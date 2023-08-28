@@ -13,6 +13,12 @@ void
 pl_chsrc_python (char* source_name)
 {
   char* source_url = NULL;
+
+  if (NULL==source_name) {
+    source_name = "tuna";
+    puts("chsrc: Default selection is TsingHua Tuna");
+  }
+
   if (0==strcmp("tuna", source_name)) {
     puts("chsrc: Selected source provider: Tuna");
     source_url = "https://pypi.tuna.tsinghua.edu.cn/simple";
@@ -33,6 +39,11 @@ void
 pl_chsrc_ruby (char* source_name)
 {
   char* source_url = NULL;
+
+  if (NULL==source_name) {
+    source_name = "rubychina";
+    puts("chsrc: Default selection is Ruby China");
+  }
 
   if (0==strcmp("rubychina", source_name)) {
     puts("chsrc: Selected source provider: Ruby China");
@@ -104,6 +115,9 @@ void
 call_cmd (void* cmdptr, char* arg)
 {
   void (*cmd_func)(char*) = cmdptr;
+  if (NULL==arg) {
+    puts("chsrc: Use the default");
+  }
   cmd_func(arg);
 }
 
@@ -120,18 +134,39 @@ print_help()
 int
 main(int argc, char const *argv[])
 {
-  if (1==argc) {
+  // 未提供参数时
+  if (argc<=1) {
     print_help(); return 0;
+  }
+
+  // 第一个参数
+  char* target = NULL;
+  if (0==strcmp("-h",argv[1])) {
+    print_help(); return 0;
+  } else {
+    target = argv[1];
+  }
+
+  char* option = NULL;
+  char* cmdarg = NULL;
+  // 第二个参数
+  if (argc>=2)
+  {
+    if (argv[2][0]=='-') {
+      option = argv[2];
+    } else {
+      cmdarg = argv[2];
+    }
   }
 
   int matched = 0;
 
-  for (int i=0; ARRAY_SIZE(pl_packagers); i++) {
+  for (int i=0; i<ARRAY_SIZE(pl_packagers); i++) {
     const char const** packager = pl_packagers[i];
     int k = 0;
     const char* alias = packager[k];
     while (NULL!=alias) {
-      if (0==strcmp(argv[1], alias)) {
+      if (0==strcmp(target, alias)) {
         // printf("matched: %s\n", alias);
         matched = 1; break;
       }
@@ -142,7 +177,7 @@ main(int argc, char const *argv[])
       do {
         k++; alias = packager[k];
       } while (NULL!=alias);
-      call_cmd ((void*) packager[k+1], "tuna");
+      call_cmd ((void*) packager[k+1], cmdarg);
     }
   }
 
