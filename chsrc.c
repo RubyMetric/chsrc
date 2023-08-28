@@ -3,27 +3,6 @@
 
 #define Chsrc_Version "v0.1.0"
 
-static const char const
-*pl_ruby[]   = {"gem",  "ruby",    "rb",       NULL},
-*pl_python[] = {"pip",  "python",  "py",       NULL},
-*pl_nodejs[] = {"npm",  "node",    "nodejs",  "js",     NULL},
-*pl_perl[]   = {"perl", "cpan",     NULL},
-*pl_php[]    = {"php",  "composer", NULL},
-*pl_cran[]   = {"r",    "cran",     NULL},
-*pl_rust[]   = {"rust", "cargo",   "crate",   "crates",  NULL},
-*pl_go[]     = {"go",   "golang",  "goproxy",  NULL},
-*pl_dotnet[] = {"nuget","net",     "dotnet",  ".net",    NULL},
-*pl_maven[]  = {"maven", NULL},
-*pl_gradle[] = {"gradel",NULL},
-*pl_julia[]  = {"julia", NULL},
-// Java暂时需要直接指定包管理器
-// pl_java
-**pl_packagers[] = {
-  pl_ruby, pl_python, pl_nodejs, pl_perl,  pl_php,    pl_cran,
-  pl_rust, pl_go,     pl_dotnet, pl_maven, pl_gradle, pl_julia
-};
-
-
 
 /**
  * Python换源
@@ -86,6 +65,27 @@ pl_chsrc_ruby (char* source_name)
   free(cmd);
 }
 
+#define arg(func) (const char const*)func
+static const char const
+*pl_ruby[]   = {"gem",  "ruby",    "rb",       NULL,  arg(pl_chsrc_ruby)},
+*pl_python[] = {"pip",  "python",  "py",       NULL},
+*pl_nodejs[] = {"npm",  "node",    "nodejs",  "js",     NULL},
+*pl_perl[]   = {"perl", "cpan",     NULL},
+*pl_php[]    = {"php",  "composer", NULL},
+*pl_cran[]   = {"r",    "cran",     NULL},
+*pl_rust[]   = {"rust", "cargo",   "crate",   "crates",  NULL},
+*pl_go[]     = {"go",   "golang",  "goproxy",  NULL},
+*pl_dotnet[] = {"nuget","net",     "dotnet",  ".net",    NULL},
+*pl_maven[]  = {"maven", NULL},
+*pl_gradle[] = {"gradel",NULL},
+*pl_julia[]  = {"julia", NULL},
+// Java暂时需要直接指定包管理器
+// pl_java
+**pl_packagers[] = {
+  pl_ruby, pl_python, pl_nodejs, pl_perl,  pl_php,    pl_cran,
+  pl_rust, pl_go,     pl_dotnet, pl_maven, pl_gradle, pl_julia
+};
+#undef arg
 
 static const char const*
 usage[] = {
@@ -98,6 +98,14 @@ usage[] = {
 
   "Supported:\n"
 };
+
+
+void
+call_cmd (void* cmdptr, char* arg)
+{
+  void (*cmd_func)(char*) = cmdptr;
+  cmd_func(arg);
+}
 
 
 int
@@ -116,19 +124,27 @@ main(int argc, char const *argv[])
     print_help(); return 0;
   }
 
+  int matched = 0;
+
   for (int i=0; ARRAY_SIZE(pl_packagers); i++) {
     const char const** packager = pl_packagers[i];
     int k = 0;
     const char* alias = packager[k];
     while (NULL!=alias) {
       if (0==strcmp(argv[1], alias)) {
-        printf("matched: %s\n", alias);
-      } else {
-        printf("not match: %s\n", alias);
+        // printf("matched: %s\n", alias);
+        matched = 1; break;
       }
       k++;
       alias = packager[k];
     }
+    if (matched) {
+      do {
+        k++; alias = packager[k];
+      } while (NULL!=alias);
+      call_cmd ((void*) packager[k+1], "tuna");
+    }
   }
+
   return 0;
 }
