@@ -12,6 +12,13 @@
 #include <string.h>
 #include <stdlib.h>
 
+#ifdef _WIN32
+  #include <windows.h>
+  #define xy_useutf8() SetConsoleOutputCP(65001)
+#else
+  #define xy_useutf8()
+#endif
+
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
 
 char*

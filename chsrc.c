@@ -107,7 +107,7 @@ static const char const
   pl_ruby, pl_python, pl_nodejs, pl_perl,  pl_php,    pl_cran,
   pl_rust, pl_go,     pl_dotnet, pl_maven, pl_gradle, pl_julia
 };
-#undef arg
+#undef cmdfunc
 
 static const char const*
 usage[] = {
@@ -145,6 +145,8 @@ print_help ()
 int
 main (int argc, char const *argv[])
 {
+  xy_useutf8();
+
   // 未提供参数时
   if (argc<=1) {
     print_help(); return 0;
