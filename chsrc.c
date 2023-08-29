@@ -10,6 +10,7 @@
 * -------------------------------------------------------------*/
 
 #include <stdio.h>
+#include "chsrc.h"
 #include "helper.h"
 
 #define Chsrc_Version "v0.1.0"
@@ -47,44 +48,32 @@ pl_chsrc_python (char* source_name)
  * 参考：https://gitee.com/RubyKids/rbenv-cn
  */
 void
-pl_chsrc_ruby (char* source_name)
+pl_chsrc_ruby (char* option)
 {
-  char* source_url = NULL;
-
-  if (NULL==source_name) {
-    source_name = "rubychina";
-    puts("chsrc: Default selection is Ruby China");
+  int selected = 0;
+  for (int i=0;i<sizeof(pl_ruby_sources);i++) {
+    // 循环测速
   }
 
-  if (0==strcmp("rubychina", source_name)) {
-    puts("chsrc: Selected source provider: Ruby China");
-    source_url = "https://gems.ruby-china.com";
-  }
-  else if (0==strcmp("ali", source_name)) {
-    puts("chsrc: Selected source provider: Alibaba OPSX");
-    source_url = "https://mirrors.aliyun.com/rubygems/";
-  }
-  else if (0==strcmp("tencent", source_name)) {
-    puts("chsrc: Selected source provider: Tencent");
-    source_url = "http://mirrors.tencent.com/rubygems/";
-  }
-  else if (0==strcmp("tuna", source_name)) {
-    puts("chsrc: Selected source provider: Tuna");
-    source_url = "https://mirrors.tuna.tsinghua.edu.cn/rubygems/";
-  }
+  const char* source_name = pl_ruby_sources[selected].mirror->name;
+  const char* source_abbr = pl_ruby_sources[selected].mirror->abbr;
+  const char* source_url  = pl_ruby_sources[selected].url;
 
-  puts("chsrc: Change source for 'gem'");
+  puts (xy_strjoin("chsrc: 选中镜像站：", source_abbr));
+
+  puts("chsrc: 为'gem'命令换源");
   system("gem source -r https://rubygems.org/");
-
 
   char* cmd = xy_strjoin("gem source -a ", source_url);
   system(cmd);
   free(cmd);
 
   cmd = xy_strjoin("bundle config 'mirror.https://rubygems.org' ", source_url);
-  puts("chsrc: Change source for 'bundler'");
+  puts("chsrc: 为'bundler'命令换源");
   system(cmd);
   free(cmd);
+
+  puts(xy_strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
 
 #define cmdfunc(func) (const char const*)func
@@ -127,7 +116,7 @@ call_cmd (void* cmdptr, const char* arg)
 {
   void (*cmd_func)(const char*) = cmdptr;
   if (NULL==arg) {
-    puts("chsrc: Use the default");
+    puts("chsrc: 将使用默认镜像");
   }
   cmd_func(arg);
 }
@@ -163,8 +152,9 @@ main (int argc, char const *argv[])
   const char* option = NULL;
   const char* cmdarg = NULL;
   // 第二个参数
-  if (argc>=2)
+  if (argc>=3)
   {
+    // printf ("argc = %d\n", argc);
     if (argv[2][0]=='-') {
       option = argv[2];
     } else {
@@ -194,5 +184,8 @@ main (int argc, char const *argv[])
     }
   }
 
+  if (!matched) {
+    puts("chsrc: 暂不支持的换源类型，请使用-h查看可换源");
+  }
   return 0;
 }
