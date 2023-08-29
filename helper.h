@@ -2,7 +2,7 @@
 * File          : helper.h
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
-* Last modified : <2023-08-28>
+* Last modified : <2023-08-29>
 *
 * helper:
 *
@@ -15,7 +15,7 @@
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
 
 char*
-xy_strjoin(const char* str1, const char* str2)
+xy_strjoin (const char* str1, const char* str2)
 {
   size_t len = strlen(str1) + strlen(str2) + 1;
   char* ret  = malloc(len);

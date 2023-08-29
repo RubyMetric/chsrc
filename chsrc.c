@@ -1,3 +1,14 @@
+/* --------------------------------------------------------------
+* File          : chsrc.c
+* Authors       : Aoran Zeng <ccmywish@qq.com>
+* Created on    : <2023-08-28>
+* Last modified : <2023-08-29>
+*
+* chsrc:
+*
+*   Change Source —— 换源命令行工具
+* -------------------------------------------------------------*/
+
 #include <stdio.h>
 #include "helper.h"
 
@@ -76,9 +87,9 @@ pl_chsrc_ruby (char* source_name)
   free(cmd);
 }
 
-#define arg(func) (const char const*)func
+#define cmdfunc(func) (const char const*)func
 static const char const
-*pl_ruby[]   = {"gem",  "ruby",    "rb",       NULL,  arg(pl_chsrc_ruby)},
+*pl_ruby[]   = {"gem",  "ruby",    "rb",       NULL,  cmdfunc(pl_chsrc_ruby)},
 *pl_python[] = {"pip",  "python",  "py",       NULL},
 *pl_nodejs[] = {"npm",  "node",    "nodejs",  "js",     NULL},
 *pl_perl[]   = {"perl", "cpan",     NULL},
@@ -101,20 +112,20 @@ static const char const
 static const char const*
 usage[] = {
   "chsrc: Change Source " Chsrc_Version " by RubyMetric\n",
-  "Usage:\n"
-  "  chsrc <target> [source]\n",
+  "使用：\n"
+  "  chsrc <要换源的对象> [所换源名称]\n",
 
-  "Options:\n"
-  "  -h                     Print this help\n",
+  "选项：\n"
+  "  -h                     打印该帮助\n",
 
-  "Supported:\n"
+  "支持：\n"
 };
 
 
 void
-call_cmd (void* cmdptr, char* arg)
+call_cmd (void* cmdptr, const char* arg)
 {
-  void (*cmd_func)(char*) = cmdptr;
+  void (*cmd_func)(const char*) = cmdptr;
   if (NULL==arg) {
     puts("chsrc: Use the default");
   }
@@ -123,7 +134,7 @@ call_cmd (void* cmdptr, char* arg)
 
 
 int
-print_help()
+print_help ()
 {
   for (int i=0; i<ARRAY_SIZE(usage); i++) {
     puts(usage[i]);
@@ -132,7 +143,7 @@ print_help()
 
 
 int
-main(int argc, char const *argv[])
+main (int argc, char const *argv[])
 {
   // 未提供参数时
   if (argc<=1) {
@@ -140,15 +151,15 @@ main(int argc, char const *argv[])
   }
 
   // 第一个参数
-  char* target = NULL;
+  const char* target = NULL;
   if (0==strcmp("-h",argv[1])) {
     print_help(); return 0;
   } else {
     target = argv[1];
   }
 
-  char* option = NULL;
-  char* cmdarg = NULL;
+  const char* option = NULL;
+  const char* cmdarg = NULL;
   // 第二个参数
   if (argc>=2)
   {
