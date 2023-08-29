@@ -20,13 +20,25 @@ chsrc dotnet
 # 操作系统
 chsrc ubuntu
 chsrc debian
+chsrc fedora
 chsrc arch
+chsrc gentoo
+chsrc kali
+chsrc manjaro
+
 chsrc deepin
 chsrc openkylin
 chsrc openeuler
+
 chsrc openbsd
 chsrc netbsd
 
+# Windows
+chsrc msys2 # 或 chsrc msys
+
 # macOS
 chsrc brew  # 或 chsrc homebrew
+
+# 其他软件
+chsrc anaconda
 ```
