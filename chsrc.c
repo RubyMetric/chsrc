@@ -22,23 +22,25 @@
  * 参考：https://mirrors.tuna.tsinghua.edu.cn/help/pypi/
  */
 void
-pl_python_chsrc (char* source_name)
+pl_python_chsrc (char* option)
 {
-  char* source_url = NULL;
+  int selected = 0;
 
-  if (NULL==source_name) {
-    source_name = "tuna";
-    puts("chsrc: Default selection is TsingHua Tuna");
+  for (int i=0;i<sizeof(pl_ruby_sources);i++) {
+    // 循环测速
   }
 
-  if (0==strcmp("tuna", source_name)) {
-    puts("chsrc: Selected source provider: Tuna");
-    source_url = "https://pypi.tuna.tsinghua.edu.cn/simple";
-  }
+  const char* source_name = pl_ruby_sources[selected].mirror->name;
+  const char* source_abbr = pl_ruby_sources[selected].mirror->abbr;
+  const char* source_url  = pl_ruby_sources[selected].url;
+
+  xy_info (xy_strjoin("chsrc: 选中镜像站：", source_abbr));
 
   char* cmd = xy_strjoin("pip config set global.index-url ", source_url);
   system(cmd);
   free(cmd);
+
+  xy_success(xy_strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
 
 
@@ -59,9 +61,9 @@ pl_ruby_chsrc (char* option)
   const char* source_abbr = pl_ruby_sources[selected].mirror->abbr;
   const char* source_url  = pl_ruby_sources[selected].url;
 
-  puts (xy_strjoin("chsrc: 选中镜像站：", source_abbr));
+  xy_info (xy_strjoin("chsrc: 选中镜像站：", source_abbr));
 
-  puts("chsrc: 为'gem'命令换源");
+  xy_info("chsrc: 为 gem 命令换源");
   system("gem source -r https://rubygems.org/");
 
   char* cmd = xy_strjoin("gem source -a ", source_url);
@@ -69,11 +71,11 @@ pl_ruby_chsrc (char* option)
   free(cmd);
 
   cmd = xy_strjoin("bundle config 'mirror.https://rubygems.org' ", source_url);
-  puts("chsrc: 为'bundler'命令换源");
+  xy_info("chsrc: 为 bundler 命令换源");
   system(cmd);
   free(cmd);
 
-  puts(xy_strjoin("chsrc: 感谢镜像提供方：", source_name));
+  xy_success(xy_strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
 
 #define cmdfunc(func) (const char const*)func
@@ -101,11 +103,14 @@ static const char const
 static const char const*
 usage[] = {
   "chsrc: Change Source " Chsrc_Version " by RubyMetric\n",
+
+  "维护:  https://gitee.com/RubyMetric/chsrc\n",
+
   "使用：\n"
-  "  chsrc <要换源的对象> [所换源名称]\n",
+  "  chsrc  <要换源的对象>  [所换源名称]\n",
 
   "选项：\n"
-  "  -h                     打印该帮助\n",
+  "  -h, --help           打印该帮助\n",
 
   "支持：\n"
 };
@@ -116,7 +121,7 @@ call_cmd (void* cmdptr, const char* arg)
 {
   void (*cmd_func)(const char*) = cmdptr;
   if (NULL==arg) {
-    puts("chsrc: 将使用默认镜像");
+    xy_info("chsrc: 将使用默认镜像");
   }
   cmd_func(arg);
 }
@@ -126,7 +131,7 @@ int
 print_help ()
 {
   for (int i=0; i<Array_Size(usage); i++) {
-    puts(usage[i]);
+    xy_info(usage[i]);
   }
 }
 
@@ -143,7 +148,7 @@ main (int argc, char const *argv[])
 
   // 第一个参数
   const char* target = NULL;
-  if (0==strcmp("-h",argv[1])) {
+  if (0==strcmp("-h",argv[1]) || 0==strcmp("--help",argv[1])) {
     print_help(); return 0;
   } else {
     target = argv[1];
@@ -185,7 +190,7 @@ main (int argc, char const *argv[])
   }
 
   if (!matched) {
-    puts("chsrc: 暂不支持的换源类型，请使用-h查看可换源");
+    xy_info("chsrc: 暂不支持的换源类型，请使用-h查看可换源");
   }
   return 0;
 }
