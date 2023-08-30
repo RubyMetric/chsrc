@@ -9,9 +9,15 @@
 *   helper functions and macros
 * -------------------------------------------------------------*/
 
+#ifndef XY_H
+#define XY_H
+
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <assert.h>
+
+// #define NDEBUG
 
 #ifdef _WIN32
   #include <windows.h>
@@ -118,3 +124,5 @@ xy_warn (const char* str1)
   fprintf(stderr, buf);
   free(buf);
 }
+
+#endif
