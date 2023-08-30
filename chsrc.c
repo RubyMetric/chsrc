@@ -76,6 +76,40 @@ pl_ruby_chsrc (char* option)
   puts(xy_strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
 
+void 
+pl_ubuntu_chsrc (char* option)
+{
+  int selected = 0;
+  for (int i=0;i<sizeof(pl_ruby_sources);i++) {
+    // 循环测速
+  }
+  const char* source_name = pl_ubuntu_sources[selected].mirror->name;
+  const char* source_abbr = pl_ubuntu_sources[selected].mirror->abbr;
+  const char* source_url  = pl_ubuntu_sources[selected].url;
+// #ifdef BEIFEN
+  char* beifen = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
+  system(beifen);
+  free(beifen);
+  puts("备份文件名: /etc/apt/sources.list.bak");
+// #endif
+  const char* current_url = xy_strch(source_url,"/","\\/");
+
+  char* cmd = xy_strjoin(xy_strjoin("sed -E \'s/(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/ubuntu\\//\\1",current_url),"\\//\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
+
+  system(cmd);
+  free(cmd);
+
+#ifndef BEIFEN
+  char* rm = "rm -rf /etc/apt/source.list.bak";
+  system(rm);
+  free(rm);  
+#endif
+
+
+  puts("chsrc: 为'ubuntu'命令换源");
+  puts(xy_strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
 #define cmdfunc(func) (const char const*)func
 static const char const
 *pl_ruby[]   = {"gem",  "ruby",    "rb",       NULL,  cmdfunc(pl_ruby_chsrc)},

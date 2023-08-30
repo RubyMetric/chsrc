@@ -43,6 +43,33 @@ xy_strjoin (const char* str1, const char* str2)
 }
 
 
+//有一个BUG，每一次替换都会加长到最大长度
+static char*
+xy_strch (const char* str, const char src,const char* dest)
+{
+  size_t str_len  = strlen(str);
+  size_t dest_len  = strlen(dest);
+  size_t size = str_len*dest_len;
+  char* ret  = (char*)malloc(size);
+  int i=0;
+  int j=0;
+  while(i<str_len) {
+    if(str[i]==src) {
+      int k=0;
+      while(k<dest_len){
+        ret[j++] = dest[k++];
+      }
+      i++;
+    }
+    else {
+      ret[j++] = str[i++];
+    }
+  }
+  ret[j] = 0;
+  return ret;
+}
+
+
 static void
 xy_success (const char* str1)
 {

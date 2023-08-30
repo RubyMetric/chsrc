@@ -24,7 +24,10 @@ mirror_info
   Bfsu          = {"BFSU",     "北京外国语大学开源软件镜像站"},
   Pku           = {"PKU",      "北京大学开源镜像站"},
   Bjtu          = {"BJTU",     "北京交通大学自由与开源软件镜像站"},
-  Sustech       = {"SUSTech",  "南方科技大学开源软件镜像站"};
+  Sustech       = {"SUSTech",  "南方科技大学开源软件镜像站"},
+  Ustc          = {"USTC",     "中国科学技术大学开源镜像站"},
+  Wy            = {"WY",       "网易开源镜像站"},
+  Sohu          = {"SOHU",     "搜狐开源镜像站"};
 
 // 大型公司
 mirror_info
@@ -49,4 +52,15 @@ pl_ruby_sources[] = {
   {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/"},
   {&Tencent,   "https://mirrors.tencent.com/rubygems/"},
   {&RubyChina, "https://gems.ruby-china.com"},
+};
+
+static source_info
+pl_ubuntu_sources[] = {
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/ubuntu/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/ubuntu/"},
+  {&Ali,       "https://mirrors.aliyun.com/ubuntu/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/ubuntu/"},
+  {&Tencent,   "https://mirrors.tencent.com/ubuntu/"},
+  {&Wy,        "https://mirrors.163.com/ubuntu/"},
+  {&Sohu,      "https://mirrors.sohu.com/ubuntu/"},
 };
