@@ -9,6 +9,9 @@
 *   chsrc.c 头文件
 * -------------------------------------------------------------*/
 
+#include <stdio.h>
+#include "helper.h"
+
 typedef struct {
   const char* abbr;
   const char* name;
@@ -68,3 +71,8 @@ pl_python_sources[] = {
   {&Jlu,           "https://mirrors.jlu.edu.cn/pypi//web/simple"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/pypi/web/simple"}
 };
+
+
+
+/* 函数签名 */
+bool does_the_program_exist (char* check_cmd, char* progname);

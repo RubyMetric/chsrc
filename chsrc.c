@@ -14,22 +14,30 @@
 #define Chsrc_Version "v0.1.0"
 
 
-/* 检测二进制命令是否存在
+/**
+ * 检测二进制程序是否存在
+ *
+ * @param[in]  check_cmd  检测 `progname` 是否存在的一段命令，一般来说，填 `progname` 本身即可，
+ *                        但是某些情况下，需要使用其他命令绕过一些特殊情况，比如 python 这个命令在Windows上
+ *                        会自动打开 Microsoft Store，需避免
+ *
+ * @param[in]  progname   要检测的二进制程序名
  */
 bool
-does_the_command_exist (char* check_cmd)
+does_the_program_exist (char* check_cmd, char* progname)
 {
   char* which = check_cmd;
 
   int ret = system(which);
 
   char buf[32] = {0};
-  sprintf(buf, "Error code: %d", ret);
+  sprintf(buf, "错误码: %d", ret);
 
   if (0!=ret) {
-    xy_warn (xy_strjoin("Not exist with ", buf));
+    xy_warn (xy_strjoin(progname, xy_strjoin(" 命令不存在，", buf)));
     return false;
   } else {
+    xy_success (xy_strjoin(progname, " 命令存在"));
     return true;
   }
 }
@@ -39,11 +47,34 @@ does_the_command_exist (char* check_cmd)
  * Python换源
  *
  * 参考：https://mirrors.tuna.tsinghua.edu.cn/help/pypi/
+ *
+ * 经测试，Windows上调用换源命令，会写入 C:\Users\RubyMetric\AppData\Roaming\pip\pip.ini
  */
 void
 pl_python_chsrc (char* option)
 {
-  int selected = 0;
+  int selected = 0; char* check_cmd, *prog = NULL;
+
+  // 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store
+  if (xy_on_windows) check_cmd = "python --version >nul 2>nul";
+  else               check_cmd = "python --version 1>/dev/null 2>&1";
+
+  bool exist_b = does_the_program_exist (check_cmd, "python");
+
+  if (!exist_b) {
+    if (xy_on_windows) check_cmd = "python3 --version >nul 2>nul";
+    else               check_cmd = "python3 --version 1>/dev/null 2>&1";
+    exist_b = does_the_program_exist (check_cmd, "python3");
+    if (exist_b) prog = "python3";
+  }
+  else {
+    prog = "python";
+  }
+
+  if (!exist_b) {
+    xy_error ("chsrc: 未找到 Python 相关命令，请检查是否存在");
+    return;
+  }
 
   for (int i=0;i<sizeof(pl_ruby_sources);i++) {
     // 循环测速
@@ -55,7 +86,7 @@ pl_python_chsrc (char* option)
 
   xy_info (xy_strjoin("chsrc: 选中镜像站：", source_abbr));
 
-  char* cmd = xy_strjoin("pip config set global.index-url ", source_url);
+  char* cmd = xy_strjoin(prog, xy_strjoin(" -m pip config set global.index-url ", source_url));
   system(cmd);
   free(cmd);
 
@@ -99,8 +130,8 @@ pl_ruby_chsrc (char* option)
 
 #define chsrcfunc(func) (const char const*)func
 static const char const
-*pl_ruby[]   = {"gem",  "ruby",    "rb",       NULL,  chsrcfunc(pl_ruby_chsrc)},
-*pl_python[] = {"pip",  "python",  "py",       NULL,  chsrcfunc(pl_python_chsrc)},
+*pl_ruby[]   = {"gem",  "ruby",    "rb",       NULL,          chsrcfunc(pl_ruby_chsrc)  },
+*pl_python[] = {"pip",  "python",  "py",      "pypi",   NULL, chsrcfunc(pl_python_chsrc)},
 *pl_nodejs[] = {"npm",  "node",    "nodejs",  "js",     NULL},
 *pl_perl[]   = {"perl", "cpan",     NULL},
 *pl_php[]    = {"php",  "composer", NULL},
