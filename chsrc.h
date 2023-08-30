@@ -56,9 +56,9 @@ pl_ruby_sources[] = {
 
 static source_info
 pl_ubuntu_sources[] = {
+  {&Ali,       "https://mirrors.aliyun.com/ubuntu/"},
   {&Bfsu,      "https://mirrors.bfsu.edu.cn/ubuntu/"},
   {&Ustc,      "https://mirrors.ustc.edu.cn/ubuntu/"},
-  {&Ali,       "https://mirrors.aliyun.com/ubuntu/"},
   {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/ubuntu/"},
   {&Tencent,   "https://mirrors.tencent.com/ubuntu/"},
   {&Wy,        "https://mirrors.163.com/ubuntu/"},
