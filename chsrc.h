@@ -15,6 +15,8 @@ typedef struct {
 } mirror_info;
 
 // 教育网
+// 我们目前根据 https://github.com/mirrorz-org/oh-my-mirrorz 挑选速度前10位
+//
 mirror_info
   Tuna          = {"TUNA",     "清华大学开源软件镜像站"},
   Sjtug_Zhiyuan = {"SJTUG-zhiyuan", "上海交通大学致远镜像站"},
@@ -41,6 +43,12 @@ typedef struct {
   const char* url;
 } source_info;
 
+
+/**
+ * 源信息
+ *
+ * 我们要求每个源至少有一个教育网镜像，至少有一个商业公司或开源社区维护的镜像
+ */
 static source_info
 pl_ruby_sources[] = {
   // 目前北外最快，Ruby China的源慢了一半
@@ -49,4 +57,14 @@ pl_ruby_sources[] = {
   {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/"},
   {&Tencent,   "https://mirrors.tencent.com/rubygems/"},
   {&RubyChina, "https://gems.ruby-china.com"},
+},
+
+// TODO: 待更新完整列表，如阿里，腾讯，其他大学镜像
+pl_python_sources[] = {
+  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/pypi/web/simple"},
+  {&Tuna,          "https://pypi.tuna.tsinghua.edu.cn/simple"},
+  // 不要使用Zju，浙大的pypi在校外访问会自动转向Tuna
+  {&Lzuoss,        "https://mirror.lzu.edu.cn/pypi/web/simple"},
+  {&Jlu,           "https://mirrors.jlu.edu.cn/pypi//web/simple"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/pypi/web/simple"}
 };
