@@ -16,8 +16,10 @@ int
 main (int argc, char const *argv[])
 {
   xy_useutf8();
-  puts(xy_strjoin("中文输出",  "test"));
-  puts(xy_strjoin("中文输出2",  "test"));
+  puts(xy_2strjoin("Xi",    "'an"));
+  puts(xy_strjoin (2, "Xi", "'an"));
+  puts(xy_strjoin(3, "中文输出",  " XiangYang", " shan shui"));
+  puts(xy_strjoin(4, "中文输出2", " XianYan",   " hao", " feng jing"));
 
   xy_success("成功：输出成功内容");
   xy_info("信息: 输出信息内容");
