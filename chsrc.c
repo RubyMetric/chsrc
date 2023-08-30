@@ -2,7 +2,7 @@
 * File          : chsrc.c
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
-* Last modified : <2023-08-29>
+* Last modified : <2023-08-30>
 *
 * chsrc:
 *
@@ -22,7 +22,7 @@
  * 参考：https://mirrors.tuna.tsinghua.edu.cn/help/pypi/
  */
 void
-pl_chsrc_python (char* source_name)
+pl_python_chsrc (char* source_name)
 {
   char* source_url = NULL;
 
@@ -48,7 +48,7 @@ pl_chsrc_python (char* source_name)
  * 参考：https://gitee.com/RubyKids/rbenv-cn
  */
 void
-pl_chsrc_ruby (char* option)
+pl_ruby_chsrc (char* option)
 {
   int selected = 0;
   for (int i=0;i<sizeof(pl_ruby_sources);i++) {
@@ -78,7 +78,7 @@ pl_chsrc_ruby (char* option)
 
 #define cmdfunc(func) (const char const*)func
 static const char const
-*pl_ruby[]   = {"gem",  "ruby",    "rb",       NULL,  cmdfunc(pl_chsrc_ruby)},
+*pl_ruby[]   = {"gem",  "ruby",    "rb",       NULL,  cmdfunc(pl_ruby_chsrc)},
 *pl_python[] = {"pip",  "python",  "py",       NULL},
 *pl_nodejs[] = {"npm",  "node",    "nodejs",  "js",     NULL},
 *pl_perl[]   = {"perl", "cpan",     NULL},
@@ -125,7 +125,7 @@ call_cmd (void* cmdptr, const char* arg)
 int
 print_help ()
 {
-  for (int i=0; i<ARRAY_SIZE(usage); i++) {
+  for (int i=0; i<Array_Size(usage); i++) {
     puts(usage[i]);
   }
 }
@@ -164,7 +164,7 @@ main (int argc, char const *argv[])
 
   int matched = 0;
 
-  for (int i=0; i<ARRAY_SIZE(pl_packagers); i++) {
+  for (int i=0; i<Array_Size(pl_packagers); i++) {
     const char const** packager = pl_packagers[i];
     int k = 0;
     const char* alias = packager[k];

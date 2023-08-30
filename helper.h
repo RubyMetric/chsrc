@@ -19,7 +19,7 @@
   #define xy_useutf8()
 #endif
 
-#define ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
+#define Array_Size(x) (sizeof(x) / sizeof(x[0]))
 
 char*
 xy_strjoin (const char* str1, const char* str2)
