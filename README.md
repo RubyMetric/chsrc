@@ -59,6 +59,7 @@ chsrc msys2 # 或 chsrc msys
 chsrc brew  # 或 chsrc homebrew
 
 # 其他软件
+chsrc emacs
 chsrc anaconda
 chsrc ctan     # Tex
 ```

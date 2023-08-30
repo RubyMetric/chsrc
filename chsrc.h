@@ -35,16 +35,22 @@ mirror_info
 // 速度暂时处于10位以后，但是可用的源
   Nju           = {"NJU",      "南京大学开源镜像站"};
 
+
 // 大型公司
+// 注意，腾讯软件源中，有很多链接都已失效，请仔细检查
 mirror_info
   Ali      = {"Ali OPSX", "阿里巴巴开源镜像站"},
   Tencent  = {"Tencent",  "腾讯软件源"},
   Netease  = {"Netease",  "网易开源镜像站"},
   Sohu     = {"SOHU",     "搜狐开源镜像站"};
 
+
 // 开源社区
 mirror_info
-  RubyChina = {"RubyChina", "Ruby China 社区源"};
+  RubyChina = {"RubyChina",  "Ruby China 社区"},
+  GoProxyCN = {"Goproxy.cn", "七牛云 Goproxy.cn"},
+  GoProxyIO = {"GOPROXY.IO", "GOPROXY.IO"};
+
 
 
 typedef struct {
@@ -151,7 +157,22 @@ pl_julia_sources[] = {
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/julia"},
   {&Pku,           "https://mirrors.pku.edu.cn/julia"},
   {&Nju,           "https://mirror.nju.edu.cn/julia"}
-};
+},
+
+
+
+
+/**
+ * 2023-08-30 更新
+ *
+ * TODO: 1. 速度未经测试，请Go用户协助
+ *       2. 缺少教育网或开源社区软件源
+ */
+pl_go_sources[] = {
+  {&Ali,          "https://mirrors.aliyun.com/goproxy/"},
+  {&GoProxyCN,    "https://goproxy.cn"},
+  {&GoProxyIO,    "https://goproxy.io"}
+},
 
 
 
