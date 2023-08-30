@@ -29,12 +29,15 @@ mirror_info
   Bfsu          = {"BFSU",     "北京外国语大学开源软件镜像站"},
   Pku           = {"PKU",      "北京大学开源镜像站"},
   Bjtu          = {"BJTU",     "北京交通大学自由与开源软件镜像站"},
-  Sustech       = {"SUSTech",  "南方科技大学开源软件镜像站"};
+  Sustech       = {"SUSTech",  "南方科技大学开源软件镜像站"},
+  Ustc          = {"USTC",     "中国科学技术大学开源镜像站"},
 
 // 大型公司
 mirror_info
   Ali      = {"Ali OPSX", "阿里巴巴开源镜像站"},
   Tencent  = {"Tencent",  "腾讯软件源"};
+  Netease  = {"Netease",  "网易开源镜像站"},
+  Sohu     = {"SOHU",     "搜狐开源镜像站"};
 
 // 开源社区
 mirror_info
@@ -72,6 +75,17 @@ pl_python_sources[] = {
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/pypi/web/simple"}
 };
 
+
+static source_info
+os_ubuntu_sources[] = {
+  {&Ali,       "https://mirrors.aliyun.com/ubuntu/"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/ubuntu/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/ubuntu/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/ubuntu/"},
+  {&Tencent,   "https://mirrors.tencent.com/ubuntu/"},
+  {&Wy,        "https://mirrors.163.com/ubuntu/"},
+  {&Sohu,      "https://mirrors.sohu.com/ubuntu/"},
+};
 
 
 /* 函数签名 */
