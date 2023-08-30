@@ -43,9 +43,15 @@ xy_strjoin (const char* str1, const char* str2)
 }
 
 
-//有一个BUG，每一次替换都会加长到最大长度
+/*
+ * 
+ * 
+ * 
+ * 
+ * 
+ * */
 static char*
-xy_strch (const char* str, const char src,const char* dest)
+xy_strch (const char* str, char src,const char* dest)
 {
   size_t str_len  = strlen(str);
   size_t dest_len  = strlen(dest);

@@ -77,7 +77,7 @@ pl_ruby_chsrc (char* option)
 }
 
 void 
-pl_ubuntu_chsrc (char* option)
+os_ubuntu_chsrc (char* option)
 {
   int selected = 0;
   for (int i=0;i<sizeof(pl_ruby_sources);i++) {
@@ -86,25 +86,20 @@ pl_ubuntu_chsrc (char* option)
   const char* source_name = pl_ubuntu_sources[selected].mirror->name;
   const char* source_abbr = pl_ubuntu_sources[selected].mirror->abbr;
   const char* source_url  = pl_ubuntu_sources[selected].url;
-// #ifdef BEIFEN
+  
   char* beifen = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
   system(beifen);
-  free(beifen);
+  // free(beifen);
   puts("备份文件名: /etc/apt/sources.list.bak");
-// #endif
-  const char* current_url = xy_strch(source_url,"/","\\/");
+  const char* current_url = xy_strch(source_url,'/',"\\/");
 
-  char* cmd = xy_strjoin(xy_strjoin("sed -E \'s/(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/ubuntu\\//\\1",current_url),"\\//\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
-
+  char* cmd = xy_strjoin(xy_strjoin("sed -E \'s/(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/ubuntu\\//\\1",current_url),"/\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
   system(cmd);
   free(cmd);
 
-#ifndef BEIFEN
   char* rm = "rm -rf /etc/apt/source.list.bak";
   system(rm);
-  free(rm);  
-#endif
-
+  // free(rm);  
 
   puts("chsrc: 为'ubuntu'命令换源");
   puts(xy_strjoin("chsrc: 感谢镜像提供方：", source_name));
@@ -124,12 +119,19 @@ static const char const
 *pl_maven[]  = {"maven", NULL},
 *pl_gradle[] = {"gradel",NULL},
 *pl_julia[]  = {"julia", NULL},
+
+*os_ubuntu[] = {"ubuntu", NULL,  cmdfunc(os_ubuntu_chsrc)},
 // Java暂时需要直接指定包管理器
 // pl_java
 **pl_packagers[] = {
   pl_ruby, pl_python, pl_nodejs, pl_perl,  pl_php,    pl_cran,
   pl_rust, pl_go,     pl_dotnet, pl_maven, pl_gradle, pl_julia
+},
+**os_packagers[] = {
+  os_ubuntu,
 };
+// static const char const
+// *os_ubuntu[] = {"ubuntu", NULL,  cmdfunc(os_ubuntu_chsrc)};
 #undef cmdfunc
 
 static const char const*
@@ -203,6 +205,7 @@ main (int argc, char const *argv[])
     int k = 0;
     const char* alias = packager[k];
     while (NULL!=alias) {
+      // printf("%s matched: %s\n",target, alias);
       if (0==strcmp(target, alias)) {
         // printf("matched: %s\n", alias);
         matched = 1; break;
