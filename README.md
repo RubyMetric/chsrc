@@ -61,6 +61,8 @@ chsrc anaconda
 
 ## 开发
 
+请确保拥有一个支持C99的C编译器。
+
 ```bash
 make
 make test

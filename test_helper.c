@@ -19,7 +19,9 @@ main (int argc, char const *argv[])
   puts(xy_strjoin("中文输出",  "test"));
   puts(xy_strjoin("中文输出2",  "test"));
 
-  xy_success("成功输出");
-  xy_warn("警告输出");
+  xy_success("成功：输出成功内容");
+  xy_info("信息: 输出信息内容");
+  xy_warn("警告：输出警告内容");
+  xy_error("错误：输出错误内容");
   return 0;
 }
