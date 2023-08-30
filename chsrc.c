@@ -182,8 +182,7 @@ static const char const
 **os_packagers[] = {
   os_ubuntu
 };
-// static const char const
-// *os_ubuntu[] = {"ubuntu", NULL,  cmdfunc(os_ubuntu_chsrc)};
+
 #undef chsrcfunc
 
 static const char const*

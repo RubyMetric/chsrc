@@ -98,13 +98,9 @@ xy_log (int level, const char* str)
 #define xy_error(str) xy_log (XY_ERROR, str)
 
 
-/*
- * 
- * 
- * 
- * 
- * 
- * */
+/**
+ *
+ */
 static char*
 xy_strch (const char* str, char src,const char* dest)
 {

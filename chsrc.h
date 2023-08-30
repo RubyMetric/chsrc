@@ -30,12 +30,12 @@ mirror_info
   Pku           = {"PKU",      "北京大学开源镜像站"},
   Bjtu          = {"BJTU",     "北京交通大学自由与开源软件镜像站"},
   Sustech       = {"SUSTech",  "南方科技大学开源软件镜像站"},
-  Ustc          = {"USTC",     "中国科学技术大学开源镜像站"},
+  Ustc          = {"USTC",     "中国科学技术大学开源镜像站"};
 
 // 大型公司
 mirror_info
   Ali      = {"Ali OPSX", "阿里巴巴开源镜像站"},
-  Tencent  = {"Tencent",  "腾讯软件源"};
+  Tencent  = {"Tencent",  "腾讯软件源"},
   Netease  = {"Netease",  "网易开源镜像站"},
   Sohu     = {"SOHU",     "搜狐开源镜像站"};
 
@@ -83,7 +83,7 @@ os_ubuntu_sources[] = {
   {&Ustc,      "https://mirrors.ustc.edu.cn/ubuntu/"},
   {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/ubuntu/"},
   {&Tencent,   "https://mirrors.tencent.com/ubuntu/"},
-  {&Wy,        "https://mirrors.163.com/ubuntu/"},
+  {&Netease,   "https://mirrors.163.com/ubuntu/"},
   {&Sohu,      "https://mirrors.sohu.com/ubuntu/"},
 };
 
