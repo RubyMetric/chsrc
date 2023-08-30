@@ -11,7 +11,7 @@
 
 #include "chsrc.h"
 
-#define Chsrc_Version "v0.1.0"
+#define Chsrc_Version "v0.1.0.20230910.pre"
 
 
 /**
@@ -200,13 +200,19 @@ usage[] = {
 
   "维护:  https://gitee.com/RubyMetric/chsrc\n",
 
-  "使用：\n"
-  "  chsrc  <要换源的对象>  [所换源名称]\n",
+  "使用：",
+  "chsrc help              # 打印帮助，或 -h, --help",
+  "chsrc list              # 查看可换源软件，以及目前所有的源",
+  "chsrc list   <software> # 查看对该软件，可以使用哪些源\n",
 
-  "选项：\n"
-  "  -h, --help           打印该帮助\n",
+  "chsrc cesu   <software> # 对该软件所有源测速",
+  "      speed  <software> # 对该软件所有源测速\n",
 
-  "支持：\n"
+  "chsrc status <software> # 查看当前软件的源使用情况\n",
+
+  "chsrc <software>        # 换源，挑选的是最快源（自动进行用户端测速）",
+  "chsrc <software> -1     # 1,2,3的1。换源，挑选的是经维护者测速排序第一的源（用户端不进行自动测速）",
+  "chsrc <software> -v     # 换源。并打印换源所执行的具体操作\n"
 };
 
 
