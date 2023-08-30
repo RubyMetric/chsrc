@@ -9,11 +9,30 @@
 *   Change Source —— 换源命令行工具
 * -------------------------------------------------------------*/
 
-#include <stdio.h>
 #include "chsrc.h"
-#include "helper.h"
 
 #define Chsrc_Version "v0.1.0"
+
+
+/* 检测二进制命令是否存在
+ */
+bool
+does_the_command_exist (char* check_cmd)
+{
+  char* which = check_cmd;
+
+  int ret = system(which);
+
+  char buf[32] = {0};
+  sprintf(buf, "Error code: %d", ret);
+
+  if (0!=ret) {
+    xy_warn (xy_strjoin("Not exist with ", buf));
+    return false;
+  } else {
+    return true;
+  }
+}
 
 
 /**
@@ -78,10 +97,10 @@ pl_ruby_chsrc (char* option)
   xy_success(xy_strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
 
-#define cmdfunc(func) (const char const*)func
+#define chsrcfunc(func) (const char const*)func
 static const char const
-*pl_ruby[]   = {"gem",  "ruby",    "rb",       NULL,  cmdfunc(pl_ruby_chsrc)},
-*pl_python[] = {"pip",  "python",  "py",       NULL},
+*pl_ruby[]   = {"gem",  "ruby",    "rb",       NULL,  chsrcfunc(pl_ruby_chsrc)},
+*pl_python[] = {"pip",  "python",  "py",       NULL,  chsrcfunc(pl_python_chsrc)},
 *pl_nodejs[] = {"npm",  "node",    "nodejs",  "js",     NULL},
 *pl_perl[]   = {"perl", "cpan",     NULL},
 *pl_php[]    = {"php",  "composer", NULL},
@@ -98,7 +117,7 @@ static const char const
   pl_ruby, pl_python, pl_nodejs, pl_perl,  pl_php,    pl_cran,
   pl_rust, pl_go,     pl_dotnet, pl_maven, pl_gradle, pl_julia
 };
-#undef cmdfunc
+#undef chsrcfunc
 
 static const char const*
 usage[] = {
