@@ -160,33 +160,39 @@ os_ubuntu_chsrc (char* option)
 }
 
 
+
 #define chsrcfunc(func) (const char const*)func
 static const char const
-*pl_ruby[]   = {"gem",  "ruby",    "rb",       NULL,          chsrcfunc(pl_ruby_chsrc)  },
-*pl_python[] = {"pip",  "python",  "py",      "pypi",   NULL, chsrcfunc(pl_python_chsrc)},
+*pl_ruby[]   = {"gem",  "ruby",    "rb",       NULL,           chsrcfunc(pl_ruby_chsrc)  },
+*pl_python[] = {"pip",  "python",  "py",      "pypi",   NULL,  chsrcfunc(pl_python_chsrc)},
 *pl_nodejs[] = {"npm",  "node",    "nodejs",  "js",     NULL},
 *pl_perl[]   = {"perl", "cpan",     NULL},
-*pl_php[]    = {"php",  "composer", NULL},
-*pl_cran[]   = {"r",    "cran",     NULL},
+
 *pl_rust[]   = {"rust", "cargo",   "crate",   "crates",  NULL},
 *pl_go[]     = {"go",   "golang",  "goproxy",  NULL},
 *pl_dotnet[] = {"nuget","net",     "dotnet",  ".net",    NULL},
-*pl_maven[]  = {"maven", NULL},
-*pl_gradle[] = {"gradel",NULL},
+*pl_java[]   = {"maven", NULL},
+*pl_php[]    = {"php",  "composer", NULL},
+
+*pl_cran[]   = {"r",    "cran",     NULL},
 *pl_julia[]  = {"julia", NULL},
 
-*os_ubuntu[] = {"ubuntu", NULL,  chsrcfunc(os_ubuntu_chsrc)},
-// Java暂时需要直接指定包管理器
-// pl_java
 **pl_packagers[] = {
-  pl_ruby, pl_python, pl_nodejs, pl_perl,  pl_php,    pl_cran,
-  pl_rust, pl_go,     pl_dotnet, pl_maven, pl_gradle, pl_julia
+  pl_ruby,    pl_python,  pl_nodejs,  pl_perl,
+  pl_rust,    pl_go,      pl_dotnet,  pl_java,  pl_php,
+  pl_cran, pl_julia
 },
+
+
+*os_ubuntu[] = {"ubuntu", NULL,  chsrcfunc(os_ubuntu_chsrc)},
+
 **os_packagers[] = {
   os_ubuntu
 };
 
 #undef chsrcfunc
+
+
 
 static const char const*
 usage[] = {

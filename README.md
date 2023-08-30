@@ -27,14 +27,14 @@ chsrc pip   # 或 chsrc python
 chsrc npm   # 或 chsrc nodejs
 chsrc cpan  # 或 chsrc perl
 
-chsrc cran  # 或 chsrc r
-chsrc julia
-
 chsrc go
 chsrc cargo # 或 chsrc rust 或 chsrc crate
-chsrc maven
-chsrc gradle
+chsrc maven # 或 chsrc java 或 chsrc gradle
 chsrc dotnet
+chsrc composer # 或 chsrc php
+
+chsrc cran  # 或 chsrc r
+chsrc julia
 
 # 操作系统
 chsrc ubuntu

@@ -33,7 +33,8 @@ mirror_info
   Ustc          = {"USTC",     "中国科学技术大学开源镜像站"},
 
 // 速度暂时处于10位以后，但是可用的源
-  Nju           = {"NJU",      "南京大学开源镜像站"};
+  Nju           = {"NJU",      "南京大学开源镜像站"},
+  Cqu           = {"CQU",      "重庆大学开源软件镜像站"};
 
 
 // 大型公司
@@ -49,8 +50,8 @@ mirror_info
 mirror_info
   RubyChina = {"RubyChina",  "Ruby China 社区"},
   GoProxyCN = {"Goproxy.cn", "七牛云 Goproxy.cn"},
-  GoProxyIO = {"GOPROXY.IO", "GOPROXY.IO"};
-
+  GoProxyIO = {"GOPROXY.IO", "GOPROXY.IO"},
+  NugetOrg  = {"NuGet Org",  "https://www.nuget.org/"};
 
 
 typedef struct {
@@ -126,7 +127,7 @@ pl_perl_sources[] = {
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CPAN/"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/CPAN/"},
   {&Bjtu,          "https://mirror.bjtu.edu.cn/cpan/"},
-  {&Lzuoss         "https://mirror.lzu.edu.cn/CPAN/"}
+  {&Lzuoss,        "https://mirror.lzu.edu.cn/CPAN/"}
 },
 
 
@@ -144,7 +145,6 @@ pl_r_sources[] = {
 },
 
 
-
 /**
  * 2023-08-30 更新
  *
@@ -160,13 +160,11 @@ pl_julia_sources[] = {
 },
 
 
-
-
 /**
  * 2023-08-30 更新
  *
  * TODO: 1. 速度未经测试，请Go用户协助
- *       2. 缺少教育网或开源社区软件源
+ *       2. 缺少教育网软件源
  */
 pl_go_sources[] = {
   {&Ali,          "https://mirrors.aliyun.com/goproxy/"},
@@ -174,6 +172,59 @@ pl_go_sources[] = {
   {&GoProxyIO,    "https://goproxy.io"}
 },
 
+
+/**
+ * 2023-08-30 更新
+ *
+ * TODO: 1. 速度未经测试，请Rust用户协助
+ *       2. 缺少商业公司或开源社区软件源
+ */
+pl_rust_sources[] = {
+  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/"},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/crates.io-index/"},
+  {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/"}
+},
+
+
+/**
+ * 2023-08-30 更新
+ *
+ * TODO: 1. 速度未经测试，请Java用户协助
+ *       2. 缺少教育网或开源社区软件源
+ *       3. 当前仅有一个源
+ */
+pl_java_sources[] = {
+  {&Ali,           "https://maven.aliyun.com/repository/public/"}
+},
+
+
+/**
+ * 2023-08-30 更新
+ *
+ * 暂时未实现该换源功能
+ *
+ * TODO: 1. 速度未经测试，请Java用户协助
+ *       2. 缺少教育网或开源社区软件源
+ *       3. 当前仅有一个源
+ */
+pl_nuget_sources[] = {
+  {&NugetOrg,      "https://www.nuget.org/api/v2/"}
+},
+
+
+
+/**
+ * 2023-08-30 更新
+ *
+ * TODO: 1. 速度未经测试，请PHP用户协助
+ *       2. 缺少教育网或开源社区软件源
+ *       3. 当前仅有一个源
+ */
+pl_php_sources[] = {
+  {&Ali,            "https://mirrors.aliyun.com/composer/"}
+};
 
 
 
