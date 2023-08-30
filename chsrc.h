@@ -55,9 +55,15 @@ typedef struct {
  *
  * 我们要求每个源至少有一个教育网镜像，至少有一个商业公司或开源社区维护的镜像
  */
+
+
+/**
+ * 2023-08-29 更新
+ *
+ * 速度已经过测试，目前北外最快，Ruby China 的源慢了一半
+ */
 static source_info
 pl_ruby_sources[] = {
-  // 目前北外最快，Ruby China的源慢了一半
   {&Bfsu,      "https://mirrors.bfsu.edu.cn/rubygems/"},
   {&Ali,       "https://mirrors.aliyun.com/rubygems/"},
   {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/"},
@@ -65,14 +71,52 @@ pl_ruby_sources[] = {
   {&RubyChina, "https://gems.ruby-china.com"},
 },
 
-// TODO: 待更新完整列表，如阿里，腾讯，其他大学镜像
+
+/**
+ * 2023-08-29 更新
+ *
+ * 不要添加Zju，浙大的pypi在校外访问会自动转向Tuna
+ *
+ * TODO: 速度只经过简单测试，请Python用户协助，待更新完整列表，如阿里，腾讯，其他大学镜像
+ */
 pl_python_sources[] = {
   {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/pypi/web/simple"},
   {&Tuna,          "https://pypi.tuna.tsinghua.edu.cn/simple"},
-  // 不要使用Zju，浙大的pypi在校外访问会自动转向Tuna
   {&Lzuoss,        "https://mirror.lzu.edu.cn/pypi/web/simple"},
   {&Jlu,           "https://mirrors.jlu.edu.cn/pypi//web/simple"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/pypi/web/simple"}
+},
+
+
+
+/**
+ * 2023-08-30 更新
+ *
+ * Sjtug, Tuna, Lzuoss, Jlu, Bfsu, 网易，搜狐 都没有
+ *
+ * 腾讯软件源虽然有npm的名，但名存实亡
+ */
+pl_nodejs_sources[] = {
+  {&Ali,           "https://registry.npmmirror.com"},
+  {&Zju,           "https://mirrors.zju.edu.cn/docs/npm/"}
+},
+
+
+/**
+ * 2023-08-30 更新
+ *
+ * 参考：https://help.mirrors.cernet.edu.cn/CPAN/
+ *
+ * Jlu 吉林大学没有该源
+ *
+ * TODO: 速度未经测试，请Perl用户协助
+ */
+pl_perl_sources[] = {
+  {&Ali,           "https://mirrors.aliyun.com/CPAN/"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CPAN/"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/CPAN/"},
+  {&Bjtu,          "https://mirror.bjtu.edu.cn/cpan/"},
+  {&Lzuoss         "https://mirror.lzu.edu.cn/CPAN/"}
 };
 
 
