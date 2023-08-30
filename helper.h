@@ -20,11 +20,24 @@
 // #define NDEBUG
 
 #ifdef _WIN32
+
+  static bool xy_on_windows = true;
+  static bool xy_on_linux   = false;
+  static bool xy_on_macos   = false;
+  static bool xy_on_bsds    = false;
+
   #include <windows.h>
   #define xy_useutf8() SetConsoleOutputCP(65001)
+
 #else
+  static bool xy_on_windows = false;
+  static bool xy_on_linux   = true;
+  static bool xy_on_macos   = false;
+  static bool xy_on_bsds    = false;
+
   #define xy_useutf8()
 #endif
+
 
 #define Array_Size(x) (sizeof(x) / sizeof(x[0]))
 
