@@ -51,18 +51,6 @@ xy_malloc0 (size_t size)
 }
 
 
-static char*
-xy_strjoin (const char* str1, const char* str2)
-{
-  size_t len  = strlen(str1);
-  size_t size = len + strlen(str2) + 1;
-  char* ret  = malloc(size);
-  strcpy(ret, str1);
-  strcpy(ret+len, str2);
-  return ret;
-}
-
-
 #define XY_INFO     1
 #define XY_SUCCESS  1<<1
 #define XY_WARN     1<<2
@@ -136,6 +124,56 @@ xy_warn (const char* str1)
   sprintf (buf, color_fmt_str, str1);
   fprintf(stderr, buf);
   free(buf);
+}
+
+
+static char*
+xy_2strjoin (const char* str1, const char* str2)
+{
+  size_t len  = strlen(str1);
+  size_t size = len + strlen(str2) + 1;
+  char* ret  = malloc(size);
+  strcpy(ret, str1);
+  strcpy(ret+len, str2);
+  return ret;
+}
+
+
+static char*
+xy_strjoin (unsigned int count, ...)
+{
+  size_t al_fixed = 64;
+  char* ret = calloc(1, al_fixed);
+  // 已分配次数
+  int al_times = 1;
+  // 当前已分配量
+  size_t al_cur = al_fixed;
+
+  const char* str = NULL;
+  // 需要分配的量
+  size_t al_need = 0;
+  // 用于 strcpy() 到 ret 的哪个位置
+  char* cur  = ret + 0;
+
+  va_list args;
+  va_start(args, count);
+
+  for(int i=0; i<count; i++)
+  {
+    str = va_arg(args, const char*);
+    al_need += strlen(str);
+    if (al_need > al_cur) {
+      al_times += 1; al_cur = al_times * al_fixed;
+      ret = realloc(ret, al_cur);
+      if (NULL==ret) { xy_error ("xy: No availble memory!"); return NULL; }
+    }
+    strcpy(cur, str);
+    cur += strlen(str);
+  }
+  va_end(args);
+
+  *cur = '\0';
+  return ret;
 }
 
 #endif
