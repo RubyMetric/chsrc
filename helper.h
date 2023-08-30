@@ -24,9 +24,11 @@
 char*
 xy_strjoin (const char* str1, const char* str2)
 {
-  size_t len = strlen(str1) + strlen(str2) + 1;
-  char* ret  = malloc(len);
-  strcat(ret, str1);
-  strcat(ret, str2);
+  size_t len  = strlen(str1);
+  size_t size = len + strlen(str2) + 1;
+
+  char* ret  = malloc(size);
+  strcpy(ret, str1);
+  strcpy(ret+len, str2);
   return ret;
 }
