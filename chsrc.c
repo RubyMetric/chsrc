@@ -34,10 +34,10 @@ does_the_program_exist (char* check_cmd, char* progname)
   sprintf(buf, "错误码: %d", ret);
 
   if (0!=ret) {
-    xy_warn (xy_strjoin(progname, xy_strjoin(" 命令不存在，", buf)));
+    xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
     return false;
   } else {
-    xy_success (xy_strjoin(progname, " 命令存在"));
+    xy_success (xy_strjoin(3, "√ 命令 ", progname, " 存在"));
     return true;
   }
 }
@@ -84,13 +84,13 @@ pl_python_chsrc (char* option)
   const char* source_abbr = pl_ruby_sources[selected].mirror->abbr;
   const char* source_url  = pl_ruby_sources[selected].url;
 
-  xy_info (xy_strjoin("chsrc: 选中镜像站：", source_abbr));
+  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
 
-  char* cmd = xy_strjoin(prog, xy_strjoin(" -m pip config set global.index-url ", source_url));
+  char* cmd = xy_2strjoin(prog, xy_2strjoin(" -m pip config set global.index-url ", source_url));
   system(cmd);
   free(cmd);
 
-  xy_success(xy_strjoin("chsrc: 感谢镜像提供方：", source_name));
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
 
 
@@ -111,21 +111,21 @@ pl_ruby_chsrc (char* option)
   const char* source_abbr = pl_ruby_sources[selected].mirror->abbr;
   const char* source_url  = pl_ruby_sources[selected].url;
 
-  xy_info (xy_strjoin("chsrc: 选中镜像站：", source_abbr));
+  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
 
   xy_info("chsrc: 为 gem 命令换源");
   system("gem source -r https://rubygems.org/");
 
-  char* cmd = xy_strjoin("gem source -a ", source_url);
+  char* cmd = xy_2strjoin("gem source -a ", source_url);
   system(cmd);
   free(cmd);
 
-  cmd = xy_strjoin("bundle config 'mirror.https://rubygems.org' ", source_url);
+  cmd = xy_2strjoin("bundle config 'mirror.https://rubygems.org' ", source_url);
   xy_info("chsrc: 为 bundler 命令换源");
   system(cmd);
   free(cmd);
 
-  xy_success(xy_strjoin("chsrc: 感谢镜像提供方：", source_name));
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
 
 void
@@ -139,13 +139,15 @@ os_ubuntu_chsrc (char* option)
   const char* source_abbr = os_ubuntu_sources[selected].mirror->abbr;
   const char* source_url  = os_ubuntu_sources[selected].url;
 
-  char* beifen = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
-  system(beifen);
-  // free(beifen);
-  puts("备份文件名: /etc/apt/sources.list.bak");
+  char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
+  system(backup);
+
+  xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
   const char* current_url = xy_strch(source_url,'/',"\\/");
 
-  char* cmd = xy_strjoin(xy_strjoin("sed -E \'s/(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/ubuntu\\//\\1",current_url),"/\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
+  char* cmd = xy_strjoin(3, "sed -E \'s/(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/ubuntu\\//\\1",
+                          current_url,
+                          "/\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
   system(cmd);
   free(cmd);
 
@@ -153,9 +155,10 @@ os_ubuntu_chsrc (char* option)
   system(rm);
   // free(rm);
 
-  puts("chsrc: 为'ubuntu'命令换源");
-  puts(xy_strjoin("chsrc: 感谢镜像提供方：", source_name));
+  xy_info ("chsrc: 为'ubuntu'命令换源");
+  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
+
 
 #define chsrcfunc(func) (const char const*)func
 static const char const
@@ -259,7 +262,6 @@ main (int argc, char const *argv[])
     int k = 0;
     const char* alias = packager[k];
     while (NULL!=alias) {
-      printf("%s matched: %s\n",target, alias);
       if (0==strcmp(target, alias)) {
         // printf("matched: %s\n", alias);
         matched = 1; break;
