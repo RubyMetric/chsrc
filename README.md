@@ -25,8 +25,9 @@
 chsrc gem   # 或 chsrc ruby
 chsrc pip   # 或 chsrc python
 chsrc npm   # 或 chsrc nodejs
-chsrc cran  # 或 chsrc r
 chsrc cpan  # 或 chsrc perl
+
+chsrc cran  # 或 chsrc r
 chsrc julia
 
 chsrc go
@@ -59,6 +60,7 @@ chsrc brew  # 或 chsrc homebrew
 
 # 其他软件
 chsrc anaconda
+chsrc ctan     # Tex
 ```
 
 <br>

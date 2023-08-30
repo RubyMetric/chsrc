@@ -30,7 +30,10 @@ mirror_info
   Pku           = {"PKU",      "北京大学开源镜像站"},
   Bjtu          = {"BJTU",     "北京交通大学自由与开源软件镜像站"},
   Sustech       = {"SUSTech",  "南方科技大学开源软件镜像站"},
-  Ustc          = {"USTC",     "中国科学技术大学开源镜像站"};
+  Ustc          = {"USTC",     "中国科学技术大学开源镜像站"},
+
+// 速度暂时处于10位以后，但是可用的源
+  Nju           = {"NJU",      "南京大学开源镜像站"};
 
 // 大型公司
 mirror_info
@@ -77,7 +80,8 @@ pl_ruby_sources[] = {
  *
  * 不要添加Zju，浙大的pypi在校外访问会自动转向Tuna
  *
- * TODO: 速度只经过简单测试，请Python用户协助，待更新完整列表，如阿里，腾讯，其他大学镜像
+ * TODO: 1. 速度只经过简单测试，请Python用户协助，
+ *       2. 列表暂时未添加商业公司源，以及其他大学镜像
  */
 pl_python_sources[] = {
   {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/pypi/web/simple"},
@@ -117,7 +121,40 @@ pl_perl_sources[] = {
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/CPAN/"},
   {&Bjtu,          "https://mirror.bjtu.edu.cn/cpan/"},
   {&Lzuoss         "https://mirror.lzu.edu.cn/CPAN/"}
+},
+
+
+/**
+ * 2023-08-30 更新
+ *
+ * TODO: 速度未经测试，请R用户协助
+ */
+pl_r_sources[] = {
+  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/cran/"},
+  {&Ali,           "https://mirrors.aliyun.com/CRAN/"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/CRAN/"},
+  {&Bjtu,          "https://mirror.bjtu.edu.cn/cran/"},
+},
+
+
+
+/**
+ * 2023-08-30 更新
+ *
+ * 阿里云没有该源
+ *
+ * TODO: 1. 速度未经测试，请Julia用户协助
+ *       2. 缺少商业公司或开源社区软件源
+ */
+pl_julia_sources[] = {
+  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/julia"},
+  {&Pku,           "https://mirrors.pku.edu.cn/julia"},
+  {&Nju,           "https://mirror.nju.edu.cn/julia"}
 };
+
+
+
 
 
 static source_info
