@@ -43,6 +43,51 @@ does_the_program_exist (char* check_cmd, char* progname)
 }
 
 
+
+
+/**
+ * Perl换源
+ *
+ * 参考：https://help.mirrors.cernet.edu.cn/CPAN/
+ */
+void
+pl_perl_chsrc (char* option)
+{
+  int selected = 0; char* check_cmd, *prog = NULL;
+
+  if (xy_on_windows) check_cmd = "perl --version >nul 2>nul";
+  else               check_cmd = "perl --version 1>/dev/null 2>&1";
+
+  bool exist_b = does_the_program_exist (check_cmd, "perl");
+
+  if (!exist_b) {
+    xy_error ("chsrc: 未找到 perl 相关命令，请检查是否存在");
+    return;
+  }
+
+  for (int i=0;i<sizeof(pl_perl_sources);i++) {
+    // 循环测速
+  }
+
+  const char* source_name = pl_perl_sources[selected].mirror->name;
+  const char* source_abbr = pl_perl_sources[selected].mirror->abbr;
+  const char* source_url  = pl_perl_sources[selected].url;
+
+  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+
+  char* cmd = xy_strjoin(3,
+  "perl -MCPAN -e 'CPAN::HandleConfig->edit(\"pushy_https\", 0); CPAN::HandleConfig->edit(\"urllist\", \"unshift\", \"",
+   source_url,
+  "\"); mkmyconfig'");
+
+  system(cmd);
+  free(cmd);
+
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
+
+
 /**
  * NodeJS换源
  *
@@ -140,9 +185,17 @@ pl_python_chsrc (char* option)
 void
 pl_ruby_chsrc (char* option)
 {
-  int selected = 0;
+  int selected = 0; char* check_cmd = NULL;
   for (int i=0;i<sizeof(pl_ruby_sources);i++) {
     // 循环测速
+  }
+
+  if (xy_on_windows) check_cmd = "gem -v >nul 2>nul";
+  else               check_cmd = "gem -v 1>/dev/null 2>&1";
+  bool exist_b = does_the_program_exist (check_cmd, "gem");
+  if (!exist_b) {
+    xy_error ("chsrc: 未找到 gem 相关命令，请检查是否存在");
+    return;
   }
 
   const char* source_name = pl_ruby_sources[selected].mirror->name;
@@ -158,6 +211,15 @@ pl_ruby_chsrc (char* option)
   system(cmd);
   free(cmd);
 
+
+  if (xy_on_windows) check_cmd = "bundle -v >nul 2>nul";
+  else               check_cmd = "bundle -v 1>/dev/null 2>&1";
+  bool exist_b = does_the_program_exist (check_cmd, "bundle");
+  if (!exist_b) {
+    xy_error ("chsrc: 未找到 bundle 相关命令，请检查是否存在");
+    return;
+  }
+
   cmd = xy_2strjoin("bundle config 'mirror.https://rubygems.org' ", source_url);
   xy_info("chsrc: 为 bundler 命令换源");
   system(cmd);
@@ -165,6 +227,210 @@ pl_ruby_chsrc (char* option)
 
   xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
+
+
+
+/**
+ * Go换源
+ *
+ * 参考：https://goproxy.cn/
+ */
+void
+pl_go_chsrc (char* option)
+{
+  int selected = 0; char* check_cmd = NULL;
+
+  if (xy_on_windows) check_cmd = "go --version >nul 2>nul";
+  else               check_cmd = "go --version 1>/dev/null 2>&1";
+
+  bool exist_b = does_the_program_exist (check_cmd, "go");
+
+  if (!exist_b) {
+    xy_error ("chsrc: 未找到 go 相关命令，请检查是否存在");
+    return;
+  }
+
+  for (int i=0;i<sizeof(pl_go_sources);i++) {
+    // 循环测速
+  }
+
+  const char* source_name = pl_go_sources[selected].mirror->name;
+  const char* source_abbr = pl_go_sources[selected].mirror->abbr;
+  const char* source_url  = pl_go_sources[selected].url;
+
+  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+  char* cmd = "go env -w GO111MODULE=on";
+  system(cmd);
+
+  cmd = xy_strjoin(3, "go env -w GOPROXY=", source_url, ",direct");
+  system(cmd);
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
+
+
+/**
+ * Rust 换源
+ *
+ * 参考：https://help.mirrors.cernet.edu.cn/crates.io-index.git
+ */
+void
+pl_rust_chsrc (char* option)
+{
+  int selected = 0; char* check_cmd = NULL;
+
+  for (int i=0;i<sizeof(pl_rust_sources);i++) {
+    // 循环测速
+  }
+
+  const char* source_name = pl_rust_sources[selected].mirror->name;
+  const char* source_abbr = pl_rust_sources[selected].mirror->abbr;
+  const char* source_url  = pl_rust_sources[selected].url;
+
+  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+
+
+  const char* file = xy_strjoin (3,
+    "[source.crates-io]\n"
+    "replace-with = 'mirror'\n\n"
+
+    "[source.mirror]\n"
+    "registry = \"", source_url, "\"");
+
+
+  char* cmd = NULL;
+  if (xy_on_windows)
+    cmd = xy_strjoin(3, "echo ", file, ">> \%USERPROFILE%\\.cargo");
+  else
+    cmd = xy_strjoin(3, "echo ", file, ">> $HOME/.cargo");
+
+  system(cmd);
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
+
+
+
+/**
+ * NuGet 换源
+ *
+ */
+void
+pl_dotnet_chsrc (char* option)
+{
+  int selected = 0; char* check_cmd = NULL;
+
+  xy_error ("chsrc: 暂时无法为NuGet换源，若有需求，请您提交issue");
+}
+
+
+
+
+/**
+ * PHP 换源
+ *
+ * 参考：https://developer.aliyun.com/composer
+ */
+void
+pl_php_chsrc (char* option)
+{
+  int selected = 0; char* check_cmd = NULL;
+
+  if (xy_on_windows) check_cmd = "composer --version >nul 2>nul";
+  else               check_cmd = "composer --version 1>/dev/null 2>&1";
+
+  bool exist_b = does_the_program_exist (check_cmd, "composer");
+
+  if (!exist_b) {
+    xy_error ("chsrc: 未找到 composer 相关命令，请检查是否存在");
+    return;
+  }
+
+  for (int i=0;i<sizeof(pl_php_sources);i++) {
+    // 循环测速
+  }
+
+  const char* source_name = pl_php_sources[selected].mirror->name;
+  const char* source_abbr = pl_php_sources[selected].mirror->abbr;
+  const char* source_url  = pl_php_sources[selected].url;
+
+  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+
+  char* cmd = xy_2strjoin("composer config repo.packagist composer ", source_url);
+  system(cmd);
+
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
+
+
+/**
+ * Java 换源
+ *
+ * 参考：https://developer.aliyun.com/mirror/maven
+ */
+void
+pl_java_chsrc (char* option)
+{
+  int selected = 0; char* check_cmd = NULL;
+
+  if (xy_on_windows) check_cmd = "mvn --version >nul 2>nul";
+  else               check_cmd = "mvn --version 1>/dev/null 2>&1";
+  bool mvn_exist_b    = does_the_program_exist (check_cmd, "mvn");
+
+  if (xy_on_windows) check_cmd = "gradle --version >nul 2>nul";
+  else               check_cmd = "gradle --version 1>/dev/null 2>&1";
+  bool gradle_exist_b = does_the_program_exist (check_cmd, "gradle");
+
+  if (!mvn_exist_b && !gradle_exist_b) {
+    xy_error ("chsrc: maven 与 gradle 命令均未找到，请检查是否存在（其一）");
+    return;
+  }
+
+  for (int i=0;i<sizeof(pl_java_sources);i++) {
+    // 循环测速
+  }
+
+  const char* source_name = pl_java_sources[selected].mirror->name;
+  const char* source_abbr = pl_java_sources[selected].mirror->abbr;
+  const char* source_url  = pl_java_sources[selected].url;
+
+  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+
+  if (mvn_exist_b) {
+    const char* file = xy_strjoin(3,
+    "<mirror>\n"
+    "  <id>aliyunmaven</id>\n"
+    "  <mirrorOf>*</mirrorOf>\n"
+    "  <name>阿里云公共仓库</name>\n"
+    "  <url>", source_url, "</url>\n"
+    "</mirror>");
+
+    xy_info ("chsrc: 请在您的 maven安装目录/conf/settings.xml 中添加:\n");
+    puts (file);
+  }
+
+  if (gradle_exist_b) {
+    const char* file = xy_strjoin(3,
+    "allprojects {\n"
+    "  repositories {\n"
+    "  maven { url '", source_url, "' }\n"
+    "  mavenLocal()\n"
+    "  mavenCentral()\n"
+    "  }\n"
+    "}");
+
+    xy_info ("chsrc: 请在您的 build.gradle 中添加:\n");
+    puts (file);
+  }
+
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
+
+
+
+
 
 void
 os_ubuntu_chsrc (char* option)
@@ -201,19 +467,19 @@ os_ubuntu_chsrc (char* option)
 
 #define chsrcfunc(func) (const char const*)func
 static const char const
-*pl_ruby[]   = {"gem",  "ruby",    "rb",       NULL,           chsrcfunc(pl_ruby_chsrc)  },
+*pl_ruby[]   = {"gem",  "ruby",    "rb",                NULL,  chsrcfunc(pl_ruby_chsrc)  },
 *pl_python[] = {"pip",  "python",  "py",      "pypi",   NULL,  chsrcfunc(pl_python_chsrc)},
 *pl_nodejs[] = {"npm",  "node",    "nodejs",  "js",     NULL,  chsrcfunc(pl_nodejs_chsrc)},
-*pl_perl[]   = {"perl", "cpan",     NULL},
+*pl_perl[]   = {"perl", "cpan",                         NULL,  chsrcfunc(pl_perl_chsrc)},
 
-*pl_rust[]   = {"rust", "cargo",   "crate",   "crates",  NULL},
-*pl_go[]     = {"go",   "golang",  "goproxy",  NULL},
-*pl_dotnet[] = {"nuget","net",     "dotnet",  ".net",    NULL},
-*pl_java[]   = {"maven", NULL},
-*pl_php[]    = {"php",  "composer", NULL},
+*pl_rust[]   = {"rust", "cargo",   "crate",   "crates", NULL, chsrcfunc(pl_rust_chsrc)},
+*pl_go[]     = {"go",   "golang",  "goproxy",           NULL, chsrcfunc(pl_go_chsrc)},
+*pl_dotnet[] = {"nuget","net",     "dotnet",  ".net",   NULL, chsrcfunc(pl_dotnet_chsrc)},
+*pl_java[]   = {"maven", "gradle",                      NULL, chsrcfunc(pl_java_chsrc)},
+*pl_php[]    = {"php",  "composer",                     NULL, chsrcfunc(pl_php_chsrc)},
 
-*pl_cran[]   = {"r",    "cran",     NULL},
-*pl_julia[]  = {"julia", NULL},
+*pl_cran[]   = {"r",    "cran",                         NULL, chsrcfunc(pl_r_chsrc)},
+*pl_julia[]  = {"julia",                                NULL, chsrcfunc(pl_julia_sources)},
 
 **pl_packagers[] = {
   pl_ruby,    pl_python,  pl_nodejs,  pl_perl,
