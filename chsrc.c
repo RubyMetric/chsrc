@@ -613,8 +613,7 @@ print_available_mirrors ()
   for (int i=0; i<xy_arylen(available_mirrors); i++)
   {
     mirror_info* mir = available_mirrors[i];
-    printf ("%-14s ", mir->abbr);
-    puts (mir->name);
+    printf ("%-18s%-41s ", mir->abbr, mir->site); puts(mir->name);
   }
 }
 

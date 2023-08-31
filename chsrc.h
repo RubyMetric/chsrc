@@ -15,43 +15,45 @@
 typedef struct {
   const char* abbr;
   const char* name;
+  const char* site;
 } mirror_info;
 
 // 教育网
 // 我们目前根据 https://github.com/mirrorz-org/oh-my-mirrorz 挑选速度前10位
 //
 mirror_info
-  Tuna          = {"TUNA",     "清华大学开源软件镜像站"},
-  Sjtug_Zhiyuan = {"SJTUG-zhiyuan", "上海交通大学致远镜像站"},
-  Zju           = {"ZJU",      "浙江大学开源软件镜像站"},
-  Lzuoss        = {"LZUOSS",   "兰州大学开源社区镜像站"},
-  Jlu           = {"JLU",      "吉林大学开源镜像站"},
-  Bfsu          = {"BFSU",     "北京外国语大学开源软件镜像站"},
-  Pku           = {"PKU",      "北京大学开源镜像站"},
-  Bjtu          = {"BJTU",     "北京交通大学自由与开源软件镜像站"},
-  Sustech       = {"SUSTech",  "南方科技大学开源软件镜像站"},
-  Ustc          = {"USTC",     "中国科学技术大学开源镜像站"},
+  MirrorZ       = {"MirrorZ",       "MirrorZ校园网镜像站",       "https://mirrors.cernet.edu.cn/"},
+  Tuna          = {"TUNA",          "清华大学开源软件镜像站",     "https://mirrors.tuna.tsinghua.edu.cn/"},
+  Sjtug_Zhiyuan = {"SJTUG-zhiyuan", "上海交通大学致远镜像站",     "https://mirrors.sjtug.sjtu.edu.cn/"},
+  Zju           = {"ZJU",           "浙江大学开源软件镜像站",     "https://mirrors.zju.edu.cn/"},
+  Lzuoss        = {"LZUOSS",        "兰州大学开源社区镜像站",     "https://mirror.lzu.edu.cn/"},
+  Jlu           = {"JLU",           "吉林大学开源镜像站",         "https://mirrors.jlu.edu.cn/"},
+  Bfsu          = {"BFSU",          "北京外国语大学开源软件镜像站","https://mirrors.bfsu.edu.cn/"},
+  Pku           = {"PKU",           "北京大学开源镜像站",         "https://mirrors.pku.edu.cn/"},
+  Bjtu          = {"BJTU",          "北京交通大学自由与开源软件镜像站", "https://mirror.bjtu.edu.cn/"},
+  Sustech       = {"SUSTech",       "南方科技大学开源软件镜像站",  "https://mirrors.sustech.edu.cn/"},
+  Ustc          = {"USTC",          "中国科学技术大学开源镜像站",  "https://mirrors.ustc.edu.cn/"},
 
-// 速度暂时处于10位以后，但是可用的源
-  Nju           = {"NJU",      "南京大学开源镜像站"},
-  Cqu           = {"CQU",      "重庆大学开源软件镜像站"};
+// 速度暂时处于10位以后，但是目前可用的源
+  Nju           = {"NJU",           "南京大学开源镜像站",         "https://mirrors.nju.edu.cn/"},
+  Cqu           = {"CQU",           "重庆大学开源软件镜像站",     "https://mirrors.cqu.edu.cn/"};
 
 
 // 大型公司
 // 注意，腾讯软件源中，有很多链接都已失效，请仔细检查
 mirror_info
-  Ali      = {"Ali OPSX", "阿里巴巴开源镜像站"},
-  Tencent  = {"Tencent",  "腾讯软件源"},
-  Netease  = {"Netease",  "网易开源镜像站"},
-  Sohu     = {"SOHU",     "搜狐开源镜像站"};
+  Ali      = {"Ali OPSX",           "阿里巴巴开源镜像站",         "https://developer.aliyun.com/mirror/"},
+  Tencent  = {"Tencent",            "腾讯软件源",                 "https://mirrors.tencent.com/"},
+  Netease  = {"Netease",            "网易开源镜像站",             "https://mirrors.163.com/"},
+  Sohu     = {"SOHU",               "搜狐开源镜像站",             "https://mirrors.sohu.com/"};
 
 
 // 开源社区
 mirror_info
-  RubyChina = {"RubyChina",  "Ruby China 社区"},
-  GoProxyCN = {"Goproxy.cn", "七牛云 Goproxy.cn"},
-  GoProxyIO = {"GOPROXY.IO", "GOPROXY.IO"},
-  NugetOrg  = {"NuGet Org",  "https://www.nuget.org/"};
+  RubyChina = {"RubyChina",         "Ruby China 社区",           "https://ruby-china.org/"},
+  GoProxyCN = {"Goproxy.cn",        "七牛云 Goproxy.cn",         "https://www.qiniu.com/"},
+  GoProxyIO = {"GOPROXY.IO",        "GOPROXY.IO",                "https://goproxy.io/"},
+  NugetOrg  = {"NuGet Org",         "Nuget Organization",        "https://www.nuget.org/"};
 
 
 mirror_info*
