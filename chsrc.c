@@ -562,7 +562,7 @@ static const char const
 
 *os_ubuntu[] = {"ubuntu", NULL,  chsrcfunc(os_ubuntu_chsrc)},
 
-**os_packagers[] = {
+**os_systems[] = {
   os_ubuntu
 },
 
@@ -671,10 +671,10 @@ main (int argc, char const *argv[])
   }
   goto match_end;
 
-  for (int i=0; i<Array_Size(os_packagers); i++) {
-    const char const** packager = os_packagers[i];
+  for (int i=0; i<Array_Size(os_systems); i++) {
+    const char const** system = os_systems[i];
     int k = 0;
-    const char* alias = packager[k];
+    const char* alias = system[k];
     while (NULL!=alias) {
       // printf("%s matched: %s\n",target, alias);
       if (0==strcmp(target, alias)) {
@@ -682,13 +682,13 @@ main (int argc, char const *argv[])
         matched = 1; break;
       }
       k++;
-      alias = packager[k];
+      alias = system[k];
     }
     if (matched) {
       do {
-        k++; alias = packager[k];
+        k++; alias = system[k];
       } while (NULL!=alias);
-      call_cmd ((void*) packager[k+1], cmdarg);
+      call_cmd ((void*) system[k+1], cmdarg);
     }
   }
   goto match_end;
