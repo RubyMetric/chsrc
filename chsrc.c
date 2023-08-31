@@ -51,7 +51,7 @@ does_the_program_exist (char* check_cmd, char* progname)
  * 参考：https://help.mirrors.cernet.edu.cn/CPAN/
  */
 void
-pl_perl_chsrc (char* option)
+pl_perl_setsrc (char* option)
 {
   int selected = 0; char* check_cmd, *prog = NULL;
 
@@ -94,7 +94,7 @@ pl_perl_chsrc (char* option)
  * 参考：https://npmmirror.com/
  */
 void
-pl_nodejs_chsrc (char* option)
+pl_nodejs_setsrc (char* option)
 {
   int selected = 0; char* check_cmd, *prog = NULL;
 
@@ -134,7 +134,7 @@ pl_nodejs_chsrc (char* option)
  * 经测试，Windows上调用换源命令，会写入 C:\Users\RubyMetric\AppData\Roaming\pip\pip.ini
  */
 void
-pl_python_chsrc (char* option)
+pl_python_setsrc (char* option)
 {
   int selected = 0; char* check_cmd, *prog = NULL;
 
@@ -183,7 +183,7 @@ pl_python_chsrc (char* option)
  * 参考：https://gitee.com/RubyKids/rbenv-cn
  */
 void
-pl_ruby_chsrc (char* option)
+pl_ruby_setsrc (char* option)
 {
   int selected = 0; char* check_cmd = NULL;
   for (int i=0;i<sizeof(pl_ruby_sources);i++) {
@@ -236,7 +236,7 @@ pl_ruby_chsrc (char* option)
  * 参考：https://goproxy.cn/
  */
 void
-pl_go_chsrc (char* option)
+pl_go_setsrc (char* option)
 {
   int selected = 0; char* check_cmd = NULL;
 
@@ -275,7 +275,7 @@ pl_go_chsrc (char* option)
  * 参考：https://help.mirrors.cernet.edu.cn/crates.io-index.git
  */
 void
-pl_rust_chsrc (char* option)
+pl_rust_setsrc (char* option)
 {
   int selected = 0; char* check_cmd = NULL;
 
@@ -316,7 +316,7 @@ pl_rust_chsrc (char* option)
  *
  */
 void
-pl_dotnet_chsrc (char* option)
+pl_dotnet_setsrc (char* option)
 {
   int selected = 0; char* check_cmd = NULL;
 
@@ -332,7 +332,7 @@ pl_dotnet_chsrc (char* option)
  * 参考：https://developer.aliyun.com/composer
  */
 void
-pl_php_chsrc (char* option)
+pl_php_setsrc (char* option)
 {
   int selected = 0; char* check_cmd = NULL;
 
@@ -370,7 +370,7 @@ pl_php_chsrc (char* option)
  * 参考：https://developer.aliyun.com/mirror/maven
  */
 void
-pl_java_chsrc (char* option)
+pl_java_setsrc (char* option)
 {
   int selected = 0; char* check_cmd = NULL;
 
@@ -435,7 +435,7 @@ pl_java_chsrc (char* option)
  * 参考：https://help.mirrors.cernet.edu.cn/CRAN/
  */
 void
-pl_r_chsrc (char* option)
+pl_r_setsrc (char* option)
 {
   int selected = 0; char* check_cmd = NULL;
 
@@ -474,7 +474,7 @@ pl_r_chsrc (char* option)
  * 参考：https://help.mirrors.cernet.edu.cn/julia/
  */
 void
-pl_julia_chsrc (char* option)
+pl_julia_setsrc (char* option)
 {
   int selected = 0; char* check_cmd = NULL;
 
@@ -505,7 +505,7 @@ pl_julia_chsrc (char* option)
 
 
 void
-os_ubuntu_chsrc (char* option)
+os_ubuntu_setsrc (char* option)
 {
   int selected = 0;
   for (int i=0;i<sizeof(os_ubuntu_sources);i++) {
@@ -537,43 +537,46 @@ os_ubuntu_chsrc (char* option)
 
 
 
-#define chsrcfunc(func) (const char const*)func
+#define  setsrc_fn(func) (const char const*)func
+#define  getsrc_fn(func) (const char const*)func
+#define sources_ptr(ptr) (const char const*)ptr
 static const char const
-*pl_ruby  [] = {"gem",  "ruby",    "rb",                NULL,  chsrcfunc(pl_ruby_chsrc)  },
-*pl_python[] = {"pip",  "python",  "py",      "pypi",   NULL,  chsrcfunc(pl_python_chsrc)},
-*pl_nodejs[] = {"npm",  "node",    "nodejs",  "js",     NULL,  chsrcfunc(pl_nodejs_chsrc)},
-*pl_perl  [] = {"perl", "cpan",                         NULL,  chsrcfunc(pl_perl_chsrc)},
-
-*pl_rust  [] = {"rust", "cargo",   "crate",   "crates", NULL, chsrcfunc(pl_rust_chsrc)},
-*pl_go    [] = {"go",   "golang",  "goproxy",           NULL, chsrcfunc(pl_go_chsrc)},
-*pl_dotnet[] = {"nuget","net",     "dotnet",  ".net",   NULL, chsrcfunc(pl_dotnet_chsrc)},
-*pl_java  [] = {"maven", "gradle",                      NULL, chsrcfunc(pl_java_chsrc)},
-*pl_php   [] = {"php",  "composer",                     NULL, chsrcfunc(pl_php_chsrc)},
-
-*pl_cran  [] = {"r",    "cran",                         NULL, chsrcfunc(pl_r_chsrc)},
-*pl_julia [] = {"julia",                                NULL, chsrcfunc(pl_julia_chsrc)},
-
-**pl_packagers[] = {
+*pl_ruby  [] = {"gem",   "ruby",    "rb",    "rubygems", NULL,  setsrc_fn(pl_ruby_setsrc) ,   NULL,  sources_ptr(pl_ruby_sources) },
+*pl_python[] = {"pip",   "python",  "py",    "pypi",     NULL,  setsrc_fn(pl_python_setsrc),  NULL,  sources_ptr(pl_python_sources)},
+*pl_nodejs[] = {"npm",   "node",    "js",    "nodejs",   NULL,  setsrc_fn(pl_nodejs_setsrc),  NULL,  sources_ptr(pl_nodejs_sources)},
+*pl_perl  [] = {"perl",  "cpan",                         NULL,  setsrc_fn(pl_perl_setsrc),    NULL,  sources_ptr(pl_perl_sources)},
+*pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  setsrc_fn(pl_rust_setsrc),    NULL,  sources_ptr(pl_rust_sources)},
+*pl_go    [] = {"go",    "golang",  "goproxy",           NULL,  setsrc_fn(pl_go_setsrc),      NULL,  sources_ptr(pl_go_sources)},
+*pl_dotnet[] = {"nuget", "net",     ".net",   "dotnet",  NULL,  setsrc_fn(pl_dotnet_setsrc),  NULL,  sources_ptr(pl_dotnet_sources)},
+*pl_java  [] = {"java",  "maven",   "gradle",            NULL,  setsrc_fn(pl_java_setsrc),    NULL,  sources_ptr(pl_java_sources)},
+*pl_php   [] = {"php",   "composer",                     NULL,  setsrc_fn(pl_php_setsrc),     NULL,  sources_ptr(pl_php_sources)},
+*pl_cran  [] = {"r",     "cran",                         NULL,  setsrc_fn(pl_r_setsrc),       NULL,  sources_ptr(pl_r_sources)},
+*pl_julia [] = {"julia",                                 NULL,  setsrc_fn(pl_julia_setsrc),   NULL,  sources_ptr(pl_julia_sources)},
+**pl_packagers[] =
+{
   pl_ruby,    pl_python,  pl_nodejs,  pl_perl,
   pl_rust,    pl_go,      pl_dotnet,  pl_java,  pl_php,
   pl_cran,    pl_julia
 },
 
 
-*os_ubuntu  [] = {"ubuntu", NULL,  chsrcfunc(os_ubuntu_chsrc)},
-
-**os_systems[] = {
+*os_ubuntu  [] = {"ubuntu", NULL,  setsrc_fn(os_ubuntu_setsrc)},
+**os_systems[] =
+{
   os_ubuntu
 },
 
 
 *wr_anaconda[] = {"conda", "anaconda",         NULL,  NULL},
-*wr_tex     [] =      {"latex", "ctan",     "tex",  NULL,  NULL},
-*wr_emacs   []    = {"emacs",                     NULL,  NULL},
-
-**wr_softwares[] = {wr_anaconda, wr_tex, wr_emacs};
-
-#undef chsrcfunc
+*wr_tex     [] = {"latex", "ctan",     "tex",  NULL,  NULL},
+*wr_emacs   [] = {"emacs",                     NULL,  NULL},
+**wr_softwares[] =
+{
+  wr_anaconda, wr_tex, wr_emacs
+};
+#undef getsrc_fn
+#undef getsrc_fn
+#undef sources_ptr
 
 
 
@@ -647,6 +650,17 @@ print_supported_targets ()
   xy_warn ("软件");
   print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
 }
+
+
+
+void
+print_supported_sources_for_target (const char* target)
+{
+  xy_info ("chsrc: 支持对以下目标换源 (同一行表示这几个命令兼容)");
+
+}
+
+
 
 
 int

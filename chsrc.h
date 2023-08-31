@@ -220,7 +220,7 @@ pl_java_sources[] = {
  *       2. 缺少教育网或开源社区软件源
  *       3. 当前仅有一个源
  */
-pl_nuget_sources[] = {
+pl_dotnet_sources[] = {
   {&NugetOrg,      "https://www.nuget.org/api/v2/"}
 },
 
