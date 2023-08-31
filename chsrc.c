@@ -539,39 +539,39 @@ os_ubuntu_chsrc (char* option)
 
 #define chsrcfunc(func) (const char const*)func
 static const char const
-*pl_ruby[]   = {"gem",  "ruby",    "rb",                NULL,  chsrcfunc(pl_ruby_chsrc)  },
+*pl_ruby  [] = {"gem",  "ruby",    "rb",                NULL,  chsrcfunc(pl_ruby_chsrc)  },
 *pl_python[] = {"pip",  "python",  "py",      "pypi",   NULL,  chsrcfunc(pl_python_chsrc)},
 *pl_nodejs[] = {"npm",  "node",    "nodejs",  "js",     NULL,  chsrcfunc(pl_nodejs_chsrc)},
-*pl_perl[]   = {"perl", "cpan",                         NULL,  chsrcfunc(pl_perl_chsrc)},
+*pl_perl  [] = {"perl", "cpan",                         NULL,  chsrcfunc(pl_perl_chsrc)},
 
-*pl_rust[]   = {"rust", "cargo",   "crate",   "crates", NULL, chsrcfunc(pl_rust_chsrc)},
-*pl_go[]     = {"go",   "golang",  "goproxy",           NULL, chsrcfunc(pl_go_chsrc)},
+*pl_rust  [] = {"rust", "cargo",   "crate",   "crates", NULL, chsrcfunc(pl_rust_chsrc)},
+*pl_go    [] = {"go",   "golang",  "goproxy",           NULL, chsrcfunc(pl_go_chsrc)},
 *pl_dotnet[] = {"nuget","net",     "dotnet",  ".net",   NULL, chsrcfunc(pl_dotnet_chsrc)},
-*pl_java[]   = {"maven", "gradle",                      NULL, chsrcfunc(pl_java_chsrc)},
-*pl_php[]    = {"php",  "composer",                     NULL, chsrcfunc(pl_php_chsrc)},
+*pl_java  [] = {"maven", "gradle",                      NULL, chsrcfunc(pl_java_chsrc)},
+*pl_php   [] = {"php",  "composer",                     NULL, chsrcfunc(pl_php_chsrc)},
 
-*pl_cran[]   = {"r",    "cran",                         NULL, chsrcfunc(pl_r_chsrc)},
-*pl_julia[]  = {"julia",                                NULL, chsrcfunc(pl_julia_chsrc)},
+*pl_cran  [] = {"r",    "cran",                         NULL, chsrcfunc(pl_r_chsrc)},
+*pl_julia [] = {"julia",                                NULL, chsrcfunc(pl_julia_chsrc)},
 
 **pl_packagers[] = {
   pl_ruby,    pl_python,  pl_nodejs,  pl_perl,
   pl_rust,    pl_go,      pl_dotnet,  pl_java,  pl_php,
-  pl_cran, pl_julia
+  pl_cran,    pl_julia
 },
 
 
-*os_ubuntu[] = {"ubuntu", NULL,  chsrcfunc(os_ubuntu_chsrc)},
+*os_ubuntu  [] = {"ubuntu", NULL,  chsrcfunc(os_ubuntu_chsrc)},
 
 **os_systems[] = {
   os_ubuntu
 },
 
 
-*wr_tex[] =      {"latex", "ctan",     "tex",  NULL,  NULL},
 *wr_anaconda[] = {"conda", "anaconda",         NULL,  NULL},
-*wr_emacs[]    = {"emacs",                     NULL,  NULL},
+*wr_tex     [] =      {"latex", "ctan",     "tex",  NULL,  NULL},
+*wr_emacs   []    = {"emacs",                     NULL,  NULL},
 
-**wr_softwares[] = {wr_tex, wr_anaconda, wr_emacs};
+**wr_softwares[] = {wr_anaconda, wr_tex, wr_emacs};
 
 #undef chsrcfunc
 
@@ -609,8 +609,8 @@ call_cmd (void* cmdptr, const char* arg)
 void
 print_available_mirrors ()
 {
-  // xy_info ("chsrc: 可用以下镜像站，所有的致谢属于这些站点以及它们的开发/维护者们");
-  for (int i=0; i<Array_Size(available_mirrors); i++)
+  xy_info ("chsrc: 可用以下镜像站，所有的致谢属于这些站点以及它们的开发/维护者们");
+  for (int i=0; i<xy_arylen(available_mirrors); i++)
   {
     mirror_info* mir = available_mirrors[i];
     printf ("%-14s ", mir->abbr);
@@ -642,18 +642,18 @@ print_supported_targets ()
 {
   xy_info ("chsrc: 支持对以下目标换源 (同一行表示这几个命令兼容)");
   xy_warn ("编程语言开发");
-  print_supported_targets_ (pl_packagers, Array_Size(pl_packagers));
+  print_supported_targets_ (pl_packagers, xy_arylen(pl_packagers));
   xy_warn ("操作系统");
-  print_supported_targets_ (os_systems,   Array_Size(os_systems));
+  print_supported_targets_ (os_systems,   xy_arylen(os_systems));
   xy_warn ("软件");
-  print_supported_targets_ (wr_softwares, Array_Size(wr_softwares));
+  print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
 }
 
 
 int
 print_help ()
 {
-  for (int i=0; i<Array_Size(usage); i++) {
+  for (int i=0; i<xy_arylen(usage); i++) {
     puts (usage[i]);
   }
 }
@@ -751,7 +751,7 @@ main (int argc, char const *argv[])
 
   int matched = 0;
 
-  for (int i=0; i<Array_Size(pl_packagers); i++) {
+  for (int i=0; i<xy_arylen(pl_packagers); i++) {
     const char const** packager = pl_packagers[i];
     int k = 0;
     const char* alias = packager[k];
@@ -772,7 +772,7 @@ main (int argc, char const *argv[])
   }
   goto match_end;
 
-  for (int i=0; i<Array_Size(os_systems); i++) {
+  for (int i=0; i<xy_arylen(os_systems); i++) {
     const char const** system = os_systems[i];
     int k = 0;
     const char* alias = system[k];
@@ -794,7 +794,7 @@ main (int argc, char const *argv[])
   }
   goto match_end;
 
-  for (int i=0; i<Array_Size(wr_softwares); i++) {
+  for (int i=0; i<xy_arylen(wr_softwares); i++) {
     const char const** ware = wr_softwares[i];
     int k = 0;
     const char* alias = ware[k];

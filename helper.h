@@ -39,7 +39,7 @@
 #endif
 
 
-#define Array_Size(x) (sizeof(x) / sizeof(x[0]))
+#define xy_arylen(x) (sizeof(x) / sizeof(x[0]))
 
 
 static inline void*
