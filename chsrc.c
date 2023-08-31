@@ -581,14 +581,14 @@ usage[] = {
 
   "维护:  https://gitee.com/RubyMetric/chsrc\n",
 
-  "使用：chsrc <command> ",
-  "help                 # 打印帮助，或 -h, --help",
-  "list [target]        # 查看可换源软件，或该软件可以换哪些源",
-  "cesu <target>        # 对该软件所有源测速",
-  "get  <target>        # 查看当前软件的源使用情况",
-  "set  <target>        # 换源，自动测速后挑选最快源",
-  "set  <target> -1     # 1,2,3的1。换源，不测速，挑选经维护者测速排序的第一源",
-  "set  <target> -v     # 换源，并打印换源所执行的具体操作\n"
+  "使用：chsrc <command> [target]",
+  "help                  # 打印此帮助，或 -h, --help",
+  "list [target]         # 查看可换源软件，或该软件可以换哪些源",
+  "cesu <target>         # 对该软件所有源测速",
+  "get  <target>         # 查看当前软件的源使用情况",
+  "set  <target>         # 换源，自动测速后挑选最快源",
+  "set  <target> -1      # 1,2,3的1。换源，不测速，挑选经维护者测速排序的第一源",
+  "set  <target> -v      # 换源，并打印换源所执行的具体操作\n"
 };
 
 
@@ -621,19 +621,78 @@ main (int argc, char const *argv[])
     print_help(); return 0;
   }
 
-  const char* target = NULL;
-  if (xy_streql("-h", argv[1]) || xy_streql("help", argv[1]) || xy_streql("--help", argv[1]))  {
-    print_help(); return 0;
-  } else {
-    target = argv[1];
+  const char* command = argv[1];
+  const char* target  = NULL;
+
+  /* chsrc help */
+  if (xy_streql(command, "-h") ||
+      xy_streql(command, "help") ||
+      xy_streql(command, "--help"))
+  {
+    print_help();
+    return 0;
   }
+
+  /* chsrc list */
+  else if (xy_streql(command, "list"))
+  {
+    if (argc < 2) {
+      puts("chsrc: 列出所有支持的软件，以及所有可用源");
+    } else {
+      puts("chsrc: 列出所有可用镜像站");
+    }
+    return 0;
+  }
+
+
+  /* chsrc cesu */
+  else if (xy_streql(command, "cesu"))
+  {
+    if (argc < 2) {
+      xy_error ("chsrc: 请您提供想要测速源的软件名; 使用 chsrc list 查看所有支持的软件");
+      return 1;
+    }
+    puts("chsrc: 测试提供该软件源的镜像站点速度");
+    return 0;
+  }
+
+
+  /* chsrc get */
+  else if (xy_streql(command, "get"))
+  {
+    if (argc < 2) {
+      xy_error ("chsrc: 请您提供想要查看源的软件名; 使用 chsrc list 查看所有支持的软件");
+      return 1;
+    }
+    puts("chsrc: 查看该软件的换源情况");
+    return 0;
+  }
+
+  /* chsrc set */
+  else if (xy_streql(command, "set"))
+  {
+    if (argc < 2) {
+      xy_error ("chsrc: 请您提供想要设置源的软件名; 使用 chsrc list 查看所有支持的软件");
+      return 1;
+    }
+    puts("chsrc: 开始换源");
+    return 0;
+  }
+
+  /* 不支持的命令 */
+  else
+  {
+    xy_error ("chsrc: 不支持的命令，请使用 chsrc help 查看使用方式");
+    return 1;
+  }
+
+
 
   const char* option = NULL;
   const char* cmdarg = NULL;
 
   if (argc>=2)
   {
-    // printf ("argc = %d\n", argc);
     if (argv[2][0]=='-') {
       option = argv[2];
     } else {
