@@ -577,23 +577,18 @@ static const char const
 
 static const char const*
 usage[] = {
-  "chsrc: Change Source " Chsrc_Version " by RubyMetric\n",
+  "chsrc: Change Source \e[1;35m" Chsrc_Version "\e[0m by \e[4;31mRubyMetric\e[0m\n",
 
   "维护:  https://gitee.com/RubyMetric/chsrc\n",
 
-  "使用：",
-  "chsrc help              # 打印帮助，或 -h, --help",
-  "chsrc list              # 查看可换源软件，以及目前所有的源",
-  "chsrc list   <software> # 查看对该软件，可以使用哪些源\n",
-
-  "chsrc cesu   <software> # 对该软件所有源测速",
-  "      speed  <software> # 对该软件所有源测速\n",
-
-  "chsrc status <software> # 查看当前软件的源使用情况\n",
-
-  "chsrc <software>        # 换源，挑选的是最快源（自动进行用户端测速）",
-  "chsrc <software> -1     # 1,2,3的1。换源，挑选的是经维护者测速排序第一的源（用户端不进行自动测速）",
-  "chsrc <software> -v     # 换源。并打印换源所执行的具体操作\n"
+  "使用：chsrc <command> ",
+  "help                 # 打印帮助，或 -h, --help",
+  "list [target]        # 查看可换源软件，或该软件可以换哪些源",
+  "cesu <target>        # 对该软件所有源测速",
+  "get  <target>        # 查看当前软件的源使用情况",
+  "set  <target>        # 换源，自动测速后挑选最快源",
+  "set  <target> -1     # 1,2,3的1。换源，不测速，挑选经维护者测速排序的第一源",
+  "set  <target> -v     # 换源，并打印换源所执行的具体操作\n"
 };
 
 
@@ -612,7 +607,7 @@ int
 print_help ()
 {
   for (int i=0; i<Array_Size(usage); i++) {
-    xy_info(usage[i]);
+    puts (usage[i]);
   }
 }
 
@@ -620,14 +615,12 @@ print_help ()
 int
 main (int argc, char const *argv[])
 {
-  xy_useutf8();
+  xy_useutf8(); argc -= 1;
 
-  // 未提供参数时
-  if (argc<=1) {
+  if (argc==0) {
     print_help(); return 0;
   }
 
-  // 第一个参数
   const char* target = NULL;
   if (xy_streql("-h", argv[1]) || xy_streql("help", argv[1]) || xy_streql("--help", argv[1]))  {
     print_help(); return 0;
@@ -637,8 +630,8 @@ main (int argc, char const *argv[])
 
   const char* option = NULL;
   const char* cmdarg = NULL;
-  // 第二个参数
-  if (argc>=3)
+
+  if (argc>=2)
   {
     // printf ("argc = %d\n", argc);
     if (argv[2][0]=='-') {
