@@ -564,7 +564,12 @@ static const char const
 
 **os_packagers[] = {
   os_ubuntu
-};
+},
+
+
+*wr_tex[] = {"tex", "latex", "ctan",   NULL,  NULL},
+
+**wr_softwares[] = {wr_tex};
 
 #undef chsrcfunc
 
@@ -664,6 +669,8 @@ main (int argc, char const *argv[])
       call_cmd ((void*) packager[k+1], cmdarg);
     }
   }
+  goto match_end;
+
   for (int i=0; i<Array_Size(os_packagers); i++) {
     const char const** packager = os_packagers[i];
     int k = 0;
@@ -684,9 +691,32 @@ main (int argc, char const *argv[])
       call_cmd ((void*) packager[k+1], cmdarg);
     }
   }
+  goto match_end;
 
+  for (int i=0; i<Array_Size(wr_softwares); i++) {
+    const char const** ware = wr_softwares[i];
+    int k = 0;
+    const char* alias = ware[k];
+    while (NULL!=alias) {
+      // printf("%s matched: %s\n",target, alias);
+      if (0==strcmp(target, alias)) {
+        // printf("matched: %s\n", alias);
+        matched = 1; break;
+      }
+      k++;
+      alias = ware[k];
+    }
+    if (matched) {
+      do {
+        k++; alias = ware[k];
+      } while (NULL!=alias);
+      call_cmd ((void*) ware[k+1], cmdarg);
+    }
+  }
+
+match_end:
   if (!matched) {
-    xy_info("chsrc: 暂不支持的换源类型，请使用-h查看可换源");
+    xy_info("chsrc: 暂不支持的换源类型，请使用chsrc help查看可换源");
   }
   return 0;
 }
