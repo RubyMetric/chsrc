@@ -2,7 +2,7 @@
 * File          : chsrc.c
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
-* Last modified : <2023-08-30>
+* Last modified : <2023-08-31>
 *
 * chsrc:
 *
@@ -44,6 +44,44 @@ does_the_program_exist (char* check_cmd, char* progname)
 
 
 /**
+ * NodeJS换源
+ *
+ * 参考：https://npmmirror.com/
+ */
+void
+pl_nodejs_chsrc (char* option)
+{
+  int selected = 0; char* check_cmd, *prog = NULL;
+
+  if (xy_on_windows) check_cmd = "npm -v >nul 2>nul";
+  else               check_cmd = "npm -v 1>/dev/null 2>&1";
+
+  bool exist_b = does_the_program_exist (check_cmd, "npm");
+
+  if (!exist_b) {
+    xy_error ("chsrc: 未找到 npm 相关命令，请检查是否存在");
+    return;
+  }
+
+  for (int i=0;i<sizeof(pl_nodejs_sources);i++) {
+    // 循环测速
+  }
+
+  const char* source_name = pl_nodejs_sources[selected].mirror->name;
+  const char* source_abbr = pl_nodejs_sources[selected].mirror->abbr;
+  const char* source_url  = pl_nodejs_sources[selected].url;
+
+  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+
+  char* cmd = xy_2strjoin("npm config set registry  ", source_url);
+  system(cmd);
+  free(cmd);
+
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
+
+/**
  * Python换源
  *
  * 参考：https://mirrors.tuna.tsinghua.edu.cn/help/pypi/
@@ -76,13 +114,13 @@ pl_python_chsrc (char* option)
     return;
   }
 
-  for (int i=0;i<sizeof(pl_ruby_sources);i++) {
+  for (int i=0;i<sizeof(pl_python_sources);i++) {
     // 循环测速
   }
 
-  const char* source_name = pl_ruby_sources[selected].mirror->name;
-  const char* source_abbr = pl_ruby_sources[selected].mirror->abbr;
-  const char* source_url  = pl_ruby_sources[selected].url;
+  const char* source_name = pl_python_sources[selected].mirror->name;
+  const char* source_abbr = pl_python_sources[selected].mirror->abbr;
+  const char* source_url  = pl_python_sources[selected].url;
 
   xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
 
@@ -165,7 +203,7 @@ os_ubuntu_chsrc (char* option)
 static const char const
 *pl_ruby[]   = {"gem",  "ruby",    "rb",       NULL,           chsrcfunc(pl_ruby_chsrc)  },
 *pl_python[] = {"pip",  "python",  "py",      "pypi",   NULL,  chsrcfunc(pl_python_chsrc)},
-*pl_nodejs[] = {"npm",  "node",    "nodejs",  "js",     NULL},
+*pl_nodejs[] = {"npm",  "node",    "nodejs",  "js",     NULL,  chsrcfunc(pl_nodejs_chsrc)},
 *pl_perl[]   = {"perl", "cpan",     NULL},
 
 *pl_rust[]   = {"rust", "cargo",   "crate",   "crates",  NULL},
