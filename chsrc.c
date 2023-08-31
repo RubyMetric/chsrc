@@ -214,7 +214,7 @@ pl_ruby_chsrc (char* option)
 
   if (xy_on_windows) check_cmd = "bundle -v >nul 2>nul";
   else               check_cmd = "bundle -v 1>/dev/null 2>&1";
-  bool exist_b = does_the_program_exist (check_cmd, "bundle");
+  exist_b = does_the_program_exist (check_cmd, "bundle");
   if (!exist_b) {
     xy_error ("chsrc: 未找到 bundle 相关命令，请检查是否存在");
     return;
@@ -429,6 +429,78 @@ pl_java_chsrc (char* option)
 
 
 
+/**
+ * R 换源
+ *
+ * 参考：https://help.mirrors.cernet.edu.cn/CRAN/
+ */
+void
+pl_r_chsrc (char* option)
+{
+  int selected = 0; char* check_cmd = NULL;
+
+  for (int i=0;i<sizeof(pl_r_sources);i++) {
+    // 循环测速
+  }
+
+  const char* source_name = pl_r_sources[selected].mirror->name;
+  const char* source_abbr = pl_r_sources[selected].mirror->abbr;
+  const char* source_url  = pl_r_sources[selected].url;
+
+  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+
+
+  const char* file = xy_strjoin (3, "options(\"repos\" = c(CRAN=\"", source_url, "\"))" );
+
+
+  char* cmd = NULL;
+  // TODO: 待确认，Windows 下是否也是该文件
+  if (xy_on_windows)
+    cmd = xy_strjoin(3, "echo ", file, " >> %USERPROFILE%/.Rprofile");
+  else
+    cmd = xy_strjoin(3, "echo ", file, " >> ~/.Rprofile");
+
+  system(cmd);
+
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
+
+
+
+/**
+ * Julia 换源
+ *
+ * 参考：https://help.mirrors.cernet.edu.cn/julia/
+ */
+void
+pl_julia_chsrc (char* option)
+{
+  int selected = 0; char* check_cmd = NULL;
+
+  for (int i=0;i<sizeof(pl_r_sources);i++) {
+    // 循环测速
+  }
+
+  const char* source_name = pl_r_sources[selected].mirror->name;
+  const char* source_abbr = pl_r_sources[selected].mirror->abbr;
+  const char* source_url  = pl_r_sources[selected].url;
+
+  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+
+  const char* file = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source_url, "\"");
+
+  char* cmd = NULL;
+  // TODO: $JULIA_DEPOT_PATH/config/startup.jl 是否要考虑环境变量
+  if (xy_on_windows)
+    cmd = xy_strjoin(3, "echo ", file, " >> %USERPROFILE%/.julia/config/startup.jl");
+  else
+    cmd = xy_strjoin(3, "echo ", file, " >> ~/.julia/config/startup.jl");
+  system(cmd);
+
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
 
 
 
@@ -459,7 +531,7 @@ os_ubuntu_chsrc (char* option)
   system(rm);
   // free(rm);
 
-  xy_info ("chsrc: 为'ubuntu'命令换源");
+  xy_info ("chsrc: 为 ubuntu 命令换源");
   xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
 
@@ -479,7 +551,7 @@ static const char const
 *pl_php[]    = {"php",  "composer",                     NULL, chsrcfunc(pl_php_chsrc)},
 
 *pl_cran[]   = {"r",    "cran",                         NULL, chsrcfunc(pl_r_chsrc)},
-*pl_julia[]  = {"julia",                                NULL, chsrcfunc(pl_julia_sources)},
+*pl_julia[]  = {"julia",                                NULL, chsrcfunc(pl_julia_chsrc)},
 
 **pl_packagers[] = {
   pl_ruby,    pl_python,  pl_nodejs,  pl_perl,
