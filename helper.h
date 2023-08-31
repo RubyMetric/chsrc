@@ -2,7 +2,7 @@
 * File          : helper.h
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
-* Last modified : <2023-08-30>
+* Last modified : <2023-08-31>
 *
 * helper:
 *
@@ -51,10 +51,10 @@ xy_malloc0 (size_t size)
 }
 
 
-#define XY_INFO     1
-#define XY_SUCCESS  1<<1
-#define XY_WARN     1<<2
-#define XY_ERROR    1<<3
+#define XY_INFO     00001
+#define XY_SUCCESS  00001<<1
+#define XY_WARN     00001<<2
+#define XY_ERROR    00001<<3
 
 static void
 xy_log (int level, const char* str)
