@@ -629,7 +629,7 @@ main (int argc, char const *argv[])
 
   // 第一个参数
   const char* target = NULL;
-  if (0==strcmp("-h",argv[1]) || 0==strcmp("--help",argv[1])) {
+  if (xy_streql("-h", argv[1]) || xy_streql("help", argv[1]) || xy_streql("--help", argv[1]))  {
     print_help(); return 0;
   } else {
     target = argv[1];
@@ -655,7 +655,7 @@ main (int argc, char const *argv[])
     int k = 0;
     const char* alias = packager[k];
     while (NULL!=alias) {
-      if (0==strcmp(target, alias)) {
+      if (xy_streql(target, alias)) {
         // printf("matched: %s\n", alias);
         matched = 1; break;
       }
@@ -677,7 +677,7 @@ main (int argc, char const *argv[])
     const char* alias = system[k];
     while (NULL!=alias) {
       // printf("%s matched: %s\n",target, alias);
-      if (0==strcmp(target, alias)) {
+      if (xy_streql(target, alias)) {
         // printf("matched: %s\n", alias);
         matched = 1; break;
       }
@@ -699,7 +699,7 @@ main (int argc, char const *argv[])
     const char* alias = ware[k];
     while (NULL!=alias) {
       // printf("%s matched: %s\n",target, alias);
-      if (0==strcmp(target, alias)) {
+      if (xy_streql(target, alias)) {
         // printf("matched: %s\n", alias);
         matched = 1; break;
       }

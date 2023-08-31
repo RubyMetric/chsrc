@@ -205,4 +205,10 @@ xy_strjoin (unsigned int count, ...)
   return ret;
 }
 
+
+bool
+xy_streql(const char* str1, const char* str2) {
+  return strcmp(str1, str2) == 0 ? true : false;
+}
+
 #endif
