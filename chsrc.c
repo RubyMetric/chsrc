@@ -609,7 +609,7 @@ call_cmd (void* cmdptr, const char* arg)
 void
 print_available_mirrors ()
 {
-  xy_info ("chsrc: 可用以下镜像站，所有的致谢属于这些站点以及它们的开发/维护者们");
+  xy_info ("chsrc: 支持以下镜像站，荣耀与感恩均归于这些站点，以及它们的开发/维护者们");
   for (int i=0; i<xy_arylen(available_mirrors); i++)
   {
     mirror_info* mir = available_mirrors[i];

@@ -81,8 +81,8 @@ xy_log (int level, const char* str)
     //xy_assert ("CAN'T REACH!");
   }
 
-  // -2 把中间%s减掉，-1 把末尾nul减掉
-  size_t len = sizeof(color_fmt_str) -2 -1;
+  // -2 把中间%s减掉
+  size_t len = strlen(color_fmt_str) -2;
   char* buf = malloc(strlen(str) + len + 1);
 
   sprintf (buf, color_fmt_str, str);
