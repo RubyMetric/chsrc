@@ -54,6 +54,15 @@ mirror_info
   NugetOrg  = {"NuGet Org",  "https://www.nuget.org/"};
 
 
+mirror_info*
+available_mirrors[] = {
+  &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Nju, &Cqu,
+  &Ali,  &Tencent, &Netease, &Sohu,
+  &RubyChina, &GoProxyCN, &GoProxyIO
+  // 暂不支持 NugetOrg
+};
+
+
 typedef struct {
   const mirror_info* mirror;
   const char* url;

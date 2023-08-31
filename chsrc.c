@@ -567,9 +567,11 @@ static const char const
 },
 
 
-*wr_tex[] = {"tex", "latex", "ctan",   NULL,  NULL},
+*wr_tex[] =      {"latex", "ctan",     "tex",  NULL,  NULL},
+*wr_anaconda[] = {"conda", "anaconda",         NULL,  NULL},
+*wr_emacs[]    = {"emacs",                     NULL,  NULL},
 
-**wr_softwares[] = {wr_tex};
+**wr_softwares[] = {wr_tex, wr_anaconda, wr_emacs};
 
 #undef chsrcfunc
 
@@ -600,6 +602,51 @@ call_cmd (void* cmdptr, const char* arg)
     xy_info("chsrc: 将使用默认镜像");
   }
   cmd_func(arg);
+}
+
+
+
+void
+print_available_mirrors ()
+{
+  // xy_info ("chsrc: 可用以下镜像站，所有的致谢属于这些站点以及它们的开发/维护者们");
+  for (int i=0; i<Array_Size(available_mirrors); i++)
+  {
+    mirror_info* mir = available_mirrors[i];
+    printf ("%-14s ", mir->abbr);
+    puts (mir->name);
+  }
+}
+
+
+void
+print_supported_targets_ (const char const*** array, size_t size)
+{
+  for (int i=0; i<size; i++)
+  {
+    const char ** target = array[i];
+    const char* alias = target[0];
+    for (int k=1; alias!=NULL; k++)
+    {
+      printf ("%s\t", alias);
+      alias = target[k];
+    }
+    puts("");
+  }
+  puts("");
+}
+
+
+void
+print_supported_targets ()
+{
+  xy_info ("chsrc: 支持对以下目标换源 (同一行表示这几个命令兼容)");
+  xy_warn ("编程语言开发");
+  print_supported_targets_ (pl_packagers, Array_Size(pl_packagers));
+  xy_warn ("操作系统");
+  print_supported_targets_ (os_systems,   Array_Size(os_systems));
+  xy_warn ("软件");
+  print_supported_targets_ (wr_softwares, Array_Size(wr_softwares));
 }
 
 
@@ -637,9 +684,11 @@ main (int argc, char const *argv[])
   else if (xy_streql(command, "list"))
   {
     if (argc < 2) {
-      puts("chsrc: 列出所有支持的软件，以及所有可用源");
+      print_available_mirrors();
+      puts("");
+      print_supported_targets();
     } else {
-      puts("chsrc: 列出所有可用镜像站");
+      puts("chsrc: 列出该软件所有可用镜像站");
     }
     return 0;
   }
