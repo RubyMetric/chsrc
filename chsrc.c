@@ -2,7 +2,7 @@
 * File          : chsrc.c
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
-* Last modified : <2023-08-31>
+* Last modified : <2023-09-01>
 *
 * chsrc:
 *
@@ -587,7 +587,7 @@ usage[] = {
   "维护:  https://gitee.com/RubyMetric/chsrc\n",
 
   "使用：chsrc <command> [target]",
-  "help                  # 打印此帮助，或 -h, --help",
+  "help                  # 打印此帮助，或 h, -h, --help",
   "list [target]         # 查看可换源软件，或该软件可以换哪些源",
   "cesu <target>         # 对该软件所有源测速",
   "get  <target>         # 查看当前软件的源使用情况",
@@ -773,7 +773,8 @@ main (int argc, char const *argv[])
   bool matched = false;
 
   /* chsrc help */
-  if (xy_streql(command, "-h") ||
+  if (xy_streql(command, "h")  ||
+      xy_streql(command, "-h") ||
       xy_streql(command, "help") ||
       xy_streql(command, "--help"))
   {

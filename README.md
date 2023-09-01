@@ -20,19 +20,15 @@
 
 ## 安装使用
 ```bash
-chsrc help              # 打印帮助，或 -h, --help
+使用：chsrc <command> [target]
 
-chsrc list              # 查看可换源软件，以及目前所有的源
-chsrc list   <software> # 查看对该软件，可以使用哪些源
-
-chsrc cesu   <software> # 对该软件所有源测速
-      speed  <software> # 对该软件所有源测速
-
-chsrc status <software> # 查看当前软件的源使用情况
-
-chsrc <software>        # 换源，挑选的是最快源（自动进行用户端测速）
-chsrc <software> -1     # 1,2,3的1。换源，挑选的是经维护者测速排序第一的源（用户端不进行自动测速）
-chsrc <software> -v     # 换源。并打印换源所执行的具体操作
+help                  # 打印此帮助，或 h, -h, --help
+list [target]         # 查看可换源软件，或该软件可以换哪些源
+cesu <target>         # 对该软件所有源测速
+get  <target>         # 查看当前软件的源使用情况
+set  <target>         # 换源，自动测速后挑选最快源
+set  <target> -1      # 1,2,3的1。换源，不测速，挑选经维护者测速排序的第一源
+set  <target> -v      # 换源，并打印换源所执行的具体操作
 ```
 
 换源：
