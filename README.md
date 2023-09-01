@@ -21,9 +21,11 @@
 ## 安装使用
 ```bash
 使用：chsrc <command> [target]
-
 help                  # 打印此帮助，或 h, -h, --help
-list [target]         # 查看可换源软件，或该软件可以换哪些源
+list (或 ls, 或 l)    # 查看可用镜像源，和可换源软件
+list mirror(s)        # 查看可用镜像源
+list target(s)        # 查看可换源软件
+list <target>         # 查看该软件可以使用哪些源
 cesu <target>         # 对该软件所有源测速
 get  <target>         # 查看当前软件的源使用情况
 set  <target>         # 换源，自动测速后挑选最快源

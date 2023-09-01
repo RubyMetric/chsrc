@@ -588,7 +588,10 @@ usage[] = {
 
   "使用：chsrc <command> [target]",
   "help                  # 打印此帮助，或 h, -h, --help",
-  "list [target]         # 查看可换源软件，或该软件可以换哪些源",
+  "list (或 ls, 或 l)    # 查看可用镜像源，和可换源软件",
+  "list mirror(s)        # 查看可用镜像源",
+  "list target(s)        # 查看可换源软件",
+  "list <target>         # 查看该软件可以使用哪些源",
   "cesu <target>         # 对该软件所有源测速",
   "get  <target>         # 查看当前软件的源使用情况",
   "set  <target>         # 换源，自动测速后挑选最快源",
@@ -783,13 +786,28 @@ main (int argc, char const *argv[])
   }
 
   /* chsrc list */
-  else if (xy_streql(command, "list"))
+  else if (xy_streql(command, "list") ||
+           xy_streql(command, "l")    ||
+           xy_streql(command, "ls"))
   {
     if (argc < 2) {
       print_available_mirrors();
       puts("");
       print_supported_targets();
     } else {
+
+      if (xy_streql(argv[2],"mirrors")) {
+        print_available_mirrors(); return 0;
+      }
+      if (xy_streql(argv[2],"mirror"))  {
+        print_available_mirrors(); return 0;
+      }
+      if (xy_streql(argv[2],"targets")) {
+        print_supported_targets(); return 0;
+      }
+      if (xy_streql(argv[2],"target"))  {
+        print_supported_targets(); return 0;
+      }
       matched = get_target(argv[2], Target_List_Sources);
       if (!matched) goto not_matched;
     }
@@ -798,10 +816,12 @@ main (int argc, char const *argv[])
 
 
   /* chsrc cesu */
-  else if (xy_streql(command, "cesu"))
+  else if (xy_streql(command, "cesu") ||
+           xy_streql(command, "ce")   ||
+           xy_streql(command, "c"))
   {
     if (argc < 2) {
-      xy_error ("chsrc: 请您提供想要测速源的软件名; 使用 chsrc list 查看所有支持的软件");
+      xy_error ("chsrc: 请您提供想要测速源的软件名; 使用 chsrc list targets 查看所有支持的软件");
       return 1;
     }
     // TODO:
@@ -813,10 +833,11 @@ main (int argc, char const *argv[])
 
 
   /* chsrc get */
-  else if (xy_streql(command, "get"))
+  else if (xy_streql(command, "get") ||
+           xy_streql(command, "g"))
   {
     if (argc < 2) {
-      xy_error ("chsrc: 请您提供想要查看源的软件名; 使用 chsrc list 查看所有支持的软件");
+      xy_error ("chsrc: 请您提供想要查看源的软件名; 使用 chsrc list targets 查看所有支持的软件");
       return 1;
     }
     matched = get_target(argv[2], Target_Get_Source);
@@ -825,10 +846,11 @@ main (int argc, char const *argv[])
   }
 
   /* chsrc set */
-  else if (xy_streql(command, "set"))
+  else if (xy_streql(command, "set") ||
+           xy_streql(command, "s"))
   {
     if (argc < 2) {
-      xy_error ("chsrc: 请您提供想要设置源的软件名; 使用 chsrc list 查看所有支持的软件");
+      xy_error ("chsrc: 请您提供想要设置源的软件名; 使用 chsrc list targets 查看所有支持的软件");
       return 1;
     }
     matched = get_target(argv[2], Target_Set_Source);
@@ -845,7 +867,7 @@ main (int argc, char const *argv[])
 
 not_matched:
   if (!matched) {
-    xy_info("chsrc: 暂不支持的换源目标，请使用 chsrc list 查看可换源");
+    xy_info("chsrc: 暂不支持的换源目标，请使用 chsrc list targets 查看可换源软件");
     return 1;
   }
 }

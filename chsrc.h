@@ -2,7 +2,7 @@
 * File          : chsrc.h
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-29>
-* Last modified : <2023-08-31>
+* Last modified : <2023-09-01>
 *
 * chsrc:
 *
@@ -58,7 +58,7 @@ mirror_info
 
 mirror_info*
 available_mirrors[] = {
-  &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Nju, &Cqu,
+  &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Nju, &Cqu,
   &Ali,  &Tencent, &Netease, &Sohu,
   &RubyChina, &GoProxyCN, &GoProxyIO
   // 暂不支持 NugetOrg
