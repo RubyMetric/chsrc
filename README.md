@@ -10,7 +10,7 @@
 
 1. `Python`/`JS`:
 
-    我们只想换源。一个简单的换源工具，不需要也不应该强行塞给用户一个庞大的解释器和数十、数百MB其他文件。
+    一个简单的换源工具，不需要也不应该强行塞给用户一个庞大的解释器和数十、数百MB其他文件。
 
 2. `Go`: Go 不足以编译到任何平台
 
@@ -21,6 +21,7 @@
 ## 安装使用
 ```bash
 使用：chsrc <command> [target]
+
 help                  # 打印此帮助，或 h, -h, --help
 list (或 ls, 或 l)    # 查看可用镜像源，和可换源软件
 list mirror(s)        # 查看可用镜像源
@@ -36,46 +37,44 @@ set  <target> -v      # 换源，并打印换源所执行的具体操作
 换源：
 ```bash
 # 编程语言开发
-chsrc gem   # 或 chsrc ruby
-chsrc pip   # 或 chsrc python
-chsrc npm   # 或 chsrc nodejs
-chsrc cpan  # 或 chsrc perl
+chsrc set ruby   # 或 chsrc set gem
+chsrc set python # 或 chsrc set pip
+chsrc set node   # 或 chsrc set npm 或 chsrc set nodejs
+chsrc set perl   # 或 chsrc set cpan
+chsrc set php    # 或 chsrc composer
 
-chsrc go
-chsrc cargo # 或 chsrc rust 或 chsrc crate
-chsrc maven # 或 chsrc java 或 chsrc gradle
-chsrc dotnet
-chsrc composer # 或 chsrc php
+chsrc set go
+chsrc set rust   # 或 chsrc set cargo 或 chsrc crate
+chsrc set java   # 或 chsrc set maven 或 chsrc set mvn 或 chsrc gradle
 
-chsrc cran  # 或 chsrc r
-chsrc julia
+#chsrc set dotnet # 暂无换源需求
+
+chsrc set r     # 或 chsrc set cran
+chsrc set julia
 
 # 操作系统
-chsrc ubuntu
-chsrc debian
-chsrc fedora
-chsrc arch
-chsrc gentoo
-chsrc kali
-chsrc manjaro
+chsrc set ubuntu
+chsrc set debian
+chsrc set fedora
+chsrc set arch
+chsrc set gentoo
+chsrc set kali
+chsrc set manjaro
 
-chsrc deepin
-chsrc openkylin
-chsrc openeuler
+chsrc set deepin
+chsrc set openkylin
+chsrc set openeuler
 
-chsrc openbsd
-chsrc netbsd
+chsrc set openbsd
+chsrc set netbsd
 
-# Windows
-chsrc msys2 # 或 chsrc msys
+chsrc set msys2 # 或 chsrc set msys
 
-# macOS
-chsrc brew  # 或 chsrc homebrew
-
-# 其他软件
-chsrc emacs
-chsrc anaconda
-chsrc ctan     # Tex
+# 软件
+chsrc set brew  # 或 chsrc set homebrew
+chsrc set emacs
+chsrc set conda # 或 chsrc set anaconda
+chsrc set ctan  # 或 chsrc set tex
 ```
 
 <br>
