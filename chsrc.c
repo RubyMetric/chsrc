@@ -44,6 +44,59 @@ does_the_program_exist (char* check_cmd, char* progname)
 
 
 
+/**
+ * 测速代码参考自 https://github.com/mirrorz-org/oh-my-mirrorz/blob/master/oh-my-mirrorz.py
+ * 修改为C语言，一切功劳属于原作者
+ *
+ * @return 返回测得的速度，若无速度或出错，返回0
+ */
+double
+test_speed (char* url)
+{
+  char* curl_cmd, *devnull = NULL;
+  if (xy_on_windows)
+    devnull = "nul";
+  else
+    devnull = "/dev/null";
+
+  curl_cmd = xy_strjoin(4, "curl -qs -o ", devnull, "-w '%{http_code} %{speed_download}' -m8 -A chsrc/" Chsrc_Version
+             "(+https://gitee.com/RubyMetric/chsrc)", url);
+
+  FILE* fp = popen(curl_cmd, "r");
+  char buf[64] = {0};
+  fgets(buf, 64, fp);
+  fclose(fp);
+  char* split = strchr(buf, ' ');
+  *split = '\0';
+  int http_code = atoi(buf);
+  double speed  = atof(split+1);
+
+  char* speedstr = to_human_readable_speed(speed);
+
+  puts(url);
+
+  if (200!=http_code) {
+    xy_warn (xy_2strjoin("HTTP码 = ", buf));
+  }
+  puts(xy_2strjoin("速度 = ", speedstr));
+}
+
+
+char*
+to_human_readable_speed (double speed)
+{
+  char* scale[] = {"Byte/s", "KByte/s", "MByte/s", "GByte/s", "TByte/s"};
+  int i = 0;
+  while (speed > 1024.0)
+  {
+    i += 1;
+    speed /= 1024.0;
+  }
+  char* buf = xy_malloc0(64);
+  sprintf(buf, "%.2f %s", speed, scale[i]);
+}
+
+
 
 /**
  * Perl换源
