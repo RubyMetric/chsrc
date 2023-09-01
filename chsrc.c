@@ -6,7 +6,7 @@
 *
 * chsrc:
 *
-*   Change Source —— 换源命令行工具
+*   Change Source —— 命令行换源工具
 * -------------------------------------------------------------*/
 
 #include "chsrc.h"
@@ -672,6 +672,92 @@ print_help ()
 }
 
 
+
+/**
+ * 遍历我们内置的targets列表，查询用户输入`input`是否与我们支持的某个target匹配
+ *
+ * @param[out]  target_func  如果匹配到，则返回内置targets列表中NULL的位置
+ *
+ * @return 匹配到则返回true，未匹配到则返回false
+ */
+bool
+iterate_targets_(const char const*** array, size_t size, const char* input, const char const*** target_func)
+{
+  int matched = 0;
+
+  const char const** target = NULL;
+  int k = 0;
+  const char* alias = NULL;
+
+  for (int i=0; i<size; i++) {
+    target = array[i];
+    alias = target[k];
+    while (NULL!=alias) {
+      if (xy_streql(input, alias)) {
+        matched = 1; break;
+      }
+      k++;
+      alias = target[k];
+    }
+    if (!matched) k = 0;
+    if (matched) break;
+  }
+
+  if(!matched) {
+    *target_func = NULL;
+    return false;
+  }
+
+  do {
+    k++;
+    alias = target[k];
+  } while (NULL!=alias);
+  *target_func = target + k;
+  return true;
+}
+
+#define iterate_targets(ary, input, target_func) iterate_targets_(ary, xy_arylen(ary), input, target_func)
+
+#define Target_Set_Source   1
+#define Target_Get_Source   2
+#define Target_List_Sources 3
+
+/**
+ * 寻找target，并根据`code`执行相应的操作
+ *
+ * @param[in]  input  用户输入的目标
+ * @param[in]  code   对target要执行的操作
+ *
+ * @return 找到目标返回true，未找到返回false
+ */
+bool
+get_target (const char* input, int code)
+{
+  const char const** target_func = NULL;
+
+           bool matched = iterate_targets(pl_packagers, input, &target_func);
+  if (!matched) matched = iterate_targets(os_systems,   input, &target_func);
+  if (!matched) matched = iterate_targets(wr_softwares, input, &target_func);
+
+  if (!matched) {
+    return false;
+  }
+
+  if (Target_Set_Source==code) {
+    puts("chsrc: 对该软件换源");
+    // call_cmd ((void*) target_func+code, NULL);
+  }
+  else if (Target_Get_Source==code) {
+    puts("chsrc: 查看该软件的换源情况");
+  }
+  else if (Target_List_Sources==code) {
+    puts("chsrc: 列出该软件所有可用镜像站");
+  }
+  return true;
+}
+
+
+
 int
 main (int argc, char const *argv[])
 {
@@ -683,6 +769,8 @@ main (int argc, char const *argv[])
 
   const char* command = argv[1];
   const char* target  = NULL;
+
+  bool matched = false;
 
   /* chsrc help */
   if (xy_streql(command, "-h") ||
@@ -701,7 +789,8 @@ main (int argc, char const *argv[])
       puts("");
       print_supported_targets();
     } else {
-      puts("chsrc: 列出该软件所有可用镜像站");
+      matched = get_target(argv[2], Target_List_Sources);
+      if (!matched) goto not_matched;
     }
     return 0;
   }
@@ -714,6 +803,9 @@ main (int argc, char const *argv[])
       xy_error ("chsrc: 请您提供想要测速源的软件名; 使用 chsrc list 查看所有支持的软件");
       return 1;
     }
+    // TODO:
+    // matched = get_target(argv[2],);
+    // if (!matched) goto not_matched;
     puts("chsrc: 测试提供该软件源的镜像站点速度");
     return 0;
   }
@@ -726,7 +818,8 @@ main (int argc, char const *argv[])
       xy_error ("chsrc: 请您提供想要查看源的软件名; 使用 chsrc list 查看所有支持的软件");
       return 1;
     }
-    puts("chsrc: 查看该软件的换源情况");
+    matched = get_target(argv[2], Target_Get_Source);
+    if (!matched) goto not_matched;
     return 0;
   }
 
@@ -737,7 +830,8 @@ main (int argc, char const *argv[])
       xy_error ("chsrc: 请您提供想要设置源的软件名; 使用 chsrc list 查看所有支持的软件");
       return 1;
     }
-    puts("chsrc: 开始换源");
+    matched = get_target(argv[2], Target_Set_Source);
+    if (!matched) goto not_matched;
     return 0;
   }
 
@@ -748,89 +842,9 @@ main (int argc, char const *argv[])
     return 1;
   }
 
-
-
-  const char* option = NULL;
-  const char* cmdarg = NULL;
-
-  if (argc>=2)
-  {
-    if (argv[2][0]=='-') {
-      option = argv[2];
-    } else {
-      cmdarg = argv[2];
-    }
-  }
-
-  int matched = 0;
-
-  for (int i=0; i<xy_arylen(pl_packagers); i++) {
-    const char const** packager = pl_packagers[i];
-    int k = 0;
-    const char* alias = packager[k];
-    while (NULL!=alias) {
-      if (xy_streql(target, alias)) {
-        // printf("matched: %s\n", alias);
-        matched = 1; break;
-      }
-      k++;
-      alias = packager[k];
-    }
-    if (matched) {
-      do {
-        k++; alias = packager[k];
-      } while (NULL!=alias);
-      call_cmd ((void*) packager[k+1], cmdarg);
-    }
-  }
-  goto match_end;
-
-  for (int i=0; i<xy_arylen(os_systems); i++) {
-    const char const** system = os_systems[i];
-    int k = 0;
-    const char* alias = system[k];
-    while (NULL!=alias) {
-      // printf("%s matched: %s\n",target, alias);
-      if (xy_streql(target, alias)) {
-        // printf("matched: %s\n", alias);
-        matched = 1; break;
-      }
-      k++;
-      alias = system[k];
-    }
-    if (matched) {
-      do {
-        k++; alias = system[k];
-      } while (NULL!=alias);
-      call_cmd ((void*) system[k+1], cmdarg);
-    }
-  }
-  goto match_end;
-
-  for (int i=0; i<xy_arylen(wr_softwares); i++) {
-    const char const** ware = wr_softwares[i];
-    int k = 0;
-    const char* alias = ware[k];
-    while (NULL!=alias) {
-      // printf("%s matched: %s\n",target, alias);
-      if (xy_streql(target, alias)) {
-        // printf("matched: %s\n", alias);
-        matched = 1; break;
-      }
-      k++;
-      alias = ware[k];
-    }
-    if (matched) {
-      do {
-        k++; alias = ware[k];
-      } while (NULL!=alias);
-      call_cmd ((void*) ware[k+1], cmdarg);
-    }
-  }
-
-match_end:
+not_matched:
   if (!matched) {
-    xy_info("chsrc: 暂不支持的换源类型，请使用chsrc help查看可换源");
+    xy_info("chsrc: 暂不支持的换源目标，请使用 chsrc list 查看可换源");
+    return 1;
   }
-  return 0;
 }
