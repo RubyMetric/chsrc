@@ -99,7 +99,8 @@ xy_log (int level, const char* str)
 
 
 /**
- *
+ * 将str中所有的src字符替换成dest,并返回一个全新的字符串
+ * 现在已经废弃不用
  */
 static char*
 xy_strch (const char* str, char src,const char* dest)
