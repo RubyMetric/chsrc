@@ -841,12 +841,12 @@ print_help ()
 /**
  * 遍历我们内置的targets列表，查询用户输入`input`是否与我们支持的某个target匹配
  *
- * @param[out]  target_func  如果匹配到，则返回内置targets列表中最后的target_info信息
+ * @param[out]  target_info  如果匹配到，则返回内置targets列表中最后的target_info信息
  *
  * @return 匹配到则返回true，未匹配到则返回false
  */
 bool
-iterate_targets_(const char const*** array, size_t size, const char* input, const char const*** target_func)
+iterate_targets_(const char const*** array, size_t size, const char* input, const char const*** target_info)
 {
   int matched = 0;
 
@@ -869,7 +869,7 @@ iterate_targets_(const char const*** array, size_t size, const char* input, cons
   }
 
   if(!matched) {
-    *target_func = NULL;
+    *target_info = NULL;
     return false;
   }
 
@@ -877,11 +877,11 @@ iterate_targets_(const char const*** array, size_t size, const char* input, cons
     k++;
     alias = target[k];
   } while (NULL!=alias);
-  *target_func = target + k;
+  *target_info = target + k + 1;
   return true;
 }
 
-#define iterate_targets(ary, input, target_func) iterate_targets_(ary, xy_arylen(ary), input, target_func)
+#define iterate_targets(ary, input, target) iterate_targets_(ary, xy_arylen(ary), input, target)
 
 #define Target_Set_Source   1
 #define Target_Get_Source   2
@@ -898,27 +898,28 @@ iterate_targets_(const char const*** array, size_t size, const char* input, cons
 bool
 get_target (const char* input, int code)
 {
-  const char const** target_func = NULL;
+  const char const** target_tmp = NULL;
 
-           bool matched = iterate_targets(pl_packagers, input, &target_func);
-  if (!matched) matched = iterate_targets(os_systems,   input, &target_func);
-  if (!matched) matched = iterate_targets(wr_softwares, input, &target_func);
+           bool matched = iterate_targets(pl_packagers, input, &target_tmp);
+  if (!matched) matched = iterate_targets(os_systems,   input, &target_tmp);
+  if (!matched) matched = iterate_targets(wr_softwares, input, &target_tmp);
 
   if (!matched) {
     return false;
   }
 
+  target_info* target = (target_info*) *target_tmp;
+
   if (Target_Set_Source==code) {
     puts("chsrc: 对该软件换源");
-    call_cmd ((void*) *(target_func+code), NULL);
+    // call_cmd ((void*) *(target_func+code), NULL);
+    target->setfn(NULL);
   }
   else if (Target_Get_Source==code) {
-    puts("chsrc: 查看该软件的换源情况");
-    call_cmd ((void*) *(target_func+code), NULL);
+    target->getfn("");
   }
   else if (Target_List_Sources==code) {
-    source_info* sources = (source_info*) * (target_func + Target_List_Sources);
-    print_supported_sources_for_target (sources);
+    print_supported_sources_for_target (target->sources);
   }
   return true;
 }
