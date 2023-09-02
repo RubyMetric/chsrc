@@ -176,7 +176,7 @@ xy_2strjoin (const char* str1, const char* str2)
 static char*
 xy_strjoin (unsigned int count, ...)
 {
-  size_t al_fixed = 256;
+  size_t al_fixed = 128;
   char* ret = calloc(1, al_fixed);
   // 已分配次数
   int al_times = 1;
@@ -194,14 +194,26 @@ xy_strjoin (unsigned int count, ...)
 
   for(int i=0; i<count; i++)
   {
+    // 是否需要重新分配
+    bool need_realloc = false;
+
     str = va_arg(args, const char*);
     al_need += strlen(str);
-    if (al_need > al_cur) {
+    while (al_need > al_cur) {
       al_times += 1; al_cur = al_times * al_fixed;
+      need_realloc = true;
+    }
+    // printf("al_times %d, al_need %zd, al_cur %zd\n", al_times, al_need, al_cur);
+    if (need_realloc) {
+      ptrdiff_t diff = cur - ret;
       ret = realloc(ret, al_cur);
-      if (NULL==ret) { xy_error ("xy: No availble memory!"); return NULL; }
+      cur = ret + diff;
+    }
+    if (NULL==ret) {
+      xy_error ("xy: No availble memory!"); return NULL;
     }
     strcpy(cur, str);
+    // puts(ret);
     cur += strlen(str);
   }
   va_end(args);

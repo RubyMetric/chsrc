@@ -1,6 +1,7 @@
 CFLAGS =
 
 TARGET = chsrc
+TEST_TARGET = test_$(TARGET)
 #=======================
 
 all:
@@ -8,8 +9,8 @@ all:
 	@gcc chsrc.c $(CFLAGS) -o $(TARGET)
 
 test:
-	@gcc test_helper.c -o test
-	@./test
+	@gcc test_helper.c -o $(TEST_TARGET)
+	@./$(TEST_TARGET)
 
 test_cmd: $(TARGET)
 	./$(TARGET) list mirror
