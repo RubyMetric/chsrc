@@ -239,7 +239,11 @@ pl_php_sources[] = {
 
 
 
-
+/**
+ * 2023-09-01 更新
+ *
+ * TODO: 1. 源并不完整，且未经测试是否有效
+ */
 static source_info
 os_ubuntu_sources[] = {
   {&Ali,       "https://mirrors.aliyun.com/ubuntu/"},
@@ -249,8 +253,22 @@ os_ubuntu_sources[] = {
   {&Tencent,   "https://mirrors.tencent.com/ubuntu/"},
   {&Netease,   "https://mirrors.163.com/ubuntu/"},
   {&Sohu,      "https://mirrors.sohu.com/ubuntu/"},
-};
+},
 
+/**
+ * 2023-09-01 更新
+ *
+ * TODO: 1. 源并不完整，且未经测试是否有效
+ */
+os_debian_sources[] = {
+  {&Ali,       "https://mirrors.aliyun.com/ubuntu/"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/ubuntu/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/ubuntu/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/ubuntu/"},
+  {&Tencent,   "https://mirrors.tencent.com/ubuntu/"},
+  {&Netease,   "https://mirrors.163.com/ubuntu/"},
+  {&Sohu,      "https://mirrors.sohu.com/ubuntu/"},
+};
 
 /* 函数签名 */
 bool does_the_program_exist (char* check_cmd, char* progname);

@@ -572,22 +572,47 @@ os_ubuntu_setsrc (char* option)
   system(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
-  const char* current_url = xy_strch(source_url,'/',"\\/");
 
-  char* cmd = xy_strjoin(3, "sed -E \'s/(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/ubuntu\\//\\1",
-                          current_url,
-                          "/\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
+  char* cmd = xy_strjoin(3, "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/ubuntu\\/@\\1",
+                          source_url,
+                          "@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
   system(cmd);
   free(cmd);
 
   char* rm = "rm -rf /etc/apt/source.list.bak";
   system(rm);
-  // free(rm);
 
   xy_info ("chsrc: 为 ubuntu 命令换源");
   xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
+void
+os_debian_setsrc (char* option)
+{
+  int selected = 0;
+  for (int i=0;i<sizeof(os_ubuntu_sources);i++) {
+    // 循环测速
+  }
+  const char* source_name = os_ubuntu_sources[selected].mirror->name;
+  const char* source_abbr = os_ubuntu_sources[selected].mirror->abbr;
+  const char* source_url  = os_ubuntu_sources[selected].url;
 
+  char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
+  system(backup);
+
+  xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
+
+  char* cmd = xy_strjoin(3, "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/debian\\/@\\1",
+                          source_url,
+                          "@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
+  system(cmd);
+  free(cmd);
+
+  char* rm = "rm -rf /etc/apt/source.list.bak";
+  system(rm);
+
+  xy_info ("chsrc: 为 ubuntu 命令换源");
+  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
 
 
 #define  setsrc_fn(func) (const char const*)func
@@ -613,10 +638,11 @@ static const char const
 },
 
 
-*os_ubuntu  [] = {"ubuntu", NULL,  setsrc_fn(os_ubuntu_setsrc)},
+*os_ubuntu  [] = {"ubuntu", NULL,  setsrc_fn(os_ubuntu_setsrc),NULL,sources_ptr(os_ubuntu_sources)},
+*os_debian  [] = {"debian", NULL,  setsrc_fn(os_debian_setsrc),NULL,sources_ptr(os_debian_sources)},
 **os_systems[] =
 {
-  os_ubuntu
+  os_ubuntu,os_debian
 },
 
 
