@@ -281,6 +281,24 @@ pl_ruby_setsrc (char* option)
   xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
 
+void
+pl_ruby_getsrc (char* option)
+{
+  char* cmd = "gem sources";
+  xy_info (xy_2strjoin("chsrc: 运行 ", cmd));
+  system(cmd);
+  cmd = "bundle config get mirror.https://rubygems.org";
+  xy_info (xy_2strjoin("chsrc: 运行 ", cmd));
+  system(cmd);
+}
+
+void
+pl_ruby_listsrc (char* option)
+{
+  const mirror_info* mir = pl_ruby_sources->mirror;
+  printf ("%-18s%-41s ", mir->abbr, pl_ruby_sources->url);
+  puts(mir->name);
+}
 
 
 /**
@@ -731,15 +749,6 @@ print_supported_targets ()
   print_supported_targets_ (os_systems,   xy_arylen(os_systems));
   xy_warn ("软件");
   print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
-}
-
-
-
-void
-print_supported_sources_for_target (const char* target)
-{
-  xy_info ("chsrc: 支持对以下目标换源 (同一行表示这几个命令兼容)");
-
 }
 
 
