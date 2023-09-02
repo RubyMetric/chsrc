@@ -43,6 +43,20 @@ does_the_program_exist (char* check_cmd, char* progname)
 }
 
 
+char*
+to_human_readable_speed (double speed)
+{
+  char* scale[] = {"Byte/s", "KByte/s", "MByte/s", "GByte/s", "TByte/s"};
+  int i = 0;
+  while (speed > 1024.0)
+  {
+    i += 1;
+    speed /= 1024.0;
+  }
+  char* buf = xy_malloc0(64);
+  sprintf(buf, "%.2f %s", speed, scale[i]);
+}
+
 
 /**
  * 测速代码参考自 https://github.com/mirrorz-org/oh-my-mirrorz/blob/master/oh-my-mirrorz.py
@@ -82,21 +96,7 @@ test_speed (char* url)
 }
 
 
-char*
-to_human_readable_speed (double speed)
-{
-  char* scale[] = {"Byte/s", "KByte/s", "MByte/s", "GByte/s", "TByte/s"};
-  int i = 0;
-  while (speed > 1024.0)
-  {
-    i += 1;
-    speed /= 1024.0;
-  }
-  char* buf = xy_malloc0(64);
-  sprintf(buf, "%.2f %s", speed, scale[i]);
-}
-
-
+/***************************************** 换源 *********************************************/
 
 /**
  * Perl换源
@@ -292,13 +292,6 @@ pl_ruby_getsrc (char* option)
   system(cmd);
 }
 
-void
-pl_ruby_listsrc (char* option)
-{
-  const mirror_info* mir = pl_ruby_sources->mirror;
-  printf ("%-18s%-41s ", mir->abbr, pl_ruby_sources->url);
-  puts(mir->name);
-}
 
 
 /**
@@ -637,7 +630,7 @@ os_debian_setsrc (char* option)
 #define  getsrc_fn(func) (const char const*)func
 #define sources_ptr(ptr) (const char const*)ptr
 static const char const
-*pl_ruby  [] = {"gem",   "ruby",    "rb",    "rubygems", NULL,  setsrc_fn(pl_ruby_setsrc) ,   NULL,  sources_ptr(pl_ruby_sources) },
+*pl_ruby  [] = {"gem",   "ruby",    "rb",    "rubygems", NULL,  setsrc_fn(pl_ruby_setsrc), getsrc_fn(pl_ruby_getsrc), sources_ptr(pl_ruby_sources)},
 *pl_python[] = {"pip",   "python",  "py",    "pypi",     NULL,  setsrc_fn(pl_python_setsrc),  NULL,  sources_ptr(pl_python_sources)},
 *pl_nodejs[] = {"npm",   "node",    "js",    "nodejs",   NULL,  setsrc_fn(pl_nodejs_setsrc),  NULL,  sources_ptr(pl_nodejs_sources)},
 *pl_perl  [] = {"perl",  "cpan",                         NULL,  setsrc_fn(pl_perl_setsrc),    NULL,  sources_ptr(pl_perl_sources)},
@@ -753,6 +746,23 @@ print_supported_targets ()
 
 
 
+/**
+ * 用于 chsrc list <target>
+ */
+void
+print_supported_sources_for_target (source_info sources[])
+{
+  for (int i=0;i<4;i++)
+  {
+    source_info src = sources[i];
+    const mirror_info* mir = src.mirror;
+    printf ("%-18s%-50s ", mir->abbr, src.url);
+    puts(mir->name);
+  }
+}
+
+
+
 
 int
 print_help ()
@@ -836,13 +846,15 @@ get_target (const char* input, int code)
 
   if (Target_Set_Source==code) {
     puts("chsrc: 对该软件换源");
-    // call_cmd ((void*) target_func+code, NULL);
+    call_cmd ((void*) *(target_func+code), NULL);
   }
   else if (Target_Get_Source==code) {
     puts("chsrc: 查看该软件的换源情况");
+    call_cmd ((void*) *(target_func+code), NULL);
   }
   else if (Target_List_Sources==code) {
-    puts("chsrc: 列出该软件所有可用镜像站");
+    source_info* sources = (source_info*) * (target_func + Target_List_Sources);
+    print_supported_sources_for_target (sources);
   }
   return true;
 }
