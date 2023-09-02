@@ -626,47 +626,80 @@ os_debian_setsrc (char* option)
 }
 
 
-#define  setsrc_fn(func) (const char const*)func
-#define  getsrc_fn(func) (const char const*)func
-#define sources_ptr(ptr) (const char const*)ptr
+/************************************** Target Matrix ****************************************/
+
+typedef struct {
+  void (*setfn)(char* option);
+  void (*getfn)(char* option);
+  void (*cesufn)(char* option);
+  source_info* sources;
+  size_t       sources_count;
+} target_info;
+
+#define def_target_info(t, n) target_info t##_target = {t##_setsrc, t##_getsrc, t##_cesu, t##_sources, n};
+
+def_target_info(pl_ruby, 5)
+
+target_info
+  pl_python_target = {pl_python_setsrc, NULL, NULL, pl_python_sources, 5},
+  pl_nodejs_target = {pl_nodejs_setsrc, NULL, NULL, pl_nodejs_sources, 2},
+  pl_perl_target   = {pl_perl_setsrc,   NULL, NULL, pl_perl_sources,   5},
+  pl_rust_target   = {pl_rust_setsrc,   NULL, NULL, pl_rust_sources,   5},
+  pl_go_target     = {pl_go_setsrc,     NULL, NULL, pl_go_sources,     3},
+  pl_dotnet_target = {pl_dotnet_setsrc, NULL, NULL, pl_dotnet_sources, 1},
+  pl_java_target   = {pl_java_setsrc,   NULL, NULL, pl_java_sources,   1},
+  pl_php_target    = {pl_php_setsrc,    NULL, NULL, pl_php_sources,    1},
+  pl_r_target      = {pl_r_setsrc,      NULL, NULL, pl_r_sources,      5},
+  pl_julia_target  = {pl_julia_setsrc,  NULL, NULL, pl_julia_sources,  3};
+
+
+#define targetinfo(t) (const char const*)t
 static const char const
-*pl_ruby  [] = {"gem",   "ruby",    "rb",    "rubygems", NULL,  setsrc_fn(pl_ruby_setsrc), getsrc_fn(pl_ruby_getsrc), sources_ptr(pl_ruby_sources)},
-*pl_python[] = {"pip",   "python",  "py",    "pypi",     NULL,  setsrc_fn(pl_python_setsrc),  NULL,  sources_ptr(pl_python_sources)},
-*pl_nodejs[] = {"npm",   "node",    "js",    "nodejs",   NULL,  setsrc_fn(pl_nodejs_setsrc),  NULL,  sources_ptr(pl_nodejs_sources)},
-*pl_perl  [] = {"perl",  "cpan",                         NULL,  setsrc_fn(pl_perl_setsrc),    NULL,  sources_ptr(pl_perl_sources)},
-*pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  setsrc_fn(pl_rust_setsrc),    NULL,  sources_ptr(pl_rust_sources)},
-*pl_go    [] = {"go",    "golang",  "goproxy",           NULL,  setsrc_fn(pl_go_setsrc),      NULL,  sources_ptr(pl_go_sources)},
-*pl_dotnet[] = {"nuget", "net",     ".net",   "dotnet",  NULL,  setsrc_fn(pl_dotnet_setsrc),  NULL,  sources_ptr(pl_dotnet_sources)},
-*pl_java  [] = {"java",  "maven",   "gradle",            NULL,  setsrc_fn(pl_java_setsrc),    NULL,  sources_ptr(pl_java_sources)},
-*pl_php   [] = {"php",   "composer",                     NULL,  setsrc_fn(pl_php_setsrc),     NULL,  sources_ptr(pl_php_sources)},
-*pl_cran  [] = {"r",     "cran",                         NULL,  setsrc_fn(pl_r_setsrc),       NULL,  sources_ptr(pl_r_sources)},
-*pl_julia [] = {"julia",                                 NULL,  setsrc_fn(pl_julia_setsrc),   NULL,  sources_ptr(pl_julia_sources)},
+*pl_ruby  [] = {"gem",   "ruby",    "rb",    "rubygems", NULL,  targetinfo(&pl_ruby_target)},
+*pl_python[] = {"pip",   "python",  "py",    "pypi",     NULL,  targetinfo(&pl_python_target)},
+*pl_nodejs[] = {"npm",   "node",    "js",    "nodejs",   NULL,  targetinfo(&pl_nodejs_target)},
+*pl_perl  [] = {"perl",  "cpan",                         NULL,  targetinfo(&pl_perl_target)},
+*pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  targetinfo(&pl_rust_target)},
+*pl_go    [] = {"go",    "golang",  "goproxy",           NULL,  targetinfo(&pl_go_target)} ,
+*pl_dotnet[] = {"nuget", "net",     ".net",   "dotnet",  NULL,  targetinfo(&pl_dotnet_target)},
+*pl_java  [] = {"java",  "maven",   "gradle",            NULL,  targetinfo(&pl_java_target)},
+*pl_php   [] = {"php",   "composer",                     NULL,  targetinfo(&pl_php_target)},
+*pl_r     [] = {"r",     "cran",                         NULL,  targetinfo(&pl_r_target)},
+*pl_julia [] = {"julia",                                 NULL,  targetinfo(&pl_julia_target)},
 **pl_packagers[] =
 {
   pl_ruby,    pl_python,  pl_nodejs,  pl_perl,
-  pl_rust,    pl_go,      pl_dotnet,  pl_java,  pl_php,
-  pl_cran,    pl_julia
-},
+  pl_rust,    pl_go,      pl_dotnet,  pl_java,   pl_php,
+  pl_r,       pl_julia
+};
 
 
-*os_ubuntu  [] = {"ubuntu", NULL,  setsrc_fn(os_ubuntu_setsrc),NULL,sources_ptr(os_ubuntu_sources)},
-*os_debian  [] = {"debian", NULL,  setsrc_fn(os_debian_setsrc),NULL,sources_ptr(os_debian_sources)},
+target_info
+  os_ubuntu_target = {os_ubuntu_setsrc, NULL, NULL, os_ubuntu_sources, 7},
+  os_debian_target = {os_debian_setsrc, NULL, NULL, os_debian_sources, 7};
+static const char const
+*os_ubuntu  [] = {"ubuntu", NULL,  targetinfo(&os_ubuntu_target)},
+*os_debian  [] = {"debian", NULL,  targetinfo(&os_debian_target)},
 **os_systems[] =
 {
-  os_ubuntu,os_debian
-},
+  os_ubuntu, os_debian
+};
 
 
-*wr_anaconda[] = {"conda", "anaconda",         NULL,  NULL},
-*wr_tex     [] = {"latex", "ctan",     "tex",  NULL,  NULL},
-*wr_emacs   [] = {"emacs",                     NULL,  NULL},
+target_info
+  wr_anaconda_target = {NULL, NULL, NULL, NULL, 0},
+  wr_emacs_target    = {NULL, NULL, NULL, NULL, 0},
+  wr_tex_target      = {NULL, NULL, NULL, NULL, 0};
+
+static const char const
+*wr_anaconda[] = {"conda", "anaconda",         NULL,  targetinfo(&wr_anaconda_target)},
+*wr_emacs   [] = {"emacs",                     NULL,  targetinfo(&wr_emacs_target)},
+*wr_tex     [] = {"latex", "ctan",     "tex",  NULL,  targetinfo(&wr_tex_target) },
 **wr_softwares[] =
 {
-  wr_anaconda, wr_tex, wr_emacs
+  wr_anaconda, wr_emacs, wr_tex
 };
-#undef getsrc_fn
-#undef getsrc_fn
-#undef sources_ptr
+#undef targetinfo
 
 
 
