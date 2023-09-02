@@ -68,44 +68,35 @@ to_human_readable_speed (double speed)
 double
 test_speed (char* url)
 {
-  char* curl_cmd = xy_strjoin(4, "curl -qs -o ", xy_os_devnull, " -w \"%{http_code} %{speed_download}\" -m8 -A chsrc/" Chsrc_Version
+  // 我们用 —L，因为Ruby China源会跳转到其他地方
+  char* curl_cmd = xy_strjoin(4, "curl -qsL -o ", xy_os_devnull, " -w \"%{http_code} %{speed_download}\" -m8 -A chsrc/" Chsrc_Version
                    "  ", url);
 
- //  xy_info (xy_2strjoin("chsrc: 测速 ", url));
-  puts(curl_cmd);
-  system(curl_cmd);
+  xy_info (xy_2strjoin("chsrc: 测速 ", url));
 
-/*
   FILE* fp = popen(curl_cmd, "r");
   char buf[64] = {0};
   while(NULL!=fgets(buf, 64, fp));
-
-  puts("hello?");
-  puts(buf);
-
+  // puts(buf);
 
   // 如果尾部有换行，删除
   char* last_lf = strrchr(buf, '\n');
   if (last_lf) *last_lf = '\0';
 
   char* split = strchr(buf, ' ');
-  printf("diff = %d\n", split-buf);
   if (split) *split = '\0';
-  puts(buf);
-  puts(split+1);
+
+  // puts(buf); puts(split+1);
   int http_code = atoi(buf);
   double speed  = atof(split+1);
-
-  printf("http_code = %d, speed = %f\n", http_code, speed);
   char* speedstr = to_human_readable_speed(speed);
 
   if (200!=http_code) {
-    xy_warn (xy_2strjoin("HTTP码 = ", buf));
+    xy_warn (xy_strjoin(4, "chsrc: 速度 ", speedstr, " | HTTP码  " , http_code));
+  } else {
+    xy_info (xy_2strjoin("chsrc: 速度 ", speedstr));
   }
-  puts(xy_2strjoin("速度 = ", speedstr));
   return speed;
-   */
-  return 0;
 }
 
 
@@ -338,7 +329,6 @@ pl_ruby_cesu (char* option)
     source_info src = sources[i];
     const char* baseurl = src.url;
     char* testurl = xy_2strjoin(baseurl, "gems/nokogiri-1.15.0-java.gem");
-    puts(testurl);
     double speed  = test_speed (testurl);
     speeds[i] = speed;
   }

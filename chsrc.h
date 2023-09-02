@@ -79,7 +79,7 @@ typedef struct {
 
 
 /**
- * 2023-08-29 更新
+ * 2023-09-02 更新
  *
  * 速度已经过测试，目前北外最快，Ruby China 的源慢了一半
  */
@@ -89,7 +89,9 @@ pl_ruby_sources[] = {
   {&Ali,       "https://mirrors.aliyun.com/rubygems/"},
   {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/"},
   {&Tencent,   "https://mirrors.tencent.com/rubygems/"},
-  {&RubyChina, "https://gems.ruby-china.com"},
+  // Ruby China 给的链接是不带后缀 / 的，不知道是否带后缀会影响
+  // 如有问题请报告
+  {&RubyChina, "https://gems.ruby-china.com/"},
 },
 
 
