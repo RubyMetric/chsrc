@@ -26,6 +26,8 @@
   static bool xy_on_macos   = false;
   static bool xy_on_bsds    = false;
 
+  static char* xy_os_devnull = "nul";
+
   #include <windows.h>
   #define xy_useutf8() SetConsoleOutputCP(65001)
 
@@ -34,6 +36,8 @@
   static bool xy_on_linux   = true;
   static bool xy_on_macos   = false;
   static bool xy_on_bsds    = false;
+
+  static char* xy_os_devnull = "/dev/null"
 
   #define xy_useutf8()
 #endif
@@ -210,6 +214,18 @@ xy_strjoin (unsigned int count, ...)
 bool
 xy_streql(const char* str1, const char* str2) {
   return strcmp(str1, str2) == 0 ? true : false;
+}
+
+
+char*
+xy_str_to_quietcmd (const char* cmd)
+{
+  char* ret = NULL;
+#ifdef _WIN32
+  ret = xy_2strjoin (cmd, " >nul 2>nul");
+#else
+  ret = xy_2strjoin (cmd, " 1>/dev/null 2>&1");
+#endif
 }
 
 #endif

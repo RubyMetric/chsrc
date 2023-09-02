@@ -55,6 +55,7 @@ to_human_readable_speed (double speed)
   }
   char* buf = xy_malloc0(64);
   sprintf(buf, "%.2f %s", speed, scale[i]);
+  return buf;
 }
 
 
@@ -62,37 +63,49 @@ to_human_readable_speed (double speed)
  * 测速代码参考自 https://github.com/mirrorz-org/oh-my-mirrorz/blob/master/oh-my-mirrorz.py
  * 修改为C语言，一切功劳属于原作者
  *
- * @return 返回测得的速度，若无速度或出错，返回0
+ * @return 返回测得的速度，若出错，返回-1
  */
 double
 test_speed (char* url)
 {
-  char* curl_cmd, *devnull = NULL;
-  if (xy_on_windows)
-    devnull = "nul";
-  else
-    devnull = "/dev/null";
+  char* curl_cmd = xy_strjoin(4, "curl -qs -o ", xy_os_devnull, " -w \"%{http_code} %{speed_download}\" -m8 -A chsrc/" Chsrc_Version
+                   "  ", url);
 
-  curl_cmd = xy_strjoin(4, "curl -qs -o ", devnull, "-w '%{http_code} %{speed_download}' -m8 -A chsrc/" Chsrc_Version
-             "(+https://gitee.com/RubyMetric/chsrc)", url);
+ //  xy_info (xy_2strjoin("chsrc: 测速 ", url));
+  puts(curl_cmd);
+  system(curl_cmd);
 
+/*
   FILE* fp = popen(curl_cmd, "r");
   char buf[64] = {0};
-  fgets(buf, 64, fp);
-  fclose(fp);
+  while(NULL!=fgets(buf, 64, fp));
+
+  puts("hello?");
+  puts(buf);
+
+
+  // 如果尾部有换行，删除
+  char* last_lf = strrchr(buf, '\n');
+  if (last_lf) *last_lf = '\0';
+
   char* split = strchr(buf, ' ');
-  *split = '\0';
+  printf("diff = %d\n", split-buf);
+  if (split) *split = '\0';
+  puts(buf);
+  puts(split+1);
   int http_code = atoi(buf);
   double speed  = atof(split+1);
 
+  printf("http_code = %d, speed = %f\n", http_code, speed);
   char* speedstr = to_human_readable_speed(speed);
-
-  puts(url);
 
   if (200!=http_code) {
     xy_warn (xy_2strjoin("HTTP码 = ", buf));
   }
   puts(xy_2strjoin("速度 = ", speedstr));
+  return speed;
+   */
+  return 0;
 }
 
 
@@ -317,8 +330,6 @@ dblary_maxidx(double* array, int size)
 void
 pl_ruby_cesu (char* option)
 {
-  char* url = "";
-
   size_t size = pl_ruby_sources_n;
   source_info* sources = pl_ruby_sources;
   double speeds[size];
@@ -327,6 +338,7 @@ pl_ruby_cesu (char* option)
     source_info src = sources[i];
     const char* baseurl = src.url;
     char* testurl = xy_2strjoin(baseurl, "gems/nokogiri-1.15.0-java.gem");
+    puts(testurl);
     double speed  = test_speed (testurl);
     speeds[i] = speed;
   }
@@ -924,8 +936,15 @@ get_target (const char* input, int code)
     print_supported_sources_for_target (target->sources);
   }
   else if (Target_Cesu_Source==code) {
-    if (target->cesufn) target->cesufn("");
-    else xy_error (xy_strjoin(3, "chsrc: 暂未对", input, "实现cesu功能，欢迎贡献"));
+    if (!target->cesufn)
+      xy_error (xy_strjoin(3, "chsrc: 暂未对", input, "实现cesu功能，欢迎贡献"));
+    else {
+      char* check_cmd = xy_str_to_quietcmd("curl --version");
+      bool exist_b = does_the_program_exist (check_cmd, "curl");
+      if (!exist_b)  xy_error ("chsrc: 没有curl命令，无法测速");
+      else target->cesufn("");
+      return true;
+    }
   }
   return true;
 }
