@@ -1,6 +1,6 @@
 CFLAGS =
 
-TARGET = target
+TARGET = chsrc
 #=======================
 
 all:
@@ -10,6 +10,12 @@ all:
 test:
 	@gcc test_helper.c -o test
 	@./test
+
+test_cmd: $(TARGET)
+	./$(TARGET) list mirror
+	./$(TARGET) list target
+	./$(TARGET) get  ruby
+	./$(TARGET) get  python
 
 clean:
 	-@rm *.exe      2>/dev/null
