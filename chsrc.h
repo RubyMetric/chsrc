@@ -2,7 +2,7 @@
 * File          : chsrc.h
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-29>
-* Last modified : <2023-09-01>
+* Last modified : <2023-09-02>
 *
 * chsrc:
 *
@@ -272,3 +272,23 @@ os_debian_sources[] = {
 
 /* 函数签名 */
 bool does_the_program_exist (char* check_cmd, char* progname);
+
+
+
+#define def_target_sources_n(t) const size_t t##_sources_n = xy_arylen(pl_ruby_sources)
+def_target_sources_n(pl_ruby); def_target_sources_n(pl_python); def_target_sources_n(pl_nodejs);
+def_target_sources_n(pl_perl); def_target_sources_n(pl_php);    def_target_sources_n(pl_go);
+def_target_sources_n(pl_rust); def_target_sources_n(pl_java);   def_target_sources_n(pl_r);
+def_target_sources_n(pl_julia);
+def_target_sources_n(os_ubuntu); def_target_sources_n(os_debian);
+
+/* Target Info */
+typedef struct {
+  void (*setfn)(char* option);
+  void (*getfn)(char* option);
+  void (*cesufn)(char* option);
+  source_info* sources;
+  size_t       sources_n;
+} target_info;
+
+#define def_target_info(t) target_info t##_target = {t##_setsrc, t##_getsrc, t##_cesu, t##_sources, t##_sources_n}

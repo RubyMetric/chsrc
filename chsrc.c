@@ -2,7 +2,7 @@
 * File          : chsrc.c
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
-* Last modified : <2023-09-01>
+* Last modified : <2023-09-02>
 *
 * chsrc:
 *
@@ -290,6 +290,48 @@ pl_ruby_getsrc (char* option)
   cmd = "bundle config get mirror.https://rubygems.org";
   xy_info (xy_2strjoin("chsrc: 运行 ", cmd));
   system(cmd);
+}
+
+
+int
+dblary_maxidx(double* array, int size)
+{
+  double maxval = array[0];
+  double maxidx = 0;
+
+  for (int i=1; i<size; i++) {
+    if (array[i]>maxval) {
+      maxval = array[i];
+      maxidx = i;
+    }
+  }
+  return maxidx;
+}
+
+
+/**
+ * @maintainer ccmywish
+ *
+ * 我们测 https://mirrors.bfsu.edu.cn/rubygems/gems/nokogiri-1.15.0-java.gem 大小为9.9MB
+ */
+void
+pl_ruby_cesu (char* option)
+{
+  char* url = "";
+
+  size_t size = pl_ruby_sources_n;
+  source_info* sources = pl_ruby_sources;
+  double speeds[size];
+  for (int i=0;i<size;i++)
+  {
+    source_info src = sources[i];
+    const char* baseurl = src.url;
+    char* testurl = xy_2strjoin(baseurl, "gems/nokogiri-1.15.0-java.gem");
+    double speed  = test_speed (testurl);
+    speeds[i] = speed;
+  }
+  int maxidx = dblary_maxidx (speeds, size);
+  xy_success (xy_2strjoin("最快镜像站为: ", sources[maxidx].mirror->name));
 }
 
 
@@ -626,19 +668,8 @@ os_debian_setsrc (char* option)
 }
 
 
-/************************************** Target Matrix ****************************************/
-
-typedef struct {
-  void (*setfn)(char* option);
-  void (*getfn)(char* option);
-  void (*cesufn)(char* option);
-  source_info* sources;
-  size_t       sources_count;
-} target_info;
-
-#define def_target_info(t, n) target_info t##_target = {t##_setsrc, t##_getsrc, t##_cesu, t##_sources, n};
-
-def_target_info(pl_ruby, 5)
+/************************************** Begin Target Matrix ****************************************/
+def_target_info(pl_ruby);
 
 target_info
   pl_python_target = {pl_python_setsrc, NULL, NULL, pl_python_sources, 5},
@@ -700,7 +731,7 @@ static const char const
   wr_anaconda, wr_emacs, wr_tex
 };
 #undef targetinfo
-
+/************************************** End Target Matrix ****************************************/
 
 
 static const char const*
@@ -810,7 +841,7 @@ print_help ()
 /**
  * 遍历我们内置的targets列表，查询用户输入`input`是否与我们支持的某个target匹配
  *
- * @param[out]  target_func  如果匹配到，则返回内置targets列表中NULL的位置
+ * @param[out]  target_func  如果匹配到，则返回内置targets列表中最后的target_info信息
  *
  * @return 匹配到则返回true，未匹配到则返回false
  */
