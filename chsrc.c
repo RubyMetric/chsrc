@@ -769,7 +769,7 @@ call_cmd (void* cmdptr, const char* arg)
 void
 print_available_mirrors ()
 {
-  xy_info ("chsrc: 支持以下镜像站，荣耀与感恩均归于这些站点，以及它们的开发/维护者们");
+  xy_info ("chsrc: 支持以下镜像站，荣耀均归属于这些站点，以及它们的开发/维护者们");
   for (int i=0; i<xy_arylen(available_mirrors); i++)
   {
     mirror_info* mir = available_mirrors[i];
@@ -883,9 +883,10 @@ iterate_targets_(const char const*** array, size_t size, const char* input, cons
 
 #define iterate_targets(ary, input, target) iterate_targets_(ary, xy_arylen(ary), input, target)
 
-#define Target_Set_Source   1
-#define Target_Get_Source   2
-#define Target_List_Sources 3
+#define Target_Set_Source  1
+#define Target_Get_Source  2
+#define Target_Cesu_Source 3
+#define Target_List_Source 4
 
 /**
  * 寻找target，并根据`code`执行相应的操作
@@ -911,15 +912,20 @@ get_target (const char* input, int code)
   target_info* target = (target_info*) *target_tmp;
 
   if (Target_Set_Source==code) {
-    puts("chsrc: 对该软件换源");
-    // call_cmd ((void*) *(target_func+code), NULL);
-    target->setfn(NULL);
+    if (target->setfn) target->setfn("");
+    else xy_error (xy_strjoin(3, "chsrc: 暂未对", input, "实现set功能，欢迎贡献"));
   }
   else if (Target_Get_Source==code) {
-    target->getfn("");
+    if (target->getfn) target->getfn("");
+    else xy_error (xy_strjoin(3, "chsrc: 暂未对", input, "实现get功能，欢迎贡献"));
   }
-  else if (Target_List_Sources==code) {
+  else if (Target_List_Source==code) {
+    xy_info (xy_strjoin(3,"chsrc: 对", input ,"支持以下镜像站，荣耀均归属于这些站点，以及它们的开发/维护者们"));
     print_supported_sources_for_target (target->sources);
+  }
+  else if (Target_Cesu_Source==code) {
+    if (target->cesufn) target->cesufn("");
+    else xy_error (xy_strjoin(3, "chsrc: 暂未对", input, "实现cesu功能，欢迎贡献"));
   }
   return true;
 }
@@ -973,7 +979,7 @@ main (int argc, char const *argv[])
       if (xy_streql(argv[2],"target"))  {
         print_supported_targets(); return 0;
       }
-      matched = get_target(argv[2], Target_List_Sources);
+      matched = get_target(argv[2], Target_List_Source);
       if (!matched) goto not_matched;
     }
     return 0;
@@ -989,10 +995,8 @@ main (int argc, char const *argv[])
       xy_error ("chsrc: 请您提供想要测速源的软件名; 使用 chsrc list targets 查看所有支持的软件");
       return 1;
     }
-    // TODO:
-    // matched = get_target(argv[2],);
-    // if (!matched) goto not_matched;
-    puts("chsrc: 测试提供该软件源的镜像站点速度");
+    matched = get_target(argv[2], Target_Cesu_Source);
+    if (!matched) goto not_matched;
     return 0;
   }
 
