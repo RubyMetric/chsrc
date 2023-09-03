@@ -2,7 +2,7 @@
 * File          : chsrc.h
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-29>
-* Last modified : <2023-09-02>
+* Last modified : <2023-09-03>
 *
 * chsrc:
 *
@@ -339,6 +339,24 @@ os_mysys2_sources[] = {
 }
 ;
 
+
+/* 辅助函数 */
+int
+dblary_maxidx(double* array, int size)
+{
+  double maxval = array[0];
+  double maxidx = 0;
+
+  for (int i=1; i<size; i++) {
+    if (array[i]>maxval) {
+      maxval = array[i];
+      maxidx = i;
+    }
+  }
+  return maxidx;
+}
+
+
 /* 函数签名 */
 bool does_the_program_exist (char* check_cmd, char* progname);
 
@@ -356,7 +374,7 @@ def_target_sources_n(os_kali); def_target_sources_n(os_openbsd); def_target_sour
 typedef struct {
   void (*setfn)(char* option);
   void (*getfn)(char* option);
-  void (*cesufn)(char* option);
+  int (*cesufn)(char* option);
   source_info* sources;
   size_t       sources_n;
 } target_info;

@@ -2,7 +2,7 @@
 * File          : chsrc.c
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
-* Last modified : <2023-09-02>
+* Last modified : <2023-09-03>
 *
 * chsrc:
 *
@@ -234,6 +234,33 @@ pl_python_setsrc (char* option)
 }
 
 
+
+ /* Ruby源 @maintainer ccmywish */
+
+/**
+ * 我们测 https://mirrors.bfsu.edu.cn/rubygems/gems/nokogiri-1.15.0-java.gem 大小为9.9MB
+ *
+ * @return 返回最快源索引
+ */
+int
+pl_ruby_cesu (char* option)
+{
+  size_t size = pl_ruby_sources_n;
+  source_info* sources = pl_ruby_sources;
+  double speeds[size];
+  for (int i=0;i<size;i++)
+  {
+    source_info src = sources[i];
+    const char* baseurl = src.url;
+    char* testurl = xy_2strjoin(baseurl, "gems/nokogiri-1.15.0-java.gem");
+    double speed  = test_speed (testurl);
+    speeds[i] = speed;
+  }
+  int fastidx = dblary_maxidx (speeds, size);
+  xy_success (xy_2strjoin("最快镜像站为: ", sources[fastidx].mirror->name));
+  return fastidx;
+}
+
 /**
  * Ruby换源
  *
@@ -243,9 +270,7 @@ void
 pl_ruby_setsrc (char* option)
 {
   int selected = 0; char* check_cmd = NULL;
-  for (int i=0;i<sizeof(pl_ruby_sources);i++) {
-    // 循环测速
-  }
+  selected = pl_ruby_cesu ("");
 
   if (xy_on_windows) check_cmd = "gem -v >nul 2>nul";
   else               check_cmd = "gem -v 1>/dev/null 2>&1";
@@ -294,46 +319,6 @@ pl_ruby_getsrc (char* option)
   cmd = "bundle config get mirror.https://rubygems.org";
   xy_info (xy_2strjoin("chsrc: 运行 ", cmd));
   system(cmd);
-}
-
-
-int
-dblary_maxidx(double* array, int size)
-{
-  double maxval = array[0];
-  double maxidx = 0;
-
-  for (int i=1; i<size; i++) {
-    if (array[i]>maxval) {
-      maxval = array[i];
-      maxidx = i;
-    }
-  }
-  return maxidx;
-}
-
-
-/**
- * @maintainer ccmywish
- *
- * 我们测 https://mirrors.bfsu.edu.cn/rubygems/gems/nokogiri-1.15.0-java.gem 大小为9.9MB
- */
-void
-pl_ruby_cesu (char* option)
-{
-  size_t size = pl_ruby_sources_n;
-  source_info* sources = pl_ruby_sources;
-  double speeds[size];
-  for (int i=0;i<size;i++)
-  {
-    source_info src = sources[i];
-    const char* baseurl = src.url;
-    char* testurl = xy_2strjoin(baseurl, "gems/nokogiri-1.15.0-java.gem");
-    double speed  = test_speed (testurl);
-    speeds[i] = speed;
-  }
-  int maxidx = dblary_maxidx (speeds, size);
-  xy_success (xy_2strjoin("最快镜像站为: ", sources[maxidx].mirror->name));
 }
 
 
