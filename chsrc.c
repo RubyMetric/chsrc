@@ -460,16 +460,21 @@ _pl_php_check_cmd()
 int
 pl_php_cesu (char* option)
 {
+  xy_warn ("chsrc: Need Help: 烦请PHP用户帮助寻找Packgist.org中较大的包的链接");
+  return 0;
   return common_cesu (pl_php_sources, pl_php_sources_n,
                       "gems/nokogiri-1.15.0-java.gem");
 }
 
-/* TODO: 待PHP用户确认 */
+/**
+ * 已在Windows上测试通过，待其他平台PHP用户确认
+*/
 void
 pl_php_getsrc (char* option)
 {
   _pl_php_check_cmd ();
-  char* cmd = "composer config repo.packagist composer";
+  char* cmd = "composer config -g repositories";
+  puts(cmd);
   system(cmd);
 }
 
@@ -492,7 +497,7 @@ pl_php_setsrc (char* option)
   source_info source = pl_php_sources[index];
   say_for_setsrc (&source);
 
-  char* cmd = xy_2strjoin("composer config repo.packagist composer ", source.url);
+  char* cmd = xy_2strjoin("composer config -g repo.packagist composer ", source.url);
   system(cmd);
 
   xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
@@ -1050,16 +1055,16 @@ os_mysys2_setsrc(char* option)
 def_target_info(pl_ruby);
 
 target_info
-  pl_python_target = {pl_python_setsrc, NULL, NULL, pl_python_sources, 5},
-  pl_nodejs_target = {pl_nodejs_setsrc, NULL, NULL, pl_nodejs_sources, 2},
-  pl_perl_target   = {pl_perl_setsrc,   NULL, NULL, pl_perl_sources,   5},
-  pl_rust_target   = {pl_rust_setsrc,   NULL, NULL, pl_rust_sources,   5},
-  pl_go_target     = {pl_go_setsrc,     NULL, NULL, pl_go_sources,     3},
-  pl_dotnet_target = {pl_dotnet_setsrc, NULL, NULL, pl_dotnet_sources, 1},
-  pl_java_target   = {pl_java_setsrc,   NULL, NULL, pl_java_sources,   1},
-  pl_php_target    = {pl_php_setsrc,    NULL, NULL, pl_php_sources,    1},
-  pl_r_target      = {pl_r_setsrc,      NULL, NULL, pl_r_sources,      5},
-  pl_julia_target  = {pl_julia_setsrc,  NULL, NULL, pl_julia_sources,  3};
+  pl_python_target = {pl_python_setsrc, NULL, NULL,    pl_python_sources, 5},
+  pl_nodejs_target = {pl_nodejs_setsrc, NULL, NULL,    pl_nodejs_sources, 2},
+  pl_perl_target   = {pl_perl_setsrc,   NULL, NULL,    pl_perl_sources,   5},
+  pl_rust_target   = {pl_rust_setsrc,   NULL, NULL,    pl_rust_sources,   5},
+  pl_go_target     = {pl_go_setsrc,     NULL, NULL,    pl_go_sources,     3},
+  pl_dotnet_target = {pl_dotnet_setsrc, NULL, NULL,    pl_dotnet_sources, 1},
+  pl_java_target   = {pl_java_setsrc,   NULL, NULL,    pl_java_sources,   1},
+  pl_php_target    = {pl_php_setsrc,    pl_php_getsrc, pl_php_cesu,  pl_php_sources,  pl_php_sources_n},
+  pl_r_target      = {pl_r_setsrc,      NULL, NULL,    pl_r_sources,      5},
+  pl_julia_target  = {pl_julia_setsrc,  NULL, NULL,    pl_julia_sources,  3};
 
 
 #define targetinfo(t) (const char const*)t
