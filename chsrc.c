@@ -43,6 +43,41 @@ does_the_program_exist (char* check_cmd, char* progname)
 }
 
 
+
+/**
+ * 用于 _setsrc 函数，检测用户输入的镜像站code，是否存在于该target可用源中
+ *
+ * 如果用户输入 default 或者 def，则选择第一个源
+ */
+int
+does_the_mirror_exist (source_info* sources, size_t size, char* target, char* input)
+{
+  int idx = 0;
+  source_info source = sources[0];
+
+  if (xy_streql("default", input) || xy_streql("def", input)) {
+    xy_info ("chsrc: 默认使用由维护团队排序第一的镜像（维护者测速第一）");
+    return idx;
+  }
+
+  bool exist_b = false;
+  for (int i=1; i<size; i++)
+  {
+    if (xy_streql(source.mirror->code, input)) {
+      idx = i;
+      exist_b = true;
+      break;
+    }
+    source = sources[i];
+  }
+  if (!exist_b) {
+    xy_error (xy_strjoin(3, "chsrc: 镜像站 ", input, " 不存在"));
+    xy_error (xy_2strjoin("chsrc: 查看可使用源，请使用 chsrc list ", target));
+    exit(1);
+  }
+  return idx;
+}
+
 char*
 to_human_readable_speed (double speed)
 {
@@ -156,9 +191,15 @@ pl_ruby_getsrc (char* option)
 void
 pl_ruby_setsrc (char* option)
 {
-  int selected = 0; char* check_cmd = NULL;
-  selected = pl_ruby_cesu ("");
+  int index = 0;
 
+  if (NULL!=option) {
+    index = does_the_mirror_exist (pl_ruby_sources, pl_ruby_sources_n, "ruby", option);
+  } else {
+    index = pl_ruby_cesu ("");
+  }
+
+  char* check_cmd = NULL;
   if (xy_on_windows) check_cmd = "gem -v >nul 2>nul";
   else               check_cmd = "gem -v 1>/dev/null 2>&1";
   bool exist_b = does_the_program_exist (check_cmd, "gem");
@@ -167,19 +208,16 @@ pl_ruby_setsrc (char* option)
     return;
   }
 
-  const char* source_code = pl_ruby_sources[selected].mirror->code;
-  const char* source_name = pl_ruby_sources[selected].mirror->name;
-  const char* source_abbr = pl_ruby_sources[selected].mirror->abbr;
-  const char* source_url  = pl_ruby_sources[selected].url;
-
-  xy_info (xy_strjoin(5, "chsrc: 选中镜像站：", source_abbr, " (", source_code, ")"));
+  source_info source = pl_ruby_sources[index];
+  const char* source_name = source.mirror->name;
+  const char* source_url  = source.url;
+  say_for_setsrc (&source);
 
   xy_info("chsrc: 为 gem 命令换源");
   system("gem source -r https://rubygems.org/");
 
   char* cmd = xy_2strjoin("gem source -a ", source_url);
   system(cmd);
-  free(cmd);
 
 
   if (xy_on_windows) check_cmd = "bundle -v >nul 2>nul";
@@ -193,7 +231,6 @@ pl_ruby_setsrc (char* option)
   cmd = xy_2strjoin("bundle config 'mirror.https://rubygems.org' ", source_url);
   xy_info("chsrc: 为 bundler 命令换源");
   system(cmd);
-  free(cmd);
 
   xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
@@ -1139,13 +1176,14 @@ iterate_targets_(const char const*** array, size_t size, const char* input, cons
 /**
  * 寻找target，并根据`code`执行相应的操作
  *
- * @param[in]  input  用户输入的目标
- * @param[in]  code   对target要执行的操作
+ * @param[in]  input   用户输入的目标
+ * @param[in]  code    对target要执行的操作
+ * @param[in]  option  额外的指示，可为NULL
  *
  * @return 找到目标返回true，未找到返回false
  */
 bool
-get_target (const char* input, int code)
+get_target (const char* input, int code, char* option)
 {
   const char const** target_tmp = NULL;
 
@@ -1160,7 +1198,7 @@ get_target (const char* input, int code)
   target_info* target = (target_info*) *target_tmp;
 
   if (Target_Set_Source==code) {
-    if (target->setfn) target->setfn("");
+    if (target->setfn) target->setfn(option);
     else xy_error (xy_strjoin(3, "chsrc: 暂未对", input, "实现set功能，欢迎贡献"));
   }
   else if (Target_Get_Source==code) {
@@ -1237,7 +1275,7 @@ main (int argc, char const *argv[])
       if (xy_streql(argv[2],"target"))  {
         print_supported_targets(); return 0;
       }
-      matched = get_target(argv[2], Target_List_Source);
+      matched = get_target(argv[2], Target_List_Source, NULL);
       if (!matched) goto not_matched;
     }
     return 0;
@@ -1253,7 +1291,7 @@ main (int argc, char const *argv[])
       xy_error ("chsrc: 请您提供想要测速源的软件名; 使用 chsrc list targets 查看所有支持的软件");
       return 1;
     }
-    matched = get_target(argv[2], Target_Cesu_Source);
+    matched = get_target(argv[2], Target_Cesu_Source, NULL);
     if (!matched) goto not_matched;
     return 0;
   }
@@ -1267,7 +1305,7 @@ main (int argc, char const *argv[])
       xy_error ("chsrc: 请您提供想要查看源的软件名; 使用 chsrc list targets 查看所有支持的软件");
       return 1;
     }
-    matched = get_target(argv[2], Target_Get_Source);
+    matched = get_target(argv[2], Target_Get_Source, NULL);
     if (!matched) goto not_matched;
     return 0;
   }
@@ -1280,7 +1318,12 @@ main (int argc, char const *argv[])
       xy_error ("chsrc: 请您提供想要设置源的软件名; 使用 chsrc list targets 查看所有支持的软件");
       return 1;
     }
-    matched = get_target(argv[2], Target_Set_Source);
+
+    char* option = NULL;
+    if (argc >= 3) {
+      option = (char*) argv[3]; // 暂时我们只接受最多三个参数
+    }
+    matched = get_target(argv[2], Target_Set_Source, option);
     if (!matched) goto not_matched;
     return 0;
   }

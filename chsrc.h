@@ -356,6 +356,15 @@ dblary_maxidx(double* array, int size)
   return maxidx;
 }
 
+/**
+ * 用于 _setsrc 函数
+ */
+void
+say_for_setsrc (source_info* source)
+{
+  xy_info (xy_strjoin(5, "chsrc: 选中镜像站：", source->mirror->abbr, " (", source->mirror->code, ")"));
+}
+
 
 #define def_target_sources_n(t) const size_t t##_sources_n = xy_arylen(pl_ruby_sources)
 def_target_sources_n(pl_ruby); def_target_sources_n(pl_python); def_target_sources_n(pl_nodejs);
