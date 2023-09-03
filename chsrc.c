@@ -167,11 +167,12 @@ pl_ruby_setsrc (char* option)
     return;
   }
 
+  const char* source_code = pl_ruby_sources[selected].mirror->code;
   const char* source_name = pl_ruby_sources[selected].mirror->name;
   const char* source_abbr = pl_ruby_sources[selected].mirror->abbr;
   const char* source_url  = pl_ruby_sources[selected].url;
 
-  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+  xy_info (xy_strjoin(5, "chsrc: 选中镜像站：", source_abbr, " (", source_code, ")"));
 
   xy_info("chsrc: 为 gem 命令换源");
   system("gem source -r https://rubygems.org/");
@@ -1014,10 +1015,13 @@ void
 print_available_mirrors ()
 {
   xy_info ("chsrc: 支持以下镜像站，荣耀均归属于这些站点，以及它们的开发/维护者们");
+  xy_warn ("chsrc: 下方code列，可用于指定使用某镜像站，请使用 chsrc set <target> <code>");
+  printf ("%-14s%-30s%-41s ", "code", "服务商缩写", "服务商URL"); puts("服务商名称");
+  puts   ("-------------------------------------------------------------------------------------------------");
   for (int i=0; i<xy_arylen(available_mirrors); i++)
   {
     mirror_info* mir = available_mirrors[i];
-    printf ("%-18s%-41s ", mir->abbr, mir->site); puts(mir->name);
+    printf ("%-14s%-18s%-41s ", mir->code, mir->abbr, mir->site); puts(mir->name);
   }
 }
 
@@ -1064,7 +1068,7 @@ print_supported_sources_for_target (source_info sources[])
   {
     source_info src = sources[i];
     const mirror_info* mir = src.mirror;
-    printf ("%-18s%-50s ", mir->abbr, src.url);
+    printf ("%-14s%-18s%-50s ",mir->code, mir->abbr, src.url);
     puts(mir->name);
   }
 }
@@ -1165,6 +1169,9 @@ get_target (const char* input, int code)
   }
   else if (Target_List_Source==code) {
     xy_info (xy_strjoin(3,"chsrc: 对", input ,"支持以下镜像站，荣耀均归属于这些站点，以及它们的开发/维护者们"));
+    xy_warn (xy_strjoin(3, "chsrc: 下方code列，可用于指定使用某源，请使用 chsrc set ", input, " <code>"));
+    printf ("%-14s%-35s%-45s ", "code", "服务商缩写", "服务源URL"); puts("服务商名称");
+    puts   ("--------------------------------------------------------------------------------------------------------");
     print_supported_sources_for_target (target->sources);
   }
   else if (Target_Cesu_Source==code) {

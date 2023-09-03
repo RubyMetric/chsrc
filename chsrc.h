@@ -12,6 +12,7 @@
 #include "xy.h"
 
 typedef struct {
+  const char* code; // 用于用户指定镜像站
   const char* abbr;
   const char* name;
   const char* site;
@@ -21,38 +22,38 @@ typedef struct {
 // 我们目前根据 https://github.com/mirrorz-org/oh-my-mirrorz 挑选速度前10位
 //
 mirror_info
-  MirrorZ       = {"MirrorZ",       "MirrorZ校园网镜像站",       "https://mirrors.cernet.edu.cn/"},
-  Tuna          = {"TUNA",          "清华大学开源软件镜像站",     "https://mirrors.tuna.tsinghua.edu.cn/"},
-  Sjtug_Zhiyuan = {"SJTUG-zhiyuan", "上海交通大学致远镜像站",     "https://mirrors.sjtug.sjtu.edu.cn/"},
-  Zju           = {"ZJU",           "浙江大学开源软件镜像站",     "https://mirrors.zju.edu.cn/"},
-  Lzuoss        = {"LZUOSS",        "兰州大学开源社区镜像站",     "https://mirror.lzu.edu.cn/"},
-  Jlu           = {"JLU",           "吉林大学开源镜像站",         "https://mirrors.jlu.edu.cn/"},
-  Bfsu          = {"BFSU",          "北京外国语大学开源软件镜像站","https://mirrors.bfsu.edu.cn/"},
-  Pku           = {"PKU",           "北京大学开源镜像站",         "https://mirrors.pku.edu.cn/"},
-  Bjtu          = {"BJTU",          "北京交通大学自由与开源软件镜像站", "https://mirror.bjtu.edu.cn/"},
-  Sustech       = {"SUSTech",       "南方科技大学开源软件镜像站",  "https://mirrors.sustech.edu.cn/"},
-  Ustc          = {"USTC",          "中国科学技术大学开源镜像站",  "https://mirrors.ustc.edu.cn/"},
+  MirrorZ       = {"mirrorz", "MirrorZ",       "MirrorZ校园网镜像站",       "https://mirrors.cernet.edu.cn/"},
+  Tuna          = {"tuna",    "TUNA",          "清华大学开源软件镜像站",     "https://mirrors.tuna.tsinghua.edu.cn/"},
+  Sjtug_Zhiyuan = {"sjtu",    "SJTUG-zhiyuan", "上海交通大学致远镜像站",     "https://mirrors.sjtug.sjtu.edu.cn/"},
+  Zju           = {"zju",     "ZJU",           "浙江大学开源软件镜像站",     "https://mirrors.zju.edu.cn/"},
+  Lzuoss        = {"lzu",     "LZUOSS",        "兰州大学开源社区镜像站",     "https://mirror.lzu.edu.cn/"},
+  Jlu           = {"jlu",     "JLU",           "吉林大学开源镜像站",         "https://mirrors.jlu.edu.cn/"},
+  Bfsu          = {"bfsu",    "BFSU",          "北京外国语大学开源软件镜像站","https://mirrors.bfsu.edu.cn/"},
+  Pku           = {"pku",     "PKU",           "北京大学开源镜像站",         "https://mirrors.pku.edu.cn/"},
+  Bjtu          = {"bjtu",    "BJTU",          "北京交通大学自由与开源软件镜像站", "https://mirror.bjtu.edu.cn/"},
+  Sustech       = {"sustech", "SUSTech",       "南方科技大学开源软件镜像站",  "https://mirrors.sustech.edu.cn/"},
+  Ustc          = {"ustc",    "USTC",          "中国科学技术大学开源镜像站",  "https://mirrors.ustc.edu.cn/"},
 
 // 速度暂时处于10位以后，但是目前可用的源
-  Nju           = {"NJU",           "南京大学开源镜像站",         "https://mirrors.nju.edu.cn/"},
-  Cqu           = {"CQU",           "重庆大学开源软件镜像站",     "https://mirrors.cqu.edu.cn/"};
+  Nju           = {"nju",     "NJU",           "南京大学开源镜像站",         "https://mirrors.nju.edu.cn/"},
+  Cqu           = {"cqu",     "CQU",           "重庆大学开源软件镜像站",     "https://mirrors.cqu.edu.cn/"};
 
 
 // 大型公司
 // 注意，腾讯软件源中，有很多链接都已失效，请仔细检查
 mirror_info
-  Ali      = {"Ali OPSX",           "阿里巴巴开源镜像站",         "https://developer.aliyun.com/mirror/"},
-  Tencent  = {"Tencent",            "腾讯软件源",                 "https://mirrors.tencent.com/"},
-  Netease  = {"Netease",            "网易开源镜像站",             "https://mirrors.163.com/"},
-  Sohu     = {"SOHU",               "搜狐开源镜像站",             "https://mirrors.sohu.com/"};
+  Ali      = {"ali",        "Ali OPSX",        "阿里巴巴开源镜像站",         "https://developer.aliyun.com/mirror/"},
+  Tencent  = {"tencent",    "Tencent",         "腾讯软件源",                 "https://mirrors.tencent.com/"},
+  Netease  = {"netease",    "Netease",         "网易开源镜像站",             "https://mirrors.163.com/"},
+  Sohu     = {"sohu",       "SOHU",            "搜狐开源镜像站",             "https://mirrors.sohu.com/"};
 
 
 // 开源社区
 mirror_info
-  RubyChina = {"RubyChina",         "Ruby China 社区",           "https://ruby-china.org/"},
-  GoProxyCN = {"Goproxy.cn",        "七牛云 Goproxy.cn",         "https://www.qiniu.com/"},
-  GoProxyIO = {"GOPROXY.IO",        "GOPROXY.IO",                "https://goproxy.io/"},
-  NugetOrg  = {"NuGet Org",         "Nuget Organization",        "https://www.nuget.org/"};
+  RubyChina = {"rubychina",    "RubyChina",    "Ruby China 社区",           "https://gems.ruby-china.com/"},
+  GoProxyCN = {"goproxy.cn",   "Goproxy.cn",   "七牛云 Goproxy.cn",         "https://goproxy.cn/"},
+  GoProxyIO = {"goproxy.io",   "GOPROXY.IO",   "GOPROXY.IO",                "https://goproxy.io/"},
+  NugetOrg  = {"nuget.org",    "NuGet Org",    "Nuget Organization",        "https://www.nuget.org/"};
 
 
 mirror_info*
