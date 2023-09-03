@@ -28,6 +28,8 @@
   static bool xy_on_macos   = false;
   static bool xy_on_bsds    = false;
 
+  static char* xy_os_devnull = "nul";
+
   #include <windows.h>
   #define xy_useutf8() SetConsoleOutputCP(65001)
 
@@ -38,6 +40,8 @@
   static bool xy_on_macos   = false;
   static bool xy_on_bsds    = false;
 
+  static char* xy_os_devnull = "/dev/null"
+
   #define xy_useutf8()
 
 #elif defined(TARGET_OS_MAC) ||defined(__MACOSX__)
@@ -46,6 +50,8 @@
   static bool xy_on_linux   = false;
   static bool xy_on_macos   = true;
   static bool xy_on_bsds    = false;
+
+  // set xy_os_devnull
 
   #define xy_useutf8()
 
@@ -56,6 +62,8 @@
   static bool xy_on_macos   = false;
   static bool xy_on_bsds    = true;
 
+  // set xy_os_devnull
+  
   #define xy_useutf8()
 
 #endif
