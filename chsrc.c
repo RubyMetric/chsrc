@@ -1023,16 +1023,16 @@ usage[] = {
   "维护:  https://gitee.com/RubyMetric/chsrc\n",
 
   "使用：chsrc <command> [target]",
-  "help                  # 打印此帮助，或 h, -h, --help",
-  "list (或 ls, 或 l)    # 查看可用镜像源，和可换源软件",
-  "list mirror(s)        # 查看可用镜像源",
-  "list target(s)        # 查看可换源软件",
-  "list <target>         # 查看该软件可以使用哪些源",
-  "cesu <target>         # 对该软件所有源测速",
-  "get  <target>         # 查看当前软件的源使用情况",
-  "set  <target>         # 换源，自动测速后挑选最快源",
-  "set  <target> -1      # 1,2,3的1。换源，不测速，挑选经维护者测速排序的第一源",
-  "set  <target> -v      # 换源，并打印换源所执行的具体操作\n"
+  "help                    # 打印此帮助，或 h, -h, --help",
+  "list (或 ls, 或 l)      # 查看可用镜像源，和可换源软件",
+  "list mirror(s)          # 查看可用镜像源",
+  "list target(s)          # 查看可换源软件",
+  "list <target>           # 查看该软件可以使用哪些源",
+  "cesu <target>           # 对该软件所有源测速",
+  "get  <target>           # 查看当前软件的源使用情况",
+  "set  <target>           # 换源，自动测速后挑选最快源",
+  "set  <target> def(ault) # 换源，默认挑选经维护者测速排序第一的源",
+  "set  <target> <mirror>  # 换源，指定使用某镜像站\n"
 };
 
 
