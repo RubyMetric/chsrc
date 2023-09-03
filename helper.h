@@ -12,6 +12,7 @@
 #ifndef XY_H
 #define XY_H
 
+#include <stdarg.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -26,20 +27,36 @@
   static bool xy_on_macos   = false;
   static bool xy_on_bsds    = false;
 
-  static char* xy_os_devnull = "nul";
-
   #include <windows.h>
   #define xy_useutf8() SetConsoleOutputCP(65001)
 
-#else
+#elif  defined(__linux__) || defined(__linux)
+
   static bool xy_on_windows = false;
   static bool xy_on_linux   = true;
   static bool xy_on_macos   = false;
   static bool xy_on_bsds    = false;
 
-  static char* xy_os_devnull = "/dev/null"
+  #define xy_useutf8()
+
+#elif defined(TARGET_OS_MAC) ||defined(__MACOSX__)
+
+  static bool xy_on_windows = false;
+  static bool xy_on_linux   = false;
+  static bool xy_on_macos   = true;
+  static bool xy_on_bsds    = false;
 
   #define xy_useutf8()
+
+#elif defined(__OpenBSD__) || defined(__NetBSD__) || defined(__FreeBSD__)
+
+  static bool xy_on_windows = false;
+  static bool xy_on_linux   = false;
+  static bool xy_on_macos   = false;
+  static bool xy_on_bsds    = true;
+
+  #define xy_useutf8()
+
 #endif
 
 
@@ -194,26 +211,14 @@ xy_strjoin (unsigned int count, ...)
 
   for(int i=0; i<count; i++)
   {
-    // 是否需要重新分配
-    bool need_realloc = false;
-
     str = va_arg(args, const char*);
     al_need += strlen(str);
-    while (al_need > al_cur) {
+    if (al_need > al_cur) {
       al_times += 1; al_cur = al_times * al_fixed;
-      need_realloc = true;
-    }
-    // printf("al_times %d, al_need %zd, al_cur %zd\n", al_times, al_need, al_cur);
-    if (need_realloc) {
-      ptrdiff_t diff = cur - ret;
       ret = realloc(ret, al_cur);
-      cur = ret + diff;
-    }
-    if (NULL==ret) {
-      xy_error ("xy: No availble memory!"); return NULL;
+      if (NULL==ret) { xy_error ("xy: No availble memory!"); return NULL; }
     }
     strcpy(cur, str);
-    // puts(ret);
     cur += strlen(str);
   }
   va_end(args);
@@ -226,18 +231,6 @@ xy_strjoin (unsigned int count, ...)
 bool
 xy_streql(const char* str1, const char* str2) {
   return strcmp(str1, str2) == 0 ? true : false;
-}
-
-
-char*
-xy_str_to_quietcmd (const char* cmd)
-{
-  char* ret = NULL;
-#ifdef _WIN32
-  ret = xy_2strjoin (cmd, " >nul 2>nul");
-#else
-  ret = xy_2strjoin (cmd, " 1>/dev/null 2>&1");
-#endif
 }
 
 #endif

@@ -2,7 +2,7 @@
 * File          : chsrc.c
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
-* Last modified : <2023-09-02>
+* Last modified : <2023-09-01>
 *
 * chsrc:
 *
@@ -43,6 +43,45 @@ does_the_program_exist (char* check_cmd, char* progname)
 }
 
 
+
+/**
+ * 测速代码参考自 https://github.com/mirrorz-org/oh-my-mirrorz/blob/master/oh-my-mirrorz.py
+ * 修改为C语言，一切功劳属于原作者
+ *
+ * @return 返回测得的速度，若无速度或出错，返回0
+ */
+double
+test_speed (char* url)
+{
+  char* curl_cmd, *devnull = NULL;
+  if (xy_on_windows)
+    devnull = "nul";
+  else
+    devnull = "/dev/null";
+
+  curl_cmd = xy_strjoin(4, "curl -qs -o ", devnull, "-w '%{http_code} %{speed_download}' -m8 -A chsrc/" Chsrc_Version
+             "(+https://gitee.com/RubyMetric/chsrc)", url);
+
+  FILE* fp = popen(curl_cmd, "r");
+  char buf[64] = {0};
+  fgets(buf, 64, fp);
+  fclose(fp);
+  char* split = strchr(buf, ' ');
+  *split = '\0';
+  int http_code = atoi(buf);
+  double speed  = atof(split+1);
+
+  char* speedstr = to_human_readable_speed(speed);
+
+  puts(url);
+
+  if (200!=http_code) {
+    xy_warn (xy_2strjoin("HTTP码 = ", buf));
+  }
+  puts(xy_2strjoin("速度 = ", speedstr));
+}
+
+
 char*
 to_human_readable_speed (double speed)
 {
@@ -55,52 +94,9 @@ to_human_readable_speed (double speed)
   }
   char* buf = xy_malloc0(64);
   sprintf(buf, "%.2f %s", speed, scale[i]);
-  return buf;
 }
 
 
-/**
- * 测速代码参考自 https://github.com/mirrorz-org/oh-my-mirrorz/blob/master/oh-my-mirrorz.py
- * 修改为C语言，一切功劳属于原作者
- *
- * @return 返回测得的速度，若出错，返回-1
- */
-double
-test_speed (char* url)
-{
-  // 我们用 —L，因为Ruby China源会跳转到其他地方
-  char* curl_cmd = xy_strjoin(4, "curl -qsL -o ", xy_os_devnull, " -w \"%{http_code} %{speed_download}\" -m8 -A chsrc/" Chsrc_Version
-                   "  ", url);
-
-  xy_info (xy_2strjoin("chsrc: 测速 ", url));
-
-  FILE* fp = popen(curl_cmd, "r");
-  char buf[64] = {0};
-  while(NULL!=fgets(buf, 64, fp));
-  // puts(buf);
-
-  // 如果尾部有换行，删除
-  char* last_lf = strrchr(buf, '\n');
-  if (last_lf) *last_lf = '\0';
-
-  char* split = strchr(buf, ' ');
-  if (split) *split = '\0';
-
-  // puts(buf); puts(split+1);
-  int http_code = atoi(buf);
-  double speed  = atof(split+1);
-  char* speedstr = to_human_readable_speed(speed);
-
-  if (200!=http_code) {
-    xy_warn (xy_strjoin(4, "chsrc: 速度 ", speedstr, " | HTTP码  " , http_code));
-  } else {
-    xy_info (xy_2strjoin("chsrc: 速度 ", speedstr));
-  }
-  return speed;
-}
-
-
-/***************************************** 换源 *********************************************/
 
 /**
  * Perl换源
@@ -283,57 +279,6 @@ pl_ruby_setsrc (char* option)
   free(cmd);
 
   xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
-}
-
-void
-pl_ruby_getsrc (char* option)
-{
-  char* cmd = "gem sources";
-  xy_info (xy_2strjoin("chsrc: 运行 ", cmd));
-  system(cmd);
-  cmd = "bundle config get mirror.https://rubygems.org";
-  xy_info (xy_2strjoin("chsrc: 运行 ", cmd));
-  system(cmd);
-}
-
-
-int
-dblary_maxidx(double* array, int size)
-{
-  double maxval = array[0];
-  double maxidx = 0;
-
-  for (int i=1; i<size; i++) {
-    if (array[i]>maxval) {
-      maxval = array[i];
-      maxidx = i;
-    }
-  }
-  return maxidx;
-}
-
-
-/**
- * @maintainer ccmywish
- *
- * 我们测 https://mirrors.bfsu.edu.cn/rubygems/gems/nokogiri-1.15.0-java.gem 大小为9.9MB
- */
-void
-pl_ruby_cesu (char* option)
-{
-  size_t size = pl_ruby_sources_n;
-  source_info* sources = pl_ruby_sources;
-  double speeds[size];
-  for (int i=0;i<size;i++)
-  {
-    source_info src = sources[i];
-    const char* baseurl = src.url;
-    char* testurl = xy_2strjoin(baseurl, "gems/nokogiri-1.15.0-java.gem");
-    double speed  = test_speed (testurl);
-    speeds[i] = speed;
-  }
-  int maxidx = dblary_maxidx (speeds, size);
-  xy_success (xy_2strjoin("最快镜像站为: ", sources[maxidx].mirror->name));
 }
 
 
@@ -611,7 +556,9 @@ pl_julia_setsrc (char* option)
 
 
 
-
+/**
+ * ubuntu不同架构下的换源是不一样的,这个针对x86架构
+ */
 void
 os_ubuntu_setsrc (char* option)
 {
@@ -634,12 +581,16 @@ os_ubuntu_setsrc (char* option)
   system(cmd);
   free(cmd);
 
-  char* rm = "rm -rf /etc/apt/source.list.bak";
-  system(rm);
+  // char* rm = "rm -rf /etc/apt/source.list.bak";
+  // system(rm);
 
   xy_info ("chsrc: 为 ubuntu 命令换源");
   xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
+/**
+ * Debian Buster 以上版本默认支持 HTTPS 源。如果遇到无法拉取 HTTPS 源的情况，请先使用 HTTP 源并安装
+ * sudo apt install apt-transport-https ca-certificates
+ */
 void
 os_debian_setsrc (char* option)
 {
@@ -662,78 +613,205 @@ os_debian_setsrc (char* option)
   system(cmd);
   free(cmd);
 
-  char* rm = "rm -rf /etc/apt/source.list.bak";
-  system(rm);
+  // char* rm = "rm -rf /etc/apt/source.list.bak";
+  // system(rm);
 
-  xy_info ("chsrc: 为 ubuntu 命令换源");
+  xy_info ("chsrc: 为 debian 命令换源");
+  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+/**
+ * fedora29版本及以下暂不支持
+ */
+void
+os_fedora_setsrc (char* option)
+{
+  int selected = 0;
+  for (int i=0;i<sizeof(os_fedora_sources);i++) {
+    // 循环测速
+  }
+  const char* source_name = os_fedora_sources[selected].mirror->name;
+  const char* source_abbr = os_fedora_sources[selected].mirror->abbr;
+  const char* source_url  = os_fedora_sources[selected].url;
+
+  char* backup = "cp -rf /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora.repo.bak";
+  system(backup);
+  backup = "cp -rf /etc/yum.repos.d/fedora-updates.repo /etc/yum.repos.d/fedora-updates.repo.bak";
+  system(backup);
+
+  xy_info ("chsrc: 备份文件名:1. /etc/yum.repos.d/fedora.repo.bak");
+  xy_info ("chsrc: 备份文件名:2. /etc/yum.repos.d/fedora-updates.repo.bak");
+
+
+  char* cmd = xy_strjoin(9, "sed -e 's|^metalink=|#metalink=|g' ",
+         "-e 's|^#baseurl=http://download.example/pub/fedora/linux/|baseurl=",
+         source_url,
+         "|g' ",
+         "-i.bak ",
+         "/etc/yum.repos.d/fedora.repo ",
+         "/etc/yum.repos.d/fedora-modular.repo ",
+         "/etc/yum.repos.d/fedora-updates.repo ",
+         "/etc/yum.repos.d/fedora-updates-modular.repo");
+  system(cmd);
+  free(cmd);
+
+  xy_info("替换文件:/etc/yum.repos.d/fedora.repo");
+  xy_info("新增文件:/etc/yum.repos.d/fedora-modular.repo");
+  xy_info("替换文件:/etc/yum.repos.d/fedora-updates.repo");
+  xy_info("新增文件:/etc/yum.repos.d/fedora-updates-modular.repo");
+
+  // char* rm = "rm -rf /etc/yum.repos.d/fedora.repo.bak";
+  // system(rm);
+  // char* rm = "rm -rf /etc/yum.repos.d/fedora-updates.repo.bak";
+  // system(rm);
+
+  xy_info ("chsrc: 为 fedora 命令换源");
   xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
 
 
-/************************************** Begin Target Matrix ****************************************/
-def_target_info(pl_ruby);
-
-target_info
-  pl_python_target = {pl_python_setsrc, NULL, NULL, pl_python_sources, 5},
-  pl_nodejs_target = {pl_nodejs_setsrc, NULL, NULL, pl_nodejs_sources, 2},
-  pl_perl_target   = {pl_perl_setsrc,   NULL, NULL, pl_perl_sources,   5},
-  pl_rust_target   = {pl_rust_setsrc,   NULL, NULL, pl_rust_sources,   5},
-  pl_go_target     = {pl_go_setsrc,     NULL, NULL, pl_go_sources,     3},
-  pl_dotnet_target = {pl_dotnet_setsrc, NULL, NULL, pl_dotnet_sources, 1},
-  pl_java_target   = {pl_java_setsrc,   NULL, NULL, pl_java_sources,   1},
-  pl_php_target    = {pl_php_setsrc,    NULL, NULL, pl_php_sources,    1},
-  pl_r_target      = {pl_r_setsrc,      NULL, NULL, pl_r_sources,      5},
-  pl_julia_target  = {pl_julia_setsrc,  NULL, NULL, pl_julia_sources,  3};
 
 
-#define targetinfo(t) (const char const*)t
+void
+os_kali_setsrc(char* option)
+{
+  int selected = 0;
+  for (int i=0;i<sizeof(os_kali_sources);i++) {
+    // 循环测速
+  }
+  const char* source_name = os_kali_sources[selected].mirror->name;
+  const char* source_abbr = os_kali_sources[selected].mirror->abbr;
+  const char* source_url  = os_kali_sources[selected].url;
+
+  char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
+  system(backup);
+
+  xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
+
+  char* cmd = xy_strjoin(3, "sed -i \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/kali\\/@\\1",
+                          source_url,
+                          "@g\' /etc/apt/sources.list");
+  system(cmd);
+  free(cmd);
+
+  // char* rm = "rm -rf /etc/apt/source.list.bak";
+  // system(rm);
+
+  xy_info ("chsrc: 为 kali 命令换源");
+  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
+
+void
+os_openbsd_setsrc(char* option)
+{
+  int selected = 0;
+  for (int i=0;i<sizeof(os_openbsd_sources);i++) {
+    // 循环测速
+  }
+  const char* source_name = os_openbsd_sources[selected].mirror->name;
+  const char* source_abbr = os_openbsd_sources[selected].mirror->abbr;
+  const char* source_url  = os_openbsd_sources[selected].url;
+
+  char* backup = "cp -rf /etc/installurl /etc/installurl.bak";
+  system(backup);
+
+  xy_info ("chsrc: 备份文件名: /etc/installurl.bak");
+
+  char* cmd = xy_strjoin(3,"echo ",source_url," > /etc/installurl");
+  system(cmd);
+  free(cmd);
+
+  // char* rm = "rm -rf /etc/installurl.bak";
+  // system(rm);
+
+  xy_info ("chsrc: 为 openbsd 命令换源");
+  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
+
+void
+os_mysys2_setsrc(char* option)
+{
+  int selected = 0;
+  for (int i=0;i<sizeof(os_mysys2_sources);i++) {
+    // 循环测速
+  }
+  const char* source_name = os_mysys2_sources[selected].mirror->name;
+  const char* source_abbr = os_mysys2_sources[selected].mirror->abbr;
+  const char* source_url  = os_mysys2_sources[selected].url;
+
+  char* backup = "cp -rf /etc/pacman.d/mirrorlist.mingw32 /etc/pacman.d/mirrorlist.mingw32.bak";
+  system(backup);
+        backup = "cp -rf /etc/pacman.d/mirrorlist.mingw64 /etc/pacman.d/mirrorlist.mingw64.bak";
+  system(backup);
+        backup = "cp -rf /etc/pacman.d/mirrorlist.msys /etc/pacman.d/mirrorlist.msys.bak";
+  system(backup);
+
+  xy_info ("chsrc: 备份文件名:1. /etc/pacman.d/mirrorlist.mingw32.bak");
+  xy_info ("chsrc: 备份文件名:2. /etc/pacman.d/mirrorlist.mingw64.bak");
+  xy_info ("chsrc: 备份文件名:3. /etc/pacman.d/mirrorlist.msys.bak");
+
+  char* cmd = xy_strjoin(3,"sed -i \"s#https\?://mirror.msys2.org/#",source_url,"#g\" /etc/pacman.d/mirrorlist* ");
+  system(cmd);
+  free(cmd);
+
+  // char* rm = "rm -rf /etc/pacman.d/mirrorlist.mingw32.bak";
+  // system(rm);
+  //       rm = "rm -rf /etc/pacman.d/mirrorlist.mingw64.bak";
+  // system(rm);
+  //       rm = "rm -rf /etc/pacman.d/mirrorlist.msys.bak";
+  // system(rm);
+
+  xy_info ("chsrc: 为 mysys2 命令换源");
+  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
+#define  setsrc_fn(func) (const char const*)func
+#define  getsrc_fn(func) (const char const*)func
+#define sources_ptr(ptr) (const char const*)ptr
 static const char const
-*pl_ruby  [] = {"gem",   "ruby",    "rb",    "rubygems", NULL,  targetinfo(&pl_ruby_target)},
-*pl_python[] = {"pip",   "python",  "py",    "pypi",     NULL,  targetinfo(&pl_python_target)},
-*pl_nodejs[] = {"npm",   "node",    "js",    "nodejs",   NULL,  targetinfo(&pl_nodejs_target)},
-*pl_perl  [] = {"perl",  "cpan",                         NULL,  targetinfo(&pl_perl_target)},
-*pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  targetinfo(&pl_rust_target)},
-*pl_go    [] = {"go",    "golang",  "goproxy",           NULL,  targetinfo(&pl_go_target)} ,
-*pl_dotnet[] = {"nuget", "net",     ".net",   "dotnet",  NULL,  targetinfo(&pl_dotnet_target)},
-*pl_java  [] = {"java",  "maven",   "gradle",            NULL,  targetinfo(&pl_java_target)},
-*pl_php   [] = {"php",   "composer",                     NULL,  targetinfo(&pl_php_target)},
-*pl_r     [] = {"r",     "cran",                         NULL,  targetinfo(&pl_r_target)},
-*pl_julia [] = {"julia",                                 NULL,  targetinfo(&pl_julia_target)},
+*pl_ruby  [] = {"gem",   "ruby",    "rb",    "rubygems", NULL,  setsrc_fn(pl_ruby_setsrc) ,   NULL,  sources_ptr(pl_ruby_sources) },
+*pl_python[] = {"pip",   "python",  "py",    "pypi",     NULL,  setsrc_fn(pl_python_setsrc),  NULL,  sources_ptr(pl_python_sources)},
+*pl_nodejs[] = {"npm",   "node",    "js",    "nodejs",   NULL,  setsrc_fn(pl_nodejs_setsrc),  NULL,  sources_ptr(pl_nodejs_sources)},
+*pl_perl  [] = {"perl",  "cpan",                         NULL,  setsrc_fn(pl_perl_setsrc),    NULL,  sources_ptr(pl_perl_sources)},
+*pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  setsrc_fn(pl_rust_setsrc),    NULL,  sources_ptr(pl_rust_sources)},
+*pl_go    [] = {"go",    "golang",  "goproxy",           NULL,  setsrc_fn(pl_go_setsrc),      NULL,  sources_ptr(pl_go_sources)},
+*pl_dotnet[] = {"nuget", "net",     ".net",   "dotnet",  NULL,  setsrc_fn(pl_dotnet_setsrc),  NULL,  sources_ptr(pl_dotnet_sources)},
+*pl_java  [] = {"java",  "maven",   "gradle",            NULL,  setsrc_fn(pl_java_setsrc),    NULL,  sources_ptr(pl_java_sources)},
+*pl_php   [] = {"php",   "composer",                     NULL,  setsrc_fn(pl_php_setsrc),     NULL,  sources_ptr(pl_php_sources)},
+*pl_cran  [] = {"r",     "cran",                         NULL,  setsrc_fn(pl_r_setsrc),       NULL,  sources_ptr(pl_r_sources)},
+*pl_julia [] = {"julia",                                 NULL,  setsrc_fn(pl_julia_setsrc),   NULL,  sources_ptr(pl_julia_sources)},
 **pl_packagers[] =
 {
   pl_ruby,    pl_python,  pl_nodejs,  pl_perl,
-  pl_rust,    pl_go,      pl_dotnet,  pl_java,   pl_php,
-  pl_r,       pl_julia
-};
+  pl_rust,    pl_go,      pl_dotnet,  pl_java,  pl_php,
+  pl_cran,    pl_julia
+},
 
 
-target_info
-  os_ubuntu_target = {os_ubuntu_setsrc, NULL, NULL, os_ubuntu_sources, 7},
-  os_debian_target = {os_debian_setsrc, NULL, NULL, os_debian_sources, 7};
-static const char const
-*os_ubuntu  [] = {"ubuntu", NULL,  targetinfo(&os_ubuntu_target)},
-*os_debian  [] = {"debian", NULL,  targetinfo(&os_debian_target)},
+*os_ubuntu  [] = {"ubuntu",  NULL,  setsrc_fn(os_ubuntu_setsrc),   NULL,sources_ptr(os_ubuntu_sources)},
+*os_debian  [] = {"debian",  NULL,  setsrc_fn(os_debian_setsrc),   NULL,sources_ptr(os_debian_sources)},
+*os_fedora  [] = {"fedora",  NULL,  setsrc_fn(os_fedora_setsrc),   NULL,sources_ptr(os_fedora_sources)},
+*os_kali    [] = {"kali",    NULL,  setsrc_fn(os_kali_setsrc),     NULL,sources_ptr(os_kali_sources)},
+*os_openbsd [] = {"openbsd", NULL,  setsrc_fn(os_openbsd_setsrc),  NULL,sources_ptr(os_openbsd_sources)},
+*os_mysys2  [] = {"mysys2",  NULL,  setsrc_fn(os_mysys2_setsrc),   NULL,sources_ptr(os_mysys2_sources)},
 **os_systems[] =
 {
-  os_ubuntu, os_debian
-};
+  os_ubuntu,os_debian,os_fedora,os_kali,os_openbsd,os_mysys2
+},
 
 
-target_info
-  wr_anaconda_target = {NULL, NULL, NULL, NULL, 0},
-  wr_emacs_target    = {NULL, NULL, NULL, NULL, 0},
-  wr_tex_target      = {NULL, NULL, NULL, NULL, 0};
-
-static const char const
-*wr_anaconda[] = {"conda", "anaconda",         NULL,  targetinfo(&wr_anaconda_target)},
-*wr_emacs   [] = {"emacs",                     NULL,  targetinfo(&wr_emacs_target)},
-*wr_tex     [] = {"latex", "ctan",     "tex",  NULL,  targetinfo(&wr_tex_target) },
+*wr_anaconda[] = {"conda", "anaconda",         NULL,  NULL},
+*wr_tex     [] = {"latex", "ctan",     "tex",  NULL,  NULL},
+*wr_emacs   [] = {"emacs",                     NULL,  NULL},
 **wr_softwares[] =
 {
-  wr_anaconda, wr_emacs, wr_tex
+  wr_anaconda, wr_tex, wr_emacs
 };
-#undef targetinfo
-/************************************** End Target Matrix ****************************************/
+#undef getsrc_fn
+#undef getsrc_fn
+#undef sources_ptr
+
 
 
 static const char const*
@@ -771,7 +849,7 @@ call_cmd (void* cmdptr, const char* arg)
 void
 print_available_mirrors ()
 {
-  xy_info ("chsrc: 支持以下镜像站，荣耀均归属于这些站点，以及它们的开发/维护者们");
+  xy_info ("chsrc: 支持以下镜像站，荣耀与感恩均归于这些站点，以及它们的开发/维护者们");
   for (int i=0; i<xy_arylen(available_mirrors); i++)
   {
     mirror_info* mir = available_mirrors[i];
@@ -812,19 +890,11 @@ print_supported_targets ()
 
 
 
-/**
- * 用于 chsrc list <target>
- */
 void
-print_supported_sources_for_target (source_info sources[])
+print_supported_sources_for_target (const char* target)
 {
-  for (int i=0;i<4;i++)
-  {
-    source_info src = sources[i];
-    const mirror_info* mir = src.mirror;
-    printf ("%-18s%-50s ", mir->abbr, src.url);
-    puts(mir->name);
-  }
+  xy_info ("chsrc: 支持对以下目标换源 (同一行表示这几个命令兼容)");
+
 }
 
 
@@ -843,12 +913,12 @@ print_help ()
 /**
  * 遍历我们内置的targets列表，查询用户输入`input`是否与我们支持的某个target匹配
  *
- * @param[out]  target_info  如果匹配到，则返回内置targets列表中最后的target_info信息
+ * @param[out]  target_func  如果匹配到，则返回内置targets列表中NULL的位置
  *
  * @return 匹配到则返回true，未匹配到则返回false
  */
 bool
-iterate_targets_(const char const*** array, size_t size, const char* input, const char const*** target_info)
+iterate_targets_(const char const*** array, size_t size, const char* input, const char const*** target_func)
 {
   int matched = 0;
 
@@ -871,7 +941,7 @@ iterate_targets_(const char const*** array, size_t size, const char* input, cons
   }
 
   if(!matched) {
-    *target_info = NULL;
+    *target_func = NULL;
     return false;
   }
 
@@ -879,16 +949,15 @@ iterate_targets_(const char const*** array, size_t size, const char* input, cons
     k++;
     alias = target[k];
   } while (NULL!=alias);
-  *target_info = target + k + 1;
+  *target_func = target + k;
   return true;
 }
 
-#define iterate_targets(ary, input, target) iterate_targets_(ary, xy_arylen(ary), input, target)
+#define iterate_targets(ary, input, target_func) iterate_targets_(ary, xy_arylen(ary), input, target_func)
 
-#define Target_Set_Source  1
-#define Target_Get_Source  2
-#define Target_Cesu_Source 3
-#define Target_List_Source 4
+#define Target_Set_Source   1
+#define Target_Get_Source   2
+#define Target_List_Sources 3
 
 /**
  * 寻找target，并根据`code`执行相应的操作
@@ -901,40 +970,25 @@ iterate_targets_(const char const*** array, size_t size, const char* input, cons
 bool
 get_target (const char* input, int code)
 {
-  const char const** target_tmp = NULL;
+  const char const** target_func = NULL;
 
-           bool matched = iterate_targets(pl_packagers, input, &target_tmp);
-  if (!matched) matched = iterate_targets(os_systems,   input, &target_tmp);
-  if (!matched) matched = iterate_targets(wr_softwares, input, &target_tmp);
+           bool matched = iterate_targets(pl_packagers, input, &target_func);
+  if (!matched) matched = iterate_targets(os_systems,   input, &target_func);
+  if (!matched) matched = iterate_targets(wr_softwares, input, &target_func);
 
   if (!matched) {
     return false;
   }
 
-  target_info* target = (target_info*) *target_tmp;
-
   if (Target_Set_Source==code) {
-    if (target->setfn) target->setfn("");
-    else xy_error (xy_strjoin(3, "chsrc: 暂未对", input, "实现set功能，欢迎贡献"));
+    puts("chsrc: 对该软件换源");
+    // call_cmd ((void*) target_func+code, NULL);
   }
   else if (Target_Get_Source==code) {
-    if (target->getfn) target->getfn("");
-    else xy_error (xy_strjoin(3, "chsrc: 暂未对", input, "实现get功能，欢迎贡献"));
+    puts("chsrc: 查看该软件的换源情况");
   }
-  else if (Target_List_Source==code) {
-    xy_info (xy_strjoin(3,"chsrc: 对", input ,"支持以下镜像站，荣耀均归属于这些站点，以及它们的开发/维护者们"));
-    print_supported_sources_for_target (target->sources);
-  }
-  else if (Target_Cesu_Source==code) {
-    if (!target->cesufn)
-      xy_error (xy_strjoin(3, "chsrc: 暂未对", input, "实现cesu功能，欢迎贡献"));
-    else {
-      char* check_cmd = xy_str_to_quietcmd("curl --version");
-      bool exist_b = does_the_program_exist (check_cmd, "curl");
-      if (!exist_b)  xy_error ("chsrc: 没有curl命令，无法测速");
-      else target->cesufn("");
-      return true;
-    }
+  else if (Target_List_Sources==code) {
+    puts("chsrc: 列出该软件所有可用镜像站");
   }
   return true;
 }
@@ -988,7 +1042,7 @@ main (int argc, char const *argv[])
       if (xy_streql(argv[2],"target"))  {
         print_supported_targets(); return 0;
       }
-      matched = get_target(argv[2], Target_List_Source);
+      matched = get_target(argv[2], Target_List_Sources);
       if (!matched) goto not_matched;
     }
     return 0;
@@ -1004,8 +1058,10 @@ main (int argc, char const *argv[])
       xy_error ("chsrc: 请您提供想要测速源的软件名; 使用 chsrc list targets 查看所有支持的软件");
       return 1;
     }
-    matched = get_target(argv[2], Target_Cesu_Source);
-    if (!matched) goto not_matched;
+    // TODO:
+    // matched = get_target(argv[2],);
+    // if (!matched) goto not_matched;
+    puts("chsrc: 测试提供该软件源的镜像站点速度");
     return 0;
   }
 
