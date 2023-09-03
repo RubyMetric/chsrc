@@ -612,6 +612,9 @@ pl_julia_setsrc (char* option)
 
 
 
+/**
+ * ubuntu不同架构下的换源是不一样的,这个针对x86架构
+ */
 void
 os_ubuntu_setsrc (char* option)
 {
@@ -634,12 +637,16 @@ os_ubuntu_setsrc (char* option)
   system(cmd);
   free(cmd);
 
-  char* rm = "rm -rf /etc/apt/source.list.bak";
-  system(rm);
+  // char* rm = "rm -rf /etc/apt/source.list.bak";
+  // system(rm);
 
   xy_info ("chsrc: 为 ubuntu 命令换源");
   xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
+/**
+ * Debian Buster 以上版本默认支持 HTTPS 源。如果遇到无法拉取 HTTPS 源的情况，请先使用 HTTP 源并安装
+ * sudo apt install apt-transport-https ca-certificates
+ */
 void
 os_debian_setsrc (char* option)
 {
@@ -662,10 +669,156 @@ os_debian_setsrc (char* option)
   system(cmd);
   free(cmd);
 
-  char* rm = "rm -rf /etc/apt/source.list.bak";
-  system(rm);
+  // char* rm = "rm -rf /etc/apt/source.list.bak";
+  // system(rm);
 
-  xy_info ("chsrc: 为 ubuntu 命令换源");
+  xy_info ("chsrc: 为 debian 命令换源");
+  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+/**
+ * fedora29版本及以下暂不支持
+ */
+void
+os_fedora_setsrc (char* option)
+{
+  int selected = 0;
+  for (int i=0;i<sizeof(os_fedora_sources);i++) {
+    // 循环测速
+  }
+  const char* source_name = os_fedora_sources[selected].mirror->name;
+  const char* source_abbr = os_fedora_sources[selected].mirror->abbr;
+  const char* source_url  = os_fedora_sources[selected].url;
+
+  char* backup = "cp -rf /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora.repo.bak";
+  system(backup);
+  backup = "cp -rf /etc/yum.repos.d/fedora-updates.repo /etc/yum.repos.d/fedora-updates.repo.bak";
+  system(backup);
+
+  xy_info ("chsrc: 备份文件名:1. /etc/yum.repos.d/fedora.repo.bak");
+  xy_info ("chsrc: 备份文件名:2. /etc/yum.repos.d/fedora-updates.repo.bak");
+
+
+  char* cmd = xy_strjoin(9, "sed -e 's|^metalink=|#metalink=|g' ",
+         "-e 's|^#baseurl=http://download.example/pub/fedora/linux/|baseurl=",
+         source_url,
+         "|g' ",
+         "-i.bak ",
+         "/etc/yum.repos.d/fedora.repo ",
+         "/etc/yum.repos.d/fedora-modular.repo ",
+         "/etc/yum.repos.d/fedora-updates.repo ",
+         "/etc/yum.repos.d/fedora-updates-modular.repo");
+  system(cmd);
+  free(cmd);
+
+  xy_info("替换文件:/etc/yum.repos.d/fedora.repo");
+  xy_info("新增文件:/etc/yum.repos.d/fedora-modular.repo");
+  xy_info("替换文件:/etc/yum.repos.d/fedora-updates.repo");
+  xy_info("新增文件:/etc/yum.repos.d/fedora-updates-modular.repo");
+
+  // char* rm = "rm -rf /etc/yum.repos.d/fedora.repo.bak";
+  // system(rm);
+  // char* rm = "rm -rf /etc/yum.repos.d/fedora-updates.repo.bak";
+  // system(rm);
+
+  xy_info ("chsrc: 为 fedora 命令换源");
+  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
+
+
+
+void
+os_kali_setsrc(char* option)
+{
+  int selected = 0;
+  for (int i=0;i<sizeof(os_kali_sources);i++) {
+    // 循环测速
+  }
+  const char* source_name = os_kali_sources[selected].mirror->name;
+  const char* source_abbr = os_kali_sources[selected].mirror->abbr;
+  const char* source_url  = os_kali_sources[selected].url;
+
+  char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
+  system(backup);
+
+  xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
+
+  char* cmd = xy_strjoin(3, "sed -i \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/kali\\/@\\1",
+                          source_url,
+                          "@g\' /etc/apt/sources.list");
+  system(cmd);
+  free(cmd);
+
+  // char* rm = "rm -rf /etc/apt/source.list.bak";
+  // system(rm);
+
+  xy_info ("chsrc: 为 kali 命令换源");
+  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
+
+void
+os_openbsd_setsrc(char* option)
+{
+  int selected = 0;
+  for (int i=0;i<sizeof(os_openbsd_sources);i++) {
+    // 循环测速
+  }
+  const char* source_name = os_openbsd_sources[selected].mirror->name;
+  const char* source_abbr = os_openbsd_sources[selected].mirror->abbr;
+  const char* source_url  = os_openbsd_sources[selected].url;
+
+  char* backup = "cp -rf /etc/installurl /etc/installurl.bak";
+  system(backup);
+
+  xy_info ("chsrc: 备份文件名: /etc/installurl.bak");
+
+  char* cmd = xy_strjoin(3,"echo ",source_url," > /etc/installurl");
+  system(cmd);
+  free(cmd);
+
+  // char* rm = "rm -rf /etc/installurl.bak";
+  // system(rm);
+
+  xy_info ("chsrc: 为 openbsd 命令换源");
+  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
+
+void
+os_mysys2_setsrc(char* option)
+{
+  int selected = 0;
+  for (int i=0;i<sizeof(os_mysys2_sources);i++) {
+    // 循环测速
+  }
+  const char* source_name = os_mysys2_sources[selected].mirror->name;
+  const char* source_abbr = os_mysys2_sources[selected].mirror->abbr;
+  const char* source_url  = os_mysys2_sources[selected].url;
+
+  char* backup = "cp -rf /etc/pacman.d/mirrorlist.mingw32 /etc/pacman.d/mirrorlist.mingw32.bak";
+  system(backup);
+        backup = "cp -rf /etc/pacman.d/mirrorlist.mingw64 /etc/pacman.d/mirrorlist.mingw64.bak";
+  system(backup);
+        backup = "cp -rf /etc/pacman.d/mirrorlist.msys /etc/pacman.d/mirrorlist.msys.bak";
+  system(backup);
+
+  xy_info ("chsrc: 备份文件名:1. /etc/pacman.d/mirrorlist.mingw32.bak");
+  xy_info ("chsrc: 备份文件名:2. /etc/pacman.d/mirrorlist.mingw64.bak");
+  xy_info ("chsrc: 备份文件名:3. /etc/pacman.d/mirrorlist.msys.bak");
+
+  char* cmd = xy_strjoin(3,"sed -i \"s#https\?://mirror.msys2.org/#",source_url,"#g\" /etc/pacman.d/mirrorlist* ");
+  system(cmd);
+  free(cmd);
+
+  // char* rm = "rm -rf /etc/pacman.d/mirrorlist.mingw32.bak";
+  // system(rm);
+  //       rm = "rm -rf /etc/pacman.d/mirrorlist.mingw64.bak";
+  // system(rm);
+  //       rm = "rm -rf /etc/pacman.d/mirrorlist.msys.bak";
+  // system(rm);
+
+  xy_info ("chsrc: 为 mysys2 命令换源");
   xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
 
@@ -708,11 +861,19 @@ static const char const
 
 
 target_info
-  os_ubuntu_target = {os_ubuntu_setsrc, NULL, NULL, os_ubuntu_sources, 7},
-  os_debian_target = {os_debian_setsrc, NULL, NULL, os_debian_sources, 7};
+  os_ubuntu_target  = {os_ubuntu_setsrc, NULL, NULL, os_ubuntu_sources, 7},
+  os_debian_target  = {os_debian_setsrc, NULL, NULL, os_debian_sources, 7},
+  os_fedora_target  = {os_ubuntu_setsrc, NULL, NULL, os_ubuntu_sources, 7},
+  os_kali_target    = {os_ubuntu_setsrc, NULL, NULL, os_ubuntu_sources, 7},
+  os_openbsd_target = {os_ubuntu_setsrc, NULL, NULL, os_ubuntu_sources, 7},
+  os_mysys2_target  = {os_ubuntu_setsrc, NULL, NULL, os_ubuntu_sources, 7};
 static const char const
-*os_ubuntu  [] = {"ubuntu", NULL,  targetinfo(&os_ubuntu_target)},
-*os_debian  [] = {"debian", NULL,  targetinfo(&os_debian_target)},
+*os_ubuntu   [] = {"ubuntu", NULL,  targetinfo(&os_ubuntu_target)},
+*os_debian   [] = {"debian", NULL,  targetinfo(&os_debian_target)},
+*os_fedora   [] = {"debian", NULL,  targetinfo(&os_debian_target)},
+*os_kali     [] = {"debian", NULL,  targetinfo(&os_debian_target)},
+*os_openbsd  [] = {"debian", NULL,  targetinfo(&os_debian_target)},
+*os_mysys2   [] = {"debian", NULL,  targetinfo(&os_debian_target)},
 **os_systems[] =
 {
   os_ubuntu, os_debian

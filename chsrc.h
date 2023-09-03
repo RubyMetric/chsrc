@@ -254,7 +254,7 @@ os_ubuntu_sources[] = {
   {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/ubuntu/"},
   {&Tencent,   "https://mirrors.tencent.com/ubuntu/"},
   {&Netease,   "https://mirrors.163.com/ubuntu/"},
-  {&Sohu,      "https://mirrors.sohu.com/ubuntu/"},
+  {&Sohu,      "https://mirrors.sohu.com/ubuntu/"}
 },
 
 /**
@@ -263,14 +263,81 @@ os_ubuntu_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_debian_sources[] = {
-  {&Ali,       "https://mirrors.aliyun.com/ubuntu/"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/ubuntu/"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/ubuntu/"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/ubuntu/"},
-  {&Tencent,   "https://mirrors.tencent.com/ubuntu/"},
-  {&Netease,   "https://mirrors.163.com/ubuntu/"},
-  {&Sohu,      "https://mirrors.sohu.com/ubuntu/"},
-};
+  {&Ali,       "https://mirrors.aliyun.com/debian/"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/debian/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/debian/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/debian/"},
+  {&Tencent,   "https://mirrors.tencent.com/debian/"},
+  {&Netease,   "https://mirrors.163.com/debian/"},
+  {&Sohu,      "https://mirrors.sohu.com/debian/"}
+},
+
+
+
+/**
+ * 2023-09-02 更新
+ *
+ * TODO: 1. 源并不完整，且未经测试是否有效
+ */
+os_fedora_sources[] = {
+  {&Ali,       "https://mirrors.aliyun.com/fedora/"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/fedora/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/fedora/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/fedora/"},
+  {&Tencent,   "https://mirrors.tencent.com/fedora/"},
+  {&Netease,   "https://mirrors.163.com/fedora/"},
+  {&Sohu,      "https://mirrors.sohu.com/fedora/"}
+},
+
+
+/**
+ * 2023-09-02 更新
+ *
+ * TODO: 1. 源并不完整，且未经测试是否有效
+ */
+os_kali_sources[] = {
+  {&Ali,       "https://mirrors.aliyun.com/kali/"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/kali/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/kali/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/kali/"},
+  {&Tencent,   "https://mirrors.tencent.com/kali/"},
+  {&Netease,   "https://mirrors.163.com/kali/"},
+  {&Sohu,      "https://mirrors.sohu.com/kali/"}
+},
+
+
+
+/**
+ * 2023-09-02 更新
+ *
+ * TODO: 1. 源并不完整，且未经测试是否有效
+ */
+os_openbsd_sources[] = {
+  {&Ali,       "https://mirrors.aliyun.com/OpenBSD/"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/OpenBSD/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/OpenBSD/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/OpenBSD/"},
+  {&Tencent,   "https://mirrors.tencent.com/OpenBSD/"},
+  {&Netease,   "https://mirrors.163.com/OpenBSD/"},
+  {&Sohu,      "https://mirrors.sohu.com/OpenBSD/"}
+},
+
+
+/**
+ * 2023-09-02 更新
+ *
+ * TODO: 1. 源并不完整，且未经测试是否有效
+ */
+os_mysys2_sources[] = {
+  {&Ali,       "https://mirrors.aliyun.com/msys2/"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/msys2/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/msys2/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/msys2/"},
+  {&Tencent,   "https://mirrors.tencent.com/msys2/"},
+  {&Netease,   "https://mirrors.163.com/msys2/"},
+  {&Sohu,      "https://mirrors.sohu.com/msys2/"}
+}
+;
 
 /* 函数签名 */
 bool does_the_program_exist (char* check_cmd, char* progname);
@@ -282,7 +349,8 @@ def_target_sources_n(pl_ruby); def_target_sources_n(pl_python); def_target_sourc
 def_target_sources_n(pl_perl); def_target_sources_n(pl_php);    def_target_sources_n(pl_go);
 def_target_sources_n(pl_rust); def_target_sources_n(pl_java);   def_target_sources_n(pl_r);
 def_target_sources_n(pl_julia);
-def_target_sources_n(os_ubuntu); def_target_sources_n(os_debian);
+def_target_sources_n(os_ubuntu); def_target_sources_n(os_debian); def_target_sources_n(os_fedora);
+def_target_sources_n(os_kali); def_target_sources_n(os_openbsd); def_target_sources_n(os_mysys2);
 
 /* Target Info */
 typedef struct {

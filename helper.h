@@ -12,12 +12,14 @@
 #ifndef XY_H
 #define XY_H
 
+#include <stdarg.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
 
 // #define NDEBUG
+
 
 #ifdef _WIN32
 
@@ -26,20 +28,36 @@
   static bool xy_on_macos   = false;
   static bool xy_on_bsds    = false;
 
-  static char* xy_os_devnull = "nul";
-
   #include <windows.h>
   #define xy_useutf8() SetConsoleOutputCP(65001)
 
-#else
+#elif  defined(__linux__) || defined(__linux)
+
   static bool xy_on_windows = false;
   static bool xy_on_linux   = true;
   static bool xy_on_macos   = false;
   static bool xy_on_bsds    = false;
 
-  static char* xy_os_devnull = "/dev/null"
+  #define xy_useutf8()
+
+#elif defined(TARGET_OS_MAC) ||defined(__MACOSX__)
+
+  static bool xy_on_windows = false;
+  static bool xy_on_linux   = false;
+  static bool xy_on_macos   = true;
+  static bool xy_on_bsds    = false;
 
   #define xy_useutf8()
+
+#elif defined(__OpenBSD__) || defined(__NetBSD__) || defined(__FreeBSD__)
+
+  static bool xy_on_windows = false;
+  static bool xy_on_linux   = false;
+  static bool xy_on_macos   = false;
+  static bool xy_on_bsds    = true;
+
+  #define xy_useutf8()
+
 #endif
 
 
