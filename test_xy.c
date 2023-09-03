@@ -1,16 +1,15 @@
 /* --------------------------------------------------------------
-* File          : test_helper.c
+* File          : test_xy.c
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-30>
-* Last modified : <2023-09-02>
+* Last modified : <2023-09-03>
 *
-* test_helper:
+* test_xy:
 *
-*   测试 helper.h 中的辅助函数
+*   测试 xy.h
 * -------------------------------------------------------------*/
 
-#include <stdio.h>
-#include "helper.h"
+#include "xy.h"
 
 int
 main (int argc, char const *argv[])

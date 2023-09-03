@@ -9,7 +9,7 @@ all:
 	@gcc chsrc.c $(CFLAGS) -o $(TARGET)
 
 test:
-	@gcc test_helper.c -o $(TEST_TARGET)
+	@gcc test_xy.c -o $(TEST_TARGET)
 	@./$(TEST_TARGET)
 
 test_cmd: $(TARGET)
