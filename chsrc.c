@@ -193,12 +193,6 @@ pl_ruby_setsrc (char* option)
 {
   int index = 0;
 
-  if (NULL!=option) {
-    index = does_the_mirror_exist (pl_ruby_sources, pl_ruby_sources_n, "ruby", option);
-  } else {
-    index = pl_ruby_cesu ("");
-  }
-
   char* check_cmd = NULL;
   if (xy_on_windows) check_cmd = "gem -v >nul 2>nul";
   else               check_cmd = "gem -v 1>/dev/null 2>&1";
@@ -206,6 +200,12 @@ pl_ruby_setsrc (char* option)
   if (!exist_b) {
     xy_error ("chsrc: 未找到 gem 相关命令，请检查是否存在");
     return;
+  }
+
+  if (NULL!=option) {
+    index = does_the_mirror_exist (pl_ruby_sources, pl_ruby_sources_n, "ruby", option);
+  } else {
+    index = pl_ruby_cesu ("");
   }
 
   source_info source = pl_ruby_sources[index];
@@ -238,16 +238,6 @@ pl_ruby_setsrc (char* option)
 
 
 /**
- * TODO: 选择 Python 中的大文件
- */
-int
-pl_python_cesu (char* option)
-{
-  return common_cesu (pl_python_sources, pl_python_sources_n,
-                      "gems/nokogiri-1.15.0-java.gem");
-}
-
-/**
  * @param[out] prog 返回 Python 的可用名，如果不可用，则返回 NULL
  */
 void
@@ -277,6 +267,19 @@ _pl_python_check_cmd (char** prog)
   }
 }
 
+
+
+/**
+ * TODO: 选择 Python 中的大文件
+ */
+int
+pl_python_cesu (char* option)
+{
+  return common_cesu (pl_python_sources, pl_python_sources_n,
+                      "gems/nokogiri-1.15.0-java.gem");
+}
+
+
 void
 pl_python_getsrc (char* option)
 {
@@ -294,36 +297,25 @@ pl_python_getsrc (char* option)
 void
 pl_python_setsrc (char* option)
 {
-  int selected = 0;
+  int index = 0;
   char* prog = NULL;
   _pl_python_check_cmd (&prog);
 
-  selected = pl_python_cesu ("");
+  if (NULL!=option) {
+    index = does_the_mirror_exist (pl_python_sources, pl_python_sources_n, "python", option);
+  } else {
+    index = pl_python_cesu ("");
+  }
 
-  const char* source_name = pl_python_sources[selected].mirror->name;
-  const char* source_abbr = pl_python_sources[selected].mirror->abbr;
-  const char* source_url  = pl_python_sources[selected].url;
+  source_info source = pl_python_sources[index];
+  say_for_setsrc(&source);
 
-  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
-
-  char* cmd = xy_2strjoin(prog, xy_2strjoin(" -m pip config set global.index-url ", source_url));
+  char* cmd = xy_2strjoin(prog, xy_2strjoin(" -m pip config set global.index-url ", source.url));
   system(cmd);
-  free(cmd);
-
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
 }
 
 
-
-/**
- * TODO: 寻找合适的文件
- */
-int
-pl_nodejs_cesu (char* option)
-{
-  return common_cesu (pl_nodejs_sources, pl_nodejs_sources_n,
-                      "gems/nokogiri-1.15.0-java.gem");
-}
 
 void
 _pl_nodejs_check_cmd ()
@@ -337,6 +329,16 @@ _pl_nodejs_check_cmd ()
     xy_error ("chsrc: 未找到 npm 命令，请检查是否存在");
     exit(1);
   }
+}
+
+/**
+ * TODO: 寻找合适的文件
+ */
+int
+pl_nodejs_cesu (char* option)
+{
+  return common_cesu (pl_nodejs_sources, pl_nodejs_sources_n,
+                      "gems/nokogiri-1.15.0-java.gem");
 }
 
 void
@@ -355,31 +357,24 @@ pl_nodejs_setsrc (char* option)
 {
   _pl_nodejs_check_cmd();
 
-  int selected = pl_nodejs_cesu ("");
+  int index = 0;
 
-  const char* source_name = pl_nodejs_sources[selected].mirror->name;
-  const char* source_abbr = pl_nodejs_sources[selected].mirror->abbr;
-  const char* source_url  = pl_nodejs_sources[selected].url;
+  if (NULL!=option) {
+    index = does_the_mirror_exist (pl_nodejs_sources, pl_nodejs_sources_n, "nodejs", option);
+  } else {
+    index = pl_nodejs_cesu ("");
+  }
 
-  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+  source_info source = pl_nodejs_sources[index];
+  say_for_setsrc (&source);
 
-  char* cmd = xy_2strjoin("npm config set registry  ", source_url);
+  char* cmd = xy_2strjoin("npm config set registry  ", source.url);
   system(cmd);
-  free(cmd);
 
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
 }
 
 
-/**
- * TODO: 寻找合适的文件
- */
-int
-pl_perl_cesu (char* option)
-{
-  return common_cesu (pl_perl_sources, pl_perl_sources_n,
-                      "gems/nokogiri-1.15.0-java.gem");
-}
 
 void
 _pl_perl_check_cmd ()
@@ -394,6 +389,16 @@ _pl_perl_check_cmd ()
     xy_error ("chsrc: 未找到 perl 命令，请检查是否存在");
     exit(1);
   }
+}
+
+/**
+ * TODO: 寻找合适的文件
+ */
+int
+pl_perl_cesu (char* option)
+{
+  return common_cesu (pl_perl_sources, pl_perl_sources_n,
+                      "gems/nokogiri-1.15.0-java.gem");
 }
 
 /* TODO: 暂未实现 */
@@ -412,38 +417,27 @@ pl_perl_getsrc (char* option)
 void
 pl_perl_setsrc (char* option)
 {
-  int selected = 0; char* check_cmd, *prog = NULL;
+  int index = 0;
 
-  selected = pl_perl_cesu ("");
+  if (NULL!=option) {
+    index = does_the_mirror_exist (pl_perl_sources, pl_perl_sources_n, "perl", option);
+  } else {
+    index = pl_perl_cesu ("");
+  }
 
-  const char* source_name = pl_perl_sources[selected].mirror->name;
-  const char* source_abbr = pl_perl_sources[selected].mirror->abbr;
-  const char* source_url  = pl_perl_sources[selected].url;
-
-  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+  source_info source = pl_perl_sources[index];
+  say_for_setsrc (&source);
 
   char* cmd = xy_strjoin(3,
   "perl -MCPAN -e 'CPAN::HandleConfig->edit(\"pushy_https\", 0); CPAN::HandleConfig->edit(\"urllist\", \"unshift\", \"",
-   source_url,
+   source.url,
   "\"); mkmyconfig'");
 
   system(cmd);
-  free(cmd);
-
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
 }
 
 
-
-/**
- * TODO: 寻找合适的文件
- */
-int
-pl_php_cesu (char* option)
-{
-  return common_cesu (pl_php_sources, pl_php_sources_n,
-                      "gems/nokogiri-1.15.0-java.gem");
-}
 
 void
 _pl_php_check_cmd()
@@ -458,6 +452,16 @@ _pl_php_check_cmd()
     xy_error ("chsrc: 未找到 composer 命令，请检查是否存在");
     exit(1);
   }
+}
+
+/**
+ * TODO: 寻找合适的文件
+ */
+int
+pl_php_cesu (char* option)
+{
+  return common_cesu (pl_php_sources, pl_php_sources_n,
+                      "gems/nokogiri-1.15.0-java.gem");
 }
 
 /* TODO: 待PHP用户确认 */
@@ -477,33 +481,29 @@ pl_php_setsrc (char* option)
 {
   _pl_php_check_cmd();
 
-  int selected = pl_php_cesu ("");
+  int index = 0;
 
-  const char* source_name = pl_php_sources[selected].mirror->name;
-  const char* source_abbr = pl_php_sources[selected].mirror->abbr;
-  const char* source_url  = pl_php_sources[selected].url;
+  if (NULL!=option) {
+    index = does_the_mirror_exist (pl_php_sources, pl_php_sources_n, "php", option);
+  } else {
+    index = pl_php_cesu ("");
+  }
 
-  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+  source_info source = pl_php_sources[index];
+  say_for_setsrc (&source);
 
-  char* cmd = xy_2strjoin("composer config repo.packagist composer ", source_url);
+  char* cmd = xy_2strjoin("composer config repo.packagist composer ", source.url);
   system(cmd);
 
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
 }
 
 
 
-
-/**
- * Go换源
- *
- * 参考：https://goproxy.cn/
- */
 void
-pl_go_setsrc (char* option)
+_pl_go_check_cmd ()
 {
-  int selected = 0; char* check_cmd = NULL;
-
+  char* check_cmd = NULL;
   if (xy_on_windows) check_cmd = "go --version >nul 2>nul";
   else               check_cmd = "go --version 1>/dev/null 2>&1";
 
@@ -511,27 +511,77 @@ pl_go_setsrc (char* option)
 
   if (!exist_b) {
     xy_error ("chsrc: 未找到 go 相关命令，请检查是否存在");
-    return;
+    exit(1);
   }
-
-  for (int i=0;i<sizeof(pl_go_sources);i++) {
-    // 循环测速
-  }
-
-  const char* source_name = pl_go_sources[selected].mirror->name;
-  const char* source_abbr = pl_go_sources[selected].mirror->abbr;
-  const char* source_url  = pl_go_sources[selected].url;
-
-  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
-  char* cmd = "go env -w GO111MODULE=on";
-  system(cmd);
-
-  cmd = xy_strjoin(3, "go env -w GOPROXY=", source_url, ",direct");
-  system(cmd);
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
 
 
+/**
+ * TODO: 寻找合适的文件
+ */
+int
+pl_go_cesu (char* option)
+{
+  return common_cesu (pl_go_sources, pl_go_sources_n,
+                      "gems/nokogiri-1.15.0-java.gem");
+}
+
+/* TODO: 暂未实现 */
+void
+pl_go_getsrc (char* option)
+{
+  _pl_go_check_cmd ();
+
+  // char* cmd = "npm config get registry";
+  // system(cmd);
+}
+
+/**
+ * Go换源，参考：https://goproxy.cn/
+ */
+void
+pl_go_setsrc (char* option)
+{
+  _pl_go_check_cmd();
+  int index = 0;
+
+  if (NULL!=option) {
+    index = does_the_mirror_exist (pl_go_sources, pl_go_sources_n, "go", option);
+  } else {
+    index = pl_go_cesu ("");
+  }
+
+  source_info source = pl_go_sources[index];
+  say_for_setsrc (&source);
+
+  char* cmd = "go env -w GO111MODULE=on";
+  system(cmd);
+
+  cmd = xy_strjoin(3, "go env -w GOPROXY=", source.url, ",direct");
+  system(cmd);
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
+}
+
+
+
+
+/**
+ * TODO: 寻找合适的文件
+ */
+int
+pl_rust_cesu (char* option)
+{
+  return common_cesu (pl_rust_sources, pl_rust_sources_n,
+                      "gems/nokogiri-1.15.0-java.gem");
+}
+
+/* TODO: 暂未实现 */
+void
+pl_rust_getsrc (char* option)
+{
+  // char* cmd = "npm config get registry";
+  // system(cmd);
+}
 
 /**
  * Rust 换源
@@ -541,25 +591,23 @@ pl_go_setsrc (char* option)
 void
 pl_rust_setsrc (char* option)
 {
-  int selected = 0; char* check_cmd = NULL;
+  int index = 0;
 
-  for (int i=0;i<sizeof(pl_rust_sources);i++) {
-    // 循环测速
+  if (NULL!=option) {
+    index = does_the_mirror_exist (pl_rust_sources, pl_rust_sources_n, "rust", option);
+  } else {
+    index = pl_rust_cesu ("");
   }
 
-  const char* source_name = pl_rust_sources[selected].mirror->name;
-  const char* source_abbr = pl_rust_sources[selected].mirror->abbr;
-  const char* source_url  = pl_rust_sources[selected].url;
-
-  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
-
+  source_info source = pl_rust_sources[index];
+  say_for_setsrc(&source);
 
   const char* file = xy_strjoin (3,
     "[source.crates-io]\n"
     "replace-with = 'mirror'\n\n"
 
     "[source.mirror]\n"
-    "registry = \"", source_url, "\"");
+    "registry = \"", source.url, "\"");
 
 
   char* cmd = NULL;
@@ -569,20 +617,32 @@ pl_rust_setsrc (char* option)
     cmd = xy_strjoin(3, "echo ", file, ">> $HOME/.cargo");
 
   system(cmd);
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
 }
 
 
 
 
+
+void
+pl_dotnet_cesu (char* option)
+{
+  xy_error ("chsrc: 暂时无法为NuGet测速，若有需求，请您提交issue");
+}
+
+void
+pl_dotnet_getsrc (char* option)
+{
+  xy_error ("chsrc: 暂时无法查看NuGet源，若有需求，请您提交issue");
+}
+
 /**
  * NuGet 换源
- *
  */
 void
 pl_dotnet_setsrc (char* option)
 {
-  int selected = 0; char* check_cmd = NULL;
+  int index = 0; char* check_cmd = NULL;
 
   xy_error ("chsrc: 暂时无法为NuGet换源，若有需求，请您提交issue");
 }
@@ -590,6 +650,23 @@ pl_dotnet_setsrc (char* option)
 
 
 
+/**
+ * TODO: 寻找合适的文件
+ */
+int
+pl_java_cesu (char* option)
+{
+  return common_cesu (pl_java_sources, pl_java_sources_n,
+                      "gems/nokogiri-1.15.0-java.gem");
+}
+
+/* TODO: 暂未实现 */
+void
+pl_java_getsrc (char* option)
+{
+  // char* cmd = "npm config get registry";
+  // system(cmd);
+}
 
 /**
  * Java 换源
@@ -599,7 +676,7 @@ pl_dotnet_setsrc (char* option)
 void
 pl_java_setsrc (char* option)
 {
-  int selected = 0; char* check_cmd = NULL;
+  int index = 0; char* check_cmd = NULL;
 
   if (xy_on_windows) check_cmd = "mvn --version >nul 2>nul";
   else               check_cmd = "mvn --version 1>/dev/null 2>&1";
@@ -614,15 +691,14 @@ pl_java_setsrc (char* option)
     return;
   }
 
-  for (int i=0;i<sizeof(pl_java_sources);i++) {
-    // 循环测速
+  if (NULL!=option) {
+    index = does_the_mirror_exist (pl_java_sources, pl_java_sources_n, "java", option);
+  } else {
+    index = pl_java_cesu ("");
   }
 
-  const char* source_name = pl_java_sources[selected].mirror->name;
-  const char* source_abbr = pl_java_sources[selected].mirror->abbr;
-  const char* source_url  = pl_java_sources[selected].url;
-
-  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+  source_info source = pl_java_sources[index];
+  say_for_setsrc(&source);
 
   if (mvn_exist_b) {
     const char* file = xy_strjoin(3,
@@ -630,7 +706,7 @@ pl_java_setsrc (char* option)
     "  <id>aliyunmaven</id>\n"
     "  <mirrorOf>*</mirrorOf>\n"
     "  <name>阿里云公共仓库</name>\n"
-    "  <url>", source_url, "</url>\n"
+    "  <url>", source.url, "</url>\n"
     "</mirror>");
 
     xy_info ("chsrc: 请在您的 maven安装目录/conf/settings.xml 中添加:\n");
@@ -641,7 +717,7 @@ pl_java_setsrc (char* option)
     const char* file = xy_strjoin(3,
     "allprojects {\n"
     "  repositories {\n"
-    "  maven { url '", source_url, "' }\n"
+    "  maven { url '", source.url, "' }\n"
     "  mavenLocal()\n"
     "  mavenCentral()\n"
     "  }\n"
@@ -651,34 +727,48 @@ pl_java_setsrc (char* option)
     puts (file);
   }
 
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
 }
 
 
 
 /**
- * R 换源
- *
- * 参考：https://help.mirrors.cernet.edu.cn/CRAN/
+ * TODO: 寻找合适的文件
+ */
+int
+pl_r_cesu (char* option)
+{
+  return common_cesu (pl_r_sources, pl_r_sources_n,
+                      "gems/nokogiri-1.15.0-java.gem");
+}
+
+/* TODO: 暂未实现 */
+void
+pl_r_getsrc (char* option)
+{
+  // char* cmd = "npm config get registry";
+  // system(cmd);
+}
+
+/**
+ * R 换源，参考：https://help.mirrors.cernet.edu.cn/CRAN/
  */
 void
 pl_r_setsrc (char* option)
 {
-  int selected = 0; char* check_cmd = NULL;
+  int index = 0;
 
-  for (int i=0;i<sizeof(pl_r_sources);i++) {
-    // 循环测速
+  if (NULL!=option) {
+    index = does_the_mirror_exist (pl_r_sources, pl_r_sources_n, "r", option);
+  } else {
+    index = pl_r_cesu ("");
   }
 
-  const char* source_name = pl_r_sources[selected].mirror->name;
-  const char* source_abbr = pl_r_sources[selected].mirror->abbr;
-  const char* source_url  = pl_r_sources[selected].url;
-
-  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+  source_info source = pl_r_sources[index];
+  say_for_setsrc(&source);
 
 
-  const char* file = xy_strjoin (3, "options(\"repos\" = c(CRAN=\"", source_url, "\"))" );
-
+  const char* file = xy_strjoin (3, "options(\"repos\" = c(CRAN=\"", source.url, "\"))" );
 
   char* cmd = NULL;
   // TODO: 待确认，Windows 下是否也是该文件
@@ -688,34 +778,48 @@ pl_r_setsrc (char* option)
     cmd = xy_strjoin(3, "echo ", file, " >> ~/.Rprofile");
 
   system(cmd);
-
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
 }
 
 
 
 
 /**
- * Julia 换源
- *
- * 参考：https://help.mirrors.cernet.edu.cn/julia/
+ * TODO: 寻找合适的文件
+ */
+int
+pl_julia_cesu (char* option)
+{
+  return common_cesu (pl_r_sources, pl_r_sources_n,
+                      "gems/nokogiri-1.15.0-java.gem");
+}
+
+/* TODO: 暂未实现 */
+void
+pl_julia_getsrc (char* option)
+{
+  // char* cmd = "npm config get registry";
+  // system(cmd);
+}
+
+/**
+ * Julia 换源，参考：https://help.mirrors.cernet.edu.cn/julia/
  */
 void
 pl_julia_setsrc (char* option)
 {
-  int selected = 0; char* check_cmd = NULL;
+  int index = 0;
 
-  for (int i=0;i<sizeof(pl_r_sources);i++) {
-    // 循环测速
+  if (NULL!=option) {
+    index = does_the_mirror_exist (pl_julia_sources, pl_julia_sources_n, "julia", option);
+  } else {
+    index = pl_julia_cesu ("");
   }
 
-  const char* source_name = pl_r_sources[selected].mirror->name;
-  const char* source_abbr = pl_r_sources[selected].mirror->abbr;
-  const char* source_url  = pl_r_sources[selected].url;
+  source_info source = pl_julia_sources[index];
+  say_for_setsrc(&source);
 
-  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
-
-  const char* file = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source_url, "\"");
+  const char* file = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
 
   char* cmd = NULL;
   // TODO: $JULIA_DEPOT_PATH/config/startup.jl 是否要考虑环境变量
@@ -725,7 +829,7 @@ pl_julia_setsrc (char* option)
     cmd = xy_strjoin(3, "echo ", file, " >> ~/.julia/config/startup.jl");
   system(cmd);
 
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
 }
 
 
@@ -1022,17 +1126,17 @@ usage[] = {
 
   "维护:  https://gitee.com/RubyMetric/chsrc\n",
 
-  "使用：chsrc <command> [target]",
-  "help                    # 打印此帮助，或 h, -h, --help",
-  "list (或 ls, 或 l)      # 查看可用镜像源，和可换源软件",
-  "list mirror(s)          # 查看可用镜像源",
-  "list target(s)          # 查看可换源软件",
-  "list <target>           # 查看该软件可以使用哪些源",
-  "cesu <target>           # 对该软件所有源测速",
-  "get  <target>           # 查看当前软件的源使用情况",
-  "set  <target>           # 换源，自动测速后挑选最快源",
-  "set  <target> def(ault) # 换源，默认挑选经维护者测速排序第一的源",
-  "set  <target> <mirror>  # 换源，指定使用某镜像站\n"
+  "使用：chsrc <command> [target] [mirror]",
+  "help                      打印此帮助，或 h, -h, --help",
+  "list (或 ls, 或 l)        查看可用镜像源，和可换源软件",
+  "list mirror(s)            查看可用镜像源",
+  "list target(s)            查看可换源软件",
+  "list <target>             查看该软件可以使用哪些源",
+  "cesu <target>             对该软件所有源测速",
+  "get  <target>             查看当前软件的源使用情况",
+  "set  <target>             换源，自动测速后挑选最快源",
+  "set  <target> def(ault)   换源，默认挑选经维护者测速排序第一的源",
+  "set  <target> <mirror>    换源，指定使用某镜像站\n"
 };
 
 
