@@ -6,7 +6,7 @@
 *
 * xy:
 *
-*   Xiangyang or Xianyang or something else
+*   y = f(x)
 * -------------------------------------------------------------*/
 
 #ifndef XY_H
