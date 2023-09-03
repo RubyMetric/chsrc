@@ -100,140 +100,28 @@ test_speed (char* url)
 }
 
 
+/**
+ * @param[in]  place  所有源的url后，所接的部分url
+ */
+int
+common_cesu (source_info* sources, size_t size, char* place)
+{
+  double speeds[size];
+  for (int i=0;i<size;i++)
+  {
+    source_info src = sources[i];
+    const char* baseurl = src.url;
+    char* testurl = xy_2strjoin(baseurl, place);
+    double speed  = test_speed (testurl);
+    speeds[i] = speed;
+  }
+  int fastidx = dblary_maxidx (speeds, size);
+  xy_success (xy_2strjoin("最快镜像站为: ", sources[fastidx].mirror->name));
+  return fastidx;
+}
+
+
 /***************************************** 换源 *********************************************/
-
-/**
- * Perl换源
- *
- * 参考：https://help.mirrors.cernet.edu.cn/CPAN/
- */
-void
-pl_perl_setsrc (char* option)
-{
-  int selected = 0; char* check_cmd, *prog = NULL;
-
-  if (xy_on_windows) check_cmd = "perl --version >nul 2>nul";
-  else               check_cmd = "perl --version 1>/dev/null 2>&1";
-
-  bool exist_b = does_the_program_exist (check_cmd, "perl");
-
-  if (!exist_b) {
-    xy_error ("chsrc: 未找到 perl 相关命令，请检查是否存在");
-    return;
-  }
-
-  for (int i=0;i<sizeof(pl_perl_sources);i++) {
-    // 循环测速
-  }
-
-  const char* source_name = pl_perl_sources[selected].mirror->name;
-  const char* source_abbr = pl_perl_sources[selected].mirror->abbr;
-  const char* source_url  = pl_perl_sources[selected].url;
-
-  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
-
-  char* cmd = xy_strjoin(3,
-  "perl -MCPAN -e 'CPAN::HandleConfig->edit(\"pushy_https\", 0); CPAN::HandleConfig->edit(\"urllist\", \"unshift\", \"",
-   source_url,
-  "\"); mkmyconfig'");
-
-  system(cmd);
-  free(cmd);
-
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
-}
-
-
-
-/**
- * NodeJS换源
- *
- * 参考：https://npmmirror.com/
- */
-void
-pl_nodejs_setsrc (char* option)
-{
-  int selected = 0; char* check_cmd, *prog = NULL;
-
-  if (xy_on_windows) check_cmd = "npm -v >nul 2>nul";
-  else               check_cmd = "npm -v 1>/dev/null 2>&1";
-
-  bool exist_b = does_the_program_exist (check_cmd, "npm");
-
-  if (!exist_b) {
-    xy_error ("chsrc: 未找到 npm 相关命令，请检查是否存在");
-    return;
-  }
-
-  for (int i=0;i<sizeof(pl_nodejs_sources);i++) {
-    // 循环测速
-  }
-
-  const char* source_name = pl_nodejs_sources[selected].mirror->name;
-  const char* source_abbr = pl_nodejs_sources[selected].mirror->abbr;
-  const char* source_url  = pl_nodejs_sources[selected].url;
-
-  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
-
-  char* cmd = xy_2strjoin("npm config set registry  ", source_url);
-  system(cmd);
-  free(cmd);
-
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
-}
-
-
-/**
- * Python换源
- *
- * 参考：https://mirrors.tuna.tsinghua.edu.cn/help/pypi/
- *
- * 经测试，Windows上调用换源命令，会写入 C:\Users\RubyMetric\AppData\Roaming\pip\pip.ini
- */
-void
-pl_python_setsrc (char* option)
-{
-  int selected = 0; char* check_cmd, *prog = NULL;
-
-  // 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store
-  if (xy_on_windows) check_cmd = "python --version >nul 2>nul";
-  else               check_cmd = "python --version 1>/dev/null 2>&1";
-
-  bool exist_b = does_the_program_exist (check_cmd, "python");
-
-  if (!exist_b) {
-    if (xy_on_windows) check_cmd = "python3 --version >nul 2>nul";
-    else               check_cmd = "python3 --version 1>/dev/null 2>&1";
-    exist_b = does_the_program_exist (check_cmd, "python3");
-    if (exist_b) prog = "python3";
-  }
-  else {
-    prog = "python";
-  }
-
-  if (!exist_b) {
-    xy_error ("chsrc: 未找到 Python 相关命令，请检查是否存在");
-    return;
-  }
-
-  for (int i=0;i<sizeof(pl_python_sources);i++) {
-    // 循环测速
-  }
-
-  const char* source_name = pl_python_sources[selected].mirror->name;
-  const char* source_abbr = pl_python_sources[selected].mirror->abbr;
-  const char* source_url  = pl_python_sources[selected].url;
-
-  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
-
-  char* cmd = xy_2strjoin(prog, xy_2strjoin(" -m pip config set global.index-url ", source_url));
-  system(cmd);
-  free(cmd);
-
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
-}
-
-
 
  /* Ruby源 @maintainer ccmywish */
 
@@ -247,24 +135,23 @@ pl_ruby_cesu (char* option)
 {
   size_t size = pl_ruby_sources_n;
   source_info* sources = pl_ruby_sources;
-  double speeds[size];
-  for (int i=0;i<size;i++)
-  {
-    source_info src = sources[i];
-    const char* baseurl = src.url;
-    char* testurl = xy_2strjoin(baseurl, "gems/nokogiri-1.15.0-java.gem");
-    double speed  = test_speed (testurl);
-    speeds[i] = speed;
-  }
-  int fastidx = dblary_maxidx (speeds, size);
-  xy_success (xy_2strjoin("最快镜像站为: ", sources[fastidx].mirror->name));
-  return fastidx;
+  return common_cesu (sources, size, "gems/nokogiri-1.15.0-java.gem");
 }
 
+void
+pl_ruby_getsrc (char* option)
+{
+  char* cmd = "gem sources";
+  xy_info (xy_2strjoin("chsrc: 运行 ", cmd));
+  system(cmd);
+  cmd = "bundle config get mirror.https://rubygems.org";
+  xy_info (xy_2strjoin("chsrc: 运行 ", cmd));
+  system(cmd);
+}
+
+
 /**
- * Ruby换源
- *
- * 参考：https://gitee.com/RubyKids/rbenv-cn
+ * Ruby换源，参考：https://gitee.com/RubyKids/rbenv-cn
  */
 void
 pl_ruby_setsrc (char* option)
@@ -310,16 +197,262 @@ pl_ruby_setsrc (char* option)
   xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
 }
 
-void
-pl_ruby_getsrc (char* option)
+
+
+/**
+ * TODO: 选择 Python 中的大文件
+ */
+int
+pl_python_cesu (char* option)
 {
-  char* cmd = "gem sources";
-  xy_info (xy_2strjoin("chsrc: 运行 ", cmd));
-  system(cmd);
-  cmd = "bundle config get mirror.https://rubygems.org";
-  xy_info (xy_2strjoin("chsrc: 运行 ", cmd));
+  return common_cesu (pl_python_sources, pl_python_sources_n,
+                      "gems/nokogiri-1.15.0-java.gem");
+}
+
+/**
+ * @param[out] prog 返回 Python 的可用名，如果不可用，则返回 NULL
+ */
+void
+_pl_python_check_cmd (char** prog)
+{
+  char* check_cmd = NULL; *prog = NULL;
+
+  // 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store
+  if (xy_on_windows) check_cmd = "python --version >nul 2>nul";
+  else               check_cmd = "python --version 1>/dev/null 2>&1";
+
+  bool exist_b = does_the_program_exist (check_cmd, "python");
+
+  if (!exist_b) {
+    if (xy_on_windows) check_cmd = "python3 --version >nul 2>nul";
+    else               check_cmd = "python3 --version 1>/dev/null 2>&1";
+    exist_b = does_the_program_exist (check_cmd, "python3");
+    if (exist_b) *prog = "python3";
+  }
+  else {
+    *prog = "python";
+  }
+
+  if (!exist_b) {
+    xy_error ("chsrc: 未找到 Python 相关命令，请检查是否存在");
+    exit(1);
+  }
+}
+
+void
+pl_python_getsrc (char* option)
+{
+  char* prog = NULL;
+  _pl_python_check_cmd (&prog);
+  char* cmd = xy_2strjoin(prog, " -m pip config get global.index-url");
   system(cmd);
 }
+
+/**
+ * Python换源，参考：https://mirrors.tuna.tsinghua.edu.cn/help/pypi/
+ *
+ * 经测试，Windows上调用换源命令，会写入 C:\Users\RubyMetric\AppData\Roaming\pip\pip.ini
+ */
+void
+pl_python_setsrc (char* option)
+{
+  int selected = 0;
+  char* prog = NULL;
+  _pl_python_check_cmd (&prog);
+
+  selected = pl_python_cesu ("");
+
+  const char* source_name = pl_python_sources[selected].mirror->name;
+  const char* source_abbr = pl_python_sources[selected].mirror->abbr;
+  const char* source_url  = pl_python_sources[selected].url;
+
+  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+
+  char* cmd = xy_2strjoin(prog, xy_2strjoin(" -m pip config set global.index-url ", source_url));
+  system(cmd);
+  free(cmd);
+
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
+
+
+/**
+ * TODO: 寻找合适的文件
+ */
+int
+pl_nodejs_cesu (char* option)
+{
+  return common_cesu (pl_nodejs_sources, pl_nodejs_sources_n,
+                      "gems/nokogiri-1.15.0-java.gem");
+}
+
+void
+_pl_nodejs_check_cmd ()
+{
+  char* check_cmd = NULL;
+  if (xy_on_windows) check_cmd = "npm -v >nul 2>nul";
+  else               check_cmd = "npm -v 1>/dev/null 2>&1";
+
+  bool exist_b = does_the_program_exist (check_cmd, "npm");
+  if (!exist_b) {
+    xy_error ("chsrc: 未找到 npm 命令，请检查是否存在");
+    exit(1);
+  }
+}
+
+void
+pl_nodejs_getsrc (char* option)
+{
+  _pl_nodejs_check_cmd ();
+  char* cmd = "npm config get registry";
+  system(cmd);
+}
+
+/**
+ * NodeJS换源，参考：https://npmmirror.com/
+ */
+void
+pl_nodejs_setsrc (char* option)
+{
+  _pl_nodejs_check_cmd();
+
+  int selected = pl_nodejs_cesu ("");
+
+  const char* source_name = pl_nodejs_sources[selected].mirror->name;
+  const char* source_abbr = pl_nodejs_sources[selected].mirror->abbr;
+  const char* source_url  = pl_nodejs_sources[selected].url;
+
+  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+
+  char* cmd = xy_2strjoin("npm config set registry  ", source_url);
+  system(cmd);
+  free(cmd);
+
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
+
+/**
+ * TODO: 寻找合适的文件
+ */
+int
+pl_perl_cesu (char* option)
+{
+  return common_cesu (pl_perl_sources, pl_perl_sources_n,
+                      "gems/nokogiri-1.15.0-java.gem");
+}
+
+void
+_pl_perl_check_cmd ()
+{
+  char* check_cmd = NULL;
+  if (xy_on_windows) check_cmd = "perl --version >nul 2>nul";
+  else               check_cmd = "perl --version 1>/dev/null 2>&1";
+
+  bool exist_b = does_the_program_exist (check_cmd, "perl");
+
+  if (!exist_b) {
+    xy_error ("chsrc: 未找到 perl 命令，请检查是否存在");
+    exit(1);
+  }
+}
+
+/* TODO: 暂未实现 */
+void
+pl_perl_getsrc (char* option)
+{
+  _pl_perl_check_cmd ();
+
+  // char* cmd = "npm config get registry";
+  // system(cmd);
+}
+
+/**
+ * Perl换源，参考：https://help.mirrors.cernet.edu.cn/CPAN/
+ */
+void
+pl_perl_setsrc (char* option)
+{
+  int selected = 0; char* check_cmd, *prog = NULL;
+
+  selected = pl_perl_cesu ("");
+
+  const char* source_name = pl_perl_sources[selected].mirror->name;
+  const char* source_abbr = pl_perl_sources[selected].mirror->abbr;
+  const char* source_url  = pl_perl_sources[selected].url;
+
+  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+
+  char* cmd = xy_strjoin(3,
+  "perl -MCPAN -e 'CPAN::HandleConfig->edit(\"pushy_https\", 0); CPAN::HandleConfig->edit(\"urllist\", \"unshift\", \"",
+   source_url,
+  "\"); mkmyconfig'");
+
+  system(cmd);
+  free(cmd);
+
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
+
+
+/**
+ * TODO: 寻找合适的文件
+ */
+int
+pl_php_cesu (char* option)
+{
+  return common_cesu (pl_php_sources, pl_php_sources_n,
+                      "gems/nokogiri-1.15.0-java.gem");
+}
+
+void
+_pl_php_check_cmd()
+{
+  char* check_cmd = NULL;
+  if (xy_on_windows) check_cmd = "composer --version >nul 2>nul";
+  else               check_cmd = "composer --version 1>/dev/null 2>&1";
+
+  bool exist_b = does_the_program_exist (check_cmd, "composer");
+
+  if (!exist_b) {
+    xy_error ("chsrc: 未找到 composer 命令，请检查是否存在");
+    exit(1);
+  }
+}
+
+/* TODO: 待PHP用户确认 */
+void
+pl_php_getsrc (char* option)
+{
+  _pl_php_check_cmd ();
+  char* cmd = "composer config repo.packagist composer";
+  system(cmd);
+}
+
+/**
+ * PHP 换源，参考：https://developer.aliyun.com/composer
+ */
+void
+pl_php_setsrc (char* option)
+{
+  _pl_php_check_cmd();
+
+  int selected = pl_php_cesu ("");
+
+  const char* source_name = pl_php_sources[selected].mirror->name;
+  const char* source_abbr = pl_php_sources[selected].mirror->abbr;
+  const char* source_url  = pl_php_sources[selected].url;
+
+  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
+
+  char* cmd = xy_2strjoin("composer config repo.packagist composer ", source_url);
+  system(cmd);
+
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+}
+
 
 
 
@@ -417,43 +550,6 @@ pl_dotnet_setsrc (char* option)
 }
 
 
-
-
-/**
- * PHP 换源
- *
- * 参考：https://developer.aliyun.com/composer
- */
-void
-pl_php_setsrc (char* option)
-{
-  int selected = 0; char* check_cmd = NULL;
-
-  if (xy_on_windows) check_cmd = "composer --version >nul 2>nul";
-  else               check_cmd = "composer --version 1>/dev/null 2>&1";
-
-  bool exist_b = does_the_program_exist (check_cmd, "composer");
-
-  if (!exist_b) {
-    xy_error ("chsrc: 未找到 composer 相关命令，请检查是否存在");
-    return;
-  }
-
-  for (int i=0;i<sizeof(pl_php_sources);i++) {
-    // 循环测速
-  }
-
-  const char* source_name = pl_php_sources[selected].mirror->name;
-  const char* source_abbr = pl_php_sources[selected].mirror->abbr;
-  const char* source_url  = pl_php_sources[selected].url;
-
-  xy_info (xy_2strjoin("chsrc: 选中镜像站：", source_abbr));
-
-  char* cmd = xy_2strjoin("composer config repo.packagist composer ", source_url);
-  system(cmd);
-
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
-}
 
 
 

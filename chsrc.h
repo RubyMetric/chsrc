@@ -356,18 +356,14 @@ dblary_maxidx(double* array, int size)
 }
 
 
-/* 函数签名 */
-bool does_the_program_exist (char* check_cmd, char* progname);
-
-
-
 #define def_target_sources_n(t) const size_t t##_sources_n = xy_arylen(pl_ruby_sources)
 def_target_sources_n(pl_ruby); def_target_sources_n(pl_python); def_target_sources_n(pl_nodejs);
 def_target_sources_n(pl_perl); def_target_sources_n(pl_php);    def_target_sources_n(pl_go);
 def_target_sources_n(pl_rust); def_target_sources_n(pl_java);   def_target_sources_n(pl_r);
 def_target_sources_n(pl_julia);
-def_target_sources_n(os_ubuntu); def_target_sources_n(os_debian); def_target_sources_n(os_fedora);
-def_target_sources_n(os_kali); def_target_sources_n(os_openbsd); def_target_sources_n(os_mysys2);
+
+def_target_sources_n(os_ubuntu); def_target_sources_n(os_debian);  def_target_sources_n(os_fedora);
+def_target_sources_n(os_kali);   def_target_sources_n(os_openbsd); def_target_sources_n(os_mysys2);
 
 /* Target Info */
 typedef struct {
