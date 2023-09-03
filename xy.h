@@ -1,17 +1,18 @@
 /* --------------------------------------------------------------
-* File          : helper.h
+* File          : xy.h
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
-* Last modified : <2023-08-31>
+* Last modified : <2023-09-03>
 *
-* helper:
+* xy:
 *
-*   helper functions and macros
+*   Xiangyang or Xianyang or something else
 * -------------------------------------------------------------*/
 
 #ifndef XY_H
 #define XY_H
 
+#include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
 #include <stdlib.h>
@@ -63,7 +64,7 @@
   static bool xy_on_bsds    = true;
 
   // set xy_os_devnull
-  
+
   #define xy_useutf8()
 
 #endif

@@ -9,8 +9,7 @@
 *   chsrc.c 头文件
 * -------------------------------------------------------------*/
 
-#include <stdio.h>
-#include "helper.h"
+#include "xy.h"
 
 typedef struct {
   const char* abbr;
