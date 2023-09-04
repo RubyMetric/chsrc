@@ -252,6 +252,15 @@ xy_strjoin (unsigned int count, ...)
 }
 
 
+char*
+xy_strdup(const char* str)
+{
+  size_t len = strlen(str);
+  char* new = xy_malloc0(len+1);
+  strcpy(new, str);
+}
+
+
 bool
 xy_streql(const char* str1, const char* str2) {
   return strcmp(str1, str2) == 0 ? true : false;
@@ -267,6 +276,7 @@ xy_str_to_quietcmd (const char* cmd)
 #else
   ret = xy_2strjoin (cmd, " 1>/dev/null 2>&1");
 #endif
+  return ret;
 }
 
 #endif

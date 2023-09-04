@@ -181,13 +181,10 @@ void
 pl_ruby_setsrc (char* option)
 {
   int index = 0;
-
-  char* check_cmd = NULL;
-  if (xy_on_windows) check_cmd = "gem -v >nul 2>nul";
-  else               check_cmd = "gem -v 1>/dev/null 2>&1";
+  char* check_cmd = xy_str_to_quietcmd("gem -v");
   bool exist_b = does_the_program_exist (check_cmd, "gem");
   if (!exist_b) {
-    xy_error ("chsrc: 未找到 gem 相关命令，请检查是否存在");
+    xy_error ("chsrc: 未找到 gem 命令，请检查是否存在");
     return;
   }
 
@@ -198,30 +195,27 @@ pl_ruby_setsrc (char* option)
   }
 
   source_info source = pl_ruby_sources[index];
-  const char* source_name = source.mirror->name;
-  const char* source_url  = source.url;
   say_for_setsrc (&source);
 
   xy_info("chsrc: 为 gem 命令换源");
   system("gem source -r https://rubygems.org/");
 
-  char* cmd = xy_2strjoin("gem source -a ", source_url);
+  char* cmd = xy_2strjoin("gem source -a ", source.url);
   system(cmd);
 
 
-  if (xy_on_windows) check_cmd = "bundle -v >nul 2>nul";
-  else               check_cmd = "bundle -v 1>/dev/null 2>&1";
+  check_cmd = xy_str_to_quietcmd("bundle -v");
   exist_b = does_the_program_exist (check_cmd, "bundle");
   if (!exist_b) {
-    xy_error ("chsrc: 未找到 bundle 相关命令，请检查是否存在");
+    xy_error ("chsrc: 未找到 bundle 命令，请检查是否存在");
     return;
   }
 
-  cmd = xy_2strjoin("bundle config 'mirror.https://rubygems.org' ", source_url);
+  cmd = xy_2strjoin("bundle config 'mirror.https://rubygems.org' ", source.url);
   xy_info("chsrc: 为 bundler 命令换源");
   system(cmd);
 
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
 }
 
 
@@ -232,17 +226,13 @@ pl_ruby_setsrc (char* option)
 void
 _pl_python_check_cmd (char** prog)
 {
-  char* check_cmd = NULL; *prog = NULL;
-
+  *prog = NULL;
   // 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store
-  if (xy_on_windows) check_cmd = "python --version >nul 2>nul";
-  else               check_cmd = "python --version 1>/dev/null 2>&1";
-
+  char* check_cmd = xy_str_to_quietcmd("python --version");
   bool exist_b = does_the_program_exist (check_cmd, "python");
 
   if (!exist_b) {
-    if (xy_on_windows) check_cmd = "python3 --version >nul 2>nul";
-    else               check_cmd = "python3 --version 1>/dev/null 2>&1";
+    check_cmd = xy_str_to_quietcmd("python3 --version");
     exist_b = does_the_program_exist (check_cmd, "python3");
     if (exist_b) *prog = "python3";
   }
@@ -297,10 +287,7 @@ pl_python_setsrc (char* option)
 void
 _pl_nodejs_check_cmd ()
 {
-  char* check_cmd = NULL;
-  if (xy_on_windows) check_cmd = "npm -v >nul 2>nul";
-  else               check_cmd = "npm -v 1>/dev/null 2>&1";
-
+  char* check_cmd = xy_str_to_quietcmd("npm -v");
   bool exist_b = does_the_program_exist (check_cmd, "npm");
   if (!exist_b) {
     xy_error ("chsrc: 未找到 npm 命令，请检查是否存在");
@@ -347,10 +334,7 @@ pl_nodejs_setsrc (char* option)
 void
 _pl_perl_check_cmd ()
 {
-  char* check_cmd = NULL;
-  if (xy_on_windows) check_cmd = "perl --version >nul 2>nul";
-  else               check_cmd = "perl --version 1>/dev/null 2>&1";
-
+  char* check_cmd = xy_str_to_quietcmd("perl --version");
   bool exist_b = does_the_program_exist (check_cmd, "perl");
 
   if (!exist_b) {
@@ -401,10 +385,7 @@ pl_perl_setsrc (char* option)
 void
 _pl_php_check_cmd()
 {
-  char* check_cmd = NULL;
-  if (xy_on_windows) check_cmd = "composer --version >nul 2>nul";
-  else               check_cmd = "composer --version 1>/dev/null 2>&1";
-
+  char* check_cmd = xy_str_to_quietcmd("composer --version");
   bool exist_b = does_the_program_exist (check_cmd, "composer");
 
   if (!exist_b) {
@@ -456,10 +437,7 @@ pl_php_setsrc (char* option)
 void
 _pl_go_check_cmd ()
 {
-  char* check_cmd = NULL;
-  if (xy_on_windows) check_cmd = "go version >nul 2>nul";
-  else               check_cmd = "go version 1>/dev/null 2>&1";
-
+  char* check_cmd = xy_str_to_quietcmd("go version");
   bool exist_b = does_the_program_exist (check_cmd, "go");
 
   if (!exist_b) {
@@ -472,7 +450,6 @@ void
 pl_go_getsrc (char* option)
 {
   _pl_go_check_cmd ();
-
   char* cmd = "go env GOPROXY";
   system(cmd);
 }
@@ -587,14 +564,12 @@ pl_java_getsrc (char* option)
 void
 pl_java_setsrc (char* option)
 {
-  int index = 0; char* check_cmd = NULL;
+  int index = 0;
 
-  if (xy_on_windows) check_cmd = "mvn --version >nul 2>nul";
-  else               check_cmd = "mvn --version 1>/dev/null 2>&1";
+  char* check_cmd = xy_str_to_quietcmd("mvn --version");
   bool mvn_exist_b    = does_the_program_exist (check_cmd, "mvn");
 
-  if (xy_on_windows) check_cmd = "gradle --version >nul 2>nul";
-  else               check_cmd = "gradle --version 1>/dev/null 2>&1";
+  check_cmd = xy_str_to_quietcmd("gradle --version");
   bool gradle_exist_b = does_the_program_exist (check_cmd, "gradle");
 
   if (!mvn_exist_b && !gradle_exist_b) {
