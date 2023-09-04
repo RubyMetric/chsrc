@@ -19,42 +19,82 @@ typedef struct {
   const char* __bigfile_url;  // 用于对该镜像站测速
 } mirror_info;
 
+// #define Big_File_ubuntu  "/indices/md5sums.gz"  这个是错的
+#define Big_File_ctan       "/systems/texlive/Images/texlive.iso"           // 4.8GB
+#define Big_File_debian     "/ls-lR.gz"                                     // 13.9 MB
+#define Big_File_archlinux  "/iso/latest/archlinux-x86_64.iso"              // 800MB 左右
+#define Big_File_deepin     "/20.9/deepin-desktop-community-20.9-amd64.iso" // 4GB左右
+
+
 // 教育网
 // 我们目前根据 https://github.com/mirrorz-org/oh-my-mirrorz 挑选速度前10位
 //
 mirror_info
-  MirrorZ       = {"mirrorz", "MirrorZ",       "MirrorZ校园网镜像站",       "https://mirrors.cernet.edu.cn/",        NULL},
-  Tuna          = {"tuna",    "TUNA",          "清华大学开源软件镜像站",     "https://mirrors.tuna.tsinghua.edu.cn/", NULL},
-  Sjtug_Zhiyuan = {"sjtu",    "SJTUG-zhiyuan", "上海交通大学致远镜像站",     "https://mirrors.sjtug.sjtu.edu.cn/",    NULL},
-  Zju           = {"zju",     "ZJU",           "浙江大学开源软件镜像站",     "https://mirrors.zju.edu.cn/",           NULL},
-  Lzuoss        = {"lzu",     "LZUOSS",        "兰州大学开源社区镜像站",     "https://mirror.lzu.edu.cn/",        NULL},
-  Jlu           = {"jlu",     "JLU",           "吉林大学开源镜像站",         "https://mirrors.jlu.edu.cn/",      NULL},
-  Bfsu          = {"bfsu",    "BFSU",          "北京外国语大学开源软件镜像站","https://mirrors.bfsu.edu.cn/",     NULL},
-  Pku           = {"pku",     "PKU",           "北京大学开源镜像站",         "https://mirrors.pku.edu.cn/",      NULL},
-  Bjtu          = {"bjtu",    "BJTU",          "北京交通大学自由与开源软件镜像站", "https://mirror.bjtu.edu.cn/", NULL},
-  Sustech       = {"sustech", "SUSTech",       "南方科技大学开源软件镜像站",  "https://mirrors.sustech.edu.cn/", NULL},
-  Ustc          = {"ustc",    "USTC",          "中国科学技术大学开源镜像站",  "https://mirrors.ustc.edu.cn/",    NULL},
+  MirrorZ       = {"mirrorz", "MirrorZ",       "MirrorZ校园网镜像站",       "https://mirrors.cernet.edu.cn/",  NULL},
+
+  Tuna          = {"tuna",    "TUNA",          "清华大学开源软件镜像站",     "https://mirrors.tuna.tsinghua.edu.cn/",
+                   "https://mirrors.tuna.tsinghua.edu.cn/speedtest/1000mb.bin"},
+
+  Sjtug_Zhiyuan = {"sjtu",    "SJTUG-zhiyuan", "上海交通大学致远镜像站",     "https://mirrors.sjtug.sjtu.edu.cn/",
+                   "https://mirrors.sjtug.sjtu.edu.cn/ctan" Big_File_ctan},
+
+  Zju           = {"zju",     "ZJU",           "浙江大学开源软件镜像站",     "https://mirrors.zju.edu.cn/",
+                   "https://mirrors.zju.edu.cn/debian" Big_File_debian},
+
+  Lzuoss        = {"lzu",     "LZUOSS",        "兰州大学开源社区镜像站",     "https://mirror.lzu.edu.cn/",
+                   "https://mirror.lzu.edu.cn/CTAN" Big_File_ctan},
+
+  Jlu           = {"jlu",     "JLU",           "吉林大学开源镜像站",         "https://mirrors.jlu.edu.cn/",
+                   "https://mirrors.jlu.edu.cn/_static/speedtest.bin"},
+
+  Bfsu          = {"bfsu",    "BFSU",          "北京外国语大学开源软件镜像站","https://mirrors.bfsu.edu.cn/",
+                   "https://mirrors.bfsu.edu.cn/speedtest/1000mb.bin"},
+
+  Pku           = {"pku",     "PKU",           "北京大学开源镜像站",         "https://mirrors.pku.edu.cn/",
+                   "https://mirrors.pku.edu.cn/debian" Big_File_debian},
+
+  Bjtu          = {"bjtu",    "BJTU",          "北京交通大学自由与开源软件镜像站", "https://mirror.bjtu.edu.cn/",
+                   "https://mirror.bjtu.edu.cn/archlinux" Big_File_archlinux},
+
+  Sustech       = {"sustech", "SUSTech",       "南方科技大学开源软件镜像站",  "https://mirrors.sustech.edu.cn/",
+                   "https://mirrors.sustech.edu.cn/site/speedtest/1000mb.bin"},
+
+  Ustc          = {"ustc",    "USTC",          "中国科学技术大学开源镜像站",  "https://mirrors.ustc.edu.cn/",
+                   "https://mirrors.ustc.edu.cn/CTAN" Big_File_ctan},
 
 // 速度暂时处于10位以后，但是目前可用的源
-  Nju           = {"nju",     "NJU",           "南京大学开源镜像站",         "https://mirrors.nju.edu.cn/",  NULL},
-  Cqu           = {"cqu",     "CQU",           "重庆大学开源软件镜像站",     "https://mirrors.cqu.edu.cn/",  NULL};
+  Nju           = {"nju",     "NJU",           "南京大学开源镜像站",         "https://mirrors.nju.edu.cn/",
+                   "https://mirrors.nju.edu.cn/archlinux" Big_File_archlinux},
+
+  Cqu           = {"cqu",     "CQU",           "重庆大学开源软件镜像站",     "https://mirrors.cqu.edu.cn/",
+                   "https://mirrors.cqu.edu.cn/speedtest/1000mb.bin"};
 
 
 // 大型公司
 // 注意，腾讯软件源中，有很多链接都已失效，请仔细检查
 mirror_info
-  Ali      = {"ali",     "Ali OPSX", "阿里巴巴开源镜像站",  "https://developer.aliyun.com/mirror/", NULL},
-  Tencent  = {"tencent", "Tencent",  "腾讯软件源",         "https://mirrors.tencent.com/", NULL},
-  Netease  = {"netease", "Netease",  "网易开源镜像站",      "https://mirrors.163.com/",    NULL},
-  Sohu     = {"sohu",    "SOHU",     "搜狐开源镜像站",      "https://mirrors.sohu.com/",   NULL};
+  Ali      = {"ali",     "Ali OPSX", "阿里巴巴开源镜像站",  "https://developer.aliyun.com/mirror/",
+              "https://mirrors.aliyun.com/deepin-cd" Big_File_deepin},
+
+  Tencent  = {"tencent", "Tencent",  "腾讯软件源",         "https://mirrors.tencent.com/",
+              "https://mirrors.cloud.tencent.com/debian" Big_File_debian},
+
+  Netease  = {"netease", "Netease",  "网易开源镜像站",      "https://mirrors.163.com/",
+              "https://mirrors.163.com/deepin-cd" Big_File_deepin},
+
+  Sohu     = {"sohu",    "SOHU",     "搜狐开源镜像站",      "https://mirrors.sohu.com/",
+              "https://mirrors.sohu.com/deepin-cd" Big_File_deepin};
 
 
 // 开源社区
 mirror_info
   RubyChina = {"rubychina",    "RubyChina",    "Ruby China 社区",    "https://gems.ruby-china.com/",
                "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"}, // 9.9 MB
+
   GoProxyCN = {"goproxy.cn",   "Goproxy.cn",   "七牛云 Goproxy.cn",   "https://goproxy.cn/",         NULL},
+
   GoProxyIO = {"goproxy.io",   "GOPROXY.IO",   "GOPROXY.IO",         "https://goproxy.io/",          NULL},
+
   NugetOrg  = {"nuget.org",    "NuGet Org",    "Nuget Organization", "https://www.nuget.org/",       NULL};
 
 
