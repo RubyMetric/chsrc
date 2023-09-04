@@ -1,6 +1,6 @@
 # chsrc
 
-全平台命令行换源工具，**目标支持 Linux, Windows, macOS, BSD 等所有操作系统，飞腾，龙芯等所有CPU**。
+全平台命令行换源工具，**目标支持 Linux, Windows, macOS, BSD 等所有操作系统，龙芯、申威、飞腾、兆芯、海光等所有CPU**。
 
 若有不支持的情况，请提交issue。
 
@@ -41,7 +41,7 @@ set  <target> <mirror>  # 换源，指定使用某镜像站
 - [ ] `chsrc set rust`  或 `chsrc set cargo` 或 `chsrc crate`
 - [ ] `chsrc set java`  或 `chsrc set maven` 或 `chsrc set mvn` 或 `chsrc gradle`
 
-- [ ] `chsrc set r`  或 `chsrc set cran`
+- [x] `chsrc set r`  或 `chsrc set cran`
 - [ ] `chsrc set julia`
 
 ## 操作系统

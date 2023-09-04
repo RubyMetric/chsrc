@@ -189,7 +189,7 @@ pl_perl_sources[] = {
 
 
 /**
- * 2023-08-30 更新
+ * 2023-09-04 更新
  *
  * TODO: 速度未经测试，请R用户协助
  */
@@ -197,6 +197,7 @@ pl_r_sources[] = {
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/cran/"},
   {&Ali,           "https://mirrors.aliyun.com/CRAN/"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"},
+  {&Sustech,       "https://mirrors.sustech.edu.cn/CRAN"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/CRAN/"},
   {&Bjtu,          "https://mirror.bjtu.edu.cn/cran/"},
 },

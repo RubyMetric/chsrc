@@ -627,16 +627,23 @@ pl_java_setsrc (char* option)
 }
 
 
-/* TODO: 暂未实现 */
+
 void
 pl_r_getsrc (char* option)
 {
-  // char* cmd = "npm config get registry";
-  // system(cmd);
+  char* cmd = NULL;
+  if(xy_on_windows) {
+    cmd = "type %USERPROFILE%\\Documents\\.Rprofile";
+  } else {
+    cmd = "cat ~/.Rprofile";
+  }
+  chsrc_logcmd(cmd);
+  system(cmd);
 }
 
 /**
  * R 换源，参考：https://help.mirrors.cernet.edu.cn/CRAN/
+ * TODO: bioconductor 换源
  */
 void
 pl_r_setsrc (char* option)
@@ -655,12 +662,12 @@ pl_r_setsrc (char* option)
   const char* file = xy_strjoin (3, "options(\"repos\" = c(CRAN=\"", source.url, "\"))" );
 
   char* cmd = NULL;
-  // TODO: 待确认，Windows 下是否也是该文件
   if (xy_on_windows)
-    cmd = xy_strjoin(3, "echo ", file, " >> %USERPROFILE%/.Rprofile");
+    cmd = xy_strjoin(3, "echo ", file, " >> %USERPROFILE%/Documents/.Rprofile");
   else
     cmd = xy_strjoin(3, "echo ", file, " >> ~/.Rprofile");
 
+  chsrc_logcmd(cmd);
   system(cmd);
   chsrc_say_thanks(&source);
 }
@@ -931,7 +938,7 @@ target_info
   pl_dotnet_target = {pl_dotnet_setsrc, NULL,           pl_dotnet_sources, pl_dotnet_sources_n},
   pl_java_target   = {pl_java_setsrc,   NULL,           pl_java_sources,   pl_java_sources_n},
   pl_php_target    = {pl_php_setsrc,    pl_php_getsrc,  pl_php_sources,    pl_php_sources_n},
-  pl_r_target      = {pl_r_setsrc,      NULL,           pl_r_sources,      pl_r_sources_n},
+  pl_r_target      = {pl_r_setsrc,      pl_r_getsrc,    pl_r_sources,      pl_r_sources_n},
   pl_julia_target  = {pl_julia_setsrc,  NULL,           pl_julia_sources,  pl_julia_sources_n};
 
 
