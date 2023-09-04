@@ -2,7 +2,7 @@
 * File          : chsrc.c
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
-* Last modified : <2023-09-03>
+* Last modified : <2023-09-04>
 *
 * chsrc:
 *
@@ -154,6 +154,7 @@ common_cesu_ (source_info* sources, size_t size)
       speed = test_speed (url);
     }
     speeds[i] = speed;
+    printf("%d %d\n", i, size);
   }
   int fastidx = dblary_maxidx (speeds, size);
   xy_success (xy_2strjoin("最快镜像站为: ", sources[fastidx].mirror->name));
@@ -458,8 +459,8 @@ void
 _pl_go_check_cmd ()
 {
   char* check_cmd = NULL;
-  if (xy_on_windows) check_cmd = "go --version >nul 2>nul";
-  else               check_cmd = "go --version 1>/dev/null 2>&1";
+  if (xy_on_windows) check_cmd = "go version >nul 2>nul";
+  else               check_cmd = "go version 1>/dev/null 2>&1";
 
   bool exist_b = does_the_program_exist (check_cmd, "go");
 
@@ -944,15 +945,15 @@ def_target_info(pl_ruby);
 def_target_info(pl_python);
 
 target_info
-  pl_nodejs_target = {pl_nodejs_setsrc, NULL,           pl_nodejs_sources, 2},
-  pl_perl_target   = {pl_perl_setsrc,   NULL,           pl_perl_sources,   5},
-  pl_rust_target   = {pl_rust_setsrc,   NULL,           pl_rust_sources,   5},
-  pl_go_target     = {pl_go_setsrc,     NULL,           pl_go_sources,     3},
-  pl_dotnet_target = {pl_dotnet_setsrc, NULL,           pl_dotnet_sources, 1},
-  pl_java_target   = {pl_java_setsrc,   NULL,           pl_java_sources,   1},
-  pl_php_target    = {pl_php_setsrc,    pl_php_getsrc,  pl_php_sources,  pl_php_sources_n},
-  pl_r_target      = {pl_r_setsrc,      NULL,           pl_r_sources,      5},
-  pl_julia_target  = {pl_julia_setsrc,  NULL,           pl_julia_sources,  3};
+  pl_nodejs_target = {pl_nodejs_setsrc, NULL,           pl_nodejs_sources, pl_nodejs_sources_n},
+  pl_perl_target   = {pl_perl_setsrc,   NULL,           pl_perl_sources,   pl_perl_sources_n},
+  pl_rust_target   = {pl_rust_setsrc,   NULL,           pl_rust_sources,   pl_rust_sources_n},
+  pl_go_target     = {pl_go_setsrc,     NULL,           pl_go_sources,     pl_go_sources_n},
+  pl_dotnet_target = {pl_dotnet_setsrc, NULL,           pl_dotnet_sources, pl_dotnet_sources_n},
+  pl_java_target   = {pl_java_setsrc,   NULL,           pl_java_sources,   pl_java_sources_n},
+  pl_php_target    = {pl_php_setsrc,    pl_php_getsrc,  pl_php_sources,    pl_php_sources_n},
+  pl_r_target      = {pl_r_setsrc,      NULL,           pl_r_sources,      pl_r_sources_n},
+  pl_julia_target  = {pl_julia_setsrc,  NULL,           pl_julia_sources,  pl_julia_sources_n};
 
 
 #define targetinfo(t) (const char const*)t

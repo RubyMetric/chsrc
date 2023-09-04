@@ -91,7 +91,7 @@ mirror_info
   RubyChina = {"rubychina",    "RubyChina",    "Ruby China 社区",    "https://gems.ruby-china.com/",
                "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"}, // 9.9 MB
 
-  GoProxyCN = {"goproxy.cn",   "Goproxy.cn",   "七牛云 Goproxy.cn",   "https://goproxy.cn/",         NULL},
+  GoProxyCN = {"goproxy.cn",   "Goproxy.cn",   "七牛云 Goproxy.cn",   "https://goproxy.cn/",          NULL},
 
   GoProxyIO = {"goproxy.io",   "GOPROXY.IO",   "GOPROXY.IO",         "https://goproxy.io/",          NULL},
 
@@ -386,6 +386,7 @@ os_mysys2_sources[] = {
 int
 dblary_maxidx(double* array, int size)
 {
+   puts("here");
   double maxval = array[0];
   double maxidx = 0;
 
@@ -395,6 +396,7 @@ dblary_maxidx(double* array, int size)
       maxidx = i;
     }
   }
+  puts("hello");
   return maxidx;
 }
 
@@ -408,11 +410,11 @@ say_for_setsrc (source_info* source)
 }
 
 
-#define def_target_sources_n(t) const size_t t##_sources_n = xy_arylen(pl_ruby_sources)
+#define def_target_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 def_target_sources_n(pl_ruby); def_target_sources_n(pl_python); def_target_sources_n(pl_nodejs);
 def_target_sources_n(pl_perl); def_target_sources_n(pl_php);    def_target_sources_n(pl_go);
-def_target_sources_n(pl_rust); def_target_sources_n(pl_java);   def_target_sources_n(pl_r);
-def_target_sources_n(pl_julia);
+def_target_sources_n(pl_rust); def_target_sources_n(pl_java);   def_target_sources_n(pl_dotnet);
+def_target_sources_n(pl_r);    def_target_sources_n(pl_julia);
 
 def_target_sources_n(os_ubuntu); def_target_sources_n(os_debian);  def_target_sources_n(os_fedora);
 def_target_sources_n(os_kali);   def_target_sources_n(os_openbsd); def_target_sources_n(os_mysys2);
