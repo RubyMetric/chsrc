@@ -348,15 +348,16 @@ _pl_perl_check_cmd ()
   }
 }
 
-
-/* TODO: 暂未实现 */
 void
 pl_perl_getsrc (char* option)
 {
   _pl_perl_check_cmd ();
-
-  // char* cmd = "npm config get registry";
-  // system(cmd);
+  // @ccmywish: 注意，prettyprint 仅仅是一个内部实现，可能不稳定，如果需要更稳定的，
+  //            可以使用 CPAN::Shell->o('conf', 'urllist');
+  //            另外，上述两种方法无论哪种，都要首先load()
+  char* cmd = "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->prettyprint('urllist')\" ";
+  chsrc_logcmd(cmd);
+  system(cmd);
 }
 
 /**
@@ -377,12 +378,12 @@ pl_perl_setsrc (char* option)
   chsrc_say_selection (&source);
 
   char* cmd = xy_strjoin(3,
-  "perl -MCPAN -e 'CPAN::HandleConfig->edit(\"pushy_https\", 0); CPAN::HandleConfig->edit(\"urllist\", \"unshift\", \"",
-   source.url,
-  "\"); mkmyconfig'");
-
+  "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('urllist', 'unshift', '", source.url, "'); CPAN::HandleConfig->commit()\"");
   chsrc_logcmd(cmd);
   system(cmd);
+
+  xy_warn ("chsrc: 请您使用 perl -v 以及 cpan -v，若 Perl >= v5.36 或 CPAN >= 2.29，请额外手动调用下面的命令");
+  xy_warn ("       perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('pushy_https', 0);; CPAN::HandleConfig->commit()\"");
   chsrc_say_thanks(&source);
 }
 
@@ -399,7 +400,6 @@ _pl_php_check_cmd()
     exit(1);
   }
 }
-
 
 /**
  * 已在Windows上测试通过，待其他平台PHP用户确认
@@ -1196,8 +1196,10 @@ get_target (const char* input, int code, char* option)
   {
     char* check_cmd = xy_str_to_quietcmd("curl --version");
     bool exist_b = does_the_program_exist (check_cmd, "curl");
-    if (!exist_b)  xy_error ("chsrc: 没有curl命令，无法测速");
-    // TODO: 通用测速
+    if (!exist_b) {
+      xy_error ("chsrc: 没有curl命令，无法测速");
+      exit(1);
+    }
     common_cesu_ (target->sources, target->sources_n);
     return true;
 
