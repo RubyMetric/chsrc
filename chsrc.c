@@ -631,6 +631,11 @@ pl_java_setsrc (char* option)
 void
 pl_r_getsrc (char* option)
 {
+  // 或参考：https://zhuanlan.zhihu.com/p/585036231
+  //
+  // options()$repos
+  // options()$BioC_mirror
+  //
   char* cmd = NULL;
   if(xy_on_windows) {
     cmd = "type %USERPROFILE%\\Documents\\.Rprofile";
@@ -643,7 +648,6 @@ pl_r_getsrc (char* option)
 
 /**
  * R 换源，参考：https://help.mirrors.cernet.edu.cn/CRAN/
- * TODO: bioconductor 换源
  */
 void
 pl_r_setsrc (char* option)
@@ -659,9 +663,24 @@ pl_r_setsrc (char* option)
   source_info source = pl_r_sources[index];
   chsrc_say_selection(&source);
 
+  char* bioconductor_url = xy_str_delete_suffix(xy_str_delete_suffix(source.url, "cran/"), "CRAN/");
+  bioconductor_url = xy_2strjoin(bioconductor_url, "bioconductor");
+
   const char* file = xy_strjoin (3, "options(\"repos\" = c(CRAN=\"", source.url, "\"))" );
 
   char* cmd = NULL;
+  // 或者我们调用 r.exe --slave -e 上面的内容
+  if (xy_on_windows)
+    cmd = xy_strjoin(3, "echo ", file, " >> %USERPROFILE%/Documents/.Rprofile");
+  else
+    cmd = xy_strjoin(3, "echo ", file, " >> ~/.Rprofile");
+
+  chsrc_logcmd(cmd);
+  system(cmd);
+
+
+  file = xy_strjoin (3, "options(BioC_mirror=\"", bioconductor_url, "\")" );
+  // 或者我们调用 r.exe --slave -e 上面的内容
   if (xy_on_windows)
     cmd = xy_strjoin(3, "echo ", file, " >> %USERPROFILE%/Documents/.Rprofile");
   else

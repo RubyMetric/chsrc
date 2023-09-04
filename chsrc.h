@@ -175,8 +175,6 @@ pl_nodejs_sources[] = {
  *
  * 参考：https://help.mirrors.cernet.edu.cn/CPAN/
  *
- * Jlu 吉林大学没有该源
- *
  * TODO: 速度未经测试，请Perl用户协助
  */
 pl_perl_sources[] = {
@@ -191,15 +189,16 @@ pl_perl_sources[] = {
 /**
  * 2023-09-04 更新
  *
- * TODO: 速度未经测试，请R用户协助
+ * @note 以下注释的，是不含有bioconductor的镜像站，
+ *       我们在换cran的同时，也直接帮助用户换bioconductor
  */
 pl_r_sources[] = {
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/cran/"},
-  {&Ali,           "https://mirrors.aliyun.com/CRAN/"},
+  // {&Ali,           "https://mirrors.aliyun.com/CRAN/"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"},
-  {&Sustech,       "https://mirrors.sustech.edu.cn/CRAN"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/CRAN/"},
-  {&Bjtu,          "https://mirror.bjtu.edu.cn/cran/"},
+  // {&Sustech,       "https://mirrors.sustech.edu.cn/CRAN"},
+  // {&Bfsu,          "https://mirrors.bfsu.edu.cn/CRAN/"},
+  // {&Bjtu,          "https://mirror.bjtu.edu.cn/cran/"},
 },
 
 
