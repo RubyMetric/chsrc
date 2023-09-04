@@ -166,10 +166,10 @@ void
 pl_ruby_getsrc (char* option)
 {
   char* cmd = "gem sources";
-  xy_info (xy_2strjoin("chsrc: 运行 ", cmd));
+  chsrc_cmdlog(cmd);
   system(cmd);
   cmd = "bundle config get mirror.https://rubygems.org";
-  xy_info (xy_2strjoin("chsrc: 运行 ", cmd));
+  chsrc_cmdlog(cmd);
   system(cmd);
 }
 
@@ -253,6 +253,7 @@ pl_python_getsrc (char* option)
   char* prog = NULL;
   _pl_python_check_cmd (&prog);
   char* cmd = xy_2strjoin(prog, " -m pip config get global.index-url");
+  chsrc_cmdlog(cmd);
   system(cmd);
 }
 
@@ -301,6 +302,7 @@ pl_nodejs_getsrc (char* option)
 {
   _pl_nodejs_check_cmd ();
   char* cmd = "npm config get registry";
+  chsrc_cmdlog(cmd);
   system(cmd);
 }
 
@@ -403,7 +405,7 @@ pl_php_getsrc (char* option)
 {
   _pl_php_check_cmd ();
   char* cmd = "composer config -g repositories";
-  puts(cmd);
+  chsrc_cmdlog(cmd);
   system(cmd);
 }
 
@@ -451,6 +453,7 @@ pl_go_getsrc (char* option)
 {
   _pl_go_check_cmd ();
   char* cmd = "go env GOPROXY";
+  chsrc_cmdlog(cmd);
   system(cmd);
 }
 
@@ -913,10 +916,10 @@ os_mysys2_setsrc(char* option)
 /************************************** Begin Target Matrix ****************************************/
 def_target_info(pl_ruby);
 def_target_info(pl_python);
+def_target_info(pl_nodejs);
+def_target_info(pl_perl);
 
 target_info
-  pl_nodejs_target = {pl_nodejs_setsrc, NULL,           pl_nodejs_sources, pl_nodejs_sources_n},
-  pl_perl_target   = {pl_perl_setsrc,   NULL,           pl_perl_sources,   pl_perl_sources_n},
   pl_rust_target   = {pl_rust_setsrc,   NULL,           pl_rust_sources,   pl_rust_sources_n},
   pl_go_target     = {pl_go_setsrc,     pl_go_getsrc,   pl_go_sources,     pl_go_sources_n},
   pl_dotnet_target = {pl_dotnet_setsrc, NULL,           pl_dotnet_sources, pl_dotnet_sources_n},

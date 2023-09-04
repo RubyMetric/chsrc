@@ -400,6 +400,15 @@ dblary_maxidx(double* array, int size)
 }
 
 /**
+ * 用于告知用户 chsrc 所执行的操作
+ */
+void
+chsrc_cmdlog (const char* cmd)
+{
+  xy_info(xy_2strjoin("chsrc: 运行 ", cmd));
+}
+
+/**
  * 用于 _setsrc 函数
  */
 void
