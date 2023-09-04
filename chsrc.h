@@ -2,7 +2,7 @@
 * File          : chsrc.h
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-29>
-* Last modified : <2023-09-03>
+* Last modified : <2023-09-04>
 *
 * chsrc:
 *
@@ -271,14 +271,14 @@ pl_dotnet_sources[] = {
 
 
 /**
- * 2023-08-30 更新
+ * 2023-09-04 更新
  *
  * TODO: 1. 速度未经测试，请PHP用户协助
  *       2. 缺少教育网或开源社区软件源
- *       3. 当前仅有一个源
  */
 pl_php_sources[] = {
-  {&Ali,            "https://mirrors.aliyun.com/composer/"}
+  {&Ali,            "https://mirrors.aliyun.com/composer/"},
+  {&Tencent,        "https://mirrors.tencent.com/composer/"}
 };
 
 
