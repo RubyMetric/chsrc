@@ -107,7 +107,7 @@ test_speed (const char* url)
   char* curl_cmd = xy_strjoin(4, "curl -qsL -o ", xy_os_devnull, " -w \"%{http_code} %{speed_download}\" -m8 -A chsrc/" Chsrc_Version
                    "  ", url);
 
-  xy_info (xy_2strjoin("chsrc: 测速 ", url));
+  // xy_info (xy_2strjoin("chsrc: 测速 ", url));
 
   FILE* fp = popen(curl_cmd, "r");
   char buf[64] = {0};
@@ -149,6 +149,7 @@ common_cesu_ (source_info* sources, size_t size)
       xy_warn ("chsrc: 跳过该站点");
       speed = 0;
     } else {
+      xy_info (xy_2strjoin("chsrc: 测速 ", src.mirror->site));
       speed = test_speed (url);
     }
     speeds[i] = speed;

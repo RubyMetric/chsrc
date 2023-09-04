@@ -218,14 +218,13 @@ pl_julia_sources[] = {
 
 
 /**
- * 2023-08-30 更新
+ * 2023-09-04 更新
  *
- * TODO: 1. 速度未经测试，请Go用户协助
- *       2. 缺少教育网软件源
+ * TODO: 1. 缺少教育网软件源
  */
 pl_go_sources[] = {
-  {&Ali,          "https://mirrors.aliyun.com/goproxy/"},
   {&GoProxyCN,    "https://goproxy.cn"},
+  {&Ali,          "https://mirrors.aliyun.com/goproxy/"},
   {&GoProxyIO,    "https://goproxy.io"}
 },
 
