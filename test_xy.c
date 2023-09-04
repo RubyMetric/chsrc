@@ -24,6 +24,13 @@ main (int argc, char const *argv[])
   puts(xy_strjoin(4, "水落鱼梁浅，", "天寒梦泽深。", "羊公碑字在，", "读罢泪沾襟。"));
   puts(xy_strjoin(6, "楚山横地出，", "汉水接天回。", "冠盖非新里，", "章华即旧台。", "习池风景异，", "归路满尘埃。"));
 
+
+  putb(xy_str_end_with("abcdef", "abcdefg"));
+  putb(xy_str_end_with("abcdef", "def"));
+  putb(xy_str_end_with("abcdef", "bcdef"));
+  putb(xy_str_end_with("abcdef", "abcdef"));
+  putb(xy_str_end_with("abcdef", ""));
+
   xy_success("成功：输出成功内容");
   xy_info("信息: 输出信息内容");
   xy_warn("警告：输出警告内容");

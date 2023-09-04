@@ -71,6 +71,7 @@
 
 #define putf(n) printf("%f\n", n)
 #define puti(n) printf("%d\n", n)
+#define putb(n) if(n) puts("true"); else puts("false");
 
 #define xy_arylen(x) (sizeof(x) / sizeof(x[0]))
 
@@ -277,6 +278,27 @@ xy_str_to_quietcmd (const char* cmd)
   ret = xy_2strjoin (cmd, " 1>/dev/null 2>&1");
 #endif
   return ret;
+}
+
+
+bool
+xy_str_end_with (const char* str, const char* suffix)
+{
+  size_t len1 = strlen(str);
+  size_t len2 = strlen(suffix);
+
+  if (0==len2)     return true;  // 空字符串直接返回
+  if (len1 < len2) return false;
+
+  const char* cur1 = str + len1 - 1;
+  const char* cur2 = suffix + len2 - 1;
+
+  for (int i=0; i<len2; i++)
+  {
+    if (*cur1 != *cur2) return false;
+    cur1--; cur2--;
+  }
+  return true;
 }
 
 #endif
