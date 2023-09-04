@@ -2,7 +2,7 @@
 * File          : xy.h
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
-* Last modified : <2023-09-03>
+* Last modified : <2023-09-04>
 *
 * xy:
 *
@@ -69,6 +69,8 @@
 
 #endif
 
+#define putf(n) printf("%f\n", n)
+#define puti(n) printf("%d\n", n)
 
 #define xy_arylen(x) (sizeof(x) / sizeof(x[0]))
 

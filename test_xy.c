@@ -2,7 +2,7 @@
 * File          : test_xy.c
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-30>
-* Last modified : <2023-09-03>
+* Last modified : <2023-09-04>
 *
 * test_xy:
 *
@@ -15,6 +15,9 @@ int
 main (int argc, char const *argv[])
 {
   xy_useutf8();
+  puti(3);
+  double dbl = 3.1415;
+  putf(dbl);
   puts(xy_2strjoin("Xi",    "'an"));
   puts(xy_strjoin (2, "Xi", "'an"));
   puts(xy_strjoin(3, "屈身守分，",   "以待天时，",  "不可与命争也"));
