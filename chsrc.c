@@ -104,7 +104,7 @@ double
 test_speed (const char* url)
 {
   // 我们用 —L，因为Ruby China源会跳转到其他地方
-  char* curl_cmd = xy_strjoin(4, "curl -qsL -o ", xy_os_devnull, " -w \"%{http_code} %{speed_download}\" -m8 -A chsrc/" Chsrc_Version
+  char* curl_cmd = xy_strjoin(4, "curl -qsL -o ", xy_os_devnull, " -w \"%{http_code} %{speed_download}\" -m6 -A chsrc/" Chsrc_Version
                    "  ", url);
 
   // xy_info (xy_2strjoin("chsrc: 测速 ", url));

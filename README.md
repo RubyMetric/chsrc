@@ -41,7 +41,7 @@ set  <target> <mirror>  # 换源，指定使用某镜像站
 - [ ] `chsrc set rust`  或 `chsrc set cargo` 或 `chsrc crate`
 - [ ] `chsrc set java`  或 `chsrc set maven` 或 `chsrc set mvn` 或 `chsrc gradle`
 
-- [x] `chsrc set r`  或 `chsrc set cran`  (同时会为 `bioconductor` 换源)
+- [x] `chsrc set r` 或 `chsrc set cran`  (同时会为 `bioconductor` 换源)
 - [ ] `chsrc set julia`
 
 ## 操作系统
