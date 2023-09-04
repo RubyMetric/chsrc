@@ -1,24 +1,15 @@
 # chsrc
 
-全平台命令行换源工具，**支持 Linux, Windows, macOS, BSD 等所有操作系统，飞腾，龙芯等所有CPU**
+全平台命令行换源工具，**目标支持 Linux, Windows, macOS, BSD 等所有操作系统，飞腾，龙芯等所有CPU** (使用`C99`完成该目标)
 
-若有不支持的情况，请提交issue
+若有不支持的情况，请提交issue。
 
-<br>
-
-## 为什么不使用Python/JS/Go/Rust?
-
-1. `Python`/`JS`:
-
-    一个简单的换源工具，不需要也不应该强行塞给用户一个庞大的解释器和数十、数百MB其他文件。
-
-2. `Go`: Go 不足以编译到任何平台
-
-3. `Rust`: 我不会 Rust
+我们并不使用Python或JS等解释语言。因为一个简单的换源工具，不应该强行塞给用户一个庞大的解释器和数十、数百MB其他文件。
 
 <br>
 
 ## 安装使用
+
 ```bash
 使用：chsrc <command> [target]
 
@@ -36,54 +27,54 @@ set  <target> def(ault) # 换源，默认挑选经维护者测速排序第一的
 set  <target> <mirror>  # 换源，指定使用某镜像站
 ```
 
-换源：
-```bash
-# 编程语言开发
-chsrc set ruby   # 或 chsrc set gem
-chsrc set python # 或 chsrc set pip
-chsrc set node   # 或 chsrc set npm 或 chsrc set nodejs
-chsrc set perl   # 或 chsrc set cpan
-chsrc set php    # 或 chsrc composer
+## 编程语言开发
+- [x] `chsrc set ruby`  或 `chsrc set gem`
 
-chsrc set go
-chsrc set rust   # 或 chsrc set cargo 或 chsrc crate
-chsrc set java   # 或 chsrc set maven 或 chsrc set mvn 或 chsrc gradle
+- [x] `chsrc set python` 或 `chsrc set pip`
 
-#chsrc set dotnet # 暂无换源需求
+- [x] `chsrc set node`   或 `chsrc set npm` 或 `chsrc set nodejs`
 
-chsrc set r     # 或 chsrc set cran
-chsrc set julia
+- [x] `chsrc set perl` 或 `chsrc set cpan`
+- [x] `chsrc set php`  或 `chsrc composer`
 
-# 操作系统
-chsrc set ubuntu
-chsrc set debian
-chsrc set fedora
-chsrc set arch
-chsrc set gentoo
-chsrc set kali
-chsrc set manjaro
+- [ ] `chsrc set go`
+- [ ] `chsrc set rust`  或 `chsrc set cargo` 或 `chsrc crate`
+- [ ] `chsrc set java`  或 `chsrc set maven` 或 `chsrc set mvn` 或 `chsrc gradle`
 
-chsrc set deepin
-chsrc set openkylin
-chsrc set openeuler
+- [ ] `chsrc set r`  或 `chsrc set cran`
+- [ ] `chsrc set julia`
 
-chsrc set openbsd
-chsrc set netbsd
+## 操作系统
+- [ ] `chsrc set ubuntu`
+- [ ] `chsrc set debian`
+- [ ] `chsrc set fedora`
+- [ ] `chsrc set arch`
+- [ ] `chsrc set gentoo`
+- [ ] `chsrc set kali`
+- [ ] `chsrc set manjaro`
 
-chsrc set msys2 # 或 chsrc set msys
+- [ ] `chsrc set deepin`
+- [ ] `chsrc set openkylin`
+- [ ] `chsrc set openeuler`
 
-# 软件
-chsrc set brew  # 或 chsrc set homebrew
-chsrc set emacs
-chsrc set conda # 或 chsrc set anaconda
-chsrc set ctan  # 或 chsrc set tex
-```
+- [ ] `chsrc set openbsd`
+- [ ] `chsrc set netbsd`
+
+- [ ] `chsrc set msys2` 或 `chsrc set msys`
+
+## 软件
+
+- [ ] `chsrc set brew`  或 `chsrc set homebrew`
+- [ ] `chsrc set emacs`
+- [ ] `chsrc set conda` 或 `chsrc set anaconda`
+- [ ] `chsrc set ctan`  或 `chsrc set tex`
+
 
 <br>
 
 ## 开发
 
-请确保拥有一个支持C99的C编译器如 `gcc` 和 `make`
+请安装好 `gcc` 和 `make` 以及 `curl`
 
 ```bash
 make
