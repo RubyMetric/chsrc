@@ -25,11 +25,16 @@ main (int argc, char const *argv[])
   puts(xy_strjoin(6, "楚山横地出，", "汉水接天回。", "冠盖非新里，", "章华即旧台。", "习池风景异，", "归路满尘埃。"));
 
 
-  putb(xy_str_end_with("abcdef", "abcdefg"));
-  putb(xy_str_end_with("abcdef", "def"));
-  putb(xy_str_end_with("abcdef", "bcdef"));
-  putb(xy_str_end_with("abcdef", "abcdef"));
-  putb(xy_str_end_with("abcdef", ""));
+  putb(xy_str_end_with("abcdef", "abcdefg")); // false
+  putb(xy_str_end_with("abcdef", "def"));     // true
+  putb(xy_str_end_with("abcdef", "bcdef"));   // true
+  putb(xy_str_end_with("abcdef", "abcdef"));  // true
+  putb(xy_str_end_with("abcdef", ""));        // true
+
+  puts(xy_str_delete_suffix("abcdefg", "cdef"));  // 不变
+  puts(xy_str_delete_suffix("abcdefg", "cdefgh"));// 不变
+  puts(xy_str_delete_suffix("abcdefg", ""));      // 不变
+  puts(xy_str_delete_suffix("abcdefg", "efg"));   // abcd
 
   xy_success("成功：输出成功内容");
   xy_info("信息: 输出信息内容");

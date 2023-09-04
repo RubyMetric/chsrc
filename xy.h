@@ -301,4 +301,19 @@ xy_str_end_with (const char* str, const char* suffix)
   return true;
 }
 
+
+char*
+xy_str_delete_suffix (const char* str, const char* suffix)
+{
+  char* new = xy_strdup(str);
+  bool yes = xy_str_end_with(str, suffix);
+  if (!yes) return new;
+
+  size_t len1 = strlen(str);
+  size_t len2 = strlen(suffix);
+  char* cur = new + len1 - len2;
+  *cur = '\0';
+  return new;
+}
+
 #endif
