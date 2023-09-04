@@ -166,10 +166,10 @@ void
 pl_ruby_getsrc (char* option)
 {
   char* cmd = "gem sources";
-  chsrc_cmdlog(cmd);
+  chsrc_logcmd(cmd);
   system(cmd);
   cmd = "bundle config get mirror.https://rubygems.org";
-  chsrc_cmdlog(cmd);
+  chsrc_logcmd(cmd);
   system(cmd);
 }
 
@@ -195,12 +195,15 @@ pl_ruby_setsrc (char* option)
   }
 
   source_info source = pl_ruby_sources[index];
-  say_for_setsrc (&source);
+  chsrc_say_selection (&source);
 
-  xy_info("chsrc: 为 gem 命令换源");
-  system("gem source -r https://rubygems.org/");
 
-  char* cmd = xy_2strjoin("gem source -a ", source.url);
+  char* cmd = "gem source -r https://rubygems.org/";
+  chsrc_logcmd(cmd);
+  system(cmd);
+
+  cmd = xy_2strjoin("gem source -a ", source.url);
+  chsrc_logcmd(cmd);
   system(cmd);
 
 
@@ -212,10 +215,10 @@ pl_ruby_setsrc (char* option)
   }
 
   cmd = xy_2strjoin("bundle config 'mirror.https://rubygems.org' ", source.url);
-  xy_info("chsrc: 为 bundler 命令换源");
+  chsrc_logcmd(cmd);
   system(cmd);
 
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
+  chsrc_say_thanks(&source);
 }
 
 
@@ -253,7 +256,7 @@ pl_python_getsrc (char* option)
   char* prog = NULL;
   _pl_python_check_cmd (&prog);
   char* cmd = xy_2strjoin(prog, " -m pip config get global.index-url");
-  chsrc_cmdlog(cmd);
+  chsrc_logcmd(cmd);
   system(cmd);
 }
 
@@ -276,11 +279,12 @@ pl_python_setsrc (char* option)
   }
 
   source_info source = pl_python_sources[index];
-  say_for_setsrc(&source);
+  chsrc_say_selection(&source);
 
   char* cmd = xy_2strjoin(prog, xy_2strjoin(" -m pip config set global.index-url ", source.url));
+  chsrc_logcmd(cmd);
   system(cmd);
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
+  chsrc_say_thanks(&source);
 }
 
 
@@ -302,7 +306,7 @@ pl_nodejs_getsrc (char* option)
 {
   _pl_nodejs_check_cmd ();
   char* cmd = "npm config get registry";
-  chsrc_cmdlog(cmd);
+  chsrc_logcmd(cmd);
   system(cmd);
 }
 
@@ -323,12 +327,11 @@ pl_nodejs_setsrc (char* option)
   }
 
   source_info source = pl_nodejs_sources[index];
-  say_for_setsrc (&source);
+  chsrc_say_selection (&source);
 
-  char* cmd = xy_2strjoin("npm config set registry  ", source.url);
+  char* cmd = xy_2strjoin("npm config set registry ", source.url);
+  chsrc_logcmd(cmd);
   system(cmd);
-
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
 }
 
 
@@ -371,15 +374,16 @@ pl_perl_setsrc (char* option)
   }
 
   source_info source = pl_perl_sources[index];
-  say_for_setsrc (&source);
+  chsrc_say_selection (&source);
 
   char* cmd = xy_strjoin(3,
   "perl -MCPAN -e 'CPAN::HandleConfig->edit(\"pushy_https\", 0); CPAN::HandleConfig->edit(\"urllist\", \"unshift\", \"",
    source.url,
   "\"); mkmyconfig'");
 
+  chsrc_logcmd(cmd);
   system(cmd);
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
+  chsrc_say_thanks(&source);
 }
 
 
@@ -405,7 +409,7 @@ pl_php_getsrc (char* option)
 {
   _pl_php_check_cmd ();
   char* cmd = "composer config -g repositories";
-  chsrc_cmdlog(cmd);
+  chsrc_logcmd(cmd);
   system(cmd);
 }
 
@@ -426,12 +430,13 @@ pl_php_setsrc (char* option)
   }
 
   source_info source = pl_php_sources[index];
-  say_for_setsrc (&source);
+  chsrc_say_selection (&source);
 
   char* cmd = xy_2strjoin("composer config -g repo.packagist composer ", source.url);
+  chsrc_logcmd(cmd);
   system(cmd);
 
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
+  chsrc_say_thanks(&source);
 }
 
 
@@ -453,7 +458,7 @@ pl_go_getsrc (char* option)
 {
   _pl_go_check_cmd ();
   char* cmd = "go env GOPROXY";
-  chsrc_cmdlog(cmd);
+  chsrc_logcmd(cmd);
   system(cmd);
 }
 
@@ -473,14 +478,16 @@ pl_go_setsrc (char* option)
   }
 
   source_info source = pl_go_sources[index];
-  say_for_setsrc (&source);
+  chsrc_say_selection (&source);
 
   char* cmd = "go env -w GO111MODULE=on";
+  chsrc_logcmd(cmd);
   system(cmd);
 
   cmd = xy_strjoin(3, "go env -w GOPROXY=", source.url, ",direct");
+  chsrc_logcmd(cmd);
   system(cmd);
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
+  chsrc_say_thanks(&source);
 }
 
 
@@ -510,7 +517,7 @@ pl_rust_setsrc (char* option)
   }
 
   source_info source = pl_rust_sources[index];
-  say_for_setsrc(&source);
+  chsrc_say_selection(&source);
 
   const char* file = xy_strjoin (3,
     "[source.crates-io]\n"
@@ -527,7 +534,7 @@ pl_rust_setsrc (char* option)
     cmd = xy_strjoin(3, "echo ", file, ">> $HOME/.cargo");
 
   system(cmd);
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
+  chsrc_say_thanks(&source);
 }
 
 
@@ -587,7 +594,7 @@ pl_java_setsrc (char* option)
   }
 
   source_info source = pl_java_sources[index];
-  say_for_setsrc(&source);
+  chsrc_say_selection(&source);
 
   if (mvn_exist_b) {
     const char* file = xy_strjoin(3,
@@ -616,7 +623,7 @@ pl_java_setsrc (char* option)
     puts (file);
   }
 
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
+  chsrc_say_thanks(&source);
 }
 
 
@@ -643,8 +650,7 @@ pl_r_setsrc (char* option)
   }
 
   source_info source = pl_r_sources[index];
-  say_for_setsrc(&source);
-
+  chsrc_say_selection(&source);
 
   const char* file = xy_strjoin (3, "options(\"repos\" = c(CRAN=\"", source.url, "\"))" );
 
@@ -656,7 +662,7 @@ pl_r_setsrc (char* option)
     cmd = xy_strjoin(3, "echo ", file, " >> ~/.Rprofile");
 
   system(cmd);
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
+  chsrc_say_thanks(&source);
 }
 
 
@@ -684,7 +690,7 @@ pl_julia_setsrc (char* option)
   }
 
   source_info source = pl_julia_sources[index];
-  say_for_setsrc(&source);
+  chsrc_say_selection(&source);
 
   const char* file = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
 
@@ -696,7 +702,7 @@ pl_julia_setsrc (char* option)
     cmd = xy_strjoin(3, "echo ", file, " >> ~/.julia/config/startup.jl");
   system(cmd);
 
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source.mirror->name));
+  chsrc_say_thanks(&source);
 }
 
 

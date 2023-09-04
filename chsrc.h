@@ -403,7 +403,7 @@ dblary_maxidx(double* array, int size)
  * 用于告知用户 chsrc 所执行的操作
  */
 void
-chsrc_cmdlog (const char* cmd)
+chsrc_logcmd (const char* cmd)
 {
   xy_info(xy_2strjoin("chsrc: 运行 ", cmd));
 }
@@ -412,9 +412,15 @@ chsrc_cmdlog (const char* cmd)
  * 用于 _setsrc 函数
  */
 void
-say_for_setsrc (source_info* source)
+chsrc_say_selection (source_info* source)
 {
   xy_info (xy_strjoin(5, "chsrc: 选中镜像站：", source->mirror->abbr, " (", source->mirror->code, ")"));
+}
+
+void
+chsrc_say_thanks (source_info* source)
+{
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source->mirror->name));
 }
 
 
