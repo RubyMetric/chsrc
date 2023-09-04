@@ -61,14 +61,14 @@ does_the_mirror_exist (source_info* sources, size_t size, char* target, char* in
   }
 
   bool exist_b = false;
-  for (int i=1; i<size; i++)
+  for (int i=0; i<size; i++)
   {
+    source = sources[i];
     if (xy_streql(source.mirror->code, input)) {
       idx = i;
       exist_b = true;
       break;
     }
-    source = sources[i];
   }
   if (!exist_b) {
     xy_error (xy_strjoin(3, "chsrc: 镜像站 ", input, " 不存在"));
@@ -101,7 +101,7 @@ to_human_readable_speed (double speed)
  * @return 返回测得的速度，若出错，返回-1
  */
 double
-test_speed (char* url)
+test_speed (const char* url)
 {
   // 我们用 —L，因为Ruby China源会跳转到其他地方
   char* curl_cmd = xy_strjoin(4, "curl -qsL -o ", xy_os_devnull, " -w \"%{http_code} %{speed_download}\" -m8 -A chsrc/" Chsrc_Version
@@ -135,19 +135,24 @@ test_speed (char* url)
 }
 
 
-/**
- * @param[in]  place  所有源的url后，所接的部分url
- */
+#define common_cesu(s) common_cesu_(s##_sources, s##_sources_n)
 int
-common_cesu (source_info* sources, size_t size, char* place)
+common_cesu_ (source_info* sources, size_t size)
 {
   double speeds[size];
+  double speed = 0.0;
   for (int i=0;i<size;i++)
   {
     source_info src = sources[i];
-    const char* baseurl = src.url;
-    char* testurl = xy_2strjoin(baseurl, place);
-    double speed  = test_speed (testurl);
+    // const char* baseurl = src.url;
+    // char* url = xy_2strjoin(baseurl, place);
+    const char* url = src.mirror->__bigfile_url;
+    if (NULL==url) {
+      xy_warn ("chsrc: 跳过该站点");
+      speed = 0;
+    } else {
+      speed = test_speed (url);
+    }
     speeds[i] = speed;
   }
   int fastidx = dblary_maxidx (speeds, size);
@@ -157,21 +162,6 @@ common_cesu (source_info* sources, size_t size, char* place)
 
 
 /***************************************** 换源 *********************************************/
-
- /* Ruby源 @maintainer ccmywish */
-
-/**
- * 我们测 https://mirrors.bfsu.edu.cn/rubygems/gems/nokogiri-1.15.0-java.gem 大小为9.9MB
- *
- * @return 返回最快源索引
- */
-int
-pl_ruby_cesu (char* option)
-{
-  size_t size = pl_ruby_sources_n;
-  source_info* sources = pl_ruby_sources;
-  return common_cesu (sources, size, "gems/nokogiri-1.15.0-java.gem");
-}
 
 void
 pl_ruby_getsrc (char* option)
@@ -205,7 +195,7 @@ pl_ruby_setsrc (char* option)
   if (NULL!=option) {
     index = does_the_mirror_exist (pl_ruby_sources, pl_ruby_sources_n, "ruby", option);
   } else {
-    index = pl_ruby_cesu ("");
+    index = common_cesu(pl_ruby);
   }
 
   source_info source = pl_ruby_sources[index];
@@ -268,18 +258,6 @@ _pl_python_check_cmd (char** prog)
 }
 
 
-
-/**
- * TODO: 选择 Python 中的大文件
- */
-int
-pl_python_cesu (char* option)
-{
-  return common_cesu (pl_python_sources, pl_python_sources_n,
-                      "gems/nokogiri-1.15.0-java.gem");
-}
-
-
 void
 pl_python_getsrc (char* option)
 {
@@ -304,7 +282,7 @@ pl_python_setsrc (char* option)
   if (NULL!=option) {
     index = does_the_mirror_exist (pl_python_sources, pl_python_sources_n, "python", option);
   } else {
-    index = pl_python_cesu ("");
+    index = common_cesu (pl_python);
   }
 
   source_info source = pl_python_sources[index];
@@ -331,15 +309,6 @@ _pl_nodejs_check_cmd ()
   }
 }
 
-/**
- * TODO: 寻找合适的文件
- */
-int
-pl_nodejs_cesu (char* option)
-{
-  return common_cesu (pl_nodejs_sources, pl_nodejs_sources_n,
-                      "gems/nokogiri-1.15.0-java.gem");
-}
 
 void
 pl_nodejs_getsrc (char* option)
@@ -362,7 +331,7 @@ pl_nodejs_setsrc (char* option)
   if (NULL!=option) {
     index = does_the_mirror_exist (pl_nodejs_sources, pl_nodejs_sources_n, "nodejs", option);
   } else {
-    index = pl_nodejs_cesu ("");
+    index = common_cesu (pl_nodejs);
   }
 
   source_info source = pl_nodejs_sources[index];
@@ -391,15 +360,6 @@ _pl_perl_check_cmd ()
   }
 }
 
-/**
- * TODO: 寻找合适的文件
- */
-int
-pl_perl_cesu (char* option)
-{
-  return common_cesu (pl_perl_sources, pl_perl_sources_n,
-                      "gems/nokogiri-1.15.0-java.gem");
-}
 
 /* TODO: 暂未实现 */
 void
@@ -422,7 +382,7 @@ pl_perl_setsrc (char* option)
   if (NULL!=option) {
     index = does_the_mirror_exist (pl_perl_sources, pl_perl_sources_n, "perl", option);
   } else {
-    index = pl_perl_cesu ("");
+    index = common_cesu (pl_perl);
   }
 
   source_info source = pl_perl_sources[index];
@@ -454,17 +414,6 @@ _pl_php_check_cmd()
   }
 }
 
-/**
- * TODO: 寻找合适的文件
- */
-int
-pl_php_cesu (char* option)
-{
-  xy_warn ("chsrc: Need Help: 烦请PHP用户帮助寻找Packgist.org中较大的包的链接");
-  return 0;
-  return common_cesu (pl_php_sources, pl_php_sources_n,
-                      "gems/nokogiri-1.15.0-java.gem");
-}
 
 /**
  * 已在Windows上测试通过，待其他平台PHP用户确认
@@ -491,7 +440,7 @@ pl_php_setsrc (char* option)
   if (NULL!=option) {
     index = does_the_mirror_exist (pl_php_sources, pl_php_sources_n, "php", option);
   } else {
-    index = pl_php_cesu ("");
+    index = common_cesu (pl_php);
   }
 
   source_info source = pl_php_sources[index];
@@ -521,15 +470,6 @@ _pl_go_check_cmd ()
 }
 
 
-/**
- * TODO: 寻找合适的文件
- */
-int
-pl_go_cesu (char* option)
-{
-  return common_cesu (pl_go_sources, pl_go_sources_n,
-                      "gems/nokogiri-1.15.0-java.gem");
-}
 
 /* TODO: 暂未实现 */
 void
@@ -553,7 +493,7 @@ pl_go_setsrc (char* option)
   if (NULL!=option) {
     index = does_the_mirror_exist (pl_go_sources, pl_go_sources_n, "go", option);
   } else {
-    index = pl_go_cesu ("");
+    index = common_cesu (pl_go);
   }
 
   source_info source = pl_go_sources[index];
@@ -568,17 +508,6 @@ pl_go_setsrc (char* option)
 }
 
 
-
-
-/**
- * TODO: 寻找合适的文件
- */
-int
-pl_rust_cesu (char* option)
-{
-  return common_cesu (pl_rust_sources, pl_rust_sources_n,
-                      "gems/nokogiri-1.15.0-java.gem");
-}
 
 /* TODO: 暂未实现 */
 void
@@ -601,7 +530,7 @@ pl_rust_setsrc (char* option)
   if (NULL!=option) {
     index = does_the_mirror_exist (pl_rust_sources, pl_rust_sources_n, "rust", option);
   } else {
-    index = pl_rust_cesu ("");
+    index = common_cesu (pl_rust);
   }
 
   source_info source = pl_rust_sources[index];
@@ -627,14 +556,6 @@ pl_rust_setsrc (char* option)
 
 
 
-
-
-void
-pl_dotnet_cesu (char* option)
-{
-  xy_error ("chsrc: 暂时无法为NuGet测速，若有需求，请您提交issue");
-}
-
 void
 pl_dotnet_getsrc (char* option)
 {
@@ -653,17 +574,6 @@ pl_dotnet_setsrc (char* option)
 }
 
 
-
-
-/**
- * TODO: 寻找合适的文件
- */
-int
-pl_java_cesu (char* option)
-{
-  return common_cesu (pl_java_sources, pl_java_sources_n,
-                      "gems/nokogiri-1.15.0-java.gem");
-}
 
 /* TODO: 暂未实现 */
 void
@@ -699,7 +609,7 @@ pl_java_setsrc (char* option)
   if (NULL!=option) {
     index = does_the_mirror_exist (pl_java_sources, pl_java_sources_n, "java", option);
   } else {
-    index = pl_java_cesu ("");
+    index = common_cesu (pl_java);
   }
 
   source_info source = pl_java_sources[index];
@@ -736,17 +646,6 @@ pl_java_setsrc (char* option)
 }
 
 
-
-/**
- * TODO: 寻找合适的文件
- */
-int
-pl_r_cesu (char* option)
-{
-  return common_cesu (pl_r_sources, pl_r_sources_n,
-                      "gems/nokogiri-1.15.0-java.gem");
-}
-
 /* TODO: 暂未实现 */
 void
 pl_r_getsrc (char* option)
@@ -766,7 +665,7 @@ pl_r_setsrc (char* option)
   if (NULL!=option) {
     index = does_the_mirror_exist (pl_r_sources, pl_r_sources_n, "r", option);
   } else {
-    index = pl_r_cesu ("");
+    index = common_cesu (pl_r);
   }
 
   source_info source = pl_r_sources[index];
@@ -788,17 +687,6 @@ pl_r_setsrc (char* option)
 
 
 
-
-/**
- * TODO: 寻找合适的文件
- */
-int
-pl_julia_cesu (char* option)
-{
-  return common_cesu (pl_r_sources, pl_r_sources_n,
-                      "gems/nokogiri-1.15.0-java.gem");
-}
-
 /* TODO: 暂未实现 */
 void
 pl_julia_getsrc (char* option)
@@ -818,7 +706,7 @@ pl_julia_setsrc (char* option)
   if (NULL!=option) {
     index = does_the_mirror_exist (pl_julia_sources, pl_julia_sources_n, "julia", option);
   } else {
-    index = pl_julia_cesu ("");
+    index = common_cesu (pl_julia);
   }
 
   source_info source = pl_julia_sources[index];
@@ -1053,18 +941,18 @@ os_mysys2_setsrc(char* option)
 
 /************************************** Begin Target Matrix ****************************************/
 def_target_info(pl_ruby);
+def_target_info(pl_python);
 
 target_info
-  pl_python_target = {pl_python_setsrc, NULL, NULL,    pl_python_sources, 5},
-  pl_nodejs_target = {pl_nodejs_setsrc, NULL, NULL,    pl_nodejs_sources, 2},
-  pl_perl_target   = {pl_perl_setsrc,   NULL, NULL,    pl_perl_sources,   5},
-  pl_rust_target   = {pl_rust_setsrc,   NULL, NULL,    pl_rust_sources,   5},
-  pl_go_target     = {pl_go_setsrc,     NULL, NULL,    pl_go_sources,     3},
-  pl_dotnet_target = {pl_dotnet_setsrc, NULL, NULL,    pl_dotnet_sources, 1},
-  pl_java_target   = {pl_java_setsrc,   NULL, NULL,    pl_java_sources,   1},
-  pl_php_target    = {pl_php_setsrc,    pl_php_getsrc, pl_php_cesu,  pl_php_sources,  pl_php_sources_n},
-  pl_r_target      = {pl_r_setsrc,      NULL, NULL,    pl_r_sources,      5},
-  pl_julia_target  = {pl_julia_setsrc,  NULL, NULL,    pl_julia_sources,  3};
+  pl_nodejs_target = {pl_nodejs_setsrc, NULL,           pl_nodejs_sources, 2},
+  pl_perl_target   = {pl_perl_setsrc,   NULL,           pl_perl_sources,   5},
+  pl_rust_target   = {pl_rust_setsrc,   NULL,           pl_rust_sources,   5},
+  pl_go_target     = {pl_go_setsrc,     NULL,           pl_go_sources,     3},
+  pl_dotnet_target = {pl_dotnet_setsrc, NULL,           pl_dotnet_sources, 1},
+  pl_java_target   = {pl_java_setsrc,   NULL,           pl_java_sources,   1},
+  pl_php_target    = {pl_php_setsrc,    pl_php_getsrc,  pl_php_sources,  pl_php_sources_n},
+  pl_r_target      = {pl_r_setsrc,      NULL,           pl_r_sources,      5},
+  pl_julia_target  = {pl_julia_setsrc,  NULL,           pl_julia_sources,  3};
 
 
 #define targetinfo(t) (const char const*)t
@@ -1089,12 +977,12 @@ static const char const
 
 
 target_info
-  os_ubuntu_target  = {os_ubuntu_setsrc, NULL, NULL, os_ubuntu_sources, 7},
-  os_debian_target  = {os_debian_setsrc, NULL, NULL, os_debian_sources, 7},
-  os_fedora_target  = {os_ubuntu_setsrc, NULL, NULL, os_ubuntu_sources, 7},
-  os_kali_target    = {os_ubuntu_setsrc, NULL, NULL, os_ubuntu_sources, 7},
-  os_openbsd_target = {os_ubuntu_setsrc, NULL, NULL, os_ubuntu_sources, 7},
-  os_mysys2_target  = {os_ubuntu_setsrc, NULL, NULL, os_ubuntu_sources, 7};
+  os_ubuntu_target  = {os_ubuntu_setsrc, NULL, os_ubuntu_sources, 7},
+  os_debian_target  = {os_debian_setsrc, NULL, os_debian_sources, 7},
+  os_fedora_target  = {os_ubuntu_setsrc, NULL, os_ubuntu_sources, 7},
+  os_kali_target    = {os_ubuntu_setsrc, NULL, os_ubuntu_sources, 7},
+  os_openbsd_target = {os_ubuntu_setsrc, NULL, os_ubuntu_sources, 7},
+  os_mysys2_target  = {os_ubuntu_setsrc, NULL, os_ubuntu_sources, 7};
 static const char const
 *os_ubuntu   [] = {"ubuntu", NULL,  targetinfo(&os_ubuntu_target)},
 *os_debian   [] = {"debian", NULL,  targetinfo(&os_debian_target)},
@@ -1109,9 +997,9 @@ static const char const
 
 
 target_info
-  wr_anaconda_target = {NULL, NULL, NULL, NULL, 0},
-  wr_emacs_target    = {NULL, NULL, NULL, NULL, 0},
-  wr_tex_target      = {NULL, NULL, NULL, NULL, 0};
+  wr_anaconda_target = {NULL, NULL, NULL, 0},
+  wr_emacs_target    = {NULL, NULL, NULL, 0},
+  wr_tex_target      = {NULL, NULL, NULL, 0};
 
 static const char const
 *wr_anaconda[] = {"conda", "anaconda",         NULL,  targetinfo(&wr_anaconda_target)},
@@ -1306,31 +1194,33 @@ get_target (const char* input, int code, char* option)
 
   target_info* target = (target_info*) *target_tmp;
 
-  if (Target_Set_Source==code) {
+  if (Target_Set_Source==code)
+  {
     if (target->setfn) target->setfn(option);
     else xy_error (xy_strjoin(3, "chsrc: 暂未对", input, "实现set功能，欢迎贡献"));
   }
-  else if (Target_Get_Source==code) {
+  else if (Target_Get_Source==code)
+  {
     if (target->getfn) target->getfn("");
     else xy_error (xy_strjoin(3, "chsrc: 暂未对", input, "实现get功能，欢迎贡献"));
   }
-  else if (Target_List_Source==code) {
+  else if (Target_List_Source==code)
+  {
     xy_info (xy_strjoin(3,"chsrc: 对", input ,"支持以下镜像站，荣耀均归属于这些站点，以及它们的开发/维护者们"));
     xy_warn (xy_strjoin(3, "chsrc: 下方code列，可用于指定使用某源，请使用 chsrc set ", input, " <code>"));
     printf ("%-14s%-35s%-45s ", "code", "服务商缩写", "服务源URL"); puts("服务商名称");
     puts   ("--------------------------------------------------------------------------------------------------------");
     print_supported_sources_for_target (target->sources);
   }
-  else if (Target_Cesu_Source==code) {
-    if (!target->cesufn)
-      xy_error (xy_strjoin(3, "chsrc: 暂未对", input, "实现cesu功能，欢迎贡献"));
-    else {
-      char* check_cmd = xy_str_to_quietcmd("curl --version");
-      bool exist_b = does_the_program_exist (check_cmd, "curl");
-      if (!exist_b)  xy_error ("chsrc: 没有curl命令，无法测速");
-      else target->cesufn("");
-      return true;
-    }
+  else if (Target_Cesu_Source==code)
+  {
+    char* check_cmd = xy_str_to_quietcmd("curl --version");
+    bool exist_b = does_the_program_exist (check_cmd, "curl");
+    if (!exist_b)  xy_error ("chsrc: 没有curl命令，无法测速");
+    // TODO: 通用测速
+    common_cesu_ (target->sources, target->sources_n);
+    return true;
+
   }
   return true;
 }
