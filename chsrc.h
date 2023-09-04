@@ -91,9 +91,11 @@ mirror_info
   RubyChina = {"rubychina",    "RubyChina",    "Ruby China 社区",    "https://gems.ruby-china.com/",
                "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"}, // 9.9 MB
 
-  GoProxyCN = {"goproxy.cn",   "Goproxy.cn",   "七牛云 Goproxy.cn",   "https://goproxy.cn/",          NULL},
+  GoProxyCN = {"goproxy.cn",   "Goproxy.cn",   "七牛云 Goproxy.cn",   "https://goproxy.cn/",
+               "https://goproxy.cn/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"},  // 30 MB
 
-  GoProxyIO = {"goproxy.io",   "GOPROXY.IO",   "GOPROXY.IO",         "https://goproxy.io/",          NULL},
+  GoProxyIO = {"goproxy.io",   "GOPROXY.IO",   "GOPROXY.IO",         "https://goproxy.io/",
+               "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"},   // 30 MB
 
   NugetOrg  = {"nuget.org",    "NuGet Org",    "Nuget Organization", "https://www.nuget.org/",       NULL};
 
@@ -386,7 +388,6 @@ os_mysys2_sources[] = {
 int
 dblary_maxidx(double* array, int size)
 {
-   puts("here");
   double maxval = array[0];
   double maxidx = 0;
 
@@ -396,7 +397,6 @@ dblary_maxidx(double* array, int size)
       maxidx = i;
     }
   }
-  puts("hello");
   return maxidx;
 }
 

@@ -37,7 +37,7 @@ set  <target> <mirror>  # 换源，指定使用某镜像站
 - [x] `chsrc set perl` 或 `chsrc set cpan`
 - [x] `chsrc set php`  或 `chsrc composer`
 
-- [ ] `chsrc set go`
+- [x] `chsrc set go`
 - [ ] `chsrc set rust`  或 `chsrc set cargo` 或 `chsrc crate`
 - [ ] `chsrc set java`  或 `chsrc set maven` 或 `chsrc set mvn` 或 `chsrc gradle`
 

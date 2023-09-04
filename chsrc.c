@@ -144,8 +144,6 @@ common_cesu_ (source_info* sources, size_t size)
   for (int i=0;i<size;i++)
   {
     source_info src = sources[i];
-    // const char* baseurl = src.url;
-    // char* url = xy_2strjoin(baseurl, place);
     const char* url = src.mirror->__bigfile_url;
     if (NULL==url) {
       xy_warn ("chsrc: 跳过该站点");
@@ -154,10 +152,9 @@ common_cesu_ (source_info* sources, size_t size)
       speed = test_speed (url);
     }
     speeds[i] = speed;
-    printf("%d %d\n", i, size);
   }
   int fastidx = dblary_maxidx (speeds, size);
-  xy_success (xy_2strjoin("最快镜像站为: ", sources[fastidx].mirror->name));
+  xy_success (xy_2strjoin("chsrc: 最快镜像站: ", sources[fastidx].mirror->name));
   return fastidx;
 }
 
@@ -470,16 +467,13 @@ _pl_go_check_cmd ()
   }
 }
 
-
-
-/* TODO: 暂未实现 */
 void
 pl_go_getsrc (char* option)
 {
   _pl_go_check_cmd ();
 
-  // char* cmd = "npm config get registry";
-  // system(cmd);
+  char* cmd = "go env GOPROXY";
+  system(cmd);
 }
 
 /**
@@ -948,7 +942,7 @@ target_info
   pl_nodejs_target = {pl_nodejs_setsrc, NULL,           pl_nodejs_sources, pl_nodejs_sources_n},
   pl_perl_target   = {pl_perl_setsrc,   NULL,           pl_perl_sources,   pl_perl_sources_n},
   pl_rust_target   = {pl_rust_setsrc,   NULL,           pl_rust_sources,   pl_rust_sources_n},
-  pl_go_target     = {pl_go_setsrc,     NULL,           pl_go_sources,     pl_go_sources_n},
+  pl_go_target     = {pl_go_setsrc,     pl_go_getsrc,   pl_go_sources,     pl_go_sources_n},
   pl_dotnet_target = {pl_dotnet_setsrc, NULL,           pl_dotnet_sources, pl_dotnet_sources_n},
   pl_java_target   = {pl_java_setsrc,   NULL,           pl_java_sources,   pl_java_sources_n},
   pl_php_target    = {pl_php_setsrc,    pl_php_getsrc,  pl_php_sources,    pl_php_sources_n},
