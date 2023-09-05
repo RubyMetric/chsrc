@@ -47,10 +47,12 @@ does_the_program_exist (char* check_cmd, char* progname)
 /**
  * 用于 _setsrc 函数，检测用户输入的镜像站code，是否存在于该target可用源中
  *
- * 如果用户输入 default 或者 def，则选择第一个源
+ * @param  target  目标名
+ * @param  input   如果用户输入 default 或者 def，则选择第一个源
  */
+#define lets_find_mirror(s, input) does_the_input_mirror_exist(s##_sources, s##_sources_n, #s+3, input)
 int
-does_the_mirror_exist (source_info* sources, size_t size, char* target, char* input)
+does_the_input_mirror_exist (source_info* sources, size_t size, char* target, char* input)
 {
   if (0==size) {
     xy_error(xy_strjoin(3, "chsrc: 当前 ", target, " 无任何可用源，请联系维护者"));
@@ -110,7 +112,7 @@ to_human_readable_speed (double speed)
  * @return 返回测得的速度，若出错，返回-1
  */
 double
-test_speed (const char* url)
+test_speed_url (const char* url)
 {
   // 我们用 —L，因为Ruby China源会跳转到其他地方
   char* curl_cmd = xy_strjoin(4, "curl -qsL -o ", xy_os_devnull, " -w \"%{http_code} %{speed_download}\" -m6 -A chsrc/" Chsrc_Version
@@ -144,9 +146,9 @@ test_speed (const char* url)
 }
 
 
-#define common_cesu(s) common_cesu_(s##_sources, s##_sources_n, #s+3)
+#define lets_test_speed(s) lets_test_speed_(s##_sources, s##_sources_n, #s+3)
 int
-common_cesu_ (source_info* sources, size_t size, const char* target)
+lets_test_speed_ (source_info* sources, size_t size, const char* target)
 {
   if (0==size) {
     xy_error(xy_strjoin(3, "chsrc: 当前 ", target, " 无任何可用源，请联系维护者"));
@@ -167,7 +169,7 @@ common_cesu_ (source_info* sources, size_t size, const char* target)
       speed = 0;
     } else {
       xy_info (xy_2strjoin("chsrc: 测速 ", src.mirror->site));
-      speed = test_speed (url);
+      speed = test_speed_url (url);
     }
     speeds[i] = speed;
   }
@@ -211,9 +213,9 @@ pl_ruby_setsrc (char* option)
   }
 
   if (NULL!=option) {
-    index = does_the_mirror_exist (pl_ruby_sources, pl_ruby_sources_n, "ruby", option);
+    index = lets_find_mirror(pl_ruby, option);
   } else {
-    index = common_cesu(pl_ruby);
+    index = lets_test_speed(pl_ruby);
   }
 
   source_info source = pl_ruby_sources[index];
@@ -295,9 +297,9 @@ pl_python_setsrc (char* option)
   _pl_python_check_cmd (&prog);
 
   if (NULL!=option) {
-    index = does_the_mirror_exist (pl_python_sources, pl_python_sources_n, "python", option);
+    index = lets_find_mirror (pl_python, option);
   } else {
-    index = common_cesu (pl_python);
+    index = lets_test_speed (pl_python);
   }
 
   source_info source = pl_python_sources[index];
@@ -343,9 +345,9 @@ pl_nodejs_setsrc (char* option)
   int index = 0;
 
   if (NULL!=option) {
-    index = does_the_mirror_exist (pl_nodejs_sources, pl_nodejs_sources_n, "nodejs", option);
+    index = lets_find_mirror (pl_nodejs, option);
   } else {
-    index = common_cesu (pl_nodejs);
+    index = lets_test_speed (pl_nodejs);
   }
 
   source_info source = pl_nodejs_sources[index];
@@ -391,9 +393,9 @@ pl_perl_setsrc (char* option)
   int index = 0;
 
   if (NULL!=option) {
-    index = does_the_mirror_exist (pl_perl_sources, pl_perl_sources_n, "perl", option);
+    index = lets_find_mirror (pl_perl, option);
   } else {
-    index = common_cesu (pl_perl);
+    index = lets_test_speed (pl_perl);
   }
 
   source_info source = pl_perl_sources[index];
@@ -446,9 +448,9 @@ pl_php_setsrc (char* option)
   int index = 0;
 
   if (NULL!=option) {
-    index = does_the_mirror_exist (pl_php_sources, pl_php_sources_n, "php", option);
+    index = lets_find_mirror (pl_php, option);
   } else {
-    index = common_cesu (pl_php);
+    index = lets_test_speed (pl_php);
   }
 
   source_info source = pl_php_sources[index];
@@ -494,9 +496,9 @@ pl_go_setsrc (char* option)
   int index = 0;
 
   if (NULL!=option) {
-    index = does_the_mirror_exist (pl_go_sources, pl_go_sources_n, "go", option);
+    index = lets_find_mirror (pl_go, option);
   } else {
-    index = common_cesu (pl_go);
+    index = lets_test_speed (pl_go);
   }
 
   source_info source = pl_go_sources[index];
@@ -533,9 +535,9 @@ pl_rust_setsrc (char* option)
   int index = 0;
 
   if (NULL!=option) {
-    index = does_the_mirror_exist (pl_rust_sources, pl_rust_sources_n, "rust", option);
+    index = lets_find_mirror (pl_rust, option);
   } else {
-    index = common_cesu (pl_rust);
+    index = lets_test_speed (pl_rust);
   }
 
   source_info source = pl_rust_sources[index];
@@ -643,9 +645,9 @@ pl_java_setsrc (char* option)
   int index = 0;
 
   if (NULL!=option) {
-    index = does_the_mirror_exist (pl_java_sources, pl_java_sources_n, "java", option);
+    index = lets_find_mirror (pl_java, option);
   } else {
-    index = common_cesu (pl_java);
+    index = lets_test_speed (pl_java);
   }
 
   source_info source = pl_java_sources[index];
@@ -712,9 +714,9 @@ pl_r_setsrc (char* option)
   int index = 0;
 
   if (NULL!=option) {
-    index = does_the_mirror_exist (pl_r_sources, pl_r_sources_n, "r", option);
+    index = lets_find_mirror (pl_r, option);
   } else {
-    index = common_cesu (pl_r);
+    index = lets_test_speed (pl_r);
   }
 
   source_info source = pl_r_sources[index];
@@ -781,9 +783,9 @@ pl_julia_setsrc (char* option)
   int index = 0;
 
   if (NULL!=option) {
-    index = does_the_mirror_exist (pl_julia_sources, pl_julia_sources_n, "julia", option);
+    index = lets_find_mirror (pl_julia, option);
   } else {
-    index = common_cesu (pl_julia);
+    index = lets_test_speed (pl_julia);
   }
 
   source_info source = pl_julia_sources[index];
@@ -1301,7 +1303,7 @@ get_target (const char* input, int code, char* option)
       xy_error ("chsrc: 没有curl命令，无法测速");
       exit(1);
     }
-    common_cesu_ (target->sources, target->sources_n, input-3);
+    lets_test_speed_ (target->sources, target->sources_n, input-3);
     return true;
 
   }
