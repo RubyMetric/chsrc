@@ -7,6 +7,8 @@
 * xy:
 *
 *   y = f(x)
+*
+*   Corss-Platform C utilities in Ruby flavor
 * -------------------------------------------------------------*/
 
 #ifndef XY_H
@@ -345,6 +347,30 @@ xy_str_delete_suffix (const char* str, const char* suffix)
   size_t len2 = strlen(suffix);
   char* cur = new + len1 - len2;
   *cur = '\0';
+  return new;
+}
+
+
+char*
+xy_str_strip (const char* str)
+{
+  const char* lf   = "\n";
+  const char* crlf = "\r\n";
+
+  char* new = xy_strdup(str);
+
+  while (xy_str_start_with(new, lf)) {
+    new = xy_str_delete_prefix(new, lf);
+  }
+  while (xy_str_start_with(new, crlf)) {
+    new = xy_str_delete_prefix(new, crlf);
+  }
+  while (xy_str_end_with(new, lf)) {
+    new = xy_str_delete_suffix(new, lf);
+  }
+  while (xy_str_end_with(new, crlf)) {
+    new = xy_str_delete_suffix(new, crlf);
+  }
   return new;
 }
 
