@@ -1296,11 +1296,8 @@ print_supported_sources_for_target (source_info sources[])
 int
 print_help ()
 {
-  puts(xy_strjoin(4, "Change Source ",
-                      xy_str_to_magenta(Chsrc_Version),
-                      " by ",
-                      xy_str_to_underline(xy_str_to_bold(xy_str_to_red("RubyMetric\n")))
-                      ));
+  puts(xy_strjoin(3, "chsrc: Change Source (GPLv3) ",
+                      xy_str_to_magenta(Chsrc_Version), " by RubyMetric\n"));
   for (int i=0; i<xy_arylen(usage); i++) {
     puts (usage[i]);
   }
