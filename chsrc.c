@@ -840,7 +840,7 @@ os_ubuntu_setsrc (char* option)
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
-  char* arch = xy_getcmd("arch");
+  char* arch = xy_getcmd("arch",NULL);
   char* cmd;
   if(strncmp(arch,"x86_64",6)==0)
   {
@@ -874,53 +874,62 @@ os_ubuntu_setsrc (char* option)
 void
 os_debian_setsrc (char* option)
 {
-  int selected = 0;
-  for (int i=0;i<sizeof(os_ubuntu_sources);i++) {
-    // 循环测速
-  }
-  const char* source_name = os_ubuntu_sources[selected].mirror->name;
-  const char* source_abbr = os_ubuntu_sources[selected].mirror->abbr;
-  const char* source_url  = os_ubuntu_sources[selected].url;
+  int index = 0;
 
-  xy_info("如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并 需要您 安装");
-  xy_info("sudo apt install apt-transport-https ca-certificates");
+  if (NULL!=option) {
+    index = lets_find_mirror(os_debian, option);
+  } else {
+    index = lets_test_speed(os_debian);
+  }
+
+
+  source_info source = os_debian_sources[index];
+  chsrc_say_selection(&source);
+
+  xy_info ("chsrc: 如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并 需要您 安装");
+  xy_info ("chsrc: sudo apt install apt-transport-https ca-certificates");
 
   char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
+  chsrc_logcmd(backup);
   system(backup);
 
-  xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
-
-  char* cmd = xy_strjoin(3, "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/debian\\/@\\1",
-                          source_url,
+  char * cmd = xy_strjoin(3,"chsrc: 备份文件名: /etc/apt/.*)http[:|\\.|\\/|a-z|A-Z]*\\/debian\\/@\\1",
+                          source.url,
                           "@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
+  chsrc_logcmd(cmd);
   system(cmd);
-  free(cmd);
 
   // char* rm = "rm -rf /etc/apt/source.list.bak";
   // system(rm);
 
-  xy_info ("chsrc: 为 debian 命令换源");
-  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  chsrc_say_thanks(&source);
 }
 /**
  * fedora29版本及以下暂不支持
+ * 未经测试
  */
 void
 os_fedora_setsrc (char* option)
 {
-  int selected = 0;
-  for (int i=0;i<sizeof(os_fedora_sources);i++) {
-    // 循环测速
-  }
-  const char* source_name = os_fedora_sources[selected].mirror->name;
-  const char* source_abbr = os_fedora_sources[selected].mirror->abbr;
-  const char* source_url  = os_fedora_sources[selected].url;
+  int index = 0;
 
-  xy_info("fedora29版本及以下暂不支持");
+  if (NULL!=option) {
+    index = lets_find_mirror(os_fedora, option);
+  } else {
+    index = lets_test_speed(os_fedora);
+  }
+
+
+  source_info source = os_fedora_sources[index];
+  chsrc_say_selection(&source);
+
+  xy_info ("chsrc: fedora29版本及以下暂不支持");
 
   char* backup = "cp -rf /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora.repo.bak";
+  chsrc_logcmd(backup);
   system(backup);
   backup = "cp -rf /etc/yum.repos.d/fedora-updates.repo /etc/yum.repos.d/fedora-updates.repo.bak";
+  chsrc_logcmd(backup);
   system(backup);
 
   xy_info ("chsrc: 备份文件名:1. /etc/yum.repos.d/fedora.repo.bak");
@@ -929,120 +938,147 @@ os_fedora_setsrc (char* option)
 
   char* cmd = xy_strjoin(9, "sed -e 's|^metalink=|#metalink=|g' ",
          "-e 's|^#baseurl=http://download.example/pub/fedora/linux/|baseurl=",
-         source_url,
+         source.url,
          "|g' ",
          "-i.bak ",
          "/etc/yum.repos.d/fedora.repo ",
          "/etc/yum.repos.d/fedora-modular.repo ",
          "/etc/yum.repos.d/fedora-updates.repo ",
          "/etc/yum.repos.d/fedora-updates-modular.repo");
+  chsrc_logcmd(cmd);
   system(cmd);
-  free(cmd);
 
-  xy_info("替换文件:/etc/yum.repos.d/fedora.repo");
-  xy_info("新增文件:/etc/yum.repos.d/fedora-modular.repo");
-  xy_info("替换文件:/etc/yum.repos.d/fedora-updates.repo");
-  xy_info("新增文件:/etc/yum.repos.d/fedora-updates-modular.repo");
+  xy_info ("chsrc: 替换文件:/etc/yum.repos.d/fedora.repo");
+  xy_info ("chsrc: 新增文件:/etc/yum.repos.d/fedora-modular.repo");
+  xy_info ("chsrc: 替换文件:/etc/yum.repos.d/fedora-updates.repo");
+  xy_info ("chsrc: 新增文件:/etc/yum.repos.d/fedora-updates-modular.repo");
 
   // char* rm = "rm -rf /etc/yum.repos.d/fedora.repo.bak";
   // system(rm);
   // char* rm = "rm -rf /etc/yum.repos.d/fedora-updates.repo.bak";
   // system(rm);
 
-  xy_info ("chsrc: 为 fedora 命令换源");
-  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  chsrc_say_thanks(&source);
 }
 
 
 
-
+/**
+ * 未经测试
+ */
 void
 os_kali_setsrc(char* option)
 {
-  int selected = 0;
-  for (int i=0;i<sizeof(os_kali_sources);i++) {
-    // 循环测速
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_kali, option);
+  } else {
+    index = lets_test_speed(os_kali);
   }
-  const char* source_name = os_kali_sources[selected].mirror->name;
-  const char* source_abbr = os_kali_sources[selected].mirror->abbr;
-  const char* source_url  = os_kali_sources[selected].url;
+
+
+  source_info source = os_kali_sources[index];
+  chsrc_say_selection(&source);
 
   char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
+  chsrc_logcmd(backup);
   system(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
   char* cmd = xy_strjoin(3, "sed -i \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/kali\\/@\\1",
-                          source_url,
+                          source.url,
                           "@g\' /etc/apt/sources.list");
+  chsrc_logcmd(cmd);
   system(cmd);
-  free(cmd);
 
   // char* rm = "rm -rf /etc/apt/source.list.bak";
   // system(rm);
 
-  xy_info ("chsrc: 为 kali 命令换源");
-  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  chsrc_say_thanks(&source);
 }
 
 
+/**
+ * 未经测试
+ */
 void
 os_openbsd_setsrc(char* option)
 {
-  int selected = 0;
-  for (int i=0;i<sizeof(os_openbsd_sources);i++) {
-    // 循环测速
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_openbsd, option);
+  } else {
+    index = lets_test_speed(os_openbsd);
   }
-  const char* source_name = os_openbsd_sources[selected].mirror->name;
-  const char* source_abbr = os_openbsd_sources[selected].mirror->abbr;
-  const char* source_url  = os_openbsd_sources[selected].url;
+
+
+  source_info source = os_openbsd_sources[index];
+  chsrc_say_selection(&source);
 
   char* backup = "cp -rf /etc/installurl /etc/installurl.bak";
+  chsrc_logcmd(backup);
   system(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/installurl.bak");
 
-  char* cmd = xy_strjoin(3,"echo ",source_url," > /etc/installurl");
+  char* cmd = xy_strjoin(3,"echo ",
+                            source.url,
+                            " > /etc/installurl");
+  chsrc_logcmd(cmd);
   system(cmd);
-  free(cmd);
 
   // char* rm = "rm -rf /etc/installurl.bak";
   // system(rm);
 
-  xy_info ("chsrc: 为 openbsd 命令换源");
-  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  chsrc_say_thanks(&source);
 }
 
-
+/**
+ * 未经测试
+ */
 void
 os_mysys2_setsrc(char* option)
 {
-  int selected = 0;
-  for (int i=0;i<sizeof(os_mysys2_sources);i++) {
-    // 循环测速
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_mysys2, option);
+  } else {
+    index = lets_test_speed(os_mysys2);
   }
-  const char* source_name = os_mysys2_sources[selected].mirror->name;
-  const char* source_abbr = os_mysys2_sources[selected].mirror->abbr;
-  const char* source_url  = os_mysys2_sources[selected].url;
+
+
+  source_info source = os_mysys2_sources[index];
+  chsrc_say_selection(&source);
+
 
   char* backup = "cp -rf /etc/pacman.d/mirrorlist.mingw32 /etc/pacman.d/mirrorlist.mingw32.bak";
+  chsrc_logcmd(backup);
   system(backup);
         backup = "cp -rf /etc/pacman.d/mirrorlist.mingw64 /etc/pacman.d/mirrorlist.mingw64.bak";
+  chsrc_logcmd(backup);
   system(backup);
         backup = "cp -rf /etc/pacman.d/mirrorlist.msys /etc/pacman.d/mirrorlist.msys.bak";
+  chsrc_logcmd(backup);
   system(backup);
 
   xy_info ("chsrc: 备份文件名:1. /etc/pacman.d/mirrorlist.mingw32.bak");
   xy_info ("chsrc: 备份文件名:2. /etc/pacman.d/mirrorlist.mingw64.bak");
   xy_info ("chsrc: 备份文件名:3. /etc/pacman.d/mirrorlist.msys.bak");
 
-  char* prev = xy_strjoin(3,"请针对你的架构下载安装此目录下的文件:",source_url,"distrib/<架构>/");
+  char* prev = xy_strjoin(3,"请针对你的架构下载安装此目录下的文件:",
+                            source.url,
+                            "distrib/<架构>/");
   xy_info (prev);
-  free(prev);
-
-  char* cmd = xy_strjoin(3,"sed -i \"s#https\?://mirror.msys2.org/#",source_url,"#g\" /etc/pacman.d/mirrorlist* ");
+  
+  char* cmd = xy_strjoin(3,"sed -i \"s#https\?://mirror.msys2.org/#",
+                            source.url,
+                            "#g\" /etc/pacman.d/mirrorlist* ");
+  chsrc_logcmd(cmd);
   system(cmd);
-  free(cmd);
 
   // char* rm = "rm -rf /etc/pacman.d/mirrorlist.mingw32.bak";
   // system(rm);
@@ -1051,71 +1087,137 @@ os_mysys2_setsrc(char* option)
   //       rm = "rm -rf /etc/pacman.d/mirrorlist.msys.bak";
   // system(rm);
 
-  xy_info ("chsrc: 为 mysys2 命令换源");
-  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  chsrc_say_thanks(&source);
 }
 
-
+/**
+ * 未经测试
+ */
 void
-os_archlinux_setsrc(char* option)
+os_arch_setsrc(char* option)
 {
-  int selected = 0;
-  for (int i=0;i<sizeof(os_archlinux_sources);i++) {
-    // 循环测速
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_arch, option);
+  } else {
+    index = lets_test_speed(os_arch);
   }
-  const char* source_name = os_archlinux_sources[selected].mirror->name;
-  const char* source_abbr = os_archlinux_sources[selected].mirror->abbr;
-  const char* source_url  = os_archlinux_sources[selected].url;
+
+
+  source_info source = os_arch_sources[index];
+  chsrc_say_selection(&source);
+
 
   char* backup = "cp -rf /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak";
+  chsrc_logcmd(backup);
   system(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/pacman.d/mirrorlist.bak");
-  char* new_file = xy_strjoin("Server = ",source_url,"$repo/os/$arch");
-  char* cmd = xy_strjoin(3,"echo ",new_file," > /etc/pacman.d/mirrorlist");
+  char* new_file = xy_strjoin(3,"Server = ",
+                                source.url,
+                                "$repo/os/$arch");
+  char* cmd = xy_strjoin(3,"echo ",
+                            new_file,
+                            " > /etc/pacman.d/mirrorlist");
+  chsrc_logcmd(cmd);
   system(cmd);
-  free(cmd);
   cmd = "cat /etc/pacman.d/mirrorlist.bak >> /etc/pacman.d/mirrorlist";
+  chsrc_logcmd(cmd);
   system(cmd);
-  free(new_file);
 
   // char* rm = "rm -rf /etc/pacman.d/mirrorlist.bak";
   // system(rm);
-  xy_info ("chsrc: 为 archlinux 命令换源");
-  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  
+  chsrc_say_thanks(&source);
   xy_info ("Please use \"pacman -Syyu \" to update your source");
 }
 
+/**
+ * 未经测试
+ */
 void
-os_gentoolinux_setsrc(char* option)
+os_gentoo_setsrc(char* option)
 {
-  int selected = 0;
-  for (int i=0;i<sizeof(os_gentoolinux_sources);i++) {
-    // 循环测速
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_gentoo, option);
+  } else {
+    index = lets_test_speed(os_gentoo);
   }
-  const char* source_name = os_gentoolinux_sources[selected].mirror->name;
-  const char* source_abbr = os_gentoolinux_sources[selected].mirror->abbr;
-  const char* source_url  = os_gentoolinux_sources[selected].url;
+
+
+  source_info source = os_arch_sources[index];
+  chsrc_say_selection(&source);
+
 
   char* backup = "cp -rf /etc/portage/repos.conf/gentoo.conf /etc/portage/repos.conf/gentoo.conf.bak";
+  chsrc_logcmd(backup);
   system(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/portage/repos.conf/gentoo.conf.bak");
-  char* cmd = xy_strjoin(3,"sed -i \"s#rsync[:|\\.|\\/|a-z|A-Z]*/gentoo-portage#rsync://",source_url,"gentoo-portage#g");
+  char* cmd = xy_strjoin(3,"sed -i \"s#rsync[:|\\.|\\/|a-z|A-Z]*/gentoo-portage#rsync://",
+                            source.url,
+                            "gentoo-portage#g");
+  chsrc_logcmd(cmd);
   system(cmd);
-  free(cmd);
 
-  char * yuan = xy_strjoin(3,"GENTOO_MIRRORS=\"https://",source_url,"gentoo\"");
+  char * yuan = xy_strjoin(3,"GENTOO_MIRRORS=\"https://",
+                              source.url,
+                              "gentoo\"");
   cmd = xy_strjoin("cat ",yuan," >> /etc/portage/make.conf");
+  chsrc_logcmd(cmd);
   system(cmd);
-  free(cmd);
-  free(yuan);
 
   // char* rm = "rm -rf /etc/portage/repos.conf/gentoo.conf.bak";
   // system(rm);
-  xy_info ("chsrc: 为 gentoolinux 命令换源");
-  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  chsrc_say_thanks(&source);
 }
+
+
+/**
+ * 未经测试
+ */
+void
+os_netbsd_setsrc(char* option)
+{
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_netbsd, option);
+  } else {
+    index = lets_test_speed(os_netbsd);
+  }
+
+
+  source_info source = os_netbsd_sources[index];
+  chsrc_say_selection(&source);
+
+
+  char* backup = "cp -rf /usr/pkg/etc/pkgin/repositories.conf /usr/pkg/etc/pkgin/repositories.conf.bak";
+  chsrc_logcmd(backup);
+  system(backup);
+
+  xy_info ("chsrc: 备份文件名: /usr/pkg/etc/pkgin/repositories.conf.bak");
+
+  char* arch = xy_getcmd("arch",NULL);
+  char* version = "cat /etc/os-release | grep \"VERSION=\" | grep -Po [8-9].[0-9]+";
+  char* cmd = xy_strjoin(6,"echo ",
+                            source.url,
+                            arch,
+                            "/",
+                            version,
+                            "/All > /usr/pkg/etc/pkgin/repositories.conf");
+  chsrc_logcmd(cmd);
+  system(cmd);
+
+  // char* rm = "rm -rf /etc/portage/repos.conf/gentoo.conf.bak";
+  // system(rm);
+  
+  chsrc_say_thanks(&source);
+}
+
 
 
 /************************************** Begin Target Matrix ****************************************/
@@ -1161,9 +1263,10 @@ target_info
   os_fedora_target      = {os_fedora_setsrc,      NULL, os_fedora_sources,          7},
   os_kali_target        = {os_kali_setsrc,        NULL, os_kali_sources,            7},
   os_openbsd_target     = {os_openbsd_setsrc,     NULL, os_openbsd_sources,         7},
-  os_mysys2_target      = {os_mysys2_setsrc,      NULL, os_mysys2_sources,           7},
-  os_archlinux_target   = {os_archlinux_setsrc,   NULL, os_archlinux_sources,       7},
-  os_gentoolinux_target = {os_gentoolinux_setsrc, NULL, os_gentoolinux_sources,     7};
+  os_mysys2_target      = {os_mysys2_setsrc,      NULL, os_mysys2_sources,          7},
+  os_arch_target        = {os_arch_setsrc,        NULL, os_arch_sources,            7},
+  os_gentoo_target      = {os_gentoo_setsrc,      NULL, os_gentoo_sources,          7},
+  os_netbsd_target      = {os_netbsd_setsrc,      NULL, os_netbsd_sources,          7};
 static const char const
 *os_ubuntu        [] = {"ubuntu",  NULL,  targetinfo(&os_ubuntu_target)},
 *os_debian        [] = {"debian",  NULL,  targetinfo(&os_debian_target)},
@@ -1171,11 +1274,12 @@ static const char const
 *os_kali          [] = {"kali",    NULL,  targetinfo(&os_kali_target)},
 *os_openbsd       [] = {"openbsd", NULL,  targetinfo(&os_openbsd_target)},
 *os_mysys2        [] = {"mysys2",  NULL,  targetinfo(&os_mysys2_target)},
-*os_archlinux     [] = {"mysys2",  NULL,  targetinfo(&os_archlinux_target)},
-*os_gentoolinux   [] = {"mysys2",  NULL,  targetinfo(&os_gentoolinux_target)},
+*os_arch          [] = {"arch",    NULL,  targetinfo(&os_arch_target)},
+*os_gentoo        [] = {"gentoo",  NULL,  targetinfo(&os_gentoo_target)},
+*os_netbsd        [] = {"netbsd",  NULL,  targetinfo(&os_netbsd_target)},
 **os_systems[] =
 {
-  os_ubuntu, os_debian,os_fedora,os_kali,os_openbsd,os_mysys2,os_archlinux,os_gentoolinux
+  os_ubuntu, os_debian,os_fedora,os_kali,os_openbsd,os_mysys2,os_arch,os_gentoo,os_netbsd
 };
 
 
