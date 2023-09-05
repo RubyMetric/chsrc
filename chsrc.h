@@ -64,10 +64,13 @@ mirror_info
 
 // 速度暂时处于10位以后，但是目前可用的源
   Nju           = {"nju",     "NJU",           "南京大学开源镜像站",         "https://mirrors.nju.edu.cn/",
-                   "https://mirrors.nju.edu.cn/archlinux" Big_File_archlinux},
+                   "https://mirrors.nju.edu.cn/archlinux" Big_File_archlinux};
 
-  Cqu           = {"cqu",     "CQU",           "重庆大学开源软件镜像站",     "https://mirrors.cqu.edu.cn/",
-                   "https://mirrors.cqu.edu.cn/speedtest/1000mb.bin"};
+
+// @ccmywish: 2023-09-05 我只使用了不到5次，重庆大学镜像站就把我的ip封杀了，对用户来说封杀策略过严，暂时不可靠，暂时不用
+//
+//  Cqu           = {"cqu",     "CQU",           "重庆大学开源软件镜像站",     "https://mirrors.cqu.edu.cn/",
+//                  "https://mirrors.cqu.edu.cn/speedtest/1000mb.bin"};
 
 
 // 大型公司
@@ -102,10 +105,10 @@ mirror_info
 
 mirror_info*
 available_mirrors[] = {
-  &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Nju, &Cqu,
+  &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Nju, // &Cqu,
   &Ali,  &Tencent, &Netease, &Sohu,
   &RubyChina, &GoProxyCN, &GoProxyIO
-  // 暂不支持 NugetOrg
+  // 暂不支持 &NugetOrg
 };
 
 
