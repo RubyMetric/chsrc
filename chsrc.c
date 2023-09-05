@@ -1136,7 +1136,7 @@ void
 print_available_mirrors ()
 {
   xy_info ("chsrc: 支持以下镜像站，荣耀均归属于这些站点，以及它们的开发/维护者们");
-  xy_warn ("chsrc: 下方code列，可用于指定使用某镜像站，请使用 chsrc set <target> <code>");
+  xy_warn ("chsrc: 下方 code 列，可用于指定使用某镜像站，请使用 chsrc set <target> <code>");
   printf ("%-14s%-30s%-41s ", "code", "服务商缩写", "服务商URL"); puts("服务商名称");
   puts   ("-------------------------------------------------------------------------------------------------");
   for (int i=0; i<xy_arylen(available_mirrors); i++)
@@ -1289,17 +1289,17 @@ get_target (const char* input, int code, char* option)
   if (Target_Set_Source==code)
   {
     if (target->setfn) target->setfn(option);
-    else xy_error (xy_strjoin(3, "chsrc: 暂未对", input, "实现set功能，欢迎贡献"));
+    else xy_error (xy_strjoin(3, "chsrc: 暂未对 ", input, " 实现set功能，欢迎贡献"));
   }
   else if (Target_Get_Source==code)
   {
     if (target->getfn) target->getfn("");
-    else xy_error (xy_strjoin(3, "chsrc: 暂未对", input, "实现get功能，欢迎贡献"));
+    else xy_error (xy_strjoin(3, "chsrc: 暂未对 ", input, " 实现get功能，欢迎贡献"));
   }
   else if (Target_List_Source==code)
   {
-    xy_info (xy_strjoin(3,"chsrc: 对", input ,"支持以下镜像站，荣耀均归属于这些站点，以及它们的开发/维护者们"));
-    xy_warn (xy_strjoin(3, "chsrc: 下方code列，可用于指定使用某源，请使用 chsrc set ", input, " <code>"));
+    xy_info (xy_strjoin(3,"chsrc: 对 ", input ," 支持以下镜像站，荣耀均归属于这些站点，以及它们的开发/维护者们"));
+    xy_warn (xy_strjoin(3, "chsrc: 下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>"));
     printf ("%-14s%-35s%-45s ", "code", "服务商缩写", "服务源URL"); puts("服务商名称");
     puts   ("--------------------------------------------------------------------------------------------------------");
     print_supported_sources_for_target (target->sources);
