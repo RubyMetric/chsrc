@@ -1,5 +1,6 @@
 /* --------------------------------------------------------------
 * File          : chsrc.c
+* License       : GPLv3
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
 * Last modified : <2023-09-05>
@@ -7,6 +8,8 @@
 * chsrc:
 *
 *   Change Source —— 命令行换源工具
+*
+*   该软件为自由软件，采用 GPLv3 许可证，请查阅 LICENSE.txt 文件
 * -------------------------------------------------------------*/
 
 #include "chsrc.h"
@@ -1397,11 +1400,8 @@ print_supported_sources_for_target (source_info sources[])
 int
 print_help ()
 {
-  puts(xy_strjoin(4, "Change Source ",
-                      xy_str_to_magenta(Chsrc_Version),
-                      " by ",
-                      xy_str_to_underline(xy_str_to_bold(xy_str_to_red("RubyMetric\n")))
-                      ));
+  puts(xy_strjoin(3, "chsrc: Change Source (GPLv3) ",
+                      xy_str_to_magenta(Chsrc_Version), " by RubyMetric\n"));
   for (int i=0; i<xy_arylen(usage); i++) {
     puts (usage[i]);
   }

@@ -1,5 +1,6 @@
 /* --------------------------------------------------------------
 * File          : test_xy.c
+* License       : MIT
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-30>
 * Last modified : <2023-09-05>
