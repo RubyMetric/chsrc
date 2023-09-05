@@ -1,3 +1,6 @@
+GNU GENERAL PUBLIC LICENSE Version 3 (GPLv3)
+MIT License
+
 许可证与版权
 
 1. chsrc 主程序采用 GPLv3 许可证，保证该软件的永久自由。
@@ -8,12 +11,14 @@
 而使用 chsrc 的代码，则要求您履行 GPLv3 的所有条件。
 
 
+
 ---
 GNU GENERAL PUBLIC LICENSE Version 3 (GPLv3)
 
 Copyright (c) 2023-present 曾奥然 (Aoran Zeng), 郭恒 (Heng Guo). All rights reserved.
 
 See: https://www.gnu.org/licenses/gpl-3.0.html
+
 
 
 ---
