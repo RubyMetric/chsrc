@@ -908,19 +908,25 @@ os_debian_setsrc (char* option)
 void
 os_fedora_setsrc (char* option)
 {
-  int selected = 0;
-  for (int i=0;i<sizeof(os_fedora_sources);i++) {
-    // 循环测速
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_fedora, option);
+  } else {
+    index = lets_test_speed(os_fedora);
   }
-  const char* source_name = os_fedora_sources[selected].mirror->name;
-  const char* source_abbr = os_fedora_sources[selected].mirror->abbr;
-  const char* source_url  = os_fedora_sources[selected].url;
+
+
+  source_info source = os_fedora_sources[index];
+  chsrc_say_selection(&source);
 
   xy_info("fedora29版本及以下暂不支持");
 
   char* backup = "cp -rf /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora.repo.bak";
+  chsrc_logcmd(backup);
   system(backup);
   backup = "cp -rf /etc/yum.repos.d/fedora-updates.repo /etc/yum.repos.d/fedora-updates.repo.bak";
+  chsrc_logcmd(backup);
   system(backup);
 
   xy_info ("chsrc: 备份文件名:1. /etc/yum.repos.d/fedora.repo.bak");
@@ -929,13 +935,14 @@ os_fedora_setsrc (char* option)
 
   char* cmd = xy_strjoin(9, "sed -e 's|^metalink=|#metalink=|g' ",
          "-e 's|^#baseurl=http://download.example/pub/fedora/linux/|baseurl=",
-         source_url,
+         source.url,
          "|g' ",
          "-i.bak ",
          "/etc/yum.repos.d/fedora.repo ",
          "/etc/yum.repos.d/fedora-modular.repo ",
          "/etc/yum.repos.d/fedora-updates.repo ",
          "/etc/yum.repos.d/fedora-updates-modular.repo");
+  chsrc_logcmd(cmd);
   system(cmd);
   free(cmd);
 
@@ -949,8 +956,7 @@ os_fedora_setsrc (char* option)
   // char* rm = "rm -rf /etc/yum.repos.d/fedora-updates.repo.bak";
   // system(rm);
 
-  xy_info ("chsrc: 为 fedora 命令换源");
-  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  chsrc_say_thanks(&source);
 }
 
 
