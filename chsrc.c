@@ -52,25 +52,34 @@ does_the_program_exist (char* check_cmd, char* progname)
 int
 does_the_mirror_exist (source_info* sources, size_t size, char* target, char* input)
 {
+  if (0==size) {
+    xy_error(xy_strjoin(3, "chsrc: 当前 ", target, " 无任何可用源，请联系维护者"));
+    exit(1);
+  }
+
+  if (1==size) {
+    xy_success(xy_strjoin(5, "chsrc: ", sources[0].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢你们的慷慨支持"));
+  }
+
+  if (xy_streql("default", input) || xy_streql("def", input)) {
+    xy_info ("chsrc: 默认使用维护团队测速第一的源");
+    return 0;
+  }
+
   int idx = 0;
   source_info source = sources[0];
 
-  if (xy_streql("default", input) || xy_streql("def", input)) {
-    xy_info ("chsrc: 默认使用由维护团队排序第一的镜像（维护者测速第一）");
-    return idx;
-  }
-
-  bool exist_b = false;
+  bool exist = false;
   for (int i=0; i<size; i++)
   {
     source = sources[i];
     if (xy_streql(source.mirror->code, input)) {
       idx = i;
-      exist_b = true;
+      exist = true;
       break;
     }
   }
-  if (!exist_b) {
+  if (!exist) {
     xy_error (xy_strjoin(3, "chsrc: 镜像站 ", input, " 不存在"));
     xy_error (xy_2strjoin("chsrc: 查看可使用源，请使用 chsrc list ", target));
     exit(1);
@@ -135,10 +144,18 @@ test_speed (const char* url)
 }
 
 
-#define common_cesu(s) common_cesu_(s##_sources, s##_sources_n)
+#define common_cesu(s) common_cesu_(s##_sources, s##_sources_n, #s+3)
 int
-common_cesu_ (source_info* sources, size_t size)
+common_cesu_ (source_info* sources, size_t size, const char* target)
 {
+  if (0==size) {
+    xy_error(xy_strjoin(3, "chsrc: 当前 ", target, " 无任何可用源，请联系维护者"));
+    exit(1);
+  }
+
+  bool onlyone = false;
+  if (1==size) onlyone = true;
+
   double speeds[size];
   double speed = 0.0;
   for (int i=0;i<size;i++)
@@ -155,7 +172,12 @@ common_cesu_ (source_info* sources, size_t size)
     speeds[i] = speed;
   }
   int fastidx = dblary_maxidx (speeds, size);
-  xy_success (xy_2strjoin("chsrc: 最快镜像站: ", sources[fastidx].mirror->name));
+
+  if (onlyone)
+    xy_success(xy_strjoin(5, "chsrc: ", sources[fastidx].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢你们的慷慨支持"));
+  else
+    xy_success (xy_2strjoin("chsrc: 最快镜像站: ", sources[fastidx].mirror->name));
+
   return fastidx;
 }
 
@@ -403,7 +425,7 @@ _pl_php_check_cmd()
 
 /**
  * 已在Windows上测试通过，待其他平台PHP用户确认
-*/
+ */
 void
 pl_php_getsrc (char* option)
 {
@@ -1087,7 +1109,7 @@ usage[] = {
   "cesu <target>             对该软件所有源测速",
   "get  <target>             查看当前软件的源使用情况",
   "set  <target>             换源，自动测速后挑选最快源",
-  "set  <target> def(ault)   换源，默认挑选维护者测速第一的源",
+  "set  <target> def(ault)   换源，默认使用维护团队测速第一的源",
   "set  <target> <mirror>    换源，指定使用某镜像站\n"
 };
 
@@ -1279,7 +1301,7 @@ get_target (const char* input, int code, char* option)
       xy_error ("chsrc: 没有curl命令，无法测速");
       exit(1);
     }
-    common_cesu_ (target->sources, target->sources_n);
+    common_cesu_ (target->sources, target->sources_n, input-3);
     return true;
 
   }

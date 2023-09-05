@@ -27,7 +27,7 @@ cesu <target>           # 对该软件所有源测速
 get  <target>           # 查看当前软件的源使用情况
 
 set  <target>           # 换源，自动测速后挑选最快源
-set  <target> def(ault) # 换源，默认挑选经维护者测速排序第一的源
+set  <target> def(ault) # 换源，默认使用维护团队测速第一的源
 set  <target> <mirror>  # 换源，指定使用某镜像站
 ```
 
