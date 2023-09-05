@@ -558,34 +558,67 @@ pl_dotnet_setsrc (char* option)
 
 
 
-/* TODO: 暂未实现 */
+void
+_pl_java_check_cmd(bool* maven_exist, bool* gradle_exist)
+{
+  char* check_cmd = NULL;
+  check_cmd    = xy_str_to_quietcmd("mvn --version");
+  *maven_exist = does_the_program_exist (check_cmd, "mvn");
+
+  check_cmd     = xy_str_to_quietcmd("gradle --version");
+  *gradle_exist = does_the_program_exist (check_cmd, "gradle");
+
+  if (! *maven_exist && ! *gradle_exist) {
+    xy_error ("chsrc: maven 与 gradle 命令均未找到，请检查是否存在（其一）");
+    exit(1);
+  }
+}
+
+char*
+_pl_java_find_maven_config ()
+{
+  FILE* fp = popen("mvn -v", "r");
+  char buf[512];
+  fgets(buf, 512, fp);
+  memset(buf, 0, 512);
+  fgets(buf, 512, fp);
+  pclose(fp);
+  char* maven_home = xy_str_delete_prefix(buf, "Maven home: ");
+  // xy_info (buf);
+  maven_home = xy_str_strip(maven_home);
+
+  char* maven_config = NULL;
+
+  if (xy_on_windows)
+    maven_config = xy_2strjoin(maven_home, "\\conf\\settings.xml");
+  else
+    maven_config = xy_2strjoin(maven_home, "/conf/settings.xml");
+
+  return maven_config;
+}
+
 void
 pl_java_getsrc (char* option)
 {
-  // char* cmd = "npm config get registry";
+  bool maven_exist, gradle_exist;
+  _pl_java_check_cmd (&maven_exist, &gradle_exist);
+  char* maven_config = _pl_java_find_maven_config();
+
+  char* echo = xy_2strjoin("chsrc: 请查看 ", maven_config);
+  xy_info (echo);
   // system(cmd);
 }
 
 /**
- * Java 换源
- *
- * 参考：https://developer.aliyun.com/mirror/maven
+ * Java 换源，参考：https://developer.aliyun.com/mirror/maven
  */
 void
 pl_java_setsrc (char* option)
 {
+  bool maven_exist, gradle_exist;
+  _pl_java_check_cmd (&maven_exist, &gradle_exist);
+
   int index = 0;
-
-  char* check_cmd = xy_str_to_quietcmd("mvn --version");
-  bool mvn_exist_b    = does_the_program_exist (check_cmd, "mvn");
-
-  check_cmd = xy_str_to_quietcmd("gradle --version");
-  bool gradle_exist_b = does_the_program_exist (check_cmd, "gradle");
-
-  if (!mvn_exist_b && !gradle_exist_b) {
-    xy_error ("chsrc: maven 与 gradle 命令均未找到，请检查是否存在（其一）");
-    return;
-  }
 
   if (NULL!=option) {
     index = does_the_mirror_exist (pl_java_sources, pl_java_sources_n, "java", option);
@@ -596,33 +629,35 @@ pl_java_setsrc (char* option)
   source_info source = pl_java_sources[index];
   chsrc_say_selection(&source);
 
-  if (mvn_exist_b) {
-    const char* file = xy_strjoin(3,
+  if (maven_exist) {
+    const char* file = xy_strjoin(7,
     "<mirror>\n"
-    "  <id>aliyunmaven</id>\n"
+    "  <id>", source.mirror->code, "</id>\n"
     "  <mirrorOf>*</mirrorOf>\n"
-    "  <name>阿里云公共仓库</name>\n"
+    "  <name>", source.mirror->name, "</name>\n"
     "  <url>", source.url, "</url>\n"
     "</mirror>");
 
-    xy_info ("chsrc: 请在您的 maven安装目录/conf/settings.xml 中添加:\n");
+    char* maven_config = _pl_java_find_maven_config();
+    char* echo = xy_strjoin(3, "chsrc: 请在您的 maven 配置文件 ", maven_config, " 中添加:");
+    xy_info(echo);
     puts (file);
   }
 
-  if (gradle_exist_b) {
+  if (gradle_exist) {
+    if (maven_exist) puts("");
     const char* file = xy_strjoin(3,
     "allprojects {\n"
     "  repositories {\n"
-    "  maven { url '", source.url, "' }\n"
-    "  mavenLocal()\n"
-    "  mavenCentral()\n"
+    "    maven { url '", source.url, "' }\n"
+    "    mavenLocal()\n"
+    "    mavenCentral()\n"
     "  }\n"
     "}");
 
-    xy_info ("chsrc: 请在您的 build.gradle 中添加:\n");
+    xy_info ("chsrc: 请在您的 build.gradle 中添加:");
     puts (file);
   }
-
   chsrc_say_thanks(&source);
 }
 
@@ -968,13 +1003,13 @@ def_target_info(pl_nodejs);
 def_target_info(pl_perl);
 def_target_info(pl_php);
 def_target_info(pl_go);
+def_target_info(pl_java);
 def_target_info(pl_r);
 def_target_info(pl_julia);
 
 target_info
   pl_rust_target   = {pl_rust_setsrc,   NULL,           pl_rust_sources,   pl_rust_sources_n},
-  pl_dotnet_target = {pl_dotnet_setsrc, NULL,           pl_dotnet_sources, pl_dotnet_sources_n},
-  pl_java_target   = {pl_java_setsrc,   NULL,           pl_java_sources,   pl_java_sources_n};
+  pl_dotnet_target = {pl_dotnet_setsrc, NULL,           pl_dotnet_sources, pl_dotnet_sources_n};
 
 
 #define targetinfo(t) (const char const*)t
@@ -1021,15 +1056,17 @@ static const char const
 target_info
   wr_anaconda_target = {NULL, NULL, NULL, 0},
   wr_emacs_target    = {NULL, NULL, NULL, 0},
-  wr_tex_target      = {NULL, NULL, NULL, 0};
+  wr_tex_target      = {NULL, NULL, NULL, 0},
+  wr_brew_target     = {NULL, NULL, NULL, 0};
 
 static const char const
 *wr_anaconda[] = {"conda", "anaconda",         NULL,  targetinfo(&wr_anaconda_target)},
 *wr_emacs   [] = {"emacs",                     NULL,  targetinfo(&wr_emacs_target)},
 *wr_tex     [] = {"latex", "ctan",     "tex",  NULL,  targetinfo(&wr_tex_target) },
+*wr_brew    [] = {"brew",  "homebrew",         NULL,  targetinfo(&wr_brew_target)},
 **wr_softwares[] =
 {
-  wr_anaconda, wr_emacs, wr_tex
+  wr_anaconda, wr_emacs, wr_tex, wr_brew
 };
 #undef targetinfo
 /************************************** End Target Matrix ****************************************/
@@ -1050,7 +1087,7 @@ usage[] = {
   "cesu <target>             对该软件所有源测速",
   "get  <target>             查看当前软件的源使用情况",
   "set  <target>             换源，自动测速后挑选最快源",
-  "set  <target> def(ault)   换源，默认挑选经维护者测速排序第一的源",
+  "set  <target> def(ault)   换源，默认挑选维护者测速第一的源",
   "set  <target> <mirror>    换源，指定使用某镜像站\n"
 };
 
