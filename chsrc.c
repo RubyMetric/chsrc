@@ -1127,35 +1127,45 @@ os_arch_setsrc(char* option)
   xy_info ("Please use \"pacman -Syyu \" to update your source");
 }
 
+/**
+ * 未经测试
+ */
 void
-os_gentoolinux_setsrc(char* option)
+os_gentoo_setsrc(char* option)
 {
-  int selected = 0;
-  for (int i=0;i<sizeof(os_gentoolinux_sources);i++) {
-    // 循环测速
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_gentoo, option);
+  } else {
+    index = lets_test_speed(os_gentoo);
   }
-  const char* source_name = os_gentoolinux_sources[selected].mirror->name;
-  const char* source_abbr = os_gentoolinux_sources[selected].mirror->abbr;
-  const char* source_url  = os_gentoolinux_sources[selected].url;
+
+
+  source_info source = os_arch_sources[index];
+  chsrc_say_selection(&source);
+
 
   char* backup = "cp -rf /etc/portage/repos.conf/gentoo.conf /etc/portage/repos.conf/gentoo.conf.bak";
+  chsrc_logcmd(backup);
   system(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/portage/repos.conf/gentoo.conf.bak");
-  char* cmd = xy_strjoin(3,"sed -i \"s#rsync[:|\\.|\\/|a-z|A-Z]*/gentoo-portage#rsync://",source_url,"gentoo-portage#g");
+  char* cmd = xy_strjoin(3,"sed -i \"s#rsync[:|\\.|\\/|a-z|A-Z]*/gentoo-portage#rsync://",source.url,"gentoo-portage#g");
+  chsrc_logcmd(cmd);
   system(cmd);
   free(cmd);
 
-  char * yuan = xy_strjoin(3,"GENTOO_MIRRORS=\"https://",source_url,"gentoo\"");
+  char * yuan = xy_strjoin(3,"GENTOO_MIRRORS=\"https://",source.url,"gentoo\"");
   cmd = xy_strjoin("cat ",yuan," >> /etc/portage/make.conf");
+  chsrc_logcmd(cmd);
   system(cmd);
   free(cmd);
   free(yuan);
 
   // char* rm = "rm -rf /etc/portage/repos.conf/gentoo.conf.bak";
   // system(rm);
-  xy_info ("chsrc: 为 gentoolinux 命令换源");
-  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  chsrc_say_thanks(&source);
 }
 
 
@@ -1204,7 +1214,7 @@ target_info
   os_openbsd_target     = {os_openbsd_setsrc,     NULL, os_openbsd_sources,         7},
   os_mysys2_target      = {os_mysys2_setsrc,      NULL, os_mysys2_sources,          7},
   os_arch_target        = {os_arch_setsrc,        NULL, os_arch_sources,            7},
-  os_gentoolinux_target = {os_gentoolinux_setsrc, NULL, os_gentoolinux_sources,     7};
+  os_gentoo_target      = {os_gentoo_setsrc,      NULL, os_gentoo_sources,          7};
 static const char const
 *os_ubuntu        [] = {"ubuntu",  NULL,  targetinfo(&os_ubuntu_target)},
 *os_debian        [] = {"debian",  NULL,  targetinfo(&os_debian_target)},
@@ -1213,10 +1223,10 @@ static const char const
 *os_openbsd       [] = {"openbsd", NULL,  targetinfo(&os_openbsd_target)},
 *os_mysys2        [] = {"mysys2",  NULL,  targetinfo(&os_mysys2_target)},
 *os_arch          [] = {"arch",    NULL,  targetinfo(&os_arch_target)},
-*os_gentoolinux   [] = {"mysys2",  NULL,  targetinfo(&os_gentoolinux_target)},
+*os_gentoo        [] = {"gentoo",  NULL,  targetinfo(&os_gentoo_target)},
 **os_systems[] =
 {
-  os_ubuntu, os_debian,os_fedora,os_kali,os_openbsd,os_mysys2,os_arch,os_gentoolinux
+  os_ubuntu, os_debian,os_fedora,os_kali,os_openbsd,os_mysys2,os_arch,os_gentoo
 };
 
 

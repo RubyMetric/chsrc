@@ -394,7 +394,7 @@ os_arch_sources[] = {
  *
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
-os_gentoolinux_sources[] = {
+os_gentoo_sources[] = {
   {&Ali,       "mirrors.aliyun.com"},
   {&Bfsu,      "mirrors.bfsu.edu.cn"},
   {&Ustc,      "mirrors.ustc.edu.cn"},
@@ -455,7 +455,7 @@ def_target_sources_n(pl_r);    def_target_sources_n(pl_julia);
 
 def_target_sources_n(os_ubuntu);      def_target_sources_n(os_debian);      def_target_sources_n(os_fedora);
 def_target_sources_n(os_kali);        def_target_sources_n(os_openbsd);     def_target_sources_n(os_mysys2);
-def_target_sources_n(os_arch);        def_target_sources_n(os_gentoolinux);
+def_target_sources_n(os_arch);        def_target_sources_n(os_gentoo);
 
 /* Target Info */
 typedef struct {
