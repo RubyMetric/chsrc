@@ -2,7 +2,7 @@
 * File          : test_xy.c
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-30>
-* Last modified : <2023-09-04>
+* Last modified : <2023-09-05>
 *
 * test_xy:
 *
@@ -31,10 +31,22 @@ main (int argc, char const *argv[])
   putb(xy_str_end_with("abcdef", "abcdef"));  // true
   putb(xy_str_end_with("abcdef", ""));        // true
 
+  putb(xy_str_start_with("abcdef", "abcdefg")); // false
+  putb(xy_str_start_with("abcdef", "abc"));     // true
+  putb(xy_str_start_with("abcdef", "abcde"));   // true
+  putb(xy_str_start_with("abcdef", "abcdef"));  // true
+  putb(xy_str_start_with("abcdef", ""));        // true
+
   puts(xy_str_delete_suffix("abcdefg", "cdef"));  // 不变
   puts(xy_str_delete_suffix("abcdefg", "cdefgh"));// 不变
   puts(xy_str_delete_suffix("abcdefg", ""));      // 不变
   puts(xy_str_delete_suffix("abcdefg", "efg"));   // abcd
+
+
+  puts(xy_str_delete_prefix("abcdefg", "cdef"));  // 不变
+  puts(xy_str_delete_prefix("abcdefg", "0abcde"));// 不变
+  puts(xy_str_delete_prefix("abcdefg", ""));      // 不变
+  puts(xy_str_delete_prefix("abcdefg", "abc"));   // defg
 
   xy_success("成功：输出成功内容");
   xy_info("信息: 输出信息内容");

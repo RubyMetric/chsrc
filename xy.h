@@ -301,6 +301,38 @@ xy_str_end_with (const char* str, const char* suffix)
   return true;
 }
 
+bool
+xy_str_start_with (const char* str, const char* prefix)
+{
+  size_t len1 = strlen(str);
+  size_t len2 = strlen(prefix);
+
+  if (0==len2)     return true;  // 空字符串直接返回
+  if (len1 < len2) return false;
+
+  const char* cur1 = str;
+  const char* cur2 = prefix;
+
+  for (int i=0; i<len2; i++)
+  {
+    if (*cur1 != *cur2) return false;
+    cur1++; cur2++;
+  }
+  return true;
+}
+
+char*
+xy_str_delete_prefix (const char* str, const char* prefix)
+{
+  char* new = xy_strdup(str);
+  bool yes = xy_str_start_with(str, prefix);
+  if (!yes) return new;
+
+  size_t len = strlen(prefix);
+  char* cur = new + len;
+  return cur;
+}
+
 
 char*
 xy_str_delete_suffix (const char* str, const char* suffix)
