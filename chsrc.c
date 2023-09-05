@@ -880,16 +880,17 @@ os_debian_setsrc (char* option)
   }
 
 
-  source_info source = os_ubuntu_sources[index];
+  source_info source = os_debian_sources[index];
   chsrc_say_selection(&source);
 
   xy_info("如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并 需要您 安装");
   xy_info("sudo apt install apt-transport-https ca-certificates");
 
   char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
+  chsrc_logcmd(backup);
   system(backup);
 
-  xy_info ("chsrc: 备份文件名: /etc/apt/.*)http[:|\\.|\\/|a-z|A-Z]*\\/debian\\/@\\1",
+  char * cmd = xy_strjoin(3,"chsrc: 备份文件名: /etc/apt/.*)http[:|\\.|\\/|a-z|A-Z]*\\/debian\\/@\\1",
                           source.url,
                           "@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
   chsrc_logcmd(cmd);
@@ -902,6 +903,7 @@ os_debian_setsrc (char* option)
 }
 /**
  * fedora29版本及以下暂不支持
+ * 未经测试
  */
 void
 os_fedora_setsrc (char* option)
