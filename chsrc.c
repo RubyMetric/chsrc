@@ -1159,6 +1159,48 @@ os_gentoo_setsrc(char* option)
 }
 
 
+/**
+ * 未经测试
+ */
+void
+os_netbsd_setsrc(char* option)
+{
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_netbsd, option);
+  } else {
+    index = lets_test_speed(os_netbsd);
+  }
+
+
+  source_info source = os_netbsd_sources[index];
+  chsrc_say_selection(&source);
+
+
+  char* backup = "cp -rf /usr/pkg/etc/pkgin/repositories.conf /usr/pkg/etc/pkgin/repositories.conf.bak";
+  chsrc_logcmd(backup);
+  system(backup);
+
+  xy_info ("chsrc: 备份文件名: /usr/pkg/etc/pkgin/repositories.conf.bak");
+
+  char* cmd = xy_strjoin(6,"echo ",
+                            source.url,
+                            arch,
+                            "/",
+                            version,
+                            "/All > /usr/pkg/etc/pkgin/repositories.conf");
+  chsrc_logcmd(cmd);
+  system(cmd);
+
+  // char* rm = "rm -rf /etc/portage/repos.conf/gentoo.conf.bak";
+  // system(rm);
+  
+  chsrc_say_thanks(&source);
+}
+
+
+
 /************************************** Begin Target Matrix ****************************************/
 def_target_info(pl_ruby);
 def_target_info(pl_python);
