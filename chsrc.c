@@ -944,7 +944,6 @@ os_fedora_setsrc (char* option)
          "/etc/yum.repos.d/fedora-updates-modular.repo");
   chsrc_logcmd(cmd);
   system(cmd);
-  free(cmd);
 
   xy_info ("chsrc: 替换文件:/etc/yum.repos.d/fedora.repo");
   xy_info ("chsrc: 新增文件:/etc/yum.repos.d/fedora-modular.repo");
@@ -990,7 +989,6 @@ os_kali_setsrc(char* option)
                           "@g\' /etc/apt/sources.list");
   chsrc_logcmd(cmd);
   system(cmd);
-  free(cmd);
 
   // char* rm = "rm -rf /etc/apt/source.list.bak";
   // system(rm);
@@ -1026,7 +1024,6 @@ os_openbsd_setsrc(char* option)
   char* cmd = xy_strjoin(3,"echo ",source.url," > /etc/installurl");
   chsrc_logcmd(cmd);
   system(cmd);
-  free(cmd);
 
   // char* rm = "rm -rf /etc/installurl.bak";
   // system(rm);
@@ -1069,12 +1066,10 @@ os_mysys2_setsrc(char* option)
 
   char* prev = xy_strjoin(3,"请针对你的架构下载安装此目录下的文件:",source.url,"distrib/<架构>/");
   xy_info (prev);
-  free(prev);
-
+  
   char* cmd = xy_strjoin(3,"sed -i \"s#https\?://mirror.msys2.org/#",source.url,"#g\" /etc/pacman.d/mirrorlist* ");
   chsrc_logcmd(cmd);
   system(cmd);
-  free(cmd);
 
   // char* rm = "rm -rf /etc/pacman.d/mirrorlist.mingw32.bak";
   // system(rm);
@@ -1114,11 +1109,9 @@ os_arch_setsrc(char* option)
   char* cmd = xy_strjoin(3,"echo ",new_file," > /etc/pacman.d/mirrorlist");
   chsrc_logcmd(cmd);
   system(cmd);
-  free(cmd);
   cmd = "cat /etc/pacman.d/mirrorlist.bak >> /etc/pacman.d/mirrorlist";
   chsrc_logcmd(cmd);
   system(cmd);
-  free(new_file);
 
   // char* rm = "rm -rf /etc/pacman.d/mirrorlist.bak";
   // system(rm);
@@ -1154,14 +1147,11 @@ os_gentoo_setsrc(char* option)
   char* cmd = xy_strjoin(3,"sed -i \"s#rsync[:|\\.|\\/|a-z|A-Z]*/gentoo-portage#rsync://",source.url,"gentoo-portage#g");
   chsrc_logcmd(cmd);
   system(cmd);
-  free(cmd);
 
   char * yuan = xy_strjoin(3,"GENTOO_MIRRORS=\"https://",source.url,"gentoo\"");
   cmd = xy_strjoin("cat ",yuan," >> /etc/portage/make.conf");
   chsrc_logcmd(cmd);
   system(cmd);
-  free(cmd);
-  free(yuan);
 
   // char* rm = "rm -rf /etc/portage/repos.conf/gentoo.conf.bak";
   // system(rm);
