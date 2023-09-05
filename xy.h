@@ -444,8 +444,8 @@ xy_str_strip (const char* str)
  * 执行cmd后拿到cmd的执行结果 注意从外部free掉这段内存
  * 注意：执行结果后面有回车换行
  */
-char * 
-xy_getcmd(const char * cmd)
+char *
+xy_getcmd(const char * cmd, bool (*func)(const char*))
 {
   const int BUFSIZE = 1024;
 
@@ -462,15 +462,29 @@ xy_getcmd(const char * cmd)
   // 从 stream 指针指向的文件中读取数据。
   char *ret;
   do {
-          ret = fgets(buf, sizeof(buf), stream);
-          if(ret==NULL)
-                  break;
+          if(fgets(buf, sizeof(buf), stream)==NULL)
+          {
+            break;
+          }
+          if(func==NULL)
+          {
+                ret = buf;
+          }
+          else
+          {
+                if(func(buf))
+                {
+                        ret = buf;
+                        break;
+                }
+          }
   }while(1);
 
   // 关闭 stream 指针。
   pclose(stream);
-  return buf;
+  return ret;
 }
+
 
 
 #endif
