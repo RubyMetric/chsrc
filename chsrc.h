@@ -2,7 +2,7 @@
 * File          : chsrc.h
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-29>
-* Last modified : <2023-09-04>
+* Last modified : <2023-09-05>
 *
 * chsrc:
 *
@@ -204,8 +204,6 @@ pl_r_sources[] = {
 
 /**
  * 2023-08-30 更新
- *
- * 阿里云没有该源
  *
  * TODO: 1. 速度未经测试，请Julia用户协助
  *       2. 缺少商业公司或开源社区软件源

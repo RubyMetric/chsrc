@@ -1,8 +1,6 @@
 # chsrc
 
-全平台命令行换源工具，**目标支持 Linux, Windows, macOS, BSD 等所有操作系统，龙芯、申威、飞腾、兆芯、海光等所有CPU**。
-
-若有不支持的情况，请提交issue。
+全平台命令行换源工具，**目标支持 Linux, Windows, macOS, BSD 等所有操作系统，龙芯、申威、飞腾、兆芯、海光等所有CPU**。 若有不支持的情况，请提交issue。
 
 我们使用 `C99` 来完成上述目标。另外，我们并不使用Python或JS等解释语言，因为一个简单的换源工具，不应该强行塞给用户一个庞大的解释器和数十、数百MB其他文件。
 
@@ -48,7 +46,7 @@ set  <target> <mirror>  # 换源，指定使用某镜像站
 - [ ] `chsrc set java`  或 `chsrc set maven` 或 `chsrc set mvn` 或 `chsrc gradle`
 
 - [x] `chsrc set r` 或 `chsrc set cran`  (同时会为 `bioconductor` 换源)
-- [ ] `chsrc set julia`
+- [x] `chsrc set julia`
 
 ## 操作系统
 - [ ] `chsrc set ubuntu`
