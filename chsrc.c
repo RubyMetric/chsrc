@@ -1,5 +1,6 @@
 /* --------------------------------------------------------------
 * File          : chsrc.c
+* License       : GPLv3
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
 * Last modified : <2023-09-05>
@@ -7,6 +8,8 @@
 * chsrc:
 *
 *   Change Source —— 命令行换源工具
+*
+*   该软件为自由软件，采用 GPLv3 许可证，请查阅 LICENSE.txt 文件
 * -------------------------------------------------------------*/
 
 #include "chsrc.h"

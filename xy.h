@@ -1,14 +1,17 @@
 /* --------------------------------------------------------------
 * File          : xy.h
+* License       : MIT
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
 * Last modified : <2023-09-05>
 *
 * xy:
 *
-*   y = f(x)
+*   Xiangyang (襄阳) or Xianyang (咸阳)
 *
 *   Corss-Platform C utilities in Ruby flavor
+*
+*   该文件采用 MIT 许可证，可闭源使用，请查阅 LICENSE.txt 文件
 * -------------------------------------------------------------*/
 
 #ifndef XY_H
@@ -444,7 +447,7 @@ xy_str_strip (const char* str)
  * 执行cmd后拿到cmd的执行结果 注意从外部free掉这段内存
  * 注意：执行结果后面有回车换行
  */
-char * 
+char *
 xy_getcmd(const char * cmd)
 {
   const int BUFSIZE = 1024;
