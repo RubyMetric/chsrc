@@ -964,34 +964,41 @@ os_fedora_setsrc (char* option)
 
 
 
-
+/**
+ * 未经测试
+ */
 void
 os_kali_setsrc(char* option)
 {
-  int selected = 0;
-  for (int i=0;i<sizeof(os_kali_sources);i++) {
-    // 循环测速
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_kali, option);
+  } else {
+    index = lets_test_speed(os_kali);
   }
-  const char* source_name = os_kali_sources[selected].mirror->name;
-  const char* source_abbr = os_kali_sources[selected].mirror->abbr;
-  const char* source_url  = os_kali_sources[selected].url;
+
+
+  source_info source = os_kali_sources[index];
+  chsrc_say_selection(&source);
 
   char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
+  chsrc_logcmd(backup);
   system(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
   char* cmd = xy_strjoin(3, "sed -i \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/kali\\/@\\1",
-                          source_url,
+                          source.url,
                           "@g\' /etc/apt/sources.list");
+  chsrc_logcmd(cmd);
   system(cmd);
   free(cmd);
 
   // char* rm = "rm -rf /etc/apt/source.list.bak";
   // system(rm);
 
-  xy_info ("chsrc: 为 kali 命令换源");
-  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  chsrc_say_thanks(&source);
 }
 
 
