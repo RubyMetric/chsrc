@@ -999,31 +999,39 @@ os_kali_setsrc(char* option)
 }
 
 
+/**
+ * 未经测试
+ */
 void
 os_openbsd_setsrc(char* option)
 {
-  int selected = 0;
-  for (int i=0;i<sizeof(os_openbsd_sources);i++) {
-    // 循环测速
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_openbsd, option);
+  } else {
+    index = lets_test_speed(os_openbsd);
   }
-  const char* source_name = os_openbsd_sources[selected].mirror->name;
-  const char* source_abbr = os_openbsd_sources[selected].mirror->abbr;
-  const char* source_url  = os_openbsd_sources[selected].url;
+
+
+  source_info source = os_openbsd_sources[index];
+  chsrc_say_selection(&source);
 
   char* backup = "cp -rf /etc/installurl /etc/installurl.bak";
+  chsrc_logcmd(backup);
   system(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/installurl.bak");
 
-  char* cmd = xy_strjoin(3,"echo ",source_url," > /etc/installurl");
+  char* cmd = xy_strjoin(3,"echo ",source.url," > /etc/installurl");
+  chsrc_logcmd(cmd);
   system(cmd);
   free(cmd);
 
   // char* rm = "rm -rf /etc/installurl.bak";
   // system(rm);
 
-  xy_info ("chsrc: 为 openbsd 命令换源");
-  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  chsrc_say_thanks(&source);
 }
 
 
