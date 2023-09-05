@@ -264,6 +264,98 @@ xy_strdup(const char* str)
 }
 
 
+#define XY_STR_BOLD      1
+#define XY_STR_FAINT     2
+#define XY_STR_ITALIC    3
+#define XY_STR_UNDERLINE 4
+#define XY_STR_BLINK     5
+#define XY_STR_CROSS     9
+
+#define xy_str_to_bold(str)      xy_str_to_terminal_style_(XY_STR_BOLD,     str)
+#define xy_str_to_faint(str)     xy_str_to_terminal_style_(XY_STR_FAINT,    str)
+#define xy_str_to_italic(str)    xy_str_to_terminal_style_(XY_STR_ITALIC,   str)
+#define xy_str_to_underline(str) xy_str_to_terminal_style_(XY_STR_UNDERLINE,str)
+#define xy_str_to_blink(str)     xy_str_to_terminal_style_(XY_STR_BLINK,    str)
+#define xy_str_to_cross(str)     xy_str_to_terminal_style_(XY_STR_CROSS,    str)
+
+#define XY_STR_RED      31
+#define XY_STR_GREEN    32
+#define XY_STR_YELLOW   33
+#define XY_STR_BLUE     34
+#define XY_STR_MAGENTA  35
+#define XY_STR_CYAN     36
+
+#define xy_str_to_red(str)     xy_str_to_terminal_style_(XY_STR_RED,    str)
+#define xy_str_to_green(str)   xy_str_to_terminal_style_(XY_STR_GREEN,  str)
+#define xy_str_to_yellow(str)  xy_str_to_terminal_style_(XY_STR_YELLOW, str)
+#define xy_str_to_blue(str)    xy_str_to_terminal_style_(XY_STR_BLUE,   str)
+#define xy_str_to_magenta(str) xy_str_to_terminal_style_(XY_STR_MAGENTA,str)
+#define xy_str_to_purple       xy_str_to_magenta
+#define xy_str_to_cyan(str)    xy_str_to_terminal_style_(XY_STR_CYAN,   str)
+
+char*
+xy_str_to_terminal_style_(int style, const char* str)
+{
+  char* color_fmt_str = NULL;
+  if (XY_STR_RED==style)
+  {
+    color_fmt_str = "\e[31m%s\e[0m"; // 红色
+  }
+  else if (XY_STR_GREEN==style)
+  {
+    color_fmt_str = "\e[32m%s\e[0m"; // 绿色
+  }
+  else if (XY_STR_YELLOW==style)
+  {
+    color_fmt_str = "\e[33m%s\e[0m"; // 黄色
+  }
+  else if (XY_STR_BLUE==style)
+  {
+    color_fmt_str = "\e[34m%s\e[0m"; // 蓝色
+  }
+  else if (XY_STR_MAGENTA==style)
+  {
+    color_fmt_str = "\e[35m%s\e[0m"; // 蓝色
+  }
+  else if (XY_STR_CYAN==style)
+  {
+    color_fmt_str = "\e[36m%s\e[0m"; // 蓝色
+  }
+
+
+  else if (XY_STR_BOLD==style)
+  {
+    color_fmt_str = "\e[1m%s\e[0m";
+  }
+  else if (XY_STR_FAINT==style)
+  {
+    color_fmt_str = "\e[2m%s\e[0m";
+  }
+  else if (XY_STR_ITALIC==style)
+  {
+    color_fmt_str = "\e[3m%s\e[0m";
+  }
+  else if (XY_STR_UNDERLINE==style)
+  {
+    color_fmt_str = "\e[4m%s\e[0m";
+  }
+  else if (XY_STR_BLINK==style)
+  {
+    color_fmt_str = "\e[5m%s\e[0m";
+  }
+  else if (XY_STR_CROSS==style)
+  {
+    color_fmt_str = "\e[9m%s\e[0m";
+  }
+
+  // -2 把中间%s减掉
+  size_t len = strlen(color_fmt_str) -2;
+  char* buf = malloc(strlen(str) + len + 1);
+  sprintf (buf, color_fmt_str, str);
+  return buf;
+}
+
+
 bool
 xy_streql(const char* str1, const char* str2) {
   return strcmp(str1, str2) == 0 ? true : false;
