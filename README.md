@@ -32,42 +32,54 @@ set  <target> <mirror>  # 换源，指定使用某镜像站
 ```
 
 ## 编程语言开发
-- [x] `chsrc set ruby`  或 `chsrc set gem`
 
-- [x] `chsrc set python` 或 `chsrc set pip`
+```bash
+chsrc set ruby   或 chsrc set gem
+chsrc set python 或 chsrc set pip
+chsrc set node   或 chsrc set npm  或 chsrc set nodejs
+chsrc set perl   或 chsrc set cpan
+chsrc set php    或 chsrc composer
 
-- [x] `chsrc set node`   或 `chsrc set npm` 或 `chsrc set nodejs`
+chsrc set go
+chsrc set java   或 chsrc set maven  或 chsrc set mvn  或 chsrc gradle
 
-- [x] `chsrc set perl` 或 `chsrc set cpan`
-- [x] `chsrc set php`  或 `chsrc composer`
+# 额外会为 bioconductor 换源
+chsrc set r      或 chsrc set cran
+chsrc set julia
+```
 
-- [x] `chsrc set go`
-- [ ] `chsrc set rust`  或 `chsrc set cargo` 或 `chsrc crate`
-- [x] `chsrc set java`  或 `chsrc set maven` 或 `chsrc set mvn` 或 `chsrc gradle`
+TODO:
+- [ ] `chsrc set rust`  或 `chsrc set cargo`  或 `chsrc crate`
 
-- [x] `chsrc set r` 或 `chsrc set cran`  (同时会为 `bioconductor` 换源)
-- [x] `chsrc set julia`
 
 ## 操作系统
-- [ ] `chsrc set ubuntu`
-- [ ] `chsrc set debian`
-- [ ] `chsrc set fedora`
+
+```bash
+chsrc set ubuntu
+chsrc set debian
+chsrc set fedora
+chsrc set kali
+
+chsrc set openbsd
+
+chsrc set msys2  或 chsrc set msys
+```
+
+TODO:
 - [ ] `chsrc set arch`
 - [ ] `chsrc set gentoo`
-- [ ] `chsrc set kali`
 - [ ] `chsrc set manjaro`
 
 - [ ] `chsrc set deepin`
 - [ ] `chsrc set openkylin`
 - [ ] `chsrc set openeuler`
 
-- [ ] `chsrc set openbsd`
 - [ ] `chsrc set netbsd`
 
-- [ ] `chsrc set msys2` 或 `chsrc set msys`
 
 ## 软件
 
+TODO:
 - [ ] `chsrc set brew`  或 `chsrc set homebrew`
 - [ ] `chsrc set emacs`
 - [ ] `chsrc set conda` 或 `chsrc set anaconda`
