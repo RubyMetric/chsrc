@@ -840,7 +840,7 @@ os_ubuntu_setsrc (char* option)
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
-  char* arch = xy_getcmd("arch");
+  char* arch = xy_getcmd("arch",NULL);
   char* cmd;
   if(strncmp(arch,"x86_64",6)==0)
   {
@@ -1187,6 +1187,8 @@ os_netbsd_setsrc(char* option)
 
   xy_info ("chsrc: 备份文件名: /usr/pkg/etc/pkgin/repositories.conf.bak");
 
+  char* arch = xy_getcmd("arch",NULL);
+  char* version = "cat /etc/os-release | grep \"VERSION=\" | grep -Po [8-9].[0-9]+";
   char* cmd = xy_strjoin(6,"echo ",
                             source.url,
                             arch,
@@ -1249,7 +1251,8 @@ target_info
   os_openbsd_target     = {os_openbsd_setsrc,     NULL, os_openbsd_sources,         7},
   os_mysys2_target      = {os_mysys2_setsrc,      NULL, os_mysys2_sources,          7},
   os_arch_target        = {os_arch_setsrc,        NULL, os_arch_sources,            7},
-  os_gentoo_target      = {os_gentoo_setsrc,      NULL, os_gentoo_sources,          7};
+  os_gentoo_target      = {os_gentoo_setsrc,      NULL, os_gentoo_sources,          7},
+  os_netbsd_target      = {os_netbsd_setsrc,      NULL, os_netbsd_sources,          7};
 static const char const
 *os_ubuntu        [] = {"ubuntu",  NULL,  targetinfo(&os_ubuntu_target)},
 *os_debian        [] = {"debian",  NULL,  targetinfo(&os_debian_target)},
@@ -1259,9 +1262,10 @@ static const char const
 *os_mysys2        [] = {"mysys2",  NULL,  targetinfo(&os_mysys2_target)},
 *os_arch          [] = {"arch",    NULL,  targetinfo(&os_arch_target)},
 *os_gentoo        [] = {"gentoo",  NULL,  targetinfo(&os_gentoo_target)},
+*os_netbsd        [] = {"netbsd",  NULL,  targetinfo(&os_netbsd_target)},
 **os_systems[] =
 {
-  os_ubuntu, os_debian,os_fedora,os_kali,os_openbsd,os_mysys2,os_arch,os_gentoo
+  os_ubuntu, os_debian,os_fedora,os_kali,os_openbsd,os_mysys2,os_arch,os_gentoo,os_netbsd
 };
 
 
