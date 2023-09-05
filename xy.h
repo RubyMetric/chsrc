@@ -2,7 +2,7 @@
 * File          : xy.h
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
-* Last modified : <2023-09-04>
+* Last modified : <2023-09-05>
 *
 * xy:
 *
@@ -273,9 +273,9 @@ xy_str_to_quietcmd (const char* cmd)
 {
   char* ret = NULL;
 #ifdef _WIN32
-  ret = xy_2strjoin (cmd, " >nul 2>nul");
+  ret = xy_2strjoin (cmd, " >nul 2>nul ");
 #else
-  ret = xy_2strjoin (cmd, " 1>/dev/null 2>&1");
+  ret = xy_2strjoin (cmd, " 1>/dev/null 2>&1 ");
 #endif
   return ret;
 }
