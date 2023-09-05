@@ -6,9 +6,9 @@
 
 <br>
 
-一个人无法精通各种软件，也没有机会使用多样的平台环境，因此我邀请您参与本项目，维护你所熟悉的语言/操作系统/软件的换源方式以及可用源。
+一个人无法精通各种软件，也没有机会使用多样的平台环境。因此我邀请您参与，维护你所熟悉的部分软件的换源。本软件为自由软件，GPLv3 许可证的采用将有机会使您的贡献被更广泛地使用，详情查阅 [LICENSE.txt](./LICENSE.txt)
 
-请查阅：[chsrc 协作者/维护者列表](https://gitee.com/RubyMetric/chsrc/issues/I7YI8E)
+参与维护开发，请查阅：[chsrc 协作者/维护者列表](https://gitee.com/RubyMetric/chsrc/issues/I7YI8E)
 
 <br>
 
@@ -101,3 +101,9 @@ make
 make test
 make clean
 ```
+
+<br>
+
+## License
+
+本软件采用 GPLv3 和 MIT 双许可证，具体请查阅 [LICENSE.txt](./LICENSE.txt)
