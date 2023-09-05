@@ -180,7 +180,7 @@ lets_test_speed_ (source_info* sources, size_t size, const char* target)
       xy_warn ("chsrc: 跳过该站点");
       speed = 0;
     } else {
-      printf (xy_strjoin(3, "chsrc: 测速 ", src.mirror->site , " ... "));
+      printf ("%s",xy_strjoin(3, "chsrc: 测速 ", src.mirror->site , " ... "));
       speed = test_speed_url (url);
     }
     speeds[i] = speed;
@@ -1166,7 +1166,9 @@ os_gentoo_setsrc(char* option)
   char * yuan = xy_strjoin(3,"GENTOO_MIRRORS=\"https://",
                               source.url,
                               "gentoo\"");
-  cmd = xy_strjoin("cat ",yuan," >> /etc/portage/make.conf");
+  cmd = xy_strjoin(3,"cat ",
+                      yuan,
+                      " >> /etc/portage/make.conf");
   chsrc_logcmd(cmd);
   system(cmd);
 
