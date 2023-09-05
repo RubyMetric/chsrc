@@ -374,4 +374,37 @@ xy_str_strip (const char* str)
   return new;
 }
 
+/* *
+ * 执行cmd后拿到cmd的执行结果 注意从外部free掉这段内存
+ * 注意：执行结果后面有回车换行
+ */
+char * 
+xy_getcmd(const char * cmd)
+{
+  const int BUFSIZE = 1024;
+
+  FILE *stream;
+  char* buf = (char*)malloc(sizeof(char)*BUFSIZE);
+
+  // 执行命令，并将输出保存到 stream 指针指向的文件中。
+  stream = popen(cmd, "r");
+  if (stream == NULL) {
+          printf("命令执行失败。\n");
+          return NULL;
+  }
+
+  // 从 stream 指针指向的文件中读取数据。
+  char *ret;
+  do {
+          ret = fgets(buf, sizeof(buf), stream);
+          if(ret==NULL)
+                  break;
+  }while(1);
+
+  // 关闭 stream 指针。
+  pclose(stream);
+  return buf;
+}
+
+
 #endif

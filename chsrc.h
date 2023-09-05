@@ -289,13 +289,13 @@ pl_php_sources[] = {
  */
 static source_info
 os_ubuntu_sources[] = {
-  {&Ali,       "https://mirrors.aliyun.com/ubuntu/"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/ubuntu/"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/ubuntu/"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/ubuntu/"},
-  {&Tencent,   "https://mirrors.tencent.com/ubuntu/"},
-  {&Netease,   "https://mirrors.163.com/ubuntu/"},
-  {&Sohu,      "https://mirrors.sohu.com/ubuntu/"}
+  {&Ali,       "https://mirrors.aliyun.com/ubuntu"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/ubuntu"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/ubuntu"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/ubuntu"},
+  {&Tencent,   "https://mirrors.tencent.com/ubuntu"},
+  {&Netease,   "https://mirrors.163.com/ubuntu"},
+  {&Sohu,      "https://mirrors.sohu.com/ubuntu"}
 },
 
 /**
@@ -377,6 +377,36 @@ os_mysys2_sources[] = {
   {&Tencent,   "https://mirrors.tencent.com/msys2/"},
   {&Netease,   "https://mirrors.163.com/msys2/"},
   {&Sohu,      "https://mirrors.sohu.com/msys2/"}
+},
+
+/**
+ * 2023-09-05 更新
+ *
+ * TODO: 1. 源并不完整，且未经测试是否有效
+ */
+os_archlinux_sources[] = {
+  {&Ali,       "https://mirrors.aliyun.com/archlinux/"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/archlinux/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/archlinux/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/archlinux/"},
+  {&Tencent,   "https://mirrors.tencent.com/archlinux/"},
+  {&Netease,   "https://mirrors.163.com/archlinux/"},
+  {&Sohu,      "https://mirrors.sohu.com/archlinux/"}
+},
+
+/**
+ * 2023-09-05 更新
+ *
+ * TODO: 1. 源并不完整，且未经测试是否有效
+ */
+os_gentoolinux_sources[] = {
+  {&Ali,       "mirrors.aliyun.com"},
+  {&Bfsu,      "mirrors.bfsu.edu.cn"},
+  {&Ustc,      "mirrors.ustc.edu.cn"},
+  {&Tuna,      "mirrors.tuna.tsinghua.edu.cn"},
+  {&Tencent,   "mirrors.tencent.com"},
+  {&Netease,   "mirrors.163.com"},
+  {&Sohu,      "mirrors.sohu.com"}
 }
 ;
 
@@ -428,8 +458,9 @@ def_target_sources_n(pl_perl); def_target_sources_n(pl_php);    def_target_sourc
 def_target_sources_n(pl_rust); def_target_sources_n(pl_java);   def_target_sources_n(pl_dotnet);
 def_target_sources_n(pl_r);    def_target_sources_n(pl_julia);
 
-def_target_sources_n(os_ubuntu); def_target_sources_n(os_debian);  def_target_sources_n(os_fedora);
-def_target_sources_n(os_kali);   def_target_sources_n(os_openbsd); def_target_sources_n(os_mysys2);
+def_target_sources_n(os_ubuntu);      def_target_sources_n(os_debian);      def_target_sources_n(os_fedora);
+def_target_sources_n(os_kali);        def_target_sources_n(os_openbsd);     def_target_sources_n(os_mysys2);
+def_target_sources_n(os_archlinux);   def_target_sources_n(os_gentoolinux);
 
 /* Target Info */
 typedef struct {
