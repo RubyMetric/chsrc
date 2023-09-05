@@ -31,6 +31,8 @@ set  <target> def(ault) # 换源，默认使用维护团队测速第一的源
 set  <target> <mirror>  # 换源，指定使用某镜像站
 ```
 
+<br>
+
 ## 编程语言开发
 
 ```bash
@@ -38,19 +40,21 @@ chsrc set ruby   或 chsrc set gem
 chsrc set python 或 chsrc set pip
 chsrc set node   或 chsrc set npm  或 chsrc set nodejs
 chsrc set perl   或 chsrc set cpan
-chsrc set php    或 chsrc composer
+chsrc set php    或 chsrc set composer
 
 chsrc set go
+chsrc set rust   或 chsrc set cargo  或 chsrc set crate
 chsrc set java   或 chsrc set maven  或 chsrc set mvn  或 chsrc gradle
 
-# 额外会为 bioconductor 换源
+# 同时会为 bioconductor 换源
 chsrc set r      或 chsrc set cran
 chsrc set julia
 ```
 
-TODO:
-- [ ] `chsrc set rust`  或 `chsrc set cargo`  或 `chsrc crate`
+TODO: 上述已全部完成，但
 
+1. 部分换源方案当前需要用户进行少量手动操作如 `java`，`rust`
+2. 还未经多平台测试
 
 ## 操作系统
 

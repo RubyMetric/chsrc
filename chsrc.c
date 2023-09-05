@@ -17,11 +17,11 @@
 /**
  * 检测二进制程序是否存在
  *
- * @param[in]  check_cmd  检测 `progname` 是否存在的一段命令，一般来说，填 `progname` 本身即可，
- *                        但是某些情况下，需要使用其他命令绕过一些特殊情况，比如 python 这个命令在Windows上
- *                        会自动打开 Microsoft Store，需避免
+ * @param  check_cmd  检测 `progname` 是否存在的一段命令，一般来说，填 `progname` 本身即可，
+ *                    但是某些情况下，需要使用其他命令绕过一些特殊情况，比如 python 这个命令在Windows上
+ *                    会自动打开 Microsoft Store，需避免
  *
- * @param[in]  progname   要检测的二进制程序名
+ * @param  progname   要检测的二进制程序名
  */
 bool
 does_the_program_exist (char* check_cmd, char* progname)
@@ -30,11 +30,11 @@ does_the_program_exist (char* check_cmd, char* progname)
 
   int ret = system(which);
 
-  char buf[32] = {0};
-  sprintf(buf, "错误码: %d", ret);
+  // char buf[32] = {0}; sprintf(buf, "错误码: %d", ret);
 
   if (0!=ret) {
-    xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
+    // xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
+    xy_warn (xy_strjoin(3, "× 命令 ", progname, " 不存在"));
     return false;
   } else {
     xy_success (xy_strjoin(3, "√ 命令 ", progname, " 存在"));
@@ -516,18 +516,21 @@ pl_go_setsrc (char* option)
 
 
 
-/* TODO: 暂未实现 */
 void
 pl_rust_getsrc (char* option)
 {
-  // char* cmd = "npm config get registry";
-  // system(cmd);
+  char* cmd = NULL;
+  if(xy_on_windows) {
+    cmd = "type %USERPROFILE%\\.cargo";
+  } else {
+    cmd = "cat  ~/.cargo";
+  }
+  chsrc_logcmd(cmd);
+  system(cmd);
 }
 
 /**
- * Rust 换源
- *
- * 参考：https://help.mirrors.cernet.edu.cn/crates.io-index.git
+ * Rust 换源，参考：https://mirrors.tuna.tsinghua.edu.cn/help/crates.io-index/
  */
 void
 pl_rust_setsrc (char* option)
@@ -548,16 +551,10 @@ pl_rust_setsrc (char* option)
     "replace-with = 'mirror'\n\n"
 
     "[source.mirror]\n"
-    "registry = \"", source.url, "\"");
+    "registry = \"sparse+", source.url, "\"");
 
-
-  char* cmd = NULL;
-  if (xy_on_windows)
-    cmd = xy_strjoin(3, "echo ", file, ">> \%USERPROFILE%\\.cargo");
-  else
-    cmd = xy_strjoin(3, "echo ", file, ">> $HOME/.cargo");
-
-  system(cmd);
+  xy_warn ("chsrc: 请您手动写入以下内容到 ~/.cargo 文件中");
+  puts(file);
   chsrc_say_thanks(&source);
 }
 
@@ -1027,13 +1024,13 @@ def_target_info(pl_nodejs);
 def_target_info(pl_perl);
 def_target_info(pl_php);
 def_target_info(pl_go);
+def_target_info(pl_rust);
 def_target_info(pl_java);
 def_target_info(pl_r);
 def_target_info(pl_julia);
 
 target_info
-  pl_rust_target   = {pl_rust_setsrc,   NULL,           pl_rust_sources,   pl_rust_sources_n},
-  pl_dotnet_target = {pl_dotnet_setsrc, NULL,           pl_dotnet_sources, pl_dotnet_sources_n};
+  pl_dotnet_target = {pl_dotnet_setsrc, NULL,  pl_dotnet_sources, pl_dotnet_sources_n};
 
 
 #define targetinfo(t) (const char const*)t
@@ -1256,9 +1253,9 @@ iterate_targets_(const char const*** array, size_t size, const char* input, cons
 /**
  * 寻找target，并根据`code`执行相应的操作
  *
- * @param[in]  input   用户输入的目标
- * @param[in]  code    对target要执行的操作
- * @param[in]  option  额外的指示，可为NULL
+ * @param  input   用户输入的目标
+ * @param  code    对target要执行的操作
+ * @param  option  额外的指示，可为NULL
  *
  * @return 找到目标返回true，未找到返回false
  */

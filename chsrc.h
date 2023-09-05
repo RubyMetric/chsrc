@@ -228,17 +228,17 @@ pl_go_sources[] = {
 
 
 /**
- * 2023-08-30 更新
+ * 2023-09-05 更新
  *
- * TODO: 1. 速度未经测试，请Rust用户协助
- *       2. 缺少商业公司或开源社区软件源
+ * @note 缺少商业公司或开源社区软件源
+ *
+ * @note 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`
  */
 pl_rust_sources[] = {
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/"},
   {&Ustc,          "https://mirrors.ustc.edu.cn/crates.io-index/"},
-  {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/"}
 },
 
 
