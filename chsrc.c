@@ -1021,7 +1021,9 @@ os_openbsd_setsrc(char* option)
 
   xy_info ("chsrc: 备份文件名: /etc/installurl.bak");
 
-  char* cmd = xy_strjoin(3,"echo ",source.url," > /etc/installurl");
+  char* cmd = xy_strjoin(3,"echo ",
+                            source.url,
+                            " > /etc/installurl");
   chsrc_logcmd(cmd);
   system(cmd);
 
@@ -1064,10 +1066,14 @@ os_mysys2_setsrc(char* option)
   xy_info ("chsrc: 备份文件名:2. /etc/pacman.d/mirrorlist.mingw64.bak");
   xy_info ("chsrc: 备份文件名:3. /etc/pacman.d/mirrorlist.msys.bak");
 
-  char* prev = xy_strjoin(3,"请针对你的架构下载安装此目录下的文件:",source.url,"distrib/<架构>/");
+  char* prev = xy_strjoin(3,"请针对你的架构下载安装此目录下的文件:",
+                            source.url,
+                            "distrib/<架构>/");
   xy_info (prev);
   
-  char* cmd = xy_strjoin(3,"sed -i \"s#https\?://mirror.msys2.org/#",source.url,"#g\" /etc/pacman.d/mirrorlist* ");
+  char* cmd = xy_strjoin(3,"sed -i \"s#https\?://mirror.msys2.org/#",
+                            source.url,
+                            "#g\" /etc/pacman.d/mirrorlist* ");
   chsrc_logcmd(cmd);
   system(cmd);
 
@@ -1105,8 +1111,12 @@ os_arch_setsrc(char* option)
   system(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/pacman.d/mirrorlist.bak");
-  char* new_file = xy_strjoin("Server = ",source.url,"$repo/os/$arch");
-  char* cmd = xy_strjoin(3,"echo ",new_file," > /etc/pacman.d/mirrorlist");
+  char* new_file = xy_strjoin(3,"Server = ",
+                                source.url,
+                                "$repo/os/$arch");
+  char* cmd = xy_strjoin(3,"echo ",
+                            new_file,
+                            " > /etc/pacman.d/mirrorlist");
   chsrc_logcmd(cmd);
   system(cmd);
   cmd = "cat /etc/pacman.d/mirrorlist.bak >> /etc/pacman.d/mirrorlist";
@@ -1144,11 +1154,15 @@ os_gentoo_setsrc(char* option)
   system(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/portage/repos.conf/gentoo.conf.bak");
-  char* cmd = xy_strjoin(3,"sed -i \"s#rsync[:|\\.|\\/|a-z|A-Z]*/gentoo-portage#rsync://",source.url,"gentoo-portage#g");
+  char* cmd = xy_strjoin(3,"sed -i \"s#rsync[:|\\.|\\/|a-z|A-Z]*/gentoo-portage#rsync://",
+                            source.url,
+                            "gentoo-portage#g");
   chsrc_logcmd(cmd);
   system(cmd);
 
-  char * yuan = xy_strjoin(3,"GENTOO_MIRRORS=\"https://",source.url,"gentoo\"");
+  char * yuan = xy_strjoin(3,"GENTOO_MIRRORS=\"https://",
+                              source.url,
+                              "gentoo\"");
   cmd = xy_strjoin("cat ",yuan," >> /etc/portage/make.conf");
   chsrc_logcmd(cmd);
   system(cmd);
