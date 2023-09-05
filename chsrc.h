@@ -456,7 +456,7 @@ def_target_sources_n(pl_r);    def_target_sources_n(pl_julia);
 
 def_target_sources_n(os_ubuntu);      def_target_sources_n(os_debian);      def_target_sources_n(os_fedora);
 def_target_sources_n(os_kali);        def_target_sources_n(os_openbsd);     def_target_sources_n(os_mysys2);
-def_target_sources_n(os_archlinux);   def_target_sources_n(os_gentoolinux);
+def_target_sources_n(os_arch);        def_target_sources_n(os_gentoolinux);
 
 /* Target Info */
 typedef struct {
