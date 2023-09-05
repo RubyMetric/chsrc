@@ -1037,7 +1037,9 @@ os_openbsd_setsrc(char* option)
   chsrc_say_thanks(&source);
 }
 
-
+/**
+ * 未经测试
+ */
 void
 os_mysys2_setsrc(char* option)
 {
