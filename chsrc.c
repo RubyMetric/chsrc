@@ -1104,11 +1104,9 @@ static const char const
 
 static const char const*
 usage[] = {
-  "chsrc: Change Source \e[1;35m" Chsrc_Version "\e[0m by \e[4;31mRubyMetric\e[0m\n",
+  "维护: https://gitee.com/RubyMetric/chsrc\n",
 
-  "维护:  https://gitee.com/RubyMetric/chsrc\n",
-
-  "使用：chsrc <command> [target] [mirror]",
+  "使用: chsrc <command> [target] [mirror]",
   "help                      打印此帮助，或 h, -h, --help",
   "list (或 ls, 或 l)        查看可用镜像源，和可换源软件",
   "list mirror(s)            查看可用镜像源",
@@ -1202,6 +1200,11 @@ print_supported_sources_for_target (source_info sources[])
 int
 print_help ()
 {
+  puts(xy_strjoin(4, "Change Source ",
+                      xy_str_to_magenta(Chsrc_Version),
+                      " by ",
+                      xy_str_to_underline(xy_str_to_bold(xy_str_to_red("RubyMetric\n")))
+                      ));
   for (int i=0; i<xy_arylen(usage); i++) {
     puts (usage[i]);
   }
