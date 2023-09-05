@@ -2,7 +2,7 @@
 * File          : chsrc.c
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
-* Last modified : <2023-09-04>
+* Last modified : <2023-09-05>
 *
 * chsrc:
 *
@@ -693,16 +693,30 @@ pl_r_setsrc (char* option)
 
 
 
-/* TODO: 暂未实现 */
+/**
+ * Julia的换源可以通过两种方式
+ * 1. 写入 startup.jl
+ * 2. 使用环境变量
+ *
+ * 我们采用第一种
+ */
 void
 pl_julia_getsrc (char* option)
 {
-  // char* cmd = "npm config get registry";
-  // system(cmd);
+  char* cmd = NULL;
+  if(xy_on_windows) {
+    cmd = "type %USERPROFILE%\\.julia\\config\\startup.jl";
+  } else {
+    cmd = "cat  ~/.julia/config/startup.jl";
+  }
+  chsrc_logcmd(cmd);
+  system(cmd);
 }
 
 /**
- * Julia 换源，参考：https://help.mirrors.cernet.edu.cn/julia/
+ * Julia 换源，参考：
+ * 1. https://help.mirrors.cernet.edu.cn/julia/
+ * 2. https://docs.julialang.org/en/v1/manual/command-line-interface/#Startup-file
  */
 void
 pl_julia_setsrc (char* option)
@@ -721,13 +735,15 @@ pl_julia_setsrc (char* option)
   const char* file = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
 
   char* cmd = NULL;
-  // TODO: $JULIA_DEPOT_PATH/config/startup.jl 是否要考虑环境变量
   if (xy_on_windows)
-    cmd = xy_strjoin(3, "echo ", file, " >> %USERPROFILE%/.julia/config/startup.jl");
+    cmd = xy_strjoin(4, xy_str_to_quietcmd("md %USERPROFILE%\\.julia\\config"),
+          "& echo ", file, " >> %USERPROFILE%/.julia/config/startup.jl");
   else
-    cmd = xy_strjoin(3, "echo ", file, " >> ~/.julia/config/startup.jl");
-  system(cmd);
+    cmd = xy_strjoin(4, xy_str_to_quietcmd("mkdir -p ~/.julia/config"),
+        ";echo ", file, " >> ~/.julia/config/startup.jl");
 
+  chsrc_logcmd(cmd);
+  system(cmd);
   chsrc_say_thanks(&source);
 }
 
@@ -950,15 +966,15 @@ def_target_info(pl_ruby);
 def_target_info(pl_python);
 def_target_info(pl_nodejs);
 def_target_info(pl_perl);
+def_target_info(pl_php);
+def_target_info(pl_go);
+def_target_info(pl_r);
+def_target_info(pl_julia);
 
 target_info
   pl_rust_target   = {pl_rust_setsrc,   NULL,           pl_rust_sources,   pl_rust_sources_n},
-  pl_go_target     = {pl_go_setsrc,     pl_go_getsrc,   pl_go_sources,     pl_go_sources_n},
   pl_dotnet_target = {pl_dotnet_setsrc, NULL,           pl_dotnet_sources, pl_dotnet_sources_n},
-  pl_java_target   = {pl_java_setsrc,   NULL,           pl_java_sources,   pl_java_sources_n},
-  pl_php_target    = {pl_php_setsrc,    pl_php_getsrc,  pl_php_sources,    pl_php_sources_n},
-  pl_r_target      = {pl_r_setsrc,      pl_r_getsrc,    pl_r_sources,      pl_r_sources_n},
-  pl_julia_target  = {pl_julia_setsrc,  NULL,           pl_julia_sources,  pl_julia_sources_n};
+  pl_java_target   = {pl_java_setsrc,   NULL,           pl_java_sources,   pl_java_sources_n};
 
 
 #define targetinfo(t) (const char const*)t
