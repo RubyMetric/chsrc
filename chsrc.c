@@ -814,50 +814,55 @@ pl_julia_setsrc (char* option)
 
 
 
-
 /**
- * ubuntu不同架构下的换源是不一样的,未经测试
+ * @note 不同架构下换源不一样
  */
 void
 os_ubuntu_setsrc (char* option)
 {
-  int selected = 0;
-  for (int i=0;i<sizeof(os_ubuntu_sources);i++) {
-    // 循环测速
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_ubuntu, option);
+  } else {
+    index = lets_test_speed(os_ubuntu);
   }
-  const char* source_name = os_ubuntu_sources[selected].mirror->name;
-  const char* source_abbr = os_ubuntu_sources[selected].mirror->abbr;
-  const char* source_url  = os_ubuntu_sources[selected].url;
+
+  source_info source = os_ubuntu_sources[index];
+  chsrc_say_selection(&source);
 
   char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
+  chsrc_logcmd (backup);
   system(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
-  char * arch = xy_getcmd("arch");
-  char * cmd;
+  char* arch = xy_getcmd("arch");
+  char* cmd;
   if(strncmp(arch,"x86_64",6)==0)
   {
-    cmd = xy_strjoin(3, "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/ubuntu\\/@\\1",
-                            source_url,
-                            "/@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
-    
+    cmd = xy_strjoin(3,
+      "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/ubuntu\\/@\\1",
+      source.url,
+      "/@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
+
   }
-  else
-  {
-    cmd = xy_strjoin(3, "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/ubuntu\\/@\\1",
-                            source_url,
-                            "-ports/@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
+  else {
+    cmd = xy_strjoin(3,
+      "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/ubuntu\\/@\\1",
+      source.url,
+      "-ports/@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
   }
+
+  chsrc_logcmd(cmd);
   system(cmd);
-  free(cmd);
-  free(arch);
   // char* rm = "rm -rf /etc/apt/source.list.bak";
   // system(rm);
 
-  xy_info ("chsrc: 为 ubuntu 命令换源");
-  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  chsrc_say_thanks(&source);
 }
+
+
 /**
  * Debian Buster 以上版本默认支持 HTTPS 源。如果遇到无法拉取 HTTPS 源的情况，请先使用 HTTP 源并安装
  * sudo apt install apt-transport-https ca-certificates
