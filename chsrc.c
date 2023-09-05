@@ -1216,7 +1216,7 @@ static const char const
 *os_gentoolinux   [] = {"mysys2",  NULL,  targetinfo(&os_gentoolinux_target)},
 **os_systems[] =
 {
-  os_ubuntu, os_debian,os_fedora,os_kali,os_openbsd,os_mysys2,os_archlinux,os_gentoolinux
+  os_ubuntu, os_debian,os_fedora,os_kali,os_openbsd,os_mysys2,os_arch,os_gentoolinux
 };
 
 
