@@ -101,7 +101,15 @@ to_human_readable_speed (double speed)
   }
   char* buf = xy_malloc0(64);
   sprintf(buf, "%.2f %s", speed, scale[i]);
-  return buf;
+
+  char* new = NULL;
+  if (i <= 1 ) new = xy_str_to_red(buf);
+  else
+  {
+    if (i == 2 && speed < 2.00) new = xy_str_to_yellow(buf);
+    else new = xy_str_to_green(buf);
+  }
+  return new;
 }
 
 
@@ -138,9 +146,10 @@ test_speed_url (const char* url)
   char* speedstr = to_human_readable_speed(speed);
 
   if (200!=http_code) {
-    xy_warn (xy_strjoin(4, "chsrc: 速度 ", speedstr, " | HTTP码  " , http_code));
+    char* httpcodestr = xy_str_to_yellow(xy_2strjoin("HTTP码  ", buf));
+    puts (xy_strjoin(3, speedstr, " | ",  httpcodestr));
   } else {
-    xy_info (xy_2strjoin("chsrc: 速度 ", speedstr));
+    puts (speedstr);
   }
   return speed;
 }
@@ -168,7 +177,7 @@ lets_test_speed_ (source_info* sources, size_t size, const char* target)
       xy_warn ("chsrc: 跳过该站点");
       speed = 0;
     } else {
-      xy_info (xy_2strjoin("chsrc: 测速 ", src.mirror->site));
+      printf (xy_strjoin(3, "chsrc: 测速 ", src.mirror->site , " ... "));
       speed = test_speed_url (url);
     }
     speeds[i] = speed;

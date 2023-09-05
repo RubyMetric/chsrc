@@ -118,14 +118,14 @@ typedef struct {
 /**
  * 源信息
  *
- * 我们要求每个源至少有一个教育网镜像，至少有一个商业公司或开源社区维护的镜像
+ * @note 我们要求每个源至少有一个教育网镜像，至少有一个商业公司或开源社区维护的镜像
  */
 
 
 /**
  * 2023-09-02 更新
  *
- * 速度已经过测试，目前北外最快，Ruby China 的源慢了一半
+ * @note 目前北外最快，Ruby China 的源慢了一半
  */
 static source_info
 pl_ruby_sources[] = {
@@ -140,19 +140,18 @@ pl_ruby_sources[] = {
 
 
 /**
- * 2023-08-29 更新
+ * 2023-09-05 更新
  *
- * 不要添加Zju，浙大的pypi在校外访问会自动转向Tuna
+ * @note 不要添加Zju，浙大的pypi在校外访问会自动转向Tuna
  *
- * TODO: 1. 速度只经过简单测试，请Python用户协助，
- *       2. 列表暂时未添加商业公司源，以及其他大学镜像
+ * TODO: 列表暂时未添加商业公司源
  */
 pl_python_sources[] = {
-  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/pypi/web/simple"},
-  {&Tuna,          "https://pypi.tuna.tsinghua.edu.cn/simple"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/pypi/web/simple"},
   {&Lzuoss,        "https://mirror.lzu.edu.cn/pypi/web/simple"},
   {&Jlu,           "https://mirrors.jlu.edu.cn/pypi/web/simple"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/pypi/web/simple"}
+  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/pypi/web/simple"},
+  {&Tuna,          "https://pypi.tuna.tsinghua.edu.cn/simple"},
 },
 
 
@@ -162,7 +161,7 @@ pl_python_sources[] = {
  *
  * Sjtug, Tuna, Lzuoss, Jlu, Bfsu, 网易，搜狐 都没有
  *
- * 腾讯软件源虽然有npm的名，但名存实亡
+ * @note 腾讯软件源虽然有npm的名，但名存实亡
  */
 pl_nodejs_sources[] = {
   {&Ali,           "https://registry.npmmirror.com"},
@@ -171,17 +170,15 @@ pl_nodejs_sources[] = {
 
 
 /**
- * 2023-08-30 更新
+ * 2023-09-05 更新
  *
- * 参考：https://help.mirrors.cernet.edu.cn/CPAN/
- *
- * TODO: 速度未经测试，请Perl用户协助
+ * 参考: https://help.mirrors.cernet.edu.cn/CPAN/
  */
 pl_perl_sources[] = {
-  {&Ali,           "https://mirrors.aliyun.com/CPAN/"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CPAN/"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/CPAN/"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CPAN/"},
   {&Bjtu,          "https://mirror.bjtu.edu.cn/cpan/"},
+  {&Ali,           "https://mirrors.aliyun.com/CPAN/"},
   {&Lzuoss,        "https://mirror.lzu.edu.cn/CPAN/"}
 },
 
@@ -203,10 +200,9 @@ pl_r_sources[] = {
 
 
 /**
- * 2023-08-30 更新
+ * 2023-09-05 更新
  *
- * TODO: 1. 速度未经测试，请Julia用户协助
- *       2. 缺少商业公司或开源社区软件源
+ * @note 缺少商业公司或开源社区软件源
  */
 pl_julia_sources[] = {
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/julia"},
@@ -218,7 +214,7 @@ pl_julia_sources[] = {
 /**
  * 2023-09-04 更新
  *
- * TODO: 1. 缺少教育网软件源
+ * @note 缺少教育网软件源
  */
 pl_go_sources[] = {
   {&GoProxyCN,    "https://goproxy.cn"},
@@ -245,9 +241,8 @@ pl_rust_sources[] = {
 /**
  * 2023-08-30 更新
  *
- * TODO: 1. 速度未经测试，请Java用户协助
- *       2. 缺少教育网或开源社区软件源
- *       3. 当前仅有一个源
+ * @note 当前仅有一个源，缺少教育网或开源社区软件源
+ *
  */
 pl_java_sources[] = {
   {&Ali,           "https://maven.aliyun.com/repository/public/"}
@@ -257,11 +252,9 @@ pl_java_sources[] = {
 /**
  * 2023-08-30 更新
  *
- * 暂时未实现该换源功能
+ * @note 暂时未实现该换源功能
  *
- * TODO: 1. 速度未经测试，请Java用户协助
- *       2. 缺少教育网或开源社区软件源
- *       3. 当前仅有一个源
+ * @note 当前仅有一个源，缺少教育网或开源社区软件源
  */
 pl_dotnet_sources[] = {
   {&NugetOrg,      "https://www.nuget.org/api/v2/"}
@@ -272,8 +265,7 @@ pl_dotnet_sources[] = {
 /**
  * 2023-09-04 更新
  *
- * TODO: 1. 速度未经测试，请PHP用户协助
- *       2. 缺少教育网或开源社区软件源
+ * @note 缺少教育网或开源社区软件源
  */
 pl_php_sources[] = {
   {&Ali,            "https://mirrors.aliyun.com/composer/"},
@@ -412,13 +404,13 @@ chsrc_logcmd (const char* cmd)
 void
 chsrc_say_selection (source_info* source)
 {
-  xy_info (xy_strjoin(5, "chsrc: 选中镜像站：", source->mirror->abbr, " (", source->mirror->code, ")"));
+  xy_info (xy_strjoin(5, "chsrc: 选中镜像站: ", source->mirror->abbr, " (", source->mirror->code, ")"));
 }
 
 void
 chsrc_say_thanks (source_info* source)
 {
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方：", source->mirror->name));
+  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方: ", source->mirror->name));
 }
 
 
