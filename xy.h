@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <stddef.h>
 
 // #define NDEBUG
 
@@ -46,7 +47,7 @@
   static bool xy_on_macos   = false;
   static bool xy_on_bsds    = false;
 
-  static char* xy_os_devnull = "/dev/null"
+  static char* xy_os_devnull = "/dev/null";
 
   #define xy_useutf8()
 
@@ -74,9 +75,9 @@
 
 #endif
 
-#define putf(n) printf("%f\n", n)
-#define puti(n) printf("%d\n", n)
-#define putb(n) if(n) puts("true"); else puts("false");
+void putf(double n)    {printf("%f\n",  n);}
+void puti(long long n) {printf("%lld\n", n);}
+void putb(bool n)      {if(n) puts("true"); else puts("false");}
 
 #define xy_arylen(x) (sizeof(x) / sizeof(x[0]))
 
@@ -131,7 +132,7 @@ xy_log_ (int level, const char* str)
 
   sprintf (buf, color_fmt_str, str);
   if (to_stderr) {
-    fprintf(stderr, buf);
+    fprintf(stderr, "%s",buf);
   } else {
     puts(buf);
   }
