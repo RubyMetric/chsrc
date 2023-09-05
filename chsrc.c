@@ -883,8 +883,8 @@ os_debian_setsrc (char* option)
   source_info source = os_debian_sources[index];
   chsrc_say_selection(&source);
 
-  xy_info("如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并 需要您 安装");
-  xy_info("sudo apt install apt-transport-https ca-certificates");
+  xy_info ("chsrc: 如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并 需要您 安装");
+  xy_info ("chsrc: sudo apt install apt-transport-https ca-certificates");
 
   char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
   chsrc_logcmd(backup);
@@ -920,7 +920,7 @@ os_fedora_setsrc (char* option)
   source_info source = os_fedora_sources[index];
   chsrc_say_selection(&source);
 
-  xy_info("fedora29版本及以下暂不支持");
+  xy_info ("chsrc: fedora29版本及以下暂不支持");
 
   char* backup = "cp -rf /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora.repo.bak";
   chsrc_logcmd(backup);
@@ -946,10 +946,10 @@ os_fedora_setsrc (char* option)
   system(cmd);
   free(cmd);
 
-  xy_info("替换文件:/etc/yum.repos.d/fedora.repo");
-  xy_info("新增文件:/etc/yum.repos.d/fedora-modular.repo");
-  xy_info("替换文件:/etc/yum.repos.d/fedora-updates.repo");
-  xy_info("新增文件:/etc/yum.repos.d/fedora-updates-modular.repo");
+  xy_info ("chsrc: 替换文件:/etc/yum.repos.d/fedora.repo");
+  xy_info ("chsrc: 新增文件:/etc/yum.repos.d/fedora-modular.repo");
+  xy_info ("chsrc: 替换文件:/etc/yum.repos.d/fedora-updates.repo");
+  xy_info ("chsrc: 新增文件:/etc/yum.repos.d/fedora-updates-modular.repo");
 
   // char* rm = "rm -rf /etc/yum.repos.d/fedora.repo.bak";
   // system(rm);
