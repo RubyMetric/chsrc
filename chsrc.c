@@ -1038,30 +1038,39 @@ os_openbsd_setsrc(char* option)
 void
 os_mysys2_setsrc(char* option)
 {
-  int selected = 0;
-  for (int i=0;i<sizeof(os_mysys2_sources);i++) {
-    // 循环测速
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_mysys2, option);
+  } else {
+    index = lets_test_speed(os_mysys2);
   }
-  const char* source_name = os_mysys2_sources[selected].mirror->name;
-  const char* source_abbr = os_mysys2_sources[selected].mirror->abbr;
-  const char* source_url  = os_mysys2_sources[selected].url;
+
+
+  source_info source = os_mysys2_sources[index];
+  chsrc_say_selection(&source);
+
 
   char* backup = "cp -rf /etc/pacman.d/mirrorlist.mingw32 /etc/pacman.d/mirrorlist.mingw32.bak";
+  chsrc_logcmd(backup);
   system(backup);
         backup = "cp -rf /etc/pacman.d/mirrorlist.mingw64 /etc/pacman.d/mirrorlist.mingw64.bak";
+  chsrc_logcmd(backup);
   system(backup);
         backup = "cp -rf /etc/pacman.d/mirrorlist.msys /etc/pacman.d/mirrorlist.msys.bak";
+  chsrc_logcmd(backup);
   system(backup);
 
   xy_info ("chsrc: 备份文件名:1. /etc/pacman.d/mirrorlist.mingw32.bak");
   xy_info ("chsrc: 备份文件名:2. /etc/pacman.d/mirrorlist.mingw64.bak");
   xy_info ("chsrc: 备份文件名:3. /etc/pacman.d/mirrorlist.msys.bak");
 
-  char* prev = xy_strjoin(3,"请针对你的架构下载安装此目录下的文件:",source_url,"distrib/<架构>/");
+  char* prev = xy_strjoin(3,"请针对你的架构下载安装此目录下的文件:",source.url,"distrib/<架构>/");
   xy_info (prev);
   free(prev);
 
-  char* cmd = xy_strjoin(3,"sed -i \"s#https\?://mirror.msys2.org/#",source_url,"#g\" /etc/pacman.d/mirrorlist* ");
+  char* cmd = xy_strjoin(3,"sed -i \"s#https\?://mirror.msys2.org/#",source.url,"#g\" /etc/pacman.d/mirrorlist* ");
+  chsrc_logcmd(cmd);
   system(cmd);
   free(cmd);
 
@@ -1072,8 +1081,7 @@ os_mysys2_setsrc(char* option)
   //       rm = "rm -rf /etc/pacman.d/mirrorlist.msys.bak";
   // system(rm);
 
-  xy_info ("chsrc: 为 mysys2 命令换源");
-  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  chsrc_say_thanks(&source);
 }
 
 
