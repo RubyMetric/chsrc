@@ -1086,34 +1086,44 @@ os_mysys2_setsrc(char* option)
   chsrc_say_thanks(&source);
 }
 
-
+/**
+ * 未经测试
+ */
 void
-os_archlinux_setsrc(char* option)
+os_arch_setsrc(char* option)
 {
-  int selected = 0;
-  for (int i=0;i<sizeof(os_archlinux_sources);i++) {
-    // 循环测速
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_arch, option);
+  } else {
+    index = lets_test_speed(os_arch);
   }
-  const char* source_name = os_archlinux_sources[selected].mirror->name;
-  const char* source_abbr = os_archlinux_sources[selected].mirror->abbr;
-  const char* source_url  = os_archlinux_sources[selected].url;
+
+
+  source_info source = os_arch_sources[index];
+  chsrc_say_selection(&source);
+
 
   char* backup = "cp -rf /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak";
+  chsrc_logcmd(backup);
   system(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/pacman.d/mirrorlist.bak");
-  char* new_file = xy_strjoin("Server = ",source_url,"$repo/os/$arch");
+  char* new_file = xy_strjoin("Server = ",source.url,"$repo/os/$arch");
   char* cmd = xy_strjoin(3,"echo ",new_file," > /etc/pacman.d/mirrorlist");
+  chsrc_logcmd(cmd);
   system(cmd);
   free(cmd);
   cmd = "cat /etc/pacman.d/mirrorlist.bak >> /etc/pacman.d/mirrorlist";
+  chsrc_logcmd(cmd);
   system(cmd);
   free(new_file);
 
   // char* rm = "rm -rf /etc/pacman.d/mirrorlist.bak";
   // system(rm);
-  xy_info ("chsrc: 为 archlinux 命令换源");
-  xy_success (xy_2strjoin("chsrc: 感谢镜像提供方：", source_name));
+  
+  chsrc_say_thanks(&source);
   xy_info ("Please use \"pacman -Syyu \" to update your source");
 }
 
@@ -1192,8 +1202,8 @@ target_info
   os_fedora_target      = {os_fedora_setsrc,      NULL, os_fedora_sources,          7},
   os_kali_target        = {os_kali_setsrc,        NULL, os_kali_sources,            7},
   os_openbsd_target     = {os_openbsd_setsrc,     NULL, os_openbsd_sources,         7},
-  os_mysys2_target      = {os_mysys2_setsrc,      NULL, os_mysys2_sources,           7},
-  os_archlinux_target   = {os_archlinux_setsrc,   NULL, os_archlinux_sources,       7},
+  os_mysys2_target      = {os_mysys2_setsrc,      NULL, os_mysys2_sources,          7},
+  os_arch_target        = {os_arch_setsrc,        NULL, os_arch_sources,            7},
   os_gentoolinux_target = {os_gentoolinux_setsrc, NULL, os_gentoolinux_sources,     7};
 static const char const
 *os_ubuntu        [] = {"ubuntu",  NULL,  targetinfo(&os_ubuntu_target)},
@@ -1202,7 +1212,7 @@ static const char const
 *os_kali          [] = {"kali",    NULL,  targetinfo(&os_kali_target)},
 *os_openbsd       [] = {"openbsd", NULL,  targetinfo(&os_openbsd_target)},
 *os_mysys2        [] = {"mysys2",  NULL,  targetinfo(&os_mysys2_target)},
-*os_archlinux     [] = {"mysys2",  NULL,  targetinfo(&os_archlinux_target)},
+*os_arch          [] = {"arch",    NULL,  targetinfo(&os_arch_target)},
 *os_gentoolinux   [] = {"mysys2",  NULL,  targetinfo(&os_gentoolinux_target)},
 **os_systems[] =
 {

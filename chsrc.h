@@ -379,7 +379,7 @@ os_mysys2_sources[] = {
  *
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
-os_archlinux_sources[] = {
+os_arch_sources[] = {
   {&Ali,       "https://mirrors.aliyun.com/archlinux/"},
   {&Bfsu,      "https://mirrors.bfsu.edu.cn/archlinux/"},
   {&Ustc,      "https://mirrors.ustc.edu.cn/archlinux/"},
