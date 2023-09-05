@@ -402,6 +402,21 @@ os_gentoo_sources[] = {
   {&Tencent,   "mirrors.tencent.com"},
   {&Netease,   "mirrors.163.com"},
   {&Sohu,      "mirrors.sohu.com"}
+},
+
+/**
+ * 2023-09-05 更新
+ *
+ * TODO: 1. 源并不完整，且未经测试是否有效
+ */
+os_netbsd_sources[] = {
+  {&Ali,       "https://mirrors.aliyun.com/pkgsrc/packages/NetBSD/"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/pkgsrc/packages/NetBSD/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/pkgsrc/packages/NetBSD/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/pkgsrc/packages/NetBSD/"},
+  {&Tencent,   "https://mirrors.tencent.com/pkgsrc/packages/NetBSD/"},
+  {&Netease,   "https://mirrors.163.com/pkgsrc/packages/NetBSD/"},
+  {&Sohu,      "https://mirrors.sohu.com/pkgsrc/packages/NetBSD/"}
 }
 ;
 
@@ -455,7 +470,7 @@ def_target_sources_n(pl_r);    def_target_sources_n(pl_julia);
 
 def_target_sources_n(os_ubuntu);      def_target_sources_n(os_debian);      def_target_sources_n(os_fedora);
 def_target_sources_n(os_kali);        def_target_sources_n(os_openbsd);     def_target_sources_n(os_mysys2);
-def_target_sources_n(os_arch);        def_target_sources_n(os_gentoo);
+def_target_sources_n(os_arch);        def_target_sources_n(os_gentoo);      def_target_sources_n(os_netbsd);
 
 /* Target Info */
 typedef struct {
