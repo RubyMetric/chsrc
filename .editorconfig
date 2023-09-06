@@ -12,7 +12,7 @@ insert_final_newline = false
 indent_style = space
 indent_size = 2
 
-[{Makefile,makefile,*.{mk,make,makefile}]
+[Makefile,makefile,*.{mk,make,makefile}]
 indent_style = tab
 
 [*.md]
