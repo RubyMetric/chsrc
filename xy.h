@@ -3,7 +3,7 @@
 * License       : MIT
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
-* Last modified : <2023-09-05>
+* Last modified : <2023-09-06>
 *
 * xy:
 *
@@ -239,6 +239,7 @@ xy_strdup(const char* str)
   size_t len = strlen(str);
   char* new = xy_malloc0(len+1);
   strcpy(new, str);
+  return new;
 }
 
 
