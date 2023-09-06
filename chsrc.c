@@ -1357,8 +1357,8 @@ target_info
   pl_dotnet_target = {pl_dotnet_setsrc, NULL,  pl_dotnet_sources, pl_dotnet_sources_n};
 
 
-#define targetinfo(t) (const char const*)t
-static const char const
+#define targetinfo(t) (const char*)t
+static const char
 *pl_ruby  [] = {"gem",   "ruby",    "rb",    "rubygems", NULL,  targetinfo(&pl_ruby_target)},
 *pl_python[] = {"pip",   "python",  "py",    "pypi",     NULL,  targetinfo(&pl_python_target)},
 *pl_nodejs[] = {"npm",   "node",    "js",    "nodejs",   NULL,  targetinfo(&pl_nodejs_target)},
@@ -1392,7 +1392,7 @@ target_info
   os_manjaro_target     = {os_manjaro_setsrc,     NULL, NULL,                       0},
   os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources,       7},
   os_openkylin_target   = {os_openkylin_setsrc,   NULL, os_openkylin_sources,       7};
-static const char const
+static const char
 *os_ubuntu        [] = {"ubuntu",  NULL,  targetinfo(&os_ubuntu_target)},
 *os_deepin        [] = {"deepin",  NULL,  targetinfo(&os_deepin_target)},
 *os_debian        [] = {"debian",  NULL,  targetinfo(&os_debian_target)},
@@ -1418,7 +1418,7 @@ target_info
   wr_tex_target      = {NULL, NULL, NULL, 0},
   wr_brew_target     = {NULL, NULL, NULL, 0};
 
-static const char const
+static const char
 *wr_anaconda[] = {"conda", "anaconda",         NULL,  targetinfo(&wr_anaconda_target)},
 *wr_emacs   [] = {"emacs",                     NULL,  targetinfo(&wr_emacs_target)},
 *wr_tex     [] = {"latex", "ctan",     "tex",  NULL,  targetinfo(&wr_tex_target) },
@@ -1431,7 +1431,7 @@ static const char const
 /************************************** End Target Matrix ****************************************/
 
 
-static const char const*
+static const char*
 usage[] = {
   "维护: https://gitee.com/RubyMetric/chsrc\n",
 
@@ -1477,11 +1477,11 @@ print_available_mirrors ()
 
 
 void
-print_supported_targets_ (const char const*** array, size_t size)
+print_supported_targets_ (const char*** array, size_t size)
 {
   for (int i=0; i<size; i++)
   {
-    const char ** target = array[i];
+    const char** target = array[i];
     const char* alias = target[0];
     for (int k=1; alias!=NULL; k++)
     {
@@ -1545,11 +1545,11 @@ print_help ()
  * @return 匹配到则返回true，未匹配到则返回false
  */
 bool
-iterate_targets_(const char const*** array, size_t size, const char* input, const char const*** target_info)
+iterate_targets_(const char*** array, size_t size, const char* input, const char*** target_info)
 {
   int matched = 0;
 
-  const char const** target = NULL;
+  const char** target = NULL;
   int k = 0;
   const char* alias = NULL;
 
@@ -1599,7 +1599,7 @@ iterate_targets_(const char const*** array, size_t size, const char* input, cons
 bool
 get_target (const char* input, int code, char* option)
 {
-  const char const** target_tmp = NULL;
+  const char** target_tmp = NULL;
 
            bool matched = iterate_targets(pl_packagers, input, &target_tmp);
   if (!matched) matched = iterate_targets(os_systems,   input, &target_tmp);
