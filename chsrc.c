@@ -1221,6 +1221,17 @@ os_netbsd_setsrc(char* option)
 }
 
 
+/**
+ * 未经测试
+ */
+void
+os_manjaro_setsrc(char* option)
+{
+
+  xy_info ("chsrc: Please use \"sudo pacman-mirrors -i -c China -m rank\" to select sources");
+
+  xy_info ("chsrc: If success, please use \"sudo pacman -Syy\" to flush cache");
+}
 
 /************************************** Begin Target Matrix ****************************************/
 def_target_info(pl_ruby);
@@ -1268,7 +1279,8 @@ target_info
   os_msys2_target       = {os_msys2_setsrc,       NULL, os_msys2_sources,           7},
   os_arch_target        = {os_arch_setsrc,        NULL, os_arch_sources,            7},
   os_gentoo_target      = {os_gentoo_setsrc,      NULL, os_gentoo_sources,          7},
-  os_netbsd_target      = {os_netbsd_setsrc,      NULL, os_netbsd_sources,          7};
+  os_netbsd_target      = {os_netbsd_setsrc,      NULL, os_netbsd_sources,          7},
+  os_manjaro_target     = {os_manjaro_setsrc,     NULL, NULL,                       0};
 static const char const
 *os_ubuntu        [] = {"ubuntu",  NULL,  targetinfo(&os_ubuntu_target)},
 *os_debian        [] = {"debian",  NULL,  targetinfo(&os_debian_target)},
@@ -1279,9 +1291,10 @@ static const char const
 *os_arch          [] = {"arch",    NULL,  targetinfo(&os_arch_target)},
 *os_gentoo        [] = {"gentoo",  NULL,  targetinfo(&os_gentoo_target)},
 *os_netbsd        [] = {"netbsd",  NULL,  targetinfo(&os_netbsd_target)},
+*os_manjaro       [] = {"manjaro", NULL,  targetinfo(&os_manjaro_target)},
 **os_systems[] =
 {
-  os_ubuntu, os_debian,os_fedora,os_kali,os_openbsd,os_msys2,os_arch,os_gentoo,os_netbsd
+  os_ubuntu, os_debian,os_fedora,os_kali,os_openbsd,os_msys2,os_arch,os_gentoo,os_netbsd,os_manjaro
 };
 
 
