@@ -1,10 +1,9 @@
-/******Test_Merge modified by hengG*****/
 /* --------------------------------------------------------------
 * File          : chsrc.c
 * License       : GPLv3
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
-* Last modified : <2023-09-05>
+* Last modified : <2023-09-06>
 *
 * chsrc:
 *
@@ -1074,7 +1073,7 @@ os_msys2_setsrc(char* option)
                             source.url,
                             "distrib/<架构>/");
   xy_info (prev);
-  
+
   char* cmd = xy_strjoin(3,"sed -i \"s#https\?://mirror.msys2.org/#",
                             source.url,
                             "#g\" /etc/pacman.d/mirrorlist* ");
@@ -1129,7 +1128,7 @@ os_arch_setsrc(char* option)
 
   // char* rm = "rm -rf /etc/pacman.d/mirrorlist.bak";
   // system(rm);
-  
+
   chsrc_say_thanks(&source);
   xy_info ("Please use \"pacman -Syyu \" to update your source");
 }
@@ -1217,7 +1216,7 @@ os_netbsd_setsrc(char* option)
 
   // char* rm = "rm -rf /etc/portage/repos.conf/gentoo.conf.bak";
   // system(rm);
-  
+
   chsrc_say_thanks(&source);
 }
 
