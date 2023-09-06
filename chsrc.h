@@ -294,6 +294,23 @@ os_ubuntu_sources[] = {
   {&Sohu,      "https://mirrors.sohu.com/ubuntu"}
 },
 
+
+/**
+ * 2023-09-06 更新
+ *
+ * TODO: 1. 源并不完整，且未经测试是否有效
+ */
+os_deepin_sources[] = {
+  {&Ali,       "https://mirrors.aliyun.com/deepin/"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/deepin/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/deepin/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/deepin/"},
+  {&Tencent,   "https://mirrors.tencent.com/deepin/"},
+  {&Netease,   "https://mirrors.163.com/deepin/"},
+  {&Sohu,      "https://mirrors.sohu.com/deepin/"}
+},
+
+
 /**
  * 2023-09-01 更新
  *
@@ -473,6 +490,7 @@ def_target_sources_n(pl_r);    def_target_sources_n(pl_julia);
 def_target_sources_n(os_ubuntu);      def_target_sources_n(os_debian);      def_target_sources_n(os_fedora);
 def_target_sources_n(os_kali);        def_target_sources_n(os_openbsd);     def_target_sources_n(os_msys2);
 def_target_sources_n(os_arch);        def_target_sources_n(os_gentoo);      def_target_sources_n(os_netbsd);
+def_target_sources_n(os_deepin);
 
 /* Target Info */
 typedef struct {

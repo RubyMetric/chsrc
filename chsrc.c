@@ -865,6 +865,41 @@ os_ubuntu_setsrc (char* option)
   chsrc_say_thanks(&source);
 }
 
+/**
+ * 未经测试
+ */
+void
+os_deepin_setsrc (char* option)
+{
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_deepin, option);
+  } else {
+    index = lets_test_speed(os_deepin);
+  }
+
+  source_info source = os_deepin_sources[index];
+  chsrc_say_selection(&source);
+
+  char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
+  chsrc_logcmd (backup);
+  system(backup);
+
+  xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
+
+  char* cmd;
+  cmd = xy_strjoin(3,
+    "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/deepin\\/@\\1",
+    source.url,
+    "@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
+  chsrc_logcmd(cmd);
+  system(cmd);
+  // char* rm = "rm -rf /etc/apt/source.list.bak";
+  // system(rm);
+
+  chsrc_say_thanks(&source);
+}
 
 /**
  * Debian Buster 以上版本默认支持 HTTPS 源。如果遇到无法拉取 HTTPS 源的情况，请先使用 HTTP 源并安装
@@ -1272,6 +1307,7 @@ static const char const
 
 target_info
   os_ubuntu_target      = {os_ubuntu_setsrc,      NULL, os_ubuntu_sources,          7},
+  os_deepin_target      = {os_deepin_setsrc,      NULL, os_deepin_sources,          7},
   os_debian_target      = {os_debian_setsrc,      NULL, os_debian_sources,          7},
   os_fedora_target      = {os_fedora_setsrc,      NULL, os_fedora_sources,          7},
   os_kali_target        = {os_kali_setsrc,        NULL, os_kali_sources,            7},
@@ -1283,6 +1319,7 @@ target_info
   os_manjaro_target     = {os_manjaro_setsrc,     NULL, NULL,                       0};
 static const char const
 *os_ubuntu        [] = {"ubuntu",  NULL,  targetinfo(&os_ubuntu_target)},
+*os_deepin        [] = {"deepin",  NULL,  targetinfo(&os_deepin_target)},
 *os_debian        [] = {"debian",  NULL,  targetinfo(&os_debian_target)},
 *os_fedora        [] = {"fedora",  NULL,  targetinfo(&os_fedora_target)},
 *os_kali          [] = {"kali",    NULL,  targetinfo(&os_kali_target)},
@@ -1294,7 +1331,7 @@ static const char const
 *os_manjaro       [] = {"manjaro", NULL,  targetinfo(&os_manjaro_target)},
 **os_systems[] =
 {
-  os_ubuntu, os_debian,os_fedora,os_kali,os_openbsd,os_msys2,os_arch,os_gentoo,os_netbsd,os_manjaro
+  os_ubuntu, os_deepin, os_debian,os_fedora,os_kali,os_openbsd,os_msys2,os_arch,os_gentoo,os_netbsd,os_manjaro
 };
 
 

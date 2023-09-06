@@ -64,6 +64,7 @@ TODO: 上述已全部完成，但
 
 ```bash
 chsrc set ubuntu
+chsrc set deepin
 chsrc set debian
 chsrc set fedora
 chsrc set kali
@@ -79,7 +80,7 @@ chsrc set msys2  或 chsrc set msys
 ```
 
 TODO:
-- [ ] `chsrc set deepin`
+
 - [ ] `chsrc set openkylin`
 - [ ] `chsrc set openeuler`
 
