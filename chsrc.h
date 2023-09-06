@@ -443,7 +443,7 @@ os_netbsd_sources[] = {
  *
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
-os_openeular_sources[] = {
+os_openeuler_sources[] = {
   {&Ali,       "https://mirrors.aliyun.com/openeuler/"},
   {&Bfsu,      "https://mirrors.bfsu.edu.cn/openeuler/"},
   {&Ustc,      "https://mirrors.ustc.edu.cn/openeuler/"},
