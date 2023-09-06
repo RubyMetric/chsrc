@@ -459,29 +459,29 @@ xy_getcmd(const char * cmd, bool (*func)(const char*))
   // 执行命令，并将输出保存到 stream 指针指向的文件中。
   stream = popen(cmd, "r");
   if (stream == NULL) {
-          printf("命令执行失败。\n");
-          return NULL;
+    printf("命令执行失败。\n");
+    return NULL;
   }
 
   // 从 stream 指针指向的文件中读取数据。
   char *ret;
   do {
-          if(fgets(buf, sizeof(buf), stream)==NULL)
-          {
-            break;
-          }
-          if(func==NULL)
-          {
-                ret = buf;
-          }
-          else
-          {
-                if(func(buf))
-                {
-                        ret = buf;
-                        break;
-                }
-          }
+    if(fgets(buf, sizeof(buf), stream)==NULL)
+    {
+      break;
+    }
+    if(func==NULL)
+    {
+      ret = buf;
+    }
+    else
+    {
+      if(func(buf))
+      {
+        ret = buf;
+        break;
+      }
+    }
   }while(1);
 
   // 关闭 stream 指针。

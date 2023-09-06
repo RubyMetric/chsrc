@@ -63,22 +63,22 @@ chsrc set ubuntu
 chsrc set debian
 chsrc set fedora
 chsrc set kali
+chsrc set arch
+chsrc set gentoo
 
 chsrc set openbsd
+chsrc set netbsd
 
 chsrc set msys2  或 chsrc set msys
 ```
 
 TODO:
-- [ ] `chsrc set arch`
-- [ ] `chsrc set gentoo`
 - [ ] `chsrc set manjaro`
 
 - [ ] `chsrc set deepin`
 - [ ] `chsrc set openkylin`
 - [ ] `chsrc set openeuler`
 
-- [ ] `chsrc set netbsd`
 
 
 ## 软件
