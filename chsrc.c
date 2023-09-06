@@ -1041,18 +1041,18 @@ os_openbsd_setsrc(char* option)
  * 未经测试
  */
 void
-os_mysys2_setsrc(char* option)
+os_msys2_setsrc(char* option)
 {
   int index = 0;
 
   if (NULL!=option) {
-    index = lets_find_mirror(os_mysys2, option);
+    index = lets_find_mirror(os_msys2, option);
   } else {
-    index = lets_test_speed(os_mysys2);
+    index = lets_test_speed(os_msys2);
   }
 
 
-  source_info source = os_mysys2_sources[index];
+  source_info source = os_msys2_sources[index];
   chsrc_say_selection(&source);
 
 
@@ -1266,7 +1266,7 @@ target_info
   os_fedora_target      = {os_fedora_setsrc,      NULL, os_fedora_sources,          7},
   os_kali_target        = {os_kali_setsrc,        NULL, os_kali_sources,            7},
   os_openbsd_target     = {os_openbsd_setsrc,     NULL, os_openbsd_sources,         7},
-  os_mysys2_target      = {os_mysys2_setsrc,      NULL, os_mysys2_sources,          7},
+  os_msys2_target       = {os_msys2_setsrc,       NULL, os_msys2_sources,           7},
   os_arch_target        = {os_arch_setsrc,        NULL, os_arch_sources,            7},
   os_gentoo_target      = {os_gentoo_setsrc,      NULL, os_gentoo_sources,          7},
   os_netbsd_target      = {os_netbsd_setsrc,      NULL, os_netbsd_sources,          7};
@@ -1276,13 +1276,13 @@ static const char const
 *os_fedora        [] = {"fedora",  NULL,  targetinfo(&os_fedora_target)},
 *os_kali          [] = {"kali",    NULL,  targetinfo(&os_kali_target)},
 *os_openbsd       [] = {"openbsd", NULL,  targetinfo(&os_openbsd_target)},
-*os_mysys2        [] = {"mysys2",  NULL,  targetinfo(&os_mysys2_target)},
+*os_msys2         [] = {"msys2",   NULL,  targetinfo(&os_msys2_target)},
 *os_arch          [] = {"arch",    NULL,  targetinfo(&os_arch_target)},
 *os_gentoo        [] = {"gentoo",  NULL,  targetinfo(&os_gentoo_target)},
 *os_netbsd        [] = {"netbsd",  NULL,  targetinfo(&os_netbsd_target)},
 **os_systems[] =
 {
-  os_ubuntu, os_debian,os_fedora,os_kali,os_openbsd,os_mysys2,os_arch,os_gentoo,os_netbsd
+  os_ubuntu, os_debian,os_fedora,os_kali,os_openbsd,os_msys2,os_arch,os_gentoo,os_netbsd
 };
 
 
