@@ -451,6 +451,21 @@ os_openeuler_sources[] = {
   {&Tencent,   "https://mirrors.tencent.com/openeuler/"},
   {&Netease,   "https://mirrors.163.com/openeuler/"},
   {&Sohu,      "https://mirrors.sohu.com/openeuler/"}
+},
+
+/**
+ * 2023-09-06 更新
+ *
+ * TODO: 1. 源并不完整，且未经测试是否有效
+ */
+os_openkylin_sources[] = {
+  {&Ali,       "https://mirrors.aliyun.com/openkylin/"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/openkylin/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/openkylin/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/openkylin/"},
+  {&Tencent,   "https://mirrors.tencent.com/openkylin/"},
+  {&Netease,   "https://mirrors.163.com/openkylin/"},
+  {&Sohu,      "https://mirrors.sohu.com/openkylin/"}
 }
 ;
 
@@ -505,7 +520,7 @@ def_target_sources_n(pl_r);    def_target_sources_n(pl_julia);
 def_target_sources_n(os_ubuntu);      def_target_sources_n(os_debian);      def_target_sources_n(os_fedora);
 def_target_sources_n(os_kali);        def_target_sources_n(os_openbsd);     def_target_sources_n(os_msys2);
 def_target_sources_n(os_arch);        def_target_sources_n(os_gentoo);      def_target_sources_n(os_netbsd);
-def_target_sources_n(os_deepin);      def_target_sources_n(os_openeuler);
+def_target_sources_n(os_deepin);      def_target_sources_n(os_openeuler);   def_target_sources_n(os_openkylin);
 
 /* Target Info */
 typedef struct {

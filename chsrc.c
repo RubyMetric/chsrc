@@ -1304,6 +1304,43 @@ os_openeuler_setsrc (char* option)
   chsrc_say_thanks(&source);
 }
 
+/**
+ * 未经测试
+ */
+void
+os_openkylin_setsrc (char* option)
+{
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_openkylin, option);
+  } else {
+    index = lets_test_speed(os_openkylin);
+  }
+
+  source_info source = os_openkylin_sources[index];
+  chsrc_say_selection(&source);
+
+  char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
+  chsrc_logcmd (backup);
+  system(backup);
+
+  xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
+
+  char* cmd;
+  cmd = xy_strjoin(3,
+    "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/openkylin\\/@\\1",
+    source.url,
+    "@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
+  chsrc_logcmd(cmd);
+  system(cmd);
+  // char* rm = "rm -rf /etc/apt/source.list.bak";
+  // system(rm);
+
+  chsrc_say_thanks(&source);
+}
+
+
 /************************************** Begin Target Matrix ****************************************/
 def_target_info(pl_ruby);
 def_target_info(pl_python);
@@ -1353,7 +1390,8 @@ target_info
   os_gentoo_target      = {os_gentoo_setsrc,      NULL, os_gentoo_sources,          7},
   os_netbsd_target      = {os_netbsd_setsrc,      NULL, os_netbsd_sources,          7},
   os_manjaro_target     = {os_manjaro_setsrc,     NULL, NULL,                       0},
-  os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources,       7};
+  os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources,       7},
+  os_openkylin_target   = {os_openkylin_setsrc,   NULL, os_openkylin_sources,       7};
 static const char const
 *os_ubuntu        [] = {"ubuntu",  NULL,  targetinfo(&os_ubuntu_target)},
 *os_deepin        [] = {"deepin",  NULL,  targetinfo(&os_deepin_target)},
@@ -1367,9 +1405,10 @@ static const char const
 *os_netbsd        [] = {"netbsd",  NULL,  targetinfo(&os_netbsd_target)},
 *os_manjaro       [] = {"manjaro", NULL,  targetinfo(&os_manjaro_target)},
 *os_openeuler     [] = {"openeuler",NULL, targetinfo(&os_openeuler_target)},
+*os_openkylin     [] = {"openkylin",NULL, targetinfo(&os_openkylin_target)},
 **os_systems[] =
 {
-  os_ubuntu, os_deepin, os_debian,os_fedora,os_kali,os_openbsd,os_msys2,os_arch,os_gentoo,os_netbsd,os_manjaro,os_openeuler
+  os_ubuntu, os_deepin, os_debian,os_fedora,os_kali,os_openbsd,os_msys2,os_arch,os_gentoo,os_netbsd,os_manjaro,os_openeuler,os_openkylin
 };
 
 

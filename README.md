@@ -76,13 +76,15 @@ chsrc set netbsd
 
 chsrc set manjaro
 chsrc set openeuler
+chsrc set openkylin
 
 chsrc set msys2  或 chsrc set msys
 ```
 
-TODO:
+TODO: 上述已全部完成，但
 
-- [ ] `chsrc set openkylin`
+1. 部分换源方案当前需要用户进行少量手动操作如 `manjaro`
+2. 还未经多平台测试
 
 
 
