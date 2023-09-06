@@ -1448,8 +1448,7 @@ print_supported_sources_for_target (source_info sources[])
 
 
 
-
-int
+void
 print_help ()
 {
   puts(xy_strjoin(3, "chsrc: Change Source (GPLv3) ",
