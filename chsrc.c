@@ -584,8 +584,6 @@ pl_dotnet_getsrc (char* option)
 void
 pl_dotnet_setsrc (char* option)
 {
-  int index = 0; char* check_cmd = NULL;
-
   xy_error ("chsrc: 暂时无法为NuGet换源，若有需求，请您提交issue");
 }
 
@@ -1656,7 +1654,6 @@ main (int argc, char const *argv[])
   }
 
   const char* command = argv[1];
-  const char* target  = NULL;
 
   bool matched = false;
 

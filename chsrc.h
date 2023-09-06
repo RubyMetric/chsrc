@@ -475,7 +475,7 @@ int
 dblary_maxidx(double* array, int size)
 {
   double maxval = array[0];
-  double maxidx = 0;
+  int maxidx = 0;
 
   for (int i=1; i<size; i++) {
     if (array[i]>maxval) {

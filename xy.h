@@ -33,7 +33,7 @@
   static bool xy_on_windows = true;
   static bool xy_on_linux   = false;
   static bool xy_on_macos   = false;
-  static bool xy_on_bsds    = false;
+  static bool xy_on_bsd     = false;
 
   static char* xy_os_devnull = "nul";
 
@@ -45,7 +45,7 @@
   static bool xy_on_windows = false;
   static bool xy_on_linux   = true;
   static bool xy_on_macos   = false;
-  static bool xy_on_bsds    = false;
+  static bool xy_on_bsd     = false;
 
   static char* xy_os_devnull = "/dev/null";
 
@@ -56,7 +56,7 @@
   static bool xy_on_windows = false;
   static bool xy_on_linux   = false;
   static bool xy_on_macos   = true;
-  static bool xy_on_bsds    = false;
+  static bool xy_on_bsd     = false;
 
   // set xy_os_devnull
 
@@ -67,7 +67,7 @@
   static bool xy_on_windows = false;
   static bool xy_on_linux   = false;
   static bool xy_on_macos   = false;
-  static bool xy_on_bsds    = true;
+  static bool xy_on_bsd     = true;
 
   // set xy_os_devnull
 
