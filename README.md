@@ -60,6 +60,8 @@ TODO: 上述已全部完成，但
 1. 部分换源方案当前需要用户进行少量手动操作如 `java`，`rust`
 2. 还未经多平台测试
 
+<br>
+
 ## 操作系统
 
 ```bash
@@ -86,7 +88,7 @@ TODO: 上述已全部完成，但
 1. 部分换源方案当前需要用户进行少量手动操作如 `manjaro`
 2. 还未经多平台测试
 
-
+<br>
 
 ## 软件
 
@@ -96,16 +98,19 @@ TODO:
 - [ ] `chsrc set conda` 或 `chsrc set anaconda`
 - [ ] `chsrc set ctan`  或 `chsrc set tex`
 
-
 <br>
 
 ## 开发
 
-请安装好 `gcc` 和 `make` 以及 `curl`
+请安装好 `gcc`或`clang` 和 `make` 以及 `curl`
 
 ```bash
-make
-make test
+make          # 默认使用 cc 编译
+make CC=clang # 使用 clang 编译
+make CC=gcc   # 使用 gcc   编译
+
+make test  # 测试部分命令
+make xy    # 测试 xy.h
 make clean
 ```
 
