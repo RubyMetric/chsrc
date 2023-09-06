@@ -436,6 +436,21 @@ os_netbsd_sources[] = {
   {&Tencent,   "https://mirrors.tencent.com/pkgsrc/packages/NetBSD/"},
   {&Netease,   "https://mirrors.163.com/pkgsrc/packages/NetBSD/"},
   {&Sohu,      "https://mirrors.sohu.com/pkgsrc/packages/NetBSD/"}
+},
+
+/**
+ * 2023-09-06 更新
+ *
+ * TODO: 1. 源并不完整，且未经测试是否有效
+ */
+os_openeular_sources[] = {
+  {&Ali,       "https://mirrors.aliyun.com/openeuler/"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/openeuler/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/openeuler/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/openeuler/"},
+  {&Tencent,   "https://mirrors.tencent.com/openeuler/"},
+  {&Netease,   "https://mirrors.163.com/openeuler/"},
+  {&Sohu,      "https://mirrors.sohu.com/openeuler/"}
 }
 ;
 
@@ -490,7 +505,7 @@ def_target_sources_n(pl_r);    def_target_sources_n(pl_julia);
 def_target_sources_n(os_ubuntu);      def_target_sources_n(os_debian);      def_target_sources_n(os_fedora);
 def_target_sources_n(os_kali);        def_target_sources_n(os_openbsd);     def_target_sources_n(os_msys2);
 def_target_sources_n(os_arch);        def_target_sources_n(os_gentoo);      def_target_sources_n(os_netbsd);
-def_target_sources_n(os_deepin);
+def_target_sources_n(os_deepin);      def_target_sources_n(os_openeuler);
 
 /* Target Info */
 typedef struct {

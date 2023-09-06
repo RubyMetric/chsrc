@@ -1268,6 +1268,42 @@ os_manjaro_setsrc(char* option)
   xy_info ("chsrc: If success, please use \"sudo pacman -Syy\" to flush cache");
 }
 
+/**
+ * 未经测试
+ */
+void
+os_openeuler_setsrc (char* option)
+{
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_openeuler, option);
+  } else {
+    index = lets_test_speed(os_openeuler);
+  }
+
+  source_info source = os_openeuler_sources[index];
+  chsrc_say_selection(&source);
+
+  char* backup = "cp -rf /etc/yum.repos.d/openEuler.repot /etc/yum.repos.d/openEuler.repo.bak";
+  chsrc_logcmd (backup);
+  system(backup);
+
+  xy_info ("chsrc: 备份文件名: /etc/yum.repos.d/openEuler.repo.bak");
+
+  char* cmd;
+  cmd = xy_strjoin(3,
+    "s#http://repo.openeuler.org#",
+    source.url,
+    "#\'< /etc/yum.repos.d/openEuler.repo.bak | cat > /etc/yum.repos.d/openEuler.repo");
+  chsrc_logcmd(cmd);
+  system(cmd);
+  // char* rm = "rm -rf /etc/yum.repos.d/openEuler.repo.bak";
+  // system(rm);
+
+  chsrc_say_thanks(&source);
+}
+
 /************************************** Begin Target Matrix ****************************************/
 def_target_info(pl_ruby);
 def_target_info(pl_python);
@@ -1316,7 +1352,8 @@ target_info
   os_arch_target        = {os_arch_setsrc,        NULL, os_arch_sources,            7},
   os_gentoo_target      = {os_gentoo_setsrc,      NULL, os_gentoo_sources,          7},
   os_netbsd_target      = {os_netbsd_setsrc,      NULL, os_netbsd_sources,          7},
-  os_manjaro_target     = {os_manjaro_setsrc,     NULL, NULL,                       0};
+  os_manjaro_target     = {os_manjaro_setsrc,     NULL, NULL,                       0},
+  os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources,       7};
 static const char const
 *os_ubuntu        [] = {"ubuntu",  NULL,  targetinfo(&os_ubuntu_target)},
 *os_deepin        [] = {"deepin",  NULL,  targetinfo(&os_deepin_target)},
@@ -1329,9 +1366,10 @@ static const char const
 *os_gentoo        [] = {"gentoo",  NULL,  targetinfo(&os_gentoo_target)},
 *os_netbsd        [] = {"netbsd",  NULL,  targetinfo(&os_netbsd_target)},
 *os_manjaro       [] = {"manjaro", NULL,  targetinfo(&os_manjaro_target)},
+*os_openeuler     [] = {"openeuler",NULL, targetinfo(&os_openeuler_target)},
 **os_systems[] =
 {
-  os_ubuntu, os_deepin, os_debian,os_fedora,os_kali,os_openbsd,os_msys2,os_arch,os_gentoo,os_netbsd,os_manjaro
+  os_ubuntu, os_deepin, os_debian,os_fedora,os_kali,os_openbsd,os_msys2,os_arch,os_gentoo,os_netbsd,os_manjaro,os_openeuler
 };
 
 

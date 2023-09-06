@@ -75,6 +75,7 @@ chsrc set openbsd
 chsrc set netbsd
 
 chsrc set manjaro
+chsrc set openeuler
 
 chsrc set msys2  或 chsrc set msys
 ```
@@ -82,7 +83,6 @@ chsrc set msys2  或 chsrc set msys
 TODO:
 
 - [ ] `chsrc set openkylin`
-- [ ] `chsrc set openeuler`
 
 
 
