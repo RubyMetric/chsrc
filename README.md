@@ -69,12 +69,12 @@ chsrc set gentoo
 chsrc set openbsd
 chsrc set netbsd
 
+chsrc set manjaro`
+
 chsrc set msys2  或 chsrc set msys
 ```
 
 TODO:
-- [ ] `chsrc set manjaro`
-
 - [ ] `chsrc set deepin`
 - [ ] `chsrc set openkylin`
 - [ ] `chsrc set openeuler`
