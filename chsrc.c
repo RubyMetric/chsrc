@@ -53,7 +53,7 @@ does_the_program_exist (char* check_cmd, char* progname)
  * @param  target  目标名
  * @param  input   如果用户输入 default 或者 def，则选择第一个源
  */
-#define lets_find_mirror(s, input) does_the_input_mirror_exist(s##_sources, s##_sources_n, #s+3, input)
+#define lets_find_mirror(s, input) does_the_input_mirror_exist(s##_sources, s##_sources_n, (char*)#s+3, input)
 int
 does_the_input_mirror_exist (source_info* sources, size_t size, char* target, char* input)
 {
@@ -158,7 +158,7 @@ test_speed_url (const char* url)
 }
 
 
-#define lets_test_speed(s) lets_test_speed_(s##_sources, s##_sources_n, #s+3)
+#define lets_test_speed(s) lets_test_speed_(s##_sources, s##_sources_n, (char*)#s+3)
 int
 lets_test_speed_ (source_info* sources, size_t size, const char* target)
 {
