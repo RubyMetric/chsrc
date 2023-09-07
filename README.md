@@ -18,6 +18,8 @@
 
 ## 安装使用
 
+目前还处于开发中，需要您手动编译来安装（仅有一个可执行文件）。后续将会通过持续构建生成二进制文件，欢迎您对此做出贡献，[查阅 issue](https://gitee.com/RubyMetric/chsrc/issues/I7ZBDR)
+
 ```bash
 使用：chsrc <command> [target]
 
@@ -48,7 +50,7 @@ chsrc set php    或 chsrc set composer
 
 chsrc set go
 chsrc set rust   或 chsrc set cargo  或 chsrc set crate
-chsrc set java   或 chsrc set maven  或 chsrc set mvn  或 chsrc gradle
+chsrc set java   或 chsrc set maven  或 chsrc set mvn  或 chsrc set gradle
 
 # 同时会为 bioconductor 换源
 chsrc set r      或 chsrc set cran
@@ -66,17 +68,18 @@ TODO: 上述已全部完成，但
 
 ```bash
 chsrc set ubuntu
-chsrc set deepin
 chsrc set debian
 chsrc set fedora
-chsrc set kali
 chsrc set arch
+chsrc set manjaro
+chsrc set kali
 chsrc set gentoo
 
 chsrc set openbsd
 chsrc set netbsd
 
-chsrc set manjaro
+# 国产操作系统
+chsrc set deepin
 chsrc set openeuler
 chsrc set openkylin
 
