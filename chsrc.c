@@ -3,7 +3,7 @@
 * License       : GPLv3
 * Authors       : Aoran Zeng <ccmywish@qq.com>
 * Created on    : <2023-08-28>
-* Last modified : <2023-09-06>
+* Last modified : <2023-09-08>
 *
 * chsrc:
 *
@@ -1377,19 +1377,20 @@ static const char
 
 
 target_info
-  os_ubuntu_target      = {os_ubuntu_setsrc,      NULL, os_ubuntu_sources,          7},
-  os_deepin_target      = {os_deepin_setsrc,      NULL, os_deepin_sources,          7},
-  os_debian_target      = {os_debian_setsrc,      NULL, os_debian_sources,          7},
-  os_fedora_target      = {os_fedora_setsrc,      NULL, os_fedora_sources,          7},
-  os_kali_target        = {os_kali_setsrc,        NULL, os_kali_sources,            7},
-  os_openbsd_target     = {os_openbsd_setsrc,     NULL, os_openbsd_sources,         7},
-  os_msys2_target       = {os_msys2_setsrc,       NULL, os_msys2_sources,           7},
-  os_arch_target        = {os_arch_setsrc,        NULL, os_arch_sources,            7},
-  os_gentoo_target      = {os_gentoo_setsrc,      NULL, os_gentoo_sources,          7},
-  os_netbsd_target      = {os_netbsd_setsrc,      NULL, os_netbsd_sources,          7},
+  os_ubuntu_target      = {os_ubuntu_setsrc,      NULL, os_ubuntu_sources,    os_ubuntu_sources_n},
+  os_debian_target      = {os_debian_setsrc,      NULL, os_debian_sources,    os_debian_sources_n},
+  os_fedora_target      = {os_fedora_setsrc,      NULL, os_fedora_sources,    os_fedora_sources_n},
+  os_kali_target        = {os_kali_setsrc,        NULL, os_kali_sources,      os_kali_sources_n},
+  os_arch_target        = {os_arch_setsrc,        NULL, os_arch_sources,      os_arch_sources_n},
   os_manjaro_target     = {os_manjaro_setsrc,     NULL, NULL,                       0},
-  os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources,       7},
-  os_openkylin_target   = {os_openkylin_setsrc,   NULL, os_openkylin_sources,       7};
+  os_gentoo_target      = {os_gentoo_setsrc,      NULL, os_gentoo_sources,    os_gentoo_sources_n},
+  os_openbsd_target     = {os_openbsd_setsrc,     NULL, os_openbsd_sources,   os_openbsd_sources_n},
+  os_netbsd_target      = {os_netbsd_setsrc,      NULL, os_netbsd_sources,    os_netbsd_sources_n},
+  os_msys2_target       = {os_msys2_setsrc,       NULL, os_msys2_sources,     os_msys2_sources_n},
+  os_deepin_target      = {os_deepin_setsrc,      NULL, os_deepin_sources,    os_deepin_sources_n},
+  os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources, os_openeuler_sources_n},
+  os_openkylin_target   = {os_openkylin_setsrc,   NULL, os_openkylin_sources, os_openkylin_sources_n};
+
 static const char
 *os_ubuntu        [] = {"ubuntu",  NULL,  targetinfo(&os_ubuntu_target)},
 *os_deepin        [] = {"deepin",  NULL,  targetinfo(&os_deepin_target)},
@@ -1406,7 +1407,11 @@ static const char
 *os_openkylin     [] = {"openkylin",NULL, targetinfo(&os_openkylin_target)},
 **os_systems[] =
 {
-  os_ubuntu, os_deepin, os_debian,os_fedora,os_kali,os_openbsd,os_msys2,os_arch,os_gentoo,os_netbsd,os_manjaro,os_openeuler,os_openkylin
+  os_ubuntu,  os_debian,  os_fedora,  os_kali,
+  os_arch,    os_manjaro, os_gentoo,
+  os_openbsd, os_netbsd,
+  os_msys2,
+  os_deepin, os_openeuler, os_openkylin
 };
 
 
