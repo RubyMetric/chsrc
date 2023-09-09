@@ -341,12 +341,16 @@ pl_python_setsrc (char* option)
 
 
 void
-_pl_nodejs_check_cmd ()
+_pl_nodejs_check_cmd (bool* npm_exist, bool* yarn_exist)
 {
   char* check_cmd = xy_str_to_quietcmd("npm -v");
-  bool exist_b = does_the_program_exist (check_cmd, "npm");
-  if (!exist_b) {
-    xy_error ("chsrc: 未找到 npm 命令，请检查是否存在");
+  *npm_exist = does_the_program_exist (check_cmd, "npm");
+
+  check_cmd = xy_str_to_quietcmd("yarn -v");
+  *yarn_exist = does_the_program_exist (check_cmd, "yarn");
+
+  if (!*npm_exist && !*yarn_exist) {
+    xy_error ("chsrc: 未找到 npm 或 yarn 命令，请检查是否存在（其一）");
     exit(1);
   }
 }
@@ -355,10 +359,21 @@ _pl_nodejs_check_cmd ()
 void
 pl_nodejs_getsrc (char* option)
 {
-  _pl_nodejs_check_cmd ();
-  char* cmd = "npm config get registry";
-  chsrc_logcmd(cmd);
-  system(cmd);
+  bool npm_exist, yarn_exist;
+  _pl_nodejs_check_cmd (&npm_exist, &yarn_exist);
+
+  if (npm_exist)
+  {
+    char* cmd = "npm config get registry";
+    chsrc_logcmd(cmd);
+    system(cmd);
+  }
+  if (yarn_exist)
+  {
+    char* cmd = "yarn config get registry";
+    chsrc_logcmd(cmd);
+    system(cmd);
+  }
 }
 
 /**
@@ -367,7 +382,8 @@ pl_nodejs_getsrc (char* option)
 void
 pl_nodejs_setsrc (char* option)
 {
-  _pl_nodejs_check_cmd();
+  bool npm_exist, yarn_exist;
+  _pl_nodejs_check_cmd (&npm_exist, &yarn_exist);
 
   int index = 0;
 
@@ -380,9 +396,20 @@ pl_nodejs_setsrc (char* option)
   source_info source = pl_nodejs_sources[index];
   chsrc_say_selection (&source);
 
-  char* cmd = xy_2strjoin("npm config set registry ", source.url);
-  chsrc_logcmd(cmd);
-  system(cmd);
+  if (npm_exist)
+  {
+    char* cmd = xy_2strjoin("npm config set registry ", source.url);
+    chsrc_logcmd(cmd);
+    system(cmd);
+  }
+
+  if (yarn_exist)
+  {
+    char* cmd = xy_str_to_quietcmd(xy_2strjoin("yarn config set registry ", source.url));
+    chsrc_logcmd(cmd);
+    system(cmd);
+  }
+  chsrc_say_thanks(&source);
 }
 
 
