@@ -1530,9 +1530,9 @@ print_supported_targets ()
  * 用于 chsrc list <target>
  */
 void
-print_supported_sources_for_target (source_info sources[])
+print_supported_sources_for_target (source_info sources[], size_t size)
 {
-  for (int i=0;i<4;i++)
+  for (int i=0;i<size;i++)
   {
     source_info src = sources[i];
     const mirror_info* mir = src.mirror;
@@ -1645,7 +1645,7 @@ get_target (const char* input, int code, char* option)
     xy_warn (xy_strjoin(3, "chsrc: 下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>"));
     printf ("%-14s%-35s%-45s ", "code", "服务商缩写", "服务源URL"); puts("服务商名称");
     puts   ("--------------------------------------------------------------------------------------------------------");
-    print_supported_sources_for_target (target->sources);
+    print_supported_sources_for_target (target->sources, target->sources_n);
   }
   else if (Target_Cesu_Source==code)
   {
