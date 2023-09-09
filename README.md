@@ -24,7 +24,7 @@
 
 ```bash
 # Windows
-curl -O https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-Windows.exe
+curl -LO https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-Windows.exe
 ```
 
 <br>
