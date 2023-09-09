@@ -173,7 +173,7 @@ pl_python_sources[] = {
  */
 pl_nodejs_sources[] = {
   {&NpmMirror,     "https://registry.npmmirror.com"},
-  {&Zju,           "https://mirrors.zju.edu.cn/docs/npm/"}
+  {&Zju,           "https://mirrors.zju.edu.cn/npm"}
 },
 
 
