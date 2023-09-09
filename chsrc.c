@@ -1,16 +1,16 @@
-/* --------------------------------------------------------------
-* File          : chsrc.c
-* License       : GPLv3
-* Authors       : Aoran Zeng <ccmywish@qq.com>
-* Created on    : <2023-08-28>
-* Last modified : <2023-09-08>
-*
-* chsrc:
-*
-*   Change Source —— 命令行换源工具
-*
-*   该软件为自由软件，采用 GPLv3 许可证，请查阅 LICENSE.txt 文件
-* -------------------------------------------------------------*/
+/** ------------------------------------------------------------
+ * File          : chsrc.c
+ * License       : GPLv3
+ * Authors       : Aoran Zeng <ccmywish@qq.com>
+ * Created on    : <2023-08-28>
+ * Last modified : <2023-09-09>
+ *
+ * chsrc:
+ *
+ *   Change Source —— 命令行换源工具
+ *
+ *   该软件为自由软件，采用 GPLv3 许可证，请查阅 LICENSE.txt 文件
+ * ------------------------------------------------------------*/
 
 #include "chsrc.h"
 
@@ -92,6 +92,9 @@ does_the_input_mirror_exist (source_info* sources, size_t size, char* target, ch
   return idx;
 }
 
+/**
+ * 该函数来自 oh-my-mirrorz.py，由我(@ccmywish)翻译为C语言，但功劳和版权属于原作者
+ */
 char*
 to_human_readable_speed (double speed)
 {
@@ -118,16 +121,28 @@ to_human_readable_speed (double speed)
 
 /**
  * 测速代码参考自 https://github.com/mirrorz-org/oh-my-mirrorz/blob/master/oh-my-mirrorz.py
- * 修改为C语言，一切功劳属于原作者
+ * 功劳和版权属于原作者，由我(@ccmywish)修改为C语言，并做了额外调整。
  *
  * @return 返回测得的速度，若出错，返回-1
  */
 double
 test_speed_url (const char* url)
 {
+  char* time_sec = "6";
+
+/* 现在我们切换至跳转后的链接来测速，不再使用下述判断
+  if (xy_str_start_with(url, "https://registry.npmmirror"))
+  {
+    // 这里 npmmirror 跳转非常慢，需要1~3秒，所以我们给它留够至少8秒测速时间，否则非常不准
+    time_sec = "10";
+  }
+*/
+
   // 我们用 —L，因为Ruby China源会跳转到其他地方
-  char* curl_cmd = xy_strjoin(4, "curl -qsL -o ", xy_os_devnull, " -w \"%{http_code} %{speed_download}\" -m6 -A chsrc/" Chsrc_Version
-                   "  ", url);
+  // npmmirror 也会跳转
+  char* curl_cmd = xy_strjoin(6, "curl -qsL -o ", xy_os_devnull,
+                                 " -w \"%{http_code} %{speed_download}\" -m", time_sec ,
+                                 " -A chsrc/" Chsrc_Version "  ", url);
 
   // xy_info (xy_2strjoin("chsrc: 测速 ", url));
 

@@ -1,14 +1,14 @@
-/* --------------------------------------------------------------
-* File          : chsrc.h
-* License       : GPLv3
-* Authors       : Aoran Zeng <ccmywish@qq.com>
-* Created on    : <2023-08-29>
-* Last modified : <2023-09-05>
-*
-* chsrc:
-*
-*   chsrc.c 头文件
-* -------------------------------------------------------------*/
+/** ------------------------------------------------------------
+ * File          : chsrc.h
+ * License       : GPLv3
+ * Authors       : Aoran Zeng <ccmywish@qq.com>
+ * Created on    : <2023-08-29>
+ * Last modified : <2023-09-09>
+ *
+ * chsrc:
+ *
+ *   chsrc.c 头文件
+ * ------------------------------------------------------------*/
 
 #include "xy.h"
 
@@ -95,7 +95,11 @@ mirror_info
   RubyChina = {"rubychina",    "RubyChina",    "Ruby China 社区",    "https://gems.ruby-china.com/",
                "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"}, // 9.9 MB
 
-  GoProxyCN = {"goproxy.cn",   "Goproxy.cn",   "七牛云 Goproxy.cn",   "https://goproxy.cn/",
+  NpmMirror = {"npmmirror",    "npmmirror",    "npmmirror (阿里云赞助)",    "https://npmmirror.com/",
+               // 注意，这个是跳转后的地址，不确定未来会不会改变
+               "https://cdn.npmmirror.com/packages/%40tensorflow/tfjs/4.10.0/tfjs-4.10.0.tgz"}, // 29MB
+
+  GoProxyCN = {"goproxy.cn",   "Goproxy.cn",   "Goproxy.cn (七牛云赞助)",   "https://goproxy.cn/",
                "https://goproxy.cn/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"},  // 30 MB
 
   GoProxyIO = {"goproxy.io",   "GOPROXY.IO",   "GOPROXY.IO",         "https://goproxy.io/",
@@ -108,7 +112,7 @@ mirror_info*
 available_mirrors[] = {
   &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Nju, // &Cqu,
   &Ali,  &Tencent, &Netease, &Sohu,
-  &RubyChina, &GoProxyCN, &GoProxyIO
+  &RubyChina, &NpmMirror, &GoProxyCN, &GoProxyIO
   // 暂不支持 &NugetOrg
 };
 
@@ -161,14 +165,14 @@ pl_python_sources[] = {
 
 
 /**
- * 2023-08-30 更新
+ * 2023-09-09 更新
  *
  * Sjtug, Tuna, Lzuoss, Jlu, Bfsu, 网易，搜狐 都没有
  *
  * @note 腾讯软件源虽然有npm的名，但名存实亡
  */
 pl_nodejs_sources[] = {
-  {&Ali,           "https://registry.npmmirror.com"},
+  {&NpmMirror,     "https://registry.npmmirror.com"},
   {&Zju,           "https://mirrors.zju.edu.cn/docs/npm/"}
 },
 
