@@ -164,7 +164,7 @@ test_speed_url (const char* url)
   char* speedstr = to_human_readable_speed(speed);
 
   if (200!=http_code) {
-    char* httpcodestr = xy_str_to_yellow(xy_2strjoin("HTTP码  ", buf));
+    char* httpcodestr = xy_str_to_yellow(xy_2strjoin("HTTP码 ", buf));
     puts (xy_strjoin(3, speedstr, " | ",  httpcodestr));
   } else {
     puts (speedstr);
@@ -196,6 +196,7 @@ lets_test_speed_ (source_info* sources, size_t size, const char* target)
       speed = 0;
     } else {
       printf ("%s",xy_strjoin(3, "chsrc: 测速 ", src.mirror->site , " ... "));
+      fflush(stdout);
       speed = test_speed_url (url);
     }
     speeds[i] = speed;
