@@ -1,14 +1,14 @@
-/* --------------------------------------------------------------
-* File          : test_xy.c
-* License       : MIT
-* Authors       : Aoran Zeng <ccmywish@qq.com>
-* Created on    : <2023-08-30>
-* Last modified : <2023-09-05>
-*
-* test_xy:
-*
-*   测试 xy.h
-* -------------------------------------------------------------*/
+/** ------------------------------------------------------------
+ * File          : test_xy.c
+ * License       : MIT
+ * Authors       : Aoran Zeng <ccmywish@qq.com>
+ * Created on    : <2023-08-30>
+ * Last modified : <2023-09-09>
+ *
+ * test_xy:
+ *
+ *   测试 xy.h
+ * ------------------------------------------------------------*/
 
 #include "xy.h"
 
