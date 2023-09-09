@@ -18,7 +18,9 @@
 
 ## 安装
 
-目前还处于开发中，需要您手动编译来安装（仅有一个可执行文件）。后续将会通过持续构建生成二进制文件，欢迎您对此做出贡献，[查阅 issue](https://gitee.com/RubyMetric/chsrc/issues/I7ZBDR)。可先体验预编译版本:
+后续将会通过持续构建生成二进制文件，欢迎您对此做出贡献，[查阅 issue](https://gitee.com/RubyMetric/chsrc/issues/I7ZBDR)。
+
+以下平台可先体验预编译版本:
 
 ### Windows
 
