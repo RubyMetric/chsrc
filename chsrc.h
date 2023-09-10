@@ -248,13 +248,13 @@ pl_rust_sources[] = {
 
 
 /**
- * 2023-08-30 更新
+ * 2023-09-10 更新
  *
- * @note 当前仅有一个源，缺少教育网或开源社区软件源
- *
+ * @note 缺少教育网或开源社区软件源
  */
 pl_java_sources[] = {
-  {&Ali,           "https://maven.aliyun.com/repository/public/"}
+  {&Ali,           "https://maven.aliyun.com/repository/public/"},
+  {&Netease,       "http://mirrors.163.com/maven/repository/maven-public/"} // 网易的24小时更新一次
 },
 
 
