@@ -37,6 +37,9 @@ curl -LO https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x86-
 ```bash
 # x64
 curl -LO https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-linux
+
+# aarch64 / arm64
+curl -LO https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-aarch64-linux
 ```
 
 <br>
