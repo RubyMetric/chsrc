@@ -127,7 +127,9 @@ typedef struct {
 /**
  * 源信息
  *
- * @note 我们要求每个源至少有一个教育网镜像，至少有一个商业公司或开源社区维护的镜像
+ * @note 我们要求每个源最好情况下
+ *  1. 至少有一个教育网镜像
+ *  2. 至少有一个商业公司或开源社区维护的镜像
  */
 
 
@@ -277,6 +279,19 @@ pl_dart_sources[] = {
   {&Tencent,       "https://mirrors.cloud.tencent.com/dart-pub/"},
   {&Nju,           "https://mirror.nju.edu.cn/dart-pub"},
 },
+
+
+
+/**
+ * 2023-09-10 更新
+ */
+pl_haskell_sources[] = {
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/hackage"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/hackage"},
+  {&Nju,           "https://mirror.nju.edu.cn/hackage"},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/hackage"}
+},
+
 
 
 
@@ -587,7 +602,7 @@ chsrc_say_thanks (source_info* source)
 def_target_sources_n(pl_ruby); def_target_sources_n(pl_python); def_target_sources_n(pl_nodejs);
 def_target_sources_n(pl_perl); def_target_sources_n(pl_php);    def_target_sources_n(pl_go);
 def_target_sources_n(pl_rust); def_target_sources_n(pl_java);   def_target_sources_n(pl_clojure);
-def_target_sources_n(pl_dotnet); def_target_sources_n(pl_dart);
+def_target_sources_n(pl_dotnet); def_target_sources_n(pl_dart); def_target_sources_n(pl_haskell);
 def_target_sources_n(pl_r);      def_target_sources_n(pl_julia);
 
 def_target_sources_n(os_ubuntu);      def_target_sources_n(os_debian);      def_target_sources_n(os_fedora);
