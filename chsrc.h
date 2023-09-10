@@ -192,32 +192,17 @@ pl_perl_sources[] = {
 },
 
 
+
 /**
  * 2023-09-04 更新
  *
- * @note 以下注释的，是不含有bioconductor的镜像站，
- *       我们在换cran的同时，也直接帮助用户换bioconductor
+ * @note 缺少教育网或开源社区软件源
  */
-pl_r_sources[] = {
-  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/cran/"},
-  // {&Ali,           "https://mirrors.aliyun.com/CRAN/"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"},
-  // {&Sustech,       "https://mirrors.sustech.edu.cn/CRAN"},
-  // {&Bfsu,          "https://mirrors.bfsu.edu.cn/CRAN/"},
-  // {&Bjtu,          "https://mirror.bjtu.edu.cn/cran/"},
+pl_php_sources[] = {
+  {&Ali,            "https://mirrors.aliyun.com/composer/"},
+  {&Tencent,        "https://mirrors.tencent.com/composer/"}
 },
 
-
-/**
- * 2023-09-05 更新
- *
- * @note 缺少商业公司或开源社区软件源
- */
-pl_julia_sources[] = {
-  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/julia"},
-  {&Pku,           "https://mirrors.pku.edu.cn/julia"},
-  {&Nju,           "https://mirror.nju.edu.cn/julia"}
-},
 
 
 /**
@@ -259,6 +244,17 @@ pl_java_sources[] = {
 
 
 /**
+ * 2023-09-10 更新
+ *
+ * @note 不太好换，且用户可能不多，我们暂时只给用户提供文档
+ */
+pl_clojure_sources[] = {
+  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/help/clojars/"},
+  {&Ustc,           "https://mirrors.ustc.edu.cn/help/clojars.html"}
+},
+
+
+/**
  * 2023-08-30 更新
  *
  * @note 暂时未实现该换源功能
@@ -286,12 +282,31 @@ pl_dart_sources[] = {
 /**
  * 2023-09-04 更新
  *
- * @note 缺少教育网或开源社区软件源
+ * @note 以下注释的，是不含有bioconductor的镜像站，
+ *       我们在换cran的同时，也直接帮助用户换bioconductor
  */
-pl_php_sources[] = {
-  {&Ali,            "https://mirrors.aliyun.com/composer/"},
-  {&Tencent,        "https://mirrors.tencent.com/composer/"}
+pl_r_sources[] = {
+  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/cran/"},
+  // {&Ali,           "https://mirrors.aliyun.com/CRAN/"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"},
+  // {&Sustech,       "https://mirrors.sustech.edu.cn/CRAN"},
+  // {&Bfsu,          "https://mirrors.bfsu.edu.cn/CRAN/"},
+  // {&Bjtu,          "https://mirror.bjtu.edu.cn/cran/"},
+},
+
+
+/**
+ * 2023-09-05 更新
+ *
+ * @note 缺少商业公司或开源社区软件源
+ */
+pl_julia_sources[] = {
+  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/julia"},
+  {&Pku,           "https://mirrors.pku.edu.cn/julia"},
+  {&Nju,           "https://mirror.nju.edu.cn/julia"}
 };
+
+
 
 
 
@@ -569,9 +584,9 @@ chsrc_say_thanks (source_info* source)
 #define def_target_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 def_target_sources_n(pl_ruby); def_target_sources_n(pl_python); def_target_sources_n(pl_nodejs);
 def_target_sources_n(pl_perl); def_target_sources_n(pl_php);    def_target_sources_n(pl_go);
-def_target_sources_n(pl_rust); def_target_sources_n(pl_java);   def_target_sources_n(pl_dotnet);
-def_target_sources_n(pl_dart);
-def_target_sources_n(pl_r);    def_target_sources_n(pl_julia);
+def_target_sources_n(pl_rust); def_target_sources_n(pl_java);   def_target_sources_n(pl_clojure);
+def_target_sources_n(pl_dotnet); def_target_sources_n(pl_dart);
+def_target_sources_n(pl_r);      def_target_sources_n(pl_julia);
 
 def_target_sources_n(os_ubuntu);      def_target_sources_n(os_debian);      def_target_sources_n(os_fedora);
 def_target_sources_n(os_kali);        def_target_sources_n(os_openbsd);     def_target_sources_n(os_msys2);

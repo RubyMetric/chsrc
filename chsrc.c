@@ -738,6 +738,27 @@ pl_java_setsrc (char* option)
 
 
 void
+pl_clojure_setsrc(char* option)
+{
+  int index = 0;
+  if (NULL!=option) {
+    index = lets_find_mirror(pl_clojure, option);
+  } else {
+    index = lets_test_speed(pl_clojure);
+  }
+
+  source_info source = pl_clojure_sources[index];
+  chsrc_say_selection (&source);
+
+  xy_warn("chsrc: 抱歉，Clojure换源较复杂，您可手动查阅并换源:");
+  puts(source.url);
+  chsrc_say_thanks (&source);
+}
+
+
+
+
+void
 pl_dart_getsrc(char* option)
 {
   char* cmd = NULL;
@@ -915,6 +936,11 @@ pl_julia_setsrc (char* option)
   system(cmd);
   chsrc_say_thanks(&source);
 }
+
+
+
+
+
 
 
 
@@ -1533,6 +1559,9 @@ wr_emacs_setsrc(char* option)
   chsrc_say_thanks (&source);
 }
 
+
+
+
 /************************************** Begin Target Matrix ****************************************/
 def_target_info(pl_ruby);
 def_target_info(pl_python);
@@ -1547,7 +1576,8 @@ def_target_info(pl_r);
 def_target_info(pl_julia);
 
 target_info
-  pl_dotnet_target = {pl_dotnet_setsrc, NULL,  pl_dotnet_sources, pl_dotnet_sources_n};
+  pl_clojure_target = {pl_clojure_setsrc, NULL,  pl_clojure_sources, pl_clojure_sources_n},
+  pl_dotnet_target =  {pl_dotnet_setsrc,  NULL,  pl_dotnet_sources,  pl_dotnet_sources_n};
 
 
 #define targetinfo(t) (const char*)t
@@ -1560,6 +1590,7 @@ static const char
 *pl_go    [] = {"go",    "golang",  "goproxy",           NULL,  targetinfo(&pl_go_target)} ,
 *pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  targetinfo(&pl_rust_target)},
 *pl_java  [] = {"java",  "maven",   "gradle",            NULL,  targetinfo(&pl_java_target)},
+*pl_clojure[] ={"clojure","clojars","leiningen", "lein", NULL,  targetinfo(&pl_clojure_target)},
 *pl_dart  [] = {"dart",  "pub",                          NULL,  targetinfo(&pl_dart_target)},
 *pl_dotnet[] = {"nuget", "net",     ".net",   "dotnet",  NULL,  targetinfo(&pl_dotnet_target)},
 *pl_r     [] = {"r",     "cran",                         NULL,  targetinfo(&pl_r_target)},
@@ -1567,7 +1598,7 @@ static const char
 **pl_packagers[] =
 {
   pl_ruby,    pl_python,    pl_nodejs,      pl_perl,    pl_php,
-  pl_rust,    pl_go,        /*pl_dotnet,*/  pl_java,    pl_dart,
+  pl_rust,    pl_go,        /*pl_dotnet,*/  pl_java,    pl_clojure,  pl_dart,
   pl_r,       pl_julia
 };
 
