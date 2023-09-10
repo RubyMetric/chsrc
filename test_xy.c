@@ -72,5 +72,7 @@ main (int argc, char const *argv[])
   xy_error("错误：输出错误内容");
 
   putb(xy_file_exist("chsrc.png"));
+  putb(xy_file_exist(xy_win_powershell_profile));
+  putb(xy_file_exist(xy_win_powershellv5_profile));
   return 0;
 }
