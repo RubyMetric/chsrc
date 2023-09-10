@@ -500,7 +500,7 @@ wr_tex_sources[] = {
   {&Lzuoss,        "https://mirror.lzu.edu.cn/CTAN/systems/texlive/tlnet"},
   {&Jlu,           "https://mirrors.jlu.edu.cn/CTAN/systems/texlive/tlnet"},
   {&Sustech,       "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet"}
-}
+};
 
 
 

@@ -1442,6 +1442,76 @@ os_openkylin_setsrc (char* option)
 }
 
 
+
+
+
+
+
+void
+_wr_tex_check_cmd (bool* tlmgr_exist, bool* mpm_exist)
+{
+  char* check_cmd = xy_str_to_quietcmd("tlmgr --version");
+  *tlmgr_exist = does_the_program_exist (check_cmd, "tlmgr");
+
+  check_cmd = xy_str_to_quietcmd("mpm --version");
+  *mpm_exist = does_the_program_exist (check_cmd, "mpm");
+
+  if (!*tlmgr_exist && !*mpm_exist) {
+    xy_error ("chsrc: 未找到 tlmgr 或 mpm 命令，请检查是否存在（其一）");
+    exit(1);
+  }
+}
+
+void
+wr_tex_getsrc(char* option)
+{
+  bool tlmgr_exist, mpm_exist;
+  _wr_tex_check_cmd(&tlmgr_exist, &mpm_exist);
+
+  if (tlmgr_exist) {
+    chsrc_runcmd("tlmgr option repository");
+  }
+  if (mpm_exist) {
+    chsrc_runcmd("mpm --get-repository");
+  }
+}
+
+/**
+ * 参考 https://help.mirrors.cernet.edu.cn/CTAN/
+ */
+void
+wr_tex_setsrc(char* option)
+{
+  int index = 0;
+  bool tlmgr_exist, mpm_exist;
+  _wr_tex_check_cmd(&tlmgr_exist, &mpm_exist);
+
+  if (NULL!=option) {
+    index = lets_find_mirror(wr_tex, option);
+  } else {
+    index = lets_test_speed(wr_tex);
+  }
+
+  source_info source = wr_tex_sources[index];
+  chsrc_say_selection (&source);
+
+  char* cmd = NULL;
+
+  if (tlmgr_exist) {
+    cmd = xy_2strjoin("tlmgr option repository ", source.url);
+    chsrc_runcmd(cmd);
+  }
+
+  if (mpm_exist) {
+    char* miktex_url = xy_2strjoin(xy_str_delete_suffix(source.url, "texlive/tlnet"), "win32/miktex/tm/packages/");
+    cmd = xy_2strjoin("mpm --set-repository=", miktex_url);
+    chsrc_runcmd(cmd);
+  }
+
+  chsrc_say_thanks(&source);
+}
+
+
 /************************************** Begin Target Matrix ****************************************/
 def_target_info(pl_ruby);
 def_target_info(pl_python);
@@ -1520,17 +1590,18 @@ static const char
 };
 
 
+def_target_info(wr_tex);
+
 target_info
   wr_anaconda_target = {NULL, NULL, NULL, 0},
   wr_emacs_target    = {NULL, NULL, NULL, 0},
-  wr_tex_target      = {NULL, NULL, NULL, 0},
   wr_brew_target     = {NULL, NULL, NULL, 0};
 
 static const char
-*wr_anaconda[] = {"conda", "anaconda",         NULL,  targetinfo(&wr_anaconda_target)},
-*wr_emacs   [] = {"emacs",                     NULL,  targetinfo(&wr_emacs_target)},
-*wr_tex     [] = {"latex", "ctan",     "tex",  NULL,  targetinfo(&wr_tex_target) },
-*wr_brew    [] = {"brew",  "homebrew",         NULL,  targetinfo(&wr_brew_target)},
+*wr_anaconda[] = {"conda", "anaconda",     NULL,  targetinfo(&wr_anaconda_target)},
+*wr_emacs   [] = {"emacs",                 NULL,  targetinfo(&wr_emacs_target)},
+*wr_tex     [] = {"latex", "ctan", "tex", "texlive", "miktex", "tlmgr", "mpm", NULL, targetinfo(&wr_tex_target)},
+*wr_brew    [] = {"brew",  "homebrew",     NULL,  targetinfo(&wr_brew_target)},
 **wr_softwares[] =
 {
   wr_anaconda, wr_emacs, wr_tex, wr_brew
