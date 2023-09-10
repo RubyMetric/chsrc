@@ -552,12 +552,15 @@ wr_emacs_sources[] = {
 
 /**
  * 2023-09-10 更新
+ *
+ * @note 1. 这些链接是故意这么写的，会在setsrc函数中处理
+ *       2. 不确定 Sustech 能否工作
  */
 wr_brew_sources[] = {
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/"},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/git/homebrew/"},
-  {&Sustech,        "https://mirrors.sustech.edu.cn/homebrew/"},
-  {&Zju,            "https://mirrors.zju.edu.cn/git/homebrew"}
+  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/"},
+  {&Bfsu,           "https://mirrors.bfsu.edu.cn/"},
+  {&Zju,            "https://mirrors.zju.edu.cn/"},
+  {&Sustech,        "https://mirrors.sustech.edu.cn/"}
 };
 
 
