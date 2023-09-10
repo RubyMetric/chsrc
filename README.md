@@ -10,7 +10,7 @@
 
 ## 开发与维护
 
-一个人无法精通各种软件，也没有机会使用多样的平台环境。因此我邀请您参与，维护你所熟悉的部分软件的换源。本软件为自由软件，**GPLv3** 许可证的采用将有机会使您的贡献被更广泛地使用，详情查阅 [LICENSE.txt](./LICENSE.txt)
+一个人无法精通各种软件，也没有机会使用多样的平台环境。因此我邀请您参与，维护你所熟悉的部分软件的换源。本软件为**自由软件**，**GPLv3** 许可证的采用将有机会使您的贡献被更广泛地使用，详情查阅 [LICENSE.txt](./LICENSE.txt)
 
 参与维护开发，请查阅：[chsrc 协作者/维护者列表](https://gitee.com/RubyMetric/chsrc/issues/I7YI8E)
 
@@ -74,6 +74,7 @@ chsrc set php    或 chsrc set composer
 chsrc set go
 chsrc set rust   或 chsrc set cargo  或 chsrc set crate
 chsrc set java   或 chsrc set maven  或 chsrc set mvn  或 chsrc set gradle
+chsrc set dart   或 chsrc set pub
 
 # 同时会为 bioconductor 换源
 chsrc set r      或 chsrc set cran
@@ -145,3 +146,13 @@ make clean
 ## License
 
 本软件采用 GPLv3 和 MIT 双许可证，具体请查阅 [LICENSE.txt](./LICENSE.txt)
+
+<br>
+
+## 致谢
+
+感谢各个镜像站提供的优质免费镜像服务，使用的镜像站见 [chsrc.h](./chsrc.h).
+
+特别感谢:
+1. [MirrorZ 教育网镜像站](https://help.mirrors.cernet.edu.cn/)
+2. [清华大学 Tuna](https://mirrors.tuna.tsinghua.edu.cn/)
