@@ -546,6 +546,18 @@ wr_emacs_sources[] = {
   {&Ustc,           "https://mirrors.ustc.edu.cn/help/elpa.html"},
   {&Zju,            "https://mirrors.zju.edu.cn/docs/elpa/"},
   {&EmacsChina,     "https://elpamirror.emacs-china.org/"}
+},
+
+
+
+/**
+ * 2023-09-10 更新
+ */
+wr_brew_sources[] = {
+  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/"},
+  {&Bfsu,           "https://mirrors.bfsu.edu.cn/git/homebrew/"},
+  {&Sustech,        "https://mirrors.sustech.edu.cn/homebrew/"},
+  {&Zju,            "https://mirrors.zju.edu.cn/git/homebrew"}
 };
 
 
@@ -610,7 +622,7 @@ def_target_sources_n(os_kali);        def_target_sources_n(os_openbsd);     def_
 def_target_sources_n(os_arch);        def_target_sources_n(os_gentoo);      def_target_sources_n(os_netbsd);
 def_target_sources_n(os_deepin);      def_target_sources_n(os_openeuler);   def_target_sources_n(os_openkylin);
 
-def_target_sources_n(wr_tex);  def_target_sources_n(wr_emacs);
+def_target_sources_n(wr_tex);  def_target_sources_n(wr_emacs);  def_target_sources_n(wr_brew);
 
 /* Target Info */
 typedef struct {

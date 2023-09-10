@@ -1611,6 +1611,44 @@ wr_emacs_setsrc(char* option)
 
 
 
+void
+wr_brew_getsrc(char* option)
+{
+  char* cmd = "echo HOMEBREW_API_DOMAIN=$HOMEBREW_API_DOMAIN;"
+              "echo HOMEBREW_BOTTLE_DOMAIN=$HOMEBREW_BOTTLE_DOMAIN;"
+              "echo HOMEBREW_BREW_GIT_REMOTE=$HOMEBREW_BREW_GIT_REMOTE;"
+              "echo HOMEBREW_CORE_GIT_REMOTE=$HOMEBREW_CORE_GIT_REMOTE;";
+  system(cmd);
+}
+
+void
+wr_brew_setsrc(char* option)
+{
+  int index = 0;
+  if (NULL!=option) {
+    index = lets_find_mirror(wr_brew, option);
+  } else {
+    index = lets_test_speed(wr_brew);
+  }
+
+  source_info source = wr_brew_sources[index];
+  chsrc_say_selection (&source);
+
+  char* api_domain    = xy_strjoin(3, "export HOMEBREW_API_DOMAIN=\"", xy_2strjoin(source.url, "homebrew-bottles/api"), "\"");
+  char* bottle_domain = xy_strjoin(3, "export HOMEBREW_API_DOMAIN=\"", xy_2strjoin(source.url, "homebrew-bottles"), "\"");
+  char* brew_git_remote = xy_strjoin(3, "export HOMEBREW_API_DOMAIN=\"", xy_2strjoin(source.url, "git/homebrew/brew.git"), "\"");
+  char* core_git_remote = xy_strjoin(3, "export HOMEBREW_API_DOMAIN=\"", xy_2strjoin(source.url, "git/homebrew/homebrew-core.git"), "\"");
+
+  chsrc_runcmd(xy_strjoin(3,"echo ", api_domain,      " >> ~/.bashrc >> ~/.zshrc"));
+  chsrc_runcmd(xy_strjoin(3,"echo ", bottle_domain,   " >> ~/.bashrc >> ~/.zshrc"));
+  chsrc_runcmd(xy_strjoin(3,"echo ", brew_git_remote, " >> ~/.bashrc >> ~/.zshrc"));
+  chsrc_runcmd(xy_strjoin(3,"echo ", core_git_remote, " >> ~/.bashrc >> ~/.zshrc"));
+
+  chsrc_say_thanks (&source);
+}
+
+
+
 
 /************************************** Begin Target Matrix ****************************************/
 def_target_info(pl_ruby);
@@ -1696,11 +1734,11 @@ static const char
 
 
 def_target_info(wr_tex);
+def_target_info(wr_brew);
 
 target_info
   wr_anaconda_target = {NULL, NULL, NULL, 0},
-  wr_emacs_target    = {wr_emacs_setsrc, NULL, wr_emacs_sources, wr_emacs_sources_n},
-  wr_brew_target     = {NULL, NULL, NULL, 0};
+  wr_emacs_target    = {wr_emacs_setsrc, NULL, wr_emacs_sources, wr_emacs_sources_n};
 
 static const char
 *wr_anaconda[] = {"conda", "anaconda",     NULL,  targetinfo(&wr_anaconda_target)},
