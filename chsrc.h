@@ -278,7 +278,7 @@ pl_dart_sources[] = {
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"},
   {&Tencent,       "https://mirrors.cloud.tencent.com/dart-pub/"},
   {&Nju,           "https://mirror.nju.edu.cn/dart-pub"},
-}
+},
 
 
 

@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-09>
+ * Last modified : <2023-09-10>
  *
  * chsrc:
  *
@@ -738,6 +738,66 @@ pl_java_setsrc (char* option)
 
 
 void
+pl_dart_getsrc(char* option)
+{
+  char* cmd = NULL;
+  if (xy_on_windows) {
+    cmd = "set PUB_HOSTED_URL";
+    chsrc_logcmd(cmd);
+    system(cmd);
+  } else {
+    cmd = "echo $PUB_HOSTED_URL";
+    chsrc_logcmd(cmd);
+    system(cmd);
+  }
+}
+
+/**
+ * Dart pub 换源，参考：https://mirrors.tuna.tsinghua.edu.cn/help/dart-pub/
+ */
+void
+pl_dart_setsrc (char* option)
+{
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror (pl_dart, option);
+  } else {
+    index = lets_test_speed (pl_dart);
+  }
+
+  source_info source = pl_dart_sources[index];
+  chsrc_say_selection(&source);
+
+  char* cmd = NULL;
+
+  if (xy_on_windows)
+  {
+    if (xy_file_exist(xy_win_powershell_profile)) {
+      chsrc_runcmd(
+        xy_strjoin(4, "echo $env:PUB_HOSTED_URL = \"", source.url, "\" >> ", xy_win_powershell_profile));
+    }
+    if (xy_file_exist(xy_win_powershellv5_profile)) {
+      chsrc_runcmd(
+        xy_strjoin(4, "echo $env:PUB_HOSTED_URL = \"", source.url, "\" >> ", xy_win_powershellv5_profile));
+    }
+  }
+  else
+  {
+    cmd = "echo 'export PUB_HOSTED_URL=\"", source.url,  "\"' >> ~/.bashrc";
+    chsrc_runcmd(cmd);
+
+    if (xy_file_exist("~/.zshrc")) {
+      cmd = "echo 'export PUB_HOSTED_URL=\"", source.url,  "\"' >> ~/.zshrc";
+      chsrc_runcmd(cmd);
+    }
+  }
+  chsrc_say_thanks(&source);
+}
+
+
+
+void
 pl_r_getsrc (char* option)
 {
   // 或参考：https://zhuanlan.zhihu.com/p/585036231
@@ -1391,6 +1451,7 @@ def_target_info(pl_php);
 def_target_info(pl_go);
 def_target_info(pl_rust);
 def_target_info(pl_java);
+def_target_info(pl_dart);
 def_target_info(pl_r);
 def_target_info(pl_julia);
 
@@ -1404,17 +1465,18 @@ static const char
 *pl_python[] = {"pip",   "python",  "py",    "pypi",     NULL,  targetinfo(&pl_python_target)},
 *pl_nodejs[] = {"npm",   "node",    "js",    "nodejs",   NULL,  targetinfo(&pl_nodejs_target)},
 *pl_perl  [] = {"perl",  "cpan",                         NULL,  targetinfo(&pl_perl_target)},
-*pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  targetinfo(&pl_rust_target)},
-*pl_go    [] = {"go",    "golang",  "goproxy",           NULL,  targetinfo(&pl_go_target)} ,
-*pl_dotnet[] = {"nuget", "net",     ".net",   "dotnet",  NULL,  targetinfo(&pl_dotnet_target)},
-*pl_java  [] = {"java",  "maven",   "gradle",            NULL,  targetinfo(&pl_java_target)},
 *pl_php   [] = {"php",   "composer",                     NULL,  targetinfo(&pl_php_target)},
+*pl_go    [] = {"go",    "golang",  "goproxy",           NULL,  targetinfo(&pl_go_target)} ,
+*pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  targetinfo(&pl_rust_target)},
+*pl_java  [] = {"java",  "maven",   "gradle",            NULL,  targetinfo(&pl_java_target)},
+*pl_dart  [] = {"dart",  "pub",                          NULL,  targetinfo(&pl_dart_target)},
+*pl_dotnet[] = {"nuget", "net",     ".net",   "dotnet",  NULL,  targetinfo(&pl_dotnet_target)},
 *pl_r     [] = {"r",     "cran",                         NULL,  targetinfo(&pl_r_target)},
 *pl_julia [] = {"julia",                                 NULL,  targetinfo(&pl_julia_target)},
 **pl_packagers[] =
 {
-  pl_ruby,    pl_python,  pl_nodejs,  pl_perl,
-  pl_rust,    pl_go,      pl_dotnet,  pl_java,   pl_php,
+  pl_ruby,    pl_python,    pl_nodejs,      pl_perl,    pl_php,
+  pl_rust,    pl_go,        /*pl_dotnet,*/  pl_java,    pl_dart,
   pl_r,       pl_julia
 };
 
