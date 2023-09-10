@@ -218,13 +218,10 @@ void
 pl_ruby_getsrc (char* option)
 {
   char* cmd = "gem sources";
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
   cmd = "bundle config get mirror.https://rubygems.org";
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 }
-
 
 /**
  * Ruby换源，参考：https://gitee.com/RubyKids/rbenv-cn
@@ -234,8 +231,8 @@ pl_ruby_setsrc (char* option)
 {
   int index = 0;
   char* check_cmd = xy_str_to_quietcmd("gem -v");
-  bool exist_b = does_the_program_exist (check_cmd, "gem");
-  if (!exist_b) {
+  bool exist = does_the_program_exist (check_cmd, "gem");
+  if (!exist) {
     xy_error ("chsrc: 未找到 gem 命令，请检查是否存在");
     return;
   }
@@ -249,26 +246,21 @@ pl_ruby_setsrc (char* option)
   source_info source = pl_ruby_sources[index];
   chsrc_say_selection (&source);
 
-
   char* cmd = "gem source -r https://rubygems.org/";
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 
   cmd = xy_2strjoin("gem source -a ", source.url);
-  chsrc_logcmd(cmd);
-  system(cmd);
-
+  chsrc_runcmd(cmd);
 
   check_cmd = xy_str_to_quietcmd("bundle -v");
-  exist_b = does_the_program_exist (check_cmd, "bundle");
-  if (!exist_b) {
+  exist = does_the_program_exist (check_cmd, "bundle");
+  if (!exist) {
     xy_error ("chsrc: 未找到 bundle 命令，请检查是否存在");
     return;
   }
 
   cmd = xy_2strjoin("bundle config 'mirror.https://rubygems.org' ", source.url);
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 
   chsrc_say_thanks(&source);
 }
@@ -284,23 +276,22 @@ _pl_python_check_cmd (char** prog)
   *prog = NULL;
   // 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store
   char* check_cmd = xy_str_to_quietcmd("python --version");
-  bool exist_b = does_the_program_exist (check_cmd, "python");
+  bool exist = does_the_program_exist (check_cmd, "python");
 
-  if (!exist_b) {
+  if (!exist) {
     check_cmd = xy_str_to_quietcmd("python3 --version");
-    exist_b = does_the_program_exist (check_cmd, "python3");
-    if (exist_b) *prog = "python3";
+    exist = does_the_program_exist (check_cmd, "python3");
+    if (exist) *prog = "python3";
   }
   else {
     *prog = "python";
   }
 
-  if (!exist_b) {
+  if (!exist) {
     xy_error ("chsrc: 未找到 Python 相关命令，请检查是否存在");
     exit(1);
   }
 }
-
 
 void
 pl_python_getsrc (char* option)
@@ -308,8 +299,7 @@ pl_python_getsrc (char* option)
   char* prog = NULL;
   _pl_python_check_cmd (&prog);
   char* cmd = xy_2strjoin(prog, " -m pip config get global.index-url");
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 }
 
 /**
@@ -334,8 +324,7 @@ pl_python_setsrc (char* option)
   chsrc_say_selection(&source);
 
   char* cmd = xy_2strjoin(prog, xy_2strjoin(" -m pip config set global.index-url ", source.url));
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
   chsrc_say_thanks(&source);
 }
 
@@ -366,14 +355,12 @@ pl_nodejs_getsrc (char* option)
   if (npm_exist)
   {
     char* cmd = "npm config get registry";
-    chsrc_logcmd(cmd);
-    system(cmd);
+    chsrc_runcmd(cmd);
   }
   if (yarn_exist)
   {
     char* cmd = "yarn config get registry";
-    chsrc_logcmd(cmd);
-    system(cmd);
+    chsrc_runcmd(cmd);
   }
 }
 
@@ -400,15 +387,13 @@ pl_nodejs_setsrc (char* option)
   if (npm_exist)
   {
     char* cmd = xy_2strjoin("npm config set registry ", source.url);
-    chsrc_logcmd(cmd);
-    system(cmd);
+    chsrc_runcmd(cmd);
   }
 
   if (yarn_exist)
   {
     char* cmd = xy_str_to_quietcmd(xy_2strjoin("yarn config set registry ", source.url));
-    chsrc_logcmd(cmd);
-    system(cmd);
+    chsrc_runcmd(cmd);
   }
   chsrc_say_thanks(&source);
 }
@@ -419,9 +404,9 @@ void
 _pl_perl_check_cmd ()
 {
   char* check_cmd = xy_str_to_quietcmd("perl --version");
-  bool exist_b = does_the_program_exist (check_cmd, "perl");
+  bool exist = does_the_program_exist (check_cmd, "perl");
 
-  if (!exist_b) {
+  if (!exist) {
     xy_error ("chsrc: 未找到 perl 命令，请检查是否存在");
     exit(1);
   }
@@ -435,8 +420,7 @@ pl_perl_getsrc (char* option)
   //            可以使用 CPAN::Shell->o('conf', 'urllist');
   //            另外，上述两种方法无论哪种，都要首先load()
   char* cmd = "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->prettyprint('urllist')\" ";
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 }
 
 /**
@@ -458,8 +442,7 @@ pl_perl_setsrc (char* option)
 
   char* cmd = xy_strjoin(3,
   "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('urllist', 'unshift', '", source.url, "'); CPAN::HandleConfig->commit()\"");
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 
   xy_warn ("chsrc: 请您使用 perl -v 以及 cpan -v，若 Perl >= v5.36 或 CPAN >= 2.29，请额外手动调用下面的命令");
   xy_warn ("       perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('pushy_https', 0);; CPAN::HandleConfig->commit()\"");
@@ -472,9 +455,9 @@ void
 _pl_php_check_cmd()
 {
   char* check_cmd = xy_str_to_quietcmd("composer --version");
-  bool exist_b = does_the_program_exist (check_cmd, "composer");
+  bool exist = does_the_program_exist (check_cmd, "composer");
 
-  if (!exist_b) {
+  if (!exist) {
     xy_error ("chsrc: 未找到 composer 命令，请检查是否存在");
     exit(1);
   }
@@ -488,8 +471,7 @@ pl_php_getsrc (char* option)
 {
   _pl_php_check_cmd ();
   char* cmd = "composer config -g repositories";
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 }
 
 /**
@@ -512,8 +494,7 @@ pl_php_setsrc (char* option)
   chsrc_say_selection (&source);
 
   char* cmd = xy_2strjoin("composer config -g repo.packagist composer ", source.url);
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 
   chsrc_say_thanks(&source);
 }
@@ -524,9 +505,9 @@ void
 _pl_go_check_cmd ()
 {
   char* check_cmd = xy_str_to_quietcmd("go version");
-  bool exist_b = does_the_program_exist (check_cmd, "go");
+  bool exist = does_the_program_exist (check_cmd, "go");
 
-  if (!exist_b) {
+  if (!exist) {
     xy_error ("chsrc: 未找到 go 相关命令，请检查是否存在");
     exit(1);
   }
@@ -537,8 +518,7 @@ pl_go_getsrc (char* option)
 {
   _pl_go_check_cmd ();
   char* cmd = "go env GOPROXY";
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 }
 
 /**
@@ -560,12 +540,10 @@ pl_go_setsrc (char* option)
   chsrc_say_selection (&source);
 
   char* cmd = "go env -w GO111MODULE=on";
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 
   cmd = xy_strjoin(3, "go env -w GOPROXY=", source.url, ",direct");
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
   chsrc_say_thanks(&source);
 }
 
@@ -580,8 +558,7 @@ pl_rust_getsrc (char* option)
   } else {
     cmd = "cat  ~/.cargo";
   }
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 }
 
 /**
@@ -763,12 +740,10 @@ pl_dart_getsrc(char* option)
   char* cmd = NULL;
   if (xy_on_windows) {
     cmd = "set PUB_HOSTED_URL & set FLUTTER_STORAGE_BASE_URL";
-    chsrc_logcmd(cmd);
-    system(cmd);
+    chsrc_runcmd(cmd);
   } else {
     cmd = "echo $PUB_HOSTED_URL; echo $FLUTTER_STORAGE_BASE_URL";
-    chsrc_logcmd(cmd);
-    system(cmd);
+    chsrc_runcmd(cmd);
   }
 }
 
@@ -885,8 +860,7 @@ pl_r_getsrc (char* option)
   } else {
     cmd = "cat ~/.Rprofile";
   }
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 }
 
 /**
@@ -918,9 +892,7 @@ pl_r_setsrc (char* option)
   else
     cmd = xy_strjoin(3, "echo ", file, " >> ~/.Rprofile");
 
-  chsrc_logcmd(cmd);
-  system(cmd);
-
+  chsrc_runcmd(cmd);
 
   file = xy_strjoin (3, "options(BioC_mirror=\"", bioconductor_url, "\")" );
   // 或者我们调用 r.exe --slave -e 上面的内容
@@ -929,8 +901,7 @@ pl_r_setsrc (char* option)
   else
     cmd = xy_strjoin(3, "echo ", file, " >> ~/.Rprofile");
 
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
   chsrc_say_thanks(&source);
 }
 
@@ -952,8 +923,7 @@ pl_julia_getsrc (char* option)
   } else {
     cmd = "cat  ~/.julia/config/startup.jl";
   }
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 }
 
 /**
@@ -985,12 +955,9 @@ pl_julia_setsrc (char* option)
     cmd = xy_strjoin(4, xy_str_to_quietcmd("mkdir -p ~/.julia/config"),
         ";echo ", file, " >> ~/.julia/config/startup.jl");
 
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
   chsrc_say_thanks(&source);
 }
-
-
 
 
 
