@@ -483,8 +483,26 @@ os_openkylin_sources[] = {
   {&Tencent,   "https://mirrors.tencent.com/openkylin/"},
   {&Netease,   "https://mirrors.163.com/openkylin/"},
   {&Sohu,      "https://mirrors.sohu.com/openkylin/"}
+};
+
+
+
+/**
+ * 2023-09-10 更新
+ *
+ * TODO: 1. 暂未添加商业公司源
+ */
+static source_info
+wr_tex_sources[] = {
+  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/ctan/systems/texlive/tlnet"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/CTAN/systems/texlive/tlnet"},
+  {&Lzuoss,        "https://mirror.lzu.edu.cn/CTAN/systems/texlive/tlnet"},
+  {&Jlu,           "https://mirrors.jlu.edu.cn/CTAN/systems/texlive/tlnet"},
+  {&Sustech,       "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet"}
 }
-;
+
+
 
 
 /* 辅助函数 */
@@ -546,6 +564,8 @@ def_target_sources_n(os_ubuntu);      def_target_sources_n(os_debian);      def_
 def_target_sources_n(os_kali);        def_target_sources_n(os_openbsd);     def_target_sources_n(os_msys2);
 def_target_sources_n(os_arch);        def_target_sources_n(os_gentoo);      def_target_sources_n(os_netbsd);
 def_target_sources_n(os_deepin);      def_target_sources_n(os_openeuler);   def_target_sources_n(os_openkylin);
+
+def_target_sources_n(wr_tex);
 
 /* Target Info */
 typedef struct {
