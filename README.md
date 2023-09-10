@@ -124,11 +124,11 @@ TODO: 上述已全部完成，但
 
 ```bash
 chsrc set tex   # 或 chsrc set ctan/latex/texlive/miktex
+chsrc set emacs # 或 chsrc set elpa
 ```
 
 TODO:
 - [ ] `chsrc set brew`  或 `chsrc set homebrew`
-- [ ] `chsrc set emacs`
 - [ ] `chsrc set conda` 或 `chsrc set anaconda`
 
 <br>
