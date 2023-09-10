@@ -3,7 +3,7 @@
  * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-09>
+ * Last modified : <2023-09-10>
  *
  * xy:
  *
@@ -24,13 +24,11 @@
 #include <stdbool.h>
 #include <assert.h>
 #include <stddef.h>
+#include <unistd.h> // For access()
 
 // #define NDEBUG
 
-
 #ifdef _WIN32
-
-  #include <io.h> // For access()
 
   static bool xy_on_windows = true;
   static bool xy_on_linux   = false;
@@ -42,7 +40,7 @@
   #include <windows.h>
   #define xy_useutf8() SetConsoleOutputCP(65001)
 
-#elif  defined(__linux__) || defined(__linux)
+#elif defined(__linux__) || defined(__linux)
 
   static bool xy_on_windows = false;
   static bool xy_on_linux   = true;
@@ -53,7 +51,7 @@
 
   #define xy_useutf8()
 
-#elif defined(TARGET_OS_MAC) ||defined(__MACOSX__)
+#elif defined(TARGET_OS_MAC) || defined(__MACOSX__)
 
   static bool xy_on_windows = false;
   static bool xy_on_linux   = false;
@@ -71,7 +69,7 @@
   static bool xy_on_macos   = false;
   static bool xy_on_bsd     = true;
 
-  // set xy_os_devnull
+  static char* xy_os_devnull = "/dev/null";
 
   #define xy_useutf8()
 
@@ -235,7 +233,7 @@ xy_strjoin (unsigned int count, ...)
 }
 
 
-char*
+static char*
 xy_strdup(const char* str)
 {
   size_t len = strlen(str);
@@ -274,7 +272,7 @@ xy_strdup(const char* str)
 #define xy_str_to_purple       xy_str_to_magenta
 #define xy_str_to_cyan(str)    xy_str_to_terminal_style_(XY_STR_CYAN,   str)
 
-char*
+static char*
 xy_str_to_terminal_style_(int style, const char* str)
 {
   char* color_fmt_str = NULL;
@@ -337,13 +335,13 @@ xy_str_to_terminal_style_(int style, const char* str)
 }
 
 
-bool
+static bool
 xy_streql(const char* str1, const char* str2) {
   return strcmp(str1, str2) == 0 ? true : false;
 }
 
 
-char*
+static char*
 xy_str_to_quietcmd (const char* cmd)
 {
   char* ret = NULL;
@@ -356,7 +354,7 @@ xy_str_to_quietcmd (const char* cmd)
 }
 
 
-bool
+static bool
 xy_str_end_with (const char* str, const char* suffix)
 {
   size_t len1 = strlen(str);
@@ -376,7 +374,7 @@ xy_str_end_with (const char* str, const char* suffix)
   return true;
 }
 
-bool
+static bool
 xy_str_start_with (const char* str, const char* prefix)
 {
   size_t len1 = strlen(str);
@@ -396,7 +394,7 @@ xy_str_start_with (const char* str, const char* prefix)
   return true;
 }
 
-char*
+static char*
 xy_str_delete_prefix (const char* str, const char* prefix)
 {
   char* new = xy_strdup(str);
@@ -409,7 +407,7 @@ xy_str_delete_prefix (const char* str, const char* prefix)
 }
 
 
-char*
+static char*
 xy_str_delete_suffix (const char* str, const char* suffix)
 {
   char* new = xy_strdup(str);
@@ -424,7 +422,7 @@ xy_str_delete_suffix (const char* str, const char* suffix)
 }
 
 
-char*
+static char*
 xy_str_strip (const char* str)
 {
   const char* lf   = "\n";
@@ -452,7 +450,7 @@ xy_str_strip (const char* str)
  * 执行cmd后拿到cmd的执行结果 注意从外部free掉这段内存
  * 注意：执行结果后面有回车换行
  */
-char *
+static char *
 xy_getcmd(const char * cmd, bool (*func)(const char*))
 {
   const int BUFSIZE = 1024;
@@ -495,7 +493,7 @@ xy_getcmd(const char * cmd, bool (*func)(const char*))
 
 
 #define xy_os_home _xy_os_home()
-char*
+static char*
 _xy_os_home ()
 {
   char* home = NULL;
@@ -509,7 +507,7 @@ _xy_os_home ()
 
 #define xy_win_powershell_profile _xy_win_powershell_profile()
 #define xy_win_powershellv5_profile _xy_win_powershellv5_profile()
-char*
+static char*
 _xy_win_powershell_profile ()
 {
   return xy_2strjoin(xy_os_home, "\\Documents\\PowerShell\\Microsoft.PowerShell_profile.ps1");
@@ -525,7 +523,7 @@ _xy_win_powershellv5_profile()
 /**
  * @note Windows上，`path` 不要夹带变量名，因为最终 access() 不会帮你转换
  */
-bool
+static bool
 xy_file_exist(char* path)
 {
   char* newpath = path;
