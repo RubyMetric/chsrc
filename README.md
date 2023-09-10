@@ -78,7 +78,7 @@ chsrc set go
 chsrc set rust    或 chsrc set cargo / crate
 chsrc set java    或 chsrc set maven / mvn / gradle
 chsrc set clojure 或 chsrc set clojars
-chsrc set dart    或 chsrc set pub
+chsrc set dart    或 chsrc set pub / flutter # 即同时为flutter换源
 chsrc set haskell 或 chsrc set hackage/cabal/stack
 
 # 同时会为 bioconductor 换源

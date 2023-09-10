@@ -757,17 +757,16 @@ pl_clojure_setsrc(char* option)
 
 
 
-
 void
 pl_dart_getsrc(char* option)
 {
   char* cmd = NULL;
   if (xy_on_windows) {
-    cmd = "set PUB_HOSTED_URL";
+    cmd = "set PUB_HOSTED_URL & set FLUTTER_STORAGE_BASE_URL";
     chsrc_logcmd(cmd);
     system(cmd);
   } else {
-    cmd = "echo $PUB_HOSTED_URL";
+    cmd = "echo $PUB_HOSTED_URL; echo $FLUTTER_STORAGE_BASE_URL";
     chsrc_logcmd(cmd);
     system(cmd);
   }
@@ -1684,7 +1683,7 @@ static const char
 *pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  targetinfo(&pl_rust_target)},
 *pl_java  [] = {"java",  "maven",   "gradle",            NULL,  targetinfo(&pl_java_target)},
 *pl_clojure[] ={"clojure","clojars","leiningen", "lein", NULL,  targetinfo(&pl_clojure_target)},
-*pl_dart  [] = {"dart",  "pub",                          NULL,  targetinfo(&pl_dart_target)},
+*pl_dart  [] = {"dart",  "pub",     "flutter",           NULL,  targetinfo(&pl_dart_target)},
 *pl_dotnet[] = {"nuget", "net",     ".net",   "dotnet",  NULL,  targetinfo(&pl_dotnet_target)},
 *pl_haskell[] ={"haskell", "cabal", "stack",  "hackage", NULL,  targetinfo(&pl_haskell_target)},
 *pl_r     [] = {"r",     "cran",                         NULL,  targetinfo(&pl_r_target)},
