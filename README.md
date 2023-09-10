@@ -68,25 +68,26 @@ set  <target> <mirror>  # 换源，指定使用某镜像站
 ## 编程语言开发
 
 ```bash
-chsrc set ruby   或 chsrc set gem
-chsrc set python 或 chsrc set pip
-chsrc set node   或 chsrc set npm  或 chsrc set nodejs
-chsrc set perl   或 chsrc set cpan
-chsrc set php    或 chsrc set composer
+chsrc set ruby    或 chsrc set gem
+chsrc set python  或 chsrc set pip
+chsrc set node    或 chsrc set npm / nodejs
+chsrc set perl    或 chsrc set cpan
+chsrc set php     或 chsrc set composer
 
 chsrc set go
-chsrc set rust   或 chsrc set cargo  或 chsrc set crate
-chsrc set java   或 chsrc set maven  或 chsrc set mvn  或 chsrc set gradle
-chsrc set dart   或 chsrc set pub
+chsrc set rust    或 chsrc set cargo / crate
+chsrc set java    或 chsrc set maven / mvn / gradle
+chsrc set clojure 或 chsrc set clojars
+chsrc set dart    或 chsrc set pub
 
 # 同时会为 bioconductor 换源
-chsrc set r      或 chsrc set cran
+chsrc set r       或 chsrc set cran
 chsrc set julia
 ```
 
 TODO: 上述已全部完成，但
 
-1. 部分换源方案当前需要用户进行少量手动操作如 `java`，`rust`
+1. 部分换源方案当前需要用户进行部分手动操作如 `java`，`clojure`, `rust`
 2. 还未经多平台测试
 
 <br>
@@ -123,7 +124,7 @@ TODO: 上述已全部完成，但
 ## 软件
 
 ```bash
-chsrc set tex   # 或 chsrc set ctan/latex/texlive/miktex
+chsrc set tex   # 或 chsrc set ctan / latex / texlive / miktex
 chsrc set emacs # 或 chsrc set elpa
 ```
 
