@@ -105,7 +105,8 @@ mirror_info
   GoProxyIO = {"goproxy.io",   "GOPROXY.IO",   "GOPROXY.IO",         "https://goproxy.io/",
                "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"},   // 30 MB
 
-  NugetOrg  = {"nuget.org",    "NuGet Org",    "Nuget Organization", "https://www.nuget.org/",       NULL};
+  NugetOrg   = {"nuget.org",    "NuGet Org",   "Nuget Organization", "https://www.nuget.org/",           NULL},
+  EmacsChina = {"emacschina",  "EmacsChina",   "Emacs China 社区", "https://elpamirror.emacs-china.org/", NULL};
 
 
 mirror_info*
@@ -528,7 +529,8 @@ wr_emacs_sources[] = {
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/help/elpa/"},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/help/elpa/"},
   {&Ustc,           "https://mirrors.ustc.edu.cn/help/elpa.html"},
-  {&Zju,            "https://mirrors.zju.edu.cn/docs/elpa/"}
+  {&Zju,            "https://mirrors.zju.edu.cn/docs/elpa/"},
+  {&EmacsChina,     "https://elpamirror.emacs-china.org/"}
 };
 
 
