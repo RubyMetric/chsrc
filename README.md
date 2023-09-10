@@ -112,7 +112,7 @@ chsrc set deepin
 chsrc set openeuler
 chsrc set openkylin
 
-chsrc set msys2  或 chsrc set msys
+chsrc set msys2 或 chsrc set msys
 ```
 
 TODO: 上述已全部完成，但
@@ -127,10 +127,10 @@ TODO: 上述已全部完成，但
 ```bash
 chsrc set tex   # 或 chsrc set ctan / latex / texlive / miktex
 chsrc set emacs # 或 chsrc set elpa
+chsrc set brew  # 或 chsrc set homebrew
 ```
 
 TODO:
-- [ ] `chsrc set brew`  或 `chsrc set homebrew`
 - [ ] `chsrc set conda` 或 `chsrc set anaconda`
 
 <br>
