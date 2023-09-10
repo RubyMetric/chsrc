@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2023-09-09>
+ * Last modified : <2023-09-10>
  *
  * chsrc:
  *
@@ -271,6 +271,18 @@ pl_dotnet_sources[] = {
 
 
 /**
+ * 2023-09-10 更新
+ */
+pl_dart_sources[] = {
+  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/dart-pub"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"},
+  {&Tencent,       "https://mirrors.cloud.tencent.com/dart-pub/"},
+  {&Nju,           "https://mirror.nju.edu.cn/dart-pub"},
+}
+
+
+
+/**
  * 2023-09-04 更新
  *
  * @note 缺少教育网或开源社区软件源
@@ -499,6 +511,13 @@ chsrc_logcmd (const char* cmd)
   xy_info(xy_2strjoin("chsrc: 运行 ", cmd));
 }
 
+void
+chsrc_runcmd (const char* cmd)
+{
+  chsrc_logcmd(cmd);
+  system(cmd);
+}
+
 /**
  * 用于 _setsrc 函数
  */
@@ -519,6 +538,7 @@ chsrc_say_thanks (source_info* source)
 def_target_sources_n(pl_ruby); def_target_sources_n(pl_python); def_target_sources_n(pl_nodejs);
 def_target_sources_n(pl_perl); def_target_sources_n(pl_php);    def_target_sources_n(pl_go);
 def_target_sources_n(pl_rust); def_target_sources_n(pl_java);   def_target_sources_n(pl_dotnet);
+def_target_sources_n(pl_dart);
 def_target_sources_n(pl_r);    def_target_sources_n(pl_julia);
 
 def_target_sources_n(os_ubuntu);      def_target_sources_n(os_debian);      def_target_sources_n(os_fedora);
