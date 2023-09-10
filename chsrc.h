@@ -272,12 +272,18 @@ pl_dotnet_sources[] = {
 
 /**
  * 2023-09-10 更新
+ *
+ * @note 我们这里挑选的必须也支持 Flutter
+ *
+ * 我们将会在setsrc函数中生成
+ * 1. https://mirrors.tuna.tsinghua.edu.cn/dart-pub
+ * 2. https://mirrors.tuna.tsinghua.edu.cn/flutter
  */
 pl_dart_sources[] = {
-  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/dart-pub"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"},
-  {&Tencent,       "https://mirrors.cloud.tencent.com/dart-pub/"},
-  {&Nju,           "https://mirror.nju.edu.cn/dart-pub"},
+  // {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/"}, // 不确定SJTUG的flutter镜像给的对不对
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/"},
+  {&Tencent,       "https://mirrors.cloud.tencent.com/"},
+  {&Nju,           "https://mirror.nju.edu.cn/"}
 },
 
 

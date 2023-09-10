@@ -792,26 +792,30 @@ pl_dart_setsrc (char* option)
 
   char* cmd = NULL;
 
+  char* pub = xy_2strjoin(source.url, "dart-pub");
+  char* flutter = xy_2strjoin(source.url, "flutter");
+
   if (xy_on_windows)
   {
-    if (xy_file_exist(xy_win_powershell_profile)) {
-      chsrc_runcmd(
-        xy_strjoin(4, "echo $env:PUB_HOSTED_URL = \"", source.url, "\" >> ", xy_win_powershell_profile));
+    if (xy_file_exist(xy_win_powershell_profile))
+    {
+      chsrc_runcmd(xy_strjoin(4, "echo $env:PUB_HOSTED_URL = \"", pub, "\" >> ", xy_win_powershell_profile));
+      chsrc_runcmd(xy_strjoin(4, "echo $env:FLUTTER_STORAGE_BASE_URL = \"", flutter, "\" >> ", xy_win_powershell_profile));
     }
-    if (xy_file_exist(xy_win_powershellv5_profile)) {
-      chsrc_runcmd(
-        xy_strjoin(4, "echo $env:PUB_HOSTED_URL = \"", source.url, "\" >> ", xy_win_powershellv5_profile));
+
+    if (xy_file_exist(xy_win_powershellv5_profile))
+    {
+      chsrc_runcmd(xy_strjoin(4, "echo $env:PUB_HOSTED_URL = \"", pub, "\" >> ", xy_win_powershellv5_profile));
+      chsrc_runcmd(xy_strjoin(4, "echo $env:FLUTTER_STORAGE_BASE_URL = \"", flutter, "\" >> ", xy_win_powershell_profile));
     }
   }
+
   else
   {
-    cmd = "echo 'export PUB_HOSTED_URL=\"", source.url,  "\"' >> ~/.bashrc";
+    cmd = "echo 'export PUB_HOSTED_URL=\"", pub, "\"' >> ~/.bashrc >> ~/.zshrc";
     chsrc_runcmd(cmd);
-
-    if (xy_file_exist("~/.zshrc")) {
-      cmd = "echo 'export PUB_HOSTED_URL=\"", source.url,  "\"' >> ~/.zshrc";
-      chsrc_runcmd(cmd);
-    }
+    cmd = "export 'FLUTTER_STORAGE_BASE_URL=\"", flutter, "\"' >> ~/.bashrc >> ~/.zshrc";
+    chsrc_runcmd(cmd);
   }
   chsrc_say_thanks(&source);
 }
