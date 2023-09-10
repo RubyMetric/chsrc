@@ -122,11 +122,14 @@ TODO: 上述已全部完成，但
 
 ## 软件
 
+```bash
+chsrc set tex   # 或 chsrc set ctan/latex/texlive/miktex
+```
+
 TODO:
 - [ ] `chsrc set brew`  或 `chsrc set homebrew`
 - [ ] `chsrc set emacs`
 - [ ] `chsrc set conda` 或 `chsrc set anaconda`
-- [ ] `chsrc set ctan`  或 `chsrc set tex`
 
 <br>
 
