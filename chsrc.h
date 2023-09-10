@@ -559,7 +559,7 @@ wr_emacs_sources[] = {
 /**
  * 2023-09-10 更新
  *
- * @note 1. 这些链接是故意这么写的，会在setsrc函数中处理
+ * @note 1. 这些链接将会在setsrc函数中补充完整
  *       2. 不确定 Sustech 能否工作
  */
 wr_brew_sources[] = {
@@ -567,6 +567,20 @@ wr_brew_sources[] = {
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/"},
   {&Zju,            "https://mirrors.zju.edu.cn/"},
   {&Sustech,        "https://mirrors.sustech.edu.cn/"}
+},
+
+
+
+/**
+ * 2023-09-10 更新
+ *
+ * @note 1. 这些链接将会在setsrc函数中补充完整
+ */
+wr_anaconda_sources[] = {
+  {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/anaconda/"},
+  {&Bfsu,            "https://mirrors.bfsu.edu.cn/anaconda/"},
+  {&Zju,             "https://mirrors.zju.edu.cn/anaconda/"},
+  {&Sjtug_Zhiyuan,   "https://mirror.sjtu.edu.cn/anaconda"}
 };
 
 
@@ -632,6 +646,7 @@ def_target_sources_n(os_arch);        def_target_sources_n(os_gentoo);      def_
 def_target_sources_n(os_deepin);      def_target_sources_n(os_openeuler);   def_target_sources_n(os_openkylin);
 
 def_target_sources_n(wr_tex);  def_target_sources_n(wr_emacs);  def_target_sources_n(wr_brew);
+def_target_sources_n(wr_anaconda);
 
 /* Target Info */
 typedef struct {

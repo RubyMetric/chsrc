@@ -1620,6 +1620,65 @@ wr_brew_setsrc(char* option)
 
 
 
+void
+wr_anaconda_setsrc(char* option)
+{
+  int index = 0;
+  if (NULL!=option) {
+    index = lets_find_mirror(wr_anaconda, option);
+  } else {
+    index = lets_test_speed(wr_anaconda);
+  }
+
+  source_info source = wr_anaconda_sources[index];
+  chsrc_say_selection (&source);
+
+
+  char* main  = xy_2strjoin(source.url, "pkgs/main");
+  char* r     = xy_2strjoin(source.url, "pkgs/r");
+  char* msys2 = xy_2strjoin(source.url, "pkgs/msys2");
+  char* cloud = xy_2strjoin(source.url, "cloud");
+
+  char* file = xy_strjoin(22,
+               "channels:\n  - defaults\n"
+               "show_channel_urls: true\ndefault_channels:"
+             "\n  - ", main,
+             "\n  - ", r,
+             "\n  - ", msys2,
+             "\ncustom_channels:\n"
+               "  conda-forge: ", cloud,
+             "\n  msys2: ",        cloud,
+             "\n  bioconda: ",     cloud,
+             "\n  menpo: ",        cloud,
+             "\n  pytorch: ",      cloud,
+             "\n  pytorch-lts: ",  cloud,
+             "\n  simpleitk: ",    cloud,
+             "\n  deepmodeling: ", cloud);
+
+
+  char* config = xy_2strjoin(xy_os_home, ".condarc");
+
+
+  if (xy_on_windows) {
+    char* check_cmd = xy_str_to_quietcmd("conda --version");
+    bool exist = does_the_program_exist (check_cmd, "conda");
+    if (!exist) {
+      xy_error ("chsrc: 未找到 conda 命令，请检查是否存在");
+      exit(1);
+    }
+    chsrc_runcmd("conda config --set show_channel_urls yes");
+  }
+
+
+  xy_info(xy_strjoin(3,"chsrc: 请向 ", config, " 中手动添加:"));
+  puts(file);
+
+  xy_info("chsrc: 然后运行 conda clean -i 清除索引缓存，保证用的是镜像站提供的索引");
+  chsrc_say_thanks(&source);
+}
+
+
+
 /************************************** Begin Target Matrix ****************************************/
 def_target_info(pl_ruby);
 def_target_info(pl_python);
@@ -1707,7 +1766,7 @@ def_target_info(wr_tex);
 def_target_info(wr_brew);
 
 target_info
-  wr_anaconda_target = {NULL, NULL, NULL, 0},
+  wr_anaconda_target = {wr_anaconda_setsrc, NULL, wr_anaconda_sources, wr_anaconda_sources_n},
   wr_emacs_target    = {wr_emacs_setsrc, NULL, wr_emacs_sources, wr_emacs_sources_n};
 
 static const char
