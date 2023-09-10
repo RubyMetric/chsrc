@@ -1512,6 +1512,27 @@ wr_tex_setsrc(char* option)
 }
 
 
+
+
+void
+wr_emacs_setsrc(char* option)
+{
+  int index = 0;
+  if (NULL!=option) {
+    index = lets_find_mirror(wr_emacs, option);
+  } else {
+    index = lets_test_speed(wr_emacs);
+  }
+
+  source_info source = wr_emacs_sources[index];
+  chsrc_say_selection (&source);
+
+  xy_warn("chsrc: 抱歉，Emacs换源涉及Elisp，您可手动查阅并换源:");
+  puts(source.url);
+
+  chsrc_say_thanks (&source);
+}
+
 /************************************** Begin Target Matrix ****************************************/
 def_target_info(pl_ruby);
 def_target_info(pl_python);
@@ -1594,12 +1615,12 @@ def_target_info(wr_tex);
 
 target_info
   wr_anaconda_target = {NULL, NULL, NULL, 0},
-  wr_emacs_target    = {NULL, NULL, NULL, 0},
+  wr_emacs_target    = {wr_emacs_setsrc, NULL, wr_emacs_sources, wr_emacs_sources_n},
   wr_brew_target     = {NULL, NULL, NULL, 0};
 
 static const char
 *wr_anaconda[] = {"conda", "anaconda",     NULL,  targetinfo(&wr_anaconda_target)},
-*wr_emacs   [] = {"emacs",                 NULL,  targetinfo(&wr_emacs_target)},
+*wr_emacs   [] = {"emacs", "elpa",         NULL,  targetinfo(&wr_emacs_target)},
 *wr_tex     [] = {"latex", "ctan", "tex", "texlive", "miktex", "tlmgr", "mpm", NULL, targetinfo(&wr_tex_target)},
 *wr_brew    [] = {"brew",  "homebrew",     NULL,  targetinfo(&wr_brew_target)},
 **wr_softwares[] =

@@ -500,8 +500,21 @@ wr_tex_sources[] = {
   {&Lzuoss,        "https://mirror.lzu.edu.cn/CTAN/systems/texlive/tlnet"},
   {&Jlu,           "https://mirrors.jlu.edu.cn/CTAN/systems/texlive/tlnet"},
   {&Sustech,       "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet"}
-};
+},
 
+
+/**
+ * 2023-09-10 更新
+ *
+ * @note Emacs用户往往只需要一次性换源，只会极少次调用 chsrc，我们只给用户提供文档
+ */
+wr_emacs_sources[] = {
+  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/docs/emacs-elpa"},
+  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/help/elpa/"},
+  {&Bfsu,           "https://mirrors.bfsu.edu.cn/help/elpa/"},
+  {&Ustc,           "https://mirrors.ustc.edu.cn/help/elpa.html"},
+  {&Zju,            "https://mirrors.zju.edu.cn/docs/elpa/"}
+};
 
 
 
@@ -565,7 +578,7 @@ def_target_sources_n(os_kali);        def_target_sources_n(os_openbsd);     def_
 def_target_sources_n(os_arch);        def_target_sources_n(os_gentoo);      def_target_sources_n(os_netbsd);
 def_target_sources_n(os_deepin);      def_target_sources_n(os_openeuler);   def_target_sources_n(os_openkylin);
 
-def_target_sources_n(wr_tex);
+def_target_sources_n(wr_tex);  def_target_sources_n(wr_emacs);
 
 /* Target Info */
 typedef struct {
