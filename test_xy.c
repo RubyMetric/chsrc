@@ -3,7 +3,7 @@
  * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-30>
- * Last modified : <2023-09-09>
+ * Last modified : <2023-09-10>
  *
  * test_xy:
  *
@@ -70,5 +70,7 @@ main (int argc, char const *argv[])
   xy_info("信息: 输出信息内容");
   xy_warn("警告：输出警告内容");
   xy_error("错误：输出错误内容");
+
+  putb(xy_file_exist("chsrc.png"));
   return 0;
 }

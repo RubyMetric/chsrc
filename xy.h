@@ -30,6 +30,8 @@
 
 #ifdef _WIN32
 
+  #include <io.h> // For access()
+
   static bool xy_on_windows = true;
   static bool xy_on_linux   = false;
   static bool xy_on_macos   = false;
@@ -445,7 +447,8 @@ xy_str_strip (const char* str)
   return new;
 }
 
-/* *
+
+/**
  * 执行cmd后拿到cmd的执行结果 注意从外部free掉这段内存
  * 注意：执行结果后面有回车换行
  */
@@ -490,6 +493,23 @@ xy_getcmd(const char * cmd, bool (*func)(const char*))
   return ret;
 }
 
+
+/**
+ * @note Windows上，`path` 不要夹带变量名，因为最终 access() 不会帮你转换
+ */
+bool
+xy_file_exist(char* path)
+{
+  char* newpath = path;
+  if (xy_on_windows)
+  {
+    char* home = getenv("USERPROFILE");
+    if (xy_str_start_with(path, "~")) {
+      newpath = xy_2strjoin(home, path+1);
+    }
+  }
+  return access(newpath, 0) ? false : true;
+}
 
 
 #endif

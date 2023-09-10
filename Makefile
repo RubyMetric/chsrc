@@ -31,6 +31,7 @@ test: $(TARGET)
 	./$(TARGET) get  ruby
 	./$(TARGET) get  python
 
+.PHONY: xy
 xy:
 	@$(CC) test_xy.c -o xy
 	@./xy
