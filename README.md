@@ -79,6 +79,7 @@ chsrc set rust    或 chsrc set cargo / crate
 chsrc set java    或 chsrc set maven / mvn / gradle
 chsrc set clojure 或 chsrc set clojars
 chsrc set dart    或 chsrc set pub
+chsrc set haskell 或 chsrc set hackage/cabal/stack
 
 # 同时会为 bioconductor 换源
 chsrc set r       或 chsrc set cran
@@ -87,7 +88,7 @@ chsrc set julia
 
 TODO: 上述已全部完成，但
 
-1. 部分换源方案当前需要用户进行部分手动操作如 `java`，`clojure`, `rust`
+1. 部分换源方案当前需要用户进行部分手动操作如 `java`，`clojure`, `rust`, `haskell`
 2. 还未经多平台测试
 
 <br>
