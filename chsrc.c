@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-10>
+ * Last modified : <2023-09-11>
  *
  * chsrc:
  *
@@ -1619,6 +1619,30 @@ wr_brew_setsrc(char* option)
 
 
 
+void
+wr_guix_setsrc(char* option)
+{
+  int index = 0;
+  if (NULL!=option) {
+    index = lets_find_mirror(wr_guix, option);
+  } else {
+    index = lets_test_speed(wr_guix);
+  }
+
+  source_info source = wr_guix_sources[index];
+  chsrc_say_selection (&source);
+
+
+  char* file =  xy_strjoin(3, "(list (channel\n"
+                              "       (inherit (car %default-channels))\n"
+                              "       (url \"", source.url, "\")))");
+
+  xy_warn ("chsrc: 请您手动写入以下内容到 ~/.config/guix/channels.scm 文件中");
+  puts(file);
+  chsrc_say_thanks(&source);
+}
+
+
 
 void
 wr_anaconda_setsrc(char* option)
@@ -1762,21 +1786,24 @@ static const char
 };
 
 
-def_target_info(wr_tex);
 def_target_info(wr_brew);
+def_target_info(wr_tex);
 
 target_info
-  wr_anaconda_target = {wr_anaconda_setsrc, NULL, wr_anaconda_sources, wr_anaconda_sources_n},
-  wr_emacs_target    = {wr_emacs_setsrc, NULL, wr_emacs_sources, wr_emacs_sources_n};
+  wr_guix_target     = {wr_guix_setsrc,  NULL, wr_guix_sources,  wr_guix_sources_n},
+  wr_emacs_target    = {wr_emacs_setsrc, NULL, wr_emacs_sources, wr_emacs_sources_n},
+  wr_anaconda_target = {wr_anaconda_setsrc, NULL, wr_anaconda_sources, wr_anaconda_sources_n};
+
 
 static const char
 *wr_anaconda[] = {"conda", "anaconda",     NULL,  targetinfo(&wr_anaconda_target)},
 *wr_emacs   [] = {"emacs", "elpa",         NULL,  targetinfo(&wr_emacs_target)},
 *wr_tex     [] = {"latex", "ctan", "tex", "texlive", "miktex", "tlmgr", "mpm", NULL, targetinfo(&wr_tex_target)},
+*wr_guix    [] = {"guix",   NULL,                 targetinfo(&wr_guix_target)},
 *wr_brew    [] = {"brew",  "homebrew",     NULL,  targetinfo(&wr_brew_target)},
 **wr_softwares[] =
 {
-  wr_anaconda, wr_emacs, wr_tex, wr_brew
+  wr_brew, wr_guix, wr_emacs, wr_tex, wr_anaconda
 };
 #undef targetinfo
 /************************************** End Target Matrix ****************************************/
