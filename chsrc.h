@@ -570,6 +570,15 @@ wr_brew_sources[] = {
 },
 
 
+/**
+ * 2023-09-11 更新
+ *
+ * @note 目前只有一个源
+ */
+wr_guix_sources[] = {
+  {&Sjtug_Zhiyuan,  "https://mirror.sjtu.edu.cn/git/guix.git"}
+},
+
 
 /**
  * 2023-09-10 更新
@@ -645,7 +654,8 @@ def_target_sources_n(os_kali);        def_target_sources_n(os_openbsd);     def_
 def_target_sources_n(os_arch);        def_target_sources_n(os_gentoo);      def_target_sources_n(os_netbsd);
 def_target_sources_n(os_deepin);      def_target_sources_n(os_openeuler);   def_target_sources_n(os_openkylin);
 
-def_target_sources_n(wr_tex);  def_target_sources_n(wr_emacs);  def_target_sources_n(wr_brew);
+def_target_sources_n(wr_brew); def_target_sources_n(wr_guix);
+def_target_sources_n(wr_tex);  def_target_sources_n(wr_emacs);
 def_target_sources_n(wr_anaconda);
 
 /* Target Info */
