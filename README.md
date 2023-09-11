@@ -63,6 +63,10 @@ set  <target> def(ault) # 换源，默认使用维护团队测速第一的源
 set  <target> <mirror>  # 换源，指定使用某镜像站
 ```
 
+注意: 下述语言/系统/软件均已实现基本支持，但还没有经过多平台测试，若有问题，请您及时提交报告。
+
+另外，部分换源方案当前实现不足，需要用户进行部分手动操作如 `clojure`, `haskell`, `manjaro`, `emacs` 等。您可对您熟悉的部分做出贡献。
+
 <br>
 
 ## 编程语言开发
@@ -85,11 +89,6 @@ chsrc set haskell 或 chsrc set hackage/cabal/stack
 chsrc set r       或 chsrc set cran
 chsrc set julia
 ```
-
-TODO: 上述已全部完成，但
-
-1. 部分换源方案当前需要用户进行部分手动操作如 `java`，`clojure`, `rust`, `haskell`
-2. 还未经多平台测试
 
 <br>
 
@@ -115,19 +114,16 @@ chsrc set openkylin
 chsrc set msys2 或 chsrc set msys
 ```
 
-TODO: 上述已全部完成，但
-
-1. 部分换源方案当前需要用户进行少量手动操作如 `manjaro`
-2. 还未经多平台测试
-
 <br>
 
 ## 软件
 
 ```bash
-chsrc set tex    或 chsrc set ctan / latex / texlive / miktex
-chsrc set emacs  或 chsrc set elpa
 chsrc set brew   或 chsrc set homebrew
+chsrc set flathub
+chsrc set guix
+chsrc set emacs  或 chsrc set elpa
+chsrc set tex    或 chsrc set ctan / latex / texlive / miktex
 chsrc set conda  或 chsrc set anaconda
 ```
 
