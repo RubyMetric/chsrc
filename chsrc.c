@@ -1618,7 +1618,9 @@ wr_brew_setsrc(char* option)
 }
 
 
-
+/**
+ * 参考: https://mirrors.sjtug.sjtu.edu.cn/docs/guix
+ */
 void
 wr_guix_setsrc(char* option)
 {
@@ -1639,6 +1641,37 @@ wr_guix_setsrc(char* option)
 
   xy_warn ("chsrc: 请您手动写入以下内容到 ~/.config/guix/channels.scm 文件中");
   puts(file);
+  chsrc_say_thanks(&source);
+}
+
+
+
+/**
+ * 参考: https://mirrors.sjtug.sjtu.edu.cn/docs/flathub
+ */
+void
+wr_flathub_setsrc(char* option)
+{
+  int index = 0;
+  if (NULL!=option) {
+    index = lets_find_mirror(wr_flathub, option);
+  } else {
+    index = lets_test_speed(wr_flathub);
+  }
+
+  source_info source = wr_flathub_sources[index];
+  chsrc_say_selection (&source);
+
+  xy_warn ("chsrc: 若出现问题，可先调用以下命令:");
+  char* note = xy_strjoin(3,
+    "wget ", source.url, "/flathub.gpg\n"
+    "sudo flatpak remote-modify --gpg-import=flathub.gpg flathub"
+  );
+  puts(note);
+
+  char* cmd = xy_2strjoin("sudo flatpak remote-modify flathub --url=", source.url);
+  chsrc_runcmd(cmd);
+
   chsrc_say_thanks(&source);
 }
 
@@ -1790,20 +1823,21 @@ def_target_info(wr_brew);
 def_target_info(wr_tex);
 
 target_info
-  wr_guix_target     = {wr_guix_setsrc,  NULL, wr_guix_sources,  wr_guix_sources_n},
-  wr_emacs_target    = {wr_emacs_setsrc, NULL, wr_emacs_sources, wr_emacs_sources_n},
-  wr_anaconda_target = {wr_anaconda_setsrc, NULL, wr_anaconda_sources, wr_anaconda_sources_n};
-
+  wr_flathub_target  = {wr_flathub_setsrc,  NULL,  wr_flathub_sources,  wr_flathub_sources_n},
+  wr_guix_target     = {wr_guix_setsrc,     NULL,  wr_guix_sources,     wr_guix_sources_n},
+  wr_emacs_target    = {wr_emacs_setsrc,    NULL,  wr_emacs_sources,    wr_emacs_sources_n},
+  wr_anaconda_target = {wr_anaconda_setsrc, NULL,  wr_anaconda_sources, wr_anaconda_sources_n};
 
 static const char
-*wr_anaconda[] = {"conda", "anaconda",     NULL,  targetinfo(&wr_anaconda_target)},
+*wr_brew    [] = {"brew",  "homebrew",     NULL,  targetinfo(&wr_brew_target)},
+*wr_flathub [] = {"flathub", NULL,                targetinfo(&wr_flathub_target)},
+*wr_guix    [] = {"guix",    NULL,                targetinfo(&wr_guix_target)},
 *wr_emacs   [] = {"emacs", "elpa",         NULL,  targetinfo(&wr_emacs_target)},
 *wr_tex     [] = {"latex", "ctan", "tex", "texlive", "miktex", "tlmgr", "mpm", NULL, targetinfo(&wr_tex_target)},
-*wr_guix    [] = {"guix",   NULL,                 targetinfo(&wr_guix_target)},
-*wr_brew    [] = {"brew",  "homebrew",     NULL,  targetinfo(&wr_brew_target)},
+*wr_anaconda[] = {"conda", "anaconda",     NULL,  targetinfo(&wr_anaconda_target)},
 **wr_softwares[] =
 {
-  wr_brew, wr_guix, wr_emacs, wr_tex, wr_anaconda
+  wr_brew, wr_flathub, wr_guix, wr_emacs, wr_tex, wr_anaconda
 };
 #undef targetinfo
 /************************************** End Target Matrix ****************************************/
