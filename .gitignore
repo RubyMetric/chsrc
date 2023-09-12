@@ -2,3 +2,6 @@
 *.out
 *.o
 *.obj
+# target exe name
+chsrc
+xy
