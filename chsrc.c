@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-11>
+ * Last modified : <2023-09-12>
  *
  * chsrc:
  *
@@ -14,7 +14,7 @@
 
 #include "chsrc.h"
 
-#define Chsrc_Version "v0.1.0.20230910.pre"
+#define Chsrc_Version "v0.1.0.20230912.pre"
 
 
 /**
@@ -786,9 +786,9 @@ pl_dart_setsrc (char* option)
 
   else
   {
-    cmd = "echo 'export PUB_HOSTED_URL=\"", pub, "\"' >> ~/.bashrc >> ~/.zshrc";
+    cmd = xy_strjoin(3, "echo 'export PUB_HOSTED_URL=\"", pub, "\"' >> ~/.bashrc >> ~/.zshrc");
     chsrc_runcmd(cmd);
-    cmd = "export 'FLUTTER_STORAGE_BASE_URL=\"", flutter, "\"' >> ~/.bashrc >> ~/.zshrc";
+    cmd = xy_strjoin(3, "export 'FLUTTER_STORAGE_BASE_URL=\"", flutter, "\"' >> ~/.bashrc >> ~/.zshrc");
     chsrc_runcmd(cmd);
   }
   chsrc_say_thanks(&source);
