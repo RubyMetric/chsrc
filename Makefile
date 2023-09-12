@@ -3,11 +3,12 @@
 # License       : GPLv3
 # Authors       : Aoran Zeng <ccmywish@qq.com>
 # Created on    : <2023-08-28>
-# Last modified : <2023-09-06>
+# Last modified : <2023-09-12>
 # ---------------------------------------------------------------
 
 CFLAGS = # -Wall
 
+# 只有Windows会定义该变量
 ifeq ($(OS), Windows_NT)
 	CLANG_FLAGS = -target x86_64-pc-windows-gnu
 endif
@@ -15,15 +16,13 @@ endif
 TARGET = chsrc
 #=======================
 
-all: echo
+all:
 ifeq ($(CC), clang)
 	@$(CC) chsrc.c $(CLANG_FLAGS) $(CFLAGS) -o $(TARGET)
 else
 	@$(CC) chsrc.c $(CFLAGS) -o $(TARGET)
 endif
-
-echo:
-	@echo Compile using \'$(CC)\' $(CFLAGS) on $(OS) ...
+	@echo Compile done using \'$(CC)\' $(CFLAGS)
 
 test: $(TARGET)
 	./$(TARGET) list mirror
