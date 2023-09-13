@@ -3,7 +3,7 @@
  * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-10>
+ * Last modified : <2023-09-13>
  *
  * xy:
  *
@@ -51,14 +51,14 @@
 
   #define xy_useutf8()
 
-#elif defined(TARGET_OS_MAC) || defined(__MACOSX__)
+#elif defined(__APPLE__)
 
   static bool xy_on_windows = false;
   static bool xy_on_linux   = false;
   static bool xy_on_macos   = true;
   static bool xy_on_bsd     = false;
 
-  // set xy_os_devnull
+  static char* xy_os_devnull = "/dev/null";
 
   #define xy_useutf8()
 
