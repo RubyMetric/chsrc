@@ -1,0 +1,29 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "gh-pipeline" ]
+  pull_request:
+    branches: [ "gh-pipeline" ]
+
+jobs:
+  build:
+
+    runs-on: [ubuntu-latest, macos-latest]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: make
+      run: make
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.3
+      with:
+        # Artifact name
+        name: chsrc
+        path: chsrc
+        # The desired behavior if no files are found using the provided path.
+  
+        warn: Output a warning but do not fail the action
+        error: Fail the action with an error message
+ 
