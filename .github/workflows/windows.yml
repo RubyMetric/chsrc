@@ -1,0 +1,53 @@
+name: Windows Build
+on:
+  push:
+    branches: [ "gh-pipeline" ]
+  pull_request:
+    branches: [ "gh-pipeline" ]
+
+jobs:
+  build-and-upload:
+
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Install x64 gcc
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: UCRT64
+        update: true
+        install: |
+          mingw-w64-ucrt-x86_64-gcc
+          mingw-w64-ucrt-x86_64-make
+          mingw-w64-i686-gcc
+          mingw-w64-i686-make
+
+    - name: Compile chsrc x64
+      run: |
+        mingw32-make.exe CI BUILD_NAME=chsrc-x64-windows
+
+    - name: Compile chsrc x86
+      env:
+        MSYSTEM: MINGW32
+      run: |
+        mingw32-make.exe CI BUILD_NAME=chsrc-x86-windows
+
+    - name: List files
+      run: ls *.exe
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      # if: startsWith(github.ref, 'refs/tags/')
+      with:
+        tag_name: preview
+        files: |
+          chsrc-x64-windows.exe
+          chsrc-x86-windows.exe
+        token: ${{ secrets.CHSRC_UPLOAD }}
