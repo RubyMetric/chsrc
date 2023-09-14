@@ -3,7 +3,7 @@
 # License       : GPLv3
 # Authors       : Aoran Zeng <ccmywish@qq.com>
 # Created on    : <2023-08-28>
-# Last modified : <2023-09-12>
+# Last modified : <2023-09-14>
 # ---------------------------------------------------------------
 
 CFLAGS = # -Wall
@@ -14,6 +14,8 @@ ifeq ($(OS), Windows_NT)
 endif
 
 TARGET = chsrc
+
+CI_BUILD_NAME = chsrc
 #=======================
 
 all:
@@ -23,6 +25,9 @@ else
 	@$(CC) chsrc.c $(CFLAGS) -o $(TARGET)
 endif
 	@echo Compile done using \'$(CC)\' $(CFLAGS)
+
+CI: all
+	@mv chsrc $(CI_BUILD_NAME)
 
 test: $(TARGET)
 	./$(TARGET) list mirror
