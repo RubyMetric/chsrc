@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-12>
+ * Last modified : <2023-09-14>
  *
  * chsrc:
  *
@@ -14,7 +14,7 @@
 
 #include "chsrc.h"
 
-#define Chsrc_Version "v0.1.0.20230912.pre"
+#define Chsrc_Version "v0.1.0-20230914.pre"
 
 
 /**
