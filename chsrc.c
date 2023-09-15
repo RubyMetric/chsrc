@@ -46,8 +46,19 @@ pl_ruby_setsrc (char* option)
   source_info source = pl_ruby_sources[index];
   chsrc_say_selection (&source);
 
-  char* cmd = "gem source -r https://rubygems.org/";
-  chsrc_runcmd(cmd);
+  char* cmd = NULL;
+
+  FILE* fp = popen("gem sources -l", "r");
+  char buf[512] = {0};
+  while(NULL!=fgets(buf, 512, fp)) {
+    if (xy_str_start_with(buf, "http")){
+      cmd = xy_str_delete_suffix(buf, "\n");
+      cmd = xy_2strjoin("gem sources -r ", cmd);
+      chsrc_runcmd(cmd);
+    }
+    memset(buf, 0, 512);
+  }
+  pclose(fp);
 
   cmd = xy_2strjoin("gem source -a ", source.url);
   chsrc_runcmd(cmd);
