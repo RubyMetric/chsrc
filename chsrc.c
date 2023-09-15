@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-14>
+ * Last modified : <2023-09-15>
  *
  * chsrc:
  *
@@ -14,7 +14,7 @@
 
 #include "chsrc.h"
 
-#define Chsrc_Version "v0.1.0-20230914.pre"
+#define Chsrc_Version "v0.1.0-20230915.pre"
 
 
 /**
@@ -841,6 +841,58 @@ pl_haskell_setsrc(char* option)
                        "        ignore-expiry: no");
   xy_info(xy_strjoin(3,"chsrc: 请向 ", config, " 中手动添加:"));
   puts(file);
+  chsrc_say_thanks (&source);
+}
+
+
+
+void
+pl_ocaml_check_cmd_()
+{
+  char* check_cmd = xy_str_to_quietcmd("opam --version");
+  bool exist = does_the_program_exist (check_cmd, "opam");
+
+  if (!exist) {
+    xy_error ("chsrc: 未找到 opam 命令，请检查是否存在");
+    exit(1);
+  }
+}
+
+void
+pl_ocaml_getsrc(char* option)
+{
+  pl_ocaml_check_cmd_();
+  char* cmd = "opam repo get-url default";
+  chsrc_runcmd(cmd);
+}
+
+/**
+ * 参考: https://mirrors.sjtug.sjtu.edu.cn/docs/git/opam-repository.git
+ */
+void
+pl_ocaml_setsrc(char* option)
+{
+  pl_ocaml_check_cmd_();
+
+  int index = 0;
+  if (NULL!=option) {
+    index = lets_find_mirror(pl_ocaml, option);
+  } else {
+    index = lets_test_speed(pl_ocaml);
+  }
+
+  source_info source = pl_ocaml_sources[index];
+  chsrc_say_selection (&source);
+
+  char* cmd = xy_strjoin("opam repo set-url default ",
+    source.url
+    " --all --set-default";
+
+  chsrc_runcmd(cmd);
+
+  xy_info("chsrc: 如果是首次使用 opam ，请使用以下命令进行初始化")
+  puts(xy_2strjoin("opam init default ", source.url);)
+
   chsrc_say_thanks (&source);
 }
 
