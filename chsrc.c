@@ -1798,6 +1798,7 @@ def_target_info(pl_go);
 def_target_info(pl_rust);
 def_target_info(pl_java);
 def_target_info(pl_dart);
+def_target_info(pl_ocaml);
 def_target_info(pl_r);
 def_target_info(pl_julia);
 
@@ -1821,13 +1822,14 @@ static const char
 *pl_dart  [] = {"dart",  "pub",     "flutter",           NULL,  targetinfo(&pl_dart_target)},
 *pl_dotnet[] = {"nuget", "net",     ".net",   "dotnet",  NULL,  targetinfo(&pl_dotnet_target)},
 *pl_haskell[] ={"haskell", "cabal", "stack",  "hackage", NULL,  targetinfo(&pl_haskell_target)},
+*pl_ocaml[] =  {"ocaml", "opam",                         NULL,  targetinfo(&pl_ocaml_target)},
 *pl_r     [] = {"r",     "cran",                         NULL,  targetinfo(&pl_r_target)},
 *pl_julia [] = {"julia",                                 NULL,  targetinfo(&pl_julia_target)},
 **pl_packagers[] =
 {
   pl_ruby,    pl_python,    pl_nodejs,      pl_perl,    pl_php,
   pl_rust,    pl_go,        /*pl_dotnet,*/  pl_java,    pl_clojure,  pl_dart,
-  pl_haskell,
+  pl_haskell, pl_ocaml,
   pl_r,       pl_julia
 };
 
