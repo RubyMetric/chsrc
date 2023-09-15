@@ -90,6 +90,7 @@ chsrc set java    或 chsrc set maven / mvn / gradle
 chsrc set clojure 或 chsrc set clojars
 chsrc set dart    或 chsrc set pub / flutter # 即同时为flutter换源
 chsrc set haskell 或 chsrc set hackage/cabal/stack
+chsrc set ocaml   或 chsrc set opam
 
 # 同时会为 bioconductor 换源
 chsrc set r       或 chsrc set cran
@@ -140,6 +141,9 @@ chsrc set conda  或 chsrc set anaconda
 请安装好 `gcc`或`clang` 和 `make` 以及 `curl`
 
 ```bash
+# 使用 dev 分支开发
+git clone https://gitee.com/RubyMetric/chsrc.git -b dev
+
 make          # 默认使用 cc 编译
 make CC=clang # 使用 clang 编译
 make CC=gcc   # 使用 gcc   编译
@@ -159,7 +163,7 @@ make clean
 
 ## 致谢
 
-感谢各个镜像站提供的优质免费镜像服务，使用的镜像站见 [chsrc.h](./chsrc.h).
+感谢各个镜像站提供的优质免费镜像服务，使用的镜像站见 [sources.h](./sources.h).
 
 特别感谢:
 1. [MirrorZ 教育网镜像站](https://help.mirrors.cernet.edu.cn/)
