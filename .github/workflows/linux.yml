@@ -1,0 +1,32 @@
+name: Linux Build
+on:
+  push:
+    branches: [ "gh-pipeline" ]
+  pull_request:
+    branches: [ "gh-pipeline" ]
+
+jobs:
+  build-and-upload:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Compile chsrc x64
+      run: |
+        make CI CI_BUILD_NAME=chsrc-x64-linux
+
+    - name: List files
+      run: ls *-linux
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      # if: startsWith(github.ref, 'refs/tags/')
+      with:
+        tag_name: preview
+        files: |
+          chsrc-x64-linux
+        token: ${{ secrets.CHSRC_UPLOAD }}
