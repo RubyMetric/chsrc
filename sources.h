@@ -135,6 +135,11 @@ typedef struct {
  * 2023-09-15 更新
  *
  * @note
+ * 下面的源，并不都实现正确，
+ * BFSU 和 Tuna 以及 阿里的镜像都有问题，会循环遍历一个gem的所有版本，导致安装时间相当长
+ *
+ * @note 网络情况
+ * 若实现正确:
  * 1. 目前北外最快最稳定
  * 2. 腾讯挺快，个别时候不稳定，但稳定时能达到4.5MB甚至以上
  * 3. tuna 有时快有时慢，不稳定，一般在3MB以下
@@ -143,13 +148,12 @@ typedef struct {
  */
 static source_info
 pl_ruby_sources[] = {
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/rubygems/"},
   {&Tencent,   "https://mirrors.tencent.com/rubygems/"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/"},
-  // Ruby China 给的链接是不带后缀 / 的，不知道是否带后缀会影响
-  // 如有问题请报告
   {&RubyChina, "https://gems.ruby-china.com/"},
-  {&Ali,       "https://mirrors.aliyun.com/rubygems/"},
+
+  // {&Bfsu,      "https://mirrors.bfsu.edu.cn/rubygems/"},
+  // {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/"},
+  // {&Ali,       "https://mirrors.aliyun.com/rubygems/"},
 },
 
 
