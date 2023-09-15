@@ -304,7 +304,7 @@ pl_haskell_sources[] = {
  */
 pl_ocaml_sources[] = {
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/git/opam-repository.git"}
-}
+},
 
 
 
@@ -666,6 +666,7 @@ def_target_sources_n(pl_ruby); def_target_sources_n(pl_python); def_target_sourc
 def_target_sources_n(pl_perl); def_target_sources_n(pl_php);    def_target_sources_n(pl_go);
 def_target_sources_n(pl_rust); def_target_sources_n(pl_java);   def_target_sources_n(pl_clojure);
 def_target_sources_n(pl_dotnet); def_target_sources_n(pl_dart); def_target_sources_n(pl_haskell);
+def_target_sources_n(pl_ocaml);
 def_target_sources_n(pl_r);      def_target_sources_n(pl_julia);
 
 def_target_sources_n(os_ubuntu);      def_target_sources_n(os_debian);      def_target_sources_n(os_fedora);
