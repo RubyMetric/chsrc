@@ -18,7 +18,7 @@
 
 ## 安装
 
-除个别架构外，其它二进制文件使用 GitHub Actions 编译而来。请寻找下述与您的平台相匹配的命令来下载。
+使用 GitHub Actions 编译，请寻找下述与您的平台相匹配的命令来下载。
 
 ### Windows
 
@@ -37,7 +37,15 @@ curl -LO https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x86-
 curl -LO https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-linux
 
 # aarch64 / arm64
+# 此非通过GitHub Actions编译
 curl -LO https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-aarch64-linux
+```
+
+### macOS
+
+```bash
+# x64
+curl -LO https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-macos
 ```
 
 <br>
