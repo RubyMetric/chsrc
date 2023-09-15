@@ -271,7 +271,7 @@ pl_ruby_setsrc (char* option)
  * @param[out] prog 返回 Python 的可用名，如果不可用，则返回 NULL
  */
 void
-_pl_python_check_cmd (char** prog)
+pl_python_check_cmd_ (char** prog)
 {
   *prog = NULL;
   // 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store
@@ -297,7 +297,7 @@ void
 pl_python_getsrc (char* option)
 {
   char* prog = NULL;
-  _pl_python_check_cmd (&prog);
+  pl_python_check_cmd_ (&prog);
   char* cmd = xy_2strjoin(prog, " -m pip config get global.index-url");
   chsrc_runcmd(cmd);
 }
@@ -312,7 +312,7 @@ pl_python_setsrc (char* option)
 {
   int index = 0;
   char* prog = NULL;
-  _pl_python_check_cmd (&prog);
+  pl_python_check_cmd_ (&prog);
 
   if (NULL!=option) {
     index = lets_find_mirror (pl_python, option);
@@ -331,7 +331,7 @@ pl_python_setsrc (char* option)
 
 
 void
-_pl_nodejs_check_cmd (bool* npm_exist, bool* yarn_exist)
+pl_nodejs_check_cmd_ (bool* npm_exist, bool* yarn_exist)
 {
   char* check_cmd = xy_str_to_quietcmd("npm -v");
   *npm_exist = does_the_program_exist (check_cmd, "npm");
@@ -350,7 +350,7 @@ void
 pl_nodejs_getsrc (char* option)
 {
   bool npm_exist, yarn_exist;
-  _pl_nodejs_check_cmd (&npm_exist, &yarn_exist);
+  pl_nodejs_check_cmd_ (&npm_exist, &yarn_exist);
 
   if (npm_exist)
   {
@@ -371,7 +371,7 @@ void
 pl_nodejs_setsrc (char* option)
 {
   bool npm_exist, yarn_exist;
-  _pl_nodejs_check_cmd (&npm_exist, &yarn_exist);
+  pl_nodejs_check_cmd_ (&npm_exist, &yarn_exist);
 
   int index = 0;
 
@@ -401,7 +401,7 @@ pl_nodejs_setsrc (char* option)
 
 
 void
-_pl_perl_check_cmd ()
+pl_perl_check_cmd_ ()
 {
   char* check_cmd = xy_str_to_quietcmd("perl --version");
   bool exist = does_the_program_exist (check_cmd, "perl");
@@ -415,7 +415,7 @@ _pl_perl_check_cmd ()
 void
 pl_perl_getsrc (char* option)
 {
-  _pl_perl_check_cmd ();
+  pl_perl_check_cmd_ ();
   // @ccmywish: 注意，prettyprint 仅仅是一个内部实现，可能不稳定，如果需要更稳定的，
   //            可以使用 CPAN::Shell->o('conf', 'urllist');
   //            另外，上述两种方法无论哪种，都要首先load()
@@ -452,7 +452,7 @@ pl_perl_setsrc (char* option)
 
 
 void
-_pl_php_check_cmd()
+pl_php_check_cmd_()
 {
   char* check_cmd = xy_str_to_quietcmd("composer --version");
   bool exist = does_the_program_exist (check_cmd, "composer");
@@ -469,7 +469,7 @@ _pl_php_check_cmd()
 void
 pl_php_getsrc (char* option)
 {
-  _pl_php_check_cmd ();
+  pl_php_check_cmd_ ();
   char* cmd = "composer config -g repositories";
   chsrc_runcmd(cmd);
 }
@@ -480,7 +480,7 @@ pl_php_getsrc (char* option)
 void
 pl_php_setsrc (char* option)
 {
-  _pl_php_check_cmd();
+  pl_php_check_cmd_();
 
   int index = 0;
 
@@ -502,7 +502,7 @@ pl_php_setsrc (char* option)
 
 
 void
-_pl_go_check_cmd ()
+pl_go_check_cmd_ ()
 {
   char* check_cmd = xy_str_to_quietcmd("go version");
   bool exist = does_the_program_exist (check_cmd, "go");
@@ -516,7 +516,7 @@ _pl_go_check_cmd ()
 void
 pl_go_getsrc (char* option)
 {
-  _pl_go_check_cmd ();
+  pl_go_check_cmd_ ();
   char* cmd = "go env GOPROXY";
   chsrc_runcmd(cmd);
 }
@@ -527,7 +527,7 @@ pl_go_getsrc (char* option)
 void
 pl_go_setsrc (char* option)
 {
-  _pl_go_check_cmd();
+  pl_go_check_cmd_();
   int index = 0;
 
   if (NULL!=option) {
@@ -610,7 +610,7 @@ pl_dotnet_setsrc (char* option)
 
 
 void
-_pl_java_check_cmd(bool* maven_exist, bool* gradle_exist)
+pl_java_check_cmd_(bool* maven_exist, bool* gradle_exist)
 {
   char* check_cmd = NULL;
   check_cmd    = xy_str_to_quietcmd("mvn --version");
@@ -626,7 +626,7 @@ _pl_java_check_cmd(bool* maven_exist, bool* gradle_exist)
 }
 
 char*
-_pl_java_find_maven_config ()
+pl_java_find_maven_config_ ()
 {
   FILE* fp = popen("mvn -v", "r");
   char buf[512];
@@ -652,8 +652,8 @@ void
 pl_java_getsrc (char* option)
 {
   bool maven_exist, gradle_exist;
-  _pl_java_check_cmd (&maven_exist, &gradle_exist);
-  char* maven_config = _pl_java_find_maven_config();
+  pl_java_check_cmd_ (&maven_exist, &gradle_exist);
+  char* maven_config = pl_java_find_maven_config_();
 
   char* echo = xy_2strjoin("chsrc: 请查看 ", maven_config);
   xy_info (echo);
@@ -667,7 +667,7 @@ void
 pl_java_setsrc (char* option)
 {
   bool maven_exist, gradle_exist;
-  _pl_java_check_cmd (&maven_exist, &gradle_exist);
+  pl_java_check_cmd_ (&maven_exist, &gradle_exist);
 
   int index = 0;
 
@@ -689,7 +689,7 @@ pl_java_setsrc (char* option)
     "  <url>", source.url, "</url>\n"
     "</mirror>");
 
-    char* maven_config = _pl_java_find_maven_config();
+    char* maven_config = pl_java_find_maven_config_();
     char* echo = xy_strjoin(3, "chsrc: 请在您的 maven 配置文件 ", maven_config, " 中添加:");
     xy_info(echo);
     puts (file);
