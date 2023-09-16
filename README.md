@@ -62,15 +62,6 @@ git clone https://gitee.com/RubyMetric/chsrc.git ; cd chsrc ; make
 
 ## 使用
 
-当你不想自动测速的时候，你可以直接指定某镜像站。
-
-```bash
-chsrc set ruby   # 测速，寻找最快者，换源
-# 或
-chsrc ls  ruby   # 列出可用的镜像站
-chsrc set ruby rubychina # 使用 RubyChina 作为镜像站
-```
-
 <br>
 
 ```bash
@@ -88,6 +79,15 @@ get  <target>           # 查看当前软件的源使用情况
 set  <target>           # 换源，自动测速后挑选最快源
 set  <target> def(ault) # 换源，默认使用维护团队测速第一的源
 set  <target> <mirror>  # 换源，指定使用某镜像站
+```
+
+当你不想自动测速的时候，你可以直接指定某镜像站。
+
+```bash
+chsrc set ruby   # 测速，寻找最快者，换源
+# 或
+chsrc ls  ruby   # 列出可用的镜像站
+chsrc set ruby rubychina # 使用 RubyChina 作为镜像站
 ```
 
 注意: 下述语言/系统/软件均已实现基本支持，但还没有经过多平台测试，若有问题，请您及时提交报告。
