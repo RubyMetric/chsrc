@@ -48,9 +48,30 @@ curl -LO https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-aarc
 curl -LO https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-macos
 ```
 
+### 没有您的平台?
+
+编译是一件很简单的事，不要担心，只需在命令行复制粘贴这一行运行:
+```bash
+git clone https://gitee.com/RubyMetric/chsrc.git ; cd chsrc ; make
+
+# 可以运行了！
+./chsrc
+```
+
 <br>
 
 ## 使用
+
+当你不想自动测速的时候，你可以直接指定某镜像站。
+
+```bash
+chsrc set ruby   # 测速，寻找最快者，换源
+# 或
+chsrc ls  ruby   # 列出可用的镜像站
+chsrc set ruby rubychiina # 使用 RubyChina 作为镜像站
+```
+
+<br>
 
 ```bash
 使用：chsrc <command> [target]
