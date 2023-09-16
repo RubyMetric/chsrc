@@ -68,7 +68,7 @@ git clone https://gitee.com/RubyMetric/chsrc.git ; cd chsrc ; make
 chsrc set ruby   # 测速，寻找最快者，换源
 # 或
 chsrc ls  ruby   # 列出可用的镜像站
-chsrc set ruby rubychiina # 使用 RubyChina 作为镜像站
+chsrc set ruby rubychina # 使用 RubyChina 作为镜像站
 ```
 
 <br>
