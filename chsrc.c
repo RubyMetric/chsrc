@@ -1188,24 +1188,56 @@ os_arch_setsrc(char* option)
   chsrc_logcmd(backup);
   system(backup);
 
+
+  bool arch_flag = false;
   xy_info ("chsrc: 备份文件名: /etc/pacman.d/mirrorlist.bak");
-  char* new_file = xy_strjoin(3,"Server = ",
+  char* new_file ;
+
+
+
+  char* arch = xy_getcmd("arch",NULL);
+  char* cmd;
+  if(strncmp(arch, "x86_64", 6)==0)
+  {
+    arch_flag = true;
+    new_file = xy_strjoin(3,"Server = ",
                                 source.url,
-                                "$repo/os/$arch");
-  char* cmd = xy_strjoin(3,"echo ",
-                            new_file,
-                            " > /etc/pacman.d/mirrorlist");
-  chsrc_logcmd(cmd);
-  system(cmd);
-  cmd = "cat /etc/pacman.d/mirrorlist.bak >> /etc/pacman.d/mirrorlist";
+                                "archlinux/$repo/os/$arch");
+
+  }
+  else {
+    arch_flag = false;
+    new_file = xy_strjoin(3,"Server = ",
+                                source.url,
+                                "archlinuxarm/$repo/os/$arch");
+  }
+
+  cmd = xy_strjoin(3,"echo ",
+                      new_file,
+                      " > /etc/pacman.d/mirrorlist");
   chsrc_logcmd(cmd);
   system(cmd);
 
-  // char* rm = "rm -rf /etc/pacman.d/mirrorlist.bak";
-  // system(rm);
+  xy_info("For arch linux cn...");
+
+  cmd = xy_strjoin(3,"cat [archlinuxcn] \r\n Server=",source.url,"archlinuxcn/$repo/os/$arch >> /etc/pacman.d/mirrorlist");
+  chsrc_logcmd(cmd);
+  system(cmd);
+
+  cmd = "pacman -Sy archlinux-keyring";
+  chsrc_logcmd(cmd);
+  system(cmd);
+
+  if(arch_flag)
+  {
+    xy_info ("Please use \"pacman -Syyu \" to update your source");
+  }
+  else
+  {
+    xy_info ("Please use \"pacman -Syy \" to update your source");
+  }
 
   chsrc_say_thanks(&source);
-  xy_info ("Please use \"pacman -Syyu \" to update your source");
 }
 
 
@@ -1388,6 +1420,157 @@ os_openkylin_setsrc (char* option)
 }
 
 
+/**
+ * 未经测试, sources of freebsd are different from each other.
+ */
+void
+os_freebsd_setsrc (char* option)
+{
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_freebsd, option);
+  } else {
+    index = lets_test_speed(os_freebsd);
+  }
+
+  source_info source = os_freebsd_sources[index];
+  chsrc_say_selection(&source);
+
+  char* pkg_mkdir = "mkdir -p /usr/local/etc/pkg/repos";
+  char* pkg_createconf = "ee /usr/local/etc/pkg/repos/bjtu.conf";
+  chsrc_logcmd (pkg_mkdir);
+  chsrc_logcmd (pkg_createconf);
+  system(pkg_mkdir);
+  system(pkg_createconf);
+
+  char* pkg_content = xy_strjoin(3,"bjtu: { \
+                      url: \"pkg+=http://",source.url,"/freebsd-pkg/${ABI}/latest\",\
+                      mirror_type: \"srv\",\
+                      signature_type: \"none\",\
+                      fingerprints: \"/usr/share/keys/pkg\",\
+                      enabled: yes\
+                    }");
+
+  char* pkg_cmd;
+  pkg_cmd = xy_strjoin(3,
+    "cat ",
+    pkg_content,
+    "> /usr/local/etc/pkg/repos/bjtu.conf");
+  chsrc_logcmd(pkg_cmd);
+  system(pkg_cmd);
+
+  xy_info("chsrc: pkg sources changed.");
+  xy_info("chsrc: 若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将 'http' 改成 'https' ，最后使用 'pkg update -f' 刷新缓存即可");
+
+  char* ports_cp="cp -rf /etc/make.conf /etc/make.conf.bak";
+  chsrc_logcmd(ports_cp);
+  system(ports_cp);
+
+  char* ports_cmd =xy_strjoin(3,"cat MASTER_SITE_OVERRIDE?=http://",
+                                source.url,
+                                "/freebsd-ports/ >> /etc/make.conf");
+  chsrc_logcmd(ports_cmd);
+  system(ports_cmd);
+
+  xy_info("chsrc: ports sources changed.");
+
+  char* portsnap_cp="cp -rf /etc/portsnap.conf /etc/portsnap.conf.bak";
+  chsrc_logcmd(portsnap_cp);
+  system(portsnap_cp);
+
+
+  char* portsnap_cmd =xy_strjoin(3,"s@(.*)SERVERNAME=[\\.|a-z|A-Z]*@\\1SERVERNAME=",
+                                source.url,
+                                "@g < /etc/portsnap.conf.bak | cat > /etc/portsnap.conf");
+  chsrc_logcmd(portsnap_cmd);
+  system(portsnap_cmd);
+
+  xy_info("chsrc: portsnap sources changed.");
+  xy_info("chsrc: 获取portsnap更新使用此命令: 'portsnap fetch extract'");
+
+  char* update_cp="cp -rf /etc/freebsd-update.conf /etc/freebsd-update.conf.bak";
+  chsrc_logcmd(update_cp);
+  system(update_cp);
+
+
+  char* update_cmd =xy_strjoin(3,"s@(.*)SERVERNAME [\\.|a-z|A-Z]*@\\1SERVERNAME ",
+                                source.url,
+                                "@g < /etc/freebsd-update.conf.bak | cat > /etc/freebsd-update.conf");
+  chsrc_logcmd(update_cmd);
+  system(update_cmd);
+
+  xy_info("chsrc: freebsd-update sources changed.");
+
+  chsrc_say_thanks(&source);
+}
+
+
+/**
+ * 未经测试
+ */
+void
+os_opensuse_setsrc (char* option)
+{
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_opensuse, option);
+  } else {
+    index = lets_test_speed(os_opensuse);
+  }
+
+  source_info source = os_opensuse_sources[index];
+  chsrc_say_selection(&source);
+
+  char* source_nselect = "zypper mr -da";
+  chsrc_logcmd(source_nselect);
+  system(source_nselect);
+
+  char* cmd1 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/repo/oss/' mirror-oss");
+  char* cmd2 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/repo/non-oss/' mirror-non-oss");
+  char* cmd3 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/oss/' mirror-update");
+  char* cmd4 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/non-oss/' mirror-update-non-oss");
+  char* cmd5 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/sle/' mirror-sle-update");
+  char* cmd6 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/backports/' mirror-backports-update");
+  chsrc_logcmd(cmd1);
+  chsrc_logcmd(cmd2);
+  chsrc_logcmd(cmd3);
+  chsrc_logcmd(cmd4);
+  xy_info("leap 15.3用户还需 要添加sle和backports源，另外：\
+  请确保系统在更新后仅启用了六个软件源，可以使用 zypper lr 检查软件源状态，\
+  并使用 zypper mr -d 禁用多余的软件源");
+  chsrc_logcmd(cmd5);
+  chsrc_logcmd(cmd6);
+  system(cmd1);
+  system(cmd2);
+  system(cmd3);
+  system(cmd4);
+  system(cmd5);
+  system(cmd6);
+  // char* rm = "rm -rf /etc/apt/source.list.bak";
+  // system(rm);
+
+  chsrc_say_thanks(&source);
+}
 
 
 
@@ -1704,7 +1887,9 @@ target_info
   os_netbsd_target      = {os_netbsd_setsrc,      NULL, os_netbsd_sources,    os_netbsd_sources_n},
   os_msys2_target       = {os_msys2_setsrc,       NULL, os_msys2_sources,     os_msys2_sources_n},
   os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources, os_openeuler_sources_n},
-  os_openkylin_target   = {os_openkylin_setsrc,   NULL, os_openkylin_sources, os_openkylin_sources_n};
+  os_openkylin_target   = {os_openkylin_setsrc,   NULL, os_openkylin_sources, os_openkylin_sources_n},
+  os_freebsd_target     = {os_freebsd_setsrc,     NULL, os_freebsd_sources,   os_freebsd_sources_n},
+  os_opensuse_target    = {os_opensuse_setsrc,    NULL, os_opensuse_sources,  os_opensuse_sources_n};
 
 static const char
 *os_ubuntu        [] = {"ubuntu",  NULL,  targetinfo(&os_ubuntu_target)},
@@ -1720,13 +1905,15 @@ static const char
 *os_manjaro       [] = {"manjaro", NULL,  targetinfo(&os_manjaro_target)},
 *os_openeuler     [] = {"openeuler",NULL, targetinfo(&os_openeuler_target)},
 *os_openkylin     [] = {"openkylin",NULL, targetinfo(&os_openkylin_target)},
+*os_freebsd       [] = {"freebsd",NULL,   targetinfo(&os_freebsd_target)},
+*os_opensuse      [] = {"opensuse",NULL,  targetinfo(&os_opensuse_target)},
 **os_systems[] =
 {
   os_ubuntu,  os_debian,  os_fedora,  os_kali,
   os_arch,    os_manjaro, os_gentoo,
-  os_openbsd, os_netbsd,
+  os_openbsd, os_netbsd,  os_freebsd,
   os_msys2,
-  os_deepin, os_openeuler, os_openkylin
+  os_deepin, os_openeuler, os_openkylin,os_opensuse
 };
 
 

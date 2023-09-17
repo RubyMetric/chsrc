@@ -468,13 +468,13 @@ os_msys2_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_arch_sources[] = {
-  {&Ali,       "https://mirrors.aliyun.com/archlinux/"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/archlinux/"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/archlinux/"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/archlinux/"},
-  {&Tencent,   "https://mirrors.tencent.com/archlinux/"},
-  {&Netease,   "https://mirrors.163.com/archlinux/"},
-  {&Sohu,      "https://mirrors.sohu.com/archlinux/"}
+  {&Ali,       "https://mirrors.aliyun.com/"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/"},
+  {&Tencent,   "https://mirrors.tencent.com/"},
+  {&Netease,   "https://mirrors.163.com/"},
+  {&Sohu,      "https://mirrors.sohu.com/"}
 },
 
 /**
@@ -535,8 +535,37 @@ os_openkylin_sources[] = {
   {&Tencent,   "https://mirrors.tencent.com/openkylin/"},
   {&Netease,   "https://mirrors.163.com/openkylin/"},
   {&Sohu,      "https://mirrors.sohu.com/openkylin/"}
-};
+},
 
+/**
+ * 2023-09-17 更新
+ *
+ * TODO: 1. 源并不完整，且未经测试是否有效
+ */
+os_freebsd_sources[] = {
+  {&Ali,       "mirrors.aliyun.com"},
+  {&Bfsu,      "mirrors.bfsu.edu.cn"},
+  {&Ustc,      "mirrors.ustc.edu.cn"},
+  {&Tuna,      "mirrors.tuna.tsinghua.edu.cn"},
+  {&Tencent,   "mirrors.tencent.com"},
+  {&Netease,   "mirrors.163.com"},
+  {&Sohu,      "mirrors.sohu.com"}
+},
+
+/**
+ * 2023-09-17 更新
+ *
+ * TODO: 1. 源并不完整，且未经测试是否有效
+ */
+os_opensuse_sources[] = {
+  {&Ali,       "https://mirrors.aliyun.com/opensuse/"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/opensuse/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/opensuse/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/opensuse/"},
+  {&Tencent,   "https://mirrors.tencent.com/opensuse/"},
+  {&Netease,   "https://mirrors.163.com/opensuse/"},
+  {&Sohu,      "https://mirrors.sohu.com/opensuse/"}
+};
 
 
 /**
@@ -632,6 +661,7 @@ def_target_sources_n(os_ubuntu);      def_target_sources_n(os_debian);      def_
 def_target_sources_n(os_kali);        def_target_sources_n(os_openbsd);     def_target_sources_n(os_msys2);
 def_target_sources_n(os_arch);        def_target_sources_n(os_gentoo);      def_target_sources_n(os_netbsd);
 def_target_sources_n(os_deepin);      def_target_sources_n(os_openeuler);   def_target_sources_n(os_openkylin);
+def_target_sources_n(os_freebsd);     def_target_sources_n(os_opensuse);
 
 def_target_sources_n(wr_brew); def_target_sources_n(wr_guix);   def_target_sources_n(wr_flathub);
 def_target_sources_n(wr_tex);  def_target_sources_n(wr_emacs);
