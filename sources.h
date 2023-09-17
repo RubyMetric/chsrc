@@ -550,6 +550,21 @@ os_freebsd_sources[] = {
   {&Tencent,   "mirrors.tencent.com"},
   {&Netease,   "mirrors.163.com"},
   {&Sohu,      "mirrors.sohu.com"}
+},
+
+/**
+ * 2023-09-17 更新
+ *
+ * TODO: 1. 源并不完整，且未经测试是否有效
+ */
+os_opensuse_sources[] = {
+  {&Ali,       "https://mirrors.aliyun.com/opensuse/"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/opensuse/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/opensuse/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/opensuse/"},
+  {&Tencent,   "https://mirrors.tencent.com/opensuse/"},
+  {&Netease,   "https://mirrors.163.com/opensuse/"},
+  {&Sohu,      "https://mirrors.sohu.com/opensuse/"}
 };
 
 
@@ -646,7 +661,7 @@ def_target_sources_n(os_ubuntu);      def_target_sources_n(os_debian);      def_
 def_target_sources_n(os_kali);        def_target_sources_n(os_openbsd);     def_target_sources_n(os_msys2);
 def_target_sources_n(os_arch);        def_target_sources_n(os_gentoo);      def_target_sources_n(os_netbsd);
 def_target_sources_n(os_deepin);      def_target_sources_n(os_openeuler);   def_target_sources_n(os_openkylin);
-def_target_sources_n(os_freebsd);
+def_target_sources_n(os_freebsd);     def_target_sources_n(os_opensuse);
 
 def_target_sources_n(wr_brew); def_target_sources_n(wr_guix);   def_target_sources_n(wr_flathub);
 def_target_sources_n(wr_tex);  def_target_sources_n(wr_emacs);

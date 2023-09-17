@@ -1474,6 +1474,71 @@ os_freebsd_setsrc (char* option)
 }
 
 
+/**
+ * 未经测试
+ */
+void
+os_opensuse_setsrc (char* option)
+{
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_opensuse, option);
+  } else {
+    index = lets_test_speed(os_opensuse);
+  }
+
+  source_info source = os_opensuse_sources[index];
+  chsrc_say_selection(&source);
+
+  char* source_nselect = "zypper mr -da";
+  chsrc_logcmd(source_nselect);
+  system(source_nselect);
+
+  char* cmd1 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/repo/oss/' mirror-oss");
+  char* cmd2 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/repo/non-oss/' mirror-non-oss");
+  char* cmd3 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/oss/' mirror-update");
+  char* cmd4 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/non-oss/' mirror-update-non-oss");
+  char* cmd5 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/sle/' mirror-sle-update");
+  char* cmd6 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/backports/' mirror-backports-update");
+  chsrc_logcmd(cmd1);
+  chsrc_logcmd(cmd2);
+  chsrc_logcmd(cmd3);
+  chsrc_logcmd(cmd4);
+  xy_info("leap 15.3用户还需 要添加sle和backports源，另外：\
+  请确保系统在更新后仅启用了六个软件源，可以使用 zypper lr 检查软件源状态，\
+  并使用 zypper mr -d 禁用多余的软件源");
+  chsrc_logcmd(cmd5);
+  chsrc_logcmd(cmd6);
+  system(cmd1);
+  system(cmd2);
+  system(cmd3);
+  system(cmd4);
+  system(cmd5);
+  system(cmd6);
+  // char* rm = "rm -rf /etc/apt/source.list.bak";
+  // system(rm);
+
+  chsrc_say_thanks(&source);
+}
 
 
 
@@ -1791,7 +1856,8 @@ target_info
   os_msys2_target       = {os_msys2_setsrc,       NULL, os_msys2_sources,     os_msys2_sources_n},
   os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources, os_openeuler_sources_n},
   os_openkylin_target   = {os_openkylin_setsrc,   NULL, os_openkylin_sources, os_openkylin_sources_n},
-  os_freebsd_target     = {os_freebsd_setsrc,     NULL, os_freebsd_sources,   os_freebsd_sources_n};
+  os_freebsd_target     = {os_freebsd_setsrc,     NULL, os_freebsd_sources,   os_freebsd_sources_n},
+  os_opensuse_target    = {os_opensuse_setsrc,    NULL, os_opensuse_sources,  os_opensuse_sources_n};
 
 static const char
 *os_ubuntu        [] = {"ubuntu",  NULL,  targetinfo(&os_ubuntu_target)},
@@ -1808,13 +1874,14 @@ static const char
 *os_openeuler     [] = {"openeuler",NULL, targetinfo(&os_openeuler_target)},
 *os_openkylin     [] = {"openkylin",NULL, targetinfo(&os_openkylin_target)},
 *os_freebsd       [] = {"freebsd",NULL,   targetinfo(&os_freebsd_target)},
+*os_opensuse      [] = {"opensuse",NULL,  targetinfo(&os_opensuse_target)},
 **os_systems[] =
 {
   os_ubuntu,  os_debian,  os_fedora,  os_kali,
   os_arch,    os_manjaro, os_gentoo,
   os_openbsd, os_netbsd,  os_freebsd,
   os_msys2,
-  os_deepin, os_openeuler, os_openkylin
+  os_deepin, os_openeuler, os_openkylin,os_opensuse
 };
 
 
