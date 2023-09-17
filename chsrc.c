@@ -1388,6 +1388,92 @@ os_openkylin_setsrc (char* option)
 }
 
 
+/**
+ * 未经测试, sources of freebsd are different from each other.
+ */
+void
+os_freebsd_setsrc (char* option)
+{
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_freebsd, option);
+  } else {
+    index = lets_test_speed(os_freebsd);
+  }
+
+  source_info source = os_freebsd_sources[index];
+  chsrc_say_selection(&source);
+
+  char* pkg_mkdir = "mkdir -p /usr/local/etc/pkg/repos";
+  char* pkg_createconf = "ee /usr/local/etc/pkg/repos/bjtu.conf";
+  chsrc_logcmd (pkg_mkdir);
+  chsrc_logcmd (pkg_createconf);
+  system(pkg_mkdir);
+  system(pkg_createconf);
+
+  char* pkg_content = xy_strjoin(3,"bjtu: { \
+                      url: \"pkg+=http://",source.url,"/freebsd-pkg/${ABI}/latest\",\
+                      mirror_type: \"srv\",\
+                      signature_type: \"none\",\
+                      fingerprints: \"/usr/share/keys/pkg\",\
+                      enabled: yes\
+                    }");
+
+  char* pkg_cmd;
+  pkg_cmd = xy_strjoin(3,
+    "cat ",
+    pkg_content,
+    "> /usr/local/etc/pkg/repos/bjtu.conf");
+  chsrc_logcmd(pkg_cmd);
+  system(pkg_cmd);
+
+  xy_info("chsrc: pkg sources changed.");
+  xy_info("chsrc: 若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将 'http' 改成 'https' ，最后使用 'pkg update -f' 刷新缓存即可");
+
+  char* ports_cp="cp -rf /etc/make.conf /etc/make.conf.bak";
+  chsrc_logcmd(ports_cp);
+  system(ports_cp);
+
+  char* ports_cmd =xy_strjoin(3,"cat MASTER_SITE_OVERRIDE?=http://",
+                                source.url,
+                                "/freebsd-ports/ >> /etc/make.conf");
+  chsrc_logcmd(ports_cmd);
+  system(ports_cmd);
+
+  xy_info("chsrc: ports sources changed.");
+
+  char* portsnap_cp="cp -rf /etc/portsnap.conf /etc/portsnap.conf.bak";
+  chsrc_logcmd(portsnap_cp);
+  system(portsnap_cp);
+
+
+  char* portsnap_cmd =xy_strjoin(3,"s@(.*)SERVERNAME=[\\.|a-z|A-Z]*@\\1SERVERNAME=",
+                                source.url,
+                                "@g < /etc/portsnap.conf.bak | cat > /etc/portsnap.conf");
+  chsrc_logcmd(portsnap_cmd);
+  system(portsnap_cmd);
+
+  xy_info("chsrc: portsnap sources changed.");
+  xy_info("chsrc: 获取portsnap更新使用此命令: 'portsnap fetch extract'");
+
+  char* update_cp="cp -rf /etc/freebsd-update.conf /etc/freebsd-update.conf.bak";
+  chsrc_logcmd(update_cp);
+  system(update_cp);
+
+
+  char* update_cmd =xy_strjoin(3,"s@(.*)SERVERNAME [\\.|a-z|A-Z]*@\\1SERVERNAME ",
+                                source.url,
+                                "@g < /etc/freebsd-update.conf.bak | cat > /etc/freebsd-update.conf");
+  chsrc_logcmd(update_cmd);
+  system(update_cmd);
+
+  xy_info("chsrc: freebsd-update sources changed.");
+
+  chsrc_say_thanks(&source);
+}
+
+
 
 
 
@@ -1704,7 +1790,8 @@ target_info
   os_netbsd_target      = {os_netbsd_setsrc,      NULL, os_netbsd_sources,    os_netbsd_sources_n},
   os_msys2_target       = {os_msys2_setsrc,       NULL, os_msys2_sources,     os_msys2_sources_n},
   os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources, os_openeuler_sources_n},
-  os_openkylin_target   = {os_openkylin_setsrc,   NULL, os_openkylin_sources, os_openkylin_sources_n};
+  os_openkylin_target   = {os_openkylin_setsrc,   NULL, os_openkylin_sources, os_openkylin_sources_n},
+  os_freebsd_target     = {os_freebsd_setsrc,     NULL, os_freebsd_sources,   os_freebsd_sources_n};
 
 static const char
 *os_ubuntu        [] = {"ubuntu",  NULL,  targetinfo(&os_ubuntu_target)},
@@ -1720,11 +1807,12 @@ static const char
 *os_manjaro       [] = {"manjaro", NULL,  targetinfo(&os_manjaro_target)},
 *os_openeuler     [] = {"openeuler",NULL, targetinfo(&os_openeuler_target)},
 *os_openkylin     [] = {"openkylin",NULL, targetinfo(&os_openkylin_target)},
+*os_freebsd       [] = {"freebsd",NULL,   targetinfo(&os_freebsd_target)},
 **os_systems[] =
 {
   os_ubuntu,  os_debian,  os_fedora,  os_kali,
   os_arch,    os_manjaro, os_gentoo,
-  os_openbsd, os_netbsd,
+  os_openbsd, os_netbsd,  os_freebsd,
   os_msys2,
   os_deepin, os_openeuler, os_openkylin
 };
