@@ -830,6 +830,14 @@ pl_julia_setsrc (char* option)
 
 
 
+
+void
+os_ubuntu_getsrc(char* option)
+{
+  char* cmd = "cat /etc/apt/sources.list";
+  chsrc_runcmd(cmd);
+}
+
 /**
  * @note 不同架构下换源不一样
  */
@@ -854,7 +862,7 @@ os_ubuntu_setsrc (char* option)
 
   char* arch = xy_getcmd("arch",NULL);
   char* cmd;
-  if(strncmp(arch,"x86_64",6)==0)
+  if(strncmp(arch, "x86_64", 6)==0)
   {
     cmd = xy_strjoin(3,
       "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/ubuntu\\/@\\1",
@@ -878,6 +886,59 @@ os_ubuntu_setsrc (char* option)
 }
 
 
+
+void
+os_debian_getsrc(char* option)
+{
+  char* cmd = "cat /etc/apt/sources.list";
+  chsrc_runcmd(cmd);
+}
+
+/**
+ * Debian Buster 以上版本默认支持 HTTPS 源。如果遇到无法拉取 HTTPS 源的情况，请先使用 HTTP 源并安装
+ * sudo apt install apt-transport-https ca-certificates
+ */
+void
+os_debian_setsrc (char* option)
+{
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_debian, option);
+  } else {
+    index = lets_test_speed(os_debian);
+  }
+
+
+  source_info source = os_debian_sources[index];
+  chsrc_say_selection(&source);
+
+  xy_info ("chsrc: 如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并 需要您 安装");
+  xy_info ("chsrc: sudo apt install apt-transport-https ca-certificates");
+
+  char* backup = "cp -f /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
+  chsrc_runcmd(backup);
+
+  char * cmd = xy_strjoin(3,"chsrc: 备份文件名: /etc/apt/.*)http[:|\\.|\\/|a-z|A-Z]*\\/debian\\/@\\1",
+                          source.url,
+                          "@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
+
+  chsrc_runcmd(cmd);
+
+  // char* rm = "rm -rf /etc/apt/source.list.bak";
+  // system(rm);
+
+  chsrc_say_thanks(&source);
+}
+
+
+
+void
+os_deepin_getsrc(char* option)
+{
+  char* cmd = "cat /etc/apt/sources.list";
+  chsrc_runcmd(cmd);
+}
 
 /**
  * 未经测试
@@ -917,46 +978,6 @@ os_deepin_setsrc (char* option)
 
 
 /**
- * Debian Buster 以上版本默认支持 HTTPS 源。如果遇到无法拉取 HTTPS 源的情况，请先使用 HTTP 源并安装
- * sudo apt install apt-transport-https ca-certificates
- */
-void
-os_debian_setsrc (char* option)
-{
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror(os_debian, option);
-  } else {
-    index = lets_test_speed(os_debian);
-  }
-
-
-  source_info source = os_debian_sources[index];
-  chsrc_say_selection(&source);
-
-  xy_info ("chsrc: 如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并 需要您 安装");
-  xy_info ("chsrc: sudo apt install apt-transport-https ca-certificates");
-
-  char* backup = "cp -f /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
-  chsrc_logcmd(backup);
-  system(backup);
-
-  char * cmd = xy_strjoin(3,"chsrc: 备份文件名: /etc/apt/.*)http[:|\\.|\\/|a-z|A-Z]*\\/debian\\/@\\1",
-                          source.url,
-                          "@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
-  chsrc_logcmd(cmd);
-  system(cmd);
-
-  // char* rm = "rm -rf /etc/apt/source.list.bak";
-  // system(rm);
-
-  chsrc_say_thanks(&source);
-}
-
-
-
-/**
  * @note fedora 29 及以下版本暂不支持
  */
 void
@@ -974,14 +995,13 @@ os_fedora_setsrc (char* option)
   source_info source = os_fedora_sources[index];
   chsrc_say_selection(&source);
 
-  xy_info ("chsrc: fedora29版本及以下暂不支持");
+  xy_warn ("chsrc: fedora 29 及以下版本暂不支持");
 
   char* backup = "cp -f /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora.repo.bak --backup='t'";
-  chsrc_logcmd(backup);
-  system(backup);
+  chsrc_runcmd(backup);
+
   backup = "cp -f /etc/yum.repos.d/fedora-updates.repo /etc/yum.repos.d/fedora-updates.repo.bak";
-  chsrc_logcmd(backup);
-  system(backup);
+  chsrc_runcmd(backup);
 
   xy_info ("chsrc: 备份文件名:1. /etc/yum.repos.d/fedora.repo.bak");
   xy_info ("chsrc: 备份文件名:2. /etc/yum.repos.d/fedora-updates.repo.bak");
@@ -996,8 +1016,8 @@ os_fedora_setsrc (char* option)
          "/etc/yum.repos.d/fedora-modular.repo ",
          "/etc/yum.repos.d/fedora-updates.repo ",
          "/etc/yum.repos.d/fedora-updates-modular.repo");
-  chsrc_logcmd(cmd);
-  system(cmd);
+
+  chsrc_runcmd(cmd);
 
   xy_info ("chsrc: 替换文件:/etc/yum.repos.d/fedora.repo");
   xy_info ("chsrc: 新增文件:/etc/yum.repos.d/fedora-modular.repo");
@@ -1662,9 +1682,11 @@ static const char
 };
 
 
+def_target_info(os_ubuntu);
+def_target_info(os_debian);
+def_target_info(os_deepin);
+
 target_info
-  os_ubuntu_target      = {os_ubuntu_setsrc,      NULL, os_ubuntu_sources,    os_ubuntu_sources_n},
-  os_debian_target      = {os_debian_setsrc,      NULL, os_debian_sources,    os_debian_sources_n},
   os_fedora_target      = {os_fedora_setsrc,      NULL, os_fedora_sources,    os_fedora_sources_n},
   os_kali_target        = {os_kali_setsrc,        NULL, os_kali_sources,      os_kali_sources_n},
   os_arch_target        = {os_arch_setsrc,        NULL, os_arch_sources,      os_arch_sources_n},
@@ -1673,7 +1695,6 @@ target_info
   os_openbsd_target     = {os_openbsd_setsrc,     NULL, os_openbsd_sources,   os_openbsd_sources_n},
   os_netbsd_target      = {os_netbsd_setsrc,      NULL, os_netbsd_sources,    os_netbsd_sources_n},
   os_msys2_target       = {os_msys2_setsrc,       NULL, os_msys2_sources,     os_msys2_sources_n},
-  os_deepin_target      = {os_deepin_setsrc,      NULL, os_deepin_sources,    os_deepin_sources_n},
   os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources, os_openeuler_sources_n},
   os_openkylin_target   = {os_openkylin_setsrc,   NULL, os_openkylin_sources, os_openkylin_sources_n};
 
