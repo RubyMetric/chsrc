@@ -1189,7 +1189,7 @@ os_arch_setsrc(char* option)
   system(backup);
 
 
-
+  bool arch_flag = false;
   xy_info ("chsrc: 备份文件名: /etc/pacman.d/mirrorlist.bak");
   char* new_file ;
 
@@ -1199,12 +1199,14 @@ os_arch_setsrc(char* option)
   char* cmd;
   if(strncmp(arch, "x86_64", 6)==0)
   {
+    arch_flag = true;
     new_file = xy_strjoin(3,"Server = ",
                                 source.url,
                                 "archlinux/$repo/os/$arch");
 
   }
   else {
+    arch_flag = false;
     new_file = xy_strjoin(3,"Server = ",
                                 source.url,
                                 "archlinuxarm/$repo/os/$arch");
@@ -1222,7 +1224,18 @@ os_arch_setsrc(char* option)
   chsrc_logcmd(cmd);
   system(cmd);
 
-  xy_info ("Please use \"pacman -Syyu \" to update your source");
+  cmd = "pacman -Sy archlinux-keyring";
+  chsrc_logcmd(cmd);
+  system(cmd);
+
+  if(arch_flag)
+  {
+    xy_info ("Please use \"pacman -Syyu \" to update your source");
+  }
+  else
+  {
+    xy_info ("Please use \"pacman -Syy \" to update your source");
+  }
 
   chsrc_say_thanks(&source);
 }
