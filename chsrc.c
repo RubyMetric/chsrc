@@ -1491,6 +1491,13 @@ wr_brew_getsrc(char* option)
   system(cmd);
 }
 
+/**
+ * 参考自: https://mirrors.tuna.tsinghua.edu.cn/help/homebrew/
+ *
+ * 自brew 4.0.0 (2023 年 2 月 16日) 起，
+ * HOMEBREW_INSTALL_FROM_API 会成为默认行为，无需设置。大部分用户无需再克隆 homebrew-core 仓库，故无需设置 HOMEBREW_CORE_GIT_REMOTE 环境变量；
+ * 但是为了以防万一，我们还是为用户设置该环境变量
+ */
 void
 wr_brew_setsrc(char* option)
 {
@@ -1504,10 +1511,10 @@ wr_brew_setsrc(char* option)
   source_info source = wr_brew_sources[index];
   chsrc_say_selection (&source);
 
-  char* api_domain    = xy_strjoin(3, "export HOMEBREW_API_DOMAIN=\"", xy_2strjoin(source.url, "homebrew-bottles/api"), "\"");
-  char* bottle_domain = xy_strjoin(3, "export HOMEBREW_API_DOMAIN=\"", xy_2strjoin(source.url, "homebrew-bottles"), "\"");
-  char* brew_git_remote = xy_strjoin(3, "export HOMEBREW_API_DOMAIN=\"", xy_2strjoin(source.url, "git/homebrew/brew.git"), "\"");
-  char* core_git_remote = xy_strjoin(3, "export HOMEBREW_API_DOMAIN=\"", xy_2strjoin(source.url, "git/homebrew/homebrew-core.git"), "\"");
+  char* api_domain      = xy_strjoin(3, "export HOMEBREW_API_DOMAIN=\"",      xy_2strjoin(source.url, "homebrew-bottles/api"), "\"");
+  char* bottle_domain   = xy_strjoin(3, "export HOMEBREW_BOTTLE_DOMAIN=\"",   xy_2strjoin(source.url, "homebrew-bottles"), "\"");
+  char* brew_git_remote = xy_strjoin(3, "export HOMEBREW_BREW_GIT_REMOTE=\"", xy_2strjoin(source.url, "git/homebrew/brew.git"), "\"");
+  char* core_git_remote = xy_strjoin(3, "export HOMEBREW_CORE_GIT_REMOTE=\"", xy_2strjoin(source.url, "git/homebrew/homebrew-core.git"), "\"");
 
   chsrc_runcmd(xy_strjoin(3,"echo ", api_domain,      " >> ~/.bashrc >> ~/.zshrc"));
   chsrc_runcmd(xy_strjoin(3,"echo ", bottle_domain,   " >> ~/.bashrc >> ~/.zshrc"));
@@ -1515,7 +1522,9 @@ wr_brew_setsrc(char* option)
   chsrc_runcmd(xy_strjoin(3,"echo ", core_git_remote, " >> ~/.bashrc >> ~/.zshrc"));
 
   chsrc_say_thanks (&source);
+  puts(""); xy_warn("chsrc: 请您重启终端使环境变量生效");
 }
+
 
 
 /**
