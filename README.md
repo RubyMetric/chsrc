@@ -24,28 +24,28 @@
 
 ```bash
 # x64
-curl -LO https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-windows.exe
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-windows.exe -o chsrc.exe
 
 # x86
-curl -LO https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x86-windows.exe
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x86-windows.exe -o chsrc.exe
 ```
 
 ### Linux
 
 ```bash
 # x64
-curl -LO https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-linux
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-linux -o chsrc; chmod +x ./chsrc
 
 # aarch64 / arm64
 # 此非通过GitHub Actions编译
-curl -LO https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-aarch64-linux
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-aarch64-linux -o chsrc; chmod +x ./chsrc
 ```
 
 ### macOS
 
 ```bash
 # x64
-curl -LO https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-macos
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-macos -o chsrc; chmod +x ./chsrc
 ```
 
 ### 没有您的平台?
