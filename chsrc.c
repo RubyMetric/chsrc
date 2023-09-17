@@ -1622,8 +1622,8 @@ wr_anaconda_setsrc(char* option)
              "\n  deepmodeling: ", cloud);
 
 
-  char* config = xy_2strjoin(xy_os_home, ".condarc");
-
+  // TODO: 待确认 windows 上也是这里吗？
+  char* config = xy_2strjoin(xy_os_home, "/.condarc");
 
   if (xy_on_windows) {
     char* check_cmd = xy_str_to_quietcmd("conda --version");
@@ -1635,8 +1635,7 @@ wr_anaconda_setsrc(char* option)
     chsrc_runcmd("conda config --set show_channel_urls yes");
   }
 
-
-  xy_info(xy_strjoin(3,"chsrc: 请向 ", config, " 中手动添加:"));
+  xy_info(xy_strjoin(3, "chsrc: 请向 ", config, " 中手动添加:"));
   puts(file);
 
   xy_info("chsrc: 然后运行 conda clean -i 清除索引缓存，保证用的是镜像站提供的索引");
