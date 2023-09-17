@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-15>
+ * Last modified : <2023-09-17>
  *
  * chsrc:
  *
@@ -1300,15 +1300,15 @@ os_netbsd_setsrc(char* option)
 
 
 /**
- * 未经测试
+ * 似乎会弹出GUI，待确定
  */
 void
 os_manjaro_setsrc(char* option)
 {
+  char* cmd = "sudo pacman-mirrors -i -c China -m rank";
+  chsrc_runcmd(cmd);
 
-  xy_info ("chsrc: Please use \"sudo pacman-mirrors -i -c China -m rank\" to select sources");
-
-  xy_info ("chsrc: If success, please use \"sudo pacman -Syy\" to flush cache");
+  chsrc_runcmd("sudo pacman -Syy");
 }
 
 
