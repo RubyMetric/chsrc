@@ -1753,8 +1753,8 @@ usage[] = {
   "使用: chsrc <command> [target] [mirror]",
   "help                      打印此帮助，或 h, -h, --help",
   "list (或 ls, 或 l)        查看可用镜像源，和可换源软件",
-  "list mirror(s)            查看可用镜像源",
-  "list target(s)            查看可换源软件",
+  "list mirror/target        查看可用镜像源，以及可换源的所有目标",
+  "list os/lang/ware         查看可换源的操作系统/编程语言/软件",
   "list <target>             查看该软件可以使用哪些源",
   "cesu <target>             对该软件所有源测速",
   "get  <target>             查看当前软件的源使用情况",
@@ -1808,7 +1808,6 @@ print_supported_targets_ (const char*** array, size_t size)
   puts("");
 }
 
-
 void
 print_supported_targets ()
 {
@@ -1819,6 +1818,27 @@ print_supported_targets ()
   print_supported_targets_ (os_systems,   xy_arylen(os_systems));
   xy_warn ("软件");
   print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
+}
+
+void
+print_supported_pl ()
+{
+  xy_info ("chsrc: 支持对以下编程语言生态换源 (同一行表示这几个命令兼容)");
+  print_supported_targets_ (pl_packagers,   xy_arylen(pl_packagers));
+}
+
+void
+print_supported_os ()
+{
+  xy_info ("chsrc: 支持对以下操作系统换源 (同一行表示这几个命令兼容)");
+  print_supported_targets_ (os_systems,   xy_arylen(os_systems));
+}
+
+void
+print_supported_wr ()
+{
+  xy_info ("chsrc: 支持对以下软件换源 (同一行表示这几个命令兼容)");
+  print_supported_targets_ (wr_softwares,   xy_arylen(wr_softwares));
 }
 
 
@@ -2006,6 +2026,24 @@ main (int argc, char const *argv[])
       }
       if (xy_streql(argv[2],"target"))  {
         print_supported_targets(); return 0;
+      }
+      if (xy_streql(argv[2],"os")) {
+        print_supported_os(); return 0;
+      }
+      if (xy_streql(argv[2],"lang")) {
+        print_supported_pl(); return 0;
+      }
+      if (xy_streql(argv[2],"pl")) {
+        print_supported_pl(); return 0;
+      }
+      if (xy_streql(argv[2],"language")) {
+        print_supported_pl(); return 0;
+      }
+      if (xy_streql(argv[2],"software")) {
+        print_supported_wr(); return 0;
+      }
+      if (xy_streql(argv[2],"ware")) {
+        print_supported_wr(); return 0;
       }
       matched = get_target(argv[2], Target_List_Source, NULL);
       if (!matched) goto not_matched;
