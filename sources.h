@@ -468,13 +468,13 @@ os_msys2_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_arch_sources[] = {
-  {&Ali,       "https://mirrors.aliyun.com/archlinux/"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/archlinux/"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/archlinux/"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/archlinux/"},
-  {&Tencent,   "https://mirrors.tencent.com/archlinux/"},
-  {&Netease,   "https://mirrors.163.com/archlinux/"},
-  {&Sohu,      "https://mirrors.sohu.com/archlinux/"}
+  {&Ali,       "https://mirrors.aliyun.com/"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/"},
+  {&Tencent,   "https://mirrors.tencent.com/"},
+  {&Netease,   "https://mirrors.163.com/"},
+  {&Sohu,      "https://mirrors.sohu.com/"}
 },
 
 /**

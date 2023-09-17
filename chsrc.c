@@ -1188,24 +1188,43 @@ os_arch_setsrc(char* option)
   chsrc_logcmd(backup);
   system(backup);
 
+
+
   xy_info ("chsrc: 备份文件名: /etc/pacman.d/mirrorlist.bak");
-  char* new_file = xy_strjoin(3,"Server = ",
+  char* new_file ;
+
+
+
+  char* arch = xy_getcmd("arch",NULL);
+  char* cmd;
+  if(strncmp(arch, "x86_64", 6)==0)
+  {
+    new_file = xy_strjoin(3,"Server = ",
                                 source.url,
-                                "$repo/os/$arch");
-  char* cmd = xy_strjoin(3,"echo ",
-                            new_file,
-                            " > /etc/pacman.d/mirrorlist");
-  chsrc_logcmd(cmd);
-  system(cmd);
-  cmd = "cat /etc/pacman.d/mirrorlist.bak >> /etc/pacman.d/mirrorlist";
+                                "archlinux/$repo/os/$arch");
+
+  }
+  else {
+    new_file = xy_strjoin(3,"Server = ",
+                                source.url,
+                                "archlinuxarm/$repo/os/$arch");
+  }
+
+  cmd = xy_strjoin(3,"echo ",
+                      new_file,
+                      " > /etc/pacman.d/mirrorlist");
   chsrc_logcmd(cmd);
   system(cmd);
 
-  // char* rm = "rm -rf /etc/pacman.d/mirrorlist.bak";
-  // system(rm);
+  xy_info("For arch linux cn...");
+
+  cmd = xy_strjoin(3,"cat [archlinuxcn] \r\n Server=",source.url,"archlinuxcn/$repo/os/$arch >> /etc/pacman.d/mirrorlist");
+  chsrc_logcmd(cmd);
+  system(cmd);
+
+  xy_info ("Please use \"pacman -Syyu \" to update your source");
 
   chsrc_say_thanks(&source);
-  xy_info ("Please use \"pacman -Syyu \" to update your source");
 }
 
 
