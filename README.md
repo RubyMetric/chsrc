@@ -123,21 +123,21 @@ chsrc set julia
 ## 操作系统
 
 ```bash
-chsrc set ubuntu
-chsrc set debian
-chsrc set fedora
-chsrc set arch
-chsrc set manjaro
-chsrc set kali
-chsrc set gentoo
+sudo chsrc set ubuntu
+sudo chsrc set debian
+sudo chsrc set fedora
+sudo chsrc set arch
+sudo chsrc set manjaro
+sudo chsrc set kali
+sudo chsrc set gentoo
 
-chsrc set openbsd
-chsrc set netbsd
+sudo chsrc set openbsd
+sudo chsrc set netbsd
 
 # 国产操作系统
-chsrc set deepin
-chsrc set openeuler
-chsrc set openkylin
+sudo chsrc set deepin
+sudo chsrc set openeuler
+sudo chsrc set openkylin
 
 chsrc set msys2 或 chsrc set msys
 ```
