@@ -847,9 +847,8 @@ os_ubuntu_setsrc (char* option)
   source_info source = os_ubuntu_sources[index];
   chsrc_say_selection(&source);
 
-  char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
-  chsrc_logcmd (backup);
-  system(backup);
+  char* backup = "cp -f /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
+  chsrc_runcmd(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
@@ -878,6 +877,8 @@ os_ubuntu_setsrc (char* option)
   chsrc_say_thanks(&source);
 }
 
+
+
 /**
  * 未经测试
  */
@@ -895,9 +896,8 @@ os_deepin_setsrc (char* option)
   source_info source = os_deepin_sources[index];
   chsrc_say_selection(&source);
 
-  char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
-  chsrc_logcmd (backup);
-  system(backup);
+  char* backup = "cp -f /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
+  chsrc_runcmd(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
@@ -914,10 +914,11 @@ os_deepin_setsrc (char* option)
   chsrc_say_thanks(&source);
 }
 
+
+
 /**
  * Debian Buster 以上版本默认支持 HTTPS 源。如果遇到无法拉取 HTTPS 源的情况，请先使用 HTTP 源并安装
  * sudo apt install apt-transport-https ca-certificates
- * 未经测试
  */
 void
 os_debian_setsrc (char* option)
@@ -937,7 +938,7 @@ os_debian_setsrc (char* option)
   xy_info ("chsrc: 如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并 需要您 安装");
   xy_info ("chsrc: sudo apt install apt-transport-https ca-certificates");
 
-  char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
+  char* backup = "cp -f /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
   chsrc_logcmd(backup);
   system(backup);
 
@@ -952,9 +953,11 @@ os_debian_setsrc (char* option)
 
   chsrc_say_thanks(&source);
 }
+
+
+
 /**
- * fedora29版本及以下暂不支持
- * 未经测试
+ * @note fedora 29 及以下版本暂不支持
  */
 void
 os_fedora_setsrc (char* option)
@@ -973,10 +976,10 @@ os_fedora_setsrc (char* option)
 
   xy_info ("chsrc: fedora29版本及以下暂不支持");
 
-  char* backup = "cp -rf /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora.repo.bak";
+  char* backup = "cp -f /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora.repo.bak --backup='t'";
   chsrc_logcmd(backup);
   system(backup);
-  backup = "cp -rf /etc/yum.repos.d/fedora-updates.repo /etc/yum.repos.d/fedora-updates.repo.bak";
+  backup = "cp -f /etc/yum.repos.d/fedora-updates.repo /etc/yum.repos.d/fedora-updates.repo.bak";
   chsrc_logcmd(backup);
   system(backup);
 
@@ -1029,7 +1032,7 @@ os_kali_setsrc(char* option)
   source_info source = os_kali_sources[index];
   chsrc_say_selection(&source);
 
-  char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
+  char* backup = "cp -f /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
   chsrc_logcmd(backup);
   system(backup);
 
@@ -1046,6 +1049,7 @@ os_kali_setsrc(char* option)
 
   chsrc_say_thanks(&source);
 }
+
 
 
 /**
@@ -1066,7 +1070,7 @@ os_openbsd_setsrc(char* option)
   source_info source = os_openbsd_sources[index];
   chsrc_say_selection(&source);
 
-  char* backup = "cp -rf /etc/installurl /etc/installurl.bak";
+  char* backup = "cp -f /etc/installurl /etc/installurl.bak --backup='t'";
   chsrc_logcmd(backup);
   system(backup);
 
@@ -1083,6 +1087,8 @@ os_openbsd_setsrc(char* option)
 
   chsrc_say_thanks(&source);
 }
+
+
 
 /**
  * 未经测试
@@ -1103,21 +1109,20 @@ os_msys2_setsrc(char* option)
   chsrc_say_selection(&source);
 
 
-  char* backup = "cp -rf /etc/pacman.d/mirrorlist.mingw32 /etc/pacman.d/mirrorlist.mingw32.bak";
-  chsrc_logcmd(backup);
-  system(backup);
-        backup = "cp -rf /etc/pacman.d/mirrorlist.mingw64 /etc/pacman.d/mirrorlist.mingw64.bak";
-  chsrc_logcmd(backup);
-  system(backup);
-        backup = "cp -rf /etc/pacman.d/mirrorlist.msys /etc/pacman.d/mirrorlist.msys.bak";
-  chsrc_logcmd(backup);
-  system(backup);
+  char* backup = "cp -f /etc/pacman.d/mirrorlist.mingw32 /etc/pacman.d/mirrorlist.mingw32.bak";
+  chsrc_runcmd(backup);
 
-  xy_info ("chsrc: 备份文件名:1. /etc/pacman.d/mirrorlist.mingw32.bak");
-  xy_info ("chsrc: 备份文件名:2. /etc/pacman.d/mirrorlist.mingw64.bak");
-  xy_info ("chsrc: 备份文件名:3. /etc/pacman.d/mirrorlist.msys.bak");
+  backup = "cp -f /etc/pacman.d/mirrorlist.mingw64 /etc/pacman.d/mirrorlist.mingw64.bak";
+  chsrc_runcmd(backup);
 
-  char* prev = xy_strjoin(3,"请针对你的架构下载安装此目录下的文件:",
+  backup = "cp -f /etc/pacman.d/mirrorlist.msys /etc/pacman.d/mirrorlist.msys.bak";
+  chsrc_runcmd(backup);
+
+  xy_info ("chsrc: 备份文件名: 1. /etc/pacman.d/mirrorlist.mingw32.bak");
+  xy_info ("chsrc: 备份文件名: 2. /etc/pacman.d/mirrorlist.mingw64.bak");
+  xy_info ("chsrc: 备份文件名: 3. /etc/pacman.d/mirrorlist.msys.bak");
+
+  char* prev = xy_strjoin(3,"chsrc: 请针对你的架构下载安装此目录下的文件:",
                             source.url,
                             "distrib/<架构>/");
   xy_info (prev);
@@ -1125,8 +1130,8 @@ os_msys2_setsrc(char* option)
   char* cmd = xy_strjoin(3,"sed -i \"s#https\?://mirror.msys2.org/#",
                             source.url,
                             "#g\" /etc/pacman.d/mirrorlist* ");
-  chsrc_logcmd(cmd);
-  system(cmd);
+
+  chsrc_runcmd(cmd);
 
   // char* rm = "rm -rf /etc/pacman.d/mirrorlist.mingw32.bak";
   // system(rm);
@@ -1137,6 +1142,8 @@ os_msys2_setsrc(char* option)
 
   chsrc_say_thanks(&source);
 }
+
+
 
 /**
  * 未经测试
@@ -1157,7 +1164,7 @@ os_arch_setsrc(char* option)
   chsrc_say_selection(&source);
 
 
-  char* backup = "cp -rf /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak";
+  char* backup = "cp -f /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak --backup='t'";
   chsrc_logcmd(backup);
   system(backup);
 
@@ -1181,6 +1188,8 @@ os_arch_setsrc(char* option)
   xy_info ("Please use \"pacman -Syyu \" to update your source");
 }
 
+
+
 /**
  * 未经测试
  */
@@ -1200,7 +1209,7 @@ os_gentoo_setsrc(char* option)
   chsrc_say_selection(&source);
 
 
-  char* backup = "cp -rf /etc/portage/repos.conf/gentoo.conf /etc/portage/repos.conf/gentoo.conf.bak";
+  char* backup = "cp -f /etc/portage/repos.conf/gentoo.conf /etc/portage/repos.conf/gentoo.conf.bak";
   chsrc_logcmd(backup);
   system(backup);
 
@@ -1245,7 +1254,7 @@ os_netbsd_setsrc(char* option)
   chsrc_say_selection(&source);
 
 
-  char* backup = "cp -rf /usr/pkg/etc/pkgin/repositories.conf /usr/pkg/etc/pkgin/repositories.conf.bak";
+  char* backup = "cp -f /usr/pkg/etc/pkgin/repositories.conf /usr/pkg/etc/pkgin/repositories.conf.bak";
   chsrc_logcmd(backup);
   system(backup);
 
@@ -1269,6 +1278,7 @@ os_netbsd_setsrc(char* option)
 }
 
 
+
 /**
  * 未经测试
  */
@@ -1280,6 +1290,8 @@ os_manjaro_setsrc(char* option)
 
   xy_info ("chsrc: If success, please use \"sudo pacman -Syy\" to flush cache");
 }
+
+
 
 /**
  * 未经测试
@@ -1298,7 +1310,7 @@ os_openeuler_setsrc (char* option)
   source_info source = os_openeuler_sources[index];
   chsrc_say_selection(&source);
 
-  char* backup = "cp -rf /etc/yum.repos.d/openEuler.repot /etc/yum.repos.d/openEuler.repo.bak";
+  char* backup = "cp -f /etc/yum.repos.d/openEuler.repot /etc/yum.repos.d/openEuler.repo.bak --backup='t'";
   chsrc_logcmd (backup);
   system(backup);
 
@@ -1317,6 +1329,8 @@ os_openeuler_setsrc (char* option)
   chsrc_say_thanks(&source);
 }
 
+
+
 /**
  * 未经测试
  */
@@ -1334,7 +1348,7 @@ os_openkylin_setsrc (char* option)
   source_info source = os_openkylin_sources[index];
   chsrc_say_selection(&source);
 
-  char* backup = "cp -rf /etc/apt/sources.list /etc/apt/sources.list.bak";
+  char* backup = "cp -f /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
   chsrc_logcmd (backup);
   system(backup);
 
