@@ -62,15 +62,13 @@ git clone https://gitee.com/RubyMetric/chsrc.git ; cd chsrc ; make
 
 ## 使用
 
-<br>
-
 ```bash
 使用：chsrc <command> [target]
 
 help                    # 打印此帮助，或 h, -h, --help
-list (或 ls, 或 l)      # 查看可用镜像源，和可换源软件
-list mirror(s)          # 查看可用镜像源
-list target(s)          # 查看可换源软件
+list (或 ls, 或 l)      # 列出可用镜像源，和可换源软件
+list mirror/target      # 列出可用镜像源，或可换源软件
+list os/lang/ware       # 列出可换源的操作系统/编程语言/软件
 list <target>           # 查看该软件可以使用哪些源
 
 cesu <target>           # 对该软件所有源测速
