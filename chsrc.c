@@ -1166,7 +1166,7 @@ os_msys2_setsrc(char* option)
 
 
 /**
- * 未经测试
+ * 参考: https://mirrors.tuna.tsinghua.edu.cn/help/archlinuxcn/
  */
 void
 os_arch_setsrc(char* option)
@@ -1179,20 +1179,17 @@ os_arch_setsrc(char* option)
     index = lets_test_speed(os_arch);
   }
 
-
   source_info source = os_arch_sources[index];
   chsrc_say_selection(&source);
 
 
   char* backup = "cp -f /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak --backup='t'";
-  chsrc_logcmd(backup);
-  system(backup);
+  chsrc_runcmd(backup);
 
 
   bool arch_flag = false;
   xy_info ("chsrc: 备份文件名: /etc/pacman.d/mirrorlist.bak");
   char* new_file ;
-
 
 
   char* arch = xy_getcmd("arch",NULL);
@@ -1203,7 +1200,6 @@ os_arch_setsrc(char* option)
     new_file = xy_strjoin(3,"Server = ",
                                 source.url,
                                 "archlinux/$repo/os/$arch");
-
   }
   else {
     arch_flag = false;
@@ -1215,28 +1211,21 @@ os_arch_setsrc(char* option)
   cmd = xy_strjoin(3,"echo ",
                       new_file,
                       " > /etc/pacman.d/mirrorlist");
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 
-  xy_info("For arch linux cn...");
+  xy_info("chsrc: 使用 archlinuxcn ");
 
-  cmd = xy_strjoin(3,"cat [archlinuxcn] \r\n Server=",source.url,"archlinuxcn/$repo/os/$arch >> /etc/pacman.d/mirrorlist");
-  chsrc_logcmd(cmd);
-  system(cmd);
+  cmd = xy_strjoin(3, "cat [archlinuxcn] \r\n Server=",source.url,"archlinuxcn/$repo/os/$arch >> /etc/pacman.d/mirrorlist");
+  chsrc_runcmd(cmd);
 
   cmd = "pacman -Sy archlinux-keyring";
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 
-  if(arch_flag)
-  {
-    xy_info ("Please use \"pacman -Syyu \" to update your source");
+  if(arch_flag) {
+    chsrc_runcmd("pacman -Syyu");
+  } else {
+    chsrc_runcmd("pacman -Syy");
   }
-  else
-  {
-    xy_info ("Please use \"pacman -Syy \" to update your source");
-  }
-
   chsrc_say_thanks(&source);
 }
 
@@ -1255,7 +1244,6 @@ os_gentoo_setsrc(char* option)
   } else {
     index = lets_test_speed(os_gentoo);
   }
-
 
   source_info source = os_arch_sources[index];
   chsrc_say_selection(&source);
@@ -1420,6 +1408,7 @@ os_openkylin_setsrc (char* option)
 }
 
 
+
 /**
  * 未经测试, sources of freebsd are different from each other.
  */
@@ -1497,6 +1486,7 @@ os_freebsd_setsrc (char* option)
 }
 
 
+
 /**
  * 未经测试
  */
@@ -1515,8 +1505,7 @@ os_opensuse_setsrc (char* option)
   chsrc_say_selection(&source);
 
   char* source_nselect = "zypper mr -da";
-  chsrc_logcmd(source_nselect);
-  system(source_nselect);
+  chsrc_runcmd(source_nselect);
 
   char* cmd1 = xy_strjoin(3,
     "zypper ar -cfg '",
@@ -1542,24 +1531,20 @@ os_opensuse_setsrc (char* option)
     "zypper ar -cfg '",
     source.url,
     "/opensuse/distribution/leap/$releasever/backports/' mirror-backports-update");
-  chsrc_logcmd(cmd1);
-  chsrc_logcmd(cmd2);
-  chsrc_logcmd(cmd3);
-  chsrc_logcmd(cmd4);
-  xy_info("leap 15.3用户还需 要添加sle和backports源，另外：\
-  请确保系统在更新后仅启用了六个软件源，可以使用 zypper lr 检查软件源状态，\
-  并使用 zypper mr -d 禁用多余的软件源");
-  chsrc_logcmd(cmd5);
-  chsrc_logcmd(cmd6);
-  system(cmd1);
-  system(cmd2);
-  system(cmd3);
-  system(cmd4);
-  system(cmd5);
-  system(cmd6);
-  // char* rm = "rm -rf /etc/apt/source.list.bak";
-  // system(rm);
 
+  chsrc_runcmd(cmd1);
+  chsrc_runcmd(cmd2);
+  chsrc_runcmd(cmd3);
+  chsrc_runcmd(cmd4);
+
+  xy_info("chsrc: leap 15.3用户还需 要添加sle和backports源");
+  xy_info("chsrc: 另外请确保系统在更新后仅启用了六个软件源，可以使用 zypper lr 检查软件源状态");
+  xy_info("chsrc: 并使用 zypper mr -d 禁用多余的软件源");
+
+  chsrc_runcmd(cmd5);
+  chsrc_runcmd(cmd6);
+  // char* rm = "rm -f /etc/apt/source.list.bak";
+  // chsrc_runcmd(rm);
   chsrc_say_thanks(&source);
 }
 
