@@ -36,8 +36,7 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x86-w
 # x64
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-linux -o chsrc; chmod +x ./chsrc
 
-# aarch64 / arm64
-# 此非通过GitHub Actions编译
+# aarch64
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-aarch64-linux -o chsrc; chmod +x ./chsrc
 ```
 
@@ -82,37 +81,37 @@ set  <target> <mirror>  # 换源，指定使用某镜像站
 当你不想自动测速的时候，你可以直接指定某镜像站。
 
 ```bash
-chsrc set ruby   # 测速，寻找最快者，换源
+chsrc set ruby           # 测速，寻找最快者，换源
 # 或
-chsrc ls  ruby   # 列出可用的镜像站
+chsrc ls  ruby           # 列出可用的镜像站
 chsrc set ruby rubychina # 使用 RubyChina 作为镜像站
 ```
 
 注意: 下述语言/系统/软件均已实现基本支持，但还没有经过多平台测试，若有问题，请您及时提交报告。
 
-部分换源方案当前实现不足，需要用户进行部分手动操作如 `clojure`, `haskell`, `manjaro`, `emacs` 等。您可对您熟悉的部分做出贡献。
+部分换源方案当前实现不足，需要用户进行部分手动操作，您可对您熟悉的部分做出贡献。
 
 <br>
 
 ## 编程语言开发
 
 ```bash
-chsrc set ruby    或 chsrc set gem
-chsrc set python  或 chsrc set pip
-chsrc set node    或 chsrc set npm / nodejs
-chsrc set perl    或 chsrc set cpan
-chsrc set php     或 chsrc set composer
+chsrc set ruby    或 set gem
+chsrc set python  或 set pip
+chsrc set node    或 set npm / nodejs
+chsrc set perl    或 set cpan
+chsrc set php     或 set composer
 
 chsrc set go
-chsrc set rust    或 chsrc set cargo / crate
-chsrc set java    或 chsrc set maven / mvn / gradle
-chsrc set clojure 或 chsrc set clojars
-chsrc set dart    或 chsrc set pub / flutter # 即同时为flutter换源
-chsrc set haskell 或 chsrc set hackage/cabal/stack
-chsrc set ocaml   或 chsrc set opam
+chsrc set rust    或 set cargo / crate
+chsrc set java    或 set maven / mvn / gradle
+chsrc set clojure 或 set clojars
+chsrc set dart    或 set pub / flutter # 同时会为flutter换源
+chsrc set haskell 或 set hackage/cabal/stack
+chsrc set ocaml   或 set opam
 
 # 同时会为 bioconductor 换源
-chsrc set r       或 chsrc set cran
+chsrc set r       或 set cran
 chsrc set julia
 ```
 
@@ -124,20 +123,22 @@ chsrc set julia
 sudo chsrc set ubuntu
 sudo chsrc set debian
 sudo chsrc set fedora
-sudo chsrc set arch
+sudo chsrc set opensuse 或 set suse
+sudo chsrc set arch     # 同时使用 archlinuxcn
 sudo chsrc set manjaro
 sudo chsrc set kali
 sudo chsrc set gentoo
 
+sudo chsrc set freebsd
 sudo chsrc set openbsd
 sudo chsrc set netbsd
 
 # 国产操作系统
 sudo chsrc set deepin
-sudo chsrc set openeuler
+sudo chsrc set openeuler 或 set euler
 sudo chsrc set openkylin
 
-chsrc set msys2 或 chsrc set msys
+chsrc set msys2 或 set msys
 ```
 
 <br>
@@ -145,12 +146,12 @@ chsrc set msys2 或 chsrc set msys
 ## 软件
 
 ```bash
-chsrc set brew   或 chsrc set homebrew
+chsrc set brew   或 set homebrew
 chsrc set flathub
 chsrc set guix
-chsrc set emacs  或 chsrc set elpa
-chsrc set tex    或 chsrc set ctan / latex / texlive / miktex
-chsrc set conda  或 chsrc set anaconda
+chsrc set emacs  或 set elpa
+chsrc set tex    或 set ctan / latex / texlive / miktex
+chsrc set conda  或 set anaconda
 ```
 
 <br>
