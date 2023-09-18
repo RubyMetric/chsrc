@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-17>
+ * Last modified : <2023-09-18>
  *
  * chsrc:
  *
@@ -1439,10 +1439,9 @@ os_freebsd_setsrc (char* option)
 
   char* pkg_mkdir = "mkdir -p /usr/local/etc/pkg/repos";
   char* pkg_createconf = "ee /usr/local/etc/pkg/repos/bjtu.conf";
-  chsrc_logcmd (pkg_mkdir);
-  chsrc_logcmd (pkg_createconf);
-  system(pkg_mkdir);
-  system(pkg_createconf);
+
+  chsrc_runcmd(pkg_mkdir);
+  chsrc_runcmd(pkg_createconf);
 
   char* pkg_content = xy_strjoin(3,"bjtu: { \
                       url: \"pkg+=http://",source.url,"/freebsd-pkg/${ABI}/latest\",\
@@ -1457,49 +1456,41 @@ os_freebsd_setsrc (char* option)
     "cat ",
     pkg_content,
     "> /usr/local/etc/pkg/repos/bjtu.conf");
-  chsrc_logcmd(pkg_cmd);
-  system(pkg_cmd);
 
-  xy_info("chsrc: pkg sources changed.");
+  chsrc_runcmd(pkg_cmd);
+
   xy_info("chsrc: 若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将 'http' 改成 'https' ，最后使用 'pkg update -f' 刷新缓存即可");
 
-  char* ports_cp="cp -rf /etc/make.conf /etc/make.conf.bak";
-  chsrc_logcmd(ports_cp);
-  system(ports_cp);
+  char* ports_cp="cp -f /etc/make.conf /etc/make.conf.bak";
+  chsrc_runcmd(ports_cp);
 
   char* ports_cmd =xy_strjoin(3,"cat MASTER_SITE_OVERRIDE?=http://",
                                 source.url,
                                 "/freebsd-ports/ >> /etc/make.conf");
-  chsrc_logcmd(ports_cmd);
-  system(ports_cmd);
+  chsrc_runcmd(ports_cmd);
 
   xy_info("chsrc: ports sources changed.");
 
-  char* portsnap_cp="cp -rf /etc/portsnap.conf /etc/portsnap.conf.bak";
-  chsrc_logcmd(portsnap_cp);
-  system(portsnap_cp);
-
+  char* portsnap_cp="cp -f /etc/portsnap.conf /etc/portsnap.conf.bak";
+  chsrc_runcmd(portsnap_cp);
 
   char* portsnap_cmd =xy_strjoin(3,"s@(.*)SERVERNAME=[\\.|a-z|A-Z]*@\\1SERVERNAME=",
                                 source.url,
                                 "@g < /etc/portsnap.conf.bak | cat > /etc/portsnap.conf");
-  chsrc_logcmd(portsnap_cmd);
-  system(portsnap_cmd);
+  chsrc_runcmd(portsnap_cmd);
+
 
   xy_info("chsrc: portsnap sources changed.");
   xy_info("chsrc: 获取portsnap更新使用此命令: 'portsnap fetch extract'");
 
-  char* update_cp="cp -rf /etc/freebsd-update.conf /etc/freebsd-update.conf.bak";
-  chsrc_logcmd(update_cp);
-  system(update_cp);
+  char* update_cp="cp -f /etc/freebsd-update.conf /etc/freebsd-update.conf.bak";
+  chsrc_runcmd(update_cp);
 
 
   char* update_cmd =xy_strjoin(3,"s@(.*)SERVERNAME [\\.|a-z|A-Z]*@\\1SERVERNAME ",
                                 source.url,
                                 "@g < /etc/freebsd-update.conf.bak | cat > /etc/freebsd-update.conf");
-  chsrc_logcmd(update_cmd);
-  system(update_cmd);
-
+  chsrc_runcmd(update_cmd);
   xy_info("chsrc: freebsd-update sources changed.");
 
   chsrc_say_thanks(&source);
@@ -1879,41 +1870,41 @@ def_target_info(os_deepin);
 
 target_info
   os_fedora_target      = {os_fedora_setsrc,      NULL, os_fedora_sources,    os_fedora_sources_n},
+  os_opensuse_target    = {os_opensuse_setsrc,    NULL, os_opensuse_sources,  os_opensuse_sources_n},
   os_kali_target        = {os_kali_setsrc,        NULL, os_kali_sources,      os_kali_sources_n},
+  os_msys2_target       = {os_msys2_setsrc,       NULL, os_msys2_sources,     os_msys2_sources_n},
   os_arch_target        = {os_arch_setsrc,        NULL, os_arch_sources,      os_arch_sources_n},
   os_manjaro_target     = {os_manjaro_setsrc,     NULL, NULL,                       0},
   os_gentoo_target      = {os_gentoo_setsrc,      NULL, os_gentoo_sources,    os_gentoo_sources_n},
-  os_openbsd_target     = {os_openbsd_setsrc,     NULL, os_openbsd_sources,   os_openbsd_sources_n},
-  os_netbsd_target      = {os_netbsd_setsrc,      NULL, os_netbsd_sources,    os_netbsd_sources_n},
-  os_msys2_target       = {os_msys2_setsrc,       NULL, os_msys2_sources,     os_msys2_sources_n},
-  os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources, os_openeuler_sources_n},
-  os_openkylin_target   = {os_openkylin_setsrc,   NULL, os_openkylin_sources, os_openkylin_sources_n},
   os_freebsd_target     = {os_freebsd_setsrc,     NULL, os_freebsd_sources,   os_freebsd_sources_n},
-  os_opensuse_target    = {os_opensuse_setsrc,    NULL, os_opensuse_sources,  os_opensuse_sources_n};
+  os_netbsd_target      = {os_netbsd_setsrc,      NULL, os_netbsd_sources,    os_netbsd_sources_n},
+  os_openbsd_target     = {os_openbsd_setsrc,     NULL, os_openbsd_sources,   os_openbsd_sources_n},
+  os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources, os_openeuler_sources_n},
+  os_openkylin_target   = {os_openkylin_setsrc,   NULL, os_openkylin_sources, os_openkylin_sources_n};
 
 static const char
-*os_ubuntu        [] = {"ubuntu",  NULL,  targetinfo(&os_ubuntu_target)},
-*os_deepin        [] = {"deepin",  NULL,  targetinfo(&os_deepin_target)},
-*os_debian        [] = {"debian",  NULL,  targetinfo(&os_debian_target)},
-*os_fedora        [] = {"fedora",  NULL,  targetinfo(&os_fedora_target)},
-*os_kali          [] = {"kali",    NULL,  targetinfo(&os_kali_target)},
-*os_openbsd       [] = {"openbsd", NULL,  targetinfo(&os_openbsd_target)},
-*os_msys2         [] = {"msys2",   NULL,  targetinfo(&os_msys2_target)},
-*os_arch          [] = {"arch",    NULL,  targetinfo(&os_arch_target)},
-*os_gentoo        [] = {"gentoo",  NULL,  targetinfo(&os_gentoo_target)},
-*os_netbsd        [] = {"netbsd",  NULL,  targetinfo(&os_netbsd_target)},
-*os_manjaro       [] = {"manjaro", NULL,  targetinfo(&os_manjaro_target)},
-*os_openeuler     [] = {"openeuler",NULL, targetinfo(&os_openeuler_target)},
-*os_openkylin     [] = {"openkylin",NULL, targetinfo(&os_openkylin_target)},
-*os_freebsd       [] = {"freebsd",NULL,   targetinfo(&os_freebsd_target)},
-*os_opensuse      [] = {"opensuse",NULL,  targetinfo(&os_opensuse_target)},
+*os_ubuntu        [] = {"ubuntu",               NULL,  targetinfo(&os_ubuntu_target)},
+*os_debian        [] = {"debian",  "deb",       NULL,  targetinfo(&os_debian_target)},
+*os_fedora        [] = {"fedora",               NULL,  targetinfo(&os_fedora_target)},
+*os_opensuse      [] = {"opensuse","suse",      NULL,  targetinfo(&os_opensuse_target)},
+*os_kali          [] = {"kali",                 NULL,  targetinfo(&os_kali_target)},
+*os_msys2         [] = {"msys2",   "msys",      NULL,  targetinfo(&os_msys2_target)},
+*os_arch          [] = {"arch",                 NULL,  targetinfo(&os_arch_target)},
+*os_manjaro       [] = {"manjaro",              NULL,  targetinfo(&os_manjaro_target)},
+*os_gentoo        [] = {"gentoo",               NULL,  targetinfo(&os_gentoo_target)},
+*os_freebsd       [] = {"freebsd",              NULL,  targetinfo(&os_freebsd_target)},
+*os_netbsd        [] = {"netbsd",               NULL,  targetinfo(&os_netbsd_target)},
+*os_openbsd       [] = {"openbsd",              NULL,  targetinfo(&os_openbsd_target)},
+*os_deepin        [] = {"deepin",               NULL,  targetinfo(&os_deepin_target)},
+*os_openeuler     [] = {"openeuler", "euler",   NULL, targetinfo(&os_openeuler_target)},
+*os_openkylin     [] = {"openkylin",            NULL, targetinfo(&os_openkylin_target)},
 **os_systems[] =
 {
-  os_ubuntu,  os_debian,  os_fedora,  os_kali,
+  os_ubuntu,  os_debian,  os_fedora,  os_opensuse, os_kali,
   os_arch,    os_manjaro, os_gentoo,
-  os_openbsd, os_netbsd,  os_freebsd,
+  os_freebsd, os_netbsd,  os_openbsd,
   os_msys2,
-  os_deepin, os_openeuler, os_openkylin,os_opensuse
+  os_deepin, os_openeuler, os_openkylin,
 };
 
 
