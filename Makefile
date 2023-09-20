@@ -3,7 +3,7 @@
 # License       : GPLv3
 # Authors       : Aoran Zeng <ccmywish@qq.com>
 # Created on    : <2023-08-28>
-# Last modified : <2023-09-14>
+# Last modified : <2023-09-20>
 # ---------------------------------------------------------------
 
 CFLAGS = # -Wall
@@ -12,6 +12,12 @@ CFLAGS = # -Wall
 ifeq ($(OS), Windows_NT)
 	CLANG_FLAGS = -target x86_64-pc-windows-gnu
 endif
+ifeq ($(CC), clang)
+	CFLAGS += $(CLANG_FLAGS)
+endif
+ifeq ($(shell uname), Linux)
+	CFLAGS += -static
+endif
 
 TARGET = chsrc
 
@@ -19,12 +25,8 @@ CI_BUILD_NAME = chsrc
 #=======================
 
 all:
-ifeq ($(CC), clang)
-	@$(CC) chsrc.c $(CLANG_FLAGS) $(CFLAGS) -o $(TARGET)
-else
 	@$(CC) chsrc.c $(CFLAGS) -o $(TARGET)
-endif
-	@echo Compile done using \'$(CC)\' $(CFLAGS)
+	@echo; echo Compile done using \'$(CC)\' $(CFLAGS)
 
 CI: all
 	@mv chsrc $(CI_BUILD_NAME)
