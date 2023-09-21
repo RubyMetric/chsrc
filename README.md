@@ -38,6 +38,12 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-l
 
 # aarch64
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-aarch64-linux -o chsrc; chmod +x ./chsrc
+
+# riscv64
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-riscv64-linux -o chsrc; chmod +x ./chsrc
+
+# armv7
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-armv7-linux -o chsrc; chmod +x ./chsrc
 ```
 
 ### macOS
