@@ -12,7 +12,7 @@
  *   该软件为自由软件，采用 GPLv3 许可证，请查阅 LICENSE.txt 文件
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version "v0.1.0-20230921.pre"
+#define Chsrc_Version "v0.1.0-20230921"
 
 #include "chsrc.h"
 
