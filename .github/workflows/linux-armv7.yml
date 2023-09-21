@@ -1,0 +1,37 @@
+name: Linux ARMv7 Build
+on:
+  push:
+    branches: [ "gh-pipeline" ]
+  pull_request:
+    branches: [ "gh-pipeline" ]
+
+jobs:
+  armv7-linu-build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build ARMv7
+        uses: uraimo/run-on-arch-action@v2
+        with:
+          arch: armv7
+          distro: ubuntu_latest
+
+          dockerRunArgs: |
+            --volume "${PWD}/artifacts:/artifacts"
+          run: |
+            apt-get update -qq
+            apt-get install build-essential -y -q
+            apt-get install git -y -q
+            pwd ; ls -al
+            git clone https://github.com/RubyMetric/chsrc -b gh-pipeline -q
+            cd chsrc
+            make CI CI_BUILD_NAME=chsrc-armv7-linux
+            cp ./chsrc-armv7-linux /artifacts
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: preview
+          files: |
+            ./artifacts/chsrc-armv7-linux
+          token: ${{ secrets.CHSRC_UPLOAD }}
+
