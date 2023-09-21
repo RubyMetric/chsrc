@@ -758,7 +758,7 @@ pl_r_setsrc (char* option)
   if (xy_on_windows)
     cmd = xy_strjoin(3, "echo ", file, " >> %USERPROFILE%/Documents/.Rprofile");
   else
-    cmd = xy_strjoin(3, "echo ", file, " >> ~/.Rprofile");
+    cmd = xy_strjoin(3, "echo '", file, "' >> ~/.Rprofile");
 
   chsrc_runcmd(cmd);
 
@@ -767,7 +767,7 @@ pl_r_setsrc (char* option)
   if (xy_on_windows)
     cmd = xy_strjoin(3, "echo ", file, " >> %USERPROFILE%/Documents/.Rprofile");
   else
-    cmd = xy_strjoin(3, "echo ", file, " >> ~/.Rprofile");
+    cmd = xy_strjoin(3, "echo '", file, "' >> ~/.Rprofile");
 
   chsrc_runcmd(cmd);
   chsrc_say_thanks(&source);
@@ -821,7 +821,7 @@ pl_julia_setsrc (char* option)
           "& echo ", file, " >> %USERPROFILE%/.julia/config/startup.jl");
   else
     cmd = xy_strjoin(4, xy_str_to_quietcmd("mkdir -p ~/.julia/config"),
-        ";echo ", file, " >> ~/.julia/config/startup.jl");
+        ";echo '", file, "' >> ~/.julia/config/startup.jl");
 
   chsrc_runcmd(cmd);
   chsrc_say_thanks(&source);
