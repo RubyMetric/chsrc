@@ -6,22 +6,16 @@ on:
     branches: [ "gh-pipeline" ]
 
 jobs:
-  build-and-upload:
-
+  x64-build-and-upload:
     runs-on: ubuntu-latest
-
     steps:
-
     - name: Checkout repo
       uses: actions/checkout@v3
-
     - name: Compile chsrc x64
       run: |
         make CI CI_BUILD_NAME=chsrc-x64-linux
-
     - name: List files
       run: ls *-linux
-
     - name: Release
       uses: softprops/action-gh-release@v1
       # if: startsWith(github.ref, 'refs/tags/')
@@ -30,3 +24,72 @@ jobs:
         files: |
           chsrc-x64-linux
         token: ${{ secrets.CHSRC_UPLOAD }}
+
+
+  multi-build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build ARMv7
+        uses: uraimo/run-on-arch-action@v2
+        with:
+          arch: armv7
+          distro: ubuntu_latest
+
+          dockerRunArgs: |
+            --volume "${PWD}/artifacts:/artifacts"
+          run: |
+            apt-get update -q
+            apt-get install build-essential -y -q
+            apt-get install git -y -q
+            cd /home/runner/work
+            git clone https://github.com/RubyMetric/chsrc -b gh-pipeline -q
+            cd chsrc
+            make CI CI_BUILD_NAME=chsrc-armv7-linux
+            cp ./chsrc-armv7-linux /artifacts
+
+      - name: Build aarch64
+        uses: uraimo/run-on-arch-action@v2
+        with:
+          arch: aarch64
+          distro: ubuntu_latest
+
+          dockerRunArgs: |
+            --volume "${PWD}/artifacts:/artifacts"
+          run: |
+            apt-get update -q
+            apt-get install build-essential -y -q
+            apt-get install git -y -q
+            cd /home/runner/work
+            git clone https://github.com/RubyMetric/chsrc -b gh-pipeline -q
+            cd chsrc
+            make CI CI_BUILD_NAME=chsrc-aarch64-linux
+            cp ./chsrc-aarch64-linux /artifacts
+
+      - name: Build riscv64
+        uses: uraimo/run-on-arch-action@v2
+        with:
+          arch: riscv64
+          distro: ubuntu_latest
+
+          dockerRunArgs: |
+            --volume "${PWD}/artifacts:/artifacts"
+          run: |
+            apt-get update -q
+            apt-get install build-essential -y -q
+            apt-get install git -y -q
+            cd /home/runner/work
+            git clone https://github.com/RubyMetric/chsrc -b gh-pipeline -q
+            cd chsrc
+            make CI CI_BUILD_NAME=chsrc-riscv64-linux
+            cp ./chsrc-riscv64-linux /artifacts
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: preview
+          files: |
+            ./artifacts/chsrc-armv7-linux
+            ./artifacts/chsrc-aarch64-linux
+            ./artifacts/chsrc-riscv64-linux
+          token: ${{ secrets.CHSRC_UPLOAD }}
+
