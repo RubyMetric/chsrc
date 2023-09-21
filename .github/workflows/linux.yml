@@ -38,10 +38,10 @@ jobs:
           dockerRunArgs: |
             --volume "${PWD}/artifacts:/artifacts"
           run: |
-            apt-get update -q
+            apt-get update -qq
             apt-get install build-essential -y -q
             apt-get install git -y -q
-            cd /home/runner/work
+            pwd ; ls -al
             git clone https://github.com/RubyMetric/chsrc -b gh-pipeline -q
             cd chsrc
             make CI CI_BUILD_NAME=chsrc-armv7-linux
@@ -56,10 +56,10 @@ jobs:
           dockerRunArgs: |
             --volume "${PWD}/artifacts:/artifacts"
           run: |
-            apt-get update -q
+            apt-get update -qq
             apt-get install build-essential -y -q
             apt-get install git -y -q
-            cd /home/runner/work
+            pwd ; ls -al
             git clone https://github.com/RubyMetric/chsrc -b gh-pipeline -q
             cd chsrc
             make CI CI_BUILD_NAME=chsrc-aarch64-linux
@@ -74,10 +74,10 @@ jobs:
           dockerRunArgs: |
             --volume "${PWD}/artifacts:/artifacts"
           run: |
-            apt-get update -q
+            apt-get update -qq
             apt-get install build-essential -y -q
             apt-get install git -y -q
-            cd /home/runner/work
+            pwd ; ls -al
             git clone https://github.com/RubyMetric/chsrc -b gh-pipeline -q
             cd chsrc
             make CI CI_BUILD_NAME=chsrc-riscv64-linux
