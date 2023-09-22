@@ -3,7 +3,7 @@
  * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-16>
+ * Last modified : <2023-09-22>
  *
  * xy:
  *
@@ -29,51 +29,39 @@
 // #define NDEBUG
 
 #ifdef _WIN32
-
-  static bool xy_on_windows = true;
-  static bool xy_on_linux   = false;
-  static bool xy_on_macos   = false;
-  static bool xy_on_bsd     = false;
-
-  static char* xy_os_devnull = "nul";
-
+  #define xy_on_windows true
+  #define xy_on_linux   false
+  #define xy_on_macos   false
+  #define xy_on_bsd     false
+  #define xy_os_devnull "nul"
   #include <windows.h>
   #define xy_useutf8() SetConsoleOutputCP(65001)
 
 #elif defined(__linux__) || defined(__linux)
-
-  static bool xy_on_windows = false;
-  static bool xy_on_linux   = true;
-  static bool xy_on_macos   = false;
-  static bool xy_on_bsd     = false;
-
-  static char* xy_os_devnull = "/dev/null";
-
+  #define xy_on_windows false
+  #define xy_on_linux   true
+  #define xy_on_macos   false
+  #define xy_on_bsd     false
+  #define xy_os_devnull "/dev/null";
   #define xy_useutf8()
 
 #elif defined(__APPLE__)
-
-  static bool xy_on_windows = false;
-  static bool xy_on_linux   = false;
-  static bool xy_on_macos   = true;
-  static bool xy_on_bsd     = false;
-
-  static char* xy_os_devnull = "/dev/null";
-
+  #define xy_on_windows false
+  #define xy_on_linux   false
+  #define xy_on_macos   true
+  #define xy_on_bsd     false
+  #define xy_os_devnull "/dev/null";
   #define xy_useutf8()
 
 #elif defined(__OpenBSD__) || defined(__NetBSD__) || defined(__FreeBSD__)
-
-  static bool xy_on_windows = false;
-  static bool xy_on_linux   = false;
-  static bool xy_on_macos   = false;
-  static bool xy_on_bsd     = true;
-
-  static char* xy_os_devnull = "/dev/null";
-
+  #define xy_on_windows false
+  #define xy_on_linux   false
+  #define xy_on_macos   false
+  #define xy_on_bsd     true
+  #define xy_os_devnull "/dev/null";
   #define xy_useutf8()
-
 #endif
+
 
 void putf(double n)    {printf("%f\n",  n);}
 void puti(long long n) {printf("%lld\n", n);}
