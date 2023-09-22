@@ -1695,7 +1695,7 @@ wr_brew_setsrc(char* option)
  * 参考: https://mirrors.sjtug.sjtu.edu.cn/docs/guix
  */
 void
-wr_guix_setsrc(char* option)
+wr_guix_setsrc (char* option)
 {
   int index = 0;
   if (NULL!=option) {
@@ -1712,8 +1712,48 @@ wr_guix_setsrc(char* option)
                               "       (inherit (car %default-channels))\n"
                               "       (url \"", source.url, "\")))");
 
-  xy_warn ("chsrc: 请您手动写入以下内容到 ~/.config/guix/channels.scm 文件中");
+  xy_warn ("chsrc: 为防止扰乱配置文件，请您手动写入以下内容到 ~/.config/guix/channels.scm 文件中");
   puts(file);
+  chsrc_say_thanks(&source);
+}
+
+
+void
+pl_nix_check_cmd_()
+{
+  char* check_cmd = xy_str_to_quietcmd("nix-channel --version");
+  bool exist = does_the_program_exist (check_cmd, "nix-channel");
+
+  if (!exist) {
+    xy_error ("chsrc: 未找到 nix-channel 命令，请检查是否存在");
+    exit(1);
+  }
+}
+
+/**
+ * 参考: https://mirrors.bfsu.edu.cn/help/nix-channels/
+ */
+void
+wr_nix_setsrc (char* option)
+{
+  pl_nix_check_cmd_();
+
+  int index = 0;
+  if (NULL!=option) {
+    index = lets_find_mirror(wr_nix, option);
+  } else {
+    index = lets_test_speed(wr_nix);
+  }
+
+  source_info source = wr_nix_sources[index];
+  chsrc_say_selection (&source);
+
+  char* cmd = xy_strjoin(3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
+  chsrc_runcmd(cmd);
+
+  cmd = "nix-channel --update";
+  chsrc_runcmd(cmd);
+
   chsrc_say_thanks(&source);
 }
 
@@ -1903,6 +1943,7 @@ def_target_info(wr_tex);
 
 target_info
   wr_flathub_target  = {wr_flathub_setsrc,  NULL,  wr_flathub_sources,  wr_flathub_sources_n},
+  wr_nix_target      = {wr_nix_setsrc,      NULL,  wr_nix_sources,      wr_nix_sources_n},
   wr_guix_target     = {wr_guix_setsrc,     NULL,  wr_guix_sources,     wr_guix_sources_n},
   wr_emacs_target    = {wr_emacs_setsrc,    NULL,  wr_emacs_sources,    wr_emacs_sources_n},
   wr_anaconda_target = {wr_anaconda_setsrc, NULL,  wr_anaconda_sources, wr_anaconda_sources_n};
@@ -1910,13 +1951,14 @@ target_info
 static const char
 *wr_brew    [] = {"brew",  "homebrew",     NULL,  targetinfo(&wr_brew_target)},
 *wr_flathub [] = {"flathub", NULL,                targetinfo(&wr_flathub_target)},
+*wr_nix     [] = {"nix",     NULL,                targetinfo(&wr_nix_target)},
 *wr_guix    [] = {"guix",    NULL,                targetinfo(&wr_guix_target)},
 *wr_emacs   [] = {"emacs", "elpa",         NULL,  targetinfo(&wr_emacs_target)},
 *wr_tex     [] = {"latex", "ctan", "tex", "texlive", "miktex", "tlmgr", "mpm", NULL, targetinfo(&wr_tex_target)},
 *wr_anaconda[] = {"conda", "anaconda",     NULL,  targetinfo(&wr_anaconda_target)},
 **wr_softwares[] =
 {
-  wr_brew, wr_flathub, wr_guix, wr_emacs, wr_tex, wr_anaconda
+  wr_brew, wr_flathub, wr_nix, wr_guix, wr_emacs, wr_tex, wr_anaconda
 };
 #undef targetinfo
 /************************************** End Target Matrix ****************************************/

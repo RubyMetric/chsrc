@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2023-09-15>
+ * Last modified : <2023-09-22>
  *
  * sources:
  *
@@ -625,6 +625,19 @@ wr_flathub_sources[] = {
 },
 
 
+
+/**
+ * 2023-09-22 更新
+ *
+ * @note 1. 目前只有一个源
+ *       2. 这些链接将会在setsrc函数中补充完整
+ */
+wr_nix_sources[] = {
+  {&Bfsu,           "https://mirrors.bfsu.edu.cn/nix-channels/"}
+},
+
+
+
 /**
  * 2023-09-11 更新
  *
@@ -635,10 +648,11 @@ wr_guix_sources[] = {
 },
 
 
+
 /**
  * 2023-09-10 更新
  *
- * @note 1. 这些链接将会在setsrc函数中补充完整
+ * @note 这些链接将会在setsrc函数中补充完整
  */
 wr_anaconda_sources[] = {
   {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/anaconda/"},
@@ -648,21 +662,23 @@ wr_anaconda_sources[] = {
 };
 
 
+
 #define def_target_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
-def_target_sources_n(pl_ruby); def_target_sources_n(pl_python); def_target_sources_n(pl_nodejs);
-def_target_sources_n(pl_perl); def_target_sources_n(pl_php);    def_target_sources_n(pl_go);
-def_target_sources_n(pl_rust); def_target_sources_n(pl_java);   def_target_sources_n(pl_clojure);
-def_target_sources_n(pl_dotnet); def_target_sources_n(pl_dart); def_target_sources_n(pl_haskell);
+def_target_sources_n(pl_ruby);     def_target_sources_n(pl_python);    def_target_sources_n(pl_nodejs);
+def_target_sources_n(pl_perl);     def_target_sources_n(pl_php);       def_target_sources_n(pl_go);
+def_target_sources_n(pl_rust);     def_target_sources_n(pl_java);      def_target_sources_n(pl_clojure);
+def_target_sources_n(pl_dotnet);   def_target_sources_n(pl_dart);      def_target_sources_n(pl_haskell);
 def_target_sources_n(pl_ocaml);
-def_target_sources_n(pl_r);      def_target_sources_n(pl_julia);
+def_target_sources_n(pl_r);        def_target_sources_n(pl_julia);
 
-def_target_sources_n(os_ubuntu);      def_target_sources_n(os_debian);      def_target_sources_n(os_fedora);
-def_target_sources_n(os_kali);        def_target_sources_n(os_openbsd);     def_target_sources_n(os_msys2);
-def_target_sources_n(os_arch);        def_target_sources_n(os_gentoo);      def_target_sources_n(os_netbsd);
-def_target_sources_n(os_deepin);      def_target_sources_n(os_openeuler);   def_target_sources_n(os_openkylin);
-def_target_sources_n(os_freebsd);     def_target_sources_n(os_opensuse);
+def_target_sources_n(os_ubuntu);   def_target_sources_n(os_debian);    def_target_sources_n(os_fedora);
+def_target_sources_n(os_kali);     def_target_sources_n(os_openbsd);   def_target_sources_n(os_msys2);
+def_target_sources_n(os_arch);     def_target_sources_n(os_gentoo);    def_target_sources_n(os_netbsd);
+def_target_sources_n(os_deepin);   def_target_sources_n(os_openeuler); def_target_sources_n(os_openkylin);
+def_target_sources_n(os_freebsd);  def_target_sources_n(os_opensuse);
 
-def_target_sources_n(wr_brew); def_target_sources_n(wr_guix);   def_target_sources_n(wr_flathub);
-def_target_sources_n(wr_tex);  def_target_sources_n(wr_emacs);
+def_target_sources_n(wr_brew);     def_target_sources_n(wr_flathub);
+def_target_sources_n(wr_nix);      def_target_sources_n(wr_guix);
+def_target_sources_n(wr_tex);      def_target_sources_n(wr_emacs);
 def_target_sources_n(wr_anaconda);
