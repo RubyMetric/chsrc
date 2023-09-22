@@ -846,6 +846,8 @@ os_ubuntu_getsrc(char* option)
 void
 os_ubuntu_setsrc (char* option)
 {
+  ensure_root();
+
   int index = 0;
 
   if (NULL!=option) {
@@ -879,8 +881,7 @@ os_ubuntu_setsrc (char* option)
       "-ports/@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
   }
 
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
   // char* rm = "rm -rf /etc/apt/source.list.bak";
   // system(rm);
 

@@ -261,6 +261,29 @@ chsrc_say_thanks (source_info* source)
 }
 
 
+
+void
+ensure_root ()
+{
+  char* euid = getenv("$EUID");
+  if (NULL==euid) {
+    FILE* fp = popen("id -u", "r");
+    char buf[10] = {0};
+    fgets(buf, 10, fp);
+    fclose(fp);
+    if (0!=atoi(buf)) goto not_root;
+    else return;
+  } else {
+    if (0!=atoi(euid)) goto not_root;
+    else return;
+  }
+not_root:
+  xy_error("chsrc: 请在命令前使用 sudo 来保证必要的权限");
+  exit(1);
+}
+
+
+
 /* Target Info */
 typedef struct {
   void (*setfn)(char* option);
