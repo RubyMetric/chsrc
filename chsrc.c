@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-21>
+ * Last modified : <2023-09-22>
  *
  * chsrc:
  *
@@ -12,7 +12,7 @@
  *   该软件为自由软件，采用 GPLv3 许可证，请查阅 LICENSE.txt 文件
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version "v0.1.0-20230921"
+#define Chsrc_Version "v0.1.0-20230922"
 
 #include "chsrc.h"
 
@@ -904,6 +904,7 @@ os_debian_getsrc(char* option)
 void
 os_debian_setsrc (char* option)
 {
+  ensure_root();
   int index = 0;
 
   if (NULL!=option) {
@@ -944,11 +945,12 @@ os_deepin_getsrc(char* option)
 }
 
 /**
- * 未经测试
+ * HELP: 未经测试
  */
 void
 os_deepin_setsrc (char* option)
 {
+  ensure_root();
   int index = 0;
 
   if (NULL!=option) {
@@ -986,6 +988,7 @@ os_deepin_setsrc (char* option)
 void
 os_fedora_setsrc (char* option)
 {
+  ensure_root();
   int index = 0;
 
   if (NULL!=option) {
@@ -1038,11 +1041,12 @@ os_fedora_setsrc (char* option)
 
 
 /**
- * 未经测试
+ * HELP: 未经测试
  */
 void
 os_kali_setsrc(char* option)
 {
+  ensure_root();
   int index = 0;
 
   if (NULL!=option) {
@@ -1051,22 +1055,19 @@ os_kali_setsrc(char* option)
     index = lets_test_speed(os_kali);
   }
 
-
   source_info source = os_kali_sources[index];
   chsrc_say_selection(&source);
 
   char* backup = "cp -f /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
-  chsrc_logcmd(backup);
-  system(backup);
+  chsrc_runcmd(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
   char* cmd = xy_strjoin(3, "sed -i \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/kali\\/@\\1",
                           source.url,
                           "@g\' /etc/apt/sources.list");
-  chsrc_logcmd(cmd);
-  system(cmd);
 
+  chsrc_runcmd(cmd);
   // char* rm = "rm -rf /etc/apt/source.list.bak";
   // system(rm);
 
@@ -1076,11 +1077,12 @@ os_kali_setsrc(char* option)
 
 
 /**
- * 未经测试
+ * HELP: 未经测试
  */
 void
 os_openbsd_setsrc(char* option)
 {
+  ensure_root();
   int index = 0;
 
   if (NULL!=option) {
@@ -1089,21 +1091,19 @@ os_openbsd_setsrc(char* option)
     index = lets_test_speed(os_openbsd);
   }
 
-
   source_info source = os_openbsd_sources[index];
   chsrc_say_selection(&source);
 
   char* backup = "cp -f /etc/installurl /etc/installurl.bak --backup='t'";
-  chsrc_logcmd(backup);
-  system(backup);
+  chsrc_runcmd(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/installurl.bak");
 
   char* cmd = xy_strjoin(3,"echo ",
                             source.url,
                             " > /etc/installurl");
-  chsrc_logcmd(cmd);
-  system(cmd);
+
+  chsrc_runcmd(cmd);
 
   // char* rm = "rm -rf /etc/installurl.bak";
   // system(rm);
@@ -1114,7 +1114,7 @@ os_openbsd_setsrc(char* option)
 
 
 /**
- * 未经测试
+ * HELP: 未经测试
  */
 void
 os_msys2_setsrc(char* option)
@@ -1174,6 +1174,7 @@ os_msys2_setsrc(char* option)
 void
 os_arch_setsrc(char* option)
 {
+  ensure_root();
   int index = 0;
 
   if (NULL!=option) {
@@ -1235,11 +1236,12 @@ os_arch_setsrc(char* option)
 
 
 /**
- * 未经测试
+ * HELP: 未经测试
  */
 void
 os_gentoo_setsrc(char* option)
 {
+  ensure_root();
   int index = 0;
 
   if (NULL!=option) {
@@ -1253,15 +1255,13 @@ os_gentoo_setsrc(char* option)
 
 
   char* backup = "cp -f /etc/portage/repos.conf/gentoo.conf /etc/portage/repos.conf/gentoo.conf.bak";
-  chsrc_logcmd(backup);
-  system(backup);
+  chsrc_runcmd(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/portage/repos.conf/gentoo.conf.bak");
   char* cmd = xy_strjoin(3,"sed -i \"s#rsync[:|\\.|\\/|a-z|A-Z]*/gentoo-portage#rsync://",
                             source.url,
                             "gentoo-portage#g");
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 
   char * yuan = xy_strjoin(3,"GENTOO_MIRRORS=\"https://",
                               source.url,
@@ -1269,8 +1269,7 @@ os_gentoo_setsrc(char* option)
   cmd = xy_strjoin(3,"cat ",
                       yuan,
                       " >> /etc/portage/make.conf");
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 
   // char* rm = "rm -rf /etc/portage/repos.conf/gentoo.conf.bak";
   // system(rm);
@@ -1279,11 +1278,13 @@ os_gentoo_setsrc(char* option)
 
 
 /**
- * 未经测试
+ * HELP: 未经测试
  */
 void
 os_netbsd_setsrc(char* option)
 {
+  ensure_root(); // HELP: 不知道是否需要确保root权限
+
   int index = 0;
 
   if (NULL!=option) {
@@ -1292,14 +1293,12 @@ os_netbsd_setsrc(char* option)
     index = lets_test_speed(os_netbsd);
   }
 
-
   source_info source = os_netbsd_sources[index];
   chsrc_say_selection(&source);
 
 
   char* backup = "cp -f /usr/pkg/etc/pkgin/repositories.conf /usr/pkg/etc/pkgin/repositories.conf.bak";
-  chsrc_logcmd(backup);
-  system(backup);
+  chsrc_runcmd(backup);
 
   xy_info ("chsrc: 备份文件名: /usr/pkg/etc/pkgin/repositories.conf.bak");
 
@@ -1311,8 +1310,7 @@ os_netbsd_setsrc(char* option)
                             "/",
                             version,
                             "/All > /usr/pkg/etc/pkgin/repositories.conf");
-  chsrc_logcmd(cmd);
-  system(cmd);
+  chsrc_runcmd(cmd);
 
   // char* rm = "rm -rf /etc/portage/repos.conf/gentoo.conf.bak";
   // system(rm);
@@ -1328,6 +1326,7 @@ os_netbsd_setsrc(char* option)
 void
 os_manjaro_setsrc(char* option)
 {
+  ensure_root();
   char* cmd = "sudo pacman-mirrors -i -c China -m rank";
   chsrc_runcmd(cmd);
 
@@ -1337,11 +1336,12 @@ os_manjaro_setsrc(char* option)
 
 
 /**
- * 未经测试
+ * HELP: 未经测试
  */
 void
 os_openeuler_setsrc (char* option)
 {
+  ensure_root();
   int index = 0;
 
   if (NULL!=option) {
@@ -1354,8 +1354,7 @@ os_openeuler_setsrc (char* option)
   chsrc_say_selection(&source);
 
   char* backup = "cp -f /etc/yum.repos.d/openEuler.repot /etc/yum.repos.d/openEuler.repo.bak --backup='t'";
-  chsrc_logcmd (backup);
-  system(backup);
+  chsrc_runcmd(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/yum.repos.d/openEuler.repo.bak");
 
@@ -1364,8 +1363,9 @@ os_openeuler_setsrc (char* option)
     "s#http://repo.openeuler.org#",
     source.url,
     "#\'< /etc/yum.repos.d/openEuler.repo.bak | cat > /etc/yum.repos.d/openEuler.repo");
-  chsrc_logcmd(cmd);
-  system(cmd);
+
+  chsrc_runcmd(cmd);
+
   // char* rm = "rm -rf /etc/yum.repos.d/openEuler.repo.bak";
   // system(rm);
 
@@ -1375,11 +1375,12 @@ os_openeuler_setsrc (char* option)
 
 
 /**
- * 未经测试
+ * HELP: 未经测试
  */
 void
 os_openkylin_setsrc (char* option)
 {
+  ensure_root();
   int index = 0;
 
   if (NULL!=option) {
@@ -1392,8 +1393,7 @@ os_openkylin_setsrc (char* option)
   chsrc_say_selection(&source);
 
   char* backup = "cp -f /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
-  chsrc_logcmd (backup);
-  system(backup);
+  chsrc_runcmd(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
@@ -1402,8 +1402,8 @@ os_openkylin_setsrc (char* option)
     "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/openkylin\\/@\\1",
     source.url,
     "@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
-  chsrc_logcmd(cmd);
-  system(cmd);
+
+  chsrc_runcmd(cmd);
   // char* rm = "rm -rf /etc/apt/source.list.bak";
   // system(rm);
 
@@ -1413,11 +1413,12 @@ os_openkylin_setsrc (char* option)
 
 
 /**
- * 未经测试, sources of freebsd are different from each other.
+ * HELP: 未经测试, sources of freebsd are different from each other.
  */
 void
 os_freebsd_setsrc (char* option)
 {
+  ensure_root(); // HELP: 不知道是否需要确保root权限
   int index = 0;
 
   if (NULL!=option) {
@@ -1491,11 +1492,12 @@ os_freebsd_setsrc (char* option)
 
 
 /**
- * 未经测试
+ * HELP: 未经测试
  */
 void
 os_opensuse_setsrc (char* option)
 {
+  ensure_root(); // HELP: 不知道是否需要确保root权限
   int index = 0;
 
   if (NULL!=option) {
@@ -1556,7 +1558,7 @@ os_opensuse_setsrc (char* option)
 
 
 void
-_wr_tex_check_cmd (bool* tlmgr_exist, bool* mpm_exist)
+wr_tex_check_cmd_ (bool* tlmgr_exist, bool* mpm_exist)
 {
   char* check_cmd = xy_str_to_quietcmd("tlmgr --version");
   *tlmgr_exist = does_the_program_exist (check_cmd, "tlmgr");
@@ -1574,7 +1576,7 @@ void
 wr_tex_getsrc(char* option)
 {
   bool tlmgr_exist, mpm_exist;
-  _wr_tex_check_cmd(&tlmgr_exist, &mpm_exist);
+  wr_tex_check_cmd_(&tlmgr_exist, &mpm_exist);
 
   if (tlmgr_exist) {
     chsrc_runcmd("tlmgr option repository");
@@ -1592,7 +1594,7 @@ wr_tex_setsrc(char* option)
 {
   int index = 0;
   bool tlmgr_exist, mpm_exist;
-  _wr_tex_check_cmd(&tlmgr_exist, &mpm_exist);
+  wr_tex_check_cmd_(&tlmgr_exist, &mpm_exist);
 
   if (NULL!=option) {
     index = lets_find_mirror(wr_tex, option);
