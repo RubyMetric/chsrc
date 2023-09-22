@@ -59,7 +59,7 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-m
 ```bash
 git clone https://gitee.com/RubyMetric/chsrc.git ; cd chsrc ; make
 
-# 可以运行了！
+# 运行试试看
 ./chsrc
 ```
 
@@ -154,6 +154,7 @@ chsrc set msys2 或 set msys
 ```bash
 chsrc set brew   或 set homebrew
 chsrc set flathub
+chsrc set nix
 chsrc set guix
 chsrc set emacs  或 set elpa
 chsrc set tex    或 set ctan / latex / texlive / miktex
