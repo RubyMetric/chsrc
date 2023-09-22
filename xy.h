@@ -42,7 +42,7 @@
   #define xy_on_linux   true
   #define xy_on_macos   false
   #define xy_on_bsd     false
-  #define xy_os_devnull "/dev/null";
+  #define xy_os_devnull "/dev/null"
   #define xy_useutf8()
 
 #elif defined(__APPLE__)
@@ -50,7 +50,7 @@
   #define xy_on_linux   false
   #define xy_on_macos   true
   #define xy_on_bsd     false
-  #define xy_os_devnull "/dev/null";
+  #define xy_os_devnull "/dev/null"
   #define xy_useutf8()
 
 #elif defined(__OpenBSD__) || defined(__NetBSD__) || defined(__FreeBSD__)
@@ -58,7 +58,7 @@
   #define xy_on_linux   false
   #define xy_on_macos   false
   #define xy_on_bsd     true
-  #define xy_os_devnull "/dev/null";
+  #define xy_os_devnull "/dev/null"
   #define xy_useutf8()
 #endif
 
