@@ -16,17 +16,6 @@
 
 <br>
 
-## 致谢
-
-感谢各个镜像站提供的优质免费镜像服务，使用的镜像站见 [sources.h](./sources.h).
-
-特别感谢:
-1. [MirrorZ 教育网镜像站](https://help.mirrors.cernet.edu.cn/)
-2. [清华大学 Tuna](https://mirrors.tuna.tsinghua.edu.cn/)
-3. [Thanks Mirror项目](https://github.com/eryajf/Thanks-Mirror) by [@eryajf](https://github.com/eryajf)
-
-<br>
-
 ## 安装
 
 使用 GitHub Actions 编译，请寻找下述与您的平台相匹配的命令来下载。
@@ -145,6 +134,8 @@ sudo chsrc set arch     # 同时使用 archlinuxcn
 sudo chsrc set manjaro
 sudo chsrc set kali
 sudo chsrc set gentoo
+sudo chsrc set alpine
+sudo chsrc set rocky
 
 sudo chsrc set freebsd
 sudo chsrc set openbsd
@@ -196,5 +187,18 @@ make clean
 ## License
 
 本软件采用 GPLv3 和 MIT 双许可证，具体请查阅 [LICENSE.txt](./LICENSE.txt)
+
+<br>
+
+## 致谢
+
+感谢各个镜像站提供的优质免费镜像服务，使用的镜像站见 [sources.h](./sources.h).
+
+特别感谢:
+1. [MirrorZ 教育网镜像站](https://help.mirrors.cernet.edu.cn/)
+2. [清华大学 Tuna](https://mirrors.tuna.tsinghua.edu.cn/)
+3. [Thanks Mirror项目](https://github.com/eryajf/Thanks-Mirror) by [@eryajf](https://github.com/eryajf)
+
+真诚鸣谢，各位参与的维护者
 
 <br>
