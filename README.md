@@ -136,6 +136,7 @@ sudo chsrc set kali
 sudo chsrc set gentoo
 sudo chsrc set alpine
 sudo chsrc set rocky
+sudo chsrc set void
 
 sudo chsrc set freebsd
 sudo chsrc set openbsd

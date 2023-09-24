@@ -1044,6 +1044,69 @@ os_fedora_setsrc (char* option)
  * HELP: 未经测试
  */
 void
+os_opensuse_setsrc (char* option)
+{
+  ensure_root(); // HELP: 不知道是否需要确保root权限
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_opensuse, option);
+  } else {
+    index = lets_test_speed(os_opensuse);
+  }
+
+  source_info source = os_opensuse_sources[index];
+  chsrc_say_selection(&source);
+
+  char* source_nselect = "zypper mr -da";
+  chsrc_runcmd(source_nselect);
+
+  char* cmd1 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/repo/oss/' mirror-oss");
+  char* cmd2 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/repo/non-oss/' mirror-non-oss");
+  char* cmd3 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/oss/' mirror-update");
+  char* cmd4 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/non-oss/' mirror-update-non-oss");
+  char* cmd5 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/sle/' mirror-sle-update");
+  char* cmd6 = xy_strjoin(3,
+    "zypper ar -cfg '",
+    source.url,
+    "/opensuse/distribution/leap/$releasever/backports/' mirror-backports-update");
+
+  chsrc_runcmd(cmd1);
+  chsrc_runcmd(cmd2);
+  chsrc_runcmd(cmd3);
+  chsrc_runcmd(cmd4);
+
+  xy_info("chsrc: leap 15.3用户还需 要添加sle和backports源");
+  xy_info("chsrc: 另外请确保系统在更新后仅启用了六个软件源，可以使用 zypper lr 检查软件源状态");
+  xy_info("chsrc: 并使用 zypper mr -d 禁用多余的软件源");
+
+  chsrc_runcmd(cmd5);
+  chsrc_runcmd(cmd6);
+  // char* rm = "rm -f /etc/apt/source.list.bak";
+  // chsrc_runcmd(rm);
+  chsrc_say_thanks(&source);
+}
+
+
+/**
+ * HELP: 未经测试
+ */
+void
 os_kali_setsrc(char* option)
 {
   ensure_root();
@@ -1340,6 +1403,54 @@ os_alpine_setsrc (char* option)
 
 
 
+void
+os_void_getsrc (char* option)
+{
+  char* cmd = "xbps-query -L";
+  chsrc_runcmd(cmd);
+}
+
+/**
+ * 参考: https://help.mirrors.cernet.edu.cn/voidlinux/
+ */
+void
+os_void_setsrc (char* option)
+{
+  // ensure_root(); // HELP: 不确定是否需要root
+
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_void, option);
+  } else {
+    index = lets_test_speed(os_void);
+  }
+
+  source_info source = os_void_sources[index];
+  chsrc_say_selection(&source);
+
+  char* cmd = "mkdir -p /etc/xbps.d";
+  chsrc_runcmd(cmd);
+
+  cmd = "cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/";
+  chsrc_runcmd(cmd);
+
+  cmd = xy_strjoin(3,
+            "sed -i 's|https://repo-default.voidlinux.org|", source.url, "|g' /etc/xbps.d/*-repository-*.conf"
+            );
+  chsrc_runcmd(cmd);
+
+  cmd = xy_strjoin(3,
+            "sed -i 's|https://alpha.de.repo.voidlinux.org|", source.url, "|g' /etc/xbps.d/*-repository-*.conf"
+            );
+
+  xy_warn("chsrc: 若报错可尝试使用以下命令");
+  puts(cmd);
+  chsrc_say_thanks(&source);
+}
+
+
+
 /**
  * HELP: 未经测试
  */
@@ -1552,69 +1663,6 @@ os_freebsd_setsrc (char* option)
   chsrc_say_thanks(&source);
 }
 
-
-
-/**
- * HELP: 未经测试
- */
-void
-os_opensuse_setsrc (char* option)
-{
-  ensure_root(); // HELP: 不知道是否需要确保root权限
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror(os_opensuse, option);
-  } else {
-    index = lets_test_speed(os_opensuse);
-  }
-
-  source_info source = os_opensuse_sources[index];
-  chsrc_say_selection(&source);
-
-  char* source_nselect = "zypper mr -da";
-  chsrc_runcmd(source_nselect);
-
-  char* cmd1 = xy_strjoin(3,
-    "zypper ar -cfg '",
-    source.url,
-    "/opensuse/distribution/leap/$releasever/repo/oss/' mirror-oss");
-  char* cmd2 = xy_strjoin(3,
-    "zypper ar -cfg '",
-    source.url,
-    "/opensuse/distribution/leap/$releasever/repo/non-oss/' mirror-non-oss");
-  char* cmd3 = xy_strjoin(3,
-    "zypper ar -cfg '",
-    source.url,
-    "/opensuse/distribution/leap/$releasever/oss/' mirror-update");
-  char* cmd4 = xy_strjoin(3,
-    "zypper ar -cfg '",
-    source.url,
-    "/opensuse/distribution/leap/$releasever/non-oss/' mirror-update-non-oss");
-  char* cmd5 = xy_strjoin(3,
-    "zypper ar -cfg '",
-    source.url,
-    "/opensuse/distribution/leap/$releasever/sle/' mirror-sle-update");
-  char* cmd6 = xy_strjoin(3,
-    "zypper ar -cfg '",
-    source.url,
-    "/opensuse/distribution/leap/$releasever/backports/' mirror-backports-update");
-
-  chsrc_runcmd(cmd1);
-  chsrc_runcmd(cmd2);
-  chsrc_runcmd(cmd3);
-  chsrc_runcmd(cmd4);
-
-  xy_info("chsrc: leap 15.3用户还需 要添加sle和backports源");
-  xy_info("chsrc: 另外请确保系统在更新后仅启用了六个软件源，可以使用 zypper lr 检查软件源状态");
-  xy_info("chsrc: 并使用 zypper mr -d 禁用多余的软件源");
-
-  chsrc_runcmd(cmd5);
-  chsrc_runcmd(cmd6);
-  // char* rm = "rm -f /etc/apt/source.list.bak";
-  // chsrc_runcmd(rm);
-  chsrc_say_thanks(&source);
-}
 
 
 
@@ -1960,6 +2008,7 @@ static const char
 def_target_info(os_ubuntu);
 def_target_info(os_debian);
 def_target_info(os_deepin);
+def_target_info(os_void);
 
 target_info
   os_fedora_target      = {os_fedora_setsrc,      NULL, os_fedora_sources,    os_fedora_sources_n},
@@ -1989,6 +2038,7 @@ static const char
 *os_gentoo        [] = {"gentoo",               NULL,  targetinfo(&os_gentoo_target)},
 *os_rocky         [] = {"rocky",  "rockylinux", NULL,  targetinfo(&os_rocky_target)},
 *os_alpine        [] = {"alpine",               NULL,  targetinfo(&os_alpine_target)},
+*os_void          [] = {"void",   "voidlinux",  NULL,  targetinfo(&os_void_target)},
 *os_freebsd       [] = {"freebsd",              NULL,  targetinfo(&os_freebsd_target)},
 *os_netbsd        [] = {"netbsd",               NULL,  targetinfo(&os_netbsd_target)},
 *os_openbsd       [] = {"openbsd",              NULL,  targetinfo(&os_openbsd_target)},
