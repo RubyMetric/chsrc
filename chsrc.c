@@ -12,7 +12,7 @@
  *   该软件为自由软件，采用 GPLv3 许可证，请查阅 LICENSE.txt 文件
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version "v0.1.0-20230924"
+#define Chsrc_Version "v0.1.1-20230924"
 
 #include "chsrc.h"
 
@@ -1507,7 +1507,14 @@ os_openkylin_setsrc (char* option)
 
 
 /**
- * HELP: 未经测试, sources of freebsd are different from each other.
+ * 参考: https://book.bsdcn.org/di-3-zhang-ruan-jian-yuan-ji-bao-guan-li-qi/di-3.2-jie-freebsd-huan-yuan-fang-shi.html
+ *
+ * 据 @ykla,
+ *   FreeBSD 有四类源：pkg、ports、portsnap、update，其中 portsnap 在 FreeBSD 14 已经被移除了
+ *
+ *   目前缺少update源，所以我们暂时只提供 pkg 和 ports 源的替换
+ *
+ * HELP: 未经测试
  */
 void
 os_freebsd_setsrc (char* option)
@@ -1524,40 +1531,58 @@ os_freebsd_setsrc (char* option)
   source_info source = os_freebsd_sources[index];
   chsrc_say_selection(&source);
 
+  xy_info("chsrc: 1. 添加 freebsd-pkg 源 (二进制安装包)");
   char* pkg_mkdir = "mkdir -p /usr/local/etc/pkg/repos";
-  char* pkg_createconf = "ee /usr/local/etc/pkg/repos/bjtu.conf";
-
+  char* pkg_createconf = xy_strjoin(3, "ee /usr/local/etc/pkg/repos/", source.mirror->code, ".conf");
   chsrc_runcmd(pkg_mkdir);
   chsrc_runcmd(pkg_createconf);
 
-  char* pkg_content = xy_strjoin(3,"bjtu: { \
-                      url: \"pkg+=http://",source.url,"/freebsd-pkg/${ABI}/latest\",\
+
+  char* pkg_content = xy_strjoin(4,
+                      source.mirror->code, ": { \
+                      url: \"pkg+=http://", source.url, "/freebsd-pkg/${ABI}/latest\",\
                       mirror_type: \"srv\",\
                       signature_type: \"none\",\
                       fingerprints: \"/usr/share/keys/pkg\",\
                       enabled: yes\
                     }");
 
-  char* pkg_cmd;
-  pkg_cmd = xy_strjoin(3,
-    "cat ",
-    pkg_content,
-    "> /usr/local/etc/pkg/repos/bjtu.conf");
-
+  char* pkg_cmd = xy_strjoin(3, "cat ", pkg_content, "> /usr/local/etc/pkg/repos/", source.mirror->code , ".conf");
   chsrc_runcmd(pkg_cmd);
 
-  xy_info("chsrc: 若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将 'http' 改成 'https' ，最后使用 'pkg update -f' 刷新缓存即可");
+  xy_warn("chsrc: 若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将 'http' 改成 'https' ，最后使用 'pkg update -f' 刷新缓存即可\n");
 
+
+
+  xy_info("chsrc: 2. 修改 freebsd-ports 源");
+  bool git_exist = does_the_program_exist (xy_str_to_quietcmd("git version"), "git");
+  if (git_exist) {
+    char* git_cmd = xy_strjoin(3, "git clone --depth 1 https://", source.url, "/freebsd-ports/ports.git /usr/ports");
+    chsrc_runcmd(git_cmd);
+  } else {
+    char* fetch  = xy_strjoin(3, "fetch https://", source.url, "/freebsd-ports/ports.tar.gz");  // 70多MB
+    char* unzip  = "tar -zxvf ports.tar.gz -C /usr/ports";
+    char* delete = "rm ports.tar.gz";
+    chsrc_runcmd(fetch);
+    chsrc_runcmd(unzip);
+    chsrc_runcmd(delete);
+  }
+
+  /* https://help.mirrors.cernet.edu.cn/FreeBSD-ports/ 的换源方法 */
+  /*
   char* ports_cp="cp -f /etc/make.conf /etc/make.conf.bak";
   chsrc_runcmd(ports_cp);
 
-  char* ports_cmd =xy_strjoin(3,"cat MASTER_SITE_OVERRIDE?=http://",
-                                source.url,
-                                "/freebsd-ports/ >> /etc/make.conf");
+  char* ports_cmd =xy_strjoin(3, "cat MASTER_SITE_OVERRIDE?=http://",
+                                 source.url,
+                                 "/freebsd-ports/ >> /etc/make.conf");
   chsrc_runcmd(ports_cmd);
+  */
 
-  xy_info("chsrc: ports sources changed.");
 
+
+  /* 不再换 portsnap */
+  /*
   char* portsnap_cp="cp -f /etc/portsnap.conf /etc/portsnap.conf.bak";
   chsrc_runcmd(portsnap_cp);
 
@@ -1567,9 +1592,15 @@ os_freebsd_setsrc (char* option)
   chsrc_runcmd(portsnap_cmd);
 
 
-  xy_info("chsrc: portsnap sources changed.");
+  xy_info("chsrc: portsnap sources changed");
   xy_info("chsrc: 获取portsnap更新使用此命令: 'portsnap fetch extract'");
+  */
 
+
+
+  // HELP: 暂时似乎没有源提供
+  /*
+  xy_info("chsrc: 3. 修改 freebsd-update 源");
   char* update_cp="cp -f /etc/freebsd-update.conf /etc/freebsd-update.conf.bak";
   chsrc_runcmd(update_cp);
 
@@ -1578,7 +1609,7 @@ os_freebsd_setsrc (char* option)
                                 source.url,
                                 "@g < /etc/freebsd-update.conf.bak | cat > /etc/freebsd-update.conf");
   chsrc_runcmd(update_cmd);
-  xy_info("chsrc: freebsd-update sources changed.");
+   */
 
   chsrc_say_thanks(&source);
 }

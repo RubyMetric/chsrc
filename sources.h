@@ -540,18 +540,16 @@ os_void_sources[] = {
 
 
 /**
- * 2023-09-17 更新
+ * 2023-09-24 更新
  *
- * TODO: 1. 源并不完整，且未经测试是否有效
+ * @note 该源需要 FreeBSD 中文社区积极参与维护
+ *
+ * @ccmywish: [2023-09-24] 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports
  */
 os_freebsd_sources[] = {
-  {&Ali,       "mirrors.aliyun.com"},
-  {&Bfsu,      "mirrors.bfsu.edu.cn"},
   {&Ustc,      "mirrors.ustc.edu.cn"},
-  {&Tuna,      "mirrors.tuna.tsinghua.edu.cn"},
-  {&Tencent,   "mirrors.tencent.com"},
+  {&Nju,       "mirror.nju.edu.cn"},
   {&Netease,   "mirrors.163.com"},
-  {&Sohu,      "mirrors.sohu.com"}
 },
 
 
