@@ -1277,6 +1277,37 @@ os_gentoo_setsrc(char* option)
 }
 
 
+
+/**
+ * 参考: https://help.mirrors.cernet.edu.cn/rocky/
+ */
+void
+os_rocky_setsrc (char* option)
+{
+  ensure_root();
+
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_rocky, option);
+  } else {
+    index = lets_test_speed(os_rocky);
+  }
+
+  source_info source = os_rocky_sources[index];
+  chsrc_say_selection(&source);
+
+  char* cmd = xy_strjoin(3,
+            "sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' "
+            "-e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=", source.url, "|g' "
+            "-i.bak /etc/yum.repos.d/rocky-extras.repo /etc/yum.repos.d/rocky.repo"
+            );
+  chsrc_runcmd(cmd);
+  chsrc_say_thanks(&source);
+}
+
+
+
 /**
  * HELP: 未经测试
  */
@@ -1906,6 +1937,7 @@ target_info
   os_arch_target        = {os_arch_setsrc,        NULL, os_arch_sources,      os_arch_sources_n},
   os_manjaro_target     = {os_manjaro_setsrc,     NULL, NULL,                       0},
   os_gentoo_target      = {os_gentoo_setsrc,      NULL, os_gentoo_sources,    os_gentoo_sources_n},
+  os_rocky_target       = {os_rocky_setsrc,       NULL, os_rocky_sources,     os_rocky_sources_n},
   os_freebsd_target     = {os_freebsd_setsrc,     NULL, os_freebsd_sources,   os_freebsd_sources_n},
   os_netbsd_target      = {os_netbsd_setsrc,      NULL, os_netbsd_sources,    os_netbsd_sources_n},
   os_openbsd_target     = {os_openbsd_setsrc,     NULL, os_openbsd_sources,   os_openbsd_sources_n},
@@ -1922,6 +1954,7 @@ static const char
 *os_arch          [] = {"arch",                 NULL,  targetinfo(&os_arch_target)},
 *os_manjaro       [] = {"manjaro",              NULL,  targetinfo(&os_manjaro_target)},
 *os_gentoo        [] = {"gentoo",               NULL,  targetinfo(&os_gentoo_target)},
+*os_rocky         [] = {"rocky",  "rockylinux", NULL,  targetinfo(&os_rocky_target)},
 *os_freebsd       [] = {"freebsd",              NULL,  targetinfo(&os_freebsd_target)},
 *os_netbsd        [] = {"netbsd",               NULL,  targetinfo(&os_netbsd_target)},
 *os_openbsd       [] = {"openbsd",              NULL,  targetinfo(&os_openbsd_target)},
@@ -1932,6 +1965,7 @@ static const char
 {
   os_ubuntu,  os_debian,  os_fedora,  os_opensuse, os_kali,
   os_arch,    os_manjaro, os_gentoo,
+  os_rocky,
   os_freebsd, os_netbsd,  os_openbsd,
   os_msys2,
   os_deepin, os_openeuler, os_openkylin,
