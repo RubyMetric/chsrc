@@ -1143,43 +1143,6 @@ os_kali_setsrc(char* option)
  * HELP: 未经测试
  */
 void
-os_openbsd_setsrc(char* option)
-{
-  ensure_root();
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror(os_openbsd, option);
-  } else {
-    index = lets_test_speed(os_openbsd);
-  }
-
-  source_info source = os_openbsd_sources[index];
-  chsrc_say_selection(&source);
-
-  char* backup = "cp -f /etc/installurl /etc/installurl.bak --backup='t'";
-  chsrc_runcmd(backup);
-
-  xy_info ("chsrc: 备份文件名: /etc/installurl.bak");
-
-  char* cmd = xy_strjoin(3,"echo ",
-                            source.url,
-                            " > /etc/installurl");
-
-  chsrc_runcmd(cmd);
-
-  // char* rm = "rm -rf /etc/installurl.bak";
-  // system(rm);
-
-  chsrc_say_thanks(&source);
-}
-
-
-
-/**
- * HELP: 未经测试
- */
-void
 os_msys2_setsrc(char* option)
 {
   int index = 0;
@@ -1452,49 +1415,6 @@ os_void_setsrc (char* option)
 
 
 /**
- * HELP: 未经测试
- */
-void
-os_netbsd_setsrc(char* option)
-{
-  ensure_root(); // HELP: 不知道是否需要确保root权限
-
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror(os_netbsd, option);
-  } else {
-    index = lets_test_speed(os_netbsd);
-  }
-
-  source_info source = os_netbsd_sources[index];
-  chsrc_say_selection(&source);
-
-
-  char* backup = "cp -f /usr/pkg/etc/pkgin/repositories.conf /usr/pkg/etc/pkgin/repositories.conf.bak";
-  chsrc_runcmd(backup);
-
-  xy_info ("chsrc: 备份文件名: /usr/pkg/etc/pkgin/repositories.conf.bak");
-
-  char* arch = xy_getcmd("arch",NULL);
-  char* version = "cat /etc/os-release | grep \"VERSION=\" | grep -Po [8-9].[0-9]+";
-  char* cmd = xy_strjoin(6,"echo ",
-                            source.url,
-                            arch,
-                            "/",
-                            version,
-                            "/All > /usr/pkg/etc/pkgin/repositories.conf");
-  chsrc_runcmd(cmd);
-
-  // char* rm = "rm -rf /etc/portage/repos.conf/gentoo.conf.bak";
-  // system(rm);
-
-  chsrc_say_thanks(&source);
-}
-
-
-
-/**
  * 似乎会弹出GUI，待确定
  */
 void
@@ -1659,6 +1579,100 @@ os_freebsd_setsrc (char* option)
                                 "@g < /etc/freebsd-update.conf.bak | cat > /etc/freebsd-update.conf");
   chsrc_runcmd(update_cmd);
   xy_info("chsrc: freebsd-update sources changed.");
+
+  chsrc_say_thanks(&source);
+}
+
+
+
+void
+os_netbsd_getsrc (char* option)
+{
+  char* cmd = "cat /usr/pkg/etc/pkgin/repositories.conf";
+  chsrc_runcmd(cmd);
+}
+
+/**
+ * 参考:
+ * 1. https://mirrors.tuna.tsinghua.edu.cn/help/pkgsrc/
+ * 2. https://book.bsdcn.org/di-27-zhang-netbsd/di-27.2-jie-huan-yuan-yu-bao-guan-li-qi.html
+ *
+ * 根据 @ykla (https://github.com/ykla)
+ *    NetBSD 默认状态下没有 pkgsrc，用户可能安装了也可能没安装
+ *
+ * HELP: 未经测试
+ */
+void
+os_netbsd_setsrc(char* option)
+{
+  ensure_root(); // HELP: 不知道是否需要确保root权限
+
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_netbsd, option);
+  } else {
+    index = lets_test_speed(os_netbsd);
+  }
+
+  source_info source = os_netbsd_sources[index];
+  chsrc_say_selection(&source);
+
+
+  char* backup = "cp -f /usr/pkg/etc/pkgin/repositories.conf /usr/pkg/etc/pkgin/repositories.conf.bak";
+  chsrc_runcmd(backup);
+
+  xy_info ("chsrc: 备份文件名: /usr/pkg/etc/pkgin/repositories.conf.bak");
+
+  char* arch = xy_getcmd("arch",NULL);
+  char* version = "cat /etc/os-release | grep \"VERSION=\" | grep -Po [8-9].[0-9]+";
+  char* cmd = xy_strjoin(6,"echo ",
+                            source.url,
+                            arch,
+                            "/",
+                            version,
+                            "/All > /usr/pkg/etc/pkgin/repositories.conf");
+  chsrc_runcmd(cmd);
+
+  chsrc_say_thanks(&source);
+}
+
+
+
+void
+os_openbsd_getsrc (char* option)
+{
+  char* cmd = "cat /etc/installurl";
+  chsrc_runcmd(cmd);
+}
+
+/**
+ * 参考：
+ * 1. https://mirrors.tuna.tsinghua.edu.cn/help/openbsd/
+ * 2. https://book.bsdcn.org/di-26-zhang-openbsd/di-26.2-jie-pei-zhi.html
+ */
+void
+os_openbsd_setsrc(char* option)
+{
+  ensure_root();
+  int index = 0;
+
+  if (NULL!=option) {
+    index = lets_find_mirror(os_openbsd, option);
+  } else {
+    index = lets_test_speed(os_openbsd);
+  }
+
+  source_info source = os_openbsd_sources[index];
+  chsrc_say_selection(&source);
+
+  char* backup = "cp -f /etc/installurl /etc/installurl.bak --backup='t'";
+  chsrc_runcmd(backup);
+
+  xy_info ("chsrc: 备份文件名: /etc/installurl.bak");
+
+  char* cmd = xy_strjoin(3,"echo ", source.url, " > /etc/installurl");
+  chsrc_runcmd(cmd);
 
   chsrc_say_thanks(&source);
 }
@@ -2009,6 +2023,9 @@ def_target_info(os_ubuntu);
 def_target_info(os_debian);
 def_target_info(os_deepin);
 def_target_info(os_void);
+def_target_info(os_netbsd);
+def_target_info(os_openbsd);
+
 
 target_info
   os_fedora_target      = {os_fedora_setsrc,      NULL, os_fedora_sources,    os_fedora_sources_n},
@@ -2021,8 +2038,6 @@ target_info
   os_rocky_target       = {os_rocky_setsrc,       NULL, os_rocky_sources,     os_rocky_sources_n},
   os_alpine_target      = {os_alpine_setsrc,      NULL, os_alpine_sources,    os_alpine_sources_n},
   os_freebsd_target     = {os_freebsd_setsrc,     NULL, os_freebsd_sources,   os_freebsd_sources_n},
-  os_netbsd_target      = {os_netbsd_setsrc,      NULL, os_netbsd_sources,    os_netbsd_sources_n},
-  os_openbsd_target     = {os_openbsd_setsrc,     NULL, os_openbsd_sources,   os_openbsd_sources_n},
   os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources, os_openeuler_sources_n},
   os_openkylin_target   = {os_openkylin_setsrc,   NULL, os_openkylin_sources, os_openkylin_sources_n};
 
