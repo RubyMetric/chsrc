@@ -446,6 +446,21 @@ os_rocky_sources[] = {
 
 
 /**
+ * 2023-09-24 更新
+ */
+os_alpine_sources[] = {
+  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/alpine"},
+  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/alpine"},
+  {&Sustech,        "https://mirrors.sustech.edu.cn/alpine"},
+  {&Zju,            "https://mirrors.zju.edu.cn/alpine"},
+  {&Lzuoss,         "https://mirror.lzu.edu.cn/alpine"},
+  {&Ali,            "https://mirrors.aliyun.com/alpine"},
+  {&Tencent,        "https://mirrors.cloud.tencent.com/alpine"}
+},
+
+
+
+/**
  * 2023-09-02 更新
  *
  * TODO: 1. 源并不完整，且未经测试是否有效
@@ -689,7 +704,8 @@ def_target_sources_n(pl_r);        def_target_sources_n(pl_julia);
 
 def_target_sources_n(os_ubuntu);   def_target_sources_n(os_debian);    def_target_sources_n(os_fedora);
 def_target_sources_n(os_kali);     def_target_sources_n(os_opensuse);
-def_target_sources_n(os_arch);     def_target_sources_n(os_gentoo);    def_target_sources_n(os_rocky);
+def_target_sources_n(os_arch);     def_target_sources_n(os_gentoo);    def_target_sources_n(os_alpine);
+def_target_sources_n(os_rocky);
 def_target_sources_n(os_msys2);
 def_target_sources_n(os_freebsd);  def_target_sources_n(os_netbsd);    def_target_sources_n(os_openbsd);
 def_target_sources_n(os_deepin);   def_target_sources_n(os_openeuler); def_target_sources_n(os_openkylin);
