@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-22>
+ * Last modified : <2023-09-24>
  *
  * chsrc:
  *
@@ -12,7 +12,7 @@
  *   该软件为自由软件，采用 GPLv3 许可证，请查阅 LICENSE.txt 文件
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version "v0.1.0-20230922"
+#define Chsrc_Version "v0.1.0-20230924"
 
 #include "chsrc.h"
 
@@ -1719,7 +1719,7 @@ wr_guix_setsrc (char* option)
 
 
 void
-pl_nix_check_cmd_()
+wr_nix_check_cmd_()
 {
   char* check_cmd = xy_str_to_quietcmd("nix-channel --version");
   bool exist = does_the_program_exist (check_cmd, "nix-channel");
@@ -1736,7 +1736,7 @@ pl_nix_check_cmd_()
 void
 wr_nix_setsrc (char* option)
 {
-  pl_nix_check_cmd_();
+  wr_nix_check_cmd_();
 
   int index = 0;
   if (NULL!=option) {
