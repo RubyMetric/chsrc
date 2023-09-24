@@ -23,7 +23,7 @@
 特别感谢:
 1. [MirrorZ 教育网镜像站](https://help.mirrors.cernet.edu.cn/)
 2. [清华大学 Tuna](https://mirrors.tuna.tsinghua.edu.cn/)
-3. [Thanks Mirror项目](https://github.com/eryajf/Thanks-Mirror) by @eryajf
+3. [Thanks Mirror项目](https://github.com/eryajf/Thanks-Mirror) by [@eryajf](https://github.com/eryajf)
 
 <br>
 
