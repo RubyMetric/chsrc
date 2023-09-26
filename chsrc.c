@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-24>
+ * Last modified : <2023-09-26>
  *
  * chsrc:
  *
@@ -12,7 +12,7 @@
  *   该软件为自由软件，采用 GPLv3 许可证，请查阅 LICENSE.txt 文件
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version "v0.1.1-20230924"
+#define Chsrc_Version "v0.1.1-20230926"
 
 #include "chsrc.h"
 
@@ -26,7 +26,7 @@ pl_ruby_getsrc (char* option)
 }
 
 /**
- * Ruby换源，参考：https://gitee.com/RubyKids/rbenv-cn
+ * Ruby换源，参考：https://gitee.com/RubyMetric/rbenv-cn
  */
 void
 pl_ruby_setsrc (char* option)
@@ -1887,7 +1887,9 @@ wr_nix_check_cmd_()
 }
 
 /**
- * 参考: https://mirrors.bfsu.edu.cn/help/nix-channels/
+ * 参考:
+ *  1. https://mirrors.bfsu.edu.cn/help/nix-channels/
+ *  2. https://gitee.com/RubyMetric/chsrc/issues/I83894
  */
 void
 wr_nix_setsrc (char* option)
@@ -1907,8 +1909,19 @@ wr_nix_setsrc (char* option)
   char* cmd = xy_strjoin(3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
   chsrc_runcmd(cmd);
 
+  cmd = xy_strjoin (3, "echo \"substituters = ", source.url, "store https://cache.nixos.org/\" > ~/.config/nix/nix.conf");
+  chsrc_runcmd(cmd);
+
   cmd = "nix-channel --update";
   chsrc_runcmd(cmd);
+
+  xy_info("chsrc: 若您使用的是NixOS，请确认您的系统版本<version>（如22.11），并手动运行:");
+  cmd = xy_strjoin(3, "nix-channel --add ", source.url, "nixpkgs-<version> nixpkgs");
+  puts(cmd);
+
+  cmd = xy_strjoin(3, "nix.settings.substituters = [ \"", source.url, "store\" ];");
+  xy_info("chsrc: 若您使用的是NixOS，请额外添加下述内容至 configuration.nix 中");
+  puts(cmd);
 
   chsrc_say_thanks(&source);
 }
