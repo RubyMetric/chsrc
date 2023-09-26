@@ -319,8 +319,8 @@ static void
 chsrc_backup (const char* path)
 {
   char* cmd = xy_strjoin(5, "cp ", path, " ", path, ".bak --backup='t'");
-  chsrc_info ( xy_strjoin (3, "备份文件名 ", path, ".bak"));
   chsrc_run (cmd);
+  chsrc_info ( xy_strjoin (3, "备份文件名 ", path, ".bak"));
 }
 
 
