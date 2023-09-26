@@ -859,31 +859,30 @@ os_ubuntu_setsrc (char* option)
   source_info source = os_ubuntu_sources[index];
   chsrc_say_selection(&source);
 
-  char* backup = "cp -f /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
+  char* backup = "cp /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
   chsrc_runcmd(backup);
 
-  xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
+  // xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
   char* arch = xy_getcmd("arch",NULL);
   char* cmd;
   if(strncmp(arch, "x86_64", 6)==0)
   {
     cmd = xy_strjoin(3,
-      "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/ubuntu\\/@\\1",
+      "sed -E -i \'s@https?://.*/ubuntu@",
       source.url,
-      "/@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
+      "@g\' /etc/apt/sources.list");
 
   }
   else {
     cmd = xy_strjoin(3,
-      "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/ubuntu\\/@\\1",
+      "sed -E -i \'s@https?://.*/ubuntu-ports@",
       source.url,
-      "-ports/@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
+      "-ports@g\' /etc/apt/sources.list");
   }
 
   chsrc_runcmd(cmd);
-  // char* rm = "rm -rf /etc/apt/source.list.bak";
-  // system(rm);
+
 
   chsrc_say_thanks(&source);
 }
