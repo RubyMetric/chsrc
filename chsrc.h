@@ -10,6 +10,7 @@
  *   chsrc.c 头文件
  * ------------------------------------------------------------*/
 
+#define App_Log_Prefix "chsrc: 运行 "
 #include "xy.h"
 #include "sources.h"
 
@@ -223,24 +224,6 @@ lets_test_speed_ (source_info* sources, size_t size, const char* target)
     xy_success (xy_2strjoin("chsrc: 最快镜像站: ", sources[fastidx].mirror->name));
 
   return fastidx;
-}
-
-
-/**
- * 用于告知用户 chsrc 所执行的操作
- */
-void
-chsrc_logcmd (const char* cmd)
-{
-  xy_info(xy_2strjoin("chsrc: 运行 ", cmd));
-}
-
-
-void
-chsrc_run (const char* cmd)
-{
-  chsrc_logcmd(cmd);
-  system(cmd);
 }
 
 

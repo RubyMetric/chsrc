@@ -20,9 +20,9 @@ void
 pl_ruby_getsrc (char* option)
 {
   char* cmd = "gem sources";
-  chsrc_run(cmd);
+  xy_run(cmd);
   cmd = "bundle config get mirror.https://rubygems.org";
-  chsrc_run(cmd);
+  xy_run(cmd);
 }
 
 /**
@@ -56,14 +56,14 @@ pl_ruby_setsrc (char* option)
     if (xy_str_start_with(buf, "http")){
       cmd = xy_str_delete_suffix(buf, "\n");
       cmd = xy_2strjoin("gem sources -r ", cmd);
-      chsrc_run(cmd);
+      xy_run(cmd);
     }
     memset(buf, 0, 512);
   }
   pclose(fp);
 
   cmd = xy_2strjoin("gem source -a ", source.url);
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   check_cmd = xy_str_to_quietcmd("bundle -v");
   exist = does_the_program_exist (check_cmd, "bundle");
@@ -73,7 +73,7 @@ pl_ruby_setsrc (char* option)
   }
 
   cmd = xy_2strjoin("bundle config 'mirror.https://rubygems.org' ", source.url);
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   chsrc_say_thanks(&source);
   puts("");
@@ -115,7 +115,7 @@ pl_python_getsrc (char* option)
   char* prog = NULL;
   pl_python_check_cmd_ (&prog);
   char* cmd = xy_2strjoin(prog, " -m pip config get global.index-url");
-  chsrc_run(cmd);
+  xy_run(cmd);
 }
 
 /**
@@ -140,7 +140,7 @@ pl_python_setsrc (char* option)
   chsrc_say_selection(&source);
 
   char* cmd = xy_2strjoin(prog, xy_2strjoin(" -m pip config set global.index-url ", source.url));
-  chsrc_run(cmd);
+  xy_run(cmd);
   chsrc_say_thanks(&source);
 }
 
@@ -171,12 +171,12 @@ pl_nodejs_getsrc (char* option)
   if (npm_exist)
   {
     char* cmd = "npm config get registry";
-    chsrc_run(cmd);
+    xy_run(cmd);
   }
   if (yarn_exist)
   {
     char* cmd = "yarn config get registry";
-    chsrc_run(cmd);
+    xy_run(cmd);
   }
 }
 
@@ -203,13 +203,13 @@ pl_nodejs_setsrc (char* option)
   if (npm_exist)
   {
     char* cmd = xy_2strjoin("npm config set registry ", source.url);
-    chsrc_run(cmd);
+    xy_run(cmd);
   }
 
   if (yarn_exist)
   {
     char* cmd = xy_str_to_quietcmd(xy_2strjoin("yarn config set registry ", source.url));
-    chsrc_run(cmd);
+    xy_run(cmd);
   }
   chsrc_say_thanks(&source);
 }
@@ -236,7 +236,7 @@ pl_perl_getsrc (char* option)
   //            可以使用 CPAN::Shell->o('conf', 'urllist');
   //            另外，上述两种方法无论哪种，都要首先load()
   char* cmd = "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->prettyprint('urllist')\" ";
-  chsrc_run(cmd);
+  xy_run(cmd);
 }
 
 /**
@@ -258,7 +258,7 @@ pl_perl_setsrc (char* option)
 
   char* cmd = xy_strjoin(3,
   "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('urllist', 'unshift', '", source.url, "'); CPAN::HandleConfig->commit()\"");
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   xy_warn ("chsrc: 请您使用 perl -v 以及 cpan -v，若 Perl >= v5.36 或 CPAN >= 2.29，请额外手动调用下面的命令");
   xy_warn ("       perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('pushy_https', 0);; CPAN::HandleConfig->commit()\"");
@@ -287,7 +287,7 @@ pl_php_getsrc (char* option)
 {
   pl_php_check_cmd_ ();
   char* cmd = "composer config -g repositories";
-  chsrc_run(cmd);
+  xy_run(cmd);
 }
 
 /**
@@ -310,7 +310,7 @@ pl_php_setsrc (char* option)
   chsrc_say_selection (&source);
 
   char* cmd = xy_2strjoin("composer config -g repo.packagist composer ", source.url);
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   chsrc_say_thanks(&source);
 }
@@ -334,7 +334,7 @@ pl_go_getsrc (char* option)
 {
   pl_go_check_cmd_ ();
   char* cmd = "go env GOPROXY";
-  chsrc_run(cmd);
+  xy_run(cmd);
 }
 
 /**
@@ -356,10 +356,10 @@ pl_go_setsrc (char* option)
   chsrc_say_selection (&source);
 
   char* cmd = "go env -w GO111MODULE=on";
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   cmd = xy_strjoin(3, "go env -w GOPROXY=", source.url, ",direct");
-  chsrc_run(cmd);
+  xy_run(cmd);
   chsrc_say_thanks(&source);
 }
 
@@ -374,7 +374,7 @@ pl_rust_getsrc (char* option)
   } else {
     cmd = "cat  ~/.cargo";
   }
-  chsrc_run(cmd);
+  xy_run(cmd);
 }
 
 /**
@@ -556,10 +556,10 @@ pl_dart_getsrc(char* option)
   char* cmd = NULL;
   if (xy_on_windows) {
     cmd = "set PUB_HOSTED_URL & set FLUTTER_STORAGE_BASE_URL";
-    chsrc_run(cmd);
+    xy_run(cmd);
   } else {
     cmd = "echo $PUB_HOSTED_URL; echo $FLUTTER_STORAGE_BASE_URL";
-    chsrc_run(cmd);
+    xy_run(cmd);
   }
 }
 
@@ -589,23 +589,23 @@ pl_dart_setsrc (char* option)
   {
     if (xy_file_exist(xy_win_powershell_profile))
     {
-      chsrc_run(xy_strjoin(4, "echo $env:PUB_HOSTED_URL = \"", pub, "\" >> ", xy_win_powershell_profile));
-      chsrc_run(xy_strjoin(4, "echo $env:FLUTTER_STORAGE_BASE_URL = \"", flutter, "\" >> ", xy_win_powershell_profile));
+      xy_run(xy_strjoin(4, "echo $env:PUB_HOSTED_URL = \"", pub, "\" >> ", xy_win_powershell_profile));
+      xy_run(xy_strjoin(4, "echo $env:FLUTTER_STORAGE_BASE_URL = \"", flutter, "\" >> ", xy_win_powershell_profile));
     }
 
     if (xy_file_exist(xy_win_powershellv5_profile))
     {
-      chsrc_run(xy_strjoin(4, "echo $env:PUB_HOSTED_URL = \"", pub, "\" >> ", xy_win_powershellv5_profile));
-      chsrc_run(xy_strjoin(4, "echo $env:FLUTTER_STORAGE_BASE_URL = \"", flutter, "\" >> ", xy_win_powershell_profile));
+      xy_run(xy_strjoin(4, "echo $env:PUB_HOSTED_URL = \"", pub, "\" >> ", xy_win_powershellv5_profile));
+      xy_run(xy_strjoin(4, "echo $env:FLUTTER_STORAGE_BASE_URL = \"", flutter, "\" >> ", xy_win_powershell_profile));
     }
   }
 
   else
   {
     cmd = xy_strjoin(3, "echo 'export PUB_HOSTED_URL=\"", pub, "\"' >> ~/.bashrc >> ~/.zshrc");
-    chsrc_run(cmd);
+    xy_run(cmd);
     cmd = xy_strjoin(3, "export 'FLUTTER_STORAGE_BASE_URL=\"", flutter, "\"' >> ~/.bashrc >> ~/.zshrc");
-    chsrc_run(cmd);
+    xy_run(cmd);
   }
   chsrc_say_thanks(&source);
 }
@@ -679,7 +679,7 @@ pl_ocaml_getsrc(char* option)
 {
   pl_ocaml_check_cmd_();
   char* cmd = "opam repo get-url default";
-  chsrc_run(cmd);
+  xy_run(cmd);
 }
 
 /**
@@ -704,7 +704,7 @@ pl_ocaml_setsrc(char* option)
     source.url,
     " --all --set-default");
 
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   xy_info("chsrc: 如果是首次使用 opam ，请使用以下命令进行初始化");
   puts(xy_2strjoin("opam init default ", source.url));
@@ -728,7 +728,7 @@ pl_r_getsrc (char* option)
   } else {
     cmd = "cat ~/.Rprofile";
   }
-  chsrc_run(cmd);
+  xy_run(cmd);
 }
 
 /**
@@ -760,7 +760,7 @@ pl_r_setsrc (char* option)
   else
     cmd = xy_strjoin(3, "echo '", file, "' >> ~/.Rprofile");
 
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   file = xy_strjoin (3, "options(BioC_mirror=\"", bioconductor_url, "\")" );
   // 或者我们调用 r.exe --slave -e 上面的内容
@@ -769,7 +769,7 @@ pl_r_setsrc (char* option)
   else
     cmd = xy_strjoin(3, "echo '", file, "' >> ~/.Rprofile");
 
-  chsrc_run(cmd);
+  xy_run(cmd);
   chsrc_say_thanks(&source);
 }
 
@@ -791,7 +791,7 @@ pl_julia_getsrc (char* option)
   } else {
     cmd = "cat  ~/.julia/config/startup.jl";
   }
-  chsrc_run(cmd);
+  xy_run(cmd);
 }
 
 /**
@@ -823,7 +823,7 @@ pl_julia_setsrc (char* option)
     cmd = xy_strjoin(4, xy_str_to_quietcmd("mkdir -p ~/.julia/config"),
         ";echo '", file, "' >> ~/.julia/config/startup.jl");
 
-  chsrc_run(cmd);
+  xy_run(cmd);
   chsrc_say_thanks(&source);
 }
 
@@ -837,7 +837,7 @@ void
 os_ubuntu_getsrc(char* option)
 {
   char* cmd = "cat /etc/apt/sources.list";
-  chsrc_run(cmd);
+  xy_run(cmd);
 }
 
 /**
@@ -860,7 +860,7 @@ os_ubuntu_setsrc (char* option)
   chsrc_say_selection(&source);
 
   char* backup = "cp /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
-  chsrc_run(backup);
+  xy_run(backup);
 
   // xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
@@ -881,7 +881,7 @@ os_ubuntu_setsrc (char* option)
       "-ports@g\' /etc/apt/sources.list");
   }
 
-  chsrc_run(cmd);
+  xy_run(cmd);
 
 
   chsrc_say_thanks(&source);
@@ -893,7 +893,7 @@ void
 os_debian_getsrc(char* option)
 {
   char* cmd = "cat /etc/apt/sources.list";
-  chsrc_run(cmd);
+  xy_run(cmd);
 }
 
 /**
@@ -920,14 +920,14 @@ os_debian_setsrc (char* option)
   xy_info ("chsrc: sudo apt install apt-transport-https ca-certificates");
 
   char* backup = "cp /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
-  chsrc_run(backup);
+  xy_run(backup);
 
   char* cmd = xy_strjoin(3,
       "sed -E -i \'s@https?://.*/debian/?@",
       source.url,
       "@g\' /etc/apt/sources.list");
 
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   // char* rm = "rm -rf /etc/apt/source.list.bak";
   // system(rm);
@@ -941,7 +941,7 @@ void
 os_deepin_getsrc(char* option)
 {
   char* cmd = "cat /etc/apt/sources.list";
-  chsrc_run(cmd);
+  xy_run(cmd);
 }
 
 /**
@@ -963,7 +963,7 @@ os_deepin_setsrc (char* option)
   chsrc_say_selection(&source);
 
   char* backup = "cp /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
-  chsrc_run(backup);
+  xy_run(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
@@ -971,8 +971,8 @@ os_deepin_setsrc (char* option)
       "sed -E -i \'s@https?://.*/deepin/?@",
       source.url,
       "@g\' /etc/apt/sources.list");
-  chsrc_logcmd(cmd);
-  system(cmd);
+
+  xy_run(cmd);
   // char* rm = "rm -rf /etc/apt/source.list.bak";
   // system(rm);
 
@@ -1003,10 +1003,10 @@ os_fedora_setsrc (char* option)
   xy_warn ("chsrc: fedora 29 及以下版本暂不支持");
 
   char* backup = "cp /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora.repo.bak --backup='t'";
-  chsrc_run(backup);
+  xy_run(backup);
 
   backup = "cp /etc/yum.repos.d/fedora-updates.repo /etc/yum.repos.d/fedora-updates.repo.bak";
-  chsrc_run(backup);
+  xy_run(backup);
 
   xy_info ("chsrc: 备份文件名:1. /etc/yum.repos.d/fedora.repo.bak");
   xy_info ("chsrc: 备份文件名:2. /etc/yum.repos.d/fedora-updates.repo.bak");
@@ -1022,7 +1022,7 @@ os_fedora_setsrc (char* option)
          "/etc/yum.repos.d/fedora-updates.repo ",
          "/etc/yum.repos.d/fedora-updates-modular.repo");
 
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   xy_info ("chsrc: 替换文件:/etc/yum.repos.d/fedora.repo");
   xy_info ("chsrc: 新增文件:/etc/yum.repos.d/fedora-modular.repo");
@@ -1058,7 +1058,7 @@ os_opensuse_setsrc (char* option)
   chsrc_say_selection(&source);
 
   char* source_nselect = "zypper mr -da";
-  chsrc_run(source_nselect);
+  xy_run(source_nselect);
 
   char* cmd1 = xy_strjoin(3,
     "zypper ar -cfg '",
@@ -1085,17 +1085,17 @@ os_opensuse_setsrc (char* option)
     source.url,
     "/opensuse/distribution/leap/$releasever/backports/' mirror-backports-update");
 
-  chsrc_run(cmd1);
-  chsrc_run(cmd2);
-  chsrc_run(cmd3);
-  chsrc_run(cmd4);
+  xy_run(cmd1);
+  xy_run(cmd2);
+  xy_run(cmd3);
+  xy_run(cmd4);
 
   xy_info("chsrc: leap 15.3用户还需 要添加sle和backports源");
   xy_info("chsrc: 另外请确保系统在更新后仅启用了六个软件源，可以使用 zypper lr 检查软件源状态");
   xy_info("chsrc: 并使用 zypper mr -d 禁用多余的软件源");
 
-  chsrc_run(cmd5);
-  chsrc_run(cmd6);
+  xy_run(cmd5);
+  xy_run(cmd6);
   // char* rm = "rm -f /etc/apt/source.list.bak";
   // chsrc_runcmd(rm);
   chsrc_say_thanks(&source);
@@ -1121,7 +1121,7 @@ os_kali_setsrc(char* option)
   chsrc_say_selection(&source);
 
   char* backup = "cp /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
-  chsrc_run(backup);
+  xy_run(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
@@ -1130,7 +1130,7 @@ os_kali_setsrc(char* option)
       source.url,
       "@g\' /etc/apt/sources.list");
 
-  chsrc_run(cmd);
+  xy_run(cmd);
   // char* rm = "rm -rf /etc/apt/source.list.bak";
   // system(rm);
 
@@ -1159,13 +1159,13 @@ os_msys2_setsrc(char* option)
 
 
   char* backup = "cp -f /etc/pacman.d/mirrorlist.mingw32 /etc/pacman.d/mirrorlist.mingw32.bak";
-  chsrc_run(backup);
+  xy_run(backup);
 
   backup = "cp -f /etc/pacman.d/mirrorlist.mingw64 /etc/pacman.d/mirrorlist.mingw64.bak";
-  chsrc_run(backup);
+  xy_run(backup);
 
   backup = "cp -f /etc/pacman.d/mirrorlist.msys /etc/pacman.d/mirrorlist.msys.bak";
-  chsrc_run(backup);
+  xy_run(backup);
 
   xy_info ("chsrc: 备份文件名: 1. /etc/pacman.d/mirrorlist.mingw32.bak");
   xy_info ("chsrc: 备份文件名: 2. /etc/pacman.d/mirrorlist.mingw64.bak");
@@ -1180,7 +1180,7 @@ os_msys2_setsrc(char* option)
                             source.url,
                             "#g\" /etc/pacman.d/mirrorlist* ");
 
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   // char* rm = "rm -rf /etc/pacman.d/mirrorlist.mingw32.bak";
   // system(rm);
@@ -1214,7 +1214,7 @@ os_arch_setsrc(char* option)
 
 
   char* backup = "cp -f /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak --backup='t'";
-  chsrc_run(backup);
+  xy_run(backup);
 
 
   bool arch_flag = false;
@@ -1235,20 +1235,20 @@ os_arch_setsrc(char* option)
 
   // TODO: 这里用的是 > 吗？
   cmd = xy_strjoin(3,"echo ", new_file, " > /etc/pacman.d/mirrorlist");
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   xy_info("chsrc: 使用 archlinuxcn ");
 
   cmd = xy_strjoin(3, "cat [archlinuxcn] \r\n Server=",source.url,"archlinuxcn/$repo/os/$arch >> /etc/pacman.d/mirrorlist");
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   cmd = "pacman -Sy archlinux-keyring";
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   if(arch_flag) {
-    chsrc_run("pacman -Syyu");
+    xy_run("pacman -Syyu");
   } else {
-    chsrc_run("pacman -Syy");
+    xy_run("pacman -Syy");
   }
   chsrc_say_thanks(&source);
 }
@@ -1275,13 +1275,13 @@ os_gentoo_setsrc(char* option)
 
 
   char* backup = "cp -f /etc/portage/repos.conf/gentoo.conf /etc/portage/repos.conf/gentoo.conf.bak";
-  chsrc_run(backup);
+  xy_run(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/portage/repos.conf/gentoo.conf.bak");
   char* cmd = xy_strjoin(3,"sed -i \"s#rsync://.*/gentoo-portage#rsync://",
                             source.url,
                             "gentoo-portage#g");
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   char * yuan = xy_strjoin(3,"GENTOO_MIRRORS=\"https://",
                               source.url,
@@ -1289,7 +1289,7 @@ os_gentoo_setsrc(char* option)
   cmd = xy_strjoin(3,"cat ",
                       yuan,
                       " >> /etc/portage/make.conf");
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   // char* rm = "rm -rf /etc/portage/repos.conf/gentoo.conf.bak";
   // system(rm);
@@ -1322,7 +1322,7 @@ os_rocky_setsrc (char* option)
             "-e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=", source.url, "|g' "
             "-i.bak /etc/yum.repos.d/rocky-extras.repo /etc/yum.repos.d/rocky.repo"
             );
-  chsrc_run(cmd);
+  xy_run(cmd);
   chsrc_say_thanks(&source);
 }
 
@@ -1350,10 +1350,10 @@ os_alpine_setsrc (char* option)
   char* cmd = xy_strjoin(3,
             "sed -i 's#https\\?://dl-cdn.alpinelinux.org/alpine#", source.url, "#g' /etc/apk/repositories"
             );
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   cmd = "apk update";
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   chsrc_say_thanks(&source);
 }
@@ -1364,7 +1364,7 @@ void
 os_void_getsrc (char* option)
 {
   char* cmd = "xbps-query -L";
-  chsrc_run(cmd);
+  xy_run(cmd);
 }
 
 /**
@@ -1387,15 +1387,15 @@ os_void_setsrc (char* option)
   chsrc_say_selection(&source);
 
   char* cmd = "mkdir -p /etc/xbps.d";
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   cmd = "cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/";
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   cmd = xy_strjoin(3,
             "sed -i 's|https://repo-default.voidlinux.org|", source.url, "|g' /etc/xbps.d/*-repository-*.conf"
             );
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   cmd = xy_strjoin(3,
             "sed -i 's|https://alpha.de.repo.voidlinux.org|", source.url, "|g' /etc/xbps.d/*-repository-*.conf"
@@ -1416,9 +1416,9 @@ os_manjaro_setsrc(char* option)
 {
   ensure_root();
   char* cmd = "sudo pacman-mirrors -i -c China -m rank";
-  chsrc_run(cmd);
+  xy_run(cmd);
 
-  chsrc_run("sudo pacman -Syy");
+  xy_run("sudo pacman -Syy");
 }
 
 
@@ -1442,7 +1442,7 @@ os_openeuler_setsrc (char* option)
   chsrc_say_selection(&source);
 
   char* backup = "cp -f /etc/yum.repos.d/openEuler.repot /etc/yum.repos.d/openEuler.repo.bak --backup='t'";
-  chsrc_run(backup);
+  xy_run(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/yum.repos.d/openEuler.repo.bak");
 
@@ -1452,7 +1452,7 @@ os_openeuler_setsrc (char* option)
     source.url,
     "#\'< /etc/yum.repos.d/openEuler.repo.bak | cat > /etc/yum.repos.d/openEuler.repo");
 
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   // char* rm = "rm -rf /etc/yum.repos.d/openEuler.repo.bak";
   // system(rm);
@@ -1481,7 +1481,7 @@ os_openkylin_setsrc (char* option)
   chsrc_say_selection(&source);
 
   char* backup = "cp -f /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
-  chsrc_run(backup);
+  xy_run(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
@@ -1491,7 +1491,7 @@ os_openkylin_setsrc (char* option)
     source.url,
     "@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
 
-  chsrc_run(cmd);
+  xy_run(cmd);
   // char* rm = "rm -rf /etc/apt/source.list.bak";
   // system(rm);
 
@@ -1528,8 +1528,8 @@ os_freebsd_setsrc (char* option)
   xy_info("chsrc: 1. 添加 freebsd-pkg 源 (二进制安装包)");
   char* pkg_mkdir = "mkdir -p /usr/local/etc/pkg/repos";
   char* pkg_createconf = xy_strjoin(3, "ee /usr/local/etc/pkg/repos/", source.mirror->code, ".conf");
-  chsrc_run(pkg_mkdir);
-  chsrc_run(pkg_createconf);
+  xy_run(pkg_mkdir);
+  xy_run(pkg_createconf);
 
 
   char* pkg_content = xy_strjoin(4,
@@ -1542,7 +1542,7 @@ os_freebsd_setsrc (char* option)
                     }");
 
   char* pkg_cmd = xy_strjoin(3, "cat ", pkg_content, "> /usr/local/etc/pkg/repos/", source.mirror->code , ".conf");
-  chsrc_run(pkg_cmd);
+  xy_run(pkg_cmd);
 
   xy_warn("chsrc: 若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将 'http' 改成 'https' ，最后使用 'pkg update -f' 刷新缓存即可\n");
 
@@ -1552,14 +1552,14 @@ os_freebsd_setsrc (char* option)
   bool git_exist = does_the_program_exist (xy_str_to_quietcmd("git version"), "git");
   if (git_exist) {
     char* git_cmd = xy_strjoin(3, "git clone --depth 1 https://", source.url, "/freebsd-ports/ports.git /usr/ports");
-    chsrc_run(git_cmd);
+    xy_run(git_cmd);
   } else {
     char* fetch  = xy_strjoin(3, "fetch https://", source.url, "/freebsd-ports/ports.tar.gz");  // 70多MB
     char* unzip  = "tar -zxvf ports.tar.gz -C /usr/ports";
     char* delete = "rm ports.tar.gz";
-    chsrc_run(fetch);
-    chsrc_run(unzip);
-    chsrc_run(delete);
+    xy_run(fetch);
+    xy_run(unzip);
+    xy_run(delete);
   }
 
   /* https://help.mirrors.cernet.edu.cn/FreeBSD-ports/ 的换源方法 */
@@ -1614,7 +1614,7 @@ void
 os_netbsd_getsrc (char* option)
 {
   char* cmd = "cat /usr/pkg/etc/pkgin/repositories.conf";
-  chsrc_run(cmd);
+  xy_run(cmd);
 }
 
 /**
@@ -1645,7 +1645,7 @@ os_netbsd_setsrc(char* option)
 
 
   char* backup = "cp -f /usr/pkg/etc/pkgin/repositories.conf /usr/pkg/etc/pkgin/repositories.conf.bak";
-  chsrc_run(backup);
+  xy_run(backup);
 
   xy_info ("chsrc: 备份文件名: /usr/pkg/etc/pkgin/repositories.conf.bak");
 
@@ -1657,7 +1657,7 @@ os_netbsd_setsrc(char* option)
                             "/",
                             version,
                             "/All > /usr/pkg/etc/pkgin/repositories.conf");
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   chsrc_say_thanks(&source);
 }
@@ -1668,7 +1668,7 @@ void
 os_openbsd_getsrc (char* option)
 {
   char* cmd = "cat /etc/installurl";
-  chsrc_run(cmd);
+  xy_run(cmd);
 }
 
 /**
@@ -1692,12 +1692,12 @@ os_openbsd_setsrc(char* option)
   chsrc_say_selection(&source);
 
   char* backup = "cp -f /etc/installurl /etc/installurl.bak --backup='t'";
-  chsrc_run(backup);
+  xy_run(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/installurl.bak");
 
   char* cmd = xy_strjoin(3,"echo ", source.url, " > /etc/installurl");
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   chsrc_say_thanks(&source);
 }
@@ -1729,10 +1729,10 @@ wr_tex_getsrc(char* option)
   wr_tex_check_cmd_(&tlmgr_exist, &mpm_exist);
 
   if (tlmgr_exist) {
-    chsrc_run("tlmgr option repository");
+    xy_run("tlmgr option repository");
   }
   if (mpm_exist) {
-    chsrc_run("mpm --get-repository");
+    xy_run("mpm --get-repository");
   }
 }
 
@@ -1759,13 +1759,13 @@ wr_tex_setsrc(char* option)
 
   if (tlmgr_exist) {
     cmd = xy_2strjoin("tlmgr option repository ", source.url);
-    chsrc_run(cmd);
+    xy_run(cmd);
   }
 
   if (mpm_exist) {
     char* miktex_url = xy_2strjoin(xy_str_delete_suffix(source.url, "texlive/tlnet"), "win32/miktex/tm/packages/");
     cmd = xy_2strjoin("mpm --set-repository=", miktex_url);
-    chsrc_run(cmd);
+    xy_run(cmd);
   }
 
   chsrc_say_thanks(&source);
@@ -1830,10 +1830,10 @@ wr_brew_setsrc(char* option)
   char* brew_git_remote = xy_strjoin(3, "export HOMEBREW_BREW_GIT_REMOTE=\"", xy_2strjoin(source.url, "git/homebrew/brew.git"), "\"");
   char* core_git_remote = xy_strjoin(3, "export HOMEBREW_CORE_GIT_REMOTE=\"", xy_2strjoin(source.url, "git/homebrew/homebrew-core.git"), "\"");
 
-  chsrc_run(xy_strjoin(3,"echo ", api_domain,      " >> ~/.bashrc >> ~/.zshrc"));
-  chsrc_run(xy_strjoin(3,"echo ", bottle_domain,   " >> ~/.bashrc >> ~/.zshrc"));
-  chsrc_run(xy_strjoin(3,"echo ", brew_git_remote, " >> ~/.bashrc >> ~/.zshrc"));
-  chsrc_run(xy_strjoin(3,"echo ", core_git_remote, " >> ~/.bashrc >> ~/.zshrc"));
+  xy_run(xy_strjoin(3,"echo ", api_domain,      " >> ~/.bashrc >> ~/.zshrc"));
+  xy_run(xy_strjoin(3,"echo ", bottle_domain,   " >> ~/.bashrc >> ~/.zshrc"));
+  xy_run(xy_strjoin(3,"echo ", brew_git_remote, " >> ~/.bashrc >> ~/.zshrc"));
+  xy_run(xy_strjoin(3,"echo ", core_git_remote, " >> ~/.bashrc >> ~/.zshrc"));
 
   chsrc_say_thanks (&source);
   puts(""); xy_warn("chsrc: 请您重启终端使环境变量生效");
@@ -1901,13 +1901,13 @@ wr_nix_setsrc (char* option)
   chsrc_say_selection (&source);
 
   char* cmd = xy_strjoin(3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   cmd = xy_strjoin (3, "echo \"substituters = ", source.url, "store https://cache.nixos.org/\" >> ~/.config/nix/nix.conf");
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   cmd = "nix-channel --update";
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   xy_info("chsrc: 若您使用的是NixOS，请确认您的系统版本<version>（如22.11），并手动运行:");
   cmd = xy_strjoin(3, "nix-channel --add ", source.url, "nixpkgs-<version> nixpkgs");
@@ -1946,7 +1946,7 @@ wr_flathub_setsrc(char* option)
   puts(note);
 
   char* cmd = xy_2strjoin("sudo flatpak remote-modify flathub --url=", source.url);
-  chsrc_run(cmd);
+  xy_run(cmd);
 
   chsrc_say_thanks(&source);
 }
@@ -1999,7 +1999,7 @@ wr_anaconda_setsrc(char* option)
       xy_error ("chsrc: 未找到 conda 命令，请检查是否存在");
       exit(1);
     }
-    chsrc_run("conda config --set show_channel_urls yes");
+    xy_run("conda config --set show_channel_urls yes");
   }
 
   xy_info(xy_strjoin(3, "chsrc: 请向 ", config, " 中手动添加:"));
