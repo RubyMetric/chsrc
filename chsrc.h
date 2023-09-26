@@ -10,7 +10,7 @@
  *   chsrc.c 头文件
  * ------------------------------------------------------------*/
 
-#define App_Log_Prefix "chsrc: 运行 "
+#define XY_Run_Prefix "chsrc: 运行 "
 #include "xy.h"
 #include "sources.h"
 

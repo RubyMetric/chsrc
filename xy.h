@@ -79,34 +79,34 @@ xy_malloc0 (size_t size)
 }
 
 
-#define XY_LOG_INFO     00001
-#define XY_LOG_SUCCESS  00001<<1
-#define XY_LOG_WARN     00001<<2
-#define XY_LOG_ERROR    00001<<3
+#define XY_Log_Info     00001
+#define XY_Log_Success  00001<<1
+#define XY_Log_Warn     00001<<2
+#define XY_Log_Error    00001<<3
 
-#define xy_success(str)  xy_log_ (XY_LOG_SUCCESS, str)
-#define xy_info(str)     xy_log_ (XY_LOG_INFO,    str)
-#define xy_warn(str)     xy_log_ (XY_LOG_WARN,    str)
-#define xy_error(str)    xy_log_ (XY_LOG_ERROR,   str)
+#define xy_success(str)  _xy_log (XY_Log_Success, str)
+#define xy_info(str)     _xy_log (XY_Log_Info,    str)
+#define xy_warn(str)     _xy_log (XY_Log_Warn,    str)
+#define xy_error(str)    _xy_log (XY_Log_Error,   str)
 
 static void
-xy_log_ (int level, const char* str)
+_xy_log (int level, const char* str)
 {
   char* color_fmt_str = NULL;
 
   bool to_stderr = false;
 
-  if (level & XY_LOG_INFO) {
+  if (level & XY_Log_Info) {
     color_fmt_str = "\033[34m%s\033[0m";   // 蓝色
   }
-  else if (level & XY_LOG_SUCCESS) {
+  else if (level & XY_Log_Success) {
     color_fmt_str = "\033[32m%s\033[0m";   // 绿色
   }
-  else if (level & XY_LOG_WARN) {
+  else if (level & XY_Log_Warn) {
     color_fmt_str = "\033[33m%s\033[0m\n"; // 黄色
     to_stderr = true;
   }
-  else if (level & XY_LOG_ERROR) {
+  else if (level & XY_Log_Error) {
     color_fmt_str = "\033[31m%s\033[0m\n"; // 红色
     to_stderr = true;
   }
@@ -137,7 +137,7 @@ static char*
 xy_strch (const char* str, char src,const char* dest)
 {
   size_t str_len  = strlen(str);
-  size_t dest_len  = strlen(dest);
+  size_t dest_len = strlen(dest);
   size_t size = str_len*dest_len;
   char* ret  = (char*)malloc(size);
   int i=0;
@@ -231,86 +231,86 @@ xy_strdup(const char* str)
 }
 
 
-#define XY_STR_BOLD      1
-#define XY_STR_FAINT     2
-#define XY_STR_ITALIC    3
-#define XY_STR_UNDERLINE 4
-#define XY_STR_BLINK     5
-#define XY_STR_CROSS     9
+#define XY_Str_Bold      1
+#define XY_Str_Faint     2
+#define XY_Str_Italic    3
+#define XY_Str_Underline 4
+#define XY_Str_Blink     5
+#define XY_Str_Cross     9
 
-#define xy_str_to_bold(str)      xy_str_to_terminal_style_(XY_STR_BOLD,     str)
-#define xy_str_to_faint(str)     xy_str_to_terminal_style_(XY_STR_FAINT,    str)
-#define xy_str_to_italic(str)    xy_str_to_terminal_style_(XY_STR_ITALIC,   str)
-#define xy_str_to_underline(str) xy_str_to_terminal_style_(XY_STR_UNDERLINE,str)
-#define xy_str_to_blink(str)     xy_str_to_terminal_style_(XY_STR_BLINK,    str)
-#define xy_str_to_cross(str)     xy_str_to_terminal_style_(XY_STR_CROSS,    str)
+#define xy_str_to_bold(str)      _xy_str_to_terminal_style(XY_Str_Bold,     str)
+#define xy_str_to_faint(str)     _xy_str_to_terminal_style(XY_Str_Faint,    str)
+#define xy_str_to_italic(str)    _xy_str_to_terminal_style(XY_Str_Italic,   str)
+#define xy_str_to_underline(str) _xy_str_to_terminal_style(XY_Str_Underline,str)
+#define xy_str_to_blink(str)     _xy_str_to_terminal_style(XY_Str_Blink,    str)
+#define xy_str_to_cross(str)     _xy_str_to_terminal_style(XY_Str_Cross,    str)
 
-#define XY_STR_RED      31
-#define XY_STR_GREEN    32
-#define XY_STR_YELLOW   33
-#define XY_STR_BLUE     34
-#define XY_STR_MAGENTA  35
-#define XY_STR_CYAN     36
+#define XY_Str_Red      31
+#define XY_Str_Green    32
+#define XY_Str_Yellow   33
+#define XY_Str_Blue     34
+#define XY_Str_Magenta  35
+#define XY_Str_Cyan     36
 
-#define xy_str_to_red(str)     xy_str_to_terminal_style_(XY_STR_RED,    str)
-#define xy_str_to_green(str)   xy_str_to_terminal_style_(XY_STR_GREEN,  str)
-#define xy_str_to_yellow(str)  xy_str_to_terminal_style_(XY_STR_YELLOW, str)
-#define xy_str_to_blue(str)    xy_str_to_terminal_style_(XY_STR_BLUE,   str)
-#define xy_str_to_magenta(str) xy_str_to_terminal_style_(XY_STR_MAGENTA,str)
-#define xy_str_to_purple       xy_str_to_magenta
-#define xy_str_to_cyan(str)    xy_str_to_terminal_style_(XY_STR_CYAN,   str)
+#define xy_str_to_red(str)     _xy_str_to_terminal_style(XY_Str_Red,    str)
+#define xy_str_to_green(str)   _xy_str_to_terminal_style(XY_Str_Green,  str)
+#define xy_str_to_yellow(str)  _xy_str_to_terminal_style(XY_Str_Yellow, str)
+#define xy_str_to_blue(str)    _xy_str_to_terminal_style(XY_Str_Blue,   str)
+#define xy_str_to_magenta(str) _xy_str_to_terminal_style(XY_Str_Magenta,str)
+#define xy_str_to_purple        xy_str_to_magenta
+#define xy_str_to_cyan(str)    _xy_str_to_terminal_style(XY_Str_Cyan,   str)
 
 static char*
-xy_str_to_terminal_style_(int style, const char* str)
+_xy_str_to_terminal_style(int style, const char* str)
 {
   char* color_fmt_str = NULL;
-  if (XY_STR_RED==style)
+  if (XY_Str_Red==style)
   {
     color_fmt_str = "\e[31m%s\e[0m"; // 红色
   }
-  else if (XY_STR_GREEN==style)
+  else if (XY_Str_Green==style)
   {
     color_fmt_str = "\e[32m%s\e[0m"; // 绿色
   }
-  else if (XY_STR_YELLOW==style)
+  else if (XY_Str_Yellow==style)
   {
     color_fmt_str = "\e[33m%s\e[0m"; // 黄色
   }
-  else if (XY_STR_BLUE==style)
+  else if (XY_Str_Blue==style)
   {
     color_fmt_str = "\e[34m%s\e[0m"; // 蓝色
   }
-  else if (XY_STR_MAGENTA==style)
+  else if (XY_Str_Magenta==style)
   {
     color_fmt_str = "\e[35m%s\e[0m"; // 蓝色
   }
-  else if (XY_STR_CYAN==style)
+  else if (XY_Str_Cyan==style)
   {
     color_fmt_str = "\e[36m%s\e[0m"; // 蓝色
   }
 
 
-  else if (XY_STR_BOLD==style)
+  else if (XY_Str_Bold==style)
   {
     color_fmt_str = "\e[1m%s\e[0m";
   }
-  else if (XY_STR_FAINT==style)
+  else if (XY_Str_Faint==style)
   {
     color_fmt_str = "\e[2m%s\e[0m";
   }
-  else if (XY_STR_ITALIC==style)
+  else if (XY_Str_Italic==style)
   {
     color_fmt_str = "\e[3m%s\e[0m";
   }
-  else if (XY_STR_UNDERLINE==style)
+  else if (XY_Str_Underline==style)
   {
     color_fmt_str = "\e[4m%s\e[0m";
   }
-  else if (XY_STR_BLINK==style)
+  else if (XY_Str_Blink==style)
   {
     color_fmt_str = "\e[5m%s\e[0m";
   }
-  else if (XY_STR_CROSS==style)
+  else if (XY_Str_Cross==style)
   {
     color_fmt_str = "\e[9m%s\e[0m";
   }
@@ -528,7 +528,7 @@ xy_file_exist(char* path)
 static void
 xy_run (const char* cmd)
 {
-  char* log = App_Log_Prefix;
+  char* log = XY_Run_Prefix;
   xy_info (xy_2strjoin (log, cmd));
   system(cmd);
 }

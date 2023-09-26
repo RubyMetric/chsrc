@@ -10,7 +10,7 @@
  *   测试 xy.h
  * ------------------------------------------------------------*/
 
-#define App_Log_Prefix "test_xy: "
+#define XY_Run_Prefix "test_xy: "
 #include "xy.h"
 
 int
