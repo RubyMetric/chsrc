@@ -524,38 +524,4 @@ xy_file_exist(char* path)
   return access(newpath, 0) ? false : true;
 }
 
-
-static void
-xy_run (const char* cmd)
-{
-  char* log = XY_Run_Prefix;
-  xy_info (xy_2strjoin (log, cmd));
-  system(cmd);
-}
-
-
-static void
-xy_append_to_file (char* str, char* file)
-{
-  char* cmd = NULL;
-  if (xy_on_windows) {
-    cmd = xy_strjoin (4, "echo ", str, " >> ", file);
-  } else {
-    cmd = xy_strjoin (4, "echo '", str, "' >> ", file);
-  }
-  xy_run(cmd);
-}
-
-static void
-xy_overwrite_file (char* str, char* file)
-{
-  char* cmd = NULL;
-  if (xy_on_windows) {
-    cmd = xy_strjoin (4, "echo ", str, " > ", file);
-  } else {
-    cmd = xy_strjoin (4, "echo '", str, "' > ", file);
-  }
-  xy_run(cmd);
-}
-
 #endif

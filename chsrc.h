@@ -273,6 +273,39 @@ not_root:
 #define chsrc_error(str)   xy_error(xy_2strjoin(App_Prefix, (str)))
 
 
+static void
+chsrc_run (const char* cmd)
+{
+  xy_info (xy_2strjoin ("chsrc: 运行 ", cmd));
+  system(cmd);
+}
+
+static void
+chsrc_append_to_file (char* prefix, char* str, char* file)
+{
+  char* cmd = NULL;
+  if (xy_on_windows) {
+    cmd = xy_strjoin (4, "echo ", str, " >> ", file);
+  } else {
+    cmd = xy_strjoin (4, "echo '", str, "' >> ", file);
+  }
+  chsrc_run(cmd);
+}
+
+static void
+chsrc_overwrite_file (char* prefix, char* str, char* file)
+{
+  char* cmd = NULL;
+  if (xy_on_windows) {
+    cmd = xy_strjoin (4, "echo ", str, " > ", file);
+  } else {
+    cmd = xy_strjoin (4, "echo '", str, "' > ", file);
+  }
+  chsrc_run(cmd);
+}
+
+
+
 /* Target Info */
 typedef struct {
   void (*setfn)(char* option);
