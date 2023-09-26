@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2023-09-21>
+ * Last modified : <2023-09-26>
  *
  * chsrc:
  *
@@ -237,7 +237,7 @@ chsrc_logcmd (const char* cmd)
 
 
 void
-chsrc_runcmd (const char* cmd)
+chsrc_run (const char* cmd)
 {
   chsrc_logcmd(cmd);
   system(cmd);
