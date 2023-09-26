@@ -3,13 +3,13 @@
  * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-22>
+ * Last modified : <2023-09-26>
  *
  * xy:
  *
  *   y = f(x)
  *
- *   Corss-Platform C utilities in Ruby flavor
+ *   Corss-Platform C utilities for CLI applications in Ruby flavor
  *
  *   该文件采用 MIT 许可证，请查阅 LICENSE.txt 文件
  * ------------------------------------------------------------*/
@@ -524,5 +524,38 @@ xy_file_exist(char* path)
   return access(newpath, 0) ? false : true;
 }
 
+
+static void
+xy_run (const char* cmd)
+{
+  char* log = App_Log_Prefix;
+  xy_info (xy_2strjoin (log, cmd));
+  system(cmd);
+}
+
+
+static void
+xy_append_to_file (char* str, char* file)
+{
+  char* cmd = NULL;
+  if (xy_on_windows) {
+    cmd = xy_strjoin (4, "echo ", str, " >> ", file);
+  } else {
+    cmd = xy_strjoin (4, "echo '", str, "' >> ", file);
+  }
+  xy_run(cmd);
+}
+
+static void
+xy_overwrite_file (char* str, char* file)
+{
+  char* cmd = NULL;
+  if (xy_on_windows) {
+    cmd = xy_strjoin (4, "echo ", str, " > ", file);
+  } else {
+    cmd = xy_strjoin (4, "echo '", str, "' > ", file);
+  }
+  xy_run(cmd);
+}
 
 #endif
