@@ -3,13 +3,14 @@
  * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-30>
- * Last modified : <2023-09-10>
+ * Last modified : <2023-09-26>
  *
  * test_xy:
  *
  *   测试 xy.h
  * ------------------------------------------------------------*/
 
+#define App_Log_Prefix "test_xy: "
 #include "xy.h"
 
 int
@@ -74,5 +75,10 @@ main (int argc, char const *argv[])
   putb(xy_file_exist("chsrc.png"));
   putb(xy_file_exist(xy_win_powershell_profile));
   putb(xy_file_exist(xy_win_powershellv5_profile));
+
+  char* str = "nix.settings.substituters = [ \"https://mirrors.bfsu.edu.cn/nix-channels/store\" ]";
+  xy_overwrite_file(str, "test.txt");
+  xy_append_to_file(str, "test.txt");
+
   return 0;
 }
