@@ -315,6 +315,14 @@ chsrc_overwrite_file (const char* str, const char* file)
   chsrc_run(cmd);
 }
 
+static void
+chsrc_backup (const char* path)
+{
+  char* cmd = xy_strjoin(5, "cp ", path, " ", path, ".bak --backup='t'");
+  chsrc_info ( xy_strjoin (3, "备份文件名 ", path, ".bak"));
+  chsrc_run (cmd);
+}
+
 
 
 /* Target Info */
