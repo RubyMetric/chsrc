@@ -1231,8 +1231,8 @@ os_arch_setsrc(char* option)
 
   chsrc_info("使用 archlinuxcn");
 
-  cmd = xy_strjoin(3, "cat [archlinuxcn] \r\n Server=",source.url,"archlinuxcn/$repo/os/$arch >> /etc/pacman.d/mirrorlist");
-  chsrc_run(cmd);
+  char* towrite = xy_strjoin(3, "[archlinuxcn]\nServer=", source.url, "archlinuxcn/$repo/os/$arch");
+  chsrc_append_to_file (towrite, "/etc/pacman.d/mirrorlist");
 
   chsrc_run("pacman -Sy archlinux-keyring");
 
@@ -1265,7 +1265,7 @@ os_gentoo_setsrc(char* option)
   chsrc_say_selection(&source);
 
 
-  char* backup = "cp -f /etc/portage/repos.conf/gentoo.conf /etc/portage/repos.conf/gentoo.conf.bak";
+  char* backup = "cp /etc/portage/repos.conf/gentoo.conf /etc/portage/repos.conf/gentoo.conf.bak";
   chsrc_run(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/portage/repos.conf/gentoo.conf.bak");
@@ -1274,16 +1274,9 @@ os_gentoo_setsrc(char* option)
                             "gentoo-portage#g");
   chsrc_run(cmd);
 
-  char * yuan = xy_strjoin(3,"GENTOO_MIRRORS=\"https://",
-                              source.url,
-                              "gentoo\"");
-  cmd = xy_strjoin(3,"cat ",
-                      yuan,
-                      " >> /etc/portage/make.conf");
-  chsrc_run(cmd);
+  char* towrite = xy_strjoin(3, "GENTOO_MIRRORS=\"https://", source.url, "gentoo\"");
 
-  // char* rm = "rm -rf /etc/portage/repos.conf/gentoo.conf.bak";
-  // system(rm);
+  chsrc_append_to_file (towrite, "/etc/portage/make.conf")
   chsrc_say_thanks(&source);
 }
 
@@ -1432,21 +1425,12 @@ os_openeuler_setsrc (char* option)
   source_info source = os_openeuler_sources[index];
   chsrc_say_selection(&source);
 
-  char* backup = "cp -f /etc/yum.repos.d/openEuler.repot /etc/yum.repos.d/openEuler.repo.bak --backup='t'";
+  char* backup = "cp /etc/yum.repos.d/openEuler.repot /etc/yum.repos.d/openEuler.repo.bak --backup='t'";
   chsrc_run(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/yum.repos.d/openEuler.repo.bak");
-
-  char* cmd;
-  cmd = xy_strjoin(3,
-    "s#http://repo.openeuler.org#",
-    source.url,
-    "#\'< /etc/yum.repos.d/openEuler.repo.bak | cat > /etc/yum.repos.d/openEuler.repo");
-
-  chsrc_run(cmd);
-
-  // char* rm = "rm -rf /etc/yum.repos.d/openEuler.repo.bak";
-  // system(rm);
+  char* towrite = xy_strjoin(3, "s#http://repo.openeuler.org#", source.url, "#\'< /etc/yum.repos.d/openEuler.repo.bak");;
+  chsrc_overwrite_file (towrite, "/etc/yum.repos.d/openEuler.repo");
 
   chsrc_say_thanks(&source);
 }
@@ -1483,8 +1467,6 @@ os_openkylin_setsrc (char* option)
     "@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
 
   chsrc_run(cmd);
-  // char* rm = "rm -rf /etc/apt/source.list.bak";
-  // system(rm);
 
   chsrc_say_thanks(&source);
 }
@@ -1532,8 +1514,8 @@ os_freebsd_setsrc (char* option)
                       enabled: yes\
                     }");
 
-  char* pkg_cmd = xy_strjoin(3, "cat ", pkg_content, "> /usr/local/etc/pkg/repos/", source.mirror->code , ".conf");
-  chsrc_run(pkg_cmd);
+  char* pkg_conf = xy_strjoin(3, "/usr/local/etc/pkg/repos/", source.mirror->code, ".conf");
+  chsrc_overwrite_file (pkg_content, pkg_conf);
 
   xy_warn("chsrc: 若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将 'http' 改成 'https' ，最后使用 'pkg update -f' 刷新缓存即可\n");
 
