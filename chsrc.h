@@ -281,7 +281,7 @@ chsrc_run (const char* cmd)
 }
 
 static void
-chsrc_append_to_file (char* prefix, char* str, char* file)
+chsrc_append_to_file (const char* str, const char* file)
 {
   char* cmd = NULL;
   if (xy_on_windows) {
@@ -293,7 +293,7 @@ chsrc_append_to_file (char* prefix, char* str, char* file)
 }
 
 static void
-chsrc_overwrite_file (char* prefix, char* str, char* file)
+chsrc_overwrite_file (const char* str, const char* file)
 {
   char* cmd = NULL;
   if (xy_on_windows) {

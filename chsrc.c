@@ -579,7 +579,7 @@ pl_dart_setsrc (char* option)
   source_info source = pl_dart_sources[index];
   chsrc_say_selection(&source);
 
-  char* cmd = NULL;
+  char* towrite = NULL;
 
   char* pub = xy_2strjoin(source.url, "dart-pub");
   char* flutter = xy_2strjoin(source.url, "flutter");
@@ -588,23 +588,30 @@ pl_dart_setsrc (char* option)
   {
     if (xy_file_exist(xy_win_powershell_profile))
     {
-      chsrc_run(xy_strjoin(4, "echo $env:PUB_HOSTED_URL = \"", pub, "\" >> ", xy_win_powershell_profile));
-      chsrc_run(xy_strjoin(4, "echo $env:FLUTTER_STORAGE_BASE_URL = \"", flutter, "\" >> ", xy_win_powershell_profile));
+      towrite = xy_strjoin(4, "$env:PUB_HOSTED_URL = \"", pub, "\"");
+      chsrc_append_to_file (towrite, xy_win_powershell_profile);
+
+      towrite = xy_strjoin(4, "$env:FLUTTER_STORAGE_BASE_URL = \"", flutter, "\"");
+      chsrc_append_to_file (towrite, xy_win_powershell_profile);
     }
 
     if (xy_file_exist(xy_win_powershellv5_profile))
     {
-      chsrc_run(xy_strjoin(4, "echo $env:PUB_HOSTED_URL = \"", pub, "\" >> ", xy_win_powershellv5_profile));
-      chsrc_run(xy_strjoin(4, "echo $env:FLUTTER_STORAGE_BASE_URL = \"", flutter, "\" >> ", xy_win_powershell_profile));
+      towrite = xy_strjoin(4, "$env:PUB_HOSTED_URL = \"", pub, "\"");
+      chsrc_append_to_file (towrite, xy_win_powershellv5_profile);
+
+      towrite = xy_strjoin(4, "$env:FLUTTER_STORAGE_BASE_URL = \"", flutter, "\"");
+      chsrc_append_to_file (towrite, xy_win_powershellv5_profile);
     }
   }
 
   else
   {
-    cmd = xy_strjoin(3, "echo 'export PUB_HOSTED_URL=\"", pub, "\"' >> ~/.bashrc >> ~/.zshrc");
-    chsrc_run(cmd);
-    cmd = xy_strjoin(3, "export 'FLUTTER_STORAGE_BASE_URL=\"", flutter, "\"' >> ~/.bashrc >> ~/.zshrc");
-    chsrc_run(cmd);
+    towrite = xy_strjoin(3, "export PUB_HOSTED_URL=\"", pub, "\"");
+    chsrc_append_to_file (towrite, "~/.bashrc >> ~/.zshrc");
+
+    towrite = xy_strjoin(3, "export FLUTTER_STORAGE_BASE_URL=\"", flutter, "\"");
+    chsrc_append_to_file (towrite, "~/.bashrc >> ~/.zshrc");
   }
   chsrc_say_thanks(&source);
 }
@@ -750,25 +757,21 @@ pl_r_setsrc (char* option)
   char* bioconductor_url = xy_str_delete_suffix(xy_str_delete_suffix(source.url, "cran/"), "CRAN/");
   bioconductor_url = xy_2strjoin(bioconductor_url, "bioconductor");
 
-  const char* file = xy_strjoin (3, "options(\"repos\" = c(CRAN=\"", source.url, "\"))" );
+  const char* towrite1 = xy_strjoin (3, "options(\"repos\" = c(CRAN=\"", source.url, "\"))" );
+  const char* towrite2 = xy_strjoin (3, "options(BioC_mirror=\"", bioconductor_url, "\")" );
 
-  char* cmd = NULL;
   // 或者我们调用 r.exe --slave -e 上面的内容
   if (xy_on_windows)
-    cmd = xy_strjoin(3, "echo ", file, " >> %USERPROFILE%/Documents/.Rprofile");
+  {
+    chsrc_append_to_file (towrite1, "%USERPROFILE%/Documents/.Rprofile");
+    chsrc_append_to_file (towrite2, "%USERPROFILE%/Documents/.Rprofile");
+  }
   else
-    cmd = xy_strjoin(3, "echo '", file, "' >> ~/.Rprofile");
+  {
+    chsrc_append_to_file (towrite1, "~/.Rprofile");
+    chsrc_append_to_file (towrite2, "~/.Rprofile");
+  }
 
-  chsrc_run(cmd);
-
-  file = xy_strjoin (3, "options(BioC_mirror=\"", bioconductor_url, "\")" );
-  // 或者我们调用 r.exe --slave -e 上面的内容
-  if (xy_on_windows)
-    cmd = xy_strjoin(3, "echo ", file, " >> %USERPROFILE%/Documents/.Rprofile");
-  else
-    cmd = xy_strjoin(3, "echo '", file, "' >> ~/.Rprofile");
-
-  chsrc_run(cmd);
   chsrc_say_thanks(&source);
 }
 
@@ -1232,17 +1235,15 @@ os_arch_setsrc(char* option)
     new_file = xy_strjoin(3,"Server = ", source.url, "archlinuxarm/$repo/os/$arch");
   }
 
-  // TODO: 这里用的是 > 吗？
-  cmd = xy_strjoin(3,"echo ", new_file, " > /etc/pacman.d/mirrorlist");
-  chsrc_run(cmd);
+  // TODO: 这里用的是 overwrite 吗？
+  chsrc_overwrite_file (new_file, "/etc/pacman.d/mirrorlist");
 
-  xy_info("chsrc: 使用 archlinuxcn ");
+  chsrc_info("使用 archlinuxcn");
 
   cmd = xy_strjoin(3, "cat [archlinuxcn] \r\n Server=",source.url,"archlinuxcn/$repo/os/$arch >> /etc/pacman.d/mirrorlist");
   chsrc_run(cmd);
 
-  cmd = "pacman -Sy archlinux-keyring";
-  chsrc_run(cmd);
+  chsrc_run("pacman -Sy archlinux-keyring");
 
   if(arch_flag) {
     chsrc_run("pacman -Syyu");
@@ -1650,13 +1651,9 @@ os_netbsd_setsrc(char* option)
 
   char* arch = xy_getcmd("arch",NULL);
   char* version = "cat /etc/os-release | grep \"VERSION=\" | grep -Po [8-9].[0-9]+";
-  char* cmd = xy_strjoin(6,"echo ",
-                            source.url,
-                            arch,
-                            "/",
-                            version,
-                            "/All > /usr/pkg/etc/pkgin/repositories.conf");
-  chsrc_run(cmd);
+
+  char* url = xy_strjoin(5, source.url, arch, "/", version, "/All");
+  chsrc_overwrite_file (url, "/usr/pkg/etc/pkgin/repositories.conf");
 
   chsrc_say_thanks(&source);
 }
@@ -1690,13 +1687,11 @@ os_openbsd_setsrc(char* option)
   source_info source = os_openbsd_sources[index];
   chsrc_say_selection(&source);
 
-  char* backup = "cp -f /etc/installurl /etc/installurl.bak --backup='t'";
+  char* backup = "cp /etc/installurl /etc/installurl.bak --backup='t'";
   chsrc_run(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/installurl.bak");
-
-  char* cmd = xy_strjoin(3,"echo ", source.url, " > /etc/installurl");
-  chsrc_run(cmd);
+  chsrc_overwrite_file (source.url, "/etc/installurl");
 
   chsrc_say_thanks(&source);
 }
@@ -1829,13 +1824,13 @@ wr_brew_setsrc(char* option)
   char* brew_git_remote = xy_strjoin(3, "export HOMEBREW_BREW_GIT_REMOTE=\"", xy_2strjoin(source.url, "git/homebrew/brew.git"), "\"");
   char* core_git_remote = xy_strjoin(3, "export HOMEBREW_CORE_GIT_REMOTE=\"", xy_2strjoin(source.url, "git/homebrew/homebrew-core.git"), "\"");
 
-  chsrc_run(xy_strjoin(3,"echo ", api_domain,      " >> ~/.bashrc >> ~/.zshrc"));
-  chsrc_run(xy_strjoin(3,"echo ", bottle_domain,   " >> ~/.bashrc >> ~/.zshrc"));
-  chsrc_run(xy_strjoin(3,"echo ", brew_git_remote, " >> ~/.bashrc >> ~/.zshrc"));
-  chsrc_run(xy_strjoin(3,"echo ", core_git_remote, " >> ~/.bashrc >> ~/.zshrc"));
+  chsrc_append_to_file (api_domain,      "~/.bashrc >> ~/.zshrc");
+  chsrc_append_to_file (bottle_domain,   "~/.bashrc >> ~/.zshrc");
+  chsrc_append_to_file (brew_git_remote, "~/.bashrc >> ~/.zshrc");
+  chsrc_append_to_file (core_git_remote, "~/.bashrc >> ~/.zshrc");
 
   chsrc_say_thanks (&source);
-  puts(""); xy_warn("chsrc: 请您重启终端使环境变量生效");
+  puts("");  chsrc_warn("请您重启终端使环境变量生效");
 }
 
 
@@ -1902,18 +1897,17 @@ wr_nix_setsrc (char* option)
   char* cmd = xy_strjoin(3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
   chsrc_run(cmd);
 
-  cmd = xy_strjoin (3, "echo \"substituters = ", source.url, "store https://cache.nixos.org/\" >> ~/.config/nix/nix.conf");
-  chsrc_run(cmd);
+  char* towrite = xy_strjoin (3, "substituters = ", source.url, "store https://cache.nixos.org/");
+  chsrc_append_to_file (towrite , "~/.config/nix/nix.conf");
 
-  cmd = "nix-channel --update";
-  chsrc_run(cmd);
+  chsrc_run("nix-channel --update");
 
-  xy_info("chsrc: 若您使用的是NixOS，请确认您的系统版本<version>（如22.11），并手动运行:");
+  chsrc_info("若您使用的是NixOS，请确认您的系统版本<version>（如22.11），并手动运行:");
   cmd = xy_strjoin(3, "nix-channel --add ", source.url, "nixpkgs-<version> nixpkgs");
   puts(cmd);
 
   cmd = xy_strjoin(3, "nix.settings.substituters = [ \"", source.url, "store\" ];");
-  xy_info("chsrc: 若您使用的是NixOS，请额外添加下述内容至 configuration.nix 中");
+  chsrc_info("若您使用的是NixOS，请额外添加下述内容至 configuration.nix 中");
   puts(cmd);
 
   chsrc_say_thanks(&source);
