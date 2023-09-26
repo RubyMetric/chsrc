@@ -1219,28 +1219,22 @@ os_arch_setsrc(char* option)
 
   bool arch_flag = false;
   xy_info ("chsrc: 备份文件名: /etc/pacman.d/mirrorlist.bak");
-  char* new_file ;
-
+  char* new_file;
 
   char* arch = xy_getcmd("arch",NULL);
   char* cmd;
-  if(strncmp(arch, "x86_64", 6)==0)
-  {
+
+  if (strncmp(arch, "x86_64", 6)==0) {
     arch_flag = true;
-    new_file = xy_strjoin(3,"Server = ",
-                                source.url,
-                                "archlinux/$repo/os/$arch");
+    new_file = xy_strjoin(3,"Server = ", source.url, "archlinux/$repo/os/$arch");
   }
   else {
     arch_flag = false;
-    new_file = xy_strjoin(3,"Server = ",
-                                source.url,
-                                "archlinuxarm/$repo/os/$arch");
+    new_file = xy_strjoin(3,"Server = ", source.url, "archlinuxarm/$repo/os/$arch");
   }
 
-  cmd = xy_strjoin(3,"echo ",
-                      new_file,
-                      " > /etc/pacman.d/mirrorlist");
+  // TODO: 这里用的是 > 吗？
+  cmd = xy_strjoin(3,"echo ", new_file, " > /etc/pacman.d/mirrorlist");
   chsrc_runcmd(cmd);
 
   xy_info("chsrc: 使用 archlinuxcn ");
@@ -1909,7 +1903,7 @@ wr_nix_setsrc (char* option)
   char* cmd = xy_strjoin(3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
   chsrc_runcmd(cmd);
 
-  cmd = xy_strjoin (3, "echo \"substituters = ", source.url, "store https://cache.nixos.org/\" > ~/.config/nix/nix.conf");
+  cmd = xy_strjoin (3, "echo \"substituters = ", source.url, "store https://cache.nixos.org/\" >> ~/.config/nix/nix.conf");
   chsrc_runcmd(cmd);
 
   cmd = "nix-channel --update";
