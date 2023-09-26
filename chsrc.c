@@ -856,29 +856,20 @@ os_ubuntu_setsrc (char* option)
 
   char* backup = "cp /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
   chsrc_run(backup);
-
-  // xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
+  xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
   char* arch = xy_getcmd("arch",NULL);
   char* cmd;
   if(strncmp(arch, "x86_64", 6)==0)
   {
-    cmd = xy_strjoin(3,
-      "sed -E -i \'s@https?://.*/ubuntu/?@",
-      source.url,
-      "@g\' /etc/apt/sources.list");
-
+    cmd = xy_strjoin(3, "sed -E -i \'s@https?://.*/ubuntu/?@", source.url, "@g\' /etc/apt/sources.list");
   }
   else {
-    cmd = xy_strjoin(3,
-      "sed -E -i \'s@https?://.*/ubuntu-ports/?@",
-      source.url,
-      "-ports@g\' /etc/apt/sources.list");
+    cmd = xy_strjoin(3, "sed -E -i \'s@https?://.*/ubuntu-ports/?@", source.url,
+                        "-ports@g\' /etc/apt/sources.list");
   }
 
   chsrc_run(cmd);
-
-
   chsrc_say_thanks(&source);
 }
 
@@ -1276,7 +1267,7 @@ os_gentoo_setsrc(char* option)
 
   char* towrite = xy_strjoin(3, "GENTOO_MIRRORS=\"https://", source.url, "gentoo\"");
 
-  chsrc_append_to_file (towrite, "/etc/portage/make.conf")
+  chsrc_append_to_file (towrite, "/etc/portage/make.conf");
   chsrc_say_thanks(&source);
 }
 
@@ -1460,14 +1451,8 @@ os_openkylin_setsrc (char* option)
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
-  char* cmd;
-  cmd = xy_strjoin(3,
-    "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/openkylin\\/@\\1",
-    source.url,
-    "@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
-
+  char* cmd = xy_strjoin(3, "sed -E -i \'s@https?://.*/openkylin/?@", source.url, "@g\' /etc/apt/sources.list");
   chsrc_run(cmd);
-
   chsrc_say_thanks(&source);
 }
 
