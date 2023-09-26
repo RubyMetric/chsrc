@@ -859,31 +859,30 @@ os_ubuntu_setsrc (char* option)
   source_info source = os_ubuntu_sources[index];
   chsrc_say_selection(&source);
 
-  char* backup = "cp -f /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
+  char* backup = "cp /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
   chsrc_runcmd(backup);
 
-  xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
+  // xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
   char* arch = xy_getcmd("arch",NULL);
   char* cmd;
   if(strncmp(arch, "x86_64", 6)==0)
   {
     cmd = xy_strjoin(3,
-      "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/ubuntu\\/@\\1",
+      "sed -E -i \'s@https?://.*/ubuntu/?@",
       source.url,
-      "/@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
+      "@g\' /etc/apt/sources.list");
 
   }
   else {
     cmd = xy_strjoin(3,
-      "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/ubuntu\\/@\\1",
+      "sed -E -i \'s@https?://.*/ubuntu-ports/?@",
       source.url,
-      "-ports/@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
+      "-ports@g\' /etc/apt/sources.list");
   }
 
   chsrc_runcmd(cmd);
-  // char* rm = "rm -rf /etc/apt/source.list.bak";
-  // system(rm);
+
 
   chsrc_say_thanks(&source);
 }
@@ -920,12 +919,13 @@ os_debian_setsrc (char* option)
   xy_info ("chsrc: 如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并 需要您 安装");
   xy_info ("chsrc: sudo apt install apt-transport-https ca-certificates");
 
-  char* backup = "cp -f /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
+  char* backup = "cp /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
   chsrc_runcmd(backup);
 
-  char * cmd = xy_strjoin(3,"chsrc: 备份文件名: /etc/apt/.*)http[:|\\.|\\/|a-z|A-Z]*\\/debian\\/@\\1",
-                          source.url,
-                          "@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
+  char* cmd = xy_strjoin(3,
+      "sed -E -i \'s@https?://.*/debian/?@",
+      source.url,
+      "@g\' /etc/apt/sources.list");
 
   chsrc_runcmd(cmd);
 
@@ -962,16 +962,15 @@ os_deepin_setsrc (char* option)
   source_info source = os_deepin_sources[index];
   chsrc_say_selection(&source);
 
-  char* backup = "cp -f /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
+  char* backup = "cp /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
   chsrc_runcmd(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
-  char* cmd;
-  cmd = xy_strjoin(3,
-    "sed -E \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/deepin\\/@\\1",
-    source.url,
-    "@\'< /etc/apt/sources.list.bak | cat > /etc/apt/sources.list");
+  char* cmd = xy_strjoin(3,
+      "sed -E -i \'s@https?://.*/deepin/?@",
+      source.url,
+      "@g\' /etc/apt/sources.list");
   chsrc_logcmd(cmd);
   system(cmd);
   // char* rm = "rm -rf /etc/apt/source.list.bak";
@@ -1003,10 +1002,10 @@ os_fedora_setsrc (char* option)
 
   xy_warn ("chsrc: fedora 29 及以下版本暂不支持");
 
-  char* backup = "cp -f /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora.repo.bak --backup='t'";
+  char* backup = "cp /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora.repo.bak --backup='t'";
   chsrc_runcmd(backup);
 
-  backup = "cp -f /etc/yum.repos.d/fedora-updates.repo /etc/yum.repos.d/fedora-updates.repo.bak";
+  backup = "cp /etc/yum.repos.d/fedora-updates.repo /etc/yum.repos.d/fedora-updates.repo.bak";
   chsrc_runcmd(backup);
 
   xy_info ("chsrc: 备份文件名:1. /etc/yum.repos.d/fedora.repo.bak");
@@ -1121,14 +1120,15 @@ os_kali_setsrc(char* option)
   source_info source = os_kali_sources[index];
   chsrc_say_selection(&source);
 
-  char* backup = "cp -f /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
+  char* backup = "cp /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
   chsrc_runcmd(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
 
-  char* cmd = xy_strjoin(3, "sed -i \'s@(^[^#]* .*)http[:|\\.|\\/|a-z|A-Z]*\\/kali\\/@\\1",
-                          source.url,
-                          "@g\' /etc/apt/sources.list");
+  char* cmd = xy_strjoin(3,
+      "sed -E -i \'s@https?://.*/kali/?@",
+      source.url,
+      "@g\' /etc/apt/sources.list");
 
   chsrc_runcmd(cmd);
   // char* rm = "rm -rf /etc/apt/source.list.bak";
@@ -1284,7 +1284,7 @@ os_gentoo_setsrc(char* option)
   chsrc_runcmd(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/portage/repos.conf/gentoo.conf.bak");
-  char* cmd = xy_strjoin(3,"sed -i \"s#rsync[:|\\.|\\/|a-z|A-Z]*/gentoo-portage#rsync://",
+  char* cmd = xy_strjoin(3,"sed -i \"s#rsync://.*/gentoo-portage#rsync://",
                             source.url,
                             "gentoo-portage#g");
   chsrc_runcmd(cmd);
