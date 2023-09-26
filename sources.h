@@ -370,13 +370,13 @@ os_ubuntu_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_deepin_sources[] = {
-  {&Ali,       "https://mirrors.aliyun.com/deepin/"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/deepin/"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/deepin/"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/deepin/"},
-  {&Tencent,   "https://mirrors.tencent.com/deepin/"},
-  {&Netease,   "https://mirrors.163.com/deepin/"},
-  {&Sohu,      "https://mirrors.sohu.com/deepin/"}
+  {&Ali,       "https://mirrors.aliyun.com/deepin"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/deepin"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/deepin"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/deepin"},
+  {&Tencent,   "https://mirrors.tencent.com/deepin"},
+  {&Netease,   "https://mirrors.163.com/deepin"},
+  {&Sohu,      "https://mirrors.sohu.com/deepin"}
 },
 
 
@@ -386,13 +386,13 @@ os_deepin_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_debian_sources[] = {
-  {&Ali,       "https://mirrors.aliyun.com/debian/"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/debian/"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/debian/"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/debian/"},
-  {&Tencent,   "https://mirrors.tencent.com/debian/"},
-  {&Netease,   "https://mirrors.163.com/debian/"},
-  {&Sohu,      "https://mirrors.sohu.com/debian/"}
+  {&Ali,       "https://mirrors.aliyun.com/debian"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/debian"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/debian"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/debian"},
+  {&Tencent,   "https://mirrors.tencent.com/debian"},
+  {&Netease,   "https://mirrors.163.com/debian"},
+  {&Sohu,      "https://mirrors.sohu.com/debian"}
 },
 
 
@@ -403,13 +403,13 @@ os_debian_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_fedora_sources[] = {
-  {&Ali,       "https://mirrors.aliyun.com/fedora/"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/fedora/"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/fedora/"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/fedora/"},
-  {&Tencent,   "https://mirrors.tencent.com/fedora/"},
-  {&Netease,   "https://mirrors.163.com/fedora/"},
-  {&Sohu,      "https://mirrors.sohu.com/fedora/"}
+  {&Ali,       "https://mirrors.aliyun.com/fedora"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/fedora"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/fedora"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/fedora"},
+  {&Tencent,   "https://mirrors.tencent.com/fedora"},
+  {&Netease,   "https://mirrors.163.com/fedora"},
+  {&Sohu,      "https://mirrors.sohu.com/fedora"}
 },
 
 
@@ -419,13 +419,13 @@ os_fedora_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_kali_sources[] = {
-  {&Ali,       "https://mirrors.aliyun.com/kali/"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/kali/"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/kali/"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/kali/"},
-  {&Tencent,   "https://mirrors.tencent.com/kali/"},
-  {&Netease,   "https://mirrors.163.com/kali/"},
-  {&Sohu,      "https://mirrors.sohu.com/kali/"}
+  {&Ali,       "https://mirrors.aliyun.com/kali"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/kali"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/kali"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/kali"},
+  {&Tencent,   "https://mirrors.tencent.com/kali"},
+  {&Netease,   "https://mirrors.163.com/kali"},
+  {&Sohu,      "https://mirrors.sohu.com/kali"}
 },
 
 
@@ -470,13 +470,13 @@ os_gentoo_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_opensuse_sources[] = {
-  {&Ali,       "https://mirrors.aliyun.com/opensuse/"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/opensuse/"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/opensuse/"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/opensuse/"},
-  {&Tencent,   "https://mirrors.tencent.com/opensuse/"},
-  {&Netease,   "https://mirrors.163.com/opensuse/"},
-  {&Sohu,      "https://mirrors.sohu.com/opensuse/"}
+  {&Ali,       "https://mirrors.aliyun.com/opensuse"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/opensuse"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/opensuse"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/opensuse"},
+  {&Tencent,   "https://mirrors.tencent.com/opensuse"},
+  {&Netease,   "https://mirrors.163.com/opensuse"},
+  {&Sohu,      "https://mirrors.sohu.com/opensuse"}
 },
 
 
@@ -487,13 +487,13 @@ os_opensuse_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_msys2_sources[] = {
-  {&Ali,       "https://mirrors.aliyun.com/msys2/"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/msys2/"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/msys2/"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/msys2/"},
-  {&Tencent,   "https://mirrors.tencent.com/msys2/"},
-  {&Netease,   "https://mirrors.163.com/msys2/"},
-  {&Sohu,      "https://mirrors.sohu.com/msys2/"}
+  {&Ali,       "https://mirrors.aliyun.com/msys2"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/msys2"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/msys2"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/msys2"},
+  {&Tencent,   "https://mirrors.tencent.com/msys2"},
+  {&Netease,   "https://mirrors.163.com/msys2"},
+  {&Sohu,      "https://mirrors.sohu.com/msys2"}
 },
 
 
