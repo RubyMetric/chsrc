@@ -272,12 +272,23 @@ not_root:
 #define chsrc_warn(str)    xy_warn(xy_2strjoin(App_Prefix,  (str)))
 #define chsrc_error(str)   xy_error(xy_2strjoin(App_Prefix, (str)))
 
-
 static void
 chsrc_run (const char* cmd)
 {
   xy_info (xy_2strjoin ("chsrc: 运行 ", cmd));
   system(cmd);
+}
+
+static void
+chsrc_check_file (const char* path)
+{
+  char* cmd = NULL;
+  if(xy_on_windows) {
+    cmd = xy_2strjoin ("type ", path);
+  } else {
+    cmd = xy_2strjoin ("cat ", path);
+  }
+  chsrc_run (cmd);
 }
 
 static void

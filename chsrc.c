@@ -368,13 +368,11 @@ pl_go_setsrc (char* option)
 void
 pl_rust_getsrc (char* option)
 {
-  char* cmd = NULL;
   if(xy_on_windows) {
-    cmd = "type %USERPROFILE%\\.cargo";
+    chsrc_check_file ("%USERPROFILE%\\.cargo");
   } else {
-    cmd = "cat  ~/.cargo";
+    chsrc_check_file ("~/.cargo");
   }
-  chsrc_run(cmd);
 }
 
 /**
@@ -728,13 +726,11 @@ pl_r_getsrc (char* option)
   // options()$repos
   // options()$BioC_mirror
   //
-  char* cmd = NULL;
   if(xy_on_windows) {
-    cmd = "type %USERPROFILE%\\Documents\\.Rprofile";
+    chsrc_check_file ("%USERPROFILE%\\Documents\\.Rprofile");
   } else {
-    cmd = "cat ~/.Rprofile";
+    chsrc_check_file ("~/.Rprofile");
   }
-  chsrc_run(cmd);
 }
 
 /**
@@ -787,13 +783,11 @@ pl_r_setsrc (char* option)
 void
 pl_julia_getsrc (char* option)
 {
-  char* cmd = NULL;
   if(xy_on_windows) {
-    cmd = "type %USERPROFILE%\\.julia\\config\\startup.jl";
+    chsrc_check_file ("%USERPROFILE%\\.julia\\config\\startup.jl");
   } else {
-    cmd = "cat  ~/.julia/config/startup.jl";
+    chsrc_check_file ("~/.julia/config/startup.jl");
   }
-  chsrc_run(cmd);
 }
 
 /**
@@ -838,8 +832,7 @@ pl_julia_setsrc (char* option)
 void
 os_ubuntu_getsrc(char* option)
 {
-  char* cmd = "cat /etc/apt/sources.list";
-  chsrc_run(cmd);
+  chsrc_check_file ("/etc/apt/sources.list");
 }
 
 /**
@@ -894,8 +887,7 @@ os_ubuntu_setsrc (char* option)
 void
 os_debian_getsrc(char* option)
 {
-  char* cmd = "cat /etc/apt/sources.list";
-  chsrc_run(cmd);
+  chsrc_check_file ("/etc/apt/sources.list");
 }
 
 /**
@@ -942,8 +934,7 @@ os_debian_setsrc (char* option)
 void
 os_deepin_getsrc(char* option)
 {
-  char* cmd = "cat /etc/apt/sources.list";
-  chsrc_run(cmd);
+  chsrc_check_file ("/etc/apt/sources.list");
 }
 
 /**
@@ -1613,8 +1604,7 @@ os_freebsd_setsrc (char* option)
 void
 os_netbsd_getsrc (char* option)
 {
-  char* cmd = "cat /usr/pkg/etc/pkgin/repositories.conf";
-  chsrc_run(cmd);
+  chsrc_check_file ("/usr/pkg/etc/pkgin/repositories.conf");
 }
 
 /**
@@ -1663,8 +1653,7 @@ os_netbsd_setsrc(char* option)
 void
 os_openbsd_getsrc (char* option)
 {
-  char* cmd = "cat /etc/installurl";
-  chsrc_run(cmd);
+  chsrc_check_file ("/etc/installurl");
 }
 
 /**
