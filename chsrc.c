@@ -1142,13 +1142,13 @@ os_msys2_setsrc(char* option)
   chsrc_say_selection(&source);
 
 
-  char* backup = "cp -f /etc/pacman.d/mirrorlist.mingw32 /etc/pacman.d/mirrorlist.mingw32.bak";
+  char* backup = "cp /etc/pacman.d/mirrorlist.mingw32 /etc/pacman.d/mirrorlist.mingw32.bak";
   chsrc_run(backup);
 
-  backup = "cp -f /etc/pacman.d/mirrorlist.mingw64 /etc/pacman.d/mirrorlist.mingw64.bak";
+  backup = "cp /etc/pacman.d/mirrorlist.mingw64 /etc/pacman.d/mirrorlist.mingw64.bak";
   chsrc_run(backup);
 
-  backup = "cp -f /etc/pacman.d/mirrorlist.msys /etc/pacman.d/mirrorlist.msys.bak";
+  backup = "cp /etc/pacman.d/mirrorlist.msys /etc/pacman.d/mirrorlist.msys.bak";
   chsrc_run(backup);
 
   xy_info ("chsrc: 备份文件名: 1. /etc/pacman.d/mirrorlist.mingw32.bak");
@@ -1197,7 +1197,7 @@ os_arch_setsrc(char* option)
   chsrc_say_selection(&source);
 
 
-  char* backup = "cp -f /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak --backup='t'";
+  char* backup = "cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak --backup='t'";
   chsrc_run(backup);
 
 
@@ -1446,7 +1446,7 @@ os_openkylin_setsrc (char* option)
   source_info source = os_openkylin_sources[index];
   chsrc_say_selection(&source);
 
-  char* backup = "cp -f /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
+  char* backup = "cp /etc/apt/sources.list /etc/apt/sources.list.bak --backup='t'";
   chsrc_run(backup);
 
   xy_info ("chsrc: 备份文件名: /etc/apt/sources.list.bak");
@@ -1522,7 +1522,7 @@ os_freebsd_setsrc (char* option)
 
   /* https://help.mirrors.cernet.edu.cn/FreeBSD-ports/ 的换源方法 */
   /*
-  char* ports_cp="cp -f /etc/make.conf /etc/make.conf.bak";
+  char* ports_cp="cp /etc/make.conf /etc/make.conf.bak";
   chsrc_runcmd(ports_cp);
 
   char* ports_cmd =xy_strjoin(3, "cat MASTER_SITE_OVERRIDE?=http://",
@@ -1535,7 +1535,7 @@ os_freebsd_setsrc (char* option)
 
   /* 不再换 portsnap */
   /*
-  char* portsnap_cp="cp -f /etc/portsnap.conf /etc/portsnap.conf.bak";
+  char* portsnap_cp="cp /etc/portsnap.conf /etc/portsnap.conf.bak";
   chsrc_runcmd(portsnap_cp);
 
   char* portsnap_cmd =xy_strjoin(3,"s@(.*)SERVERNAME=[\\.|a-z|A-Z]*@\\1SERVERNAME=",
@@ -1553,7 +1553,7 @@ os_freebsd_setsrc (char* option)
   // HELP: 暂时似乎没有源提供
   /*
   xy_info("chsrc: 3. 修改 freebsd-update 源");
-  char* update_cp="cp -f /etc/freebsd-update.conf /etc/freebsd-update.conf.bak";
+  char* update_cp="cp /etc/freebsd-update.conf /etc/freebsd-update.conf.bak";
   chsrc_runcmd(update_cp);
 
 
@@ -1601,7 +1601,7 @@ os_netbsd_setsrc(char* option)
   chsrc_say_selection(&source);
 
 
-  char* backup = "cp -f /usr/pkg/etc/pkgin/repositories.conf /usr/pkg/etc/pkgin/repositories.conf.bak";
+  char* backup = "cp /usr/pkg/etc/pkgin/repositories.conf /usr/pkg/etc/pkgin/repositories.conf.bak";
   chsrc_run(backup);
 
   xy_info ("chsrc: 备份文件名: /usr/pkg/etc/pkgin/repositories.conf.bak");
