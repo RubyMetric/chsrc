@@ -35,7 +35,7 @@ pl_ruby_setsrc (char* option)
   char* check_cmd = xy_str_to_quietcmd("gem -v");
   bool exist = does_the_program_exist (check_cmd, "gem");
   if (!exist) {
-    xy_error ("chsrc: 未找到 gem 命令，请检查是否存在");
+    chsrc_error ("未找到 gem 命令，请检查是否存在");
     return;
   }
 
@@ -68,7 +68,7 @@ pl_ruby_setsrc (char* option)
   check_cmd = xy_str_to_quietcmd("bundle -v");
   exist = does_the_program_exist (check_cmd, "bundle");
   if (!exist) {
-    xy_error ("chsrc: 未找到 bundle 命令，请检查是否存在");
+    chsrc_error ("未找到 bundle 命令，请检查是否存在");
     return;
   }
 
@@ -77,8 +77,8 @@ pl_ruby_setsrc (char* option)
 
   chsrc_say_thanks(&source);
   puts("");
-  xy_warn("chsrc: 维护者提醒您: Ruby的镜像源目前仅有腾讯和RubyChina实现正确");
-  xy_warn("chsrc: 而其它如Tuna,Bfsu,Ali目前都实现的有问题，请勿使用");
+  chsrc_warn("维护者提醒您: Ruby的镜像源目前仅有腾讯和RubyChina实现正确");
+  chsrc_warn("而其它如Tuna,Bfsu,Ali目前都实现的有问题，请勿使用");
 }
 
 
@@ -104,7 +104,7 @@ pl_python_check_cmd_ (char** prog)
   }
 
   if (!exist) {
-    xy_error ("chsrc: 未找到 Python 相关命令，请检查是否存在");
+    chsrc_error ("未找到 Python 相关命令，请检查是否存在");
     exit(1);
   }
 }
@@ -156,7 +156,7 @@ pl_nodejs_check_cmd_ (bool* npm_exist, bool* yarn_exist)
   *yarn_exist = does_the_program_exist (check_cmd, "yarn");
 
   if (!*npm_exist && !*yarn_exist) {
-    xy_error ("chsrc: 未找到 npm 或 yarn 命令，请检查是否存在（其一）");
+    chsrc_error ("未找到 npm 或 yarn 命令，请检查是否存在其一");
     exit(1);
   }
 }
@@ -223,7 +223,7 @@ pl_perl_check_cmd_ ()
   bool exist = does_the_program_exist (check_cmd, "perl");
 
   if (!exist) {
-    xy_error ("chsrc: 未找到 perl 命令，请检查是否存在");
+    chsrc_error ("未找到 perl 命令，请检查是否存在");
     exit(1);
   }
 }
@@ -260,8 +260,8 @@ pl_perl_setsrc (char* option)
   "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('urllist', 'unshift', '", source.url, "'); CPAN::HandleConfig->commit()\"");
   xy_run(cmd);
 
-  xy_warn ("chsrc: 请您使用 perl -v 以及 cpan -v，若 Perl >= v5.36 或 CPAN >= 2.29，请额外手动调用下面的命令");
-  xy_warn ("       perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('pushy_https', 0);; CPAN::HandleConfig->commit()\"");
+  chsrc_warn ("请您使用 perl -v 以及 cpan -v，若 Perl >= v5.36 或 CPAN >= 2.29，请额外手动调用下面的命令");
+  puts("perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('pushy_https', 0);; CPAN::HandleConfig->commit()\"");
   chsrc_say_thanks(&source);
 }
 
@@ -274,7 +274,7 @@ pl_php_check_cmd_()
   bool exist = does_the_program_exist (check_cmd, "composer");
 
   if (!exist) {
-    xy_error ("chsrc: 未找到 composer 命令，请检查是否存在");
+    chsrc_error ("未找到 composer 命令，请检查是否存在");
     exit(1);
   }
 }
@@ -324,7 +324,7 @@ pl_go_check_cmd_ ()
   bool exist = does_the_program_exist (check_cmd, "go");
 
   if (!exist) {
-    xy_error ("chsrc: 未找到 go 相关命令，请检查是否存在");
+    chsrc_error ("未找到 go 相关命令，请检查是否存在");
     exit(1);
   }
 }
@@ -401,7 +401,7 @@ pl_rust_setsrc (char* option)
     "[source.mirror]\n"
     "registry = \"sparse+", source.url, "\"");
 
-  xy_warn ("chsrc: 请您手动写入以下内容到 ~/.cargo 文件中");
+  chsrc_warn ("请您手动写入以下内容到 ~/.cargo 文件中:");
   puts(file);
   chsrc_say_thanks(&source);
 }
@@ -411,7 +411,7 @@ pl_rust_setsrc (char* option)
 void
 pl_dotnet_getsrc (char* option)
 {
-  xy_error ("chsrc: 暂时无法查看NuGet源，若有需求，请您提交issue");
+  chsrc_error ("暂时无法查看NuGet源，若有需求，请您提交issue");
 }
 
 /**
@@ -420,7 +420,7 @@ pl_dotnet_getsrc (char* option)
 void
 pl_dotnet_setsrc (char* option)
 {
-  xy_error ("chsrc: 暂时无法为NuGet换源，若有需求，请您提交issue");
+  chsrc_error ("暂时无法为NuGet换源，若有需求，请您提交issue");
 }
 
 
@@ -436,7 +436,7 @@ pl_java_check_cmd_(bool* maven_exist, bool* gradle_exist)
   *gradle_exist = does_the_program_exist (check_cmd, "gradle");
 
   if (! *maven_exist && ! *gradle_exist) {
-    xy_error ("chsrc: maven 与 gradle 命令均未找到，请检查是否存在（其一）");
+    chsrc_error ("maven 与 gradle 命令均未找到，请检查是否存在（其一）");
     exit(1);
   }
 }
@@ -473,7 +473,6 @@ pl_java_getsrc (char* option)
 
   char* echo = xy_2strjoin("chsrc: 请查看 ", maven_config);
   xy_info (echo);
-  // system(cmd);
 }
 
 /**
@@ -522,7 +521,7 @@ pl_java_setsrc (char* option)
     "  }\n"
     "}");
 
-    xy_info ("chsrc: 请在您的 build.gradle 中添加:");
+    chsrc_info ("请在您的 build.gradle 中添加:");
     puts (file);
   }
   chsrc_say_thanks(&source);
@@ -543,7 +542,7 @@ pl_clojure_setsrc(char* option)
   source_info source = pl_clojure_sources[index];
   chsrc_say_selection (&source);
 
-  xy_warn("chsrc: 抱歉，Clojure换源较复杂，您可手动查阅并换源:");
+  chsrc_warn("抱歉，Clojure换源较复杂，您可手动查阅并换源:");
   puts(source.url);
   chsrc_say_thanks (&source);
 }
@@ -669,7 +668,7 @@ pl_ocaml_check_cmd_()
   bool exist = does_the_program_exist (check_cmd, "opam");
 
   if (!exist) {
-    xy_error ("chsrc: 未找到 opam 命令，请检查是否存在");
+    chsrc_error ("未找到 opam 命令，请检查是否存在");
     exit(1);
   }
 }
@@ -706,7 +705,7 @@ pl_ocaml_setsrc(char* option)
 
   xy_run(cmd);
 
-  xy_info("chsrc: 如果是首次使用 opam ，请使用以下命令进行初始化");
+  chsrc_info("如果是首次使用 opam ，请使用以下命令进行初始化");
   puts(xy_2strjoin("opam init default ", source.url));
 
   chsrc_say_thanks (&source);

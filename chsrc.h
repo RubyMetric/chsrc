@@ -266,6 +266,12 @@ not_root:
 }
 
 
+#define App_Prefix "chsrc: "
+#define chsrc_success(str) xy_success(xy_2strjoin(App_Prefix, (str)))
+#define chsrc_info(str)    xy_info(xy_2strjoin(App_Prefix,  (str)))
+#define chsrc_warn(str)    xy_warn(xy_2strjoin(App_Prefix,  (str)))
+#define chsrc_error(str)   xy_error(xy_2strjoin(App_Prefix, (str)))
+
 
 /* Target Info */
 typedef struct {
