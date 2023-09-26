@@ -809,17 +809,17 @@ pl_julia_setsrc (char* option)
   source_info source = pl_julia_sources[index];
   chsrc_say_selection(&source);
 
-  const char* file = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
+  const char* towrite = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
 
-  char* cmd = NULL;
-  if (xy_on_windows)
-    cmd = xy_strjoin(4, xy_str_to_quietcmd("md %USERPROFILE%\\.julia\\config"),
-          "& echo ", file, " >> %USERPROFILE%/.julia/config/startup.jl");
-  else
-    cmd = xy_strjoin(4, xy_str_to_quietcmd("mkdir -p ~/.julia/config"),
-        ";echo '", file, "' >> ~/.julia/config/startup.jl");
+  if (xy_on_windows) {
+    chsrc_run (xy_str_to_quietcmd ("md %USERPROFILE%\\.julia\\config"));
+    chsrc_append_to_file (towrite, "%USERPROFILE%/.julia/config/startup.jl");
+  }
+  else {
+    chsrc_run (xy_str_to_quietcmd ("mkdir -p ~/.julia/config"));
+    chsrc_append_to_file (towrite, "~/.julia/config/startup.jl");
+  }
 
-  chsrc_run(cmd);
   chsrc_say_thanks(&source);
 }
 
@@ -1522,46 +1522,44 @@ os_freebsd_setsrc (char* option)
 
   /* https://help.mirrors.cernet.edu.cn/FreeBSD-ports/ 的换源方法 */
   /*
-  char* ports_cp="cp /etc/make.conf /etc/make.conf.bak";
-  chsrc_runcmd(ports_cp);
+    char* ports_cp="cp /etc/make.conf /etc/make.conf.bak";
+    chsrc_run(ports_cp);
 
-  char* ports_cmd =xy_strjoin(3, "cat MASTER_SITE_OVERRIDE?=http://",
-                                 source.url,
-                                 "/freebsd-ports/ >> /etc/make.conf");
-  chsrc_runcmd(ports_cmd);
+    char* ports = xy_strjoin(3, "MASTER_SITE_OVERRIDE?=http://", source.url, "/freebsd-ports/");
+    chsrc_append_to_file (ports, "/etc/make.conf");
   */
 
 
 
   /* 不再换 portsnap */
   /*
-  char* portsnap_cp="cp /etc/portsnap.conf /etc/portsnap.conf.bak";
-  chsrc_runcmd(portsnap_cp);
+    char* portsnap_cp="cp /etc/portsnap.conf /etc/portsnap.conf.bak";
+    chsrc_runcmd(portsnap_cp);
 
-  char* portsnap_cmd =xy_strjoin(3,"s@(.*)SERVERNAME=[\\.|a-z|A-Z]*@\\1SERVERNAME=",
-                                source.url,
-                                "@g < /etc/portsnap.conf.bak | cat > /etc/portsnap.conf");
-  chsrc_runcmd(portsnap_cmd);
+    char* portsnap =xy_strjoin(3,"s@(.*)SERVERNAME=[\\.|a-z|A-Z]*@\\1SERVERNAME=", source.url,
+                                "@g < /etc/portsnap.conf.bak");
 
+    chsrc_overwrite_file (portsnap, "/etc/portsnap.conf");
 
-  xy_info("chsrc: portsnap sources changed");
-  xy_info("chsrc: 获取portsnap更新使用此命令: 'portsnap fetch extract'");
+    chsrc_info("portsnap sources changed");
+    chsrc_info("获取portsnap更新使用此命令: 'portsnap fetch extract'");
   */
 
 
 
-  // HELP: 暂时似乎没有源提供
+  // HELP: 暂时没有源提供
   /*
-  xy_info("chsrc: 3. 修改 freebsd-update 源");
-  char* update_cp="cp /etc/freebsd-update.conf /etc/freebsd-update.conf.bak";
-  chsrc_runcmd(update_cp);
+    chsrc_info("3. 修改 freebsd-update 源");
 
+    char* update_cp="cp /etc/freebsd-update.conf /etc/freebsd-update.conf.bak";
+    chsrc_runcmd(update_cp);
 
-  char* update_cmd =xy_strjoin(3,"s@(.*)SERVERNAME [\\.|a-z|A-Z]*@\\1SERVERNAME ",
+    char* update =xy_strjoin(3,"s@(.*)SERVERNAME [\\.|a-z|A-Z]*@\\1SERVERNAME ",
                                 source.url,
-                                "@g < /etc/freebsd-update.conf.bak | cat > /etc/freebsd-update.conf");
-  chsrc_runcmd(update_cmd);
-   */
+                                "@g < /etc/freebsd-update.conf.bak");
+
+    chsrc_overwrite_file (update, "/etc/freebsd-update.conf");
+  */
 
   chsrc_say_thanks(&source);
 }
