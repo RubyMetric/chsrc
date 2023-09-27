@@ -290,10 +290,7 @@ chsrc_check_file (const char* path)
 {
   char* cmd = NULL;
   if(xy_on_windows) {
-    if (xy_str_start_with(path, "~/")){
-      path = xy_2strjoin("%USERPROFILE%\\", xy_str_delete_prefix(path, "~/"));
-      path = xy_str_gsub(path, "/", "\\");
-    }
+    path = xy_unix_path_to_win (path);
     cmd = xy_2strjoin ("type ", path);
   } else {
     cmd = xy_2strjoin ("cat ", path);

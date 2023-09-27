@@ -507,7 +507,7 @@ _xy_win_powershell_profile ()
 }
 
 char*
-_xy_win_powershellv5_profile()
+_xy_win_powershellv5_profile ()
 {
   return xy_2strjoin(xy_os_home, "\\Documents\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1");
 }
@@ -517,7 +517,7 @@ _xy_win_powershellv5_profile()
  * @note Windows上，`path` 不要夹带变量名，因为最终 access() 不会帮你转换
  */
 static bool
-xy_file_exist(char* path)
+xy_file_exist (char* path)
 {
   char* newpath = path;
   if (xy_on_windows)
@@ -527,6 +527,19 @@ xy_file_exist(char* path)
     }
   }
   return access(newpath, 0) ? false : true;
+}
+
+
+static const char*
+xy_unix_path_to_win (const char* path)
+{
+  path = xy_str_strip(path); // 防止开发者多写了空格
+  if (xy_str_start_with(path, "~/")){
+    // 或 %USERPROFILE%
+    path = xy_strjoin(3, xy_os_home,  "\\", xy_str_delete_prefix(path, "~/"));
+    path = xy_str_gsub(path, "/", "\\");
+  }
+  return path;
 }
 
 #endif
