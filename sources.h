@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2023-09-22>
+ * Last modified : <2023-09-27>
  *
  * sources:
  *
@@ -540,11 +540,12 @@ os_void_sources[] = {
 
 
 /**
- * 2023-09-24 更新
+ * 2023-09-27 更新
  *
  * @note 该源需要 FreeBSD 中文社区积极参与维护
  *
  * @ccmywish: [2023-09-24] 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports
+ * @ccmywish: [2023-09-27] 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数
  */
 os_freebsd_sources[] = {
   {&Ustc,      "mirrors.ustc.edu.cn"},

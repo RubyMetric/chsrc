@@ -1244,14 +1244,12 @@ os_openkylin_setsrc (char* option)
 
 
 /**
- * 参考: https://book.bsdcn.org/di-3-zhang-ruan-jian-yuan-ji-bao-guan-li-qi/di-3.2-jie-freebsd-huan-yuan-fang-shi.html
+ * 参考:
+ *  1. https://book.bsdcn.org/di-3-zhang-ruan-jian-yuan-ji-bao-guan-li-qi/di-3.2-jie-freebsd-huan-yuan-fang-shi.html
+ *  2. https://help.mirrors.cernet.edu.cn/FreeBSD-ports/
  *
  * 据 @ykla,
  *   FreeBSD 有四类源：pkg、ports、portsnap、update，其中 portsnap 在 FreeBSD 14 已经被移除了
- *
- *   目前缺少update源，所以我们暂时只提供 pkg 和 ports 源的替换
- *
- * HELP: 未经测试
  */
 void
 os_freebsd_setsrc (char* option)
@@ -1263,7 +1261,7 @@ os_freebsd_setsrc (char* option)
   source_info source = os_freebsd_sources[index];
   chsrc_say_selection(&source);
 
-  xy_info("chsrc: 1. 添加 freebsd-pkg 源 (二进制安装包)");
+  chsrc_info("1. 添加 freebsd-pkg 源 (二进制安装包)");
   char* pkg_mkdir = "mkdir -p /usr/local/etc/pkg/repos";
   char* pkg_createconf = xy_strjoin(3, "ee /usr/local/etc/pkg/repos/", source.mirror->code, ".conf");
   chsrc_run(pkg_mkdir);
@@ -1271,43 +1269,53 @@ os_freebsd_setsrc (char* option)
 
 
   char* pkg_content = xy_strjoin(4,
-                      source.mirror->code, ": { \
-                      url: \"pkg+=http://", source.url, "/freebsd-pkg/${ABI}/latest\",\
-                      mirror_type: \"srv\",\
-                      signature_type: \"none\",\
-                      fingerprints: \"/usr/share/keys/pkg\",\
-                      enabled: yes\
-                    }");
+                      source.mirror->code, ": { \n"
+                      " url: \"http://", source.url, "/freebsd-pkg/${ABI}/latest\",\n"
+                      " mirror_type: \"srv\",\n"
+                      " signature_type: \"none\",\n"
+                      " fingerprints: \"/usr/share/keys/pkg\",\n"
+                      " enabled: yes\n"
+                    "}\n"
+                    "FreeBSD: { enabled: no }"
+                    );
 
   char* pkg_conf = xy_strjoin(3, "/usr/local/etc/pkg/repos/", source.mirror->code, ".conf");
   chsrc_overwrite_file (pkg_content, pkg_conf);
 
-  xy_warn("chsrc: 若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将 'http' 改成 'https' ，最后使用 'pkg update -f' 刷新缓存即可\n");
+  chsrc_warn("若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将'http'改成'https'，最后使用'pkg update -f'刷新缓存即可\n");
 
 
-
-  xy_info("chsrc: 2. 修改 freebsd-ports 源");
+  chsrc_info("2. 修改 freebsd-ports 源");
+  // @ccmywish: [2023-09-27] 据 @ykla , NJU的freebsd-ports源没有设置 Git，
+  //                         但是我认为由于使用Git还是要比非Git方便许多，我们尽可能坚持使用Git
+  //                         而 gitup 又要额外修改它自己的配置，比较麻烦
   bool git_exist = does_the_program_exist (xy_str_to_quietcmd("git version"), "git");
   if (git_exist) {
+    if (xy_streql("nju",source.mirror->code)) {
+      source = os_freebsd_sources[index-1]; // 使用NJU的前一个源，即USTC源
+    }
     char* git_cmd = xy_strjoin(3, "git clone --depth 1 https://", source.url, "/freebsd-ports/ports.git /usr/ports");
     chsrc_run(git_cmd);
-  } else {
+    source = os_freebsd_sources[index]; // 恢复至选中的源
+    chsrc_warn("下次更新请使用 git -C /usr/ports pull 而非使用 gitup");
+  }
+  else {
     char* fetch  = xy_strjoin(3, "fetch https://", source.url, "/freebsd-ports/ports.tar.gz");  // 70多MB
     char* unzip  = "tar -zxvf ports.tar.gz -C /usr/ports";
     char* delete = "rm ports.tar.gz";
     chsrc_run(fetch);
     chsrc_run(unzip);
     chsrc_run(delete);
+    chsrc_warn("下次更新请重新下载内容至 /usr/ports");
   }
 
-  /* https://help.mirrors.cernet.edu.cn/FreeBSD-ports/ 的换源方法 */
-  /*
-    char* ports_cp="cp /etc/make.conf /etc/make.conf.bak";
-    chsrc_run(ports_cp);
 
-    char* ports = xy_strjoin(3, "MASTER_SITE_OVERRIDE?=http://", source.url, "/freebsd-ports/");
-    chsrc_append_to_file (ports, "/etc/make.conf");
-  */
+  chsrc_info("3. 指定 port 源");
+  // https://help.mirrors.cernet.edu.cn/FreeBSD-ports/
+  chsrc_backup ("/etc/make.conf");
+
+  char* ports = xy_strjoin(3, "MASTER_SITE_OVERRIDE?=http://", source.url, "/freebsd-ports/distfiles/${DIST_SUBDIR}/");
+  chsrc_append_to_file (ports, "/etc/make.conf");
 
 
 
@@ -1326,8 +1334,8 @@ os_freebsd_setsrc (char* option)
   */
 
 
-
   // HELP: 暂时没有源提供
+  chsrc_warn ("4. 抱歉，目前境内无 freebsd-update 源，若存在请报告issue，谢谢");
   /*
     chsrc_info("3. 修改 freebsd-update 源");
 
