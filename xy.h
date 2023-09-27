@@ -431,22 +431,21 @@ xy_str_delete_suffix (const char* str, const char* suffix)
 static char*
 xy_str_strip (const char* str)
 {
-  const char* lf   = "\n";
-  const char* crlf = "\r\n";
-
   char* new = xy_strdup(str);
 
-  while (xy_str_start_with(new, lf)) {
-    new = xy_str_delete_prefix(new, lf);
+  while (strchr("\n\r\v\t\f ", new[0]))
+  {
+    new += 1;
   }
-  while (xy_str_start_with(new, crlf)) {
-    new = xy_str_delete_prefix(new, crlf);
-  }
-  while (xy_str_end_with(new, lf)) {
-    new = xy_str_delete_suffix(new, lf);
-  }
-  while (xy_str_end_with(new, crlf)) {
-    new = xy_str_delete_suffix(new, crlf);
+
+  size_t len = strlen(new);
+
+  char* last = new + len - 1;
+
+  while (strchr("\n\r\v\t\f ", *last))
+  {
+    *last = '\0';
+    last -= 1;
   }
   return new;
 }
