@@ -456,12 +456,16 @@ xy_str_strip (const char* str)
 
 
 /**
- * 执行cmd，返回其最后一行输出结果
+ * 执行cmd，返回其最后某行输出结果
+ *
+ * @param  cmd   要执行的命令
+ * @param   n    命令打印的结果行，0 表示最后一行，n (n>0) 表示第n行
+ * @param  func  对读取的行执行函数
  *
  * @note 返回的字符串最后面可能有换行符号
  */
 static char*
-xy_getcmd(const char* cmd, bool (*func)(const char*))
+xy_getcmd (const char* cmd, unsigned long n, void (*func)(const char*))
 {
   const int size = 512;
   char* buf = (char*) malloc(size);
@@ -473,10 +477,13 @@ xy_getcmd(const char* cmd, bool (*func)(const char*))
   }
 
   char* ret = NULL;
+  unsigned long count = 0;
 
   while (true) {
-    if(NULL==fgets(buf, size, stream)) break;
+    if (NULL==fgets(buf, size, stream)) break;
     ret = buf;
+    count += 1;
+    if (n==count) break;
     if (func) { func(buf); }
   }
 

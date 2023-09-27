@@ -19,10 +19,19 @@
 void
 pl_ruby_getsrc (char* option)
 {
-  char* cmd = "gem sources";
-  chsrc_run(cmd);
-  cmd = "bundle config get mirror.https://rubygems.org";
-  chsrc_run(cmd);
+  chsrc_run("gem sources");
+  chsrc_run("bundle config get mirror.https://rubygems.org");
+}
+
+void
+pl_ruby_remove_gem_source (const char* source)
+{
+  char* cmd = NULL;
+  if (xy_str_start_with(source, "http")){
+    cmd = xy_str_delete_suffix(source, "\n");
+    cmd = xy_2strjoin("gem sources -r ", cmd);
+    chsrc_run(cmd);
+  }
 }
 
 /**
@@ -46,17 +55,7 @@ pl_ruby_setsrc (char* option)
 
   char* cmd = NULL;
 
-  FILE* fp = popen("gem sources -l", "r");
-  char buf[512] = {0};
-  while(NULL!=fgets(buf, 512, fp)) {
-    if (xy_str_start_with(buf, "http")){
-      cmd = xy_str_delete_suffix(buf, "\n");
-      cmd = xy_2strjoin("gem sources -r ", cmd);
-      chsrc_run(cmd);
-    }
-    memset(buf, 0, 512);
-  }
-  pclose(fp);
+  xy_getcmd ("gem sources -l", 0, pl_ruby_remove_gem_source);
 
   cmd = xy_2strjoin("gem source -a ", source.url);
   chsrc_run(cmd);
@@ -438,14 +437,8 @@ pl_java_check_cmd_(bool* maven_exist, bool* gradle_exist)
 char*
 pl_java_find_maven_config_ ()
 {
-  FILE* fp = popen("mvn -v", "r");
-  char buf[512];
-  fgets(buf, 512, fp);
-  memset(buf, 0, 512);
-  fgets(buf, 512, fp);
-  pclose(fp);
+  char* buf = xy_getcmd ("mvn -v", 2, NULL);
   char* maven_home = xy_str_delete_prefix(buf, "Maven home: ");
-  // xy_info (buf);
   maven_home = xy_str_strip(maven_home);
 
   char* maven_config = xy_uniform_path(xy_2strjoin(maven_home, "/conf/settings.xml"));
@@ -794,7 +787,7 @@ os_ubuntu_setsrc (char* option)
 
   chsrc_backup ("/etc/apt/sources.list");
 
-  char* arch = xy_getcmd("arch", NULL);
+  char* arch = xy_getcmd("arch", 0, NULL);
   char* cmd  = NULL;
   if (strncmp(arch, "x86_64", 6)==0)
   {
@@ -1050,7 +1043,7 @@ os_arch_setsrc(char* option)
 
   bool  arch_flag = false;
   char* new_file  = NULL;
-  char* arch = xy_getcmd("arch", NULL);
+  char* arch = xy_getcmd("arch", 0, NULL);
 
   if (strncmp(arch, "x86_64", 6)==0) {
     arch_flag = true;
@@ -1400,9 +1393,9 @@ os_netbsd_setsrc(char* option)
 
   chsrc_backup ("/usr/pkg/etc/pkgin/repositories.conf");
 
-  char* arch = xy_getcmd("arch", NULL);
+  char* arch = xy_getcmd("arch", 0, NULL);
   char* vercmd  = "cat /etc/os-release | grep \"VERSION=\" | grep -Po \"[8-9].[0-9]+\"";
-  char* version = xy_getcmd(vercmd, NULL);
+  char* version = xy_getcmd(vercmd, 0, NULL);
 
   char* url = xy_strjoin(5, source.url, arch, "/", version, "/All");
   chsrc_overwrite_file (url, "/usr/pkg/etc/pkgin/repositories.conf");

@@ -97,7 +97,7 @@ does_the_input_mirror_exist (source_info* sources, size_t size, char* target, ch
 
 
 /**
- * 该函数来自 oh-my-mirrorz.py，由我(@ccmywish)翻译为C语言，但功劳和版权属于原作者
+ * 该函数来自 oh-my-mirrorz.py，由 @ccmywish 翻译为C语言，但功劳和版权属于原作者
  */
 char*
 to_human_readable_speed (double speed)
@@ -125,7 +125,7 @@ to_human_readable_speed (double speed)
 
 /**
  * 测速代码参考自 https://github.com/mirrorz-org/oh-my-mirrorz/blob/master/oh-my-mirrorz.py
- * 功劳和版权属于原作者，由我(@ccmywish)修改为C语言，并做了额外调整。
+ * 功劳和版权属于原作者，由 @ccmywish 修改为C语言，并做了额外调整
  *
  * @return 返回测得的速度，若出错，返回-1
  */
@@ -150,15 +150,11 @@ test_speed_url (const char* url)
 
   // xy_info (xy_2strjoin("chsrc: 测速 ", url));
 
-  FILE* fp = popen(curl_cmd, "r");
-  char buf[64] = {0};
-  while(NULL!=fgets(buf, 64, fp));
-  // puts(buf);
-
+  char* buf = xy_getcmd (curl_cmd, 0, NULL);
   // 如果尾部有换行，删除
-  char* last_lf = strrchr(buf, '\n');
-  if (last_lf) *last_lf = '\0';
+  buf = xy_str_strip (buf);
 
+  // 分隔两部分数据
   char* split = strchr(buf, ' ');
   if (split) *split = '\0';
 
@@ -168,8 +164,8 @@ test_speed_url (const char* url)
   char* speedstr = to_human_readable_speed(speed);
 
   if (200!=http_code) {
-    char* httpcodestr = xy_str_to_yellow(xy_2strjoin("HTTP码 ", buf));
-    puts (xy_strjoin(3, speedstr, " | ",  httpcodestr));
+    char* httpcodestr = xy_str_to_yellow (xy_2strjoin("HTTP码 ", buf));
+    puts (xy_strjoin (3, speedstr, " | ",  httpcodestr));
   } else {
     puts (speedstr);
   }
@@ -262,10 +258,7 @@ ensure_root ()
 {
   char* euid = getenv("$EUID");
   if (NULL==euid) {
-    FILE* fp = popen("id -u", "r");
-    char buf[10] = {0};
-    fgets(buf, 10, fp);
-    fclose(fp);
+    char* buf = xy_getcmd("id -u", 0, NULL);
     if (0!=atoi(buf)) goto not_root;
     else return;
   } else {
