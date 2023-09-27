@@ -1750,21 +1750,21 @@ target_info
 
 #define targetinfo(t) (const char*)t
 static const char
-*pl_ruby  [] = {"gem",   "ruby",    "rb",    "rubygems",        NULL,  targetinfo(&pl_ruby_target)},
-*pl_python[] = {"pip",   "python",  "py",    "pypi",            NULL,  targetinfo(&pl_python_target)},
-*pl_nodejs[] = {"npm",   "node",    "js",    "nodejs", "yarn",  NULL,  targetinfo(&pl_nodejs_target)},
+*pl_ruby  [] = {"gem",   "ruby",    "rubygem", "rb", "rubygems",NULL, targetinfo(&pl_ruby_target)},
+*pl_python[] = {"pip",   "python",  "pypi",    "py",            NULL, targetinfo(&pl_python_target)},
+*pl_nodejs[] = {"npm",   "node",    "nodejs",  "js", "yarn",    NULL, targetinfo(&pl_nodejs_target)},
 *pl_perl  [] = {"perl",  "cpan",                         NULL,  targetinfo(&pl_perl_target)},
 *pl_php   [] = {"php",   "composer",                     NULL,  targetinfo(&pl_php_target)},
 *pl_lua   [] = {"lua",   "luarocks",                     NULL,  targetinfo(&pl_lua_target)},
 *pl_go    [] = {"go",    "golang",  "goproxy",           NULL,  targetinfo(&pl_go_target)} ,
 *pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  targetinfo(&pl_rust_target)},
 *pl_java  [] = {"java",  "maven",   "gradle",            NULL,  targetinfo(&pl_java_target)},
-*pl_clojure[] ={"clojure","clojars","leiningen", "lein", NULL,  targetinfo(&pl_clojure_target)},
+*pl_clojure[] ={"clojure","clojars","cloj",   "lein",   "leiningen",  NULL, targetinfo(&pl_clojure_target)},
 *pl_dart  [] = {"dart",  "pub",     "flutter",           NULL,  targetinfo(&pl_dart_target)},
 *pl_dotnet[] = {"nuget", "net",     ".net",   "dotnet",  NULL,  targetinfo(&pl_dotnet_target)},
 *pl_haskell[] ={"haskell", "cabal", "stack",  "hackage", NULL,  targetinfo(&pl_haskell_target)},
 *pl_ocaml[] =  {"ocaml", "opam",                         NULL,  targetinfo(&pl_ocaml_target)},
-*pl_r     [] = {"r",     "cran",                         NULL,  targetinfo(&pl_r_target)},
+*pl_r     [] = {"cran",  "r",                            NULL,  targetinfo(&pl_r_target)},
 *pl_julia [] = {"julia",                                 NULL,  targetinfo(&pl_julia_target)},
 **pl_packagers[] =
 {
@@ -1801,7 +1801,7 @@ static const char
 *os_ubuntu        [] = {"ubuntu",               NULL,  targetinfo(&os_ubuntu_target)},
 *os_debian        [] = {"debian",  "deb",       NULL,  targetinfo(&os_debian_target)},
 *os_fedora        [] = {"fedora",               NULL,  targetinfo(&os_fedora_target)},
-*os_opensuse      [] = {"opensuse","suse",      NULL,  targetinfo(&os_opensuse_target)},
+*os_opensuse      [] = {"suse",   "opensuse",   NULL,  targetinfo(&os_opensuse_target)},
 *os_kali          [] = {"kali",                 NULL,  targetinfo(&os_kali_target)},
 *os_msys2         [] = {"msys2",   "msys",      NULL,  targetinfo(&os_msys2_target)},
 *os_arch          [] = {"arch",                 NULL,  targetinfo(&os_arch_target)},
@@ -1814,8 +1814,8 @@ static const char
 *os_netbsd        [] = {"netbsd",               NULL,  targetinfo(&os_netbsd_target)},
 *os_openbsd       [] = {"openbsd",              NULL,  targetinfo(&os_openbsd_target)},
 *os_deepin        [] = {"deepin",               NULL,  targetinfo(&os_deepin_target)},
-*os_openeuler     [] = {"openeuler", "euler",   NULL, targetinfo(&os_openeuler_target)},
-*os_openkylin     [] = {"openkylin",            NULL, targetinfo(&os_openkylin_target)},
+*os_openeuler     [] = {"euler",  "openeuler",  NULL, targetinfo(&os_openeuler_target)},
+*os_openkylin     [] = {"kylin",  "openkylin",  NULL, targetinfo(&os_openkylin_target)},
 **os_systems[] =
 {
   os_ubuntu,  os_debian,  os_fedora,  os_opensuse, os_kali,

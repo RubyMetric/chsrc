@@ -25,11 +25,13 @@ typedef struct {
 #define Big_File_deepin     "/20.9/deepin-desktop-community-20.9-amd64.iso" // 4GB左右
 
 
-// 教育网
-// 我们目前根据 https://github.com/mirrorz-org/oh-my-mirrorz 挑选速度前10位
-//
+/**
+ * 教育网镜像
+ *
+ * 我们目前根据 https://github.com/mirrorz-org/oh-my-mirrorz 挑选速度前10位
+ */
 mirror_info
-  MirrorZ       = {"mirrorz", "MirrorZ",       "MirrorZ校园网镜像站",       "https://mirrors.cernet.edu.cn/",  NULL},
+  MirrorZ       = {"mirrorz", "MirrorZ",       "MirrorZ 校园网镜像站",       "https://mirrors.cernet.edu.cn/",  NULL},
 
   Tuna          = {"tuna",    "TUNA",          "清华大学开源软件镜像站",     "https://mirrors.tuna.tsinghua.edu.cn/",
                    "https://mirrors.tuna.tsinghua.edu.cn/speedtest/1000mb.bin"},
@@ -66,7 +68,7 @@ mirror_info
                    "https://mirrors.nju.edu.cn/archlinux" Big_File_archlinux};
 
 
-// @ccmywish: 2023-09-05 我只使用了不到5次，重庆大学镜像站就把我的ip封杀了，对用户来说封杀策略过严，暂时不可靠，暂时不用
+// @ccmywish: [2023-09-05] 我只使用了不到5次，重庆大学镜像站就把我的ip封杀了，对用户来说封杀策略过严，暂时不可靠，暂时不用
 //
 //  Cqu           = {"cqu",     "CQU",           "重庆大学开源软件镜像站",     "https://mirrors.cqu.edu.cn/",
 //                  "https://mirrors.cqu.edu.cn/speedtest/1000mb.bin"};
@@ -74,11 +76,10 @@ mirror_info
 
 
 /**
+ * 商业公司提供的源
  *
+ * @note 腾讯软件源中，有很多链接都已失效，请仔细检查
  */
-// 商业公司提供的源
-//
-// @note 腾讯软件源中，有很多链接都已失效，请仔细检查
 mirror_info
   Ali      = {"ali",     "Ali OPSX", "阿里巴巴开源镜像站",  "https://developer.aliyun.com/mirror/",
               "https://mirrors.aliyun.com/deepin-cd" Big_File_deepin},
