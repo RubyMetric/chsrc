@@ -1714,9 +1714,9 @@ target_info
 
 #define targetinfo(t) (const char*)t
 static const char
-*pl_ruby  [] = {"gem",   "ruby",    "rb",    "rubygems", NULL,  targetinfo(&pl_ruby_target)},
-*pl_python[] = {"pip",   "python",  "py",    "pypi",     NULL,  targetinfo(&pl_python_target)},
-*pl_nodejs[] = {"npm",   "node",    "js",    "nodejs",   NULL,  targetinfo(&pl_nodejs_target)},
+*pl_ruby  [] = {"gem",   "ruby",    "rb",    "rubygems",       NULL,  targetinfo(&pl_ruby_target)},
+*pl_python[] = {"pip",   "python",  "py",    "pypi",           NULL,  targetinfo(&pl_python_target)},
+*pl_nodejs[] = {"npm",   "node",    "js",    "nodejs", "yarn"  NULL,  targetinfo(&pl_nodejs_target)},
 *pl_perl  [] = {"perl",  "cpan",                         NULL,  targetinfo(&pl_perl_target)},
 *pl_php   [] = {"php",   "composer",                     NULL,  targetinfo(&pl_php_target)},
 *pl_go    [] = {"go",    "golang",  "goproxy",           NULL,  targetinfo(&pl_go_target)} ,
