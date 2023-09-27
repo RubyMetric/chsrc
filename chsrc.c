@@ -1376,7 +1376,7 @@ os_netbsd_setsrc(char* option)
   chsrc_backup ("/usr/pkg/etc/pkgin/repositories.conf");
 
   char* arch = xy_getcmd("arch",NULL);
-  char* version = "cat /etc/os-release | grep \"VERSION=\" | grep -Po [8-9].[0-9]+";
+  char* version = "cat /etc/os-release | grep \"VERSION=\" | grep -Po \"[8-9].[0-9]+\"";
 
   char* url = xy_strjoin(5, source.url, arch, "/", version, "/All");
   chsrc_overwrite_file (url, "/usr/pkg/etc/pkgin/repositories.conf");
