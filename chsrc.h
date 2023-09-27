@@ -14,6 +14,12 @@
 #include "sources.h"
 
 
+#define App_Prefix "chsrc: "
+#define chsrc_success(str) xy_success(xy_2strjoin(App_Prefix, (str)))
+#define chsrc_info(str)    xy_info(xy_2strjoin(App_Prefix,  (str)))
+#define chsrc_warn(str)    xy_warn(xy_2strjoin(App_Prefix,  (str)))
+#define chsrc_error(str)   xy_error(xy_2strjoin(App_Prefix, (str)))
+
 
 /**
  * 检测二进制程序是否存在
@@ -60,7 +66,7 @@ does_the_input_mirror_exist (source_info* sources, size_t size, char* target, ch
   }
 
   if (1==size) {
-    xy_success(xy_strjoin(5, "chsrc: ", sources[0].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢你们的慷慨支持"));
+    xy_success(xy_strjoin(5, "chsrc: ", sources[0].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
   }
 
   if (xy_streql("default", input) || xy_streql("def", input)) {
@@ -208,7 +214,7 @@ auto_select_ (source_info* sources, size_t size, const char* target)
     source_info src = sources[i];
     const char* url = src.mirror->__bigfile_url;
     if (NULL==url) {
-      xy_warn ("chsrc: 跳过该站点");
+      chsrc_warn ( xy_strjoin(3, "开发者未提供 ",  src.mirror->code, " 镜像站测速链接，跳过该站点"));
       speed = 0;
     } else {
       printf ("%s",xy_strjoin(3, "chsrc: 测速 ", src.mirror->site , " ... "));
@@ -220,7 +226,7 @@ auto_select_ (source_info* sources, size_t size, const char* target)
   int fastidx = dblary_maxidx_ (speeds, size);
 
   if (onlyone)
-    xy_success(xy_strjoin(5, "chsrc: ", sources[fastidx].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢你们的慷慨支持"));
+    xy_success(xy_strjoin(5, "chsrc: ", sources[fastidx].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
   else
     xy_success (xy_2strjoin("chsrc: 最快镜像站: ", sources[fastidx].mirror->name));
 
@@ -271,12 +277,6 @@ not_root:
   exit(1);
 }
 
-
-#define App_Prefix "chsrc: "
-#define chsrc_success(str) xy_success(xy_2strjoin(App_Prefix, (str)))
-#define chsrc_info(str)    xy_info(xy_2strjoin(App_Prefix,  (str)))
-#define chsrc_warn(str)    xy_warn(xy_2strjoin(App_Prefix,  (str)))
-#define chsrc_error(str)   xy_error(xy_2strjoin(App_Prefix, (str)))
 
 static void
 chsrc_run (const char* cmd)
