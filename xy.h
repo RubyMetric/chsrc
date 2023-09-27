@@ -534,7 +534,7 @@ xy_file_exist (const char* path)
  * 该函数即使在非Windows下也可调用，作用是删除路径左右两边多出来的空白符
  */
 static char*
-xy_unix_path_to_win_if_on_win (const char* path)
+xy_uniform_path (const char* path)
 {
   char* new = xy_str_strip(path); // 防止开发者多写了空白符
 

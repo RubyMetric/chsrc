@@ -289,8 +289,8 @@ static void
 chsrc_check_file (const char* path)
 {
   char* cmd = NULL;
+  path = xy_uniform_path (path);
   if(xy_on_windows) {
-    path = xy_unix_path_to_win (path);
     cmd = xy_2strjoin ("type ", path);
   } else {
     cmd = xy_2strjoin ("cat ", path);
@@ -301,6 +301,7 @@ chsrc_check_file (const char* path)
 static void
 chsrc_append_to_file (const char* str, const char* file)
 {
+  file = xy_uniform_path (file);
   char* cmd = NULL;
   if (xy_on_windows) {
     cmd = xy_strjoin (4, "echo ", str, " >> ", file);
@@ -313,6 +314,7 @@ chsrc_append_to_file (const char* str, const char* file)
 static void
 chsrc_overwrite_file (const char* str, const char* file)
 {
+  file = xy_uniform_path (file);
   char* cmd = NULL;
   if (xy_on_windows) {
     cmd = xy_strjoin (4, "echo ", str, " > ", file);

@@ -434,7 +434,7 @@ pl_java_check_cmd_(bool* maven_exist, bool* gradle_exist)
   *gradle_exist = does_the_program_exist (check_cmd, "gradle");
 
   if (! *maven_exist && ! *gradle_exist) {
-    chsrc_error ("maven 与 gradle 命令均未找到，请检查是否存在（其一）");
+    chsrc_error ("maven 与 gradle 命令均未找到，请检查是否存在其一");
     exit(1);
   }
 }
@@ -452,13 +452,7 @@ pl_java_find_maven_config_ ()
   // xy_info (buf);
   maven_home = xy_str_strip(maven_home);
 
-  char* maven_config = NULL;
-
-  if (xy_on_windows)
-    maven_config = xy_2strjoin(maven_home, "\\conf\\settings.xml");
-  else
-    maven_config = xy_2strjoin(maven_home, "/conf/settings.xml");
-
+  char* maven_config = xy_uniform_path(xy_2strjoin(maven_home, "/conf/settings.xml"));
   return maven_config;
 }
 
@@ -613,15 +607,15 @@ pl_haskell_setsrc(char* option)
 
   char* config = NULL;
   if (xy_on_windows) {
-    config = xy_2strjoin(xy_os_home, "\\AppData\\Roaming\\cabal\\config");
+    config = xy_uniform_path ("~/AppData/Roaming/cabal/config");
   } else {
-    config = xy_2strjoin(xy_os_home, "/.cabal/config");
+    config = "~/.cabal/config";
   }
 
   xy_info(xy_strjoin(3,"chsrc: 请向 ", config, " 中手动添加:"));
   puts(file); puts("");
 
-  config = xy_2strjoin(xy_os_home, "/.stack/config.yaml");
+  config = xy_uniform_path ("~/.stack/config.yaml");
   file = xy_strjoin(3, "package-indices:\n"
                        "  - download-prefix: ", source.url,
                      "\n    hackage-security:\n"
