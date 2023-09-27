@@ -295,7 +295,7 @@ pl_php_setsrc (char* option)
 void
 pl_lua_getsrc (char* option)
 {
-  chsrc_check_file (" ~/.luarocks/config.lua");
+  chsrc_check_file ("~/.luarocks/config.lua");
   chsrc_check_file ("~/.luarocks/upload_config.lua");
 }
 
