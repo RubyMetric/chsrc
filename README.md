@@ -129,8 +129,8 @@ chsrc set julia
 sudo chsrc set ubuntu
 sudo chsrc set debian
 sudo chsrc set fedora
-sudo chsrc set opensuse 或 set suse
-sudo chsrc set arch     # 同时使用 archlinuxcn
+sudo chsrc set suse  或 set opensuse
+sudo chsrc set arch  # 同时使用 archlinuxcn
 sudo chsrc set manjaro
 sudo chsrc set kali
 sudo chsrc set gentoo
@@ -144,8 +144,8 @@ sudo chsrc set netbsd
 
 # 国产操作系统
 sudo chsrc set deepin
-sudo chsrc set openeuler 或 set euler
-sudo chsrc set openkylin
+sudo chsrc set euler  或 set openeuler
+sudo chsrc set kylin  或 set openkylin
 
 chsrc set msys2 或 set msys
 ```

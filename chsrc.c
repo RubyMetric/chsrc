@@ -1814,8 +1814,8 @@ static const char
 *os_netbsd        [] = {"netbsd",               NULL,  targetinfo(&os_netbsd_target)},
 *os_openbsd       [] = {"openbsd",              NULL,  targetinfo(&os_openbsd_target)},
 *os_deepin        [] = {"deepin",               NULL,  targetinfo(&os_deepin_target)},
-*os_openeuler     [] = {"euler",  "openeuler",  NULL, targetinfo(&os_openeuler_target)},
-*os_openkylin     [] = {"kylin",  "openkylin",  NULL, targetinfo(&os_openkylin_target)},
+*os_openeuler     [] = {"euler",  "openeuler",  NULL,  targetinfo(&os_openeuler_target)},
+*os_openkylin     [] = {"kylin",  "openkylin",  NULL,  targetinfo(&os_openkylin_target)},
 **os_systems[] =
 {
   os_ubuntu,  os_debian,  os_fedora,  os_opensuse, os_kali,
