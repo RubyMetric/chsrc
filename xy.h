@@ -435,47 +435,31 @@ xy_str_strip (const char* str)
 
 
 /**
- * 执行cmd后拿到cmd的执行结果 注意从外部free掉这段内存
- * 注意：执行结果后面有回车换行
+ * 执行cmd，返回其最后一行输出结果
+ *
+ * @note 返回的字符串最后面可能有换行符号
  */
-static char *
-xy_getcmd(const char * cmd, bool (*func)(const char*))
+static char*
+xy_getcmd(const char* cmd, bool (*func)(const char*))
 {
-  const int BUFSIZE = 1024;
+  const int size = 512;
+  char* buf = (char*) malloc(size);
 
-  FILE *stream;
-  char* buf = (char*)malloc(sizeof(char)*BUFSIZE);
-
-  // 执行命令，并将输出保存到 stream 指针指向的文件中。
-  stream = popen(cmd, "r");
+  FILE* stream = popen(cmd, "r");
   if (stream == NULL) {
-    printf("命令执行失败。\n");
+    fprintf(stderr, "命令执行失败\n");
     return NULL;
   }
 
-  // 从 stream 指针指向的文件中读取数据。
-  char *ret;
-  do {
-    if(fgets(buf, sizeof(buf), stream)==NULL)
-    {
-      break;
-    }
-    if(func==NULL)
-    {
-      ret = buf;
-    }
-    else
-    {
-      if(func(buf))
-      {
-        ret = buf;
-        break;
-      }
-    }
-  }while(1);
+  char* ret = NULL;
 
-  // 关闭 stream 指针。
-  pclose(stream);
+  while (true) {
+    if(NULL==fgets(buf, sizeof(buf), stream)) break;
+    ret = buf;
+    if (func) { func(buf); }
+  }
+
+  pclose (stream);
   return ret;
 }
 
