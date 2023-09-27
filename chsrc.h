@@ -3,14 +3,13 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2023-09-26>
+ * Last modified : <2023-09-27>
  *
  * chsrc:
  *
  *   chsrc.c 头文件
  * ------------------------------------------------------------*/
 
-#define XY_Run_Prefix "chsrc: 运行 "
 #include "xy.h"
 #include "sources.h"
 
@@ -51,7 +50,7 @@ does_the_program_exist (char* check_cmd, char* progname)
  * @param  target  目标名
  * @param  input   如果用户输入 default 或者 def，则选择第一个源
  */
-#define lets_find_mirror(s, input) does_the_input_mirror_exist(s##_sources, s##_sources_n, (char*)#s+3, input)
+#define find_mirror(s, input) does_the_input_mirror_exist(s##_sources, s##_sources_n, (char*)#s+3, input)
 int
 does_the_input_mirror_exist (source_info* sources, size_t size, char* target, char* input)
 {
@@ -187,10 +186,12 @@ dblary_maxidx_(double* array, int size)
   return maxidx;
 }
 
-
-#define lets_test_speed(s) lets_test_speed_(s##_sources, s##_sources_n, (char*)#s+3)
+/**
+ * 自动测速选择镜像站和源
+ */
+#define auto_select(s) auto_select_(s##_sources, s##_sources_n, (char*)#s+3)
 int
-lets_test_speed_ (source_info* sources, size_t size, const char* target)
+auto_select_ (source_info* sources, size_t size, const char* target)
 {
   if (0==size) {
     xy_error(xy_strjoin(3, "chsrc: 当前 ", target, " 无任何可用源，请联系维护者"));
@@ -225,6 +226,11 @@ lets_test_speed_ (source_info* sources, size_t size, const char* target)
 
   return fastidx;
 }
+
+
+#define use_specific_mirror_or_auto_select(input, s) \
+  (NULL!=(input)) ? find_mirror(s, input) : auto_select(s)
+
 
 
 /**

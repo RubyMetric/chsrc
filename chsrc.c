@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-26>
+ * Last modified : <2023-09-27>
  *
  * chsrc:
  *
@@ -12,7 +12,7 @@
  *   该软件为自由软件，采用 GPLv3 许可证，请查阅 LICENSE.txt 文件
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version "v0.1.2-20230926"
+#define Chsrc_Version "v0.1.2-20230927"
 
 #include "chsrc.h"
 
@@ -39,11 +39,7 @@ pl_ruby_setsrc (char* option)
     return;
   }
 
-  if (NULL!=option) {
-    index = lets_find_mirror(pl_ruby, option);
-  } else {
-    index = lets_test_speed(pl_ruby);
-  }
+  index = use_specific_mirror_or_auto_select (option, pl_ruby);
 
   source_info source = pl_ruby_sources[index];
   chsrc_say_selection (&source);
@@ -130,11 +126,7 @@ pl_python_setsrc (char* option)
   char* prog = NULL;
   pl_python_check_cmd_ (&prog);
 
-  if (NULL!=option) {
-    index = lets_find_mirror (pl_python, option);
-  } else {
-    index = lets_test_speed (pl_python);
-  }
+  index = use_specific_mirror_or_auto_select (option, pl_python);
 
   source_info source = pl_python_sources[index];
   chsrc_say_selection(&source);
@@ -191,11 +183,7 @@ pl_nodejs_setsrc (char* option)
 
   int index = 0;
 
-  if (NULL!=option) {
-    index = lets_find_mirror (pl_nodejs, option);
-  } else {
-    index = lets_test_speed (pl_nodejs);
-  }
+  index = use_specific_mirror_or_auto_select (option, pl_nodejs);
 
   source_info source = pl_nodejs_sources[index];
   chsrc_say_selection (&source);
@@ -245,13 +233,7 @@ pl_perl_getsrc (char* option)
 void
 pl_perl_setsrc (char* option)
 {
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror (pl_perl, option);
-  } else {
-    index = lets_test_speed (pl_perl);
-  }
+  int index = use_specific_mirror_or_auto_select (option, pl_perl);
 
   source_info source = pl_perl_sources[index];
   chsrc_say_selection (&source);
@@ -298,13 +280,7 @@ pl_php_setsrc (char* option)
 {
   pl_php_check_cmd_();
 
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror (pl_php, option);
-  } else {
-    index = lets_test_speed (pl_php);
-  }
+  int index = use_specific_mirror_or_auto_select (option, pl_php);
 
   source_info source = pl_php_sources[index];
   chsrc_say_selection (&source);
@@ -344,13 +320,8 @@ void
 pl_go_setsrc (char* option)
 {
   pl_go_check_cmd_();
-  int index = 0;
 
-  if (NULL!=option) {
-    index = lets_find_mirror (pl_go, option);
-  } else {
-    index = lets_test_speed (pl_go);
-  }
+  int index = use_specific_mirror_or_auto_select (option, pl_go);
 
   source_info source = pl_go_sources[index];
   chsrc_say_selection (&source);
@@ -381,13 +352,7 @@ pl_rust_getsrc (char* option)
 void
 pl_rust_setsrc (char* option)
 {
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror (pl_rust, option);
-  } else {
-    index = lets_test_speed (pl_rust);
-  }
+  int index = use_specific_mirror_or_auto_select (option, pl_rust);
 
   source_info source = pl_rust_sources[index];
   chsrc_say_selection(&source);
@@ -482,13 +447,7 @@ pl_java_setsrc (char* option)
   bool maven_exist, gradle_exist;
   pl_java_check_cmd_ (&maven_exist, &gradle_exist);
 
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror (pl_java, option);
-  } else {
-    index = lets_test_speed (pl_java);
-  }
+  int index = use_specific_mirror_or_auto_select (option, pl_java);
 
   source_info source = pl_java_sources[index];
   chsrc_say_selection(&source);
@@ -530,12 +489,7 @@ pl_java_setsrc (char* option)
 void
 pl_clojure_setsrc(char* option)
 {
-  int index = 0;
-  if (NULL!=option) {
-    index = lets_find_mirror(pl_clojure, option);
-  } else {
-    index = lets_test_speed(pl_clojure);
-  }
+  int index = use_specific_mirror_or_auto_select (option, pl_clojure);
 
   source_info source = pl_clojure_sources[index];
   chsrc_say_selection (&source);
@@ -566,13 +520,7 @@ pl_dart_getsrc(char* option)
 void
 pl_dart_setsrc (char* option)
 {
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror (pl_dart, option);
-  } else {
-    index = lets_test_speed (pl_dart);
-  }
+  int index = use_specific_mirror_or_auto_select (option, pl_dart);
 
   source_info source = pl_dart_sources[index];
   chsrc_say_selection(&source);
@@ -619,12 +567,7 @@ pl_dart_setsrc (char* option)
 void
 pl_haskell_setsrc(char* option)
 {
-  int index = 0;
-  if (NULL!=option) {
-    index = lets_find_mirror(pl_haskell, option);
-  } else {
-    index = lets_test_speed(pl_haskell);
-  }
+  int index = use_specific_mirror_or_auto_select (option, pl_haskell);
 
   source_info source = pl_haskell_sources[index];
   chsrc_say_selection (&source);
@@ -694,12 +637,7 @@ pl_ocaml_setsrc(char* option)
 {
   pl_ocaml_check_cmd_();
 
-  int index = 0;
-  if (NULL!=option) {
-    index = lets_find_mirror(pl_ocaml, option);
-  } else {
-    index = lets_test_speed(pl_ocaml);
-  }
+  int index = use_specific_mirror_or_auto_select (option, pl_ocaml);
 
   source_info source = pl_ocaml_sources[index];
   chsrc_say_selection (&source);
@@ -739,13 +677,7 @@ pl_r_getsrc (char* option)
 void
 pl_r_setsrc (char* option)
 {
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror (pl_r, option);
-  } else {
-    index = lets_test_speed (pl_r);
-  }
+  int index = use_specific_mirror_or_auto_select (option, pl_r);
 
   source_info source = pl_r_sources[index];
   chsrc_say_selection(&source);
@@ -798,13 +730,7 @@ pl_julia_getsrc (char* option)
 void
 pl_julia_setsrc (char* option)
 {
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror (pl_julia, option);
-  } else {
-    index = lets_test_speed (pl_julia);
-  }
+  int index = use_specific_mirror_or_auto_select (option, pl_julia);
 
   source_info source = pl_julia_sources[index];
   chsrc_say_selection(&source);
@@ -843,13 +769,7 @@ os_ubuntu_setsrc (char* option)
 {
   ensure_root();
 
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror(os_ubuntu, option);
-  } else {
-    index = lets_test_speed(os_ubuntu);
-  }
+  int index = use_specific_mirror_or_auto_select (option, os_ubuntu);
 
   source_info source = os_ubuntu_sources[index];
   chsrc_say_selection(&source);
@@ -887,13 +807,8 @@ void
 os_debian_setsrc (char* option)
 {
   ensure_root();
-  int index = 0;
 
-  if (NULL!=option) {
-    index = lets_find_mirror(os_debian, option);
-  } else {
-    index = lets_test_speed(os_debian);
-  }
+  int index = use_specific_mirror_or_auto_select (option, os_debian);
 
   source_info source = os_debian_sources[index];
   chsrc_say_selection(&source);
@@ -927,13 +842,8 @@ void
 os_deepin_setsrc (char* option)
 {
   ensure_root();
-  int index = 0;
 
-  if (NULL!=option) {
-    index = lets_find_mirror(os_deepin, option);
-  } else {
-    index = lets_test_speed(os_deepin);
-  }
+  int index = use_specific_mirror_or_auto_select (option, os_deepin);
 
   source_info source = os_deepin_sources[index];
   chsrc_say_selection(&source);
@@ -958,14 +868,8 @@ void
 os_fedora_setsrc (char* option)
 {
   ensure_root();
-  int index = 0;
 
-  if (NULL!=option) {
-    index = lets_find_mirror(os_fedora, option);
-  } else {
-    index = lets_test_speed(os_fedora);
-  }
-
+  int index = use_specific_mirror_or_auto_select (option, os_fedora);
 
   source_info source = os_fedora_sources[index];
   chsrc_say_selection(&source);
@@ -1004,13 +908,8 @@ void
 os_opensuse_setsrc (char* option)
 {
   ensure_root(); // HELP: 不知道是否需要确保root权限
-  int index = 0;
 
-  if (NULL!=option) {
-    index = lets_find_mirror(os_opensuse, option);
-  } else {
-    index = lets_test_speed(os_opensuse);
-  }
+  int index = use_specific_mirror_or_auto_select (option, os_opensuse);
 
   source_info source = os_opensuse_sources[index];
   chsrc_say_selection(&source);
@@ -1067,13 +966,8 @@ void
 os_kali_setsrc(char* option)
 {
   ensure_root();
-  int index = 0;
 
-  if (NULL!=option) {
-    index = lets_find_mirror(os_kali, option);
-  } else {
-    index = lets_test_speed(os_kali);
-  }
+  int index = use_specific_mirror_or_auto_select (option, os_kali);
 
   source_info source = os_kali_sources[index];
   chsrc_say_selection(&source);
@@ -1097,13 +991,7 @@ os_kali_setsrc(char* option)
 void
 os_msys2_setsrc(char* option)
 {
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror(os_msys2, option);
-  } else {
-    index = lets_test_speed(os_msys2);
-  }
+  int index = use_specific_mirror_or_auto_select (option, os_msys2);
 
   source_info source = os_msys2_sources[index];
   chsrc_say_selection(&source);
@@ -1134,13 +1022,8 @@ void
 os_arch_setsrc(char* option)
 {
   ensure_root();
-  int index = 0;
 
-  if (NULL!=option) {
-    index = lets_find_mirror(os_arch, option);
-  } else {
-    index = lets_test_speed(os_arch);
-  }
+  int index = use_specific_mirror_or_auto_select (option, os_arch);
 
   source_info source = os_arch_sources[index];
   chsrc_say_selection(&source);
@@ -1188,13 +1071,8 @@ void
 os_gentoo_setsrc(char* option)
 {
   ensure_root();
-  int index = 0;
 
-  if (NULL!=option) {
-    index = lets_find_mirror(os_gentoo, option);
-  } else {
-    index = lets_test_speed(os_gentoo);
-  }
+  int index = use_specific_mirror_or_auto_select (option, os_gentoo);
 
   source_info source = os_arch_sources[index];
   chsrc_say_selection(&source);
@@ -1222,13 +1100,7 @@ os_rocky_setsrc (char* option)
 {
   ensure_root();
 
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror(os_rocky, option);
-  } else {
-    index = lets_test_speed(os_rocky);
-  }
+  int index = use_specific_mirror_or_auto_select (option, os_rocky);
 
   source_info source = os_rocky_sources[index];
   chsrc_say_selection(&source);
@@ -1252,13 +1124,7 @@ os_alpine_setsrc (char* option)
 {
   // ensure_root(); // HELP: 不确定是否需要root
 
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror(os_alpine, option);
-  } else {
-    index = lets_test_speed(os_alpine);
-  }
+  int index = use_specific_mirror_or_auto_select (option, os_alpine);
 
   source_info source = os_alpine_sources[index];
   chsrc_say_selection(&source);
@@ -1291,13 +1157,7 @@ os_void_setsrc (char* option)
 {
   // ensure_root(); // HELP: 不确定是否需要root
 
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror(os_void, option);
-  } else {
-    index = lets_test_speed(os_void);
-  }
+  int index = use_specific_mirror_or_auto_select (option, os_void);
 
   source_info source = os_void_sources[index];
   chsrc_say_selection(&source);
@@ -1317,7 +1177,7 @@ os_void_setsrc (char* option)
             "sed -i 's|https://alpha.de.repo.voidlinux.org|", source.url, "|g' /etc/xbps.d/*-repository-*.conf"
             );
 
-  xy_warn("chsrc: 若报错可尝试使用以下命令");
+  chsrc_warn("若报错可尝试使用以下命令");
   puts(cmd);
   chsrc_say_thanks(&source);
 }
@@ -1346,13 +1206,8 @@ void
 os_openeuler_setsrc (char* option)
 {
   ensure_root();
-  int index = 0;
 
-  if (NULL!=option) {
-    index = lets_find_mirror(os_openeuler, option);
-  } else {
-    index = lets_test_speed(os_openeuler);
-  }
+  int index = use_specific_mirror_or_auto_select (option, os_openeuler);
 
   source_info source = os_openeuler_sources[index];
   chsrc_say_selection(&source);
@@ -1374,13 +1229,8 @@ void
 os_openkylin_setsrc (char* option)
 {
   ensure_root();
-  int index = 0;
 
-  if (NULL!=option) {
-    index = lets_find_mirror(os_openkylin, option);
-  } else {
-    index = lets_test_speed(os_openkylin);
-  }
+  int index = use_specific_mirror_or_auto_select (option, os_openkylin);
 
   source_info source = os_openkylin_sources[index];
   chsrc_say_selection(&source);
@@ -1408,13 +1258,8 @@ void
 os_freebsd_setsrc (char* option)
 {
   ensure_root(); // HELP: 不知道是否需要确保root权限
-  int index = 0;
 
-  if (NULL!=option) {
-    index = lets_find_mirror(os_freebsd, option);
-  } else {
-    index = lets_test_speed(os_freebsd);
-  }
+  int index = use_specific_mirror_or_auto_select (option, os_freebsd);
 
   source_info source = os_freebsd_sources[index];
   chsrc_say_selection(&source);
@@ -1523,13 +1368,7 @@ os_netbsd_setsrc(char* option)
 {
   ensure_root(); // HELP: 不知道是否需要确保root权限
 
-  int index = 0;
-
-  if (NULL!=option) {
-    index = lets_find_mirror(os_netbsd, option);
-  } else {
-    index = lets_test_speed(os_netbsd);
-  }
+  int index = use_specific_mirror_or_auto_select (option, os_netbsd);
 
   source_info source = os_netbsd_sources[index];
   chsrc_say_selection(&source);
@@ -1562,13 +1401,8 @@ void
 os_openbsd_setsrc(char* option)
 {
   ensure_root();
-  int index = 0;
 
-  if (NULL!=option) {
-    index = lets_find_mirror(os_openbsd, option);
-  } else {
-    index = lets_test_speed(os_openbsd);
-  }
+  int index = use_specific_mirror_or_auto_select (option, os_openbsd);
 
   source_info source = os_openbsd_sources[index];
   chsrc_say_selection(&source);
@@ -1619,15 +1453,10 @@ wr_tex_getsrc(char* option)
 void
 wr_tex_setsrc(char* option)
 {
-  int index = 0;
   bool tlmgr_exist, mpm_exist;
   wr_tex_check_cmd_(&tlmgr_exist, &mpm_exist);
 
-  if (NULL!=option) {
-    index = lets_find_mirror(wr_tex, option);
-  } else {
-    index = lets_test_speed(wr_tex);
-  }
+  int index = use_specific_mirror_or_auto_select (option, wr_tex);
 
   source_info source = wr_tex_sources[index];
   chsrc_say_selection (&source);
@@ -1654,17 +1483,12 @@ wr_tex_setsrc(char* option)
 void
 wr_emacs_setsrc(char* option)
 {
-  int index = 0;
-  if (NULL!=option) {
-    index = lets_find_mirror(wr_emacs, option);
-  } else {
-    index = lets_test_speed(wr_emacs);
-  }
+  int index = use_specific_mirror_or_auto_select (option, wr_emacs);
 
   source_info source = wr_emacs_sources[index];
   chsrc_say_selection (&source);
 
-  xy_warn("chsrc: 抱歉，Emacs换源涉及Elisp，您可手动查阅并换源:");
+  chsrc_warn("抱歉，Emacs换源涉及Elisp，您可手动查阅并换源:");
   puts(source.url);
 
   chsrc_say_thanks (&source);
@@ -1692,12 +1516,7 @@ wr_brew_getsrc(char* option)
 void
 wr_brew_setsrc(char* option)
 {
-  int index = 0;
-  if (NULL!=option) {
-    index = lets_find_mirror(wr_brew, option);
-  } else {
-    index = lets_test_speed(wr_brew);
-  }
+  int index = use_specific_mirror_or_auto_select (option, wr_brew);
 
   source_info source = wr_brew_sources[index];
   chsrc_say_selection (&source);
@@ -1724,16 +1543,10 @@ wr_brew_setsrc(char* option)
 void
 wr_guix_setsrc (char* option)
 {
-  int index = 0;
-  if (NULL!=option) {
-    index = lets_find_mirror(wr_guix, option);
-  } else {
-    index = lets_test_speed(wr_guix);
-  }
+  int index = use_specific_mirror_or_auto_select (option, wr_guix);
 
   source_info source = wr_guix_sources[index];
   chsrc_say_selection (&source);
-
 
   char* file =  xy_strjoin(3, "(list (channel\n"
                               "       (inherit (car %default-channels))\n"
@@ -1767,12 +1580,7 @@ wr_nix_setsrc (char* option)
 {
   wr_nix_check_cmd_();
 
-  int index = 0;
-  if (NULL!=option) {
-    index = lets_find_mirror(wr_nix, option);
-  } else {
-    index = lets_test_speed(wr_nix);
-  }
+  int index = use_specific_mirror_or_auto_select (option, wr_nix);
 
   source_info source = wr_nix_sources[index];
   chsrc_say_selection (&source);
@@ -1804,12 +1612,7 @@ wr_nix_setsrc (char* option)
 void
 wr_flathub_setsrc(char* option)
 {
-  int index = 0;
-  if (NULL!=option) {
-    index = lets_find_mirror(wr_flathub, option);
-  } else {
-    index = lets_test_speed(wr_flathub);
-  }
+  int index = use_specific_mirror_or_auto_select (option, wr_flathub);
 
   source_info source = wr_flathub_sources[index];
   chsrc_say_selection (&source);
@@ -1832,16 +1635,10 @@ wr_flathub_setsrc(char* option)
 void
 wr_anaconda_setsrc(char* option)
 {
-  int index = 0;
-  if (NULL!=option) {
-    index = lets_find_mirror(wr_anaconda, option);
-  } else {
-    index = lets_test_speed(wr_anaconda);
-  }
+  int index = use_specific_mirror_or_auto_select (option, wr_anaconda);
 
   source_info source = wr_anaconda_sources[index];
   chsrc_say_selection (&source);
-
 
   char* main  = xy_2strjoin(source.url, "pkgs/main");
   char* r     = xy_2strjoin(source.url, "pkgs/r");
@@ -2238,7 +2035,7 @@ get_target (const char* input, int code, char* option)
       xy_error ("chsrc: 没有curl命令，无法测速");
       exit(1);
     }
-    lets_test_speed_ (target->sources, target->sources_n, input-3);
+    auto_select_ (target->sources, target->sources_n, input-3);
     return true;
 
   }
