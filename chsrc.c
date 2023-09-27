@@ -799,6 +799,7 @@ os_ubuntu_setsrc (char* option)
   }
 
   chsrc_run(cmd);
+  chsrc_run("sudo apt update");
   chsrc_say_thanks(&source);
 }
 
@@ -835,6 +836,7 @@ os_debian_setsrc (char* option)
       "@g\' /etc/apt/sources.list");
 
   chsrc_run(cmd);
+  chsrc_run("sudo apt update");
   chsrc_say_thanks(&source);
 }
 
@@ -867,6 +869,7 @@ os_deepin_setsrc (char* option)
       "@g\' /etc/apt/sources.list");
 
   chsrc_run(cmd);
+  chsrc_run("sudo apt update");
   chsrc_say_thanks(&source);
 }
 
@@ -907,6 +910,7 @@ os_fedora_setsrc (char* option)
   chsrc_info ("替换文件:/etc/yum.repos.d/fedora-updates.repo");
   chsrc_info ("新增文件:/etc/yum.repos.d/fedora-updates-modular.repo");
 
+  chsrc_run ("sudo dnf makecache");
   chsrc_say_thanks(&source);
 }
 
@@ -964,8 +968,6 @@ os_opensuse_setsrc (char* option)
 
   chsrc_run(cmd5);
   chsrc_run(cmd6);
-  // char* rm = "rm -f /etc/apt/source.list.bak";
-  // chsrc_runcmd(rm);
   chsrc_say_thanks(&source);
 }
 
@@ -991,6 +993,7 @@ os_kali_setsrc(char* option)
       "@g\' /etc/apt/sources.list");
 
   chsrc_run(cmd);
+  chsrc_run("sudo apt update");
   chsrc_say_thanks(&source);
 }
 
@@ -1121,6 +1124,7 @@ os_rocky_setsrc (char* option)
             "-i.bak /etc/yum.repos.d/rocky-extras.repo /etc/yum.repos.d/rocky.repo"
             );
   chsrc_run(cmd);
+  chsrc_run ("sudo dnf makecache");
   chsrc_say_thanks(&source);
 }
 
@@ -1144,9 +1148,7 @@ os_alpine_setsrc (char* option)
             );
   chsrc_run(cmd);
 
-  cmd = "apk update";
-  chsrc_run(cmd);
-
+  chsrc_run("apk update");
   chsrc_say_thanks(&source);
 }
 
@@ -1227,6 +1229,7 @@ os_openeuler_setsrc (char* option)
   char* towrite = xy_strjoin(3, "s#http://repo.openeuler.org#", source.url, "#\'< /etc/yum.repos.d/openEuler.repo.bak");;
   chsrc_overwrite_file (towrite, "/etc/yum.repos.d/openEuler.repo");
 
+  chsrc_run ("sudo dnf makecache");
   chsrc_say_thanks(&source);
 }
 
@@ -1249,6 +1252,7 @@ os_openkylin_setsrc (char* option)
 
   char* cmd = xy_strjoin(3, "sed -E -i \'s@https?://.*/openkylin/?@", source.url, "@g\' /etc/apt/sources.list");
   chsrc_run(cmd);
+  chsrc_run("sudo apt update");
   chsrc_say_thanks(&source);
 }
 
