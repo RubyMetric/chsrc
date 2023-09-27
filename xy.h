@@ -66,6 +66,8 @@
 void putf(double n)    {printf("%f\n",  n);}
 void puti(long long n) {printf("%lld\n", n);}
 void putb(bool n)      {if(n) puts("true"); else puts("false");}
+void print(char* s)    {printf("%s", s);}
+void println(char* s)  {printf("%s\n", s);}
 
 #define xy_arylen(x) (sizeof(x) / sizeof(x[0]))
 

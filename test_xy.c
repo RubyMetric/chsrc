@@ -26,20 +26,20 @@ main (int argc, char const *argv[])
   puts(xy_strjoin(6, "楚山横地出，", "汉水接天回。", "冠盖非新里，", "章华即旧台。", "习池风景异，", "归路满尘埃。"));
 
 
-  puts(xy_str_to_bold("粗体"));
-  puts(xy_str_to_faint("浅体"));
-  puts(xy_str_to_italic("斜体"));
-  puts(xy_str_to_underline("下划线"));
-  puts(xy_str_to_blink("闪烁"));
-  puts(xy_str_to_cross("删除线"));
+  print(xy_str_to_bold("粗体"));
+  print(xy_str_to_faint("浅体"));
+  print(xy_str_to_italic("斜体"));
+  print(xy_str_to_underline("下划线"));
+  print(xy_str_to_blink("闪烁"));
+  print(xy_str_to_cross("删除线"));
 
-  puts(xy_str_to_red("红色"));
-  puts(xy_str_to_green("绿色"));
-  puts(xy_str_to_yellow("黄色"));
-  puts(xy_str_to_blue("蓝色"));
-  puts(xy_str_to_magenta("紫色"));
-  puts(xy_str_to_purple("紫色"));
-  puts(xy_str_to_cyan("青色"));
+  print(xy_str_to_red("红色"));
+  print(xy_str_to_green("绿色"));
+  print(xy_str_to_yellow("黄色"));
+  print(xy_str_to_blue("蓝色"));
+  print(xy_str_to_magenta("紫色"));
+  print(xy_str_to_purple("紫色"));
+  print(xy_str_to_cyan("青色"));
 
 
 
