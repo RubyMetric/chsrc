@@ -72,8 +72,13 @@ mirror_info
 //                  "https://mirrors.cqu.edu.cn/speedtest/1000mb.bin"};
 
 
-// 大型公司
-// 注意，腾讯软件源中，有很多链接都已失效，请仔细检查
+
+/**
+ *
+ */
+// 商业公司提供的源
+//
+// @note 腾讯软件源中，有很多链接都已失效，请仔细检查
 mirror_info
   Ali      = {"ali",     "Ali OPSX", "阿里巴巴开源镜像站",  "https://developer.aliyun.com/mirror/",
               "https://mirrors.aliyun.com/deepin-cd" Big_File_deepin},
@@ -85,8 +90,9 @@ mirror_info
               "https://mirrors.163.com/deepin-cd" Big_File_deepin},
 
   Sohu     = {"sohu",    "SOHU",     "搜狐开源镜像站",      "https://mirrors.sohu.com/",
-              "https://mirrors.sohu.com/deepin-cd" Big_File_deepin};
+              "https://mirrors.sohu.com/deepin-cd" Big_File_deepin},
 
+  Api7     = {"api7",    "api7.ai",  "深圳支流科技有限公司", "https://www.apiseven.com/", NULL};
 
 // 开源社区
 mirror_info
@@ -110,8 +116,8 @@ mirror_info
 mirror_info*
 available_mirrors[] = {
   &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Nju, // &Cqu,
-  &Ali,  &Tencent, &Netease, &Sohu,
-  &RubyChina, &NpmMirror, &GoProxyCN, &GoProxyIO
+  &Ali,  &Tencent, &Netease, &Sohu, &Api7,
+  &RubyChina, &EmacsChina, &NpmMirror, &GoProxyCN, &GoProxyIO,
   // 暂不支持 &NugetOrg
 };
 
@@ -213,6 +219,16 @@ pl_php_sources[] = {
   {&Tencent,        "https://mirrors.tencent.com/composer/"}
 },
 
+
+
+/**
+ * 2023-09-27 更新
+ *
+ * @note 目前只有唯一一个源
+ */
+pl_lua_sources[] = {
+  {&Api7,            "https://luarocks.cn"},
+},
 
 
 /**
@@ -723,8 +739,9 @@ wr_anaconda_sources[] = {
 #define def_target_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
 def_target_sources_n(pl_ruby);     def_target_sources_n(pl_python);    def_target_sources_n(pl_nodejs);
-def_target_sources_n(pl_perl);     def_target_sources_n(pl_php);       def_target_sources_n(pl_go);
-def_target_sources_n(pl_rust);     def_target_sources_n(pl_java);      def_target_sources_n(pl_clojure);
+def_target_sources_n(pl_perl);     def_target_sources_n(pl_php);       def_target_sources_n(pl_lua);
+def_target_sources_n(pl_go);       def_target_sources_n(pl_rust);
+def_target_sources_n(pl_java);      def_target_sources_n(pl_clojure);
 def_target_sources_n(pl_dotnet);   def_target_sources_n(pl_dart);      def_target_sources_n(pl_haskell);
 def_target_sources_n(pl_ocaml);
 def_target_sources_n(pl_r);        def_target_sources_n(pl_julia);

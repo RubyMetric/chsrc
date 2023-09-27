@@ -312,13 +312,13 @@ pl_lua_setsrc (char* option)
 
   char* config = xy_strjoin(3, "rocks_servers = {\n"
                                "  \"", source.url, "\"\n"
-                               "}";
+                               "}");
 
   chsrc_info ("请手动修改 ~/.luarocks/config.lua 文件 (用于下载):");
   puts(config);
 
   char* upload_config = xy_strjoin(3, "key = \"<Your API Key>\"\n"
-                                      "server = \"", source.url, "\"";
+                                      "server = \"", source.url, "\"");
 
   chsrc_info ("请手动修改  ~/.luarocks/upload_config.lua 文件 (用于上传):");
   puts(upload_config);
@@ -1750,9 +1750,9 @@ target_info
 
 #define targetinfo(t) (const char*)t
 static const char
-*pl_ruby  [] = {"gem",   "ruby",    "rb",    "rubygems",       NULL,  targetinfo(&pl_ruby_target)},
-*pl_python[] = {"pip",   "python",  "py",    "pypi",           NULL,  targetinfo(&pl_python_target)},
-*pl_nodejs[] = {"npm",   "node",    "js",    "nodejs", "yarn"  NULL,  targetinfo(&pl_nodejs_target)},
+*pl_ruby  [] = {"gem",   "ruby",    "rb",    "rubygems",        NULL,  targetinfo(&pl_ruby_target)},
+*pl_python[] = {"pip",   "python",  "py",    "pypi",            NULL,  targetinfo(&pl_python_target)},
+*pl_nodejs[] = {"npm",   "node",    "js",    "nodejs", "yarn",  NULL,  targetinfo(&pl_nodejs_target)},
 *pl_perl  [] = {"perl",  "cpan",                         NULL,  targetinfo(&pl_perl_target)},
 *pl_php   [] = {"php",   "composer",                     NULL,  targetinfo(&pl_php_target)},
 *pl_lua   [] = {"lua",   "luarocks",                     NULL,  targetinfo(&pl_lua_target)},
