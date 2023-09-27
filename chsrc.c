@@ -374,11 +374,7 @@ pl_go_setsrc (char* option)
 void
 pl_rust_getsrc (char* option)
 {
-  if(xy_on_windows) {
-    chsrc_check_file ("%USERPROFILE%\\.cargo");
-  } else {
-    chsrc_check_file ("~/.cargo");
-  }
+  chsrc_check_file ("~/.cargo");
 }
 
 /**
@@ -399,7 +395,7 @@ pl_rust_setsrc (char* option)
     "[source.mirror]\n"
     "registry = \"sparse+", source.url, "\"");
 
-  chsrc_warn ("请您手动写入以下内容到 ~/.cargo 文件中:");
+  chsrc_warn (xy_strjoin(3, "请您手动写入以下内容到 ", xy_uniform_path("~/.cargo"), " 文件中:"));
   puts(file);
   chsrc_say_thanks(&source);
 }
@@ -693,8 +689,8 @@ pl_r_getsrc (char* option)
   // options()$repos
   // options()$BioC_mirror
   //
-  if(xy_on_windows) {
-    chsrc_check_file ("%USERPROFILE%\\Documents\\.Rprofile");
+  if (xy_on_windows) {
+    chsrc_check_file ("~/Documents/.Rprofile");
   } else {
     chsrc_check_file ("~/.Rprofile");
   }
@@ -720,15 +716,14 @@ pl_r_setsrc (char* option)
   // 或者我们调用 r.exe --slave -e 上面的内容
   if (xy_on_windows)
   {
-    chsrc_append_to_file (towrite1, "%USERPROFILE%/Documents/.Rprofile");
-    chsrc_append_to_file (towrite2, "%USERPROFILE%/Documents/.Rprofile");
+    chsrc_append_to_file (towrite1, "~/Documents/.Rprofile");
+    chsrc_append_to_file (towrite2, "~/Documents/.Rprofile");
   }
   else
   {
     chsrc_append_to_file (towrite1, "~/.Rprofile");
     chsrc_append_to_file (towrite2, "~/.Rprofile");
   }
-
   chsrc_say_thanks(&source);
 }
 
@@ -744,11 +739,7 @@ pl_r_setsrc (char* option)
 void
 pl_julia_getsrc (char* option)
 {
-  if(xy_on_windows) {
-    chsrc_check_file ("%USERPROFILE%\\.julia\\config\\startup.jl");
-  } else {
-    chsrc_check_file ("~/.julia/config/startup.jl");
-  }
+  chsrc_check_file ("~/.julia/config/startup.jl");
 }
 
 /**
@@ -768,12 +759,10 @@ pl_julia_setsrc (char* option)
 
   if (xy_on_windows) {
     chsrc_run (xy_str_to_quietcmd ("md %USERPROFILE%\\.julia\\config"));
-    chsrc_append_to_file (towrite, "%USERPROFILE%/.julia/config/startup.jl");
-  }
-  else {
+  } else {
     chsrc_run (xy_str_to_quietcmd ("mkdir -p ~/.julia/config"));
-    chsrc_append_to_file (towrite, "~/.julia/config/startup.jl");
   }
+  chsrc_append_to_file (towrite, "~/.julia/config/startup.jl");
 
   chsrc_say_thanks(&source);
 }
@@ -807,7 +796,7 @@ os_ubuntu_setsrc (char* option)
 
   char* arch = xy_getcmd("arch", NULL);
   char* cmd  = NULL;
-  if(strncmp(arch, "x86_64", 6)==0)
+  if (strncmp(arch, "x86_64", 6)==0)
   {
     cmd = xy_strjoin(3, "sed -E -i \'s@https?://.*/ubuntu/?@", source.url, "@g\' /etc/apt/sources.list");
   }
@@ -1082,7 +1071,7 @@ os_arch_setsrc(char* option)
 
   chsrc_run("pacman -Sy archlinux-keyring");
 
-  if(arch_flag) {
+  if (arch_flag) {
     chsrc_run("pacman -Syyu");
   } else {
     chsrc_run("pacman -Syy");
@@ -2004,7 +1993,7 @@ iterate_targets_(const char*** array, size_t size, const char* input, const char
     if (matched) break;
   }
 
-  if(!matched) {
+  if (!matched) {
     *target_info = NULL;
     return false;
   }
