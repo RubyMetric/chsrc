@@ -90,6 +90,9 @@ main (int argc, char const *argv[])
   assert(xy_file_exist("chsrc.png"));
   assert(xy_file_exist(xy_win_powershell_profile));
   assert(false==xy_file_exist(xy_win_powershellv5_profile));
+
+  puts (xy_unix_path_to_win_if_on_win(" \n ~/haha/test/123 \n\r "));
+
   xy_success("测试全部通过");
   return 0;
 }

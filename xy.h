@@ -517,9 +517,9 @@ _xy_win_powershellv5_profile ()
  * @note Windows上，`path` 不要夹带变量名，因为最终 access() 不会帮你转换
  */
 static bool
-xy_file_exist (char* path)
+xy_file_exist (const char* path)
 {
-  char* newpath = path;
+  const char* newpath = path;
   if (xy_on_windows)
   {
     if (xy_str_start_with(path, "~")) {
@@ -530,16 +530,24 @@ xy_file_exist (char* path)
 }
 
 
-static const char*
-xy_unix_path_to_win (const char* path)
+/**
+ * 该函数即使在非Windows下也可调用，作用是删除路径左右两边多出来的空白符
+ */
+static char*
+xy_unix_path_to_win_if_on_win (const char* path)
 {
-  path = xy_str_strip(path); // 防止开发者多写了空格
-  if (xy_str_start_with(path, "~/")){
-    // 或 %USERPROFILE%
-    path = xy_strjoin(3, xy_os_home,  "\\", xy_str_delete_prefix(path, "~/"));
-    path = xy_str_gsub(path, "/", "\\");
+  char* new = xy_str_strip(path); // 防止开发者多写了空白符
+
+  // 这个函数仅在Windows上才进行替换
+  if (xy_on_windows) {
+    if (xy_str_start_with(new, "~/")){
+      // 或 %USERPROFILE%
+      new = xy_strjoin(3, xy_os_home,  "\\", xy_str_delete_prefix(new, "~/"));
+    }
+    new = xy_str_gsub(new, "/", "\\");
   }
-  return path;
+
+  return new;
 }
 
 #endif
