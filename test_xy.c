@@ -3,7 +3,7 @@
  * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-30>
- * Last modified : <2023-09-26>
+ * Last modified : <2023-09-27>
  *
  * test_xy:
  *
@@ -65,6 +65,11 @@ main (int argc, char const *argv[])
   puts(xy_str_delete_prefix("abcdefg", "0abcde"));// 不变
   puts(xy_str_delete_prefix("abcdefg", ""));      // 不变
   puts(xy_str_delete_prefix("abcdefg", "abc"));   // defg
+
+  puts(xy_str_gsub("abcdefabcdef", "abc", ""));       // 删除
+  puts(xy_str_gsub("abcdefabcdef", "abc", "6"));      // 缩小
+  puts(xy_str_gsub("abcdefabcdef", "abc", "XIANG"));  // 扩张
+  puts(xy_str_gsub("abcdefabcdef", "abc", "DEF"));    // 等量
 
   xy_success("成功：输出成功内容");
   xy_info("信息: 输出信息内容");
