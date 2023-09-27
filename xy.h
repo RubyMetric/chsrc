@@ -157,7 +157,7 @@ xy_str_gsub (const char* str, const char* pat, const char* replace)
       cur = fnd + pat_len;
     } else break;
   }
-  puti(count);
+  // puti(count); DEBUG 匹配次数
 
   char* ret = malloc (unit * count + len + 1);
   char* retcur = ret;
