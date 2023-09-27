@@ -292,6 +292,41 @@ pl_php_setsrc (char* option)
 }
 
 
+void
+pl_lua_getsrc (char* option)
+{
+  chsrc_check_file (" ~/.luarocks/config.lua");
+  chsrc_check_file ("~/.luarocks/upload_config.lua");
+}
+
+/**
+ * Lua 换源，参考：https://luarocks.cn/
+ */
+void
+pl_lua_setsrc (char* option)
+{
+  int index = use_specific_mirror_or_auto_select (option, pl_lua);
+
+  source_info source = pl_lua_sources[index];
+  chsrc_say_selection (&source);
+
+  char* config = xy_strjoin(3, "rocks_servers = {\n"
+                               "  \"", source.url, "\"\n"
+                               "}";
+
+  chsrc_info ("请手动修改 ~/.luarocks/config.lua 文件 (用于下载):");
+  puts(config);
+
+  char* upload_config = xy_strjoin(3, "key = \"<Your API Key>\"\n"
+                                      "server = \"", source.url, "\"";
+
+  chsrc_info ("请手动修改  ~/.luarocks/upload_config.lua 文件 (用于上传):");
+  puts(upload_config);
+
+  chsrc_say_thanks(&source);
+}
+
+
 
 void
 pl_go_check_cmd_ ()
@@ -1698,6 +1733,7 @@ def_target_info(pl_python);
 def_target_info(pl_nodejs);
 def_target_info(pl_perl);
 def_target_info(pl_php);
+def_target_info(pl_lua);
 def_target_info(pl_go);
 def_target_info(pl_rust);
 def_target_info(pl_java);
@@ -1719,6 +1755,7 @@ static const char
 *pl_nodejs[] = {"npm",   "node",    "js",    "nodejs", "yarn"  NULL,  targetinfo(&pl_nodejs_target)},
 *pl_perl  [] = {"perl",  "cpan",                         NULL,  targetinfo(&pl_perl_target)},
 *pl_php   [] = {"php",   "composer",                     NULL,  targetinfo(&pl_php_target)},
+*pl_lua   [] = {"lua",   "luarocks",                     NULL,  targetinfo(&pl_lua_target)},
 *pl_go    [] = {"go",    "golang",  "goproxy",           NULL,  targetinfo(&pl_go_target)} ,
 *pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  targetinfo(&pl_rust_target)},
 *pl_java  [] = {"java",  "maven",   "gradle",            NULL,  targetinfo(&pl_java_target)},
@@ -1731,7 +1768,7 @@ static const char
 *pl_julia [] = {"julia",                                 NULL,  targetinfo(&pl_julia_target)},
 **pl_packagers[] =
 {
-  pl_ruby,    pl_python,    pl_nodejs,      pl_perl,    pl_php,
+  pl_ruby,    pl_python,    pl_nodejs,      pl_perl,    pl_php,      pl_lua,
   pl_rust,    pl_go,        /*pl_dotnet,*/  pl_java,    pl_clojure,  pl_dart,
   pl_haskell, pl_ocaml,
   pl_r,       pl_julia
