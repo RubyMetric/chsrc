@@ -130,31 +130,49 @@ _xy_log (int level, const char* str)
 
 
 /**
- * 将str中所有的src字符替换成dest,并返回一个全新的字符串
- * 现在已经废弃不用
+ * 将str中所有的pat字符串替换成replace，返回一个全新的字符串
  */
 static char*
-xy_strch (const char* str, char src,const char* dest)
+xy_str_gsub (const char* str, const char* pat, const char* replace)
 {
-  size_t str_len  = strlen(str);
-  size_t dest_len = strlen(dest);
-  size_t size = str_len*dest_len;
-  char* ret  = (char*)malloc(size);
-  int i=0;
-  int j=0;
-  while(i<str_len) {
-    if(str[i]==src) {
-      int k=0;
-      while(k<dest_len){
-        ret[j++] = dest[k++];
-      }
-      i++;
-    }
-    else {
-      ret[j++] = str[i++];
-    }
+  size_t replace_len = strlen(replace);
+  size_t pat_len     = strlen(pat);
+
+  int unit = replace_len - pat_len;
+  if (unit<=0) unit = 0;
+
+  size_t len = strlen(str);
+
+  const char* cur = str;
+  int count = 0;
+
+  while (cur<str+len) {
+    char* fnd = strstr(cur, pat);
+    if (fnd) {
+      count++;
+      cur = fnd + pat_len;
+    } else break;
   }
-  ret[j] = 0;
+  puti(count);
+
+  char* ret = malloc (unit * count + len + 1);
+  char* retcur = ret;
+
+  cur = str;
+  while(cur<str+len) {
+    char* fnd = strstr(cur, pat);
+    if (fnd) {
+      ptrdiff_t diff = fnd - cur;
+      strncpy(retcur, cur, diff);
+      cur = fnd + pat_len;
+
+      retcur += diff;
+      strcpy(retcur, replace);
+      retcur += replace_len;
+    } else break;
+  }
+  strcpy(retcur, cur);
+
   return ret;
 }
 
