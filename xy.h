@@ -71,6 +71,8 @@ void println(char* s)  {printf("%s\n", s);}
 
 #define xy_arylen(x) (sizeof(x) / sizeof(x[0]))
 
+#define assert_str(a,b) assert(xy_streql((a), (b)))
+
 
 static inline void*
 xy_malloc0 (size_t size)
