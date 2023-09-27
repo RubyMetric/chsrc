@@ -776,8 +776,8 @@ os_ubuntu_setsrc (char* option)
 
   chsrc_backup ("/etc/apt/sources.list");
 
-  char* arch = xy_getcmd("arch",NULL);
-  char* cmd;
+  char* arch = xy_getcmd("arch", NULL);
+  char* cmd  = NULL;
   if(strncmp(arch, "x86_64", 6)==0)
   {
     cmd = xy_strjoin(3, "sed -E -i \'s@https?://.*/ubuntu/?@", source.url, "@g\' /etc/apt/sources.list");
@@ -1031,9 +1031,8 @@ os_arch_setsrc(char* option)
   chsrc_backup ("/etc/pacman.d/mirrorlist");
 
   bool  arch_flag = false;
-  char* new_file;
+  char* new_file  = NULL;
   char* arch = xy_getcmd("arch", NULL);
-  char* cmd;
 
   if (strncmp(arch, "x86_64", 6)==0) {
     arch_flag = true;
@@ -1375,8 +1374,9 @@ os_netbsd_setsrc(char* option)
 
   chsrc_backup ("/usr/pkg/etc/pkgin/repositories.conf");
 
-  char* arch = xy_getcmd("arch",NULL);
-  char* version = "cat /etc/os-release | grep \"VERSION=\" | grep -Po \"[8-9].[0-9]+\"";
+  char* arch = xy_getcmd("arch", NULL);
+  char* vercmd  = "cat /etc/os-release | grep \"VERSION=\" | grep -Po \"[8-9].[0-9]+\"";
+  char* version = xy_getcmd(vercmd, NULL);
 
   char* url = xy_strjoin(5, source.url, arch, "/", version, "/All");
   chsrc_overwrite_file (url, "/usr/pkg/etc/pkgin/repositories.conf");
