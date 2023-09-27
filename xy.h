@@ -447,14 +447,14 @@ xy_getcmd(const char* cmd, bool (*func)(const char*))
 
   FILE* stream = popen(cmd, "r");
   if (stream == NULL) {
-    fprintf(stderr, "命令执行失败\n");
+    fprintf(stderr, "xy: 命令执行失败\n");
     return NULL;
   }
 
   char* ret = NULL;
 
   while (true) {
-    if(NULL==fgets(buf, sizeof(buf), stream)) break;
+    if(NULL==fgets(buf, size, stream)) break;
     ret = buf;
     if (func) { func(buf); }
   }
