@@ -40,45 +40,56 @@ main (int argc, char const *argv[])
   print(xy_str_to_magenta("紫色"));
   print(xy_str_to_purple("紫色"));
   print(xy_str_to_cyan("青色"));
+  puts("");
 
+  assert(false == xy_str_end_with("abcdef", "abcdefg"));
+  assert(xy_str_end_with("abcdef", "def"));
 
+  assert(xy_str_end_with("abcdef", "bcdef"));
+  assert(xy_str_end_with("abcdef", "abcdef"));
+  assert(xy_str_end_with("abcdef", ""));
 
-  putb(xy_str_end_with("abcdef", "abcdefg")); // false
-  putb(xy_str_end_with("abcdef", "def"));     // true
-  putb(xy_str_end_with("abcdef", "bcdef"));   // true
-  putb(xy_str_end_with("abcdef", "abcdef"));  // true
-  putb(xy_str_end_with("abcdef", ""));        // true
+  assert(false == xy_str_start_with("abcdef", "abcdefg"));
+  assert(xy_str_start_with("abcdef", "abc"));
+  assert(xy_str_start_with("abcdef", "abcde"));
+  assert(xy_str_start_with("abcdef", "abcdef"));
+  assert(xy_str_start_with("abcdef", ""));
 
-  putb(xy_str_start_with("abcdef", "abcdefg")); // false
-  putb(xy_str_start_with("abcdef", "abc"));     // true
-  putb(xy_str_start_with("abcdef", "abcde"));   // true
-  putb(xy_str_start_with("abcdef", "abcdef"));  // true
-  putb(xy_str_start_with("abcdef", ""));        // true
+  assert_str("abcdefg",
+    xy_str_delete_suffix("abcdefg", "cdef"));
+  assert_str("abcdefg",
+    xy_str_delete_suffix("abcdefg", "cdefgh"));
+  assert_str("abcdefg",
+    xy_str_delete_suffix("abcdefg", ""));
+  assert_str("abcd",
+    xy_str_delete_suffix("abcdefg", "efg"));
 
-  puts(xy_str_delete_suffix("abcdefg", "cdef"));  // 不变
-  puts(xy_str_delete_suffix("abcdefg", "cdefgh"));// 不变
-  puts(xy_str_delete_suffix("abcdefg", ""));      // 不变
-  puts(xy_str_delete_suffix("abcdefg", "efg"));   // abcd
+  assert_str("abcdefg",
+    xy_str_delete_prefix("abcdefg", "cdef"));
+  assert_str("abcdefg",
+    xy_str_delete_prefix("abcdefg", "0abcde"));
+  assert_str("abcdefg",
+    xy_str_delete_prefix("abcdefg", ""));
+  assert_str("defg",
+    xy_str_delete_prefix("abcdefg", "abc"));
 
-
-  puts(xy_str_delete_prefix("abcdefg", "cdef"));  // 不变
-  puts(xy_str_delete_prefix("abcdefg", "0abcde"));// 不变
-  puts(xy_str_delete_prefix("abcdefg", ""));      // 不变
-  puts(xy_str_delete_prefix("abcdefg", "abc"));   // defg
-
-  puts(xy_str_gsub("abcdefabcdef", "abc", ""));       // 删除
-  puts(xy_str_gsub("abcdefabcdef", "abc", "6"));      // 缩小
-  puts(xy_str_gsub("abcdefabcdef", "abc", "XIANG"));  // 扩张
-  puts(xy_str_gsub("abcdefabcdef", "abc", "DEF"));    // 等量
+  assert_str("defdef",
+    xy_str_gsub("abcdefabcdef", "abc", ""));  // 删除
+  assert_str("6def6def",
+    xy_str_gsub("abcdefabcdef", "abc", "6")); // 缩小
+  assert_str("XIANGdefXIANGdef",
+    xy_str_gsub("abcdefabcdef", "abc", "XIANG")); // 扩张
+  assert_str("DEFdefDEFdef",
+    xy_str_gsub("abcdefabcdef", "abc", "DEF"));   // 等量
 
   xy_success("成功：输出成功内容");
   xy_info("信息: 输出信息内容");
   xy_warn("警告：输出警告内容");
   xy_error("错误：输出错误内容");
 
-  putb(xy_file_exist("chsrc.png"));
-  putb(xy_file_exist(xy_win_powershell_profile));
-  putb(xy_file_exist(xy_win_powershellv5_profile));
-
+  assert(xy_file_exist("chsrc.png"));
+  assert(xy_file_exist(xy_win_powershell_profile));
+  assert(false==xy_file_exist(xy_win_powershellv5_profile));
+  xy_success("测试全部通过");
   return 0;
 }
