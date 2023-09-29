@@ -107,6 +107,7 @@ chsrc set python  或 set pip
 chsrc set node    或 set npm / nodejs / yarn # 同时会为yarn换源
 chsrc set perl    或 set cpan
 chsrc set php     或 set composer
+chsrc set lua     或 set luarocks
 
 chsrc set go
 chsrc set rust    或 set cargo / crate
@@ -127,16 +128,20 @@ chsrc set julia
 
 ```bash
 sudo chsrc set ubuntu
+sudo chsrc set mint  或 linuxmint
 sudo chsrc set debian
 sudo chsrc set fedora
 sudo chsrc set suse  或 set opensuse
+sudo chsrc set kali
 sudo chsrc set arch  # 同时使用 archlinuxcn
 sudo chsrc set manjaro
-sudo chsrc set kali
 sudo chsrc set gentoo
-sudo chsrc set alpine
 sudo chsrc set rocky
+sudo chsrc set alpine
 sudo chsrc set void
+sudo chsrc set trisquel
+sudo chsrc set lite  或 set linuxlite
+sudo chsrc set raspi 或 set raspberrypi
 
 sudo chsrc set freebsd
 sudo chsrc set openbsd
