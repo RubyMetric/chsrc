@@ -1360,7 +1360,7 @@ os_openkylin_setsrc (char* option)
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
-  char* cmd = xy_strjoin(3, "sed -E -i \'s@https?://.*/openkylin/?@", source.url, "@g\' /etc/apt/sources.list");
+  char* cmd = xy_strjoin(3, "sed -E -i 's@https?://.*/openkylin/?@", source.url, "@g'" ETC_APT_SOURCELIST);
   chsrc_run(cmd);
   chsrc_run("sudo apt update");
   chsrc_say_thanks(&source);
@@ -1888,7 +1888,7 @@ target_info
   os_gentoo_target      = {os_gentoo_setsrc,      NULL, os_gentoo_sources,    os_gentoo_sources_n},
   os_rocky_target       = {os_rocky_setsrc,       NULL, os_rocky_sources,     os_rocky_sources_n},
   os_freebsd_target     = {os_freebsd_setsrc,     NULL, os_freebsd_sources,   os_freebsd_sources_n},
-  os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources, os_openeuler_sources_n},
+  os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources, os_openeuler_sources_n};
 
 static const char
 *os_ubuntu        [] = {"ubuntu",               NULL,  targetinfo(&os_ubuntu_target)},

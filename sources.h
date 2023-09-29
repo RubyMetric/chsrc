@@ -110,8 +110,12 @@ mirror_info
   GoProxyIO = {"goproxy.io",   "GOPROXY.IO",   "GOPROXY.IO",         "https://goproxy.io/",
                "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"},   // 30 MB
 
-  NugetOrg   = {"nuget.org",    "NuGet Org",   "Nuget Organization", "https://www.nuget.org/",           NULL},
-  EmacsChina = {"emacschina",  "EmacsChina",   "Emacs China 社区", "https://elpamirror.emacs-china.org/", NULL};
+  NugetOrg   = {"nuget.org",    "NuGet Org",   "Nuget Organization", "https://www.nuget.org/",               NULL},
+  EmacsChina = {"emacschina",  "EmacsChina",   "Emacs China 社区",    "https://elpamirror.emacs-china.org/", NULL};
+
+
+mirror_info
+  Upstream = {"upstream",   "Upstream",     "上游默认源",      NULL,     NULL};
 
 
 mirror_info*
@@ -120,6 +124,8 @@ available_mirrors[] = {
   &Ali,  &Tencent, &Netease, &Sohu, &Api7,
   &RubyChina, &EmacsChina, &NpmMirror, &GoProxyCN, &GoProxyIO,
   // 暂不支持 &NugetOrg
+
+  // 不要列出 &Upstream
 };
 
 
@@ -655,18 +661,12 @@ os_openeuler_sources[] = {
 
 
 /**
- * 2023-09-06 更新
- *
- * TODO: 1. 源并不完整，且未经测试是否有效
+ * 2023-09-29 更新
  */
 os_openkylin_sources[] = {
+  {&Upstream,  "https://archive.openkylin.top/openkylin/"},
   {&Ali,       "https://mirrors.aliyun.com/openkylin/"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/openkylin/"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/openkylin/"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/openkylin/"},
-  {&Tencent,   "https://mirrors.tencent.com/openkylin/"},
   {&Netease,   "https://mirrors.163.com/openkylin/"},
-  {&Sohu,      "https://mirrors.sohu.com/openkylin/"}
 };
 
 
