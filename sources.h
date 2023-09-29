@@ -580,10 +580,10 @@ os_linuxlite_sources[] = {
  * 2023-09-29 更新
  */
 os_trisquel_sources[] = {
-  {&Ali,            "https://mirrors.aliyun.com"},
-  {&MirrorZ,        "https://mirrors.cernet.edu.cn"},
-  {&Nju,            "https://mirror.nju.edu.cn"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn"}
+  {&Ali,            "https://mirrors.aliyun.com/trisquel/"},
+  {&MirrorZ,        "https://mirrors.cernet.edu.cn/trisquel/"},
+  {&Nju,            "https://mirror.nju.edu.cn/trisquel/"},
+  {&Ustc,           "https://mirrors.ustc.edu.cn/trisquel/"}
 },
 
 
