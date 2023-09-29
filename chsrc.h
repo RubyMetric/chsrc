@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2023-09-27>
+ * Last modified : <2023-09-29>
  *
  * chsrc:
  *
@@ -292,9 +292,26 @@ chsrc_check_file (const char* path)
 }
 
 static void
+chsrc_ensure_dir (const char* dir)
+{
+  char* mkdir_cmd = NULL;
+  if (xy_on_windows) {
+    mkdir_cmd = "md ";
+  } else {
+    mkdir_cmd = "mkdir -p ";
+  }
+  char* cmd = xy_2strjoin (mkdir_cmd, dir);
+  cmd = xy_str_to_quietcmd (cmd);
+  chsrc_run (cmd);
+}
+
+static void
 chsrc_append_to_file (const char* str, const char* file)
 {
   file = xy_uniform_path (file);
+  char* dir = xy_parent_dir (file);
+  chsrc_ensure_dir (dir);
+
   char* cmd = NULL;
   if (xy_on_windows) {
     cmd = xy_strjoin (4, "echo ", str, " >> ", file);
@@ -308,6 +325,9 @@ static void
 chsrc_overwrite_file (const char* str, const char* file)
 {
   file = xy_uniform_path (file);
+  char* dir = xy_parent_dir (file);
+  chsrc_ensure_dir (dir);
+
   char* cmd = NULL;
   if (xy_on_windows) {
     cmd = xy_strjoin (4, "echo ", str, " > ", file);

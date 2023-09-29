@@ -1719,14 +1719,15 @@ wr_guix_setsrc (char* option)
 }
 
 
+
 void
-wr_nix_check_cmd_()
+wr_nix_check_cmd ()
 {
   char* check_cmd = xy_str_to_quietcmd("nix-channel --version");
   bool exist = does_the_program_exist (check_cmd, "nix-channel");
 
   if (!exist) {
-    xy_error ("chsrc: 未找到 nix-channel 命令，请检查是否存在");
+    chsrc_error ("未找到 nix-channel 命令，请检查是否存在");
     exit(1);
   }
 }
@@ -1739,7 +1740,7 @@ wr_nix_check_cmd_()
 void
 wr_nix_setsrc (char* option)
 {
-  wr_nix_check_cmd_();
+  wr_nix_check_cmd ();
 
   int index = use_specific_mirror_or_auto_select (option, wr_nix);
 
