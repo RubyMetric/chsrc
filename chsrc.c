@@ -878,6 +878,34 @@ os_debian_setsrc (char* option)
 
 
 void
+os_raspberrypi_getsrc (char* option)
+{
+  chsrc_check_file ("/etc/apt/sources.list.d/raspi.list");
+}
+
+void
+os_raspberrypi_setsrc (char* option)
+{
+  // ensure_root(); // HELP: 不确定是否需要
+
+  int index = use_specific_mirror_or_auto_select (option, os_raspberrypi);
+
+  source_info source = os_raspberrypi_sources[index];
+  chsrc_say_selection(&source);
+
+  chsrc_backup ("/etc/apt/sources.list.d/raspi.list");
+
+  char* cmd = xy_strjoin(3, "sed -E -i 's@https?://.*/.*/?@", source.url,
+                            "@g' /etc/apt/sources.list.d/raspi.list");
+
+  chsrc_run(cmd);
+  chsrc_run("sudo apt update");
+  chsrc_say_thanks(&source);
+}
+
+
+
+void
 os_deepin_getsrc(char* option)
 {
   chsrc_check_file (ETC_APT_SOURCELIST);
@@ -1877,6 +1905,7 @@ def_target_info(os_netbsd);
 def_target_info(os_openbsd);
 def_target_info(os_deepin);
 def_target_info(os_openkylin);
+def_target_info(os_raspberrypi);
 
 
 target_info
@@ -1906,6 +1935,7 @@ static const char
 *os_void          [] = {"void",   "voidlinux",  NULL,  targetinfo(&os_void_target)},
 *os_trisquel      [] = {"trisquel",             NULL,  targetinfo(&os_trisquel_target)},
 *os_linuxlite     [] = {"lite",   "linuxlite",  NULL,  targetinfo(&os_linuxlite_target)},
+*os_raspberrypi   [] = {"raspi",  "raspberrypi",NULL,  targetinfo(&os_raspberrypi_target)},
 *os_freebsd       [] = {"freebsd",              NULL,  targetinfo(&os_freebsd_target)},
 *os_netbsd        [] = {"netbsd",               NULL,  targetinfo(&os_netbsd_target)},
 *os_openbsd       [] = {"openbsd",              NULL,  targetinfo(&os_openbsd_target)},
@@ -1918,7 +1948,7 @@ static const char
   os_arch,    os_manjaro, os_gentoo,
   os_rocky,
   os_alpine,
-  os_trisquel, os_linuxlite,
+  os_trisquel, os_linuxlite, os_raspberrypi,
   os_freebsd, os_netbsd,  os_openbsd,
   os_msys2,
   os_deepin, os_openeuler, os_openkylin,
