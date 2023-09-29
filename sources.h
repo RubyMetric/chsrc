@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2023-09-27>
+ * Last modified : <2023-09-29>
  *
  * sources:
  *
@@ -557,6 +557,18 @@ os_void_sources[] = {
 
 
 /**
+ * 2023-09-29 更新
+ */
+os_trisquel_sources[] = {
+  {&Ali,            "https://mirrors.aliyun.com"},
+  {&MirrorZ,        "https://mirrors.cernet.edu.cn"},
+  {&Nju,            "https://mirror.nju.edu.cn"},
+  {&Ustc,           "https://mirrors.ustc.edu.cn"}
+},
+
+
+
+/**
  * 2023-09-27 更新
  *
  * @note 该源需要 FreeBSD 中文社区积极参与维护
@@ -751,6 +763,8 @@ def_target_sources_n(os_ubuntu);   def_target_sources_n(os_debian);    def_targe
 def_target_sources_n(os_kali);     def_target_sources_n(os_opensuse);
 def_target_sources_n(os_arch);     def_target_sources_n(os_msys2);     def_target_sources_n(os_gentoo);
 def_target_sources_n(os_alpine);   def_target_sources_n(os_rocky);     def_target_sources_n(os_void);
+
+def_target_sources_n(os_trisquel);
 
 def_target_sources_n(os_freebsd);  def_target_sources_n(os_netbsd);    def_target_sources_n(os_openbsd);
 def_target_sources_n(os_deepin);   def_target_sources_n(os_openeuler); def_target_sources_n(os_openkylin);
