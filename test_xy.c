@@ -3,7 +3,7 @@
  * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-30>
- * Last modified : <2023-09-27>
+ * Last modified : <2023-09-29>
  *
  * test_xy:
  *
@@ -92,6 +92,7 @@ main (int argc, char const *argv[])
   assert(false==xy_file_exist(xy_win_powershellv5_profile));
 
   puts (xy_uniform_path(" \n ~/haha/test/123 \n\r "));
+  assert_str (xy_uniform_path("~/haha/test"), xy_parent_dir (" ~/haha/test/123") );
 
   xy_success("测试全部通过");
   return 0;

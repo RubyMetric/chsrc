@@ -3,7 +3,7 @@
  * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-27>
+ * Last modified : <2023-09-29>
  *
  * xy:
  *
@@ -555,6 +555,22 @@ xy_uniform_path (const char* path)
   }
 
   return new;
+}
+
+
+static char*
+xy_parent_dir (const char* path)
+{
+  char* dir = xy_uniform_path (path);
+  char* last = NULL;
+  if (xy_on_windows) {
+    last = strrchr(dir, '\\');
+    *last = '\0';
+  } else {
+    last = strrchr(dir, '/');
+    *last = '\0';
+  }
+  return dir;
 }
 
 #endif
