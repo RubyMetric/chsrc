@@ -571,6 +571,14 @@ os_void_sources[] = {
 /**
  * 2023-09-29 更新
  */
+os_linuxlite_sources[] = {
+  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/linuxliteos/"}
+},
+
+
+/**
+ * 2023-09-29 更新
+ */
 os_trisquel_sources[] = {
   {&Ali,            "https://mirrors.aliyun.com"},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn"},
@@ -777,7 +785,7 @@ def_target_sources_n(os_kali);     def_target_sources_n(os_opensuse);
 def_target_sources_n(os_arch);     def_target_sources_n(os_msys2);     def_target_sources_n(os_gentoo);
 def_target_sources_n(os_alpine);   def_target_sources_n(os_rocky);     def_target_sources_n(os_void);
 
-def_target_sources_n(os_trisquel);
+def_target_sources_n(os_trisquel); def_target_sources_n(os_linuxlite);
 
 def_target_sources_n(os_freebsd);  def_target_sources_n(os_netbsd);    def_target_sources_n(os_openbsd);
 def_target_sources_n(os_deepin);   def_target_sources_n(os_openeuler); def_target_sources_n(os_openkylin);
