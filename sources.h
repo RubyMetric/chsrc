@@ -541,7 +541,6 @@ os_rocky_sources[] = {
 },
 
 
-
 /**
  * 2023-09-24 更新
  */
@@ -556,7 +555,6 @@ os_alpine_sources[] = {
 },
 
 
-
 /**
  * 2023-09-24 更新
  */
@@ -564,6 +562,16 @@ os_void_sources[] = {
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/voidlinux"},
   {&Sjtug_Zhiyuan,  "https://mirror.sjtu.edu.cn/voidlinux"},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/voidlinux"}
+},
+
+
+/**
+ * 2023-09-29 更新
+ */
+os_solus_sources[] = {
+  {&Tuna, "https://mirrors.tuna.tsinghua.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"},
+  {&Bfsu, "https://mirrors.bfsu.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"},
+  {&Nju,  "https://mirror.nju.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"}
 },
 
 
@@ -786,6 +794,7 @@ def_target_sources_n(os_debian);   def_target_sources_n(os_fedora);
 def_target_sources_n(os_kali);     def_target_sources_n(os_opensuse);
 def_target_sources_n(os_arch);     def_target_sources_n(os_msys2);     def_target_sources_n(os_gentoo);
 def_target_sources_n(os_alpine);   def_target_sources_n(os_rocky);     def_target_sources_n(os_void);
+def_target_sources_n(os_solus);
 
 def_target_sources_n(os_trisquel); def_target_sources_n(os_linuxlite); def_target_sources_n(os_raspberrypi);
 
