@@ -806,6 +806,37 @@ os_ubuntu_setsrc (char* option)
 
 
 void
+os_mint_getsrc(char* option)
+{
+  chsrc_check_file ("/etc/apt/sources.list.d/official-package-repositories.list");
+}
+
+/**
+ * 参考: https://help.mirrors.cernet.edu.cn/linuxmint/
+ */
+void
+os_mint_setsrc (char* option)
+{
+  ensure_root();
+
+  int index = use_specific_mirror_or_auto_select (option, os_mint);
+
+  source_info source = os_mint_sources[index];
+  chsrc_say_selection(&source);
+
+  chsrc_backup ("/etc/apt/sources.list.d/official-package-repositories.list");
+
+  char* cmd = xy_strjoin(3, "sed -E -i 's@https?://.*/ubuntu/?@", source.url,
+                            "@g' /etc/apt/sources.list.d/official-package-repositories.list");
+
+  chsrc_run(cmd);
+  chsrc_run("sudo apt update");
+  chsrc_say_thanks(&source);
+}
+
+
+
+void
 os_debian_getsrc(char* option)
 {
   chsrc_check_file ("/etc/apt/sources.list");
@@ -1786,6 +1817,7 @@ static const char
 
 
 def_target_info(os_ubuntu);
+def_target_info(os_mint);
 def_target_info(os_debian);
 def_target_info(os_deepin);
 def_target_info(os_void);
@@ -1810,6 +1842,7 @@ target_info
 
 static const char
 *os_ubuntu        [] = {"ubuntu",               NULL,  targetinfo(&os_ubuntu_target)},
+*os_mint          [] = {"mint",                 NULL,  targetinfo(&os_mint_target)},
 *os_debian        [] = {"debian",  "deb",       NULL,  targetinfo(&os_debian_target)},
 *os_fedora        [] = {"fedora",               NULL,  targetinfo(&os_fedora_target)},
 *os_opensuse      [] = {"suse",   "opensuse",   NULL,  targetinfo(&os_opensuse_target)},
@@ -1830,7 +1863,7 @@ static const char
 *os_openkylin     [] = {"kylin",  "openkylin",  NULL,  targetinfo(&os_openkylin_target)},
 **os_systems[] =
 {
-  os_ubuntu,  os_debian,  os_fedora,  os_opensuse, os_kali,
+  os_ubuntu,  os_mint,    os_debian,  os_fedora,  os_opensuse, os_kali,
   os_arch,    os_manjaro, os_gentoo,
   os_rocky,
   os_alpine,
