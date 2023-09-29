@@ -1273,6 +1273,26 @@ os_void_setsrc (char* option)
 
 
 /**
+ * 参考: https://help.mirrors.cernet.edu.cn/solus/
+ */
+void
+os_solus_setsrc (char* option)
+{
+  chsrc_ensure_root ();
+
+  int index = use_specific_mirror_or_auto_select (option, os_solus);
+
+  source_info source = os_solus_sources[index];
+  chsrc_say_selection(&source);
+
+  char* cmd = xy_2strjoin ("sudo eopkg add-repo Solus ", source.url);
+  chsrc_run (cmd);
+  chsrc_say_thanks(&source);
+}
+
+
+
+/**
  * 似乎会弹出GUI，待确定
  */
 void
@@ -1917,6 +1937,7 @@ target_info
   os_manjaro_target     = {os_manjaro_setsrc,     NULL, NULL,                       0},
   os_gentoo_target      = {os_gentoo_setsrc,      NULL, os_gentoo_sources,    os_gentoo_sources_n},
   os_rocky_target       = {os_rocky_setsrc,       NULL, os_rocky_sources,     os_rocky_sources_n},
+  os_solus_target       = {os_solus_setsrc,       NULL, os_solus_sources,     os_solus_sources_n},
   os_freebsd_target     = {os_freebsd_setsrc,     NULL, os_freebsd_sources,   os_freebsd_sources_n},
   os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources, os_openeuler_sources_n};
 
@@ -1934,6 +1955,7 @@ static const char
 *os_rocky         [] = {"rocky",  "rockylinux", NULL,  targetinfo(&os_rocky_target)},
 *os_alpine        [] = {"alpine",               NULL,  targetinfo(&os_alpine_target)},
 *os_void          [] = {"void",   "voidlinux",  NULL,  targetinfo(&os_void_target)},
+*os_solus         [] = {"solus",                NULL,  targetinfo(&os_solus_target)},
 *os_trisquel      [] = {"trisquel",             NULL,  targetinfo(&os_trisquel_target)},
 *os_linuxlite     [] = {"lite",   "linuxlite",  NULL,  targetinfo(&os_linuxlite_target)},
 *os_raspberrypi   [] = {"raspi",  "raspberrypi",NULL,  targetinfo(&os_raspberrypi_target)},
@@ -1948,7 +1970,7 @@ static const char
   os_ubuntu,  os_mint,    os_debian,  os_fedora,  os_opensuse, os_kali,
   os_arch,    os_manjaro, os_gentoo,
   os_rocky,
-  os_alpine,   os_void,
+  os_alpine,   os_void,      os_solus,
   os_trisquel, os_linuxlite, os_raspberrypi,
   os_freebsd,  os_netbsd,    os_openbsd,
   os_msys2,
