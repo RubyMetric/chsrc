@@ -772,7 +772,7 @@ pl_julia_setsrc (char* option)
 void
 os_ubuntu_getsrc(char* option)
 {
-  chsrc_check_file ("/etc/apt/sources.list");
+  chsrc_check_file (ETC_APT_SOURCELIST);
 }
 
 /**
@@ -788,7 +788,7 @@ os_ubuntu_setsrc (char* option)
   source_info source = os_ubuntu_sources[index];
   chsrc_say_selection(&source);
 
-  chsrc_backup ("/etc/apt/sources.list");
+  chsrc_backup (ETC_APT_SOURCELIST);
 
   char* arch = xy_getcmd("arch", 0, NULL);
   char* cmd  = NULL;
@@ -843,7 +843,7 @@ os_mint_setsrc (char* option)
 void
 os_debian_getsrc(char* option)
 {
-  chsrc_check_file ("/etc/apt/sources.list");
+  chsrc_check_file (ETC_APT_SOURCELIST);
 }
 
 /**
@@ -863,7 +863,7 @@ os_debian_setsrc (char* option)
   chsrc_info ("如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并需要您运行:");
   puts ("sudo apt install apt-transport-https ca-certificates");
 
-  chsrc_backup ("/etc/apt/sources.list");
+  chsrc_backup (ETC_APT_SOURCELIST);
 
   char* cmd = xy_strjoin(3,
       "sed -E -i \'s@https?://.*/debian/?@",
@@ -880,7 +880,7 @@ os_debian_setsrc (char* option)
 void
 os_deepin_getsrc(char* option)
 {
-  chsrc_check_file ("/etc/apt/sources.list");
+  chsrc_check_file (ETC_APT_SOURCELIST);
 }
 
 /**
@@ -896,7 +896,7 @@ os_deepin_setsrc (char* option)
   source_info source = os_deepin_sources[index];
   chsrc_say_selection(&source);
 
-  chsrc_backup ("/etc/apt/sources.list");
+  chsrc_backup (ETC_APT_SOURCELIST);
 
   char* cmd = xy_strjoin(3,
       "sed -E -i \'s@https?://.*/deepin/?@",
@@ -1027,7 +1027,7 @@ os_kali_setsrc(char* option)
   source_info source = os_kali_sources[index];
   chsrc_say_selection(&source);
 
-  chsrc_backup ("/etc/apt/sources.list");
+  chsrc_backup (ETC_APT_SOURCELIST);
 
   char* cmd = xy_strjoin(3,
       "sed -E -i \'s@https?://.*/kali/?@",
@@ -1262,7 +1262,7 @@ os_manjaro_setsrc(char* option)
 void
 os_trisquel_getsrc (char* option)
 {
-  chsrc_check_file ("/etc/apt/sources.list");
+  chsrc_check_file (ETC_APT_SOURCELIST);
 }
 
 /**
@@ -1278,7 +1278,7 @@ os_trisquel_setsrc (char* option)
   source_info source = os_trisquel_sources[index];
   chsrc_say_selection(&source);
 
-  chsrc_backup ("/etc/apt/sources.list");
+  chsrc_backup (ETC_APT_SOURCELIST);
 
   char* cmd = xy_strjoin(3, "sed -E -i 's@https?://.*/trisquel/?@", source.url, "@g' /etc/apt/sources.list");
 
@@ -1292,7 +1292,7 @@ os_trisquel_setsrc (char* option)
 void
 os_linuxlite_getsrc (char* option)
 {
-  chsrc_check_file ("/etc/apt/sources.list");
+  chsrc_check_file (ETC_APT_SOURCELIST);
 }
 
 /**
@@ -1308,7 +1308,7 @@ os_linuxlite_setsrc (char* option)
   source_info source = os_linuxlite_sources[index];
   chsrc_say_selection(&source);
 
-  chsrc_backup ("/etc/apt/sources.list");
+  chsrc_backup (ETC_APT_SOURCELIST);
 
   char* cmd = xy_strjoin(3, "sed -E -i 's@https?://.*/.*/?@", source.url, "@g' /etc/apt/sources.list");
 
@@ -1358,7 +1358,7 @@ os_openkylin_setsrc (char* option)
   source_info source = os_openkylin_sources[index];
   chsrc_say_selection(&source);
 
-  chsrc_backup ("/etc/apt/sources.list");
+  chsrc_backup (ETC_APT_SOURCELIST);
 
   char* cmd = xy_strjoin(3, "sed -E -i \'s@https?://.*/openkylin/?@", source.url, "@g\' /etc/apt/sources.list");
   chsrc_run(cmd);
