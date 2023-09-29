@@ -431,7 +431,6 @@ os_debian_sources[] = {
 },
 
 
-
 /**
  * 2023-09-02 更新
  *
@@ -464,7 +463,6 @@ os_kali_sources[] = {
 },
 
 
-
 /**
  * 2023-09-05 更新
  *
@@ -479,7 +477,6 @@ os_arch_sources[] = {
   {&Netease,   "https://mirrors.163.com/"},
   {&Sohu,      "https://mirrors.sohu.com/"}
 },
-
 
 
 /**
@@ -498,7 +495,6 @@ os_gentoo_sources[] = {
 },
 
 
-
 /**
  * 2023-09-17 更新
  *
@@ -515,7 +511,6 @@ os_opensuse_sources[] = {
 },
 
 
-
 /**
  * 2023-09-02 更新
  *
@@ -530,7 +525,6 @@ os_msys2_sources[] = {
   {&Netease,   "https://mirrors.163.com/msys2"},
   {&Sohu,      "https://mirrors.sohu.com/msys2"}
 },
-
 
 
 /**
@@ -573,7 +567,6 @@ os_void_sources[] = {
 },
 
 
-
 /**
  * 2023-09-29 更新
  */
@@ -593,6 +586,18 @@ os_trisquel_sources[] = {
 },
 
 
+/**
+ * 2023-09-29 更新
+ */
+os_raspberrypi_sources[] = {
+  {&MirrorZ,        "https://help.mirrors.cernet.edu.cn/raspberrypi/"},
+  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/raspberrypi/"},
+  {&Bfsu,           "https://mirrors.bfsu.edu.cn/raspberrypi/"},
+  {&Ustc,           "https://mirrors.ustc.edu.cn/raspberrypi/"},
+  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/raspberrypi/"},
+  {&Sustech,        "https://mirrors.sustech.edu.cn/raspberrypi/"}
+},
+
 
 /**
  * 2023-09-27 更新
@@ -607,7 +612,6 @@ os_freebsd_sources[] = {
   {&Nju,       "mirror.nju.edu.cn"},
   {&Netease,   "mirrors.163.com"},
 },
-
 
 
 /**
@@ -642,7 +646,6 @@ os_openbsd_sources[] = {
 },
 
 
-
 /**
  * 2023-09-06 更新
  *
@@ -657,7 +660,6 @@ os_openeuler_sources[] = {
   {&Netease,   "https://mirrors.163.com/openeuler/"},
   {&Sohu,      "https://mirrors.sohu.com/openeuler/"}
 },
-
 
 
 /**
@@ -785,7 +787,7 @@ def_target_sources_n(os_kali);     def_target_sources_n(os_opensuse);
 def_target_sources_n(os_arch);     def_target_sources_n(os_msys2);     def_target_sources_n(os_gentoo);
 def_target_sources_n(os_alpine);   def_target_sources_n(os_rocky);     def_target_sources_n(os_void);
 
-def_target_sources_n(os_trisquel); def_target_sources_n(os_linuxlite);
+def_target_sources_n(os_trisquel); def_target_sources_n(os_linuxlite); def_target_sources_n(os_raspberrypi);
 
 def_target_sources_n(os_freebsd);  def_target_sources_n(os_netbsd);    def_target_sources_n(os_openbsd);
 def_target_sources_n(os_deepin);   def_target_sources_n(os_openeuler); def_target_sources_n(os_openkylin);
