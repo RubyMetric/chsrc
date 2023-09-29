@@ -750,13 +750,7 @@ pl_julia_setsrc (char* option)
 
   const char* towrite = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
 
-  if (xy_on_windows) {
-    chsrc_run (xy_str_to_quietcmd ("md %USERPROFILE%\\.julia\\config"));
-  } else {
-    chsrc_run (xy_str_to_quietcmd ("mkdir -p ~/.julia/config"));
-  }
   chsrc_append_to_file (towrite, "~/.julia/config/startup.jl");
-
   chsrc_say_thanks(&source);
 }
 
@@ -1250,10 +1244,8 @@ os_void_setsrc (char* option)
   source_info source = os_void_sources[index];
   chsrc_say_selection(&source);
 
-  char* cmd = "mkdir -p /etc/xbps.d";
-  chsrc_run(cmd);
-
-  cmd = "cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/";
+  chsrc_ensure_dir ("/etc/xbps.d");
+  char* cmd = "cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/";
   chsrc_run(cmd);
 
   cmd = xy_strjoin(3,
@@ -1422,12 +1414,12 @@ os_openkylin_setsrc (char* option)
  *  2. https://help.mirrors.cernet.edu.cn/FreeBSD-ports/
  *
  * 据 @ykla,
- *   FreeBSD 有四类源：pkg、ports、portsnap、update，其中 portsnap 在 FreeBSD 14 已经被移除了
+ *   FreeBSD 有五类源：pkg、ports、port、portsnap、update，其中 portsnap 在 FreeBSD 14 已经被移除了
  */
 void
 os_freebsd_setsrc (char* option)
 {
-  chsrc_ensure_root(); // HELP: 不知道是否需要确保root权限
+  // chsrc_ensure_root(); // 据 @ykla，FreeBSD不自带 sudo
 
   int index = use_specific_mirror_or_auto_select (option, os_freebsd);
 
@@ -1435,11 +1427,9 @@ os_freebsd_setsrc (char* option)
   chsrc_say_selection(&source);
 
   chsrc_info("1. 添加 freebsd-pkg 源 (二进制安装包)");
-  char* pkg_mkdir = "mkdir -p /usr/local/etc/pkg/repos";
-  char* pkg_createconf = xy_strjoin(3, "ee /usr/local/etc/pkg/repos/", source.mirror->code, ".conf");
-  chsrc_run(pkg_mkdir);
-  chsrc_run(pkg_createconf);
+  chsrc_ensure_dir ("/usr/local/etc/pkg/repos");
 
+  char* conf = xy_strjoin(3, "/usr/local/etc/pkg/repos/", source.mirror->code, ".conf");
 
   char* pkg_content = xy_strjoin(4,
                       source.mirror->code, ": { \n"
@@ -1452,11 +1442,12 @@ os_freebsd_setsrc (char* option)
                     "FreeBSD: { enabled: no }"
                     );
 
-  char* pkg_conf = xy_strjoin(3, "/usr/local/etc/pkg/repos/", source.mirror->code, ".conf");
-  chsrc_overwrite_file (pkg_content, pkg_conf);
+  chsrc_overwrite_file (pkg_content, conf);
+  chsrc_warn (
+    xy_strjoin (3, "若要使用季度分支，请在", conf ,"中将latest改为quarterly"));
 
   chsrc_warn("若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将'http'改成'https'，最后使用'pkg update -f'刷新缓存即可\n");
-
+  puts("");
 
   chsrc_info("2. 修改 freebsd-ports 源");
   // @ccmywish: [2023-09-27] 据 @ykla , NJU的freebsd-ports源没有设置 Git，
@@ -1491,11 +1482,9 @@ os_freebsd_setsrc (char* option)
   chsrc_append_to_file (ports, "/etc/make.conf");
 
 
-
   /* 不再换 portsnap */
   /*
-    char* portsnap_cp="cp /etc/portsnap.conf /etc/portsnap.conf.bak";
-    chsrc_runcmd(portsnap_cp);
+    chsrc_backup ("/etc/portsnap.conf");
 
     char* portsnap =xy_strjoin(3,"s@(.*)SERVERNAME=[\\.|a-z|A-Z]*@\\1SERVERNAME=", source.url,
                                 "@g < /etc/portsnap.conf.bak");

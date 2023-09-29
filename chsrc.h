@@ -294,6 +294,7 @@ chsrc_check_file (const char* path)
 static void
 chsrc_ensure_dir (const char* dir)
 {
+  dir = xy_uniform_path (dir);
   char* mkdir_cmd = NULL;
   if (xy_on_windows) {
     mkdir_cmd = "md ";
