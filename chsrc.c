@@ -1272,6 +1272,35 @@ os_trisquel_setsrc (char* option)
 
 
 
+void
+os_linuxlite_getsrc (char* option)
+{
+  chsrc_check_file ("/etc/apt/sources.list");
+}
+
+/**
+ * 参考: https://help.mirrors.cernet.edu.cn/linuxliteos/
+ */
+void
+os_linuxlite_setsrc (char* option)
+{
+  ensure_root();
+
+  int index = use_specific_mirror_or_auto_select (option, os_linuxlite);
+
+  source_info source = os_linuxlite_sources[index];
+  chsrc_say_selection(&source);
+
+  chsrc_backup ("/etc/apt/sources.list");
+
+  char* cmd = xy_strjoin(3, "sed -E -i 's@https?://.*/.*/?@", source.url, "@g' /etc/apt/sources.list");
+
+  chsrc_run("sudo apt update");
+  chsrc_say_thanks(&source);
+}
+
+
+
 /**
  * HELP: 未经测试
  */
@@ -1822,6 +1851,7 @@ def_target_info(os_debian);
 def_target_info(os_deepin);
 def_target_info(os_void);
 def_target_info(os_trisquel);
+def_target_info(os_linuxlite);
 def_target_info(os_netbsd);
 def_target_info(os_openbsd);
 
@@ -1855,6 +1885,7 @@ static const char
 *os_alpine        [] = {"alpine",               NULL,  targetinfo(&os_alpine_target)},
 *os_void          [] = {"void",   "voidlinux",  NULL,  targetinfo(&os_void_target)},
 *os_trisquel      [] = {"trisquel",             NULL,  targetinfo(&os_trisquel_target)},
+*os_linuxlite     [] = {"lite",   "linuxlite",  NULL,  targetinfo(&os_linuxlite_target)},
 *os_freebsd       [] = {"freebsd",              NULL,  targetinfo(&os_freebsd_target)},
 *os_netbsd        [] = {"netbsd",               NULL,  targetinfo(&os_netbsd_target)},
 *os_openbsd       [] = {"openbsd",              NULL,  targetinfo(&os_openbsd_target)},
@@ -1867,7 +1898,7 @@ static const char
   os_arch,    os_manjaro, os_gentoo,
   os_rocky,
   os_alpine,
-  os_trisquel,
+  os_trisquel, os_linuxlite,
   os_freebsd, os_netbsd,  os_openbsd,
   os_msys2,
   os_deepin, os_openeuler, os_openkylin,
