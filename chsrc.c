@@ -826,12 +826,13 @@ os_mint_setsrc (char* option)
 
   chsrc_backup ("/etc/apt/sources.list.d/official-package-repositories.list");
 
-  char* cmd = xy_strjoin(3, "sed -E -i 's@https?://.*/ubuntu/?@", source.url,
+  char* cmd = xy_strjoin(3, "sed -E -i 's@https?://.*/.*/?@", source.url,
                             "@g' /etc/apt/sources.list.d/official-package-repositories.list");
 
   chsrc_run(cmd);
   chsrc_run("sudo apt update");
   chsrc_say_thanks(&source);
+  chsrc_warn ("完成后请不要再使用 mintsources（自带的图形化软件源设置工具）进行任何操作，因为在操作后，无论是否有按“确定”，mintsources 均会覆写我们刚才换源的内容");
 }
 
 
