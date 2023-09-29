@@ -1947,11 +1947,11 @@ static const char
   os_ubuntu,  os_mint,    os_debian,  os_fedora,  os_opensuse, os_kali,
   os_arch,    os_manjaro, os_gentoo,
   os_rocky,
-  os_alpine,
+  os_alpine,   os_void,
   os_trisquel, os_linuxlite, os_raspberrypi,
-  os_freebsd, os_netbsd,  os_openbsd,
+  os_freebsd,  os_netbsd,    os_openbsd,
   os_msys2,
-  os_deepin, os_openeuler, os_openkylin,
+  os_deepin,   os_openeuler, os_openkylin,
 };
 
 

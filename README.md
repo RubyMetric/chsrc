@@ -136,9 +136,9 @@ sudo chsrc set kali
 sudo chsrc set arch  # 同时使用 archlinuxcn
 sudo chsrc set manjaro
 sudo chsrc set gentoo
-sudo chsrc set rocky
+sudo chsrc set rocky 或 set rockylinux
 sudo chsrc set alpine
-sudo chsrc set void
+sudo chsrc set void  或 set voidlinux
 sudo chsrc set trisquel
 sudo chsrc set lite  或 set linuxlite
 sudo chsrc set raspi 或 set raspberrypi
