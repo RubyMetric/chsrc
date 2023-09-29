@@ -146,6 +146,7 @@ sudo chsrc set gentoo
 sudo chsrc set rocky 或 set rockylinux
 sudo chsrc set alpine
 sudo chsrc set void  或 set voidlinux
+sudo chsrc set solus
 sudo chsrc set trisquel
 sudo chsrc set lite  或 set linuxlite
 sudo chsrc set raspi 或 set raspberrypi
