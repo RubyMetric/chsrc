@@ -53,11 +53,18 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-armv7
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-macos -o chsrc; chmod +x ./chsrc
 ```
 
+### BSD
+
+*BSD 用户需要按照下述命令编译，编译好即可运行 `./chsrc`
+```bash
+git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; clang chsrc.c -o chsrc
+```
+
 ### 没有您的平台?
 
 编译是一件很简单的事，不要担心，只需在命令行复制粘贴这一行运行:
 ```bash
-git clone https://gitee.com/RubyMetric/chsrc.git ; cd chsrc ; make
+git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
 
 # 运行试试看
 ./chsrc
