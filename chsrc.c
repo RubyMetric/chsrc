@@ -766,6 +766,9 @@ pl_julia_setsrc (char* option)
 
 
 
+#define ETC_APT_SOURCELIST "/etc/apt/sources.list"
+
+
 void
 os_ubuntu_getsrc(char* option)
 {
@@ -1004,6 +1007,13 @@ os_opensuse_setsrc (char* option)
 }
 
 
+
+void
+os_kali_getsrc (char* option)
+{
+  chsrc_check_file (ETC_APT_SOURCELIST);
+}
+
 /**
  * HELP: 未经测试
  */
@@ -1161,6 +1171,12 @@ os_rocky_setsrc (char* option)
 }
 
 
+
+void
+os_alpine_getsrc (char* option)
+{
+  chsrc_check_file ("/etc/apk/repositories");
+}
 
 /**
  * 参考: https://help.mirrors.cernet.edu.cn/alpine/
@@ -1326,9 +1342,12 @@ os_openeuler_setsrc (char* option)
 
 
 
-/**
- * HELP: 未经测试
- */
+void
+os_openkylin_getsrc (char* option)
+{
+  chsrc_check_file (ETC_APT_SOURCELIST);
+}
+
 void
 os_openkylin_setsrc (char* option)
 {
@@ -1849,27 +1868,27 @@ static const char
 def_target_info(os_ubuntu);
 def_target_info(os_mint);
 def_target_info(os_debian);
-def_target_info(os_deepin);
+def_target_info(os_kali);
+def_target_info(os_alpine);
 def_target_info(os_void);
 def_target_info(os_trisquel);
 def_target_info(os_linuxlite);
 def_target_info(os_netbsd);
 def_target_info(os_openbsd);
+def_target_info(os_deepin);
+def_target_info(os_openkylin);
 
 
 target_info
   os_fedora_target      = {os_fedora_setsrc,      NULL, os_fedora_sources,    os_fedora_sources_n},
   os_opensuse_target    = {os_opensuse_setsrc,    NULL, os_opensuse_sources,  os_opensuse_sources_n},
-  os_kali_target        = {os_kali_setsrc,        NULL, os_kali_sources,      os_kali_sources_n},
   os_msys2_target       = {os_msys2_setsrc,       NULL, os_msys2_sources,     os_msys2_sources_n},
   os_arch_target        = {os_arch_setsrc,        NULL, os_arch_sources,      os_arch_sources_n},
   os_manjaro_target     = {os_manjaro_setsrc,     NULL, NULL,                       0},
   os_gentoo_target      = {os_gentoo_setsrc,      NULL, os_gentoo_sources,    os_gentoo_sources_n},
   os_rocky_target       = {os_rocky_setsrc,       NULL, os_rocky_sources,     os_rocky_sources_n},
-  os_alpine_target      = {os_alpine_setsrc,      NULL, os_alpine_sources,    os_alpine_sources_n},
   os_freebsd_target     = {os_freebsd_setsrc,     NULL, os_freebsd_sources,   os_freebsd_sources_n},
   os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources, os_openeuler_sources_n},
-  os_openkylin_target   = {os_openkylin_setsrc,   NULL, os_openkylin_sources, os_openkylin_sources_n};
 
 static const char
 *os_ubuntu        [] = {"ubuntu",               NULL,  targetinfo(&os_ubuntu_target)},
