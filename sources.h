@@ -382,6 +382,18 @@ os_ubuntu_sources[] = {
 
 
 /**
+ * 2023-09-29 更新
+ *
+ * @note: 实际上镜像站里的内容和Ubuntu的不太一样
+ */
+os_mint_sources[] = {
+  {&MirrorZ,  "https://mirrors.cernet.edu.cn/linuxmint/"},
+  {&Ali,      "http://mirrors.aliyun.com/linuxmint-packages/"},
+  {&Netease,  "https://mirrors.163.com/linuxmint/packages/"},
+},
+
+
+/**
  * 2023-09-06 更新
  *
  * TODO: 1. 源并不完整，且未经测试是否有效
@@ -754,12 +766,13 @@ wr_anaconda_sources[] = {
 def_target_sources_n(pl_ruby);     def_target_sources_n(pl_python);    def_target_sources_n(pl_nodejs);
 def_target_sources_n(pl_perl);     def_target_sources_n(pl_php);       def_target_sources_n(pl_lua);
 def_target_sources_n(pl_go);       def_target_sources_n(pl_rust);
-def_target_sources_n(pl_java);      def_target_sources_n(pl_clojure);
+def_target_sources_n(pl_java);     def_target_sources_n(pl_clojure);
 def_target_sources_n(pl_dotnet);   def_target_sources_n(pl_dart);      def_target_sources_n(pl_haskell);
 def_target_sources_n(pl_ocaml);
 def_target_sources_n(pl_r);        def_target_sources_n(pl_julia);
 
-def_target_sources_n(os_ubuntu);   def_target_sources_n(os_debian);    def_target_sources_n(os_fedora);
+def_target_sources_n(os_ubuntu);   def_target_sources_n(os_mint);
+def_target_sources_n(os_debian);   def_target_sources_n(os_fedora);
 def_target_sources_n(os_kali);     def_target_sources_n(os_opensuse);
 def_target_sources_n(os_arch);     def_target_sources_n(os_msys2);     def_target_sources_n(os_gentoo);
 def_target_sources_n(os_alpine);   def_target_sources_n(os_rocky);     def_target_sources_n(os_void);
