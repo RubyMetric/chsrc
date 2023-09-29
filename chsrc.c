@@ -781,7 +781,7 @@ os_ubuntu_getsrc(char* option)
 void
 os_ubuntu_setsrc (char* option)
 {
-  ensure_root();
+  chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_ubuntu);
 
@@ -820,7 +820,7 @@ os_mint_getsrc(char* option)
 void
 os_mint_setsrc (char* option)
 {
-  ensure_root();
+  chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_mint);
 
@@ -853,7 +853,7 @@ os_debian_getsrc(char* option)
 void
 os_debian_setsrc (char* option)
 {
-  ensure_root();
+  chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_debian);
 
@@ -886,7 +886,7 @@ os_raspberrypi_getsrc (char* option)
 void
 os_raspberrypi_setsrc (char* option)
 {
-  // ensure_root(); // HELP: 不确定是否需要
+  // chsrc_ensure_root(); // HELP: 不确定是否需要
 
   int index = use_specific_mirror_or_auto_select (option, os_raspberrypi);
 
@@ -917,7 +917,7 @@ os_deepin_getsrc(char* option)
 void
 os_deepin_setsrc (char* option)
 {
-  ensure_root();
+  chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_deepin);
 
@@ -944,7 +944,7 @@ os_deepin_setsrc (char* option)
 void
 os_fedora_setsrc (char* option)
 {
-  ensure_root();
+  chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_fedora);
 
@@ -985,7 +985,7 @@ os_fedora_setsrc (char* option)
 void
 os_opensuse_setsrc (char* option)
 {
-  ensure_root(); // HELP: 不知道是否需要确保root权限
+  chsrc_ensure_root(); // HELP: 不知道是否需要确保root权限
 
   int index = use_specific_mirror_or_auto_select (option, os_opensuse);
 
@@ -1048,7 +1048,7 @@ os_kali_getsrc (char* option)
 void
 os_kali_setsrc(char* option)
 {
-  ensure_root();
+  chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_kali);
 
@@ -1105,7 +1105,7 @@ os_msys2_setsrc(char* option)
 void
 os_arch_setsrc(char* option)
 {
-  ensure_root();
+  chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_arch);
 
@@ -1153,7 +1153,7 @@ os_arch_setsrc(char* option)
 void
 os_gentoo_setsrc(char* option)
 {
-  ensure_root();
+  chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_gentoo);
 
@@ -1181,7 +1181,7 @@ os_gentoo_setsrc(char* option)
 void
 os_rocky_setsrc (char* option)
 {
-  ensure_root();
+  chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_rocky);
 
@@ -1212,7 +1212,7 @@ os_alpine_getsrc (char* option)
 void
 os_alpine_setsrc (char* option)
 {
-  // ensure_root(); // HELP: 不确定是否需要root
+  // chsrc_ensure_root(); // HELP: 不确定是否需要root
 
   int index = use_specific_mirror_or_auto_select (option, os_alpine);
 
@@ -1243,7 +1243,7 @@ os_void_getsrc (char* option)
 void
 os_void_setsrc (char* option)
 {
-  // ensure_root(); // HELP: 不确定是否需要root
+  // chsrc_ensure_root(); // HELP: 不确定是否需要root
 
   int index = use_specific_mirror_or_auto_select (option, os_void);
 
@@ -1278,7 +1278,7 @@ os_void_setsrc (char* option)
 void
 os_manjaro_setsrc(char* option)
 {
-  ensure_root();
+  chsrc_ensure_root();
   char* cmd = "sudo pacman-mirrors -i -c China -m rank";
   chsrc_run(cmd);
 
@@ -1299,7 +1299,7 @@ os_trisquel_getsrc (char* option)
 void
 os_trisquel_setsrc (char* option)
 {
-  ensure_root();
+  chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_trisquel);
 
@@ -1329,7 +1329,7 @@ os_linuxlite_getsrc (char* option)
 void
 os_linuxlite_setsrc (char* option)
 {
-  ensure_root();
+  chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_linuxlite);
 
@@ -1352,7 +1352,7 @@ os_linuxlite_setsrc (char* option)
 void
 os_openeuler_setsrc (char* option)
 {
-  ensure_root();
+  chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_openeuler);
 
@@ -1379,7 +1379,7 @@ os_openkylin_getsrc (char* option)
 void
 os_openkylin_setsrc (char* option)
 {
-  ensure_root();
+  chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_openkylin);
 
@@ -1407,7 +1407,7 @@ os_openkylin_setsrc (char* option)
 void
 os_freebsd_setsrc (char* option)
 {
-  ensure_root(); // HELP: 不知道是否需要确保root权限
+  chsrc_ensure_root(); // HELP: 不知道是否需要确保root权限
 
   int index = use_specific_mirror_or_auto_select (option, os_freebsd);
 
@@ -1526,7 +1526,7 @@ os_netbsd_getsrc (char* option)
 void
 os_netbsd_setsrc(char* option)
 {
-  ensure_root(); // HELP: 不知道是否需要确保root权限
+  chsrc_ensure_root(); // HELP: 不知道是否需要确保root权限
 
   int index = use_specific_mirror_or_auto_select (option, os_netbsd);
 
@@ -1561,7 +1561,7 @@ os_openbsd_getsrc (char* option)
 void
 os_openbsd_setsrc(char* option)
 {
-  ensure_root();
+  chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_openbsd);
 

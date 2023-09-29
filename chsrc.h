@@ -254,7 +254,7 @@ chsrc_say_thanks (source_info* source)
 
 
 void
-ensure_root ()
+chsrc_ensure_root ()
 {
   char* euid = getenv("$EUID");
   if (NULL==euid) {
