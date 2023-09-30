@@ -1583,6 +1583,34 @@ os_openbsd_setsrc(char* option)
   chsrc_say_thanks(&source);
 }
 
+/**
+ * 参考：
+ * https://mirrors.tuna.tsinghua.edu.cn/help/ros/
+ */
+void
+os_ros_setsrc (char* option)
+{
+  chsrc_ensure_root();
+
+  int index = use_specific_mirror_or_auto_select (option, os_ros);
+
+  source_info source = os_ros_sources[index];
+  chsrc_say_selection(&source);
+
+  chsrc_backup ("/etc/apt/sources.list.d/ros-latest.list");
+
+  char* cmd  = NULL;
+  cmd = xy_strjoin(3, "sed -E -i \'s@https?://.*/ros/ubuntu/?@", source.url, "@/ros/ubuntug\' /etc/apt/sources.list");
+  chsrc_run(cmd);
+
+  cmd = "sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654";
+  chsrc_run(cmd);
+
+
+  chsrc_run("sudo apt update");
+  chsrc_say_thanks(&source);
+}
+
 
 
 
@@ -1928,7 +1956,8 @@ target_info
   os_rocky_target       = {os_rocky_setsrc,       NULL, os_rocky_sources,     os_rocky_sources_n},
   os_solus_target       = {os_solus_setsrc,       NULL, os_solus_sources,     os_solus_sources_n},
   os_freebsd_target     = {os_freebsd_setsrc,     NULL, os_freebsd_sources,   os_freebsd_sources_n},
-  os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources, os_openeuler_sources_n};
+  os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources, os_openeuler_sources_n},
+  os_ros_target         = {os_ros_setsrc,         NULL, os_ros_sources,       os_ros_sources_n};
 
 static const char
 *os_ubuntu        [] = {"ubuntu",               NULL,  targetinfo(&os_ubuntu_target)},
@@ -1954,6 +1983,7 @@ static const char
 *os_deepin        [] = {"deepin",               NULL,  targetinfo(&os_deepin_target)},
 *os_openeuler     [] = {"euler",  "openeuler",  NULL,  targetinfo(&os_openeuler_target)},
 *os_openkylin     [] = {"kylin",  "openkylin",  NULL,  targetinfo(&os_openkylin_target)},
+*os_ros           [] = {"ros",    "ros",        NULL,  targetinfo(&os_ros_target)},
 **os_systems[] =
 {
   os_ubuntu,  os_mint,    os_debian,  os_fedora,  os_opensuse, os_kali,
@@ -1964,6 +1994,7 @@ static const char
   os_freebsd,  os_netbsd,    os_openbsd,
   os_msys2,
   os_deepin,   os_openeuler, os_openkylin,
+  os_ros
 };
 
 

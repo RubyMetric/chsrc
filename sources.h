@@ -677,6 +677,22 @@ os_openkylin_sources[] = {
   {&Upstream,  "https://archive.openkylin.top/openkylin/"},
   {&Ali,       "https://mirrors.aliyun.com/openkylin/"},
   {&Netease,   "https://mirrors.163.com/openkylin/"},
+},
+
+
+/**
+ * 2023-09-30 更新
+ *
+ * TODO: 1. 源并不完整，且未经测试是否有效
+ */
+os_ros_sources[] = {
+  {&Ali,       "https://mirrors.aliyun.com"},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn"},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn"},
+  {&Tencent,   "https://mirrors.tencent.com"},
+  {&Netease,   "https://mirrors.163.com"},
+  {&Sohu,      "https://mirrors.sohu.com"}
 };
 
 
@@ -800,7 +816,7 @@ def_target_sources_n(os_trisquel); def_target_sources_n(os_linuxlite); def_targe
 
 def_target_sources_n(os_freebsd);  def_target_sources_n(os_netbsd);    def_target_sources_n(os_openbsd);
 def_target_sources_n(os_deepin);   def_target_sources_n(os_openeuler); def_target_sources_n(os_openkylin);
-
+def_target_sources_n(os_ros);
 
 def_target_sources_n(wr_brew);     def_target_sources_n(wr_flathub);
 def_target_sources_n(wr_nix);      def_target_sources_n(wr_guix);
