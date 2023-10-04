@@ -2194,10 +2194,12 @@ iterate_targets_(const char*** array, size_t size, const char* input, const char
 
 #define iterate_targets(ary, input, target) iterate_targets_(ary, xy_arylen(ary), input, target)
 
-#define Target_Set_Source  1
-#define Target_Get_Source  2
-#define Target_Cesu_Source 3
-#define Target_List_Source 4
+typedef enum {
+  Target_Set_Source = 1,
+  Target_Get_Source,
+  Target_Cesu_Source,
+  Target_List_Source
+} TargetOp;
 
 /**
  * 寻找target，并根据`code`执行相应的操作
@@ -2209,7 +2211,7 @@ iterate_targets_(const char*** array, size_t size, const char* input, const char
  * @return 找到目标返回true，未找到返回false
  */
 bool
-get_target (const char* input, int code, char* option)
+get_target (const char* input, TargetOp code, char* option)
 {
   const char** target_tmp = NULL;
 
