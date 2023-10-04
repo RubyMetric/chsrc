@@ -55,7 +55,7 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-m
 
 ### BSD
 
-*BSD 用户需要按照下述命令编译，编译好即可运行 `./chsrc`
+BSD 用户需要按照下述命令编译，编译好即可运行 `./chsrc`
 ```bash
 git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; clang chsrc.c -o chsrc
 ```
@@ -147,20 +147,21 @@ sudo chsrc set rocky 或 set rockylinux
 sudo chsrc set alpine
 sudo chsrc set void  或 set voidlinux
 sudo chsrc set solus
+sudo chsrc set ros   或 set ros2
 sudo chsrc set trisquel
 sudo chsrc set lite  或 set linuxlite
 sudo chsrc set raspi 或 set raspberrypi
 
-sudo chsrc set freebsd
-sudo chsrc set openbsd
-sudo chsrc set netbsd
-
-# 国产操作系统
 sudo chsrc set deepin
 sudo chsrc set euler  或 set openeuler
 sudo chsrc set kylin  或 set openkylin
 
 chsrc set msys2 或 set msys
+
+# BSD
+sudo chsrc set freebsd
+sudo chsrc set openbsd
+sudo chsrc set netbsd
 ```
 
 <br>

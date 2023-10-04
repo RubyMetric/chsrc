@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-09-29>
+ * Last modified : <2023-10-04>
  *
  * chsrc:
  *
@@ -12,7 +12,7 @@
  *   该软件为自由软件，采用 GPLv3 许可证，请查阅 LICENSE.txt 文件
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version "v0.1.2-20230929"
+#define Chsrc_Version "v0.1.2-2023/10/04"
 
 #include "chsrc.h"
 
@@ -1983,18 +1983,17 @@ static const char
 *os_deepin        [] = {"deepin",               NULL,  targetinfo(&os_deepin_target)},
 *os_openeuler     [] = {"euler",  "openeuler",  NULL,  targetinfo(&os_openeuler_target)},
 *os_openkylin     [] = {"kylin",  "openkylin",  NULL,  targetinfo(&os_openkylin_target)},
-*os_ros           [] = {"ros",    "ros",        NULL,  targetinfo(&os_ros_target)},
+*os_ros           [] = {"ros",    "ros2",       NULL,  targetinfo(&os_ros_target)},
 **os_systems[] =
 {
   os_ubuntu,  os_mint,    os_debian,  os_fedora,  os_opensuse, os_kali,
   os_arch,    os_manjaro, os_gentoo,
   os_rocky,
-  os_alpine,   os_void,      os_solus,
+  os_alpine,   os_void,      os_solus,          os_ros,
   os_trisquel, os_linuxlite, os_raspberrypi,
-  os_freebsd,  os_netbsd,    os_openbsd,
-  os_msys2,
   os_deepin,   os_openeuler, os_openkylin,
-  os_ros
+  os_msys2,
+  os_freebsd,  os_netbsd,    os_openbsd,
 };
 
 
