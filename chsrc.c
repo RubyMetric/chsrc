@@ -82,7 +82,7 @@ pl_ruby_setsrc (char* option)
  * @param[out] prog 返回 Python 的可用名，如果不可用，则返回 NULL
  */
 void
-pl_python_check_cmd_ (char** prog)
+pl_python_check_cmd (char** prog)
 {
   *prog = NULL;
   // 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store
@@ -108,7 +108,7 @@ void
 pl_python_getsrc (char* option)
 {
   char* prog = NULL;
-  pl_python_check_cmd_ (&prog);
+  pl_python_check_cmd (&prog);
   char* cmd = xy_2strjoin(prog, " -m pip config get global.index-url");
   chsrc_run(cmd);
 }
@@ -123,7 +123,7 @@ pl_python_setsrc (char* option)
 {
   int index = 0;
   char* prog = NULL;
-  pl_python_check_cmd_ (&prog);
+  pl_python_check_cmd (&prog);
 
   index = use_specific_mirror_or_auto_select (option, pl_python);
 
@@ -138,7 +138,7 @@ pl_python_setsrc (char* option)
 
 
 void
-pl_nodejs_check_cmd_ (bool* npm_exist, bool* yarn_exist)
+pl_nodejs_check_cmd (bool* npm_exist, bool* yarn_exist)
 {
   char* check_cmd = xy_str_to_quietcmd("npm -v");
   *npm_exist = query_program_exist (check_cmd, "npm");
@@ -157,17 +157,13 @@ void
 pl_nodejs_getsrc (char* option)
 {
   bool npm_exist, yarn_exist;
-  pl_nodejs_check_cmd_ (&npm_exist, &yarn_exist);
+  pl_nodejs_check_cmd (&npm_exist, &yarn_exist);
 
-  if (npm_exist)
-  {
-    char* cmd = "npm config get registry";
-    chsrc_run(cmd);
+  if (npm_exist) {
+    chsrc_run("npm config get registry");
   }
-  if (yarn_exist)
-  {
-    char* cmd = "yarn config get registry";
-    chsrc_run(cmd);
+  if (yarn_exist) {
+    chsrc_run("yarn config get registry");
   }
 }
 
@@ -178,11 +174,9 @@ void
 pl_nodejs_setsrc (char* option)
 {
   bool npm_exist, yarn_exist;
-  pl_nodejs_check_cmd_ (&npm_exist, &yarn_exist);
+  pl_nodejs_check_cmd (&npm_exist, &yarn_exist);
 
-  int index = 0;
-
-  index = use_specific_mirror_or_auto_select (option, pl_nodejs);
+  int index = use_specific_mirror_or_auto_select (option, pl_nodejs);
 
   SourceInfo source = pl_nodejs_sources[index];
   chsrc_say_selection (&source);
@@ -204,7 +198,7 @@ pl_nodejs_setsrc (char* option)
 
 
 void
-pl_perl_check_cmd_ ()
+pl_perl_check_cmd ()
 {
   char* check_cmd = xy_str_to_quietcmd("perl --version");
   bool exist = query_program_exist (check_cmd, "perl");
@@ -218,7 +212,7 @@ pl_perl_check_cmd_ ()
 void
 pl_perl_getsrc (char* option)
 {
-  pl_perl_check_cmd_ ();
+  pl_perl_check_cmd ();
   // @ccmywish: 注意，prettyprint 仅仅是一个内部实现，可能不稳定，如果需要更稳定的，
   //            可以使用 CPAN::Shell->o('conf', 'urllist');
   //            另外，上述两种方法无论哪种，都要首先load()
@@ -249,7 +243,7 @@ pl_perl_setsrc (char* option)
 
 
 void
-pl_php_check_cmd_()
+pl_php_check_cmd ()
 {
   char* check_cmd = xy_str_to_quietcmd("composer --version");
   bool exist = query_program_exist (check_cmd, "composer");
@@ -266,9 +260,8 @@ pl_php_check_cmd_()
 void
 pl_php_getsrc (char* option)
 {
-  pl_php_check_cmd_ ();
-  char* cmd = "composer config -g repositories";
-  chsrc_run(cmd);
+  pl_php_check_cmd ();
+  chsrc_run("composer config -g repositories");
 }
 
 /**
@@ -277,7 +270,7 @@ pl_php_getsrc (char* option)
 void
 pl_php_setsrc (char* option)
 {
-  pl_php_check_cmd_();
+  pl_php_check_cmd();
 
   int index = use_specific_mirror_or_auto_select (option, pl_php);
 
@@ -328,7 +321,7 @@ pl_lua_setsrc (char* option)
 
 
 void
-pl_go_check_cmd_ ()
+pl_go_check_cmd ()
 {
   char* check_cmd = xy_str_to_quietcmd("go version");
   bool exist = query_program_exist (check_cmd, "go");
@@ -342,9 +335,8 @@ pl_go_check_cmd_ ()
 void
 pl_go_getsrc (char* option)
 {
-  pl_go_check_cmd_ ();
-  char* cmd = "go env GOPROXY";
-  chsrc_run(cmd);
+  pl_go_check_cmd ();
+  chsrc_run("go env GOPROXY");
 }
 
 /**
@@ -353,7 +345,7 @@ pl_go_getsrc (char* option)
 void
 pl_go_setsrc (char* option)
 {
-  pl_go_check_cmd_();
+  pl_go_check_cmd();
 
   int index = use_specific_mirror_or_auto_select (option, pl_go);
 
@@ -419,7 +411,7 @@ pl_dotnet_setsrc (char* option)
 
 
 void
-pl_java_check_cmd_(bool* maven_exist, bool* gradle_exist)
+pl_java_check_cmd (bool* maven_exist, bool* gradle_exist)
 {
   char* check_cmd = NULL;
   check_cmd    = xy_str_to_quietcmd("mvn --version");
@@ -435,7 +427,7 @@ pl_java_check_cmd_(bool* maven_exist, bool* gradle_exist)
 }
 
 char*
-pl_java_find_maven_config_ ()
+pl_java_find_maven_config ()
 {
   char* buf = xy_getcmd ("mvn -v", 2, NULL);
   char* maven_home = xy_str_delete_prefix(buf, "Maven home: ");
@@ -449,8 +441,8 @@ void
 pl_java_getsrc (char* option)
 {
   bool maven_exist, gradle_exist;
-  pl_java_check_cmd_ (&maven_exist, &gradle_exist);
-  char* maven_config = pl_java_find_maven_config_();
+  pl_java_check_cmd (&maven_exist, &gradle_exist);
+  char* maven_config = pl_java_find_maven_config ();
 
   char* echo = xy_2strjoin("chsrc: 请查看 ", maven_config);
   xy_info (echo);
@@ -463,7 +455,7 @@ void
 pl_java_setsrc (char* option)
 {
   bool maven_exist, gradle_exist;
-  pl_java_check_cmd_ (&maven_exist, &gradle_exist);
+  pl_java_check_cmd (&maven_exist, &gradle_exist);
 
   int index = use_specific_mirror_or_auto_select (option, pl_java);
 
@@ -479,7 +471,7 @@ pl_java_setsrc (char* option)
     "  <url>", source.url, "</url>\n"
     "</mirror>");
 
-    char* maven_config = pl_java_find_maven_config_();
+    char* maven_config = pl_java_find_maven_config ();
     char* echo = xy_strjoin(3, "chsrc: 请在您的 maven 配置文件 ", maven_config, " 中添加:");
     xy_info(echo);
     puts (file);
@@ -628,7 +620,7 @@ pl_haskell_setsrc(char* option)
 
 
 void
-pl_ocaml_check_cmd_()
+pl_ocaml_check_cmd ()
 {
   char* check_cmd = xy_str_to_quietcmd("opam --version");
   bool exist = query_program_exist (check_cmd, "opam");
@@ -642,9 +634,8 @@ pl_ocaml_check_cmd_()
 void
 pl_ocaml_getsrc(char* option)
 {
-  pl_ocaml_check_cmd_();
-  char* cmd = "opam repo get-url default";
-  chsrc_run(cmd);
+  pl_ocaml_check_cmd();
+  chsrc_run("opam repo get-url default");
 }
 
 /**
@@ -653,7 +644,7 @@ pl_ocaml_getsrc(char* option)
 void
 pl_ocaml_setsrc(char* option)
 {
-  pl_ocaml_check_cmd_();
+  pl_ocaml_check_cmd();
 
   int index = use_specific_mirror_or_auto_select (option, pl_ocaml);
 
@@ -1617,7 +1608,7 @@ os_ros_setsrc (char* option)
 
 
 void
-wr_tex_check_cmd_ (bool* tlmgr_exist, bool* mpm_exist)
+wr_tex_check_cmd (bool* tlmgr_exist, bool* mpm_exist)
 {
   char* check_cmd = xy_str_to_quietcmd("tlmgr --version");
   *tlmgr_exist = query_program_exist (check_cmd, "tlmgr");
@@ -1635,7 +1626,7 @@ void
 wr_tex_getsrc(char* option)
 {
   bool tlmgr_exist, mpm_exist;
-  wr_tex_check_cmd_(&tlmgr_exist, &mpm_exist);
+  wr_tex_check_cmd (&tlmgr_exist, &mpm_exist);
 
   if (tlmgr_exist) {
     chsrc_run("tlmgr option repository");
@@ -1652,7 +1643,7 @@ void
 wr_tex_setsrc(char* option)
 {
   bool tlmgr_exist, mpm_exist;
-  wr_tex_check_cmd_(&tlmgr_exist, &mpm_exist);
+  wr_tex_check_cmd (&tlmgr_exist, &mpm_exist);
 
   int index = use_specific_mirror_or_auto_select (option, wr_tex);
 
@@ -1884,19 +1875,10 @@ wr_anaconda_setsrc(char* option)
 
 
 /************************************** Begin Target Matrix ****************************************/
-def_target(pl_ruby);
-def_target(pl_python);
-def_target(pl_nodejs);
-def_target(pl_perl);
-def_target(pl_php);
+def_target(pl_ruby);  def_target(pl_python);  def_target(pl_nodejs);  def_target(pl_perl); def_target(pl_php);
 def_target(pl_lua);
-def_target(pl_go);
-def_target(pl_rust);
-def_target(pl_java);
-def_target(pl_dart);
-def_target(pl_ocaml);
-def_target(pl_r);
-def_target(pl_julia);
+def_target(pl_rust);  def_target(pl_go);  def_target(pl_java); def_target(pl_dart); def_target(pl_ocaml);
+def_target(pl_r);     def_target(pl_julia);
 
 TargetInfo
   pl_clojure_target = {pl_clojure_setsrc, NULL,  pl_clojure_sources, pl_clojure_sources_n},
@@ -1904,24 +1886,24 @@ TargetInfo
   pl_haskell_target = {pl_haskell_setsrc, NULL,  pl_haskell_sources, pl_haskell_sources_n};
 
 
-#define targetinfo(t) (const char*)t
+#define t(a) (const char*)(a)
 static const char
-*pl_ruby  [] = {"gem",   "ruby",    "rubygem", "rb", "rubygems",NULL, targetinfo(&pl_ruby_target)},
-*pl_python[] = {"pip",   "python",  "pypi",    "py",            NULL, targetinfo(&pl_python_target)},
-*pl_nodejs[] = {"npm",   "node",    "nodejs",  "js", "yarn",    NULL, targetinfo(&pl_nodejs_target)},
-*pl_perl  [] = {"perl",  "cpan",                         NULL,  targetinfo(&pl_perl_target)},
-*pl_php   [] = {"php",   "composer",                     NULL,  targetinfo(&pl_php_target)},
-*pl_lua   [] = {"lua",   "luarocks",                     NULL,  targetinfo(&pl_lua_target)},
-*pl_go    [] = {"go",    "golang",  "goproxy",           NULL,  targetinfo(&pl_go_target)} ,
-*pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  targetinfo(&pl_rust_target)},
-*pl_java  [] = {"java",  "maven",   "gradle",            NULL,  targetinfo(&pl_java_target)},
-*pl_clojure[] ={"clojure","clojars","cloj",   "lein",   "leiningen",  NULL, targetinfo(&pl_clojure_target)},
-*pl_dart  [] = {"dart",  "pub",     "flutter",           NULL,  targetinfo(&pl_dart_target)},
-*pl_dotnet[] = {"nuget", "net",     ".net",   "dotnet",  NULL,  targetinfo(&pl_dotnet_target)},
-*pl_haskell[] ={"haskell", "cabal", "stack",  "hackage", NULL,  targetinfo(&pl_haskell_target)},
-*pl_ocaml[] =  {"ocaml", "opam",                         NULL,  targetinfo(&pl_ocaml_target)},
-*pl_r     [] = {"cran",  "r",                            NULL,  targetinfo(&pl_r_target)},
-*pl_julia [] = {"julia",                                 NULL,  targetinfo(&pl_julia_target)},
+*pl_ruby  [] = {"gem",   "ruby",    "rubygem", "rb", "rubygems",NULL, t(&pl_ruby_target)},
+*pl_python[] = {"pip",   "python",  "pypi",    "py",            NULL, t(&pl_python_target)},
+*pl_nodejs[] = {"npm",   "node",    "nodejs",  "js", "yarn",    NULL, t(&pl_nodejs_target)},
+*pl_perl  [] = {"perl",  "cpan",                         NULL,  t(&pl_perl_target)},
+*pl_php   [] = {"php",   "composer",                     NULL,  t(&pl_php_target)},
+*pl_lua   [] = {"lua",   "luarocks",                     NULL,  t(&pl_lua_target)},
+*pl_go    [] = {"go",    "golang",  "goproxy",           NULL,  t(&pl_go_target)} ,
+*pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  t(&pl_rust_target)},
+*pl_java  [] = {"java",  "maven",   "gradle",            NULL,  t(&pl_java_target)},
+*pl_clojure[] ={"clojure","clojars","cloj",   "lein",   "leiningen",  NULL, t(&pl_clojure_target)},
+*pl_dart  [] = {"dart",  "pub",     "flutter",           NULL,  t(&pl_dart_target)},
+*pl_dotnet[] = {"nuget", "net",     ".net",   "dotnet",  NULL,  t(&pl_dotnet_target)},
+*pl_haskell[] ={"haskell", "cabal", "stack",  "hackage", NULL,  t(&pl_haskell_target)},
+*pl_ocaml[] =  {"ocaml", "opam",                         NULL,  t(&pl_ocaml_target)},
+*pl_r     [] = {"cran",  "r",                            NULL,  t(&pl_r_target)},
+*pl_julia [] = {"julia",                                 NULL,  t(&pl_julia_target)},
 **pl_packagers[] =
 {
   pl_ruby,    pl_python,    pl_nodejs,      pl_perl,    pl_php,      pl_lua,
@@ -1939,43 +1921,43 @@ def_target(os_raspberrypi);
 
 
 TargetInfo
-  os_fedora_target      = {os_fedora_setsrc,      NULL, os_fedora_sources,    os_fedora_sources_n},
-  os_opensuse_target    = {os_opensuse_setsrc,    NULL, os_opensuse_sources,  os_opensuse_sources_n},
-  os_msys2_target       = {os_msys2_setsrc,       NULL, os_msys2_sources,     os_msys2_sources_n},
-  os_arch_target        = {os_arch_setsrc,        NULL, os_arch_sources,      os_arch_sources_n},
-  os_manjaro_target     = {os_manjaro_setsrc,     NULL, NULL,                       0},
-  os_gentoo_target      = {os_gentoo_setsrc,      NULL, os_gentoo_sources,    os_gentoo_sources_n},
-  os_rocky_target       = {os_rocky_setsrc,       NULL, os_rocky_sources,     os_rocky_sources_n},
-  os_solus_target       = {os_solus_setsrc,       NULL, os_solus_sources,     os_solus_sources_n},
-  os_freebsd_target     = {os_freebsd_setsrc,     NULL, os_freebsd_sources,   os_freebsd_sources_n},
-  os_openeuler_target   = {os_openeuler_setsrc,   NULL, os_openeuler_sources, os_openeuler_sources_n},
-  os_ros_target         = {os_ros_setsrc,         NULL, os_ros_sources,       os_ros_sources_n};
+  os_fedora_target   = {os_fedora_setsrc,    NULL, os_fedora_sources,    os_fedora_sources_n},
+  os_opensuse_target = {os_opensuse_setsrc,  NULL, os_opensuse_sources,  os_opensuse_sources_n},
+  os_msys2_target    = {os_msys2_setsrc,     NULL, os_msys2_sources,     os_msys2_sources_n},
+  os_arch_target     = {os_arch_setsrc,      NULL, os_arch_sources,      os_arch_sources_n},
+  os_manjaro_target  = {os_manjaro_setsrc,   NULL, NULL,                       0},
+  os_gentoo_target   = {os_gentoo_setsrc,    NULL, os_gentoo_sources,    os_gentoo_sources_n},
+  os_rocky_target    = {os_rocky_setsrc,     NULL, os_rocky_sources,     os_rocky_sources_n},
+  os_solus_target    = {os_solus_setsrc,     NULL, os_solus_sources,     os_solus_sources_n},
+  os_freebsd_target  = {os_freebsd_setsrc,   NULL, os_freebsd_sources,   os_freebsd_sources_n},
+  os_openeuler_target= {os_openeuler_setsrc, NULL, os_openeuler_sources, os_openeuler_sources_n},
+  os_ros_target      = {os_ros_setsrc,       NULL, os_ros_sources,       os_ros_sources_n};
 
 static const char
-*os_ubuntu        [] = {"ubuntu",               NULL,  targetinfo(&os_ubuntu_target)},
-*os_mint          [] = {"mint",                 NULL,  targetinfo(&os_mint_target)},
-*os_debian        [] = {"debian",  "deb",       NULL,  targetinfo(&os_debian_target)},
-*os_fedora        [] = {"fedora",               NULL,  targetinfo(&os_fedora_target)},
-*os_opensuse      [] = {"suse",   "opensuse",   NULL,  targetinfo(&os_opensuse_target)},
-*os_kali          [] = {"kali",                 NULL,  targetinfo(&os_kali_target)},
-*os_msys2         [] = {"msys2",   "msys",      NULL,  targetinfo(&os_msys2_target)},
-*os_arch          [] = {"arch",                 NULL,  targetinfo(&os_arch_target)},
-*os_manjaro       [] = {"manjaro",              NULL,  targetinfo(&os_manjaro_target)},
-*os_gentoo        [] = {"gentoo",               NULL,  targetinfo(&os_gentoo_target)},
-*os_rocky         [] = {"rocky",  "rockylinux", NULL,  targetinfo(&os_rocky_target)},
-*os_alpine        [] = {"alpine",               NULL,  targetinfo(&os_alpine_target)},
-*os_void          [] = {"void",   "voidlinux",  NULL,  targetinfo(&os_void_target)},
-*os_solus         [] = {"solus",                NULL,  targetinfo(&os_solus_target)},
-*os_trisquel      [] = {"trisquel",             NULL,  targetinfo(&os_trisquel_target)},
-*os_linuxlite     [] = {"lite",   "linuxlite",  NULL,  targetinfo(&os_linuxlite_target)},
-*os_raspberrypi   [] = {"raspi",  "raspberrypi",NULL,  targetinfo(&os_raspberrypi_target)},
-*os_freebsd       [] = {"freebsd",              NULL,  targetinfo(&os_freebsd_target)},
-*os_netbsd        [] = {"netbsd",               NULL,  targetinfo(&os_netbsd_target)},
-*os_openbsd       [] = {"openbsd",              NULL,  targetinfo(&os_openbsd_target)},
-*os_deepin        [] = {"deepin",               NULL,  targetinfo(&os_deepin_target)},
-*os_openeuler     [] = {"euler",  "openeuler",  NULL,  targetinfo(&os_openeuler_target)},
-*os_openkylin     [] = {"kylin",  "openkylin",  NULL,  targetinfo(&os_openkylin_target)},
-*os_ros           [] = {"ros",    "ros2",       NULL,  targetinfo(&os_ros_target)},
+*os_ubuntu     [] = {"ubuntu",               NULL,  t(&os_ubuntu_target)},
+*os_mint       [] = {"mint",                 NULL,  t(&os_mint_target)},
+*os_debian     [] = {"debian",  "deb",       NULL,  t(&os_debian_target)},
+*os_fedora     [] = {"fedora",               NULL,  t(&os_fedora_target)},
+*os_opensuse   [] = {"suse",   "opensuse",   NULL,  t(&os_opensuse_target)},
+*os_kali       [] = {"kali",                 NULL,  t(&os_kali_target)},
+*os_msys2      [] = {"msys2",   "msys",      NULL,  t(&os_msys2_target)},
+*os_arch       [] = {"arch",                 NULL,  t(&os_arch_target)},
+*os_manjaro    [] = {"manjaro",              NULL,  t(&os_manjaro_target)},
+*os_gentoo     [] = {"gentoo",               NULL,  t(&os_gentoo_target)},
+*os_rocky      [] = {"rocky",  "rockylinux", NULL,  t(&os_rocky_target)},
+*os_alpine     [] = {"alpine",               NULL,  t(&os_alpine_target)},
+*os_void       [] = {"void",   "voidlinux",  NULL,  t(&os_void_target)},
+*os_solus      [] = {"solus",                NULL,  t(&os_solus_target)},
+*os_trisquel   [] = {"trisquel",             NULL,  t(&os_trisquel_target)},
+*os_linuxlite  [] = {"lite",   "linuxlite",  NULL,  t(&os_linuxlite_target)},
+*os_raspberrypi[] = {"raspi",  "raspberrypi",NULL,  t(&os_raspberrypi_target)},
+*os_freebsd    [] = {"freebsd",              NULL,  t(&os_freebsd_target)},
+*os_netbsd     [] = {"netbsd",               NULL,  t(&os_netbsd_target)},
+*os_openbsd    [] = {"openbsd",              NULL,  t(&os_openbsd_target)},
+*os_deepin     [] = {"deepin",               NULL,  t(&os_deepin_target)},
+*os_openeuler  [] = {"euler",  "openeuler",  NULL,  t(&os_openeuler_target)},
+*os_openkylin  [] = {"kylin",  "openkylin",  NULL,  t(&os_openkylin_target)},
+*os_ros        [] = {"ros",    "ros2",       NULL,  t(&os_ros_target)},
 **os_systems[] =
 {
   os_ubuntu,  os_mint,    os_debian,  os_fedora,  os_opensuse, os_kali,
@@ -1989,9 +1971,7 @@ static const char
 };
 
 
-def_target(wr_brew);
-def_target(wr_tex);
-
+def_target(wr_brew); def_target(wr_tex);
 TargetInfo
   wr_flathub_target  = {wr_flathub_setsrc,  NULL,  wr_flathub_sources,  wr_flathub_sources_n},
   wr_nix_target      = {wr_nix_setsrc,      NULL,  wr_nix_sources,      wr_nix_sources_n},
@@ -2000,18 +1980,18 @@ TargetInfo
   wr_anaconda_target = {wr_anaconda_setsrc, NULL,  wr_anaconda_sources, wr_anaconda_sources_n};
 
 static const char
-*wr_brew    [] = {"brew",  "homebrew",     NULL,  targetinfo(&wr_brew_target)},
-*wr_flathub [] = {"flathub", NULL,                targetinfo(&wr_flathub_target)},
-*wr_nix     [] = {"nix",     NULL,                targetinfo(&wr_nix_target)},
-*wr_guix    [] = {"guix",    NULL,                targetinfo(&wr_guix_target)},
-*wr_emacs   [] = {"emacs", "elpa",         NULL,  targetinfo(&wr_emacs_target)},
-*wr_tex     [] = {"latex", "ctan", "tex", "texlive", "miktex", "tlmgr", "mpm", NULL, targetinfo(&wr_tex_target)},
-*wr_anaconda[] = {"conda", "anaconda",     NULL,  targetinfo(&wr_anaconda_target)},
+*wr_brew    [] = {"brew",  "homebrew",     NULL,  t(&wr_brew_target)},
+*wr_flathub [] = {"flathub", NULL,                t(&wr_flathub_target)},
+*wr_nix     [] = {"nix",     NULL,                t(&wr_nix_target)},
+*wr_guix    [] = {"guix",    NULL,                t(&wr_guix_target)},
+*wr_emacs   [] = {"emacs", "elpa",         NULL,  t(&wr_emacs_target)},
+*wr_tex     [] = {"latex", "ctan", "tex", "texlive", "miktex", "tlmgr", "mpm", NULL, t(&wr_tex_target)},
+*wr_anaconda[] = {"conda", "anaconda",     NULL,  t(&wr_anaconda_target)},
 **wr_softwares[] =
 {
   wr_brew, wr_flathub, wr_nix, wr_guix, wr_emacs, wr_tex, wr_anaconda
 };
-#undef targetinfo
+#undef t
 /************************************** End Target Matrix ****************************************/
 
 
