@@ -1424,13 +1424,9 @@ os_freebsd_setsrc (char* option)
 
   char* pkg_content = xy_strjoin(4,
                       source.mirror->code, ": { \n"
-                      " url: \"http://", source.url, "/freebsd-pkg/${ABI}/latest\",\n"
-                      " mirror_type: \"srv\",\n"
-                      " signature_type: \"none\",\n"
-                      " fingerprints: \"/usr/share/keys/pkg\",\n"
-                      " enabled: yes\n"
-                    "}\n"
-                    "FreeBSD: { enabled: no }"
+                      "  url: \"http://", source.url, "/freebsd-pkg/${ABI}/latest\",\n"
+                      "}\n"
+                      "FreeBSD: { enabled: no }"
                     );
 
   chsrc_overwrite_file (pkg_content, conf);
