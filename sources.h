@@ -16,7 +16,7 @@ typedef struct {
   const char* name;
   const char* site;
   const char* __bigfile_url;  // 用于对该镜像站测速
-} mirror_info;
+} MirrorInfo;
 
 // #define Big_File_ubuntu  "/indices/md5sums.gz"  这个是错的
 #define Big_File_ctan       "/systems/texlive/Images/texlive.iso"           // 4.8GB
@@ -30,7 +30,7 @@ typedef struct {
  *
  * 我们目前根据 https://github.com/mirrorz-org/oh-my-mirrorz 挑选速度前10位
  */
-mirror_info
+MirrorInfo
   MirrorZ       = {"mirrorz", "MirrorZ",       "MirrorZ 校园网镜像站",       "https://mirrors.cernet.edu.cn/",  NULL},
 
   Tuna          = {"tuna",    "TUNA",          "清华大学开源软件镜像站",     "https://mirrors.tuna.tsinghua.edu.cn/",
@@ -80,7 +80,7 @@ mirror_info
  *
  * @note 腾讯软件源中，有很多链接都已失效，请仔细检查
  */
-mirror_info
+MirrorInfo
   Ali      = {"ali",     "Ali OPSX", "阿里巴巴开源镜像站",  "https://developer.aliyun.com/mirror/",
               "https://mirrors.aliyun.com/deepin-cd" Big_File_deepin},
 
@@ -96,7 +96,7 @@ mirror_info
   Api7     = {"api7",    "api7.ai",  "深圳支流科技有限公司", "https://www.apiseven.com/", NULL};
 
 // 开源社区
-mirror_info
+MirrorInfo
   RubyChina = {"rubychina",    "RubyChina",    "Ruby China 社区",    "https://gems.ruby-china.com/",
                "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"}, // 9.9 MB
 
@@ -114,11 +114,11 @@ mirror_info
   EmacsChina = {"emacschina",  "EmacsChina",   "Emacs China 社区",    "https://elpamirror.emacs-china.org/", NULL};
 
 
-mirror_info
+MirrorInfo
   Upstream = {"upstream",   "Upstream",     "上游默认源",      NULL,     NULL};
 
 
-mirror_info*
+MirrorInfo*
 available_mirrors[] = {
   &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Nju, // &Cqu,
   &Ali,  &Tencent, &Netease, &Sohu, &Api7,
@@ -130,9 +130,9 @@ available_mirrors[] = {
 
 
 typedef struct {
-  const mirror_info* mirror;
+  const MirrorInfo* mirror;
   const char* url;
-} source_info;
+} SourceInfo;
 
 
 /**
@@ -159,7 +159,7 @@ typedef struct {
  * 4. rubychina 有时快有时慢，快时一般在 2MB以下，慢时一般在1MB以下
  * 5. 阿里云最不稳定，经常最慢
  */
-static source_info
+static SourceInfo
 pl_ruby_sources[] = {
   {&Tencent,   "https://mirrors.tencent.com/rubygems/"},
   {&RubyChina, "https://gems.ruby-china.com/"},
@@ -375,7 +375,7 @@ pl_julia_sources[] = {
  *
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
-static source_info
+static SourceInfo
 os_ubuntu_sources[] = {
   {&Ali,       "https://mirrors.aliyun.com/ubuntu"},
   {&Bfsu,      "https://mirrors.bfsu.edu.cn/ubuntu"},
@@ -705,7 +705,7 @@ os_ros_sources[] = {
  *
  * TODO: 1. 暂未添加商业公司源
  */
-static source_info
+static SourceInfo
 wr_tex_sources[] = {
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/ctan/systems/texlive/tlnet"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet"},
@@ -795,30 +795,30 @@ wr_anaconda_sources[] = {
 
 
 
-#define def_target_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
+#define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
-def_target_sources_n(pl_ruby);     def_target_sources_n(pl_python);    def_target_sources_n(pl_nodejs);
-def_target_sources_n(pl_perl);     def_target_sources_n(pl_php);       def_target_sources_n(pl_lua);
-def_target_sources_n(pl_go);       def_target_sources_n(pl_rust);
-def_target_sources_n(pl_java);     def_target_sources_n(pl_clojure);
-def_target_sources_n(pl_dotnet);   def_target_sources_n(pl_dart);      def_target_sources_n(pl_haskell);
-def_target_sources_n(pl_ocaml);
-def_target_sources_n(pl_r);        def_target_sources_n(pl_julia);
+def_sources_n(pl_ruby);     def_sources_n(pl_python);    def_sources_n(pl_nodejs);
+def_sources_n(pl_perl);     def_sources_n(pl_php);       def_sources_n(pl_lua);
+def_sources_n(pl_go);       def_sources_n(pl_rust);
+def_sources_n(pl_java);     def_sources_n(pl_clojure);
+def_sources_n(pl_dotnet);   def_sources_n(pl_dart);      def_sources_n(pl_haskell);
+def_sources_n(pl_ocaml);
+def_sources_n(pl_r);        def_sources_n(pl_julia);
 
-def_target_sources_n(os_ubuntu);   def_target_sources_n(os_mint);
-def_target_sources_n(os_debian);   def_target_sources_n(os_fedora);
-def_target_sources_n(os_kali);     def_target_sources_n(os_opensuse);
-def_target_sources_n(os_arch);     def_target_sources_n(os_msys2);     def_target_sources_n(os_gentoo);
-def_target_sources_n(os_alpine);   def_target_sources_n(os_rocky);     def_target_sources_n(os_void);
-def_target_sources_n(os_solus);
+def_sources_n(os_ubuntu);   def_sources_n(os_mint);
+def_sources_n(os_debian);   def_sources_n(os_fedora);
+def_sources_n(os_kali);     def_sources_n(os_opensuse);
+def_sources_n(os_arch);     def_sources_n(os_msys2);     def_sources_n(os_gentoo);
+def_sources_n(os_alpine);   def_sources_n(os_rocky);     def_sources_n(os_void);
+def_sources_n(os_solus);
 
-def_target_sources_n(os_trisquel); def_target_sources_n(os_linuxlite); def_target_sources_n(os_raspberrypi);
+def_sources_n(os_trisquel); def_sources_n(os_linuxlite); def_sources_n(os_raspberrypi);
 
-def_target_sources_n(os_freebsd);  def_target_sources_n(os_netbsd);    def_target_sources_n(os_openbsd);
-def_target_sources_n(os_deepin);   def_target_sources_n(os_openeuler); def_target_sources_n(os_openkylin);
-def_target_sources_n(os_ros);
+def_sources_n(os_freebsd);  def_sources_n(os_netbsd);    def_sources_n(os_openbsd);
+def_sources_n(os_deepin);   def_sources_n(os_openeuler); def_sources_n(os_openkylin);
+def_sources_n(os_ros);
 
-def_target_sources_n(wr_brew);     def_target_sources_n(wr_flathub);
-def_target_sources_n(wr_nix);      def_target_sources_n(wr_guix);
-def_target_sources_n(wr_tex);      def_target_sources_n(wr_emacs);
-def_target_sources_n(wr_anaconda);
+def_sources_n(wr_brew);     def_sources_n(wr_flathub);
+def_sources_n(wr_nix);      def_sources_n(wr_guix);
+def_sources_n(wr_tex);      def_sources_n(wr_emacs);
+def_sources_n(wr_anaconda);

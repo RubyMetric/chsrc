@@ -58,7 +58,7 @@ does_the_program_exist (char* check_cmd, char* progname)
  */
 #define find_mirror(s, input) does_the_input_mirror_exist(s##_sources, s##_sources_n, (char*)#s+3, input)
 int
-does_the_input_mirror_exist (source_info* sources, size_t size, char* target, char* input)
+does_the_input_mirror_exist (SourceInfo* sources, size_t size, char* target, char* input)
 {
   if (0==size) {
     xy_error(xy_strjoin(3, "chsrc: 当前 ", target, " 无任何可用源，请联系维护者"));
@@ -75,7 +75,7 @@ does_the_input_mirror_exist (source_info* sources, size_t size, char* target, ch
   }
 
   int idx = 0;
-  source_info source = sources[0];
+  SourceInfo source = sources[0];
 
   bool exist = false;
   for (int i=0; i<size; i++)
@@ -193,7 +193,7 @@ dblary_maxidx_(double* array, int size)
  */
 #define auto_select(s) auto_select_(s##_sources, s##_sources_n, (char*)#s+3)
 int
-auto_select_ (source_info* sources, size_t size, const char* target)
+auto_select_ (SourceInfo* sources, size_t size, const char* target)
 {
   if (0==size) {
     xy_error(xy_strjoin(3, "chsrc: 当前 ", target, " 无任何可用源，请联系维护者"));
@@ -207,7 +207,7 @@ auto_select_ (source_info* sources, size_t size, const char* target)
   double speed = 0.0;
   for (int i=0;i<size;i++)
   {
-    source_info src = sources[i];
+    SourceInfo src = sources[i];
     const char* url = src.mirror->__bigfile_url;
     if (NULL==url) {
       chsrc_warn ( xy_strjoin(3, "开发者未提供 ",  src.mirror->code, " 镜像站测速链接，跳过该站点"));
@@ -239,14 +239,14 @@ auto_select_ (source_info* sources, size_t size, const char* target)
  * 用于 _setsrc 函数
  */
 void
-chsrc_say_selection (source_info* source)
+chsrc_say_selection (SourceInfo* source)
 {
   xy_info (xy_strjoin(5, "chsrc: 选中镜像站: ", source->mirror->abbr, " (", source->mirror->code, ")"));
 }
 
 
 void
-chsrc_say_thanks (source_info* source)
+chsrc_say_thanks (SourceInfo* source)
 {
   xy_success(xy_2strjoin("chsrc: 感谢镜像提供方: ", source->mirror->name));
 }
@@ -352,8 +352,8 @@ chsrc_backup (const char* path)
 typedef struct {
   void (*setfn)(char* option);
   void (*getfn)(char* option);
-  source_info* sources;
-  size_t       sources_n;
-} target_info;
+  SourceInfo* sources;
+  size_t      sources_n;
+} TargetInfo;
 
-#define def_target_info(t) target_info t##_target = {t##_setsrc, t##_getsrc, t##_sources, t##_sources_n}
+#define def_target(t) TargetInfo t##_target = {t##_setsrc, t##_getsrc, t##_sources, t##_sources_n}
