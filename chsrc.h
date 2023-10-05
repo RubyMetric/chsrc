@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2023-09-29>
+ * Last modified : <2023-10-05>
  *
  * chsrc:
  *
@@ -341,7 +341,21 @@ chsrc_overwrite_file (const char* str, const char* file)
 static void
 chsrc_backup (const char* path)
 {
-  char* cmd = xy_strjoin(5, "cp ", path, " ", path, ".bak --backup='t'");
+  char* cmd = NULL;
+
+  if (xy_on_bsd)
+  {
+    // 似乎BSD的cp并没有 --backup='t' 选项
+    cmd = xy_strjoin(5, "cp -f ", path, " ", path, ".bak");
+  }
+  else if (xy_on_windows) {
+    // /Y 表示覆盖
+    cmd = xy_strjoin(5, "copy /Y ", path, " ", path, ".bak" );
+  }
+  else {
+    cmd = xy_strjoin(5, "cp ", path, " ", path, ".bak --backup='t'");
+  }
+
   chsrc_run (cmd);
   chsrc_info ( xy_strjoin (3, "备份文件名 ", path, ".bak"));
 }
