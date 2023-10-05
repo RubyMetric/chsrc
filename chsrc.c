@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-10-04>
+ * Last modified : <2023-10-05>
  *
  * chsrc:
  *
@@ -12,7 +12,7 @@
  *   该软件为自由软件，采用 GPLv3 许可证，请查阅 LICENSE.txt 文件
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version "v0.1.2-2023/10/04"
+#define Chsrc_Version "v0.1.2-2023/10/05"
 
 #include "chsrc.h"
 
@@ -42,7 +42,7 @@ pl_ruby_setsrc (char* option)
 {
   int index = 0;
   char* check_cmd = xy_str_to_quietcmd("gem -v");
-  bool exist = does_the_program_exist (check_cmd, "gem");
+  bool exist = query_program_exist (check_cmd, "gem");
   if (!exist) {
     chsrc_error ("未找到 gem 命令，请检查是否存在");
     return;
@@ -61,7 +61,7 @@ pl_ruby_setsrc (char* option)
   chsrc_run(cmd);
 
   check_cmd = xy_str_to_quietcmd("bundle -v");
-  exist = does_the_program_exist (check_cmd, "bundle");
+  exist = query_program_exist (check_cmd, "bundle");
   if (!exist) {
     chsrc_error ("未找到 bundle 命令，请检查是否存在");
     return;
@@ -87,11 +87,11 @@ pl_python_check_cmd_ (char** prog)
   *prog = NULL;
   // 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store
   char* check_cmd = xy_str_to_quietcmd("python --version");
-  bool exist = does_the_program_exist (check_cmd, "python");
+  bool exist = query_program_exist (check_cmd, "python");
 
   if (!exist) {
     check_cmd = xy_str_to_quietcmd("python3 --version");
-    exist = does_the_program_exist (check_cmd, "python3");
+    exist = query_program_exist (check_cmd, "python3");
     if (exist) *prog = "python3";
   }
   else {
@@ -141,10 +141,10 @@ void
 pl_nodejs_check_cmd_ (bool* npm_exist, bool* yarn_exist)
 {
   char* check_cmd = xy_str_to_quietcmd("npm -v");
-  *npm_exist = does_the_program_exist (check_cmd, "npm");
+  *npm_exist = query_program_exist (check_cmd, "npm");
 
   check_cmd = xy_str_to_quietcmd("yarn -v");
-  *yarn_exist = does_the_program_exist (check_cmd, "yarn");
+  *yarn_exist = query_program_exist (check_cmd, "yarn");
 
   if (!*npm_exist && !*yarn_exist) {
     chsrc_error ("未找到 npm 或 yarn 命令，请检查是否存在其一");
@@ -207,7 +207,7 @@ void
 pl_perl_check_cmd_ ()
 {
   char* check_cmd = xy_str_to_quietcmd("perl --version");
-  bool exist = does_the_program_exist (check_cmd, "perl");
+  bool exist = query_program_exist (check_cmd, "perl");
 
   if (!exist) {
     chsrc_error ("未找到 perl 命令，请检查是否存在");
@@ -252,7 +252,7 @@ void
 pl_php_check_cmd_()
 {
   char* check_cmd = xy_str_to_quietcmd("composer --version");
-  bool exist = does_the_program_exist (check_cmd, "composer");
+  bool exist = query_program_exist (check_cmd, "composer");
 
   if (!exist) {
     chsrc_error ("未找到 composer 命令，请检查是否存在");
@@ -331,7 +331,7 @@ void
 pl_go_check_cmd_ ()
 {
   char* check_cmd = xy_str_to_quietcmd("go version");
-  bool exist = does_the_program_exist (check_cmd, "go");
+  bool exist = query_program_exist (check_cmd, "go");
 
   if (!exist) {
     chsrc_error ("未找到 go 相关命令，请检查是否存在");
@@ -423,10 +423,10 @@ pl_java_check_cmd_(bool* maven_exist, bool* gradle_exist)
 {
   char* check_cmd = NULL;
   check_cmd    = xy_str_to_quietcmd("mvn --version");
-  *maven_exist = does_the_program_exist (check_cmd, "mvn");
+  *maven_exist = query_program_exist (check_cmd, "mvn");
 
   check_cmd     = xy_str_to_quietcmd("gradle --version");
-  *gradle_exist = does_the_program_exist (check_cmd, "gradle");
+  *gradle_exist = query_program_exist (check_cmd, "gradle");
 
   if (! *maven_exist && ! *gradle_exist) {
     chsrc_error ("maven 与 gradle 命令均未找到，请检查是否存在其一");
@@ -631,7 +631,7 @@ void
 pl_ocaml_check_cmd_()
 {
   char* check_cmd = xy_str_to_quietcmd("opam --version");
-  bool exist = does_the_program_exist (check_cmd, "opam");
+  bool exist = query_program_exist (check_cmd, "opam");
 
   if (!exist) {
     chsrc_error ("未找到 opam 命令，请检查是否存在");
@@ -1453,7 +1453,7 @@ os_freebsd_setsrc (char* option)
   // @ccmywish: [2023-09-27] 据 @ykla , NJU的freebsd-ports源没有设置 Git，
   //                         但是我认为由于使用Git还是要比非Git方便许多，我们尽可能坚持使用Git
   //                         而 gitup 又要额外修改它自己的配置，比较麻烦
-  bool git_exist = does_the_program_exist (xy_str_to_quietcmd("git version"), "git");
+  bool git_exist = query_program_exist (xy_str_to_quietcmd("git version"), "git");
   if (git_exist) {
     if (xy_streql("nju",source.mirror->code)) {
       source = os_freebsd_sources[index-1]; // 使用NJU的前一个源，即USTC源
@@ -1620,10 +1620,10 @@ void
 wr_tex_check_cmd_ (bool* tlmgr_exist, bool* mpm_exist)
 {
   char* check_cmd = xy_str_to_quietcmd("tlmgr --version");
-  *tlmgr_exist = does_the_program_exist (check_cmd, "tlmgr");
+  *tlmgr_exist = query_program_exist (check_cmd, "tlmgr");
 
   check_cmd = xy_str_to_quietcmd("mpm --version");
-  *mpm_exist = does_the_program_exist (check_cmd, "mpm");
+  *mpm_exist = query_program_exist (check_cmd, "mpm");
 
   if (!*tlmgr_exist && !*mpm_exist) {
     xy_error ("chsrc: 未找到 tlmgr 或 mpm 命令，请检查是否存在（其一）");
@@ -1761,7 +1761,7 @@ void
 wr_nix_check_cmd ()
 {
   char* check_cmd = xy_str_to_quietcmd("nix-channel --version");
-  bool exist = does_the_program_exist (check_cmd, "nix-channel");
+  bool exist = query_program_exist (check_cmd, "nix-channel");
 
   if (!exist) {
     chsrc_error ("未找到 nix-channel 命令，请检查是否存在");
@@ -1866,7 +1866,7 @@ wr_anaconda_setsrc(char* option)
 
   if (xy_on_windows) {
     char* check_cmd = xy_str_to_quietcmd("conda --version");
-    bool exist = does_the_program_exist (check_cmd, "conda");
+    bool exist = query_program_exist (check_cmd, "conda");
     if (!exist) {
       xy_error ("chsrc: 未找到 conda 命令，请检查是否存在");
       exit(1);
@@ -2238,7 +2238,7 @@ get_target (const char* input, TargetOp code, char* option)
   else if (Target_Cesu_Source==code)
   {
     char* check_cmd = xy_str_to_quietcmd("curl --version");
-    bool exist_b = does_the_program_exist (check_cmd, "curl");
+    bool exist_b = query_program_exist (check_cmd, "curl");
     if (!exist_b) {
       xy_error ("chsrc: 没有curl命令，无法测速");
       exit(1);

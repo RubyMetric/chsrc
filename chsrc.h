@@ -31,7 +31,7 @@
  * @param  progname   要检测的二进制程序名
  */
 bool
-does_the_program_exist (char* check_cmd, char* progname)
+query_program_exist (char* check_cmd, char* progname)
 {
   char* which = check_cmd;
 
@@ -56,9 +56,9 @@ does_the_program_exist (char* check_cmd, char* progname)
  * @param  target  目标名
  * @param  input   如果用户输入 default 或者 def，则选择第一个源
  */
-#define find_mirror(s, input) does_the_input_mirror_exist(s##_sources, s##_sources_n, (char*)#s+3, input)
+#define find_mirror(s, input) query_mirror_exist(s##_sources, s##_sources_n, (char*)#s+3, input)
 int
-does_the_input_mirror_exist (SourceInfo* sources, size_t size, char* target, char* input)
+query_mirror_exist (SourceInfo* sources, size_t size, char* target, char* input)
 {
   if (0==size) {
     xy_error(xy_strjoin(3, "chsrc: 当前 ", target, " 无任何可用源，请联系维护者"));
@@ -174,7 +174,7 @@ test_speed_url (const char* url)
 
 
 int
-dblary_maxidx_(double* array, int size)
+get_max_ele_idx_in_dbl_ary (double* array, int size)
 {
   double maxval = array[0];
   int maxidx = 0;
@@ -219,7 +219,7 @@ auto_select_ (SourceInfo* sources, size_t size, const char* target)
     }
     speeds[i] = speed;
   }
-  int fastidx = dblary_maxidx_ (speeds, size);
+  int fastidx = get_max_ele_idx_in_dbl_ary (speeds, size);
 
   if (onlyone)
     xy_success(xy_strjoin(5, "chsrc: ", sources[fastidx].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
