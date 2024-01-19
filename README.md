@@ -2,23 +2,15 @@
   <img alt="chsrc logo" src="chsrc.png"/>
 </div>
 
-全平台命令行换源工具，**目标支持 Linux, Windows, macOS, BSD 等尽可能多的操作系统，龙芯、飞腾等尽可能多的CPU**。 若有不支持的情况，请提交issue。
+全平台命令行换源工具，**目标支持 Linux, Windows, macOS, BSD 等尽可能多的操作系统，龙芯、飞腾等尽可能多的CPU**。
 
 我们使用 **C99** 来完成上述目标。我们并不使用Python或JS等解释语言，因为一个简单的换源工具，不应该强行塞给用户一个庞大的解释器和数十、数百MB其他文件。
 
-<br>
-
-## 开发与维护
-
-欢迎您参与维护你所熟悉的部分软件的换源。本软件为**自由软件**，**GPLv3** 许可证的采用将有机会使您的贡献被更广泛地使用，详情查阅 [LICENSE.txt](./LICENSE.txt)
-
-参与维护开发，请查阅：[chsrc 协作者/维护者列表](https://gitee.com/RubyMetric/chsrc/issues/I7YI8E)
+本软件为**自由软件**，采用 GPLv3 和 MIT 双许可证。
 
 <br>
 
 ## 安装
-
-使用 GitHub Actions 编译，请寻找下述与您的平台相匹配的命令来下载。
 
 ### Windows
 
@@ -55,18 +47,16 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-m
 
 ### BSD
 
-BSD 用户需要按照下述命令编译，编译好即可运行 `./chsrc`
 ```bash
 git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; clang chsrc.c -o chsrc
 ```
 
 ### 没有您的平台?
 
-编译是一件很简单的事，不要担心，只需在命令行复制粘贴这一行运行:
 ```bash
 git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
 
-# 运行试试看
+# 运行
 ./chsrc
 ```
 
@@ -100,10 +90,6 @@ chsrc ls  ruby           # 列出可用的镜像站
 chsrc set ruby rubychina # 使用 RubyChina 作为镜像站
 ```
 
-注意: 下述语言/系统/软件均已实现基本支持，但还没有经过多平台测试，若有问题，请您及时提交报告。
-
-部分换源方案当前实现不足，需要用户进行部分手动操作，您可对您熟悉的部分做出贡献。
-
 <br>
 
 ## 编程语言开发
@@ -111,7 +97,7 @@ chsrc set ruby rubychina # 使用 RubyChina 作为镜像站
 ```bash
 chsrc set ruby    或 set gem
 chsrc set python  或 set pip
-chsrc set node    或 set npm / nodejs / yarn # 同时会为yarn换源
+chsrc set node    或 set npm / nodejs / yarn
 chsrc set perl    或 set cpan
 chsrc set php     或 set composer
 chsrc set lua     或 set luarocks
@@ -199,21 +185,13 @@ make clean
 
 <br>
 
-## License
-
-本软件采用 GPLv3 和 MIT 双许可证，具体请查阅 [LICENSE.txt](./LICENSE.txt)
-
-<br>
-
 ## 致谢
 
 感谢各个镜像站提供的优质免费镜像服务，使用的镜像站见 [sources.h](./sources.h).
 
-特别感谢:
+另外感谢以下项目:
 1. [MirrorZ 教育网镜像站](https://help.mirrors.cernet.edu.cn/)
 2. [清华大学 Tuna](https://mirrors.tuna.tsinghua.edu.cn/)
 3. [Thanks Mirror项目](https://github.com/eryajf/Thanks-Mirror) by [@eryajf](https://github.com/eryajf)
-
-真诚鸣谢，各位参与的维护者
 
 <br>
