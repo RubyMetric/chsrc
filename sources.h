@@ -148,11 +148,14 @@ typedef struct {
 
 
 /**
- * 2023-09-15 更新
+ * 2024-04-18 更新
  *
  * @note
  * 下面的源，并不都实现正确，
  * BFSU 和 Tuna 以及 阿里的镜像都有问题，会循环遍历一个gem的所有版本，导致安装时间相当长
+ *
+ * @note
+ * 2024-04-18: @ccmywish: 华为云镜像正确可用
  *
  * @note 网络情况
  * 若实现正确:
@@ -166,6 +169,7 @@ static SourceInfo
 pl_ruby_sources[] = {
   {&Tencent,   "https://mirrors.tencent.com/rubygems/"},
   {&RubyChina, "https://gems.ruby-china.com/"},
+  {&Huawei,    "https://mirrors.huaweicloud.com/repository/rubygems/"}
 
   // {&Bfsu,      "https://mirrors.bfsu.edu.cn/rubygems/"},
   // {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/"},
