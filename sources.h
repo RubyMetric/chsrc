@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2023-10-05>
+ * Last modified : <2024-04-18>
  *
  * sources:
  *
@@ -87,6 +87,9 @@ MirrorInfo
   Tencent  = {"tencent", "Tencent",  "腾讯软件源",         "https://mirrors.tencent.com/",
               "https://mirrors.cloud.tencent.com/debian" Big_File_debian},
 
+  Huawei   = {"huawei",  "Huawei Cloud", "华为开源镜像站",  "https://mirrors.huaweicloud.com/",
+              "https://mirrors.huaweicloud.com/debian/" Big_File_debian },
+
   Netease  = {"netease", "Netease",  "网易开源镜像站",      "https://mirrors.163.com/",
               "https://mirrors.163.com/deepin-cd" Big_File_deepin},
 
@@ -121,7 +124,7 @@ MirrorInfo
 MirrorInfo*
 available_mirrors[] = {
   &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Nju, // &Cqu,
-  &Ali,  &Tencent, &Netease, &Sohu, &Api7,
+  &Ali,  &Tencent, &Huawei, &Netease, &Sohu, &Api7,
   &RubyChina, &EmacsChina, &NpmMirror, &GoProxyCN, &GoProxyIO,
   // 暂不支持 &NugetOrg
 
