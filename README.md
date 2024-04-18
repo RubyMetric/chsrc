@@ -97,7 +97,7 @@ chsrc set ruby rubychina # 使用 RubyChina 作为镜像站
 ```bash
 chsrc set ruby    或 set gem
 chsrc set python  或 set pip
-chsrc set node    或 set npm / nodejs / yarn
+chsrc set node    或 set npm / nodejs / yarn / pnpm # 同时换3个
 chsrc set perl    或 set cpan
 chsrc set php     或 set composer
 chsrc set lua     或 set luarocks

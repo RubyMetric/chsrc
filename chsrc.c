@@ -1899,7 +1899,7 @@ TargetInfo
 static const char
 *pl_ruby  [] = {"gem",   "ruby",    "rubygem", "rb", "rubygems",NULL, t(&pl_ruby_target)},
 *pl_python[] = {"pip",   "python",  "pypi",    "py",            NULL, t(&pl_python_target)},
-*pl_nodejs[] = {"npm",   "node",    "nodejs",  "js", "yarn",    NULL, t(&pl_nodejs_target)},
+*pl_nodejs[] = {"npm",   "node",    "nodejs",  "js", "yarn", "pnpm",  NULL, t(&pl_nodejs_target)},
 *pl_perl  [] = {"perl",  "cpan",                         NULL,  t(&pl_perl_target)},
 *pl_php   [] = {"php",   "composer",                     NULL,  t(&pl_php_target)},
 *pl_lua   [] = {"lua",   "luarocks",                     NULL,  t(&pl_lua_target)},
