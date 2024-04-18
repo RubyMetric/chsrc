@@ -17,6 +17,9 @@
 #ifndef XY_H
 #define XY_H
 
+#define XY_Version      "v0.1.1-2024/04/18"
+#define XY_Maintain_URL "https://gitee.com/RubyMetric/chsrc/blob/main/xy.h"
+
 #include <assert.h>
 #include <stdarg.h>
 #include <stdbool.h>
