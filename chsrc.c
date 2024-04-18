@@ -71,9 +71,9 @@ pl_ruby_setsrc (char* option)
   chsrc_run(cmd);
 
   chsrc_say_thanks(&source);
-  puts("");
-  chsrc_warn("维护者提醒您: Ruby的镜像源目前仅有腾讯和RubyChina实现正确");
-  chsrc_warn("而其它如Tuna,Bfsu,Ali目前都实现的有问题，请勿使用");
+  // puts("");
+  // chsrc_warn("维护者提醒您: Ruby的镜像源目前仅有 腾讯软件源，RubyChina，华为开源镜像站 实现正确");
+  // chsrc_warn("而其它如Tuna,Bfsu,Ali目前都实现的有问题，请勿使用");
 }
 
 
