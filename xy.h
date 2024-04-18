@@ -331,29 +331,29 @@ _xy_str_to_terminal_style (int style, const char *str)
   switch (style)
     {
     case XY_Str_Red:
-      color_fmt_str = "\e[31m%s\e[0m";
+      color_fmt_str = "\e[31m%s\e[0m"; break;
     case XY_Str_Green:
-      color_fmt_str = "\e[32m%s\e[0m";
+      color_fmt_str = "\e[32m%s\e[0m"; break;
     case XY_Str_Yellow:
-      color_fmt_str = "\e[33m%s\e[0m";
+      color_fmt_str = "\e[33m%s\e[0m"; break;
     case XY_Str_Blue:
-      color_fmt_str = "\e[34m%s\e[0m";
+      color_fmt_str = "\e[34m%s\e[0m"; break;
     case XY_Str_Magenta:
-      color_fmt_str = "\e[35m%s\e[0m";
+      color_fmt_str = "\e[35m%s\e[0m"; break;
     case XY_Str_Cyan:
-      color_fmt_str = "\e[36m%s\e[0m";
+      color_fmt_str = "\e[36m%s\e[0m"; break;
     case XY_Str_Bold:
-      color_fmt_str = "\e[1m%s\e[0m";
+      color_fmt_str = "\e[1m%s\e[0m"; break;
     case XY_Str_Faint:
-      color_fmt_str = "\e[2m%s\e[0m";
+      color_fmt_str = "\e[2m%s\e[0m"; break;
     case XY_Str_Italic:
-      color_fmt_str = "\e[3m%s\e[0m";
+      color_fmt_str = "\e[3m%s\e[0m"; break;
     case XY_Str_Underline:
-      color_fmt_str = "\e[4m%s\e[0m";
+      color_fmt_str = "\e[4m%s\e[0m"; break;
     case XY_Str_Blink:
-      color_fmt_str = "\e[5m%s\e[0m";
+      color_fmt_str = "\e[5m%s\e[0m"; break;
     case XY_Str_Cross:
-      color_fmt_str = "\e[9m%s\e[0m";
+      color_fmt_str = "\e[9m%s\e[0m"; break;
     }
 
   // -2 把中间%s减掉
