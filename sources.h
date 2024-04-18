@@ -78,7 +78,7 @@ MirrorInfo
 /**
  * 商业公司提供的源
  *
- * @note 腾讯软件源中，有很多链接都已失效，请仔细检查
+ * @warning 腾讯软件源中，有很多链接都已失效，请仔细检查
  */
 MirrorInfo
   Ali      = {"ali",     "Ali OPSX", "阿里巴巴开源镜像站",  "https://developer.aliyun.com/mirror/",
@@ -174,7 +174,7 @@ pl_ruby_sources[] = {
 
 
 /**
- * 2023-09-10 更新
+ * 2024-04-18 更新
  *
  * @note 不要添加Zju，浙大的pypi在校外访问会自动转向Tuna
  */
@@ -185,14 +185,15 @@ pl_python_sources[] = {
   {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/pypi/web/simple"},
   {&Tuna,          "https://pypi.tuna.tsinghua.edu.cn/simple"},
   {&Ali,           "https://mirrors.aliyun.com/pypi/simple/"},
-  {&Tencent,       "https://mirrors.cloud.tencent.com/pypi/simple"}
+  {&Tencent,       "https://mirrors.cloud.tencent.com/pypi/simple"},
+  {&Huawei,        "https://mirrors.huaweicloud.com/repository/pypi/simple"},
   // {&Netease,    "https://mirrors.163.com/.help/pypi.html"} // 不用，24小时更新一次
 },
 
 
 
 /**
- * 2023-09-09 更新
+ * 2024-04-18 更新
  *
  * Sjtug, Tuna, Lzuoss, Jlu, Bfsu, 网易，搜狐 都没有
  *
@@ -200,6 +201,7 @@ pl_python_sources[] = {
  */
 pl_nodejs_sources[] = {
   {&NpmMirror,     "https://registry.npmmirror.com"},
+  {&Huawei,        "https://mirrors.huaweicloud.com/repository/npm/"},
   {&Zju,           "https://mirrors.zju.edu.cn/npm"}
 },
 
@@ -220,13 +222,14 @@ pl_perl_sources[] = {
 
 
 /**
- * 2023-09-04 更新
+ * 2024-04-18 更新
  *
  * @note 缺少教育网或开源社区软件源
  */
 pl_php_sources[] = {
   {&Ali,            "https://mirrors.aliyun.com/composer/"},
-  {&Tencent,        "https://mirrors.tencent.com/composer/"}
+  {&Tencent,        "https://mirrors.tencent.com/composer/"},
+  {&Huawei,         "https://mirrors.huaweicloud.com/repository/php/"}
 },
 
 
@@ -242,13 +245,14 @@ pl_lua_sources[] = {
 
 
 /**
- * 2023-09-04 更新
+ * 2024-04-18 更新
  *
  * @note 缺少教育网软件源
  */
 pl_go_sources[] = {
   {&GoProxyCN,    "https://goproxy.cn"},
   {&Ali,          "https://mirrors.aliyun.com/goproxy/"},
+  {&Huawei,       "https://mirrors.huaweicloud.com/goproxy/"},
   {&GoProxyIO,    "https://goproxy.io"}
 },
 
@@ -269,12 +273,13 @@ pl_rust_sources[] = {
 
 
 /**
- * 2023-09-10 更新
+ * 2024-04-18 更新
  *
  * @note 缺少教育网或开源社区软件源
  */
 pl_java_sources[] = {
   {&Ali,           "https://maven.aliyun.com/repository/public/"},
+  {&Huawei,        "https://mirrors.huaweicloud.com/repository/maven/"},
   {&Netease,       "http://mirrors.163.com/maven/repository/maven-public/"} // 网易的24小时更新一次
 },
 
@@ -291,14 +296,14 @@ pl_clojure_sources[] = {
 
 
 /**
- * 2023-08-30 更新
+ * 2024-04-18 更新
  *
- * @note 暂时未实现该换源功能
- *
- * @note 当前仅有一个源，缺少教育网或开源社区软件源
+ * @note 暂时未实现该换源功能，可参照
+ *    https://mirrors.huaweicloud.com/mirrorDetail/5ebf85de07b41baf6d0882ab?mirrorName=nuget&catalog=language
  */
 pl_dotnet_sources[] = {
-  {&NugetOrg,      "https://www.nuget.org/api/v2/"}
+  {&NugetOrg,      "https://www.nuget.org/api/v2/"},
+  {&Huawei,        "https://mirrors.huaweicloud.com/repository/nuget/v3"}
 },
 
 
@@ -374,9 +379,7 @@ pl_julia_sources[] = {
 
 
 /**
- * 2023-09-01 更新
- *
- * TODO: 1. 源并不完整，且未经测试是否有效
+ * 2024-04-18 更新
  */
 static SourceInfo
 os_ubuntu_sources[] = {
@@ -385,6 +388,7 @@ os_ubuntu_sources[] = {
   {&Ustc,      "https://mirrors.ustc.edu.cn/ubuntu"},
   {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/ubuntu"},
   {&Tencent,   "https://mirrors.tencent.com/ubuntu"},
+  {&Huawei,    "https://mirrors.huaweicloud.com/ubuntu"},
   {&Netease,   "https://mirrors.163.com/ubuntu"},
   {&Sohu,      "https://mirrors.sohu.com/ubuntu"}
 },
@@ -451,9 +455,9 @@ os_fedora_sources[] = {
 
 
 /**
- * 2023-09-02 更新
+ * 2024-04-18 更新
  *
- * TODO: 1. 源并不完整，且未经测试是否有效
+ * TODO: 未经测试是否有效
  */
 os_kali_sources[] = {
   {&Ali,       "https://mirrors.aliyun.com/kali"},
@@ -461,15 +465,16 @@ os_kali_sources[] = {
   {&Ustc,      "https://mirrors.ustc.edu.cn/kali"},
   {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/kali"},
   {&Tencent,   "https://mirrors.tencent.com/kali"},
+  {&Huawei,    "https://mirrors.huaweicloud.com/kali"},
   {&Netease,   "https://mirrors.163.com/kali"},
   {&Sohu,      "https://mirrors.sohu.com/kali"}
 },
 
 
 /**
- * 2023-09-05 更新
+ * 2024-04-18 更新
  *
- * TODO: 1. 源并不完整，且未经测试是否有效
+ * TODO: 源并不完整，且未经测试是否有效
  */
 os_arch_sources[] = {
   {&Ali,       "https://mirrors.aliyun.com/"},
@@ -477,6 +482,7 @@ os_arch_sources[] = {
   {&Ustc,      "https://mirrors.ustc.edu.cn/"},
   {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/"},
   {&Tencent,   "https://mirrors.tencent.com/"},
+  {&Huawei,    "https://mirrors.huaweicloud.com/archlinux/"},
   {&Netease,   "https://mirrors.163.com/"},
   {&Sohu,      "https://mirrors.sohu.com/"}
 },
@@ -515,9 +521,9 @@ os_opensuse_sources[] = {
 
 
 /**
- * 2023-09-02 更新
+ * 2024-04-18 更新
  *
- * TODO: 1. 源并不完整，且未经测试是否有效
+ * TODO: 源并不完整，且未经测试是否有效
  */
 os_msys2_sources[] = {
   {&Ali,       "https://mirrors.aliyun.com/msys2"},
@@ -525,6 +531,7 @@ os_msys2_sources[] = {
   {&Ustc,      "https://mirrors.ustc.edu.cn/msys2"},
   {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/msys2"},
   {&Tencent,   "https://mirrors.tencent.com/msys2"},
+  {&Huawei,    "https://mirrors.huaweicloud.com/msys2"},
   {&Netease,   "https://mirrors.163.com/msys2"},
   {&Sohu,      "https://mirrors.sohu.com/msys2"}
 },
@@ -545,7 +552,7 @@ os_rocky_sources[] = {
 
 
 /**
- * 2023-09-24 更新
+ * 2024-04-18 更新
  */
 os_alpine_sources[] = {
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/alpine"},
@@ -554,7 +561,8 @@ os_alpine_sources[] = {
   {&Zju,            "https://mirrors.zju.edu.cn/alpine"},
   {&Lzuoss,         "https://mirror.lzu.edu.cn/alpine"},
   {&Ali,            "https://mirrors.aliyun.com/alpine"},
-  {&Tencent,        "https://mirrors.cloud.tencent.com/alpine"}
+  {&Tencent,        "https://mirrors.cloud.tencent.com/alpine"},
+  {&Huawei,         "https://mirrors.huaweicloud.com/alpine/"}
 },
 
 
@@ -684,9 +692,9 @@ os_openkylin_sources[] = {
 
 
 /**
- * 2023-09-30 更新
+ * 2024-04-18 更新
  *
- * TODO: 1. 源并不完整，且未经测试是否有效
+ * TODO: 未经测试是否有效
  */
 os_ros_sources[] = {
   {&Ali,       "https://mirrors.aliyun.com"},
@@ -694,6 +702,7 @@ os_ros_sources[] = {
   {&Ustc,      "https://mirrors.ustc.edu.cn"},
   {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn"},
   {&Tencent,   "https://mirrors.tencent.com"},
+  {&Huawei,    "https://mirrors.huaweicloud.com"},
   {&Netease,   "https://mirrors.163.com"},
   {&Sohu,      "https://mirrors.sohu.com"}
 };
