@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2023-10-05>
+ * Last modified : <2024-04-18>
  *
  * chsrc:
  *
@@ -138,7 +138,7 @@ pl_python_setsrc (char* option)
 
 
 void
-pl_nodejs_check_cmd (bool* npm_exist, bool* yarn_exist)
+pl_nodejs_check_cmd (bool* npm_exist, bool* yarn_exist, bool* pnpm_exist)
 {
   char* check_cmd = xy_str_to_quietcmd("npm -v");
   *npm_exist = query_program_exist (check_cmd, "npm");
@@ -146,8 +146,11 @@ pl_nodejs_check_cmd (bool* npm_exist, bool* yarn_exist)
   check_cmd = xy_str_to_quietcmd("yarn -v");
   *yarn_exist = query_program_exist (check_cmd, "yarn");
 
-  if (!*npm_exist && !*yarn_exist) {
-    chsrc_error ("未找到 npm 或 yarn 命令，请检查是否存在其一");
+  check_cmd = xy_str_to_quietcmd("pnpm -v");
+  *pnpm_exist = query_program_exist (check_cmd, "pnpm");
+
+  if (!*npm_exist && !*yarn_exist && !*pnpm_exist) {
+    chsrc_error ("未找到 npm 或 yarn 或 pnpm 命令，请检查是否存在其一");
     exit(1);
   }
 }
@@ -156,14 +159,17 @@ pl_nodejs_check_cmd (bool* npm_exist, bool* yarn_exist)
 void
 pl_nodejs_getsrc (char* option)
 {
-  bool npm_exist, yarn_exist;
-  pl_nodejs_check_cmd (&npm_exist, &yarn_exist);
+  bool npm_exist, yarn_exist, pnpm_exist;
+  pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
   if (npm_exist) {
     chsrc_run("npm config get registry");
   }
   if (yarn_exist) {
     chsrc_run("yarn config get registry");
+  }
+  if (pnpm_exist) {
+    chsrc_run("pnpm config get registry");
   }
 }
 
@@ -173,8 +179,8 @@ pl_nodejs_getsrc (char* option)
 void
 pl_nodejs_setsrc (char* option)
 {
-  bool npm_exist, yarn_exist;
-  pl_nodejs_check_cmd (&npm_exist, &yarn_exist);
+  bool npm_exist, yarn_exist, pnpm_exist;
+  pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
   int index = use_specific_mirror_or_auto_select (option, pl_nodejs);
 
@@ -192,6 +198,13 @@ pl_nodejs_setsrc (char* option)
     char* cmd = xy_str_to_quietcmd(xy_2strjoin("yarn config set registry ", source.url));
     chsrc_run(cmd);
   }
+
+  if (pnpm_exist)
+    {
+      char* cmd = xy_str_to_quietcmd(xy_2strjoin("pnpm config set registry ", source.url));
+      chsrc_run(cmd);
+    }
+
   chsrc_say_thanks(&source);
 }
 
