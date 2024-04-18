@@ -12,68 +12,71 @@
  *   该软件为自由软件，采用 GPLv3 许可证，请查阅 LICENSE.txt 文件
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version "v0.1.2-2023/10/05"
+#define Chsrc_Version "v0.1.3-2024/04/18"
 
 #include "chsrc.h"
 
 void
-pl_ruby_getsrc (char* option)
+pl_ruby_getsrc (char *option)
 {
-  chsrc_run("gem sources");
-  chsrc_run("bundle config get mirror.https://rubygems.org");
+  chsrc_run ("gem sources");
+  chsrc_run ("bundle config get mirror.https://rubygems.org");
 }
 
 void
-pl_ruby_remove_gem_source (const char* source)
+pl_ruby_remove_gem_source (const char *source)
 {
-  char* cmd = NULL;
-  if (xy_str_start_with(source, "http")){
-    cmd = xy_str_delete_suffix(source, "\n");
-    cmd = xy_2strjoin("gem sources -r ", cmd);
-    chsrc_run(cmd);
-  }
+  char *cmd = NULL;
+  if (xy_str_start_with (source, "http"))
+    {
+      cmd = xy_str_delete_suffix (source, "\n");
+      cmd = xy_2strjoin ("gem sources -r ", cmd);
+      chsrc_run (cmd);
+    }
 }
 
 /**
  * Ruby换源，参考：https://gitee.com/RubyMetric/rbenv-cn
  */
 void
-pl_ruby_setsrc (char* option)
+pl_ruby_setsrc (char *option)
 {
   int index = 0;
-  char* check_cmd = xy_str_to_quietcmd("gem -v");
+  char *check_cmd = xy_str_to_quietcmd ("gem -v");
   bool exist = query_program_exist (check_cmd, "gem");
-  if (!exist) {
-    chsrc_error ("未找到 gem 命令，请检查是否存在");
-    return;
-  }
+  if (!exist)
+    {
+      chsrc_error ("未找到 gem 命令，请检查是否存在");
+      return;
+    }
 
   index = use_specific_mirror_or_auto_select (option, pl_ruby);
 
   SourceInfo source = pl_ruby_sources[index];
   chsrc_say_selection (&source);
 
-  char* cmd = NULL;
+  char *cmd = NULL;
 
   xy_getcmd ("gem sources -l", 0, pl_ruby_remove_gem_source);
 
-  cmd = xy_2strjoin("gem source -a ", source.url);
-  chsrc_run(cmd);
+  cmd = xy_2strjoin ("gem source -a ", source.url);
+  chsrc_run (cmd);
 
-  check_cmd = xy_str_to_quietcmd("bundle -v");
+  check_cmd = xy_str_to_quietcmd ("bundle -v");
   exist = query_program_exist (check_cmd, "bundle");
-  if (!exist) {
-    chsrc_error ("未找到 bundle 命令，请检查是否存在");
-    return;
-  }
+  if (!exist)
+    {
+      chsrc_error ("未找到 bundle 命令，请检查是否存在");
+      return;
+    }
 
-  cmd = xy_2strjoin("bundle config 'mirror.https://rubygems.org' ", source.url);
-  chsrc_run(cmd);
+  cmd = xy_2strjoin ("bundle config 'mirror.https://rubygems.org' ", source.url);
+  chsrc_run (cmd);
 
-  chsrc_say_thanks(&source);
-  // puts("");
-  // chsrc_warn("维护者提醒您: Ruby的镜像源目前仅有 腾讯软件源，RubyChina，华为开源镜像站 实现正确");
-  // chsrc_warn("而其它如Tuna,Bfsu,Ali目前都实现的有问题，请勿使用");
+  chsrc_say_thanks (&source);
+  // puts ("");
+  // chsrc_warn ("维护者提醒您: Ruby的镜像源目前仅有 腾讯软件源，RubyChina，华为开源镜像站 实现正确");
+  // chsrc_warn ("而其它如Tuna,Bfsu,Ali目前都实现的有问题，请勿使用");
 }
 
 
@@ -82,35 +85,38 @@ pl_ruby_setsrc (char* option)
  * @param[out] prog 返回 Python 的可用名，如果不可用，则返回 NULL
  */
 void
-pl_python_check_cmd (char** prog)
+pl_python_check_cmd (char **prog)
 {
   *prog = NULL;
   // 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store
-  char* check_cmd = xy_str_to_quietcmd("python --version");
+  char *check_cmd = xy_str_to_quietcmd ("python --version");
   bool exist = query_program_exist (check_cmd, "python");
 
-  if (!exist) {
-    check_cmd = xy_str_to_quietcmd("python3 --version");
-    exist = query_program_exist (check_cmd, "python3");
-    if (exist) *prog = "python3";
-  }
-  else {
-    *prog = "python";
-  }
+  if (!exist)
+    {
+      check_cmd = xy_str_to_quietcmd ("python3 --version");
+      exist = query_program_exist (check_cmd, "python3");
+      if (exist) *prog = "python3";
+    }
+  else
+    {
+      *prog = "python";
+    }
 
-  if (!exist) {
-    chsrc_error ("未找到 Python 相关命令，请检查是否存在");
-    exit(1);
-  }
+  if (!exist)
+    {
+      chsrc_error ("未找到 Python 相关命令，请检查是否存在");
+      exit (1);
+    }
 }
 
 void
-pl_python_getsrc (char* option)
+pl_python_getsrc (char *option)
 {
-  char* prog = NULL;
+  char *prog = NULL;
   pl_python_check_cmd (&prog);
-  char* cmd = xy_2strjoin(prog, " -m pip config get global.index-url");
-  chsrc_run(cmd);
+  char *cmd = xy_2strjoin (prog, " -m pip config get global.index-url");
+  chsrc_run (cmd);
 }
 
 /**
@@ -119,65 +125,69 @@ pl_python_getsrc (char* option)
  * 经测试，Windows上调用换源命令，会写入 C:\Users\RubyMetric\AppData\Roaming\pip\pip.ini
  */
 void
-pl_python_setsrc (char* option)
+pl_python_setsrc (char *option)
 {
   int index = 0;
-  char* prog = NULL;
+  char *prog = NULL;
   pl_python_check_cmd (&prog);
 
   index = use_specific_mirror_or_auto_select (option, pl_python);
 
   SourceInfo source = pl_python_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
-  char* cmd = xy_2strjoin(prog, xy_2strjoin(" -m pip config set global.index-url ", source.url));
-  chsrc_run(cmd);
-  chsrc_say_thanks(&source);
+  char* cmd = xy_2strjoin (prog, xy_2strjoin (" -m pip config set global.index-url ", source.url));
+  chsrc_run (cmd);
+  chsrc_say_thanks (&source);
 }
 
 
 
 void
-pl_nodejs_check_cmd (bool* npm_exist, bool* yarn_exist, bool* pnpm_exist)
+pl_nodejs_check_cmd (bool *npm_exist, bool *yarn_exist, bool *pnpm_exist)
 {
-  char* check_cmd = xy_str_to_quietcmd("npm -v");
+  char *check_cmd = xy_str_to_quietcmd ("npm -v");
   *npm_exist = query_program_exist (check_cmd, "npm");
 
-  check_cmd = xy_str_to_quietcmd("yarn -v");
+  check_cmd = xy_str_to_quietcmd ("yarn -v");
   *yarn_exist = query_program_exist (check_cmd, "yarn");
 
-  check_cmd = xy_str_to_quietcmd("pnpm -v");
+  check_cmd = xy_str_to_quietcmd ("pnpm -v");
   *pnpm_exist = query_program_exist (check_cmd, "pnpm");
 
-  if (!*npm_exist && !*yarn_exist && !*pnpm_exist) {
-    chsrc_error ("未找到 npm 或 yarn 或 pnpm 命令，请检查是否存在其一");
-    exit(1);
-  }
+  if (!*npm_exist && !*yarn_exist && !*pnpm_exist)
+    {
+      chsrc_error ("未找到 npm 或 yarn 或 pnpm 命令，请检查是否存在其一");
+      exit (1);
+    }
 }
 
 
 void
-pl_nodejs_getsrc (char* option)
+pl_nodejs_getsrc (char *option)
 {
   bool npm_exist, yarn_exist, pnpm_exist;
   pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
-  if (npm_exist) {
-    chsrc_run("npm config get registry");
-  }
-  if (yarn_exist) {
-    chsrc_run("yarn config get registry");
-  }
-  if (pnpm_exist) {
-    chsrc_run("pnpm config get registry");
-  }
+  if (npm_exist)
+    {
+      chsrc_run ("npm config get registry");
+    }
+  if (yarn_exist)
+    {
+      chsrc_run ("yarn config get registry");
+    }
+  if (pnpm_exist)
+    {
+      chsrc_run ("pnpm config get registry");
+    }
 }
 
 /**
  * NodeJS换源，参考：https://npmmirror.com/
  */
 void
-pl_nodejs_setsrc (char* option)
+pl_nodejs_setsrc (char *option)
 {
   bool npm_exist, yarn_exist, pnpm_exist;
   pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
@@ -187,25 +197,27 @@ pl_nodejs_setsrc (char* option)
   SourceInfo source = pl_nodejs_sources[index];
   chsrc_say_selection (&source);
 
+  char *cmd = NULL;
+
   if (npm_exist)
-  {
-    char* cmd = xy_2strjoin("npm config set registry ", source.url);
-    chsrc_run(cmd);
-  }
+    {
+      cmd = xy_2strjoin ("npm config set registry ", source.url);
+      chsrc_run (cmd);
+    }
 
   if (yarn_exist)
-  {
-    char* cmd = xy_str_to_quietcmd(xy_2strjoin("yarn config set registry ", source.url));
-    chsrc_run(cmd);
-  }
+    {
+      cmd = xy_str_to_quietcmd (xy_2strjoin ("yarn config set registry ", source.url));
+      chsrc_run (cmd);
+    }
 
   if (pnpm_exist)
     {
-      char* cmd = xy_str_to_quietcmd(xy_2strjoin("pnpm config set registry ", source.url));
-      chsrc_run(cmd);
+      cmd = xy_str_to_quietcmd (xy_2strjoin ("pnpm config set registry ", source.url));
+      chsrc_run (cmd);
     }
 
-  chsrc_say_thanks(&source);
+  chsrc_say_thanks (&source);
 }
 
 
@@ -213,44 +225,45 @@ pl_nodejs_setsrc (char* option)
 void
 pl_perl_check_cmd ()
 {
-  char* check_cmd = xy_str_to_quietcmd("perl --version");
+  char *check_cmd = xy_str_to_quietcmd ("perl --version");
   bool exist = query_program_exist (check_cmd, "perl");
 
-  if (!exist) {
-    chsrc_error ("未找到 perl 命令，请检查是否存在");
-    exit(1);
-  }
+  if (!exist)
+    {
+      chsrc_error ("未找到 perl 命令，请检查是否存在");
+      exit (1);
+    }
 }
 
 void
-pl_perl_getsrc (char* option)
+pl_perl_getsrc (char *option)
 {
   pl_perl_check_cmd ();
   // @ccmywish: 注意，prettyprint 仅仅是一个内部实现，可能不稳定，如果需要更稳定的，
   //            可以使用 CPAN::Shell->o('conf', 'urllist');
   //            另外，上述两种方法无论哪种，都要首先load()
-  char* cmd = "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->prettyprint('urllist')\" ";
-  chsrc_run(cmd);
+  char *cmd = "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->prettyprint('urllist')\" ";
+  chsrc_run (cmd);
 }
 
 /**
  * Perl换源，参考：https://help.mirrors.cernet.edu.cn/CPAN/
  */
 void
-pl_perl_setsrc (char* option)
+pl_perl_setsrc (char *option)
 {
   int index = use_specific_mirror_or_auto_select (option, pl_perl);
 
   SourceInfo source = pl_perl_sources[index];
   chsrc_say_selection (&source);
 
-  char* cmd = xy_strjoin(3,
+  char *cmd = xy_strjoin (3,
   "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('urllist', 'unshift', '", source.url, "'); CPAN::HandleConfig->commit()\"");
-  chsrc_run(cmd);
+  chsrc_run (cmd);
 
   chsrc_warn ("请您使用 perl -v 以及 cpan -v，若 Perl >= v5.36 或 CPAN >= 2.29，请额外手动调用下面的命令");
-  puts("perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('pushy_https', 0);; CPAN::HandleConfig->commit()\"");
-  chsrc_say_thanks(&source);
+  puts ("perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('pushy_https', 0);; CPAN::HandleConfig->commit()\"");
+  chsrc_say_thanks (&source);
 }
 
 
@@ -258,47 +271,48 @@ pl_perl_setsrc (char* option)
 void
 pl_php_check_cmd ()
 {
-  char* check_cmd = xy_str_to_quietcmd("composer --version");
+  char *check_cmd = xy_str_to_quietcmd ("composer --version");
   bool exist = query_program_exist (check_cmd, "composer");
 
-  if (!exist) {
-    chsrc_error ("未找到 composer 命令，请检查是否存在");
-    exit(1);
-  }
+  if (!exist)
+    {
+      chsrc_error ("未找到 composer 命令，请检查是否存在");
+      exit (1);
+    }
 }
 
 /**
  * 已在Windows上测试通过，待其他平台PHP用户确认
  */
 void
-pl_php_getsrc (char* option)
+pl_php_getsrc (char *option)
 {
   pl_php_check_cmd ();
-  chsrc_run("composer config -g repositories");
+  chsrc_run ("composer config -g repositories");
 }
 
 /**
  * PHP 换源，参考：https://developer.aliyun.com/composer
  */
 void
-pl_php_setsrc (char* option)
+pl_php_setsrc (char *option)
 {
-  pl_php_check_cmd();
+  pl_php_check_cmd ();
 
   int index = use_specific_mirror_or_auto_select (option, pl_php);
 
   SourceInfo source = pl_php_sources[index];
   chsrc_say_selection (&source);
 
-  char* cmd = xy_2strjoin("composer config -g repo.packagist composer ", source.url);
-  chsrc_run(cmd);
+  char* cmd = xy_2strjoin ("composer config -g repo.packagist composer ", source.url);
+  chsrc_run (cmd);
 
-  chsrc_say_thanks(&source);
+  chsrc_say_thanks (&source);
 }
 
 
 void
-pl_lua_getsrc (char* option)
+pl_lua_getsrc (char *option)
 {
   chsrc_check_file ("~/.luarocks/config.lua");
   chsrc_check_file ("~/.luarocks/upload_config.lua");
@@ -308,27 +322,27 @@ pl_lua_getsrc (char* option)
  * Lua 换源，参考：https://luarocks.cn/
  */
 void
-pl_lua_setsrc (char* option)
+pl_lua_setsrc (char *option)
 {
   int index = use_specific_mirror_or_auto_select (option, pl_lua);
 
   SourceInfo source = pl_lua_sources[index];
   chsrc_say_selection (&source);
 
-  char* config = xy_strjoin(3, "rocks_servers = {\n"
-                               "  \"", source.url, "\"\n"
-                               "}");
+  char *config = xy_strjoin (3, "rocks_servers = {\n"
+                                "  \"", source.url, "\"\n"
+                                "}");
 
   chsrc_info ("请手动修改 ~/.luarocks/config.lua 文件 (用于下载):");
-  puts(config);
+  puts (config);
 
-  char* upload_config = xy_strjoin(3, "key = \"<Your API Key>\"\n"
+  char *upload_config = xy_strjoin (3, "key = \"<Your API Key>\"\n"
                                       "server = \"", source.url, "\"");
 
   chsrc_info ("请手动修改  ~/.luarocks/upload_config.lua 文件 (用于上传):");
-  puts(upload_config);
+  puts (upload_config);
 
-  chsrc_say_thanks(&source);
+  chsrc_say_thanks (&source);
 }
 
 
@@ -336,20 +350,21 @@ pl_lua_setsrc (char* option)
 void
 pl_go_check_cmd ()
 {
-  char* check_cmd = xy_str_to_quietcmd("go version");
+  char *check_cmd = xy_str_to_quietcmd ("go version");
   bool exist = query_program_exist (check_cmd, "go");
 
-  if (!exist) {
-    chsrc_error ("未找到 go 相关命令，请检查是否存在");
-    exit(1);
-  }
+  if (!exist)
+    {
+      chsrc_error ("未找到 go 相关命令，请检查是否存在");
+      exit (1);
+    }
 }
 
 void
-pl_go_getsrc (char* option)
+pl_go_getsrc (char *option)
 {
   pl_go_check_cmd ();
-  chsrc_run("go env GOPROXY");
+  chsrc_run ("go env GOPROXY");
 }
 
 /**
@@ -358,19 +373,19 @@ pl_go_getsrc (char* option)
 void
 pl_go_setsrc (char* option)
 {
-  pl_go_check_cmd();
+  pl_go_check_cmd ();
 
   int index = use_specific_mirror_or_auto_select (option, pl_go);
 
   SourceInfo source = pl_go_sources[index];
   chsrc_say_selection (&source);
 
-  char* cmd = "go env -w GO111MODULE=on";
-  chsrc_run(cmd);
+  char *cmd = "go env -w GO111MODULE=on";
+  chsrc_run (cmd);
 
-  cmd = xy_strjoin(3, "go env -w GOPROXY=", source.url, ",direct");
-  chsrc_run(cmd);
-  chsrc_say_thanks(&source);
+  cmd = xy_strjoin (3, "go env -w GOPROXY=", source.url, ",direct");
+  chsrc_run (cmd);
+  chsrc_say_thanks (&source);
 }
 
 
@@ -390,7 +405,7 @@ pl_rust_setsrc (char* option)
   int index = use_specific_mirror_or_auto_select (option, pl_rust);
 
   SourceInfo source = pl_rust_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   const char* file = xy_strjoin (3,
     "[source.crates-io]\n"
@@ -399,9 +414,9 @@ pl_rust_setsrc (char* option)
     "[source.mirror]\n"
     "registry = \"sparse+", source.url, "\"");
 
-  chsrc_warn (xy_strjoin(3, "请您手动写入以下内容到 ", xy_uniform_path("~/.cargo"), " 文件中:"));
-  puts(file);
-  chsrc_say_thanks(&source);
+  chsrc_warn (xy_strjoin (3, "请您手动写入以下内容到 ", xy_uniform_path("~/.cargo"), " 文件中:"));
+  puts (file);
+  chsrc_say_thanks (&source);
 }
 
 
@@ -426,38 +441,39 @@ pl_dotnet_setsrc (char* option)
 void
 pl_java_check_cmd (bool* maven_exist, bool* gradle_exist)
 {
-  char* check_cmd = NULL;
-  check_cmd    = xy_str_to_quietcmd("mvn --version");
+  char *check_cmd = NULL;
+  check_cmd    = xy_str_to_quietcmd ("mvn --version");
   *maven_exist = query_program_exist (check_cmd, "mvn");
 
-  check_cmd     = xy_str_to_quietcmd("gradle --version");
+  check_cmd     = xy_str_to_quietcmd ("gradle --version");
   *gradle_exist = query_program_exist (check_cmd, "gradle");
 
-  if (! *maven_exist && ! *gradle_exist) {
-    chsrc_error ("maven 与 gradle 命令均未找到，请检查是否存在其一");
-    exit(1);
-  }
+  if (! *maven_exist && ! *gradle_exist)
+    {
+      chsrc_error ("maven 与 gradle 命令均未找到，请检查是否存在其一");
+      exit (1);
+    }
 }
 
 char*
 pl_java_find_maven_config ()
 {
-  char* buf = xy_getcmd ("mvn -v", 2, NULL);
-  char* maven_home = xy_str_delete_prefix(buf, "Maven home: ");
-  maven_home = xy_str_strip(maven_home);
+  char *buf = xy_getcmd ("mvn -v", 2, NULL);
+  char *maven_home = xy_str_delete_prefix (buf, "Maven home: ");
+  maven_home = xy_str_strip (maven_home);
 
-  char* maven_config = xy_uniform_path(xy_2strjoin(maven_home, "/conf/settings.xml"));
+  char *maven_config = xy_uniform_path (xy_2strjoin (maven_home, "/conf/settings.xml"));
   return maven_config;
 }
 
 void
-pl_java_getsrc (char* option)
+pl_java_getsrc (char *option)
 {
   bool maven_exist, gradle_exist;
   pl_java_check_cmd (&maven_exist, &gradle_exist);
-  char* maven_config = pl_java_find_maven_config ();
+  char *maven_config = pl_java_find_maven_config ();
 
-  char* echo = xy_2strjoin("chsrc: 请查看 ", maven_config);
+  char *echo = xy_2strjoin ("chsrc: 请查看 ", maven_config);
   xy_info (echo);
 }
 
@@ -465,7 +481,7 @@ pl_java_getsrc (char* option)
  * Java 换源，参考：https://developer.aliyun.com/mirror/maven
  */
 void
-pl_java_setsrc (char* option)
+pl_java_setsrc (char *option)
 {
   bool maven_exist, gradle_exist;
   pl_java_check_cmd (&maven_exist, &gradle_exist);
@@ -475,142 +491,146 @@ pl_java_setsrc (char* option)
   SourceInfo source = pl_java_sources[index];
   chsrc_say_selection(&source);
 
-  if (maven_exist) {
-    const char* file = xy_strjoin(7,
-    "<mirror>\n"
-    "  <id>", source.mirror->code, "</id>\n"
-    "  <mirrorOf>*</mirrorOf>\n"
-    "  <name>", source.mirror->name, "</name>\n"
-    "  <url>", source.url, "</url>\n"
-    "</mirror>");
+  if (maven_exist)
+    {
+      const char *file = xy_strjoin (7,
+      "<mirror>\n"
+      "  <id>", source.mirror->code, "</id>\n"
+      "  <mirrorOf>*</mirrorOf>\n"
+      "  <name>", source.mirror->name, "</name>\n"
+      "  <url>", source.url, "</url>\n"
+      "</mirror>");
 
-    char* maven_config = pl_java_find_maven_config ();
-    char* echo = xy_strjoin(3, "chsrc: 请在您的 maven 配置文件 ", maven_config, " 中添加:");
-    xy_info(echo);
-    puts (file);
-  }
+      char *maven_config = pl_java_find_maven_config ();
+      char *echo = xy_strjoin (3, "chsrc: 请在您的 maven 配置文件 ", maven_config, " 中添加:");
+      xy_info (echo);
+      puts (file);
+    }
 
-  if (gradle_exist) {
-    if (maven_exist) puts("");
-    const char* file = xy_strjoin(3,
-    "allprojects {\n"
-    "  repositories {\n"
-    "    maven { url '", source.url, "' }\n"
-    "    mavenLocal()\n"
-    "    mavenCentral()\n"
-    "  }\n"
-    "}");
+  if (gradle_exist)
+    {
+      if (maven_exist) puts("");
+      const char* file = xy_strjoin (3,
+      "allprojects {\n"
+      "  repositories {\n"
+      "    maven { url '", source.url, "' }\n"
+      "    mavenLocal()\n"
+      "    mavenCentral()\n"
+      "  }\n"
+      "}");
 
-    chsrc_info ("请在您的 build.gradle 中添加:");
-    puts (file);
-  }
-  chsrc_say_thanks(&source);
-}
-
-
-
-void
-pl_clojure_setsrc(char* option)
-{
-  int index = use_specific_mirror_or_auto_select (option, pl_clojure);
-
-  SourceInfo source = pl_clojure_sources[index];
-  chsrc_say_selection (&source);
-
-  chsrc_warn("抱歉，Clojure换源较复杂，您可手动查阅并换源:");
-  puts(source.url);
+      chsrc_info ("请在您的 build.gradle 中添加:");
+      puts (file);
+    }
   chsrc_say_thanks (&source);
 }
 
 
 
 void
-pl_dart_getsrc(char* option)
+pl_clojure_setsrc (char *option)
 {
-  char* cmd = NULL;
-  if (xy_on_windows) {
-    cmd = "set PUB_HOSTED_URL & set FLUTTER_STORAGE_BASE_URL";
-    chsrc_run(cmd);
-  } else {
-    cmd = "echo $PUB_HOSTED_URL; echo $FLUTTER_STORAGE_BASE_URL";
-    chsrc_run(cmd);
-  }
+  int index = use_specific_mirror_or_auto_select (option, pl_clojure);
+
+  SourceInfo source = pl_clojure_sources[index];
+  chsrc_say_selection (&source);
+
+  chsrc_warn ("抱歉，Clojure换源较复杂，您可手动查阅并换源:");
+  puts (source.url);
+  chsrc_say_thanks (&source);
+}
+
+
+
+void
+pl_dart_getsrc (char *option)
+{
+  char *cmd = NULL;
+  if (xy_on_windows)
+    {
+      cmd = "set PUB_HOSTED_URL & set FLUTTER_STORAGE_BASE_URL";
+      chsrc_run (cmd);
+    }
+  else
+    {
+      cmd = "echo $PUB_HOSTED_URL; echo $FLUTTER_STORAGE_BASE_URL";
+      chsrc_run (cmd);
+    }
 }
 
 /**
  * Dart pub 换源，参考：https://mirrors.tuna.tsinghua.edu.cn/help/dart-pub/
  */
 void
-pl_dart_setsrc (char* option)
+pl_dart_setsrc (char *option)
 {
   int index = use_specific_mirror_or_auto_select (option, pl_dart);
 
   SourceInfo source = pl_dart_sources[index];
   chsrc_say_selection(&source);
 
-  char* towrite = NULL;
+  char *towrite = NULL;
 
-  char* pub = xy_2strjoin(source.url, "dart-pub");
-  char* flutter = xy_2strjoin(source.url, "flutter");
+  char *pub = xy_2strjoin(source.url, "dart-pub");
+  char *flutter = xy_2strjoin(source.url, "flutter");
 
   if (xy_on_windows)
-  {
-    if (xy_file_exist(xy_win_powershell_profile))
     {
-      towrite = xy_strjoin(4, "$env:PUB_HOSTED_URL = \"", pub, "\"");
-      chsrc_append_to_file (towrite, xy_win_powershell_profile);
+      if (xy_file_exist (xy_win_powershell_profile))
+        {
+          towrite = xy_strjoin (4, "$env:PUB_HOSTED_URL = \"", pub, "\"");
+          chsrc_append_to_file (towrite, xy_win_powershell_profile);
 
-      towrite = xy_strjoin(4, "$env:FLUTTER_STORAGE_BASE_URL = \"", flutter, "\"");
-      chsrc_append_to_file (towrite, xy_win_powershell_profile);
+          towrite = xy_strjoin (4, "$env:FLUTTER_STORAGE_BASE_URL = \"", flutter, "\"");
+          chsrc_append_to_file (towrite, xy_win_powershell_profile);
+        }
+
+      if (xy_file_exist (xy_win_powershellv5_profile))
+        {
+          towrite = xy_strjoin (4, "$env:PUB_HOSTED_URL = \"", pub, "\"");
+          chsrc_append_to_file (towrite, xy_win_powershellv5_profile);
+
+          towrite = xy_strjoin (4, "$env:FLUTTER_STORAGE_BASE_URL = \"", flutter, "\"");
+          chsrc_append_to_file (towrite, xy_win_powershellv5_profile);
+        }
     }
-
-    if (xy_file_exist(xy_win_powershellv5_profile))
-    {
-      towrite = xy_strjoin(4, "$env:PUB_HOSTED_URL = \"", pub, "\"");
-      chsrc_append_to_file (towrite, xy_win_powershellv5_profile);
-
-      towrite = xy_strjoin(4, "$env:FLUTTER_STORAGE_BASE_URL = \"", flutter, "\"");
-      chsrc_append_to_file (towrite, xy_win_powershellv5_profile);
-    }
-  }
-
   else
-  {
-    towrite = xy_strjoin(3, "export PUB_HOSTED_URL=\"", pub, "\"");
-    chsrc_append_to_file (towrite, "~/.bashrc >> ~/.zshrc");
+    {
+      towrite = xy_strjoin (3, "export PUB_HOSTED_URL=\"", pub, "\"");
+      chsrc_append_to_file (towrite, "~/.bashrc >> ~/.zshrc");
 
-    towrite = xy_strjoin(3, "export FLUTTER_STORAGE_BASE_URL=\"", flutter, "\"");
-    chsrc_append_to_file (towrite, "~/.bashrc >> ~/.zshrc");
-  }
-  chsrc_say_thanks(&source);
+      towrite = xy_strjoin (3, "export FLUTTER_STORAGE_BASE_URL=\"", flutter, "\"");
+      chsrc_append_to_file (towrite, "~/.bashrc >> ~/.zshrc");
+    }
+  chsrc_say_thanks (&source);
 }
 
 
 
 void
-pl_haskell_setsrc(char* option)
+pl_haskell_setsrc(char *option)
 {
   int index = use_specific_mirror_or_auto_select (option, pl_haskell);
 
   SourceInfo source = pl_haskell_sources[index];
   chsrc_say_selection (&source);
 
-  char* file = xy_strjoin(3, "repository mirror\n"
+  char* file = xy_strjoin (3, "repository mirror\n"
                              "  url: ", source.url,
                           "\n  secure: True");
 
-  char* config = NULL;
+  char *config = NULL;
   if (xy_on_windows) {
     config = xy_uniform_path ("~/AppData/Roaming/cabal/config");
   } else {
     config = "~/.cabal/config";
   }
 
-  xy_info(xy_strjoin(3,"chsrc: 请向 ", config, " 中手动添加:"));
-  puts(file); puts("");
+  xy_info (xy_strjoin (3,"chsrc: 请向 ", config, " 中手动添加:"));
+  puts (file); puts ("");
 
   config = xy_uniform_path ("~/.stack/config.yaml");
-  file = xy_strjoin(3, "package-indices:\n"
+  file = xy_strjoin (3, "package-indices:\n"
                        "  - download-prefix: ", source.url,
                      "\n    hackage-security:\n"
                        "        keyids:\n"
@@ -625,8 +645,8 @@ pl_haskell_setsrc(char* option)
                        "        - fe331502606802feac15e514d9b9ea83fee8b6ffef71335479a2e68d84adc6b0\n"
                        "        key-threshold: 3\n"
                        "        ignore-expiry: no");
-  xy_info(xy_strjoin(3,"chsrc: 请向 ", config, " 中手动添加:"));
-  puts(file);
+  xy_info (xy_strjoin (3,"chsrc: 请向 ", config, " 中手动添加:"));
+  puts (file);
   chsrc_say_thanks (&source);
 }
 
@@ -635,43 +655,44 @@ pl_haskell_setsrc(char* option)
 void
 pl_ocaml_check_cmd ()
 {
-  char* check_cmd = xy_str_to_quietcmd("opam --version");
+  char *check_cmd = xy_str_to_quietcmd("opam --version");
   bool exist = query_program_exist (check_cmd, "opam");
 
-  if (!exist) {
-    chsrc_error ("未找到 opam 命令，请检查是否存在");
-    exit(1);
-  }
+  if (!exist)
+    {
+      chsrc_error ("未找到 opam 命令，请检查是否存在");
+      exit (1);
+    }
 }
 
 void
-pl_ocaml_getsrc(char* option)
+pl_ocaml_getsrc(char *option)
 {
-  pl_ocaml_check_cmd();
-  chsrc_run("opam repo get-url default");
+  pl_ocaml_check_cmd ();
+  chsrc_run ("opam repo get-url default");
 }
 
 /**
  * 参考: https://mirrors.sjtug.sjtu.edu.cn/docs/git/opam-repository.git
  */
 void
-pl_ocaml_setsrc(char* option)
+pl_ocaml_setsrc(char *option)
 {
-  pl_ocaml_check_cmd();
+  pl_ocaml_check_cmd ();
 
   int index = use_specific_mirror_or_auto_select (option, pl_ocaml);
 
   SourceInfo source = pl_ocaml_sources[index];
   chsrc_say_selection (&source);
 
-  char* cmd = xy_strjoin(3, "opam repo set-url default ",
+  char *cmd = xy_strjoin (3, "opam repo set-url default ",
     source.url,
     " --all --set-default");
 
-  chsrc_run(cmd);
+  chsrc_run (cmd);
 
-  chsrc_info("如果是首次使用 opam ，请使用以下命令进行初始化");
-  puts(xy_2strjoin("opam init default ", source.url));
+  chsrc_info ("如果是首次使用 opam ，请使用以下命令进行初始化");
+  puts (xy_2strjoin ("opam init default ", source.url));
 
   chsrc_say_thanks (&source);
 }
@@ -686,42 +707,45 @@ pl_r_getsrc (char* option)
   // options()$repos
   // options()$BioC_mirror
   //
-  if (xy_on_windows) {
-    chsrc_check_file ("~/Documents/.Rprofile");
-  } else {
-    chsrc_check_file ("~/.Rprofile");
-  }
+  if (xy_on_windows)
+    {
+      chsrc_check_file ("~/Documents/.Rprofile");
+    }
+  else
+    {
+      chsrc_check_file ("~/.Rprofile");
+    }
 }
 
 /**
  * R 换源，参考：https://help.mirrors.cernet.edu.cn/CRAN/
  */
 void
-pl_r_setsrc (char* option)
+pl_r_setsrc (char *option)
 {
   int index = use_specific_mirror_or_auto_select (option, pl_r);
 
   SourceInfo source = pl_r_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
-  char* bioconductor_url = xy_str_delete_suffix(xy_str_delete_suffix(source.url, "cran/"), "CRAN/");
+  char *bioconductor_url = xy_str_delete_suffix (xy_str_delete_suffix (source.url, "cran/"), "CRAN/");
   bioconductor_url = xy_2strjoin(bioconductor_url, "bioconductor");
 
-  const char* towrite1 = xy_strjoin (3, "options(\"repos\" = c(CRAN=\"", source.url, "\"))" );
-  const char* towrite2 = xy_strjoin (3, "options(BioC_mirror=\"", bioconductor_url, "\")" );
+  const char *towrite1 = xy_strjoin (3, "options(\"repos\" = c(CRAN=\"", source.url, "\"))" );
+  const char *towrite2 = xy_strjoin (3, "options(BioC_mirror=\"", bioconductor_url, "\")" );
 
   // 或者我们调用 r.exe --slave -e 上面的内容
   if (xy_on_windows)
-  {
-    chsrc_append_to_file (towrite1, "~/Documents/.Rprofile");
-    chsrc_append_to_file (towrite2, "~/Documents/.Rprofile");
-  }
+    {
+      chsrc_append_to_file (towrite1, "~/Documents/.Rprofile");
+      chsrc_append_to_file (towrite2, "~/Documents/.Rprofile");
+    }
   else
-  {
-    chsrc_append_to_file (towrite1, "~/.Rprofile");
-    chsrc_append_to_file (towrite2, "~/.Rprofile");
-  }
-  chsrc_say_thanks(&source);
+    {
+      chsrc_append_to_file (towrite1, "~/.Rprofile");
+      chsrc_append_to_file (towrite2, "~/.Rprofile");
+    }
+  chsrc_say_thanks (&source);
 }
 
 
@@ -734,7 +758,7 @@ pl_r_setsrc (char* option)
  * 我们采用第一种
  */
 void
-pl_julia_getsrc (char* option)
+pl_julia_getsrc (char *option)
 {
   chsrc_check_file ("~/.julia/config/startup.jl");
 }
@@ -745,17 +769,17 @@ pl_julia_getsrc (char* option)
  * 2. https://docs.julialang.org/en/v1/manual/command-line-interface/#Startup-file
  */
 void
-pl_julia_setsrc (char* option)
+pl_julia_setsrc (char *option)
 {
   int index = use_specific_mirror_or_auto_select (option, pl_julia);
 
   SourceInfo source = pl_julia_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
-  const char* towrite = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
+  const char *towrite = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
 
   chsrc_append_to_file (towrite, "~/.julia/config/startup.jl");
-  chsrc_say_thanks(&source);
+  chsrc_say_thanks (&source);
 }
 
 
