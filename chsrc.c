@@ -371,7 +371,7 @@ pl_go_getsrc (char *option)
  * Go换源，参考：https://goproxy.cn/
  */
 void
-pl_go_setsrc (char* option)
+pl_go_setsrc (char *option)
 {
   pl_go_check_cmd ();
 
@@ -391,7 +391,7 @@ pl_go_setsrc (char* option)
 
 
 void
-pl_rust_getsrc (char* option)
+pl_rust_getsrc (char *option)
 {
   chsrc_check_file ("~/.cargo");
 }
@@ -400,7 +400,7 @@ pl_rust_getsrc (char* option)
  * Rust 换源，参考：https://mirrors.tuna.tsinghua.edu.cn/help/crates.io-index/
  */
 void
-pl_rust_setsrc (char* option)
+pl_rust_setsrc (char *option)
 {
   int index = use_specific_mirror_or_auto_select (option, pl_rust);
 
@@ -1311,7 +1311,7 @@ os_solus_setsrc (char *option)
   SourceInfo source = os_solus_sources[index];
   chsrc_say_selection (&source);
 
-  char* cmd = xy_2strjoin ("sudo eopkg add-repo Solus ", source.url);
+  char *cmd = xy_2strjoin ("sudo eopkg add-repo Solus ", source.url);
   chsrc_run (cmd);
   chsrc_say_thanks (&source);
 }
