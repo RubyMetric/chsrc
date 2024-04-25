@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2024-04-18>
+ * Last modified : <2024-04-25>
  *
  * chsrc:
  *
@@ -12,7 +12,7 @@
  *   该软件为自由软件，采用 GPLv3 许可证，请查阅 LICENSE.txt 文件
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version "v0.1.3-2024/04/18"
+#define Chsrc_Version "v0.1.3-2024/04/25"
 
 #include "chsrc.h"
 
@@ -792,7 +792,7 @@ pl_julia_setsrc (char *option)
 
 
 void
-os_ubuntu_getsrc(char* option)
+os_ubuntu_getsrc (char *option)
 {
   chsrc_check_file (ETC_APT_SOURCELIST);
 }
@@ -801,37 +801,38 @@ os_ubuntu_getsrc(char* option)
  * @note 不同架构下换源不一样
  */
 void
-os_ubuntu_setsrc (char* option)
+os_ubuntu_setsrc (char *option)
 {
-  chsrc_ensure_root();
+  chsrc_ensure_root ();
 
   int index = use_specific_mirror_or_auto_select (option, os_ubuntu);
 
   SourceInfo source = os_ubuntu_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
-  char* arch = xy_getcmd("arch", 0, NULL);
-  char* cmd  = NULL;
-  if (strncmp(arch, "x86_64", 6)==0)
-  {
-    cmd = xy_strjoin(3, "sed -E -i \'s@https?://.*/ubuntu/?@", source.url, "@g\' /etc/apt/sources.list");
-  }
-  else {
-    cmd = xy_strjoin(3, "sed -E -i \'s@https?://.*/ubuntu-ports/?@", source.url,
-                        "-ports@g\' /etc/apt/sources.list");
-  }
+  char *arch = xy_getcmd ("arch", 0, NULL);
+  char *cmd  = NULL;
+  if (strncmp (arch, "x86_64", 6)==0)
+    {
+      cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu/?@", source.url, "@g\' /etc/apt/sources.list");
+    }
+  else
+    {
+    cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu-ports/?@", source.url,
+                         "-ports@g\' /etc/apt/sources.list");
+    }
 
-  chsrc_run(cmd);
-  chsrc_run("sudo apt update");
-  chsrc_say_thanks(&source);
+  chsrc_run (cmd);
+  chsrc_run ("sudo apt update");
+  chsrc_say_thanks (&source);
 }
 
 
 
 void
-os_mint_getsrc(char* option)
+os_mint_getsrc(char *option)
 {
   chsrc_check_file ("/etc/apt/sources.list.d/official-package-repositories.list");
 }
@@ -840,30 +841,30 @@ os_mint_getsrc(char* option)
  * 参考: https://help.mirrors.cernet.edu.cn/linuxmint/
  */
 void
-os_mint_setsrc (char* option)
+os_mint_setsrc (char *option)
 {
-  chsrc_ensure_root();
+  chsrc_ensure_root ();
 
   int index = use_specific_mirror_or_auto_select (option, os_mint);
 
   SourceInfo source = os_mint_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_backup ("/etc/apt/sources.list.d/official-package-repositories.list");
 
-  char* cmd = xy_strjoin(3, "sed -E -i 's@https?://.*/.*/?@", source.url,
+  char* cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/.*/?@", source.url,
                             "@g' /etc/apt/sources.list.d/official-package-repositories.list");
 
-  chsrc_run(cmd);
-  chsrc_run("sudo apt update");
-  chsrc_say_thanks(&source);
+  chsrc_run (cmd);
+  chsrc_run ("sudo apt update");
+  chsrc_say_thanks (&source);
   chsrc_warn ("完成后请不要再使用 mintsources（自带的图形化软件源设置工具）进行任何操作，因为在操作后，无论是否有按“确定”，mintsources 均会覆写我们刚才换源的内容");
 }
 
 
 
 void
-os_debian_getsrc(char* option)
+os_debian_getsrc (char *option)
 {
   chsrc_check_file (ETC_APT_SOURCELIST);
 }
@@ -873,62 +874,62 @@ os_debian_getsrc(char* option)
  * sudo apt install apt-transport-https ca-certificates
  */
 void
-os_debian_setsrc (char* option)
+os_debian_setsrc (char *option)
 {
-  chsrc_ensure_root();
+  chsrc_ensure_root ();
 
   int index = use_specific_mirror_or_auto_select (option, os_debian);
 
   SourceInfo source = os_debian_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_info ("如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并需要您运行:");
   puts ("sudo apt install apt-transport-https ca-certificates");
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
-  char* cmd = xy_strjoin(3,
+  char *cmd = xy_strjoin(3,
       "sed -E -i \'s@https?://.*/debian/?@",
       source.url,
       "@g\' /etc/apt/sources.list");
 
-  chsrc_run(cmd);
-  chsrc_run("sudo apt update");
-  chsrc_say_thanks(&source);
+  chsrc_run (cmd);
+  chsrc_run ("sudo apt update");
+  chsrc_say_thanks (&source);
 }
 
 
 
 void
-os_raspberrypi_getsrc (char* option)
+os_raspberrypi_getsrc (char *option)
 {
   chsrc_check_file ("/etc/apt/sources.list.d/raspi.list");
 }
 
 void
-os_raspberrypi_setsrc (char* option)
+os_raspberrypi_setsrc (char *option)
 {
   // chsrc_ensure_root(); // HELP: 不确定是否需要
 
   int index = use_specific_mirror_or_auto_select (option, os_raspberrypi);
 
   SourceInfo source = os_raspberrypi_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_backup ("/etc/apt/sources.list.d/raspi.list");
 
-  char* cmd = xy_strjoin(3, "sed -E -i 's@https?://.*/.*/?@", source.url,
+  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/.*/?@", source.url,
                             "@g' /etc/apt/sources.list.d/raspi.list");
 
-  chsrc_run(cmd);
-  chsrc_run("sudo apt update");
-  chsrc_say_thanks(&source);
+  chsrc_run (cmd);
+  chsrc_run ("sudo apt update");
+  chsrc_say_thanks (&source);
 }
 
 
 
 void
-os_deepin_getsrc(char* option)
+os_deepin_getsrc(char *option)
 {
   chsrc_check_file (ETC_APT_SOURCELIST);
 }
@@ -937,25 +938,25 @@ os_deepin_getsrc(char* option)
  * HELP: 未经测试
  */
 void
-os_deepin_setsrc (char* option)
+os_deepin_setsrc (char *option)
 {
   chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_deepin);
 
   SourceInfo source = os_deepin_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
-  char* cmd = xy_strjoin(3,
+  char *cmd = xy_strjoin (3,
       "sed -E -i \'s@https?://.*/deepin/?@",
       source.url,
       "@g\' /etc/apt/sources.list");
 
-  chsrc_run(cmd);
-  chsrc_run("sudo apt update");
-  chsrc_say_thanks(&source);
+  chsrc_run (cmd);
+  chsrc_run ("sudo apt update");
+  chsrc_say_thanks (&source);
 }
 
 
@@ -964,21 +965,21 @@ os_deepin_setsrc (char* option)
  * @note fedora 29 及以下版本暂不支持
  */
 void
-os_fedora_setsrc (char* option)
+os_fedora_setsrc (char *option)
 {
-  chsrc_ensure_root();
+  chsrc_ensure_root ();
 
   int index = use_specific_mirror_or_auto_select (option, os_fedora);
 
   SourceInfo source = os_fedora_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   xy_warn ("chsrc: fedora 29 及以下版本暂不支持");
 
   chsrc_backup ("/etc/yum.repos.d/fedora.repo");
   chsrc_backup ("/etc/yum.repos.d/fedora-updates.repo");
 
-  char* cmd = xy_strjoin(9, "sed -e 's|^metalink=|#metalink=|g' ",
+  char* cmd = xy_strjoin (9, "sed -e 's|^metalink=|#metalink=|g' ",
          "-e 's|^#baseurl=http://download.example/pub/fedora/linux/|baseurl=",
          source.url,
          "|g' ",
@@ -988,7 +989,7 @@ os_fedora_setsrc (char* option)
          "/etc/yum.repos.d/fedora-updates.repo ",
          "/etc/yum.repos.d/fedora-updates-modular.repo");
 
-  chsrc_run(cmd);
+  chsrc_run (cmd);
 
   chsrc_info ("替换文件:/etc/yum.repos.d/fedora.repo");
   chsrc_info ("新增文件:/etc/yum.repos.d/fedora-modular.repo");
@@ -996,7 +997,7 @@ os_fedora_setsrc (char* option)
   chsrc_info ("新增文件:/etc/yum.repos.d/fedora-updates-modular.repo");
 
   chsrc_run ("sudo dnf makecache");
-  chsrc_say_thanks(&source);
+  chsrc_say_thanks (&source);
 }
 
 
@@ -1005,61 +1006,61 @@ os_fedora_setsrc (char* option)
  * HELP: 未经测试
  */
 void
-os_opensuse_setsrc (char* option)
+os_opensuse_setsrc (char *option)
 {
-  chsrc_ensure_root(); // HELP: 不知道是否需要确保root权限
+  chsrc_ensure_root (); // HELP: 不知道是否需要确保root权限
 
   int index = use_specific_mirror_or_auto_select (option, os_opensuse);
 
   SourceInfo source = os_opensuse_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
-  char* source_nselect = "zypper mr -da";
-  chsrc_run(source_nselect);
+  char *source_nselect = "zypper mr -da";
+  chsrc_run (source_nselect);
 
-  char* cmd1 = xy_strjoin(3,
+  char *cmd1 = xy_strjoin (3,
     "zypper ar -cfg '",
     source.url,
     "/opensuse/distribution/leap/$releasever/repo/oss/' mirror-oss");
-  char* cmd2 = xy_strjoin(3,
+  char *cmd2 = xy_strjoin (3,
     "zypper ar -cfg '",
     source.url,
     "/opensuse/distribution/leap/$releasever/repo/non-oss/' mirror-non-oss");
-  char* cmd3 = xy_strjoin(3,
+  char *cmd3 = xy_strjoin (3,
     "zypper ar -cfg '",
     source.url,
     "/opensuse/distribution/leap/$releasever/oss/' mirror-update");
-  char* cmd4 = xy_strjoin(3,
+  char *cmd4 = xy_strjoin (3,
     "zypper ar -cfg '",
     source.url,
     "/opensuse/distribution/leap/$releasever/non-oss/' mirror-update-non-oss");
-  char* cmd5 = xy_strjoin(3,
+  char *cmd5 = xy_strjoin (3,
     "zypper ar -cfg '",
     source.url,
     "/opensuse/distribution/leap/$releasever/sle/' mirror-sle-update");
-  char* cmd6 = xy_strjoin(3,
+  char *cmd6 = xy_strjoin (3,
     "zypper ar -cfg '",
     source.url,
     "/opensuse/distribution/leap/$releasever/backports/' mirror-backports-update");
 
-  chsrc_run(cmd1);
-  chsrc_run(cmd2);
-  chsrc_run(cmd3);
-  chsrc_run(cmd4);
+  chsrc_run (cmd1);
+  chsrc_run (cmd2);
+  chsrc_run (cmd3);
+  chsrc_run (cmd4);
 
-  xy_info("chsrc: leap 15.3用户还需 要添加sle和backports源");
-  xy_info("chsrc: 另外请确保系统在更新后仅启用了六个软件源，可以使用 zypper lr 检查软件源状态");
-  xy_info("chsrc: 并使用 zypper mr -d 禁用多余的软件源");
+  xy_info ("chsrc: leap 15.3用户还需 要添加sle和backports源");
+  xy_info ("chsrc: 另外请确保系统在更新后仅启用了六个软件源，可以使用 zypper lr 检查软件源状态");
+  xy_info ("chsrc: 并使用 zypper mr -d 禁用多余的软件源");
 
-  chsrc_run(cmd5);
-  chsrc_run(cmd6);
-  chsrc_say_thanks(&source);
+  chsrc_run (cmd5);
+  chsrc_run (cmd6);
+  chsrc_say_thanks (&source);
 }
 
 
 
 void
-os_kali_getsrc (char* option)
+os_kali_getsrc (char *option)
 {
   chsrc_check_file (ETC_APT_SOURCELIST);
 }
@@ -1068,25 +1069,25 @@ os_kali_getsrc (char* option)
  * HELP: 未经测试
  */
 void
-os_kali_setsrc(char* option)
+os_kali_setsrc (char *option)
 {
-  chsrc_ensure_root();
+  chsrc_ensure_root ();
 
   int index = use_specific_mirror_or_auto_select (option, os_kali);
 
   SourceInfo source = os_kali_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
-  char* cmd = xy_strjoin(3,
+  char *cmd = xy_strjoin (3,
       "sed -E -i \'s@https?://.*/kali/?@",
       source.url,
       "@g\' /etc/apt/sources.list");
 
-  chsrc_run(cmd);
-  chsrc_run("sudo apt update");
-  chsrc_say_thanks(&source);
+  chsrc_run (cmd);
+  chsrc_run ("sudo apt update");
+  chsrc_say_thanks (&source);
 }
 
 
@@ -1095,28 +1096,28 @@ os_kali_setsrc(char* option)
  * HELP: 未经测试
  */
 void
-os_msys2_setsrc(char* option)
+os_msys2_setsrc (char *option)
 {
   int index = use_specific_mirror_or_auto_select (option, os_msys2);
 
   SourceInfo source = os_msys2_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_backup ("/etc/pacman.d/mirrorlist.mingw32");
   chsrc_backup ("/etc/pacman.d/mirrorlist.mingw64");
   chsrc_backup ("/etc/pacman.d/mirrorlist.msys");
 
-  char* prev = xy_strjoin(3, "chsrc: 请针对你的架构下载安装此目录下的文件:",
+  char *prev = xy_strjoin (3, "chsrc: 请针对你的架构下载安装此目录下的文件:",
                               source.url,
                              "distrib/<架构>/");
   xy_info (prev);
 
-  char* cmd = xy_strjoin(3, "sed -i \"s#https\?://mirror.msys2.org/#",
+  char *cmd = xy_strjoin (3, "sed -i \"s#https\?://mirror.msys2.org/#",
                              source.url,
                             "#g\" /etc/pacman.d/mirrorlist* ");
 
-  chsrc_run(cmd);
-  chsrc_say_thanks(&source);
+  chsrc_run (cmd);
+  chsrc_say_thanks (&source);
 }
 
 
@@ -1125,46 +1126,51 @@ os_msys2_setsrc(char* option)
  * 参考: https://mirrors.tuna.tsinghua.edu.cn/help/archlinuxcn/
  */
 void
-os_arch_setsrc(char* option)
+os_arch_setsrc (char *option)
 {
-  chsrc_ensure_root();
+  chsrc_ensure_root ();
 
   int index = use_specific_mirror_or_auto_select (option, os_arch);
 
   SourceInfo source = os_arch_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_backup ("/etc/pacman.d/mirrorlist");
 
   bool  arch_flag = false;
-  char* new_file  = NULL;
-  char* arch = xy_getcmd("arch", 0, NULL);
+  char *new_file  = NULL;
+  char *arch = xy_getcmd ("arch", 0, NULL);
 
-  if (strncmp(arch, "x86_64", 6)==0) {
-    arch_flag = true;
-    new_file = xy_strjoin(3, "Server = ", source.url, "archlinux/$repo/os/$arch");
-  }
-  else {
-    arch_flag = false;
-    new_file = xy_strjoin(3, "Server = ", source.url, "archlinuxarm/$repo/os/$arch");
-  }
+  if (strncmp(arch, "x86_64", 6)==0)
+    {
+      arch_flag = true;
+      new_file = xy_strjoin (3, "Server = ", source.url, "archlinux/$repo/os/$arch");
+    }
+  else
+    {
+      arch_flag = false;
+      new_file = xy_strjoin (3, "Server = ", source.url, "archlinuxarm/$repo/os/$arch");
+    }
 
   // TODO: 这里用的是 overwrite 吗？
   chsrc_overwrite_file (new_file, "/etc/pacman.d/mirrorlist");
 
-  chsrc_info("使用 archlinuxcn");
+  chsrc_info ("使用 archlinuxcn");
 
-  char* towrite = xy_strjoin(3, "[archlinuxcn]\nServer=", source.url, "archlinuxcn/$repo/os/$arch");
+  char *towrite = xy_strjoin (3, "[archlinuxcn]\nServer=", source.url, "archlinuxcn/$repo/os/$arch");
   chsrc_append_to_file (towrite, "/etc/pacman.d/mirrorlist");
 
-  chsrc_run("pacman -Sy archlinux-keyring");
+  chsrc_run ("pacman -Sy archlinux-keyring");
 
-  if (arch_flag) {
-    chsrc_run("pacman -Syyu");
-  } else {
-    chsrc_run("pacman -Syy");
-  }
-  chsrc_say_thanks(&source);
+  if (arch_flag)
+    {
+      chsrc_run ("pacman -Syyu");
+    }
+  else
+    {
+      chsrc_run ("pacman -Syy");
+    }
+  chsrc_say_thanks (&source);
 }
 
 
@@ -1173,26 +1179,26 @@ os_arch_setsrc(char* option)
  * HELP: 未经测试
  */
 void
-os_gentoo_setsrc(char* option)
+os_gentoo_setsrc (char *option)
 {
-  chsrc_ensure_root();
+  chsrc_ensure_root ();
 
   int index = use_specific_mirror_or_auto_select (option, os_gentoo);
 
   SourceInfo source = os_arch_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_backup ("/etc/portage/repos.conf/gentoo.conf");
 
-  char* cmd = xy_strjoin(3, "sed -i \"s#rsync://.*/gentoo-portage#rsync://",
+  char *cmd = xy_strjoin (3, "sed -i \"s#rsync://.*/gentoo-portage#rsync://",
                              source.url,
                             "gentoo-portage#g");
-  chsrc_run(cmd);
+  chsrc_run (cmd);
 
-  char* towrite = xy_strjoin(3, "GENTOO_MIRRORS=\"https://", source.url, "gentoo\"");
+  char *towrite = xy_strjoin (3, "GENTOO_MIRRORS=\"https://", source.url, "gentoo\"");
 
   chsrc_append_to_file (towrite, "/etc/portage/make.conf");
-  chsrc_say_thanks(&source);
+  chsrc_say_thanks (&source);
 }
 
 
@@ -1201,29 +1207,29 @@ os_gentoo_setsrc(char* option)
  * 参考: https://help.mirrors.cernet.edu.cn/rocky/
  */
 void
-os_rocky_setsrc (char* option)
+os_rocky_setsrc (char *option)
 {
-  chsrc_ensure_root();
+  chsrc_ensure_root ();
 
   int index = use_specific_mirror_or_auto_select (option, os_rocky);
 
   SourceInfo source = os_rocky_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
-  char* cmd = xy_strjoin(3,
+  char *cmd = xy_strjoin (3,
             "sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' "
             "-e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=", source.url, "|g' "
             "-i.bak /etc/yum.repos.d/rocky-extras.repo /etc/yum.repos.d/rocky.repo"
             );
-  chsrc_run(cmd);
+  chsrc_run (cmd);
   chsrc_run ("sudo dnf makecache");
-  chsrc_say_thanks(&source);
+  chsrc_say_thanks (&source);
 }
 
 
 
 void
-os_alpine_getsrc (char* option)
+os_alpine_getsrc (char *option)
 {
   chsrc_check_file ("/etc/apk/repositories");
 }
@@ -1232,62 +1238,62 @@ os_alpine_getsrc (char* option)
  * 参考: https://help.mirrors.cernet.edu.cn/alpine/
  */
 void
-os_alpine_setsrc (char* option)
+os_alpine_setsrc (char *option)
 {
   // chsrc_ensure_root(); // HELP: 不确定是否需要root
 
   int index = use_specific_mirror_or_auto_select (option, os_alpine);
 
   SourceInfo source = os_alpine_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
-  char* cmd = xy_strjoin(3,
+  char* cmd = xy_strjoin (3,
             "sed -i 's#https\\?://dl-cdn.alpinelinux.org/alpine#", source.url, "#g' /etc/apk/repositories"
             );
-  chsrc_run(cmd);
+  chsrc_run (cmd);
 
-  chsrc_run("apk update");
-  chsrc_say_thanks(&source);
+  chsrc_run ("apk update");
+  chsrc_say_thanks (&source);
 }
 
 
 
 void
-os_void_getsrc (char* option)
+os_void_getsrc (char *option)
 {
   char* cmd = "xbps-query -L";
-  chsrc_run(cmd);
+  chsrc_run (cmd);
 }
 
 /**
  * 参考: https://help.mirrors.cernet.edu.cn/voidlinux/
  */
 void
-os_void_setsrc (char* option)
+os_void_setsrc (char *option)
 {
   // chsrc_ensure_root(); // HELP: 不确定是否需要root
 
   int index = use_specific_mirror_or_auto_select (option, os_void);
 
   SourceInfo source = os_void_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_ensure_dir ("/etc/xbps.d");
-  char* cmd = "cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/";
-  chsrc_run(cmd);
+  char *cmd = "cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/";
+  chsrc_run (cmd);
 
-  cmd = xy_strjoin(3,
+  cmd = xy_strjoin (3,
             "sed -i 's|https://repo-default.voidlinux.org|", source.url, "|g' /etc/xbps.d/*-repository-*.conf"
             );
-  chsrc_run(cmd);
+  chsrc_run (cmd);
 
-  cmd = xy_strjoin(3,
+  cmd = xy_strjoin (3,
             "sed -i 's|https://alpha.de.repo.voidlinux.org|", source.url, "|g' /etc/xbps.d/*-repository-*.conf"
             );
 
-  chsrc_warn("若报错可尝试使用以下命令");
-  puts(cmd);
-  chsrc_say_thanks(&source);
+  chsrc_warn ("若报错可尝试使用以下命令");
+  puts (cmd);
+  chsrc_say_thanks (&source);
 }
 
 
@@ -1296,18 +1302,18 @@ os_void_setsrc (char* option)
  * 参考: https://help.mirrors.cernet.edu.cn/solus/
  */
 void
-os_solus_setsrc (char* option)
+os_solus_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
   int index = use_specific_mirror_or_auto_select (option, os_solus);
 
   SourceInfo source = os_solus_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   char* cmd = xy_2strjoin ("sudo eopkg add-repo Solus ", source.url);
   chsrc_run (cmd);
-  chsrc_say_thanks(&source);
+  chsrc_say_thanks (&source);
 }
 
 
@@ -1316,19 +1322,19 @@ os_solus_setsrc (char* option)
  * 似乎会弹出GUI，待确定
  */
 void
-os_manjaro_setsrc(char* option)
+os_manjaro_setsrc (char *option)
 {
-  chsrc_ensure_root();
-  char* cmd = "sudo pacman-mirrors -i -c China -m rank";
-  chsrc_run(cmd);
+  chsrc_ensure_root ();
+  char *cmd = "sudo pacman-mirrors -i -c China -m rank";
+  chsrc_run (cmd);
 
-  chsrc_run("sudo pacman -Syy");
+  chsrc_run ("sudo pacman -Syy");
 }
 
 
 
 void
-os_trisquel_getsrc (char* option)
+os_trisquel_getsrc (char *option)
 {
   chsrc_check_file (ETC_APT_SOURCELIST);
 }
@@ -1337,28 +1343,28 @@ os_trisquel_getsrc (char* option)
  * 参考: https://help.mirrors.cernet.edu.cn/trisquel/
  */
 void
-os_trisquel_setsrc (char* option)
+os_trisquel_setsrc (char *option)
 {
-  chsrc_ensure_root();
+  chsrc_ensure_root ();
 
   int index = use_specific_mirror_or_auto_select (option, os_trisquel);
 
   SourceInfo source = os_trisquel_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
-  char* cmd = xy_strjoin(3, "sed -E -i 's@https?://.*/trisquel/?@", source.url, "@g' /etc/apt/sources.list");
+  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/trisquel/?@", source.url, "@g' /etc/apt/sources.list");
 
-  puts(cmd);
-  chsrc_run("sudo apt update");
-  chsrc_say_thanks(&source);
+  puts (cmd);
+  chsrc_run ("sudo apt update");
+  chsrc_say_thanks (&source);
 }
 
 
 
 void
-os_linuxlite_getsrc (char* option)
+os_linuxlite_getsrc (char *option)
 {
   chsrc_check_file (ETC_APT_SOURCELIST);
 }
@@ -1367,21 +1373,21 @@ os_linuxlite_getsrc (char* option)
  * 参考: https://help.mirrors.cernet.edu.cn/linuxliteos/
  */
 void
-os_linuxlite_setsrc (char* option)
+os_linuxlite_setsrc (char *option)
 {
-  chsrc_ensure_root();
+  chsrc_ensure_root ();
 
   int index = use_specific_mirror_or_auto_select (option, os_linuxlite);
 
   SourceInfo source = os_linuxlite_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
-  char* cmd = xy_strjoin(3, "sed -E -i 's@https?://.*/.*/?@", source.url, "@g' /etc/apt/sources.list");
+  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/.*/?@", source.url, "@g' /etc/apt/sources.list");
 
-  chsrc_run("sudo apt update");
-  chsrc_say_thanks(&source);
+  chsrc_run ("sudo apt update");
+  chsrc_say_thanks (&source);
 }
 
 
@@ -1390,48 +1396,51 @@ os_linuxlite_setsrc (char* option)
  * HELP: 未经测试
  */
 void
-os_openeuler_setsrc (char* option)
+os_openeuler_setsrc (char *option)
 {
-  chsrc_ensure_root();
+  chsrc_ensure_root ();
 
   int index = use_specific_mirror_or_auto_select (option, os_openeuler);
 
   SourceInfo source = os_openeuler_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_backup ("/etc/yum.repos.d/openEuler.repo");
 
-  char* towrite = xy_strjoin(3, "s#http://repo.openeuler.org#", source.url, "#\'< /etc/yum.repos.d/openEuler.repo.bak");;
+  char *towrite = xy_strjoin (3, "s#http://repo.openeuler.org#",
+                              source.url,
+                              "#\'< /etc/yum.repos.d/openEuler.repo.bak");
+
   chsrc_overwrite_file (towrite, "/etc/yum.repos.d/openEuler.repo");
 
   chsrc_run ("sudo dnf makecache");
-  chsrc_say_thanks(&source);
+  chsrc_say_thanks (&source);
 }
 
 
 
 void
-os_openkylin_getsrc (char* option)
+os_openkylin_getsrc (char *option)
 {
   chsrc_check_file (ETC_APT_SOURCELIST);
 }
 
 void
-os_openkylin_setsrc (char* option)
+os_openkylin_setsrc (char *option)
 {
   chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_openkylin);
 
   SourceInfo source = os_openkylin_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
-  char* cmd = xy_strjoin(3, "sed -E -i 's@https?://.*/openkylin/?@", source.url, "@g'" ETC_APT_SOURCELIST);
-  chsrc_run(cmd);
-  chsrc_run("sudo apt update");
-  chsrc_say_thanks(&source);
+  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/openkylin/?@", source.url, "@g'" ETC_APT_SOURCELIST);
+  chsrc_run (cmd);
+  chsrc_run ("sudo apt update");
+  chsrc_say_thanks (&source);
 }
 
 
@@ -1445,21 +1454,21 @@ os_openkylin_setsrc (char* option)
  *   FreeBSD 有五类源：pkg、ports、port、portsnap、update，其中 portsnap 在 FreeBSD 14 已经被移除了
  */
 void
-os_freebsd_setsrc (char* option)
+os_freebsd_setsrc (char *option)
 {
   // chsrc_ensure_root(); // 据 @ykla，FreeBSD不自带 sudo
 
   int index = use_specific_mirror_or_auto_select (option, os_freebsd);
 
   SourceInfo source = os_freebsd_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
-  chsrc_info("1. 添加 freebsd-pkg 源 (二进制安装包)");
+  chsrc_info ("1. 添加 freebsd-pkg 源 (二进制安装包)");
   chsrc_ensure_dir ("/usr/local/etc/pkg/repos");
 
-  char* conf = xy_strjoin(3, "/usr/local/etc/pkg/repos/", source.mirror->code, ".conf");
+  char *conf = xy_strjoin (3, "/usr/local/etc/pkg/repos/", source.mirror->code, ".conf");
 
-  char* pkg_content = xy_strjoin(4,
+  char *pkg_content = xy_strjoin (4,
                       source.mirror->code, ": { \n"
                       "  url: \"http://", source.url, "/freebsd-pkg/${ABI}/latest\",\n"
                       "}\n"
@@ -1470,39 +1479,42 @@ os_freebsd_setsrc (char* option)
   chsrc_warn (
     xy_strjoin (3, "若要使用季度分支，请在", conf ,"中将latest改为quarterly"));
 
-  chsrc_warn("若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将'http'改成'https'，最后使用'pkg update -f'刷新缓存即可\n");
-  puts("");
+  chsrc_warn ("若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将'http'改成'https'，最后使用'pkg update -f'刷新缓存即可\n");
+  puts ("");
 
-  chsrc_info("2. 修改 freebsd-ports 源");
+  chsrc_info ("2. 修改 freebsd-ports 源");
   // @ccmywish: [2023-09-27] 据 @ykla , NJU的freebsd-ports源没有设置 Git，
   //                         但是我认为由于使用Git还是要比非Git方便许多，我们尽可能坚持使用Git
   //                         而 gitup 又要额外修改它自己的配置，比较麻烦
-  bool git_exist = query_program_exist (xy_str_to_quietcmd("git version"), "git");
-  if (git_exist) {
-    if (xy_streql("nju",source.mirror->code)) {
-      source = os_freebsd_sources[index-1]; // 使用NJU的前一个源，即USTC源
+  bool git_exist = query_program_exist (xy_str_to_quietcmd ("git version"), "git");
+  if (git_exist)
+    {
+      if (xy_streql("nju",source.mirror->code))
+        {
+          source = os_freebsd_sources[index-1]; // 使用NJU的前一个源，即USTC源
+        }
+      char *git_cmd = xy_strjoin (3, "git clone --depth 1 https://", source.url, "/freebsd-ports/ports.git /usr/ports");
+      chsrc_run (git_cmd);
+      source = os_freebsd_sources[index]; // 恢复至选中的源
+      chsrc_warn ("下次更新请使用 git -C /usr/ports pull 而非使用 gitup");
     }
-    char* git_cmd = xy_strjoin(3, "git clone --depth 1 https://", source.url, "/freebsd-ports/ports.git /usr/ports");
-    chsrc_run(git_cmd);
-    source = os_freebsd_sources[index]; // 恢复至选中的源
-    chsrc_warn("下次更新请使用 git -C /usr/ports pull 而非使用 gitup");
-  }
-  else {
-    char* fetch  = xy_strjoin(3, "fetch https://", source.url, "/freebsd-ports/ports.tar.gz");  // 70多MB
-    char* unzip  = "tar -zxvf ports.tar.gz -C /usr/ports";
-    char* delete = "rm ports.tar.gz";
-    chsrc_run(fetch);
-    chsrc_run(unzip);
-    chsrc_run(delete);
-    chsrc_warn("下次更新请重新下载内容至 /usr/ports");
-  }
+  else
+    {
+      char *fetch  = xy_strjoin (3, "fetch https://", source.url, "/freebsd-ports/ports.tar.gz");  // 70多MB
+      char *unzip  = "tar -zxvf ports.tar.gz -C /usr/ports";
+      char *delete = "rm ports.tar.gz";
+      chsrc_run (fetch);
+      chsrc_run (unzip);
+      chsrc_run (delete);
+      chsrc_warn ("下次更新请重新下载内容至 /usr/ports");
+    }
 
 
-  chsrc_info("3. 指定 port 源");
+  chsrc_info ("3. 指定 port 源");
   // https://help.mirrors.cernet.edu.cn/FreeBSD-ports/
   chsrc_backup ("/etc/make.conf");
 
-  char* ports = xy_strjoin(3, "MASTER_SITE_OVERRIDE?=http://", source.url, "/freebsd-ports/distfiles/${DIST_SUBDIR}/");
+  char *ports = xy_strjoin (3, "MASTER_SITE_OVERRIDE?=http://", source.url, "/freebsd-ports/distfiles/${DIST_SUBDIR}/");
   chsrc_append_to_file (ports, "/etc/make.conf");
 
 
@@ -1535,13 +1547,13 @@ os_freebsd_setsrc (char* option)
     chsrc_overwrite_file (update, "/etc/freebsd-update.conf");
   */
 
-  chsrc_say_thanks(&source);
+  chsrc_say_thanks (&source);
 }
 
 
 
 void
-os_netbsd_getsrc (char* option)
+os_netbsd_getsrc (char *option)
 {
   chsrc_check_file ("/usr/pkg/etc/pkgin/repositories.conf");
 }
@@ -1557,22 +1569,22 @@ os_netbsd_getsrc (char* option)
  * HELP: 未经测试
  */
 void
-os_netbsd_setsrc(char* option)
+os_netbsd_setsrc (char *option)
 {
-  chsrc_ensure_root(); // HELP: 不知道是否需要确保root权限
+  chsrc_ensure_root (); // HELP: 不知道是否需要确保root权限
 
   int index = use_specific_mirror_or_auto_select (option, os_netbsd);
 
   SourceInfo source = os_netbsd_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_backup ("/usr/pkg/etc/pkgin/repositories.conf");
 
-  char* arch = xy_getcmd("arch", 0, NULL);
-  char* vercmd  = "cat /etc/os-release | grep \"VERSION=\" | grep -Po \"[8-9].[0-9]+\"";
-  char* version = xy_getcmd(vercmd, 0, NULL);
+  char *arch = xy_getcmd("arch", 0, NULL);
+  char *vercmd  = "cat /etc/os-release | grep \"VERSION=\" | grep -Po \"[8-9].[0-9]+\"";
+  char *version = xy_getcmd (vercmd, 0, NULL);
 
-  char* url = xy_strjoin(5, source.url, arch, "/", version, "/All");
+  char *url = xy_strjoin (5, source.url, arch, "/", version, "/All");
   chsrc_overwrite_file (url, "/usr/pkg/etc/pkgin/repositories.conf");
 
   chsrc_say_thanks(&source);
@@ -1581,7 +1593,7 @@ os_netbsd_setsrc(char* option)
 
 
 void
-os_openbsd_getsrc (char* option)
+os_openbsd_getsrc (char *option)
 {
   chsrc_check_file ("/etc/installurl");
 }
@@ -1592,19 +1604,19 @@ os_openbsd_getsrc (char* option)
  * 2. https://book.bsdcn.org/di-26-zhang-openbsd/di-26.2-jie-pei-zhi.html
  */
 void
-os_openbsd_setsrc(char* option)
+os_openbsd_setsrc (char *option)
 {
-  chsrc_ensure_root();
+  chsrc_ensure_root ();
 
   int index = use_specific_mirror_or_auto_select (option, os_openbsd);
 
   SourceInfo source = os_openbsd_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_backup ("/etc/installurl");
   chsrc_overwrite_file (source.url, "/etc/installurl");
 
-  chsrc_say_thanks(&source);
+  chsrc_say_thanks (&source);
 }
 
 /**
@@ -1612,27 +1624,26 @@ os_openbsd_setsrc(char* option)
  * https://mirrors.tuna.tsinghua.edu.cn/help/ros/
  */
 void
-os_ros_setsrc (char* option)
+os_ros_setsrc (char *option)
 {
-  chsrc_ensure_root();
+  chsrc_ensure_root ();
 
   int index = use_specific_mirror_or_auto_select (option, os_ros);
 
   SourceInfo source = os_ros_sources[index];
-  chsrc_say_selection(&source);
+  chsrc_say_selection (&source);
 
   chsrc_backup ("/etc/apt/sources.list.d/ros-latest.list");
 
-  char* cmd  = NULL;
+  char *cmd  = NULL;
   cmd = xy_strjoin(3, "sed -E -i \'s@https?://.*/ros/ubuntu/?@", source.url, "@/ros/ubuntug\' /etc/apt/sources.list");
   chsrc_run(cmd);
 
   cmd = "sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654";
-  chsrc_run(cmd);
+  chsrc_run (cmd);
 
-
-  chsrc_run("sudo apt update");
-  chsrc_say_thanks(&source);
+  chsrc_run ("sudo apt update");
+  chsrc_say_thanks (&source);
 }
 
 
@@ -1641,39 +1652,42 @@ os_ros_setsrc (char* option)
 
 
 void
-wr_tex_check_cmd (bool* tlmgr_exist, bool* mpm_exist)
+wr_tex_check_cmd (bool *tlmgr_exist, bool *mpm_exist)
 {
-  char* check_cmd = xy_str_to_quietcmd("tlmgr --version");
+  char *check_cmd = xy_str_to_quietcmd ("tlmgr --version");
   *tlmgr_exist = query_program_exist (check_cmd, "tlmgr");
 
-  check_cmd = xy_str_to_quietcmd("mpm --version");
+  check_cmd = xy_str_to_quietcmd ("mpm --version");
   *mpm_exist = query_program_exist (check_cmd, "mpm");
 
-  if (!*tlmgr_exist && !*mpm_exist) {
-    xy_error ("chsrc: 未找到 tlmgr 或 mpm 命令，请检查是否存在（其一）");
-    exit(1);
-  }
+  if (!*tlmgr_exist && !*mpm_exist)
+    {
+      xy_error ("chsrc: 未找到 tlmgr 或 mpm 命令，请检查是否存在（其一）");
+      exit(1);
+    }
 }
 
 void
-wr_tex_getsrc(char* option)
+wr_tex_getsrc(char *option)
 {
   bool tlmgr_exist, mpm_exist;
   wr_tex_check_cmd (&tlmgr_exist, &mpm_exist);
 
-  if (tlmgr_exist) {
-    chsrc_run("tlmgr option repository");
-  }
-  if (mpm_exist) {
-    chsrc_run("mpm --get-repository");
-  }
+  if (tlmgr_exist)
+    {
+      chsrc_run("tlmgr option repository");
+    }
+  if (mpm_exist)
+    {
+      chsrc_run("mpm --get-repository");
+    }
 }
 
 /**
  * 参考 https://help.mirrors.cernet.edu.cn/CTAN/
  */
 void
-wr_tex_setsrc(char* option)
+wr_tex_setsrc(char *option)
 {
   bool tlmgr_exist, mpm_exist;
   wr_tex_check_cmd (&tlmgr_exist, &mpm_exist);
@@ -1683,35 +1697,37 @@ wr_tex_setsrc(char* option)
   SourceInfo source = wr_tex_sources[index];
   chsrc_say_selection (&source);
 
-  char* cmd = NULL;
+  char *cmd = NULL;
 
-  if (tlmgr_exist) {
-    cmd = xy_2strjoin("tlmgr option repository ", source.url);
-    chsrc_run(cmd);
-  }
+  if (tlmgr_exist)
+    {
+      cmd = xy_2strjoin ("tlmgr option repository ", source.url);
+      chsrc_run (cmd);
+    }
 
-  if (mpm_exist) {
-    char* miktex_url = xy_2strjoin(xy_str_delete_suffix(source.url, "texlive/tlnet"), "win32/miktex/tm/packages/");
-    cmd = xy_2strjoin("mpm --set-repository=", miktex_url);
-    chsrc_run(cmd);
-  }
+  if (mpm_exist)
+    {
+      char *miktex_url = xy_2strjoin (xy_str_delete_suffix (source.url, "texlive/tlnet"), "win32/miktex/tm/packages/");
+      cmd = xy_2strjoin ("mpm --set-repository=", miktex_url);
+      chsrc_run (cmd);
+    }
 
-  chsrc_say_thanks(&source);
+  chsrc_say_thanks (&source);
 }
 
 
 
 
 void
-wr_emacs_setsrc(char* option)
+wr_emacs_setsrc(char *option)
 {
   int index = use_specific_mirror_or_auto_select (option, wr_emacs);
 
   SourceInfo source = wr_emacs_sources[index];
   chsrc_say_selection (&source);
 
-  chsrc_warn("抱歉，Emacs换源涉及Elisp，您可手动查阅并换源:");
-  puts(source.url);
+  chsrc_warn ("抱歉，Emacs换源涉及Elisp，您可手动查阅并换源:");
+  puts (source.url);
 
   chsrc_say_thanks (&source);
 }
@@ -1719,13 +1735,13 @@ wr_emacs_setsrc(char* option)
 
 
 void
-wr_brew_getsrc(char* option)
+wr_brew_getsrc(char *option)
 {
-  char* cmd = "echo HOMEBREW_API_DOMAIN=$HOMEBREW_API_DOMAIN;"
+  char *cmd = "echo HOMEBREW_API_DOMAIN=$HOMEBREW_API_DOMAIN;"
               "echo HOMEBREW_BOTTLE_DOMAIN=$HOMEBREW_BOTTLE_DOMAIN;"
               "echo HOMEBREW_BREW_GIT_REMOTE=$HOMEBREW_BREW_GIT_REMOTE;"
               "echo HOMEBREW_CORE_GIT_REMOTE=$HOMEBREW_CORE_GIT_REMOTE;";
-  system(cmd);
+  system (cmd);
 }
 
 /**
@@ -1736,17 +1752,17 @@ wr_brew_getsrc(char* option)
  * 但是为了以防万一，我们还是为用户设置该环境变量
  */
 void
-wr_brew_setsrc(char* option)
+wr_brew_setsrc (char *option)
 {
   int index = use_specific_mirror_or_auto_select (option, wr_brew);
 
   SourceInfo source = wr_brew_sources[index];
   chsrc_say_selection (&source);
 
-  char* api_domain      = xy_strjoin(3, "export HOMEBREW_API_DOMAIN=\"",      xy_2strjoin(source.url, "homebrew-bottles/api"), "\"");
-  char* bottle_domain   = xy_strjoin(3, "export HOMEBREW_BOTTLE_DOMAIN=\"",   xy_2strjoin(source.url, "homebrew-bottles"), "\"");
-  char* brew_git_remote = xy_strjoin(3, "export HOMEBREW_BREW_GIT_REMOTE=\"", xy_2strjoin(source.url, "git/homebrew/brew.git"), "\"");
-  char* core_git_remote = xy_strjoin(3, "export HOMEBREW_CORE_GIT_REMOTE=\"", xy_2strjoin(source.url, "git/homebrew/homebrew-core.git"), "\"");
+  char *api_domain      = xy_strjoin (3, "export HOMEBREW_API_DOMAIN=\"",      xy_2strjoin (source.url, "homebrew-bottles/api"), "\"");
+  char *bottle_domain   = xy_strjoin (3, "export HOMEBREW_BOTTLE_DOMAIN=\"",   xy_2strjoin (source.url, "homebrew-bottles"), "\"");
+  char *brew_git_remote = xy_strjoin (3, "export HOMEBREW_BREW_GIT_REMOTE=\"", xy_2strjoin (source.url, "git/homebrew/brew.git"), "\"");
+  char *core_git_remote = xy_strjoin (3, "export HOMEBREW_CORE_GIT_REMOTE=\"", xy_2strjoin (source.url, "git/homebrew/homebrew-core.git"), "\"");
 
   chsrc_append_to_file (api_domain,      "~/.bashrc >> ~/.zshrc");
   chsrc_append_to_file (bottle_domain,   "~/.bashrc >> ~/.zshrc");
@@ -1754,7 +1770,7 @@ wr_brew_setsrc(char* option)
   chsrc_append_to_file (core_git_remote, "~/.bashrc >> ~/.zshrc");
 
   chsrc_say_thanks (&source);
-  puts("");  chsrc_warn("请您重启终端使环境变量生效");
+  puts ("");  chsrc_warn ("请您重启终端使环境变量生效");
 }
 
 
@@ -1763,20 +1779,20 @@ wr_brew_setsrc(char* option)
  * 参考: https://mirrors.sjtug.sjtu.edu.cn/docs/guix
  */
 void
-wr_guix_setsrc (char* option)
+wr_guix_setsrc (char *option)
 {
   int index = use_specific_mirror_or_auto_select (option, wr_guix);
 
   SourceInfo source = wr_guix_sources[index];
   chsrc_say_selection (&source);
 
-  char* file =  xy_strjoin(3, "(list (channel\n"
-                              "       (inherit (car %default-channels))\n"
-                              "       (url \"", source.url, "\")))");
+  char *file =  xy_strjoin (3, "(list (channel\n"
+                               "       (inherit (car %default-channels))\n"
+                               "       (url \"", source.url, "\")))");
 
   xy_warn ("chsrc: 为防止扰乱配置文件，请您手动写入以下内容到 ~/.config/guix/channels.scm 文件中");
-  puts(file);
-  chsrc_say_thanks(&source);
+  puts (file);
+  chsrc_say_thanks (&source);
 }
 
 
@@ -1784,13 +1800,14 @@ wr_guix_setsrc (char* option)
 void
 wr_nix_check_cmd ()
 {
-  char* check_cmd = xy_str_to_quietcmd("nix-channel --version");
+  char *check_cmd = xy_str_to_quietcmd ("nix-channel --version");
   bool exist = query_program_exist (check_cmd, "nix-channel");
 
-  if (!exist) {
-    chsrc_error ("未找到 nix-channel 命令，请检查是否存在");
-    exit(1);
-  }
+  if (!exist)
+    {
+      chsrc_error ("未找到 nix-channel 命令，请检查是否存在");
+      exit (1);
+    }
 }
 
 /**
@@ -1799,7 +1816,7 @@ wr_nix_check_cmd ()
  *  2. https://gitee.com/RubyMetric/chsrc/issues/I83894
  */
 void
-wr_nix_setsrc (char* option)
+wr_nix_setsrc (char *option)
 {
   wr_nix_check_cmd ();
 
@@ -1808,23 +1825,23 @@ wr_nix_setsrc (char* option)
   SourceInfo source = wr_nix_sources[index];
   chsrc_say_selection (&source);
 
-  char* cmd = xy_strjoin(3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
-  chsrc_run(cmd);
+  char *cmd = xy_strjoin (3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
+  chsrc_run (cmd);
 
-  char* towrite = xy_strjoin (3, "substituters = ", source.url, "store https://cache.nixos.org/");
+  char *towrite = xy_strjoin (3, "substituters = ", source.url, "store https://cache.nixos.org/");
   chsrc_append_to_file (towrite , "~/.config/nix/nix.conf");
 
-  chsrc_run("nix-channel --update");
+  chsrc_run ("nix-channel --update");
 
-  chsrc_info("若您使用的是NixOS，请确认您的系统版本<version>（如22.11），并手动运行:");
-  cmd = xy_strjoin(3, "nix-channel --add ", source.url, "nixpkgs-<version> nixpkgs");
-  puts(cmd);
+  chsrc_info ("若您使用的是NixOS，请确认您的系统版本<version>（如22.11），并手动运行:");
+  cmd = xy_strjoin (3, "nix-channel --add ", source.url, "nixpkgs-<version> nixpkgs");
+  puts (cmd);
 
-  cmd = xy_strjoin(3, "nix.settings.substituters = [ \"", source.url, "store\" ];");
-  chsrc_info("若您使用的是NixOS，请额外添加下述内容至 configuration.nix 中");
-  puts(cmd);
+  cmd = xy_strjoin (3, "nix.settings.substituters = [ \"", source.url, "store\" ];");
+  chsrc_info ("若您使用的是NixOS，请额外添加下述内容至 configuration.nix 中");
+  puts (cmd);
 
-  chsrc_say_thanks(&source);
+  chsrc_say_thanks (&source);
 }
 
 
@@ -1833,7 +1850,7 @@ wr_nix_setsrc (char* option)
  * 参考: https://mirrors.sjtug.sjtu.edu.cn/docs/flathub
  */
 void
-wr_flathub_setsrc(char* option)
+wr_flathub_setsrc (char *option)
 {
   int index = use_specific_mirror_or_auto_select (option, wr_flathub);
 
@@ -1841,34 +1858,34 @@ wr_flathub_setsrc(char* option)
   chsrc_say_selection (&source);
 
   xy_warn ("chsrc: 若出现问题，可先调用以下命令:");
-  char* note = xy_strjoin(3,
+  char *note = xy_strjoin (3,
     "wget ", source.url, "/flathub.gpg\n"
     "sudo flatpak remote-modify --gpg-import=flathub.gpg flathub"
   );
-  puts(note);
+  puts (note);
 
-  char* cmd = xy_2strjoin("sudo flatpak remote-modify flathub --url=", source.url);
-  chsrc_run(cmd);
+  char *cmd = xy_2strjoin ("sudo flatpak remote-modify flathub --url=", source.url);
+  chsrc_run (cmd);
 
-  chsrc_say_thanks(&source);
+  chsrc_say_thanks (&source);
 }
 
 
 
 void
-wr_anaconda_setsrc(char* option)
+wr_anaconda_setsrc (char *option)
 {
   int index = use_specific_mirror_or_auto_select (option, wr_anaconda);
 
   SourceInfo source = wr_anaconda_sources[index];
   chsrc_say_selection (&source);
 
-  char* main  = xy_2strjoin(source.url, "pkgs/main");
-  char* r     = xy_2strjoin(source.url, "pkgs/r");
-  char* msys2 = xy_2strjoin(source.url, "pkgs/msys2");
-  char* cloud = xy_2strjoin(source.url, "cloud");
+  char *main  = xy_2strjoin (source.url, "pkgs/main");
+  char *r     = xy_2strjoin (source.url, "pkgs/r");
+  char *msys2 = xy_2strjoin (source.url, "pkgs/msys2");
+  char *cloud = xy_2strjoin (source.url, "cloud");
 
-  char* file = xy_strjoin(22,
+  char *file = xy_strjoin (22,
                "channels:\n  - defaults\n"
                "show_channel_urls: true\ndefault_channels:"
              "\n  - ", main,
@@ -1886,23 +1903,25 @@ wr_anaconda_setsrc(char* option)
 
 
   // TODO: 待确认 windows 上也是这里吗？
-  char* config = xy_2strjoin(xy_os_home, "/.condarc");
+  char *config = xy_2strjoin (xy_os_home, "/.condarc");
 
-  if (xy_on_windows) {
-    char* check_cmd = xy_str_to_quietcmd("conda --version");
-    bool exist = query_program_exist (check_cmd, "conda");
-    if (!exist) {
-      xy_error ("chsrc: 未找到 conda 命令，请检查是否存在");
-      exit(1);
+  if (xy_on_windows)
+    {
+      char *check_cmd = xy_str_to_quietcmd("conda --version");
+      bool exist = query_program_exist (check_cmd, "conda");
+      if (!exist)
+        {
+          xy_error ("chsrc: 未找到 conda 命令，请检查是否存在");
+          exit (1);
+        }
+      chsrc_run ("conda config --set show_channel_urls yes");
     }
-    chsrc_run("conda config --set show_channel_urls yes");
-  }
 
-  xy_info(xy_strjoin(3, "chsrc: 请向 ", config, " 中手动添加:"));
-  puts(file);
+  xy_info (xy_strjoin (3, "chsrc: 请向 ", config, " 中手动添加:"));
+  puts (file);
 
-  xy_info("chsrc: 然后运行 conda clean -i 清除索引缓存，保证用的是镜像站提供的索引");
-  chsrc_say_thanks(&source);
+  xy_info ("chsrc: 然后运行 conda clean -i 清除索引缓存，保证用的是镜像站提供的索引");
+  chsrc_say_thanks (&source);
 }
 
 
@@ -2047,13 +2066,14 @@ usage[] = {
 
 
 void
-call_cmd (void* cmdptr, const char* arg)
+call_cmd (void *cmdptr, const char *arg)
 {
-  void (*cmd_func)(const char*) = cmdptr;
-  if (NULL==arg) {
-    xy_info("chsrc: 将使用默认镜像");
-  }
-  cmd_func(arg);
+  void (*cmd_func)(const char *) = cmdptr;
+  if (NULL==arg)
+    {
+      xy_info ("chsrc: 将使用默认镜像");
+    }
+  cmd_func (arg);
 }
 
 
@@ -2066,10 +2086,10 @@ print_available_mirrors ()
   printf ("%-14s%-30s%-41s ", "code", "服务商缩写", "服务商URL"); puts("服务商名称");
   puts   ("-------------------------------------------------------------------------------------------------");
   for (int i=0; i<xy_arylen(available_mirrors); i++)
-  {
-    MirrorInfo* mir = available_mirrors[i];
-    printf ("%-14s%-18s%-41s ", mir->code, mir->abbr, mir->site); puts(mir->name);
-  }
+    {
+      MirrorInfo* mir = available_mirrors[i];
+      printf ("%-14s%-18s%-41s ", mir->code, mir->abbr, mir->site); puts(mir->name);
+    }
 }
 
 
@@ -2077,17 +2097,17 @@ void
 print_supported_targets_ (const char*** array, size_t size)
 {
   for (int i=0; i<size; i++)
-  {
-    const char** target = array[i];
-    const char* alias = target[0];
-    for (int k=1; alias!=NULL; k++)
     {
-      printf ("%s\t", alias);
-      alias = target[k];
+      const char **target = array[i];
+      const char *alias = target[0];
+      for (int k=1; alias!=NULL; k++)
+        {
+          printf ("%s\t", alias);
+          alias = target[k];
+        }
+      puts ("");
     }
-    puts("");
-  }
-  puts("");
+  puts ("");
 }
 
 void
@@ -2132,12 +2152,12 @@ void
 print_supported_sources_for_target (SourceInfo sources[], size_t size)
 {
   for (int i=0;i<size;i++)
-  {
-    SourceInfo src = sources[i];
-    const MirrorInfo* mir = src.mirror;
-    printf ("%-14s%-18s%-50s ",mir->code, mir->abbr, src.url);
-    puts(mir->name);
-  }
+    {
+      SourceInfo src = sources[i];
+      const MirrorInfo* mir = src.mirror;
+      printf ("%-14s%-18s%-50s ", mir->code, mir->abbr, src.url);
+      puts (mir->name);
+    }
 }
 
 
@@ -2145,11 +2165,12 @@ print_supported_sources_for_target (SourceInfo sources[], size_t size)
 void
 print_help ()
 {
-  puts(xy_strjoin(3, "chsrc: Change Source (GPLv3) ",
-                      xy_str_to_magenta(Chsrc_Version), " by RubyMetric\n"));
-  for (int i=0; i<xy_arylen(usage); i++) {
-    puts (usage[i]);
-  }
+  puts (xy_strjoin (3, "chsrc: Change Source (GPLv3) ",
+                      xy_str_to_magenta (Chsrc_Version), " by RubyMetric\n"));
+  for (int i=0; i<xy_arylen(usage); i++)
+    {
+      puts (usage[i]);
+    }
 }
 
 
@@ -2162,32 +2183,36 @@ print_help ()
  * @return 匹配到则返回true，未匹配到则返回false
  */
 bool
-iterate_targets_(const char*** array, size_t size, const char* input, const char*** target_info)
+iterate_targets_ (const char ***array, size_t size, const char *input, const char ***target_info)
 {
   int matched = 0;
 
-  const char** target = NULL;
+  const char **target = NULL;
   int k = 0;
-  const char* alias = NULL;
+  const char *alias = NULL;
 
-  for (int i=0; i<size; i++) {
-    target = array[i];
-    alias = target[k];
-    while (NULL!=alias) {
-      if (xy_streql(input, alias)) {
-        matched = 1; break;
-      }
-      k++;
+  for (int i=0; i<size; i++)
+    {
+      target = array[i];
       alias = target[k];
+      while (NULL!=alias)
+        {
+          if (xy_streql(input, alias))
+            {
+              matched = 1; break;
+            }
+          k++;
+          alias = target[k];
+        }
+      if (!matched) k = 0;
+      if (matched) break;
     }
-    if (!matched) k = 0;
-    if (matched) break;
-  }
 
-  if (!matched) {
-    *target_info = NULL;
-    return false;
-  }
+  if (!matched)
+    {
+      *target_info = NULL;
+      return false;
+    }
 
   do {
     k++;
@@ -2216,9 +2241,9 @@ typedef enum {
  * @return 找到目标返回true，未找到返回false
  */
 bool
-get_target (const char* input, TargetOp code, char* option)
+get_target (const char *input, TargetOp code, char *option)
 {
-  const char** target_tmp = NULL;
+  const char **target_tmp = NULL;
 
            bool matched = iterate_targets(pl_packagers, input, &target_tmp);
   if (!matched) matched = iterate_targets(os_systems,   input, &target_tmp);
@@ -2228,38 +2253,38 @@ get_target (const char* input, TargetOp code, char* option)
     return false;
   }
 
-  TargetInfo* target = (TargetInfo*) *target_tmp;
+  TargetInfo *target = (TargetInfo*) *target_tmp;
 
   if (Target_Set_Source==code)
-  {
-    if (target->setfn) target->setfn(option);
-    else xy_error (xy_strjoin(3, "chsrc: 暂未对 ", input, " 实现set功能，欢迎贡献"));
-  }
-  else if (Target_Get_Source==code)
-  {
-    if (target->getfn) target->getfn("");
-    else xy_error (xy_strjoin(3, "chsrc: 暂未对 ", input, " 实现get功能，欢迎贡献"));
-  }
-  else if (Target_List_Source==code)
-  {
-    xy_info (xy_strjoin(3,"chsrc: 对 ", input ," 支持以下镜像站，荣耀均归属于这些站点，以及它们的开发/维护者们"));
-    xy_warn (xy_strjoin(3, "chsrc: 下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>"));
-    printf ("%-14s%-35s%-45s ", "code", "服务商缩写", "服务源URL"); puts("服务商名称");
-    puts   ("--------------------------------------------------------------------------------------------------------");
-    print_supported_sources_for_target (target->sources, target->sources_n);
-  }
-  else if (Target_Cesu_Source==code)
-  {
-    char* check_cmd = xy_str_to_quietcmd("curl --version");
-    bool exist_b = query_program_exist (check_cmd, "curl");
-    if (!exist_b) {
-      xy_error ("chsrc: 没有curl命令，无法测速");
-      exit(1);
+    {
+      if (target->setfn) target->setfn(option);
+      else xy_error (xy_strjoin (3, "chsrc: 暂未对 ", input, " 实现set功能，欢迎贡献"));
     }
-    auto_select_ (target->sources, target->sources_n, input-3);
-    return true;
-
-  }
+  else if (Target_Get_Source==code)
+    {
+      if (target->getfn) target->getfn("");
+      else xy_error (xy_strjoin (3, "chsrc: 暂未对 ", input, " 实现get功能，欢迎贡献"));
+    }
+  else if (Target_List_Source==code)
+    {
+      xy_info (xy_strjoin (3,"chsrc: 对 ", input ," 支持以下镜像站，荣耀均归属于这些站点，以及它们的开发/维护者们"));
+      xy_warn (xy_strjoin (3, "chsrc: 下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>"));
+      printf ("%-14s%-35s%-45s ", "code", "服务商缩写", "服务源URL"); puts("服务商名称");
+      puts   ("--------------------------------------------------------------------------------------------------------");
+      print_supported_sources_for_target (target->sources, target->sources_n);
+    }
+  else if (Target_Cesu_Source==code)
+    {
+      char* check_cmd = xy_str_to_quietcmd ("curl --version");
+      bool exist_b = query_program_exist (check_cmd, "curl");
+      if (!exist_b)
+        {
+        xy_error ("chsrc: 没有curl命令，无法测速");
+        exit (1);
+      }
+      auto_select_ (target->sources, target->sources_n, input-3);
+      return true;
+    }
   return true;
 }
 
@@ -2268,130 +2293,149 @@ get_target (const char* input, TargetOp code, char* option)
 int
 main (int argc, char const *argv[])
 {
-  xy_useutf8(); argc -= 1;
+  xy_useutf8 (); argc -= 1;
 
-  if (argc==0) {
-    print_help(); return 0;
-  }
+  if (argc==0)
+    {
+      print_help (); return 0;
+    }
 
-  const char* command = argv[1];
+  const char *command = argv[1];
 
   bool matched = false;
 
   /* chsrc help */
-  if (xy_streql(command, "h")  ||
-      xy_streql(command, "-h") ||
-      xy_streql(command, "help") ||
-      xy_streql(command, "--help"))
-  {
-    print_help();
-    return 0;
-  }
+  if (xy_streql (command, "h")  ||
+      xy_streql (command, "-h") ||
+      xy_streql (command, "help") ||
+      xy_streql (command, "--help"))
+    {
+      print_help ();
+      return 0;
+    }
 
   /* chsrc list */
-  else if (xy_streql(command, "list") ||
-           xy_streql(command, "l")    ||
-           xy_streql(command, "ls"))
-  {
-    if (argc < 2) {
-      print_available_mirrors();
-      puts("");
-      print_supported_targets();
-    } else {
+  else if (xy_streql (command, "list") ||
+           xy_streql (command, "l")    ||
+           xy_streql (command, "ls"))
+    {
+      if (argc < 2)
+        {
+          print_available_mirrors ();
+          puts ("");
+          print_supported_targets ();
+        }
+      else
+        {
+          if (xy_streql(argv[2],"mirrors"))
+            {
+              print_available_mirrors(); return 0;
+            }
+          if (xy_streql(argv[2],"mirror"))
+            {
+              print_available_mirrors(); return 0;
+            }
+          if (xy_streql(argv[2],"targets"))
+            {
+              print_supported_targets(); return 0;
+            }
+          if (xy_streql(argv[2],"target"))
+            {
+              print_supported_targets(); return 0;
+            }
+          if (xy_streql(argv[2],"os"))
+            {
+              print_supported_os(); return 0;
+            }
+          if (xy_streql(argv[2],"lang"))
+            {
+              print_supported_pl(); return 0;
+            }
+          if (xy_streql(argv[2],"pl"))
+            {
+              print_supported_pl(); return 0;
+            }
+          if (xy_streql(argv[2],"language"))
+            {
+              print_supported_pl(); return 0;
+            }
+          if (xy_streql(argv[2],"software"))
+            {
+              print_supported_wr(); return 0;
+            }
+          if (xy_streql(argv[2],"ware"))
+            {
+              print_supported_wr(); return 0;
+            }
 
-      if (xy_streql(argv[2],"mirrors")) {
-        print_available_mirrors(); return 0;
-      }
-      if (xy_streql(argv[2],"mirror"))  {
-        print_available_mirrors(); return 0;
-      }
-      if (xy_streql(argv[2],"targets")) {
-        print_supported_targets(); return 0;
-      }
-      if (xy_streql(argv[2],"target"))  {
-        print_supported_targets(); return 0;
-      }
-      if (xy_streql(argv[2],"os")) {
-        print_supported_os(); return 0;
-      }
-      if (xy_streql(argv[2],"lang")) {
-        print_supported_pl(); return 0;
-      }
-      if (xy_streql(argv[2],"pl")) {
-        print_supported_pl(); return 0;
-      }
-      if (xy_streql(argv[2],"language")) {
-        print_supported_pl(); return 0;
-      }
-      if (xy_streql(argv[2],"software")) {
-        print_supported_wr(); return 0;
-      }
-      if (xy_streql(argv[2],"ware")) {
-        print_supported_wr(); return 0;
-      }
-      matched = get_target(argv[2], Target_List_Source, NULL);
-      if (!matched) goto not_matched;
-    }
-    return 0;
+          matched = get_target(argv[2], Target_List_Source, NULL);
+          if (!matched) goto not_matched;
+        }
+      return 0;
   }
 
 
   /* chsrc cesu */
-  else if (xy_streql(command, "cesu") ||
-           xy_streql(command, "ce")   ||
-           xy_streql(command, "c"))
-  {
-    if (argc < 2) {
-      xy_error ("chsrc: 请您提供想要测速源的软件名; 使用 chsrc list targets 查看所有支持的软件");
-      return 1;
+  else if (xy_streql (command, "cesu") ||
+           xy_streql (command, "ce")   ||
+           xy_streql (command, "c"))
+    {
+      if (argc < 2)
+        {
+          xy_error ("chsrc: 请您提供想要测速源的软件名; 使用 chsrc list targets 查看所有支持的软件");
+          return 1;
+        }
+      matched = get_target (argv[2], Target_Cesu_Source, NULL);
+      if (!matched) goto not_matched;
+      return 0;
     }
-    matched = get_target(argv[2], Target_Cesu_Source, NULL);
-    if (!matched) goto not_matched;
-    return 0;
-  }
 
 
   /* chsrc get */
-  else if (xy_streql(command, "get") ||
-           xy_streql(command, "g"))
-  {
-    if (argc < 2) {
-      xy_error ("chsrc: 请您提供想要查看源的软件名; 使用 chsrc list targets 查看所有支持的软件");
-      return 1;
+  else if (xy_streql (command, "get") ||
+           xy_streql (command, "g"))
+    {
+      if (argc < 2)
+        {
+          xy_error ("chsrc: 请您提供想要查看源的软件名; 使用 chsrc list targets 查看所有支持的软件");
+          return 1;
+        }
+      matched = get_target (argv[2], Target_Get_Source, NULL);
+      if (!matched) goto not_matched;
+      return 0;
     }
-    matched = get_target(argv[2], Target_Get_Source, NULL);
-    if (!matched) goto not_matched;
-    return 0;
-  }
 
   /* chsrc set */
-  else if (xy_streql(command, "set") ||
-           xy_streql(command, "s"))
-  {
-    if (argc < 2) {
-      xy_error ("chsrc: 请您提供想要设置源的软件名; 使用 chsrc list targets 查看所有支持的软件");
-      return 1;
-    }
+  else if (xy_streql (command, "set") ||
+           xy_streql (command, "s"))
+    {
+      if (argc < 2)
+        {
+          xy_error ("chsrc: 请您提供想要设置源的软件名; 使用 chsrc list targets 查看所有支持的软件");
+          return 1;
+        }
 
-    char* option = NULL;
-    if (argc >= 3) {
-      option = (char*) argv[3]; // 暂时我们只接受最多三个参数
+      char *option = NULL;
+      if (argc >= 3)
+        {
+          option = (char*) argv[3]; // 暂时我们只接受最多三个参数
+        }
+      matched = get_target (argv[2], Target_Set_Source, option);
+      if (!matched) goto not_matched;
+      return 0;
     }
-    matched = get_target(argv[2], Target_Set_Source, option);
-    if (!matched) goto not_matched;
-    return 0;
-  }
 
   /* 不支持的命令 */
   else
-  {
-    xy_error ("chsrc: 不支持的命令，请使用 chsrc help 查看使用方式");
-    return 1;
-  }
+    {
+      xy_error ("chsrc: 不支持的命令，请使用 chsrc help 查看使用方式");
+      return 1;
+    }
 
 not_matched:
-  if (!matched) {
-    xy_info("chsrc: 暂不支持的换源目标，请使用 chsrc list targets 查看可换源软件");
-    return 1;
-  }
+  if (!matched)
+    {
+      xy_info ("chsrc: 暂不支持的换源目标，请使用 chsrc list targets 查看可换源软件");
+      return 1;
+    }
 }
