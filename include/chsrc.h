@@ -11,7 +11,7 @@
  * ------------------------------------------------------------*/
 
 #include "xy.h"
-#include "sources.h"
+#include "source.h"
 
 
 #define App_Prefix "chsrc: "
