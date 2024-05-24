@@ -32,7 +32,7 @@ CI: all
 	@mv $(Target) $(CI_Build_Name)
 
 build_dir:
-	@mkdir build
+	@mkdir -p build
 
 test: $(Target)
 	./$(Target) list mirror
