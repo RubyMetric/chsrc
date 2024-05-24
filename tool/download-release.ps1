@@ -2,7 +2,7 @@
 # File          : download-release.ps1
 # Authors       : Aoran Zeng <ccmywish@qq.com>
 # Created on    : <2023-09-21>
-# Last modified : <2024-05-24>
+# Last modified : <2024-05-25>
 #
 # download:
 #
@@ -11,7 +11,7 @@
 # Changelog:
 #
 # ~> v0.1.0
-# <2024-05-24> Rename to download-release
+# <2024-05-25> Rename to download-release
 # <2023-09-21> Create file
 # ---------------------------------------------------------------
 
@@ -31,8 +31,8 @@ $names = @(
   'chsrc-armv7-linux'
 )
 
-# Like https://github.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-windows.exe
-$url_prefix = "https://github.com/RubyMetric/chsrc/releases/download/preview/"
+# Like https://github.com/RubyMetric/chsrc/releases/download/latest/chsrc-x64-windows.exe
+$url_prefix = "https://github.com/RubyMetric/chsrc/releases/download/latest/"
 
 foreach ($name in $names) {
   curl -LO "${url_prefix}${name}"
