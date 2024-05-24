@@ -5,6 +5,7 @@
 *.o
 *.obj
 
+# build directory
 build
 
 # target exe name
