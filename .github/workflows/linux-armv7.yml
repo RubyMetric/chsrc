@@ -24,7 +24,7 @@ jobs:
             pwd ; ls -al
             git clone https://github.com/RubyMetric/chsrc -b gh-pipeline -q
             cd chsrc
-            make CI CI_BUILD_NAME=chsrc-armv7-linux
+            make CI CI_Build_Name=chsrc-armv7-linux
             cp ./chsrc-armv7-linux /artifacts
 
       - name: Release

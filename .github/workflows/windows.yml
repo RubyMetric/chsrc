@@ -31,13 +31,13 @@ jobs:
 
     - name: Compile chsrc x64
       run: |
-        mingw32-make.exe CI CI_BUILD_NAME=chsrc-x64-windows
+        mingw32-make.exe CI CI_Build_Name=chsrc-x64-windows
 
     - name: Compile chsrc x86
       env:
         MSYSTEM: MINGW32
       run: |
-        mingw32-make.exe CI CI_BUILD_NAME=chsrc-x86-windows
+        mingw32-make.exe CI CI_Build_Name=chsrc-x86-windows
 
     - name: List files
       run: ls *.exe
