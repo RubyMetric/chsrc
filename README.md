@@ -2,7 +2,7 @@
   <img alt="chsrc logo" src="image/chsrc.png"/>
 </div>
 
-全平台命令行换源工具，**目标支持 Linux, Windows, macOS, BSD 等尽可能多的操作系统，龙芯、飞腾等尽可能多的CPU**。
+全平台命令行换源工具，**目标支持 Linux (包括麒麟、openEuler、deepin等), Windows, macOS, BSD 等尽可能多的操作系统，龙芯、飞腾、RISC-V 等尽可能多的CPU**。
 
 我们使用 **C99** 来完成上述目标。我们并不使用Python或JS等解释语言，因为一个简单的换源工具，不应该强行塞给用户一个庞大的解释器和数十、数百MB其他文件。
 
@@ -11,6 +11,8 @@
 <br>
 
 ## 安装
+
+以下方式均下载到当前目录，可直接通过 `./chsrc` 运行。
 
 ### Windows
 
@@ -48,16 +50,14 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-m
 ### BSD
 
 ```bash
-git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; clang chsrc.c -o chsrc
+git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc
+clang -Iinclude src/chsrc.c -o chsrc
 ```
 
-### 没有您的平台?
+### 其他平台
 
 ```bash
 git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
-
-# 运行
-./chsrc
 ```
 
 <br>
@@ -187,7 +187,7 @@ make clean
 
 ## 致谢
 
-感谢各个镜像站提供的优质免费镜像服务，使用的镜像站见 [sources.h](./sources.h).
+感谢各个镜像站提供的优质免费镜像服务，使用的镜像站见 [source.h](./include/source.h).
 
 另外感谢以下项目:
 1. [MirrorZ 教育网镜像站](https://help.mirrors.cernet.edu.cn/)
