@@ -38,7 +38,7 @@ test: $(Target)
 	./$(Target) get  python
 
 test_xy:
-	@$(CC) test/xy.c -o xy
+	@$(CC) test/xy.c $(CFLAGS) -o xy
 	@./xy
 
 clean:

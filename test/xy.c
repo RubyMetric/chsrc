@@ -3,14 +3,14 @@
  * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-30>
- * Last modified : <2024-05-24>
+ * Last modified : <2024-05-25>
  *
  * test_xy:
  *
  *   测试 xy.h
  * ------------------------------------------------------------*/
 
-#include "../xy.h"
+#include "xy.h"
 
 int
 main (int argc, char const *argv[])
@@ -78,9 +78,9 @@ main (int argc, char const *argv[])
   xy_warn ("警告：输出警告内容");
   xy_error ("错误：输出错误内容");
 
-  assert (xy_file_exist ("chsrc.png"));
+  assert (xy_file_exist ("./image/chsrc.png"));
   assert (xy_file_exist (xy_win_powershell_profile));
-  assert (false == xy_file_exist (xy_win_powershellv5_profile));
+  assert (true == xy_file_exist (xy_win_powershellv5_profile));
 
   puts (xy_uniform_path (" \n ~/haha/test/123 \n\r "));
   assert_str (xy_uniform_path ("~/haha/test"),
