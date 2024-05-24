@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2023-10-05>
+ * Last modified : <2024-05-25>
  *
  * chsrc:
  *
@@ -31,7 +31,7 @@
  * @param  progname   要检测的二进制程序名
  */
 bool
-query_program_exist (char* check_cmd, char* progname)
+query_program_exist (char *check_cmd, char *progname)
 {
   char* which = check_cmd;
 
@@ -41,10 +41,10 @@ query_program_exist (char* check_cmd, char* progname)
 
   if (0!=ret) {
     // xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
-    xy_warn (xy_strjoin(3, "× 命令 ", progname, " 不存在"));
+    puts (xy_strjoin (4, xy_str_to_red ("x "), "命令 ", xy_str_to_red (progname), " 不存在"));
     return false;
   } else {
-    xy_success (xy_strjoin(3, "√ 命令 ", progname, " 存在"));
+    puts (xy_strjoin (4, xy_str_to_green ("√ "), "命令 ", xy_str_to_green (progname), " 存在"));
     return true;
   }
 }
@@ -58,40 +58,45 @@ query_program_exist (char* check_cmd, char* progname)
  */
 #define find_mirror(s, input) query_mirror_exist(s##_sources, s##_sources_n, (char*)#s+3, input)
 int
-query_mirror_exist (SourceInfo* sources, size_t size, char* target, char* input)
+query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
 {
-  if (0==size) {
-    xy_error(xy_strjoin(3, "chsrc: 当前 ", target, " 无任何可用源，请联系维护者"));
-    exit(1);
-  }
+  if (0==size)
+    {
+      xy_error (xy_strjoin (3, "当前 ", target, " 无任何可用源，请联系维护者"));
+      exit (1);
+    }
 
-  if (1==size) {
-    xy_success(xy_strjoin(5, "chsrc: ", sources[0].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
-  }
+  if (1==size)
+    {
+      xy_success(xy_strjoin(4, sources[0].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
+    }
 
-  if (xy_streql("default", input) || xy_streql("def", input)) {
-    xy_info ("chsrc: 默认使用维护团队测速第一的源");
-    return 0;
-  }
+  if (xy_streql("default", input) || xy_streql("def", input))
+    {
+      puts ("默认使用维护团队测速第一的源");
+      return 0;
+    }
 
   int idx = 0;
   SourceInfo source = sources[0];
 
   bool exist = false;
   for (int i=0; i<size; i++)
-  {
-    source = sources[i];
-    if (xy_streql(source.mirror->code, input)) {
-      idx = i;
-      exist = true;
-      break;
+    {
+      source = sources[i];
+      if (xy_streql(source.mirror->code, input))
+        {
+          idx = i;
+          exist = true;
+          break;
+        }
     }
-  }
-  if (!exist) {
-    xy_error (xy_strjoin(3, "chsrc: 镜像站 ", input, " 不存在"));
-    xy_error (xy_2strjoin("chsrc: 查看可使用源，请使用 chsrc list ", target));
-    exit(1);
-  }
+  if (!exist)
+    {
+      xy_error (xy_strjoin(3, "镜像站 ", input, " 不存在"));
+      xy_error (xy_2strjoin("查看可使用源，请使用 chsrc list ", target));
+      exit (1);
+    }
   return idx;
 }
 
@@ -99,26 +104,26 @@ query_mirror_exist (SourceInfo* sources, size_t size, char* target, char* input)
 /**
  * 该函数来自 oh-my-mirrorz.py，由 @ccmywish 翻译为C语言，但功劳和版权属于原作者
  */
-char*
+char *
 to_human_readable_speed (double speed)
 {
-  char* scale[] = {"Byte/s", "KByte/s", "MByte/s", "GByte/s", "TByte/s"};
+  char *scale[] = {"Byte/s", "KByte/s", "MByte/s", "GByte/s", "TByte/s"};
   int i = 0;
   while (speed > 1024.0)
   {
     i += 1;
     speed /= 1024.0;
   }
-  char* buf = xy_malloc0(64);
-  sprintf(buf, "%.2f %s", speed, scale[i]);
+  char *buf = xy_malloc0 (64);
+  sprintf (buf, "%.2f %s", speed, scale[i]);
 
-  char* new = NULL;
-  if (i <= 1 ) new = xy_str_to_red(buf);
+  char *new = NULL;
+  if (i <= 1 ) new = xy_str_to_red (buf);
   else
-  {
-    if (i == 2 && speed < 2.00) new = xy_str_to_yellow(buf);
-    else new = xy_str_to_green(buf);
-  }
+    {
+      if (i == 2 && speed < 2.00) new = xy_str_to_yellow (buf);
+      else new = xy_str_to_green (buf);
+    }
   return new;
 }
 
@@ -130,9 +135,9 @@ to_human_readable_speed (double speed)
  * @return 返回测得的速度，若出错，返回-1
  */
 double
-test_speed_url (const char* url)
+test_speed_url (const char *url)
 {
-  char* time_sec = "6";
+  char *time_sec = "6";
 
 /* 现在我们切换至跳转后的链接来测速，不再使用下述判断
   if (xy_str_start_with(url, "https://registry.npmmirror"))
@@ -144,47 +149,52 @@ test_speed_url (const char* url)
 
   // 我们用 —L，因为Ruby China源会跳转到其他地方
   // npmmirror 也会跳转
-  char* curl_cmd = xy_strjoin(6, "curl -qsL -o ", xy_os_devnull,
-                                 " -w \"%{http_code} %{speed_download}\" -m", time_sec ,
-                                 " -A chsrc/" Chsrc_Version "  ", url);
+  char *curl_cmd = xy_strjoin (6, "curl -qsL -o ", xy_os_devnull,
+                                  " -w \"%{http_code} %{speed_download}\" -m", time_sec ,
+                                  " -A chsrc/" Chsrc_Version "  ", url);
 
   // xy_info (xy_2strjoin("chsrc: 测速 ", url));
 
-  char* buf = xy_getcmd (curl_cmd, 0, NULL);
+  char *buf = xy_getcmd (curl_cmd, 0, NULL);
   // 如果尾部有换行，删除
   buf = xy_str_strip (buf);
 
   // 分隔两部分数据
-  char* split = strchr(buf, ' ');
+  char *split = strchr (buf, ' ');
   if (split) *split = '\0';
 
   // puts(buf); puts(split+1);
-  int http_code = atoi(buf);
-  double speed  = atof(split+1);
-  char* speedstr = to_human_readable_speed(speed);
+  int http_code = atoi (buf);
+  double speed  = atof (split+1);
+  char *speedstr = to_human_readable_speed (speed);
 
-  if (200!=http_code) {
-    char* httpcodestr = xy_str_to_yellow (xy_2strjoin("HTTP码 ", buf));
-    puts (xy_strjoin (3, speedstr, " | ",  httpcodestr));
-  } else {
-    puts (speedstr);
-  }
+  if (200!=http_code)
+    {
+      char* httpcodestr = xy_str_to_yellow (xy_2strjoin ("HTTP码 ", buf));
+      puts (xy_strjoin (3, speedstr, " | ",  httpcodestr));
+    }
+  else
+    {
+      puts (speedstr);
+    }
   return speed;
 }
 
 
 int
-get_max_ele_idx_in_dbl_ary (double* array, int size)
+get_max_ele_idx_in_dbl_ary (double *array, int size)
 {
   double maxval = array[0];
   int maxidx = 0;
 
-  for (int i=1; i<size; i++) {
-    if (array[i]>maxval) {
-      maxval = array[i];
-      maxidx = i;
+  for (int i=1; i<size; i++)
+    {
+      if (array[i]>maxval)
+        {
+          maxval = array[i];
+          maxidx = i;
+        }
     }
-  }
   return maxidx;
 }
 
@@ -193,12 +203,13 @@ get_max_ele_idx_in_dbl_ary (double* array, int size)
  */
 #define auto_select(s) auto_select_(s##_sources, s##_sources_n, (char*)#s+3)
 int
-auto_select_ (SourceInfo* sources, size_t size, const char* target)
+auto_select_ (SourceInfo *sources, size_t size, const char *target)
 {
-  if (0==size) {
-    xy_error(xy_strjoin(3, "chsrc: 当前 ", target, " 无任何可用源，请联系维护者"));
-    exit(1);
-  }
+  if (0==size)
+    {
+      xy_error (xy_strjoin (3, "chsrc: 当前 ", target, " 无任何可用源，请联系维护者"));
+      exit (1);
+    }
 
   bool onlyone = false;
   if (1==size) onlyone = true;
@@ -209,22 +220,25 @@ auto_select_ (SourceInfo* sources, size_t size, const char* target)
   {
     SourceInfo src = sources[i];
     const char* url = src.mirror->__bigfile_url;
-    if (NULL==url) {
-      chsrc_warn ( xy_strjoin(3, "开发者未提供 ",  src.mirror->code, " 镜像站测速链接，跳过该站点"));
-      speed = 0;
-    } else {
-      printf ("%s",xy_strjoin(3, "chsrc: 测速 ", src.mirror->site , " ... "));
-      fflush(stdout);
-      speed = test_speed_url (url);
-    }
+    if (NULL==url)
+      {
+        chsrc_warn ( xy_strjoin(3, "开发者未提供 ",  src.mirror->code, " 镜像站测速链接，跳过该站点"));
+        speed = 0;
+      }
+    else
+      {
+        printf ("%s",xy_strjoin(3, "测速 ", src.mirror->site , " ... "));
+        fflush (stdout);
+        speed = test_speed_url (url);
+      }
     speeds[i] = speed;
   }
   int fastidx = get_max_ele_idx_in_dbl_ary (speeds, size);
 
   if (onlyone)
-    xy_success(xy_strjoin(5, "chsrc: ", sources[fastidx].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
+    xy_success (xy_strjoin (4, sources[fastidx].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
   else
-    xy_success (xy_2strjoin("chsrc: 最快镜像站: ", sources[fastidx].mirror->name));
+    puts (xy_2strjoin ("最快镜像站: ", xy_str_to_green (sources[fastidx].mirror->name)));
 
   return fastidx;
 }
@@ -239,16 +253,18 @@ auto_select_ (SourceInfo* sources, size_t size, const char* target)
  * 用于 _setsrc 函数
  */
 void
-chsrc_say_selection (SourceInfo* source)
+chsrc_say_selection (SourceInfo *source)
 {
-  xy_info (xy_strjoin(5, "chsrc: 选中镜像站: ", source->mirror->abbr, " (", source->mirror->code, ")"));
+  puts (xy_strjoin (5, "选中镜像站: ", xy_str_to_green (source->mirror->abbr), " (", xy_str_to_green (source->mirror->code), ")"));
+  // puts ("--------------------------------");
 }
 
 
 void
-chsrc_say_thanks (SourceInfo* source)
+chsrc_say_thanks (SourceInfo *source)
 {
-  xy_success(xy_2strjoin("chsrc: 感谢镜像提供方: ", source->mirror->name));
+  puts ("--------------------------------");
+  puts (xy_2strjoin ("换源完成，感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
 }
 
 
@@ -256,117 +272,135 @@ chsrc_say_thanks (SourceInfo* source)
 void
 chsrc_ensure_root ()
 {
-  char* euid = getenv("$EUID");
-  if (NULL==euid) {
-    char* buf = xy_getcmd("id -u", 0, NULL);
-    if (0!=atoi(buf)) goto not_root;
-    else return;
-  } else {
-    if (0!=atoi(euid)) goto not_root;
-    else return;
-  }
+  char *euid = getenv ("$EUID");
+  if (NULL==euid)
+    {
+      char *buf = xy_getcmd ("id -u", 0, NULL);
+      if (0!=atoi(buf)) goto not_root;
+      else return;
+    }
+  else
+    {
+      if (0!=atoi(euid)) goto not_root;
+      else return;
+    }
 not_root:
-  xy_error("chsrc: 请在命令前使用 sudo 来保证必要的权限");
-  exit(1);
+  xy_error ("chsrc: 请在命令前使用 sudo 来保证必要的权限");
+  exit (1);
 }
 
 
 static void
-chsrc_run (const char* cmd)
+chsrc_run (const char *cmd)
 {
-  xy_info (xy_2strjoin ("chsrc: 运行 ", cmd));
-  system(cmd);
+  puts ("~~~~~~~~~~~");
+  puts (xy_2strjoin ("运行 ", xy_str_to_blue (cmd)));
+  system (cmd);
 }
 
 static void
-chsrc_check_file (const char* path)
+chsrc_check_file (const char *path)
 {
-  char* cmd = NULL;
+  char *cmd = NULL;
   path = xy_uniform_path (path);
-  if(xy_on_windows) {
-    cmd = xy_2strjoin ("type ", path);
-  } else {
-    cmd = xy_2strjoin ("cat ", path);
-  }
+  if(xy_on_windows)
+    {
+      cmd = xy_2strjoin ("type ", path);
+    }
+  else
+    {
+      cmd = xy_2strjoin ("cat ", path);
+    }
   chsrc_run (cmd);
 }
 
 static void
-chsrc_ensure_dir (const char* dir)
+chsrc_ensure_dir (const char *dir)
 {
   dir = xy_uniform_path (dir);
-  char* mkdir_cmd = NULL;
-  if (xy_on_windows) {
-    mkdir_cmd = "md ";
-  } else {
-    mkdir_cmd = "mkdir -p ";
-  }
-  char* cmd = xy_2strjoin (mkdir_cmd, dir);
+  char *mkdir_cmd = NULL;
+  if (xy_on_windows)
+    {
+      mkdir_cmd = "md ";
+    }
+  else
+    {
+      mkdir_cmd = "mkdir -p ";
+    }
+  char *cmd = xy_2strjoin (mkdir_cmd, dir);
   cmd = xy_str_to_quietcmd (cmd);
   chsrc_run (cmd);
 }
 
 static void
-chsrc_append_to_file (const char* str, const char* file)
+chsrc_append_to_file (const char *str, const char *file)
 {
   file = xy_uniform_path (file);
-  char* dir = xy_parent_dir (file);
+  char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
 
-  char* cmd = NULL;
-  if (xy_on_windows) {
-    cmd = xy_strjoin (4, "echo ", str, " >> ", file);
-  } else {
-    cmd = xy_strjoin (4, "echo '", str, "' >> ", file);
-  }
-  chsrc_run(cmd);
+  char *cmd = NULL;
+  if (xy_on_windows)
+    {
+      cmd = xy_strjoin (4, "echo ", str, " >> ", file);
+    }
+  else
+    {
+      cmd = xy_strjoin (4, "echo '", str, "' >> ", file);
+    }
+  chsrc_run (cmd);
 }
 
 static void
-chsrc_overwrite_file (const char* str, const char* file)
+chsrc_overwrite_file (const char *str, const char *file)
 {
   file = xy_uniform_path (file);
-  char* dir = xy_parent_dir (file);
+  char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
 
-  char* cmd = NULL;
-  if (xy_on_windows) {
-    cmd = xy_strjoin (4, "echo ", str, " > ", file);
-  } else {
-    cmd = xy_strjoin (4, "echo '", str, "' > ", file);
-  }
-  chsrc_run(cmd);
+  char *cmd = NULL;
+  if (xy_on_windows)
+    {
+      cmd = xy_strjoin (4, "echo ", str, " > ", file);
+    }
+  else
+    {
+      cmd = xy_strjoin (4, "echo '", str, "' > ", file);
+    }
+  chsrc_run (cmd);
 }
 
 static void
-chsrc_backup (const char* path)
+chsrc_backup (const char *path)
 {
-  char* cmd = NULL;
+  char *cmd = NULL;
 
   if (xy_on_bsd)
-  {
-    // 似乎BSD的cp并没有 --backup='t' 选项
-    cmd = xy_strjoin(5, "cp -f ", path, " ", path, ".bak");
-  }
-  else if (xy_on_windows) {
-    // /Y 表示覆盖
-    cmd = xy_strjoin(5, "copy /Y ", path, " ", path, ".bak" );
-  }
-  else {
-    cmd = xy_strjoin(5, "cp ", path, " ", path, ".bak --backup='t'");
-  }
+    {
+      // 似乎BSD的cp并没有 --backup='t' 选项
+      cmd = xy_strjoin (5, "cp -f ", path, " ", path, ".bak");
+    }
+  else if (xy_on_windows)
+    {
+      // /Y 表示覆盖
+      cmd = xy_strjoin (5, "copy /Y ", path, " ", path, ".bak" );
+    }
+  else
+    {
+      cmd = xy_strjoin (5, "cp ", path, " ", path, ".bak --backup='t'");
+    }
 
   chsrc_run (cmd);
-  chsrc_info ( xy_strjoin (3, "备份文件名 ", path, ".bak"));
+  chsrc_info (xy_strjoin (3, "备份文件名 ", path, ".bak"));
 }
 
 
 
 /* Target Info */
 typedef struct {
-  void (*setfn)(char* option);
-  void (*getfn)(char* option);
-  SourceInfo* sources;
+  void (*setfn)(char *option);
+  void (*getfn)(char *option);
+  SourceInfo *sources;
   size_t      sources_n;
 } TargetInfo;
 
