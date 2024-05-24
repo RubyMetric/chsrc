@@ -1,5 +1,5 @@
 <div align="center">
-  <img alt="chsrc logo" src="chsrc.png"/>
+  <img alt="chsrc logo" src="image/chsrc.png"/>
 </div>
 
 全平台命令行换源工具，**目标支持 Linux, Windows, macOS, BSD 等尽可能多的操作系统，龙芯、飞腾等尽可能多的CPU**。
