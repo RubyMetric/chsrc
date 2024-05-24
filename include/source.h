@@ -91,7 +91,7 @@ MirrorInfo
               "https://mirrors.cloud.tencent.com/debian" Big_File_debian},
 
   Huawei   = {"huawei",  "Huawei Cloud", "华为开源镜像站",  "https://mirrors.huaweicloud.com/",
-              "https://mirrors.huaweicloud.com/debian/" Big_File_debian },
+              "https://mirrors.huaweicloud.com/debian" Big_File_debian },
 
   Netease  = {"netease", "Netease",  "网易开源镜像站",      "https://mirrors.163.com/",
               "https://mirrors.163.com/deepin-cd" Big_File_deepin},
