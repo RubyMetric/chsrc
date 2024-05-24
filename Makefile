@@ -6,11 +6,11 @@
 # Last modified : <2024-05-24>
 # ---------------------------------------------------------------
 
-CFLAGS = # -Wall
+CFLAGS = -Iinclude # -Wall
 
 # 只有Windows会定义该变量
 ifeq ($(OS), Windows_NT)
-	CLANG_FLAGS = -target x86_64-pc-windows-gnu
+	CLANG_FLAGS = -Target x86_64-pc-windows-gnu
 endif
 ifeq ($(CC), clang)
 	CFLAGS += $(CLANG_FLAGS)
@@ -19,30 +19,32 @@ ifeq ($(shell uname), Linux)
 	CFLAGS += -static
 endif
 
-TARGET = chsrc
+Target = build/chsrc
 
-CI_BUILD_NAME = chsrc
+CI_Build_Name = chsrc
 #=======================
 
-all:
-	@$(CC) chsrc.c $(CFLAGS) -o $(TARGET)
+all: build_dir
+	@$(CC) chsrc.c $(CFLAGS) -o $(Target)
 	@echo; echo Compile done using \'$(CC)\' $(CFLAGS)
 
 CI: all
-	@mv chsrc $(CI_BUILD_NAME)
+	@mv $(Target) $(CI_Build_Name)
 
-test: $(TARGET)
-	./$(TARGET) list mirror
-	./$(TARGET) list target
-	./$(TARGET) get  ruby
-	./$(TARGET) get  python
+build_dir:
+	@mkdir build
 
-test_xy:
-	@mkdir -p build
+test: $(Target)
+	./$(Target) list mirror
+	./$(Target) list Target
+	./$(Target) get  ruby
+	./$(Target) get  python
+
+test_xy: build_dir
 	@$(CC) test/xy.c -o build/xy
 	@./build/xy
 
 clean:
 	-@rm *.exe      2>/dev/null
-	-@rm $(TARGET)  2>/dev/null
+	-@rm $(Target)  2>/dev/null
 	-@rm ./build/* 2>/dev/null
