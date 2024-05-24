@@ -4,6 +4,9 @@
 *.out
 *.o
 *.obj
+
+build
+
 # target exe name
 chsrc
 xy
