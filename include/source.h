@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2024-05-24>
+ * Last modified : <2024-05-25>
  *
  * sources:
  *
@@ -11,11 +11,11 @@
  * ------------------------------------------------------------*/
 
 typedef struct {
-  const char* code; // 用于用户指定镜像站
-  const char* abbr;
-  const char* name;
-  const char* site;
-  const char* __bigfile_url;  // 用于对该镜像站测速
+  const char *code; // 用于用户指定镜像站
+  const char *abbr;
+  const char *name;
+  const char *site;
+  const char *__bigfile_url;  // 用于对该镜像站测速
 } MirrorInfo;
 
 // #define Big_File_ubuntu  "/indices/md5sums.gz"  这个是错的
@@ -126,7 +126,7 @@ MirrorInfo
 
 MirrorInfo*
 available_mirrors[] = {
-  &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Hust, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Nju, // &Cqu,
+  &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Hust, &Nju, // &Cqu,
   &Ali,  &Tencent, &Huawei, &Netease, &Sohu, &Api7,
   &RubyChina, &EmacsChina, &NpmMirror, &GoProxyCN, &GoProxyIO,
   // 暂不支持 &NugetOrg
@@ -136,8 +136,8 @@ available_mirrors[] = {
 
 
 typedef struct {
-  const MirrorInfo* mirror;
-  const char* url;
+  const MirrorInfo *mirror;
+  const char *url;
 } SourceInfo;
 
 
@@ -151,7 +151,7 @@ typedef struct {
 
 
 /**
- * 2024-04-18 更新
+ * 2024-05-25 更新
  *
  * @note
  * 下面的源，并不都实现正确，
@@ -170,9 +170,9 @@ typedef struct {
  */
 static SourceInfo
 pl_ruby_sources[] = {
+  {&Huawei,    "https://mirrors.huaweicloud.com/repository/rubygems/"},
   {&Tencent,   "https://mirrors.tencent.com/rubygems/"},
-  {&RubyChina, "https://gems.ruby-china.com/"},
-  {&Huawei,    "https://mirrors.huaweicloud.com/repository/rubygems/"}
+  {&RubyChina, "https://gems.ruby-china.com/"}
 
   // {&Bfsu,      "https://mirrors.bfsu.edu.cn/rubygems/"},
   // {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/"},
