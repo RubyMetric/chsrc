@@ -3,7 +3,7 @@
 # License       : GPLv3
 # Authors       : Aoran Zeng <ccmywish@qq.com>
 # Created on    : <2023-08-28>
-# Last modified : <2024-05-24>
+# Last modified : <2024-05-25>
 # ---------------------------------------------------------------
 
 CFLAGS = -Iinclude # -Wall
@@ -19,20 +19,17 @@ ifeq ($(shell uname), Linux)
 	CFLAGS += -static
 endif
 
-Target = build/chsrc
+Target = chsrc
 
 CI_Build_Name = chsrc
 #=======================
 
-all: build_dir
+all:
 	@$(CC) src/chsrc.c $(CFLAGS) -o $(Target)
 	@echo; echo Compile done using \'$(CC)\' $(CFLAGS)
 
 CI: all
 	@mv $(Target) $(CI_Build_Name)
-
-build_dir:
-	@mkdir -p build
 
 test: $(Target)
 	./$(Target) list mirror
@@ -40,10 +37,11 @@ test: $(Target)
 	./$(Target) get  ruby
 	./$(Target) get  python
 
-test_xy: build_dir
-	@$(CC) test/xy.c -o build/xy
-	@./build/xy
+test_xy:
+	@$(CC) test/xy.c -o xy
+	@./xy
 
 clean:
-	-@rm *.exe     2>/dev/null
-	-@rm ./build/* 2>/dev/null
+	-@rm *.exe  2>/dev/null
+	-@rm xy     2>/dev/null
+	-@rm chsrc  2>/dev/null
