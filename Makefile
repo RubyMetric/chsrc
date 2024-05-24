@@ -25,7 +25,7 @@ CI_Build_Name = chsrc
 #=======================
 
 all: build_dir
-	@$(CC) chsrc.c $(CFLAGS) -o $(Target)
+	@$(CC) src/chsrc.c $(CFLAGS) -o $(Target)
 	@echo; echo Compile done using \'$(CC)\' $(CFLAGS)
 
 CI: all
@@ -36,7 +36,7 @@ build_dir:
 
 test: $(Target)
 	./$(Target) list mirror
-	./$(Target) list Target
+	./$(Target) list target
 	./$(Target) get  ruby
 	./$(Target) get  python
 
@@ -45,6 +45,5 @@ test_xy: build_dir
 	@./build/xy
 
 clean:
-	-@rm *.exe      2>/dev/null
-	-@rm $(Target)  2>/dev/null
+	-@rm *.exe     2>/dev/null
 	-@rm ./build/* 2>/dev/null
