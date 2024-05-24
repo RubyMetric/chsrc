@@ -18,33 +18,33 @@
 
 ```bash
 # x64
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-windows.exe -o chsrc.exe
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-x64-windows.exe -o chsrc.exe
 
 # x86
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x86-windows.exe -o chsrc.exe
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-x86-windows.exe -o chsrc.exe
 ```
 
 ### Linux
 
 ```bash
 # x64
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-linux -o chsrc; chmod +x ./chsrc
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-x64-linux -o chsrc; chmod +x ./chsrc
 
 # aarch64
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-aarch64-linux -o chsrc; chmod +x ./chsrc
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-aarch64-linux -o chsrc; chmod +x ./chsrc
 
 # riscv64
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-riscv64-linux -o chsrc; chmod +x ./chsrc
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-riscv64-linux -o chsrc; chmod +x ./chsrc
 
 # armv7
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-armv7-linux -o chsrc; chmod +x ./chsrc
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-armv7-linux -o chsrc; chmod +x ./chsrc
 ```
 
 ### macOS
 
 ```bash
 # x64
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/preview/chsrc-x64-macos -o chsrc; chmod +x ./chsrc
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-x64-macos -o chsrc; chmod +x ./chsrc
 ```
 
 ### BSD
@@ -178,8 +178,8 @@ make          # 默认使用 cc 编译
 make CC=clang # 使用 clang 编译
 make CC=gcc   # 使用 gcc   编译
 
-make test  # 测试部分命令
-make xy    # 测试 xy.h
+make test    # 测试部分命令
+make test_xy # 测试 xy.h
 make clean
 ```
 
