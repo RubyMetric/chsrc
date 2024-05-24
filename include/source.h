@@ -39,9 +39,6 @@ MirrorInfo
   Sjtug_Zhiyuan = {"sjtu",    "SJTUG-zhiyuan", "上海交通大学致远镜像站",     "https://mirrors.sjtug.sjtu.edu.cn/",
                    "https://mirrors.sjtug.sjtu.edu.cn/ctan" Big_File_ctan},
 
-  Hust          = {"hust",    "HUST",          "华中科技大学开源镜像站",     "https://mirrors.hust.edu.cn/",
-                    "https://mirrors.hust.edu.cn/debian" Big_File_debian},
-
   Zju           = {"zju",     "ZJU",           "浙江大学开源软件镜像站",     "https://mirrors.zju.edu.cn/",
                    "https://mirrors.zju.edu.cn/debian" Big_File_debian},
 
@@ -65,6 +62,9 @@ MirrorInfo
 
   Ustc          = {"ustc",    "USTC",          "中国科学技术大学开源镜像站",  "https://mirrors.ustc.edu.cn/",
                    "https://mirrors.ustc.edu.cn/CTAN" Big_File_ctan},
+
+  Hust          = {"hust",    "HUST",          "华中科技大学开源镜像站",     "https://mirrors.hust.edu.cn/",
+                    "https://mirrors.hust.edu.cn/debian" Big_File_debian},
 
 // 速度暂时处于10位以后，但是目前可用的源
   Nju           = {"nju",     "NJU",           "南京大学开源镜像站",         "https://mirrors.nju.edu.cn/",
