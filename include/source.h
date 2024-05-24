@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2024-04-18>
+ * Last modified : <2024-05-24>
  *
  * sources:
  *
@@ -38,6 +38,9 @@ MirrorInfo
 
   Sjtug_Zhiyuan = {"sjtu",    "SJTUG-zhiyuan", "上海交通大学致远镜像站",     "https://mirrors.sjtug.sjtu.edu.cn/",
                    "https://mirrors.sjtug.sjtu.edu.cn/ctan" Big_File_ctan},
+
+  Hust          = {"hust",    "HUST",          "华中科技大学开源镜像站",     "https://mirrors.hust.edu.cn/",
+                    "https://mirrors.hust.edu.cn/debian" Big_File_debian},
 
   Zju           = {"zju",     "ZJU",           "浙江大学开源软件镜像站",     "https://mirrors.zju.edu.cn/",
                    "https://mirrors.zju.edu.cn/debian" Big_File_debian},
@@ -123,7 +126,7 @@ MirrorInfo
 
 MirrorInfo*
 available_mirrors[] = {
-  &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Nju, // &Cqu,
+  &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Hust, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Nju, // &Cqu,
   &Ali,  &Tencent, &Huawei, &Netease, &Sohu, &Api7,
   &RubyChina, &EmacsChina, &NpmMirror, &GoProxyCN, &GoProxyIO,
   // 暂不支持 &NugetOrg
