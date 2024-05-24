@@ -1,16 +1,16 @@
 /** ------------------------------------------------------------
- * File          : test_xy.c
+ * File          : xy.c
  * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-30>
- * Last modified : <2024-04-18>
+ * Last modified : <2024-05-24>
  *
  * test_xy:
  *
  *   测试 xy.h
  * ------------------------------------------------------------*/
 
-#include "xy.h"
+#include "../xy.h"
 
 int
 main (int argc, char const *argv[])
