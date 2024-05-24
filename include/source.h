@@ -181,7 +181,7 @@ pl_ruby_sources[] = {
 
 
 /**
- * 2024-04-18 更新
+ * 2024-05-24 更新
  *
  * @note 不要添加Zju，浙大的pypi在校外访问会自动转向Tuna
  */
@@ -194,6 +194,7 @@ pl_python_sources[] = {
   {&Ali,           "https://mirrors.aliyun.com/pypi/simple/"},
   {&Tencent,       "https://mirrors.cloud.tencent.com/pypi/simple"},
   {&Huawei,        "https://mirrors.huaweicloud.com/repository/pypi/simple"},
+  {&Hust,          "https://mirrors.hust.edu.cn/pypi/web/simple"}
   // {&Netease,    "https://mirrors.163.com/.help/pypi.html"} // 不用，24小时更新一次
 },
 
@@ -214,7 +215,7 @@ pl_nodejs_sources[] = {
 
 
 /**
- * 2023-09-05 更新
+ * 2024-05-24 更新
  *
  * 参考: https://help.mirrors.cernet.edu.cn/CPAN/
  */
@@ -222,6 +223,7 @@ pl_perl_sources[] = {
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/CPAN/"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CPAN/"},
   {&Bjtu,          "https://mirror.bjtu.edu.cn/cpan/"},
+  {&Hust,          "https://mirrors.hust.edu.cn/CPAN/"},
   {&Ali,           "https://mirrors.aliyun.com/CPAN/"},
   {&Lzuoss,        "https://mirror.lzu.edu.cn/CPAN/"}
 },
@@ -265,7 +267,7 @@ pl_go_sources[] = {
 
 
 /**
- * 2023-09-05 更新
+ * 2024-05-24 更新
  *
  * @note 缺少商业公司或开源社区软件源
  *
@@ -276,6 +278,7 @@ pl_rust_sources[] = {
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/"},
   {&Ustc,          "https://mirrors.ustc.edu.cn/crates.io-index/"},
+  {&Hust,          "https://mirrors.hust.edu.cn/crates.io-index/"}
 },
 
 
