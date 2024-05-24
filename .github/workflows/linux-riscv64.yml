@@ -30,7 +30,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: preview
+          tag_name: latest
           files: |
             ./artifacts/chsrc-riscv64-linux
           token: ${{ secrets.CHSRC_UPLOAD }}
