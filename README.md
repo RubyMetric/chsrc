@@ -10,6 +10,14 @@
 
 <br>
 
+## 示例
+
+<div align="center">
+  <img alt="chsrc logo" src="image/example.png"/>
+</div>
+
+<br>
+
 ## 安装
 
 以下方式均下载到当前目录，可直接通过 `./chsrc` 运行。
