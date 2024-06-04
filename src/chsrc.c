@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2024-05-25>
+ * Last modified : <2024-06-04>
  *
  * chsrc:
  *
@@ -12,7 +12,7 @@
  *   该软件为自由软件，采用 GPLv3 许可证，请查阅 LICENSE.txt 文件
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version "v0.1.4-2024/05/25"
+#define Chsrc_Version "v0.1.5-pre-2024/06/04"
 
 #include "chsrc.h"
 
@@ -82,28 +82,32 @@ pl_ruby_setsrc (char *option)
 
 
 /**
- * @param[out] prog 返回 Python 的可用名，如果不可用，则返回 NULL
+ * @param[out] prog      返回 Python 的可用名，如果不可用，则返回 NULL
+ * @param[out] pdm_exist 判断 pdm 是否存在
  */
 void
-pl_python_check_cmd (char **prog)
+pl_python_check_cmd (char **prog, bool *pdm_exist)
 {
   *prog = NULL;
   // 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store
   char *check_cmd = xy_str_to_quietcmd ("python --version");
-  bool exist = query_program_exist (check_cmd, "python");
+  bool py_exist = query_program_exist (check_cmd, "python");
 
-  if (!exist)
+  check_cmd = xy_str_to_quietcmd ("pdm --version");
+  *pdm_exist = query_program_exist (check_cmd, "pdm");
+
+  if (!py_exist)
     {
       check_cmd = xy_str_to_quietcmd ("python3 --version");
-      exist = query_program_exist (check_cmd, "python3");
-      if (exist) *prog = "python3";
+      py_exist = query_program_exist (check_cmd, "python3");
+      if (py_exist) *prog = "python3";
     }
   else
     {
       *prog = "python";
     }
 
-  if (!exist)
+  if (!py_exist)
     {
       chsrc_error ("未找到 Python 相关命令，请检查是否存在");
       exit (1);
@@ -114,9 +118,15 @@ void
 pl_python_getsrc (char *option)
 {
   char *prog = NULL;
-  pl_python_check_cmd (&prog);
+  bool pdm_exist = false;
+  pl_python_check_cmd (&prog, &pdm_exist);
   char *cmd = xy_2strjoin (prog, " -m pip config get global.index-url");
   chsrc_run (cmd);
+
+  if (pdm_exist) {
+    cmd = "pdm config --global pypi.url";
+    chsrc_run (cmd);
+  }
 }
 
 /**
@@ -129,15 +139,22 @@ pl_python_setsrc (char *option)
 {
   int index = 0;
   char *prog = NULL;
-  pl_python_check_cmd (&prog);
+  bool pdm_exist = false;
+  pl_python_check_cmd (&prog, &pdm_exist);
 
   index = use_specific_mirror_or_auto_select (option, pl_python);
 
   SourceInfo source = pl_python_sources[index];
   chsrc_say_selection (&source);
 
-  char* cmd = xy_2strjoin (prog, xy_2strjoin (" -m pip config set global.index-url ", source.url));
+  char *cmd = xy_2strjoin (prog, xy_2strjoin (" -m pip config set global.index-url ", source.url));
   chsrc_run (cmd);
+
+  if (pdm_exist) {
+    cmd = xy_2strjoin ("pdm config --global pypi.url ", source.url);
+    chsrc_run (cmd);
+  }
+
   chsrc_say_thanks (&source);
 }
 
