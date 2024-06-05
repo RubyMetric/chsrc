@@ -14,7 +14,7 @@
   "autoupdate": {
       "architecture": {
           "64bit": {
-              "url": "https://gitee.com/RubyMetric/chsrc/releases/download/$version/chsrc-x64-windows.exe"
+              "url": "https://gitee.com/RubyMetric/chsrc/releases/download/v$version/chsrc-x64-windows.exe"
           }
       }
   }
