@@ -62,7 +62,7 @@ my $set_ruby_locally = "bundle config --local";
 like `./chsrc set ruby`,         qr/$set_ruby/,         'chsrc set ruby';
 # like `./chsrc set ruby abcd`,    qr/$set_ruby_abcd/,   'chsrc set ruby abcd';
 like `./chsrc set ruby first`,   qr/$set_ruby_first/,   'chsrc set ruby first';
-like `./chsrc reset ruby`,       qr/$reset_ruby/,       'chsrc reset ruby';
+like `./chsrc reset ruby`,       qr/$reset_ruby/s,      'chsrc reset ruby';
 like `./chsrc set ruby tencent`, qr/$set_ruby_tencent/, 'chsrc set ruby tencent';
 like `./chsrc set -local ruby tencent`,  qr/$set_ruby_locally/, 'chsrc set -local ruby tencent';
 
