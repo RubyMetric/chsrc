@@ -11,3 +11,6 @@ xy
 
 # 'chsrc set -local' generated
 .bundle
+
+# Generated when testing
+nul
