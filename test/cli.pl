@@ -49,18 +49,21 @@ like `./chsrc cesu ruby`,  qr/$cesu_ruby/,      'chsrc cesu ruby';
 
 
 =begin
-测试 chsrc set
+测试 chsrc set 以及 chsrc reset
 =cut
 my $set_ruby = "换源完成，感谢镜像提供方";
 my $set_ruby_abcd = "";
 my $set_ruby_first = "换源完成，感谢镜像提供方";
+my $reset_ruby = "将重置并恢复上游默认使用的源.*Upstream";
 my $set_ruby_tencent = "换源完成，感谢镜像提供方.*腾讯软件源";
 my $set_ruby_locally = "bundle config --local";
+
 
 like `./chsrc set ruby`,         qr/$set_ruby/,         'chsrc set ruby';
 # like `./chsrc set ruby abcd`,    qr/$set_ruby_abcd/,   'chsrc set ruby abcd';
 like `./chsrc set ruby first`,   qr/$set_ruby_first/,   'chsrc set ruby first';
+like `./chsrc reset ruby`,       qr/$reset_ruby/,       'chsrc reset ruby';
 like `./chsrc set ruby tencent`, qr/$set_ruby_tencent/, 'chsrc set ruby tencent';
-like `./chsrc set -local ruby`,  qr/$set_ruby_locally/, 'chsrc set -local ruby';
+like `./chsrc set -local ruby tencent`,  qr/$set_ruby_locally/, 'chsrc set -local ruby tencent';
 
 done_testing;
