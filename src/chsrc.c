@@ -2180,7 +2180,7 @@ print_supported_sources_for_target (SourceInfo sources[], size_t size)
 
 
 void
-print_help ()
+cli_print_help ()
 {
   puts (xy_strjoin (3, "chsrc: Change Source (GPLv3) ",
                       xy_str_to_magenta (Chsrc_Version), " by RubyMetric\n"));
@@ -2296,16 +2296,18 @@ get_target (const char *input, TargetOp code, char *option)
       bool exist_b = query_program_exist (check_cmd, "curl");
       if (!exist_b)
         {
-        xy_error ("chsrc: 没有curl命令，无法测速");
-        exit (1);
-      }
+          xy_error ("chsrc: 没有curl命令，无法测速");
+          exit (1);
+        }
       auto_select_ (target->sources, target->sources_n, input-3);
       return true;
     }
   return true;
 }
 
-
+int Cli_Option_IPv6 = 0;
+int Cli_Optiion_Locally = 0;
+int Cli_Option_InEnglish = 0;
 
 int
 main (int argc, char const *argv[])
@@ -2314,10 +2316,47 @@ main (int argc, char const *argv[])
 
   if (argc==0)
     {
-      print_help (); return 0;
+      cli_print_help (); return 0;
     }
 
   const char *command = argv[1];
+
+  // chsrc set target mirror
+  //        1    2      3
+  int cli_arg_Target_pos = 2;
+  int cli_arg_Mirror_pos = cli_arg_Target_pos + 1;
+  const char *target = NULL;
+  const char *mirror = NULL;
+
+
+  // chsrc set -ipv6 target mirror
+  //        1    2     3      4
+  // argc = 4
+  for (int i=2; i<=argc ;i++)
+    {
+      if (xy_str_start_with (argv[i], "-"))
+        {
+          if (xy_streql (argv[i], "-ipv6"))
+            {
+              Cli_Option_IPv6 = 1;
+            }
+          else if (xy_streql (argv[i], "-local"))
+            {
+              Cli_Optiion_Locally = 1;
+            }
+          else if (xy_streql (argv[i], "-en") || xy_streql (argv[i], "-english"))
+            {
+              Cli_Option_InEnglish = 1;
+            }
+          else
+            {
+              chsrc_error (xy_2strjoin ("未识别的命令行选项 ", argv[i])); return 1;
+            }
+          cli_arg_Target_pos++;
+          cli_arg_Mirror_pos++;
+        }
+    }
+
 
   bool matched = false;
 
@@ -2327,7 +2366,7 @@ main (int argc, char const *argv[])
       xy_streql (command, "help") ||
       xy_streql (command, "--help"))
     {
-      print_help ();
+      cli_print_help ();
       return 0;
     }
 
@@ -2336,7 +2375,7 @@ main (int argc, char const *argv[])
            xy_streql (command, "l")    ||
            xy_streql (command, "ls"))
     {
-      if (argc < 2)
+      if (argc < cli_arg_Target_pos)
         {
           print_available_mirrors ();
           puts ("");
@@ -2344,48 +2383,29 @@ main (int argc, char const *argv[])
         }
       else
         {
-          if (xy_streql(argv[2],"mirrors"))
+          target = argv[cli_arg_Target_pos];
+          if (xy_streql(target,"mirrors") || xy_streql(target,"mirror"))
             {
               print_available_mirrors(); return 0;
             }
-          if (xy_streql(argv[2],"mirror"))
-            {
-              print_available_mirrors(); return 0;
-            }
-          if (xy_streql(argv[2],"targets"))
+          else if (xy_streql(target,"targets") || xy_streql(target,"target"))
             {
               print_supported_targets(); return 0;
             }
-          if (xy_streql(argv[2],"target"))
-            {
-              print_supported_targets(); return 0;
-            }
-          if (xy_streql(argv[2],"os"))
+          else if (xy_streql(target,"os"))
             {
               print_supported_os(); return 0;
             }
-          if (xy_streql(argv[2],"lang"))
+          else if (xy_streql(target,"lang") || xy_streql(target,"pl") || xy_streql(target,"language"))
             {
               print_supported_pl(); return 0;
             }
-          if (xy_streql(argv[2],"pl"))
-            {
-              print_supported_pl(); return 0;
-            }
-          if (xy_streql(argv[2],"language"))
-            {
-              print_supported_pl(); return 0;
-            }
-          if (xy_streql(argv[2],"software"))
-            {
-              print_supported_wr(); return 0;
-            }
-          if (xy_streql(argv[2],"ware"))
+          else if (xy_streql(target,"ware") || xy_streql(target,"software"))
             {
               print_supported_wr(); return 0;
             }
 
-          matched = get_target(argv[2], Target_List_Source, NULL);
+          matched = get_target(target, Target_List_Source, NULL);
           if (!matched) goto not_matched;
         }
       return 0;
@@ -2397,12 +2417,13 @@ main (int argc, char const *argv[])
            xy_streql (command, "ce")   ||
            xy_streql (command, "c"))
     {
-      if (argc < 2)
+      if (argc < cli_arg_Target_pos)
         {
           xy_error ("chsrc: 请您提供想要测速源的软件名; 使用 chsrc list targets 查看所有支持的软件");
           return 1;
         }
-      matched = get_target (argv[2], Target_Cesu_Source, NULL);
+      target = argv[cli_arg_Target_pos];
+      matched = get_target (target, Target_Cesu_Source, NULL);
       if (!matched) goto not_matched;
       return 0;
     }
@@ -2412,12 +2433,13 @@ main (int argc, char const *argv[])
   else if (xy_streql (command, "get") ||
            xy_streql (command, "g"))
     {
-      if (argc < 2)
+      if (argc < cli_arg_Target_pos)
         {
           xy_error ("chsrc: 请您提供想要查看源的软件名; 使用 chsrc list targets 查看所有支持的软件");
           return 1;
         }
-      matched = get_target (argv[2], Target_Get_Source, NULL);
+      target = argv[cli_arg_Target_pos];
+      matched = get_target (target, Target_Get_Source, NULL);
       if (!matched) goto not_matched;
       return 0;
     }
@@ -2426,18 +2448,15 @@ main (int argc, char const *argv[])
   else if (xy_streql (command, "set") ||
            xy_streql (command, "s"))
     {
-      if (argc < 2)
+      if (argc < cli_arg_Target_pos)
         {
           xy_error ("chsrc: 请您提供想要设置源的软件名; 使用 chsrc list targets 查看所有支持的软件");
           return 1;
         }
 
-      char *option = NULL;
-      if (argc >= 3)
-        {
-          option = (char*) argv[3]; // 暂时我们只接受最多三个参数
-        }
-      matched = get_target (argv[2], Target_Set_Source, option);
+      target = argv[cli_arg_Target_pos];
+      char *option = "";
+      matched = get_target (target, Target_Set_Source, option);
       if (!matched) goto not_matched;
       return 0;
     }
@@ -2445,7 +2464,7 @@ main (int argc, char const *argv[])
   /* 不支持的命令 */
   else
     {
-      xy_error ("chsrc: 不支持的命令，请使用 chsrc help 查看使用方式");
+      xy_error (xy_strjoin (3, "chsrc: 不支持的命令 ", command, ". 请使用 chsrc help 查看使用方式"));
       return 1;
     }
 
