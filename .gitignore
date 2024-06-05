@@ -9,4 +9,5 @@
 chsrc
 xy
 
-test.txt
+# 'chsrc set -local' generated
+.bundle
