@@ -159,7 +159,14 @@ pl_python_setsrc (char *option)
   chsrc_run (cmd);
 
   if (pdm_exist) {
-    cmd = xy_2strjoin ("pdm config --global pypi.url ", source.url);
+
+    char *where = "--global";
+    if (Cli_Optiion_Locally==1)
+      {
+        where = "--local";
+      }
+
+    cmd = xy_strjoin (4, "pdm config ", where, " pypi.url ", source.url);
     chsrc_run (cmd);
   }
 
