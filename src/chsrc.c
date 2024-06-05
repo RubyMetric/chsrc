@@ -2093,24 +2093,13 @@ usage[] = {
   "get  <target>             查看当前软件的源使用情况",
   "set  <target>             换源，自动测速后挑选最快源",
   "set  <target>  first      换源，使用维护团队测速第一的源",
-  "set  <target> <mirror>    换源，指定使用某镜像站 (通过list命令查看)\n",
+  "set  <target> <mirror>    换源，指定使用某镜像站 (通过list命令查看)",
+  "reset <target>            重置，使用上游默认使用的源\n"
 
   "选项:",
   "-ipv6                     使用IPv6测速",
   "-local                    仅对某项目而非全局换源 (仅部分软件如bundler,pdm支持)"
 };
-
-
-void
-call_cmd (void *cmdptr, const char *arg)
-{
-  void (*cmd_func)(const char *) = cmdptr;
-  if (NULL==arg)
-    {
-      xy_info ("chsrc: 将使用默认镜像");
-    }
-  cmd_func (arg);
-}
 
 
 
@@ -2496,6 +2485,25 @@ main (int argc, char const *argv[])
         mirror = xy_strdup (argv[cli_arg_Mirror_pos]);
       }
 
+      matched = get_target (target, TargetOp_Set_Source, mirror);
+      if (!matched) goto not_matched;
+      return 0;
+    }
+
+  /* chsrc reset */
+  else if (xy_streql (command, "reset") ||
+           xy_streql (command, "rest") ||
+           xy_streql (command, "r"))
+    {
+      if (argc < cli_arg_Target_pos)
+        {
+          xy_error ("chsrc: 请您提供想要重置源的软件名; 使用 chsrc list targets 查看所有支持的软件");
+          return 1;
+        }
+
+      puts ("将重置并恢复上游默认使用的源");
+      target = argv[cli_arg_Target_pos];
+      char *mirror = "upstream";
       matched = get_target (target, TargetOp_Set_Source, mirror);
       if (!matched) goto not_matched;
       return 0;
