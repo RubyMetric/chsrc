@@ -1972,9 +1972,9 @@ TargetInfo
 
 #define t(a) (const char*)(a)
 static const char
-*pl_ruby  [] = {"gem",   "ruby",    "rubygem", "rb", "rubygems",NULL, t(&pl_ruby_target)},
-*pl_python[] = {"pip",   "python",  "pypi",    "py", "pdm",     NULL, t(&pl_python_target)},
-*pl_nodejs[] = {"npm",   "node",    "nodejs",  "js", "yarn", "pnpm",  NULL, t(&pl_nodejs_target)},
+*pl_ruby  [] = {"gem",   "ruby",    "rubygem", "rb", "rubygems", "bundler",  NULL, t(&pl_ruby_target)},
+*pl_python[] = {"pip",   "python",  "pypi",    "py", "pdm",                  NULL, t(&pl_python_target)},
+*pl_nodejs[] = {"npm",   "node",    "nodejs",  "js", "yarn", "pnpm",         NULL, t(&pl_nodejs_target)},
 *pl_perl  [] = {"perl",  "cpan",                         NULL,  t(&pl_perl_target)},
 *pl_php   [] = {"php",   "composer",                     NULL,  t(&pl_php_target)},
 *pl_lua   [] = {"lua",   "luarocks",                     NULL,  t(&pl_lua_target)},
@@ -2083,7 +2083,7 @@ static const char*
 usage[] = {
   "维护: https://gitee.com/RubyMetric/chsrc\n",
 
-  "使用: chsrc <command> [target] [mirror]",
+  "使用: chsrc <command> [options] [target] [mirror]",
   "help                      打印此帮助，或 h, -h, --help",
   "list (或 ls, 或 l)        列出可用镜像源，和可换源软件",
   "list mirror/target        列出可用镜像源，或可换源软件",
@@ -2093,7 +2093,11 @@ usage[] = {
   "get  <target>             查看当前软件的源使用情况",
   "set  <target>             换源，自动测速后挑选最快源",
   "set  <target>  first      换源，使用维护团队测速第一的源",
-  "set  <target> <mirror>    换源，指定使用某镜像站\n"
+  "set  <target> <mirror>    换源，指定使用某镜像站 (通过list命令查看)\n",
+
+  "选项:",
+  "-ipv6                     使用IPv6测速",
+  "-local                    仅对某项目而非全局换源 (仅部分软件如bundler,pdm支持)"
 };
 
 

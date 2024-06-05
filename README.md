@@ -73,7 +73,7 @@ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
 ## 使用
 
 ```bash
-使用：chsrc <command> [target]
+使用: chsrc <command> [options] [target] [mirror]
 
 help                    # 打印此帮助，或 h, -h, --help
 list (或 ls, 或 l)      # 列出可用镜像源，和可换源软件
@@ -85,8 +85,12 @@ cesu <target>           # 对该软件所有源测速
 get  <target>           # 查看当前软件的源使用情况
 
 set  <target>           # 换源，自动测速后挑选最快源
-set  <target> def(ault) # 换源，默认使用维护团队测速第一的源
-set  <target> <mirror>  # 换源，指定使用某镜像站
+set  <target>  first    # 换源，使用维护团队测速第一的源
+set  <target> <mirror>  # 换源，指定使用某镜像站 (通过list命令查看)
+
+选项:
+-ipv6                   # 使用IPv6测速
+-local                  # 仅对某项目而非全局换源 (仅部分软件如bundler,pdm支持)
 ```
 
 当你不想自动测速的时候，你可以直接指定某镜像站。
@@ -96,6 +100,12 @@ chsrc set ruby           # 测速，寻找最快者，换源
 # 或
 chsrc ls  ruby           # 列出可用的镜像站
 chsrc set ruby rubychina # 使用 RubyChina 作为镜像站
+```
+
+对部分[支持局部换源](https://gitee.com/RubyMetric/chsrc/issues/I9V5I0)的，可以避免全局换源。
+```bash
+chsrc set -local bundler
+chsrc set -local pdm
 ```
 
 <br>
