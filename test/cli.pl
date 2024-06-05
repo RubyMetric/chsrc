@@ -53,11 +53,13 @@ like `./chsrc cesu ruby`,  qr/$cesu_ruby/,      'chsrc cesu ruby';
 =cut
 my $set_ruby = "换源完成，感谢镜像提供方";
 my $set_ruby_abcd = "";
+my $set_ruby_first = "换源完成，感谢镜像提供方";
 my $set_ruby_tencent = "换源完成，感谢镜像提供方.*腾讯软件源";
 my $set_ruby_locally = "bundle config --local";
 
 like `./chsrc set ruby`,         qr/$set_ruby/,         'chsrc set ruby';
 # like `./chsrc set ruby abcd`,    qr/$set_ruby_abcd/,   'chsrc set ruby abcd';
+like `./chsrc set ruby first`,   qr/$set_ruby_first/,   'chsrc set ruby first';
 like `./chsrc set ruby tencent`, qr/$set_ruby_tencent/, 'chsrc set ruby tencent';
 like `./chsrc set -local ruby`,  qr/$set_ruby_locally/, 'chsrc set -local ruby';
 
