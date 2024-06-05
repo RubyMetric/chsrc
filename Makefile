@@ -32,7 +32,7 @@ CI: all
 	@mv $(Target) $(CI_Build_Name)
 
 test: $(Target)
-	perl ./test/cli.pl
+	@perl ./test/cli.pl
 
 test-xy:
 	@$(CC) test/xy.c $(CFLAGS) -o xy
