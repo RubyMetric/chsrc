@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2024-05-25>
+ * Last modified : <2024-06-05>
  *
  * chsrc:
  *
@@ -21,32 +21,39 @@
 #define chsrc_error(str)   xy_error(xy_2strjoin(App_Prefix, (str)))
 
 
+int Cli_Option_IPv6 = 0;
+int Cli_Optiion_Locally = 0;
+int Cli_Option_InEnglish = 0;
+
 /**
  * 检测二进制程序是否存在
  *
- * @param  check_cmd  检测 `progname` 是否存在的一段命令，一般来说，填 `progname` 本身即可，
+ * @param  check_cmd  检测 `prog_name` 是否存在的一段命令，一般来说，填 `prog_name` 本身即可，
  *                    但是某些情况下，需要使用其他命令绕过一些特殊情况，比如 python 这个命令在Windows上
  *                    会自动打开 Microsoft Store，需避免
  *
- * @param  progname   要检测的二进制程序名
+ * @param  prog_name   要检测的二进制程序名
  */
 bool
-query_program_exist (char *check_cmd, char *progname)
+query_program_exist (char *check_cmd, char *prog_name)
 {
-  char* which = check_cmd;
+  char *which = check_cmd;
 
   int ret = system(which);
 
   // char buf[32] = {0}; sprintf(buf, "错误码: %d", ret);
 
-  if (0!=ret) {
-    // xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
-    puts (xy_strjoin (4, xy_str_to_red ("x "), "命令 ", xy_str_to_red (progname), " 不存在"));
-    return false;
-  } else {
-    puts (xy_strjoin (4, xy_str_to_green ("√ "), "命令 ", xy_str_to_green (progname), " 存在"));
-    return true;
-  }
+  if (0 != ret)
+    {
+      // xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
+      puts (xy_strjoin (4, xy_str_to_red ("x "), "命令 ", xy_str_to_red (prog_name), " 不存在"));
+      return false;
+    }
+  else
+    {
+      puts (xy_strjoin (4, xy_str_to_green ("√ "), "命令 ", xy_str_to_green (prog_name), " 存在"));
+      return true;
+    }
 }
 
 
@@ -68,10 +75,10 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
 
   if (1==size)
     {
-      xy_success(xy_strjoin(4, sources[0].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
+      xy_success (xy_strjoin (4, sources[0].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
     }
 
-  if (xy_streql("default", input) || xy_streql("def", input))
+  if (xy_streql ("default", input) || xy_streql ("def", input))
     {
       puts ("默认使用维护团队测速第一的源");
       return 0;
@@ -84,7 +91,7 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
   for (int i=0; i<size; i++)
     {
       source = sources[i];
-      if (xy_streql(source.mirror->code, input))
+      if (xy_streql (source.mirror->code, input))
         {
           idx = i;
           exist = true;
@@ -93,8 +100,8 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
     }
   if (!exist)
     {
-      xy_error (xy_strjoin(3, "镜像站 ", input, " 不存在"));
-      xy_error (xy_2strjoin("查看可使用源，请使用 chsrc list ", target));
+      xy_error (xy_strjoin (3, "镜像站 ", input, " 不存在"));
+      xy_error (xy_2strjoin ("查看可使用源，请使用 chsrc list ", target));
       exit (1);
     }
   return idx;
@@ -139,21 +146,28 @@ test_speed_url (const char *url)
 {
   char *time_sec = "6";
 
-/* 现在我们切换至跳转后的链接来测速，不再使用下述判断
+  /* 现在我们切换至跳转后的链接来测速，不再使用下述判断
   if (xy_str_start_with(url, "https://registry.npmmirror"))
-  {
-    // 这里 npmmirror 跳转非常慢，需要1~3秒，所以我们给它留够至少8秒测速时间，否则非常不准
-    time_sec = "10";
+    {
+      // 这里 npmmirror 跳转非常慢，需要1~3秒，所以我们给它留够至少8秒测速时间，否则非常不准
+      time_sec = "10";
+    }
+  */
+
+  char *ipv6 = ""; // 默认不启用
+
+  if (Cli_Option_IPv6==1) {
+    ipv6 = "--ipv6";
   }
-*/
 
   // 我们用 —L，因为Ruby China源会跳转到其他地方
   // npmmirror 也会跳转
-  char *curl_cmd = xy_strjoin (6, "curl -qsL -o ", xy_os_devnull,
+  char *curl_cmd = xy_strjoin (7, "curl -qsL ", ipv6,
+                                  " -o " xy_os_devnull,
                                   " -w \"%{http_code} %{speed_download}\" -m", time_sec ,
                                   " -A chsrc/" Chsrc_Version "  ", url);
 
-  // xy_info (xy_2strjoin("chsrc: 测速 ", url));
+  // xy_info (xy_2strjoin ("chsrc: 测速命令 ", curl_cmd));
 
   char *buf = xy_getcmd (curl_cmd, 0, NULL);
   // 如果尾部有换行，删除
@@ -222,12 +236,12 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target)
     const char* url = src.mirror->__bigfile_url;
     if (NULL==url)
       {
-        chsrc_warn ( xy_strjoin(3, "开发者未提供 ",  src.mirror->code, " 镜像站测速链接，跳过该站点"));
+        chsrc_warn (xy_strjoin (3, "开发者未提供 ",  src.mirror->code, " 镜像站测速链接，跳过该站点"));
         speed = 0;
       }
     else
       {
-        printf ("%s",xy_strjoin(3, "测速 ", src.mirror->site , " ... "));
+        printf ("%s", xy_strjoin (3, "测速 ", src.mirror->site , " ... "));
         fflush (stdout);
         speed = test_speed_url (url);
       }

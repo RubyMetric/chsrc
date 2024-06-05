@@ -2311,9 +2311,6 @@ get_target (const char *input, TargetOp code, char *option)
   return true;
 }
 
-int Cli_Option_IPv6 = 0;
-int Cli_Optiion_Locally = 0;
-int Cli_Option_InEnglish = 0;
 
 int
 main (int argc, char const *argv[])
