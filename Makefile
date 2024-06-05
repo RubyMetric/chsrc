@@ -3,7 +3,7 @@
 # License       : GPLv3
 # Authors       : Aoran Zeng <ccmywish@qq.com>
 # Created on    : <2023-08-28>
-# Last modified : <2024-05-25>
+# Last modified : <2024-06-05>
 # ---------------------------------------------------------------
 
 CFLAGS = -Iinclude # -Wall
@@ -32,12 +32,9 @@ CI: all
 	@mv $(Target) $(CI_Build_Name)
 
 test: $(Target)
-	./$(Target) list mirror
-	./$(Target) list target
-	./$(Target) get  ruby
-	./$(Target) get  python
+	perl ./test/cli.pl
 
-test_xy:
+test-xy:
 	@$(CC) test/xy.c $(CFLAGS) -o xy
 	@./xy
 

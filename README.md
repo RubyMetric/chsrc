@@ -186,8 +186,8 @@ make          # 默认使用 cc 编译
 make CC=clang # 使用 clang 编译
 make CC=gcc   # 使用 gcc   编译
 
-make test    # 测试部分命令
-make test_xy # 测试 xy.h
+make test    # 测试命令
+make test-xy # 测试 xy.h
 make clean
 ```
 
