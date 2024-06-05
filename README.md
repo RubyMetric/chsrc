@@ -18,6 +18,32 @@
 
 <br>
 
+## 需要你的帮助
+
+如果你想要通过 `scoop`，`brew`，`yay` 等系统包管理工具来安装和更新`chsrc`，请帮助我们达到下面的要求。
+
+- [ ] `scoop` 要求 GitHub star 数量超过 **500** 以及/或 **150**个fork
+
+    目前有**341**个star
+
+- [ ] `scoop` 要求英文输出
+
+    本意是中文输出，但是我们将提供选项来进行英文输出。该选项同时有利于BSD用户
+
+- [ ] `homebrew` 要求 GitHub 仓库 **>=30 forks**, **>=30 watchers** or **>=75 stars**
+
+    star数已够，但是fork数仅有**7**
+
+- [ ] 缺乏 `AUR` 维护者
+- [ ] 缺乏 `homebrew` 维护者
+- [x] `scoop` 维护者
+
+请访问 [chsrc on GitHub](https://github.com/RubyMetric/chsrc)
+
+若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
+
+<br>
+
 ## 安装
 
 以下方式均下载到当前目录，可直接通过 `./chsrc` 运行。
