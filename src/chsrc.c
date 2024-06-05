@@ -2123,7 +2123,7 @@ print_available_mirrors ()
   puts   ("-------------------------------------------------------------------------------------------------");
   for (int i=0; i<xy_arylen(available_mirrors); i++)
     {
-      MirrorInfo* mir = available_mirrors[i];
+      MirrorSite* mir = available_mirrors[i];
       printf ("%-14s%-18s%-41s ", mir->code, mir->abbr, mir->site); puts(mir->name);
     }
 }
@@ -2193,7 +2193,7 @@ print_supported_sources_for_target (SourceInfo sources[], size_t size)
   for (int i=0;i<size;i++)
     {
       SourceInfo src = sources[i];
-      const MirrorInfo* mir = src.mirror;
+      const MirrorSite *mir = src.mirror;
       printf ("%-14s%-18s%-50s ", mir->code, mir->abbr, src.url);
       puts (mir->name);
     }

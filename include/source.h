@@ -16,7 +16,7 @@ typedef struct {
   const char *name;
   const char *site;
   const char *__bigfile_url;  // 用于对该镜像站测速
-} MirrorInfo;
+} MirrorSite;
 
 // #define Big_File_ubuntu  "/indices/md5sums.gz"  这个是错的
 #define Big_File_ctan       "/systems/texlive/Images/texlive.iso"           // 4.8GB
@@ -30,7 +30,7 @@ typedef struct {
  *
  * 我们目前根据 https://github.com/mirrorz-org/oh-my-mirrorz 挑选速度前10位
  */
-MirrorInfo
+MirrorSite
   MirrorZ       = {"mirrorz", "MirrorZ",       "MirrorZ 校园网镜像站",       "https://mirrors.cernet.edu.cn/",  NULL},
 
   Tuna          = {"tuna",    "TUNA",          "清华大学开源软件镜像站",     "https://mirrors.tuna.tsinghua.edu.cn/",
@@ -83,7 +83,7 @@ MirrorInfo
  *
  * @warning 腾讯软件源中，有很多链接都已失效，请仔细检查
  */
-MirrorInfo
+MirrorSite
   Ali      = {"ali",     "Ali OPSX", "阿里巴巴开源镜像站",  "https://developer.aliyun.com/mirror/",
               "https://mirrors.aliyun.com/deepin-cd" Big_File_deepin},
 
@@ -102,7 +102,7 @@ MirrorInfo
   Api7     = {"api7",    "api7.ai",  "深圳支流科技有限公司", "https://www.apiseven.com/", NULL};
 
 // 开源社区
-MirrorInfo
+MirrorSite
   RubyChina = {"rubychina",    "RubyChina",    "Ruby China 社区",    "https://gems.ruby-china.com/",
                "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"}, // 9.9 MB
 
@@ -120,11 +120,11 @@ MirrorInfo
   EmacsChina = {"emacschina",  "EmacsChina",   "Emacs China 社区",    "https://elpamirror.emacs-china.org/", NULL};
 
 
-MirrorInfo
+MirrorSite
   Upstream = {"upstream",   "Upstream",     "上游默认源",      NULL,     NULL};
 
 
-MirrorInfo*
+MirrorSite*
 available_mirrors[] = {
   &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Hust, &Nju, // &Cqu,
   &Ali,  &Tencent, &Huawei, &Netease, &Sohu, &Api7,
@@ -136,7 +136,7 @@ available_mirrors[] = {
 
 
 typedef struct {
-  const MirrorInfo *mirror;
+  const MirrorSite *mirror;
   const char *url;
 } SourceInfo;
 
