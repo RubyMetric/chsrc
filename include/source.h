@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2024-05-25>
+ * Last modified : <2024-06-05>
  *
  * sources:
  *
@@ -154,7 +154,7 @@ typedef struct {
  * 2024-05-25 更新
  *
  * @note
- * 下面的源，并不都实现正确，
+ * 下面的源，并非都实现正确，
  * BFSU 和 Tuna 以及 阿里的镜像都有问题，会循环遍历一个gem的所有版本，导致安装时间相当长
  *
  * @note
@@ -170,6 +170,7 @@ typedef struct {
  */
 static SourceInfo
 pl_ruby_sources[] = {
+  {&Upstream,  "https://rubygems.org"},
   {&Huawei,    "https://mirrors.huaweicloud.com/repository/rubygems/"},
   {&Tencent,   "https://mirrors.tencent.com/rubygems/"},
   {&RubyChina, "https://gems.ruby-china.com/"}
@@ -186,6 +187,7 @@ pl_ruby_sources[] = {
  * @note 不要添加Zju，浙大的pypi在校外访问会自动转向Tuna
  */
 pl_python_sources[] = {
+  {&Upstream,      "https://pypi.org/simple"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/pypi/web/simple"},
   {&Lzuoss,        "https://mirror.lzu.edu.cn/pypi/web/simple"},
   {&Jlu,           "https://mirrors.jlu.edu.cn/pypi/web/simple"},
