@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2024-06-04>
+ * Last modified : <2024-06-05>
  *
  * chsrc:
  *
@@ -12,7 +12,7 @@
  *   该软件为自由软件，采用 GPLv3 许可证，请查阅 LICENSE.txt 文件
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version "v0.1.5-pre-2024/06/04"
+#define Chsrc_Version "v0.1.5-pre-2024/06/05"
 
 #include "chsrc.h"
 
@@ -2178,12 +2178,18 @@ print_supported_sources_for_target (SourceInfo sources[], size_t size)
 }
 
 
+void
+cli_print_version ()
+{
+  puts (xy_strjoin (3, "chsrc: Change Source (GPLv3) ",
+                      xy_str_to_magenta (Chsrc_Version), " by RubyMetric\n"));
+}
+
 
 void
 cli_print_help ()
 {
-  puts (xy_strjoin (3, "chsrc: Change Source (GPLv3) ",
-                      xy_str_to_magenta (Chsrc_Version), " by RubyMetric\n"));
+  cli_print_version ();
   for (int i=0; i<xy_arylen(usage); i++)
     {
       puts (usage[i]);
@@ -2366,7 +2372,19 @@ main (int argc, char const *argv[])
       xy_streql (command, "help") ||
       xy_streql (command, "--help"))
     {
+      cli_print_version ();
       cli_print_help ();
+      return 0;
+    }
+
+  /* chsrc -v */
+  else if (xy_streql (command, "-v")       ||
+           xy_streql (command, "-version") ||
+           xy_streql (command, "--version")||
+           xy_streql (command, "ver") ||
+           xy_streql (command, "version"))
+    {
+      cli_print_version ();
       return 0;
     }
 
