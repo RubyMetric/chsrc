@@ -136,7 +136,9 @@ pl_python_getsrc (char *option)
 }
 
 /**
- * Python换源，参考：https://mirrors.tuna.tsinghua.edu.cn/help/pypi/
+ * Python换源，参考：
+ * 1. https://mirrors.tuna.tsinghua.edu.cn/help/pypi/
+ * 2. https://github.com/RubyMetric/chsrc/issues/19
  *
  * 经测试，Windows上调用换源命令，会写入 C:\Users\RubyMetric\AppData\Roaming\pip\pip.ini
  */
@@ -1964,7 +1966,7 @@ TargetInfo
 #define t(a) (const char*)(a)
 static const char
 *pl_ruby  [] = {"gem",   "ruby",    "rubygem", "rb", "rubygems",NULL, t(&pl_ruby_target)},
-*pl_python[] = {"pip",   "python",  "pypi",    "py",            NULL, t(&pl_python_target)},
+*pl_python[] = {"pip",   "python",  "pypi",    "py", "pdm",     NULL, t(&pl_python_target)},
 *pl_nodejs[] = {"npm",   "node",    "nodejs",  "js", "yarn", "pnpm",  NULL, t(&pl_nodejs_target)},
 *pl_perl  [] = {"perl",  "cpan",                         NULL,  t(&pl_perl_target)},
 *pl_php   [] = {"php",   "composer",                     NULL,  t(&pl_php_target)},
