@@ -236,8 +236,15 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target)
     const char* url = src.mirror->__bigfile_url;
     if (NULL==url)
       {
-        chsrc_warn (xy_strjoin (3, "开发者未提供 ",  src.mirror->code, " 镜像站测速链接，跳过该站点"));
-        speed = 0;
+        if (xy_streql ("upstream", src.mirror->code))
+          {
+            continue; // 上游默认源不测速
+          }
+        else
+          {
+            chsrc_warn (xy_strjoin (3, "开发者未提供 ",  src.mirror->code, " 镜像站测速链接，跳过该站点"));
+            speed = 0;
+          }
       }
     else
       {
