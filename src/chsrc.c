@@ -70,7 +70,13 @@ pl_ruby_setsrc (char *option)
       return;
     }
 
-  cmd = xy_2strjoin ("bundle config --global 'mirror.https://rubygems.org' ", source.url);
+  char *where = "--global";
+  if (Cli_Optiion_Locally==1)
+    {
+      where = "--local";
+    }
+
+  cmd = xy_strjoin (4, "bundle config ", where, " 'mirror.https://rubygems.org' ", source.url);
   chsrc_run (cmd);
 
   chsrc_say_thanks (&source);
