@@ -81,7 +81,7 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
   if (xy_streql ("first", input))
     {
       puts ("使用维护团队测速第一的源");
-      return 0;
+      return 1; // 返回第二个，因为第一个是上游默认源
     }
 
   int idx = 0;
