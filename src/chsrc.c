@@ -2098,8 +2098,8 @@ call_cmd (void *cmdptr, const char *arg)
 void
 print_available_mirrors ()
 {
-  xy_info ("chsrc: 支持以下镜像站，荣耀均归属于这些站点，以及它们的开发/维护者们");
-  xy_warn ("chsrc: 下方 code 列，可用于指定使用某镜像站，请使用 chsrc set <target> <code>");
+  xy_info ("chsrc: 支持以下镜像站");
+  puts (xy_str_to_yellow ("chsrc: 下方 code 列，可用于指定使用某镜像站，请使用 chsrc set <target> <code>"));
   printf ("%-14s%-30s%-41s ", "code", "服务商缩写", "服务商URL"); puts("服务商名称");
   puts   ("-------------------------------------------------------------------------------------------------");
   for (int i=0; i<xy_arylen(available_mirrors); i++)
@@ -2130,12 +2130,15 @@ print_supported_targets_ (const char*** array, size_t size)
 void
 print_supported_targets ()
 {
-  xy_info ("chsrc: 支持对以下目标换源 (同一行表示这几个命令兼容)");
-  xy_warn ("编程语言开发");
+  xy_info ("chsrc: 支持对以下目标换源 (同一行表示这几个命令兼容)"); puts("");
+  xy_info ("编程语言开发");
+  puts ("-------------------------");
   print_supported_targets_ (pl_packagers, xy_arylen(pl_packagers));
-  xy_warn ("操作系统");
+  xy_info ("操作系统");
+  puts ("-------------------------");
   print_supported_targets_ (os_systems,   xy_arylen(os_systems));
-  xy_warn ("软件");
+  xy_info ("软件");
+  puts ("-------------------------");
   print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
 }
 
@@ -2248,10 +2251,10 @@ iterate_targets_ (const char ***array, size_t size, const char *input, const cha
 #define iterate_targets(ary, input, target) iterate_targets_(ary, xy_arylen(ary), input, target)
 
 typedef enum {
-  Target_Set_Source = 1,
-  Target_Get_Source,
-  Target_Cesu_Source,
-  Target_List_Source
+  TargetOp_Set_Source = 1,
+  TargetOp_Get_Source,
+  TargetOp_Cesu_Source,
+  TargetOp_List_Source
 } TargetOp;
 
 /**
@@ -2278,25 +2281,25 @@ get_target (const char *input, TargetOp code, char *option)
 
   TargetInfo *target = (TargetInfo*) *target_tmp;
 
-  if (Target_Set_Source==code)
+  if (TargetOp_Set_Source==code)
     {
       if (target->setfn) target->setfn(option);
       else xy_error (xy_strjoin (3, "chsrc: 暂未对 ", input, " 实现set功能，欢迎贡献"));
     }
-  else if (Target_Get_Source==code)
+  else if (TargetOp_Get_Source==code)
     {
       if (target->getfn) target->getfn("");
       else xy_error (xy_strjoin (3, "chsrc: 暂未对 ", input, " 实现get功能，欢迎贡献"));
     }
-  else if (Target_List_Source==code)
+  else if (TargetOp_List_Source==code)
     {
       xy_info (xy_strjoin (3,"chsrc: 对 ", input ," 支持以下镜像站，荣耀均归属于这些站点，以及它们的开发/维护者们"));
-      xy_warn (xy_strjoin (3, "chsrc: 下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>"));
+      puts (xy_str_to_yellow (xy_strjoin (3, "chsrc: 下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>")));
       printf ("%-14s%-35s%-45s ", "code", "服务商缩写", "服务源URL"); puts("服务商名称");
       puts   ("--------------------------------------------------------------------------------------------------------");
       print_supported_sources_for_target (target->sources, target->sources_n);
     }
-  else if (Target_Cesu_Source==code)
+  else if (TargetOp_Cesu_Source==code)
     {
       char* check_cmd = xy_str_to_quietcmd ("curl --version");
       bool exist_b = query_program_exist (check_cmd, "curl");
@@ -2329,7 +2332,6 @@ main (int argc, char const *argv[])
   int cli_arg_Target_pos = 2;
   int cli_arg_Mirror_pos = cli_arg_Target_pos + 1;
   const char *target = NULL;
-  const char *mirror = NULL;
 
 
   // chsrc set -ipv6 target mirror
@@ -2420,7 +2422,7 @@ main (int argc, char const *argv[])
               print_supported_wr(); return 0;
             }
 
-          matched = get_target(target, Target_List_Source, NULL);
+          matched = get_target(target, TargetOp_List_Source, NULL);
           if (!matched) goto not_matched;
         }
       return 0;
@@ -2438,7 +2440,7 @@ main (int argc, char const *argv[])
           return 1;
         }
       target = argv[cli_arg_Target_pos];
-      matched = get_target (target, Target_Cesu_Source, NULL);
+      matched = get_target (target, TargetOp_Cesu_Source, NULL);
       if (!matched) goto not_matched;
       return 0;
     }
@@ -2454,7 +2456,7 @@ main (int argc, char const *argv[])
           return 1;
         }
       target = argv[cli_arg_Target_pos];
-      matched = get_target (target, Target_Get_Source, NULL);
+      matched = get_target (target, TargetOp_Get_Source, NULL);
       if (!matched) goto not_matched;
       return 0;
     }
@@ -2470,8 +2472,12 @@ main (int argc, char const *argv[])
         }
 
       target = argv[cli_arg_Target_pos];
-      char *option = "";
-      matched = get_target (target, Target_Set_Source, option);
+      char *mirror = NULL;
+      if (argc >= cli_arg_Mirror_pos) {
+        mirror = xy_strdup (argv[cli_arg_Mirror_pos]);
+      }
+
+      matched = get_target (target, TargetOp_Set_Source, mirror);
       if (!matched) goto not_matched;
       return 0;
     }
