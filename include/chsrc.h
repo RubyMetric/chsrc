@@ -78,9 +78,9 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
       xy_success (xy_strjoin (4, sources[0].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
     }
 
-  if (xy_streql ("default", input) || xy_streql ("def", input))
+  if (xy_streql ("first", input))
     {
-      puts ("默认使用维护团队测速第一的源");
+      puts ("使用维护团队测速第一的源");
       return 0;
     }
 

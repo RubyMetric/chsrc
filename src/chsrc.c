@@ -2092,7 +2092,7 @@ usage[] = {
   "cesu <target>             对该软件所有源测速",
   "get  <target>             查看当前软件的源使用情况",
   "set  <target>             换源，自动测速后挑选最快源",
-  "set  <target> def(ault)   换源，默认使用维护团队测速第一的源",
+  "set  <target>  first      换源，使用维护团队测速第一的源",
   "set  <target> <mirror>    换源，指定使用某镜像站\n"
 };
 
@@ -2308,7 +2308,7 @@ get_target (const char *input, TargetOp code, char *option)
     }
   else if (TargetOp_List_Source==code)
     {
-      xy_info (xy_strjoin (3,"chsrc: 对 ", input ," 支持以下镜像站，荣耀均归属于这些站点，以及它们的开发/维护者们"));
+      xy_info (xy_strjoin (3, "chsrc: 对 ", input ," 支持以下镜像站"));
       puts (xy_str_to_yellow (xy_strjoin (3, "chsrc: 下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>")));
       printf ("%-14s%-35s%-45s ", "code", "服务商缩写", "服务源URL"); puts("服务商名称");
       puts   ("--------------------------------------------------------------------------------------------------------");
