@@ -3,7 +3,7 @@
  * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2024-04-18>
+ * Last modified : <2024-06-08>
  *
  * xy:
  *
@@ -17,7 +17,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define XY_Version      "v0.1.1-2024/04/18"
+#define XY_Version      "v0.1.2-2024/06/08"
 #define XY_Maintain_URL "https://gitee.com/RubyMetric/chsrc/blob/main/xy.h"
 
 #include <assert.h>
@@ -161,6 +161,11 @@ _xy_log (int level, const char *str)
     }
   free (buf);
 }
+
+
+/******************************************************
+ *                      String
+ ******************************************************/
 
 /**
  * 将str中所有的pat字符串替换成replace，返回一个全新的字符串
@@ -479,6 +484,47 @@ xy_str_strip (const char *str)
   return new;
 }
 
+/******************************************************
+ *                      Logging
+ ******************************************************/
+
+/**
+ * remarkably 系列输出受 pip 启发，为了输出方便，使用xy.h的程序应该基于此再定义自己的 app_info_remarkbaly()
+ * [app 信息]  [app info]
+ * [app 提示]  [app notice]
+ */
+void
+xy_info_remarkably (const char* prompt1, const char *prompt2, const char *content)
+{
+  puts (
+    xy_strjoin (6, "[", prompt1, " ", xy_str_to_blue (prompt2), "] ", xy_str_to_blue (content))
+  );
+}
+
+/**
+ * [app 警告]  [app warn]
+ */
+void
+xy_warn_remarkably (const char* prompt1, const char *prompt2, const char *content)
+{
+  char *buf = xy_strjoin (6,  "[", prompt1, " ", xy_str_to_yellow (prompt2), "] ", xy_str_to_yellow (content));
+  fprintf (stderr, "%s\n", buf);
+}
+
+/**
+ * [app 错误]  [app error]
+ */
+void
+xy_error_remarkably (const char* prompt1, const char *prompt2, const char *content)
+{
+  char *buf = xy_strjoin (6,  "[", prompt1, " ", xy_str_to_red (prompt2), "] ", xy_str_to_red (content));
+  fprintf (stderr, "%s\n", buf);
+}
+
+
+/******************************************************
+ *                      System
+ ******************************************************/
 /**
  * 执行cmd，返回其最后某行输出结果
  *
