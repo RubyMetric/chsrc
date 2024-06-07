@@ -721,39 +721,16 @@ os_ros_sources[] = {
 
 
 
-
-
-
 /**
- * 2023-09-10 更新
+ * 2024-06-07 更新
  *
- * TODO: 1. 暂未添加商业公司源
+ * @note: 目前仅有一个源
  */
 static SourceInfo
-wr_tex_sources[] = {
-  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/ctan/systems/texlive/tlnet"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/CTAN/systems/texlive/tlnet"},
-  {&Lzuoss,        "https://mirror.lzu.edu.cn/CTAN/systems/texlive/tlnet"},
-  {&Jlu,           "https://mirrors.jlu.edu.cn/CTAN/systems/texlive/tlnet"},
-  {&Sustech,       "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet"}
+wr_winget_sources[] = {
+  {&Upstream,       "https://cdn.winget.microsoft.com/cache"},
+  {&Ustc,           "https://mirrors.ustc.edu.cn/winget-source"},
 },
-
-
-/**
- * 2023-09-10 更新
- *
- * @note Emacs用户往往只需要一次性换源，只会极少次调用 chsrc，我们只给用户提供文档
- */
-wr_emacs_sources[] = {
-  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/docs/emacs-elpa"},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/help/elpa/"},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/help/elpa/"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/help/elpa.html"},
-  {&Zju,            "https://mirrors.zju.edu.cn/docs/elpa/"},
-  {&EmacsChina,     "https://elpamirror.emacs-china.org/"}
-},
-
 
 
 /**
@@ -808,6 +785,21 @@ wr_guix_sources[] = {
 /**
  * 2023-09-10 更新
  *
+ * @note Emacs用户往往只需要一次性换源，只会极少次调用 chsrc，我们只给用户提供文档
+ */
+wr_emacs_sources[] = {
+  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/docs/emacs-elpa"},
+  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/help/elpa/"},
+  {&Bfsu,           "https://mirrors.bfsu.edu.cn/help/elpa/"},
+  {&Ustc,           "https://mirrors.ustc.edu.cn/help/elpa.html"},
+  {&Zju,            "https://mirrors.zju.edu.cn/docs/elpa/"},
+  {&EmacsChina,     "https://elpamirror.emacs-china.org/"}
+},
+
+
+/**
+ * 2023-09-10 更新
+ *
  * @note 这些链接将会在setsrc函数中补充完整
  */
 wr_anaconda_sources[] = {
@@ -815,6 +807,22 @@ wr_anaconda_sources[] = {
   {&Bfsu,            "https://mirrors.bfsu.edu.cn/anaconda/"},
   {&Zju,             "https://mirrors.zju.edu.cn/anaconda/"},
   {&Sjtug_Zhiyuan,   "https://mirror.sjtu.edu.cn/anaconda"}
+},
+
+
+
+/**
+ * 2023-09-10 更新
+ *
+ * TODO: 1. 暂未添加商业公司源
+ */
+wr_tex_sources[] = {
+  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/ctan/systems/texlive/tlnet"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/CTAN/systems/texlive/tlnet"},
+  {&Lzuoss,        "https://mirror.lzu.edu.cn/CTAN/systems/texlive/tlnet"},
+  {&Jlu,           "https://mirrors.jlu.edu.cn/CTAN/systems/texlive/tlnet"},
+  {&Sustech,       "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet"}
 };
 
 
@@ -842,6 +850,7 @@ def_sources_n(os_freebsd);  def_sources_n(os_netbsd);    def_sources_n(os_openbs
 def_sources_n(os_deepin);   def_sources_n(os_openeuler); def_sources_n(os_openkylin);
 def_sources_n(os_ros);
 
+def_sources_n(wr_winget);
 def_sources_n(wr_brew);     def_sources_n(wr_flathub);
 def_sources_n(wr_nix);      def_sources_n(wr_guix);
 def_sources_n(wr_tex);      def_sources_n(wr_emacs);
