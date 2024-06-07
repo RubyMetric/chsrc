@@ -80,7 +80,7 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
 
   if (xy_streql ("reset", input))
     {
-      puts ("使用上游默认源");
+      puts ("将重置为上游默认源");
       return 0; // 返回第1个，因为第1个是上游默认源
     }
 
@@ -325,7 +325,7 @@ chsrc_say_thanks (SourceInfo *source)
   puts ("--------------------------------");
   if (is_upstream (source))
     {
-      puts ("已重置为上游默认源");
+      puts (xy_str_to_purple ("已重置为上游默认源"));
     }
   else
     {

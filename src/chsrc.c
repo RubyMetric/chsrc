@@ -85,6 +85,11 @@ pl_ruby_setsrc (char *option)
   // chsrc_warn ("而其它如Tuna,Bfsu,Ali目前都实现的有问题，请勿使用");
 }
 
+void
+pl_ruby_resetsrc (char *option)
+{
+  pl_ruby_setsrc ("reset");
+}
 
 
 /**
@@ -178,6 +183,12 @@ pl_python_setsrc (char *option)
   }
 
   chsrc_say_thanks (&source);
+}
+
+void
+pl_python_resetsrc (char *option)
+{
+  pl_python_setsrc ("reset");
 }
 
 
@@ -1993,7 +2004,9 @@ wr_anaconda_setsrc (char *option)
 
 
 /************************************** Begin Target Matrix ****************************************/
-def_target(pl_ruby);  def_target(pl_python);  def_target(pl_nodejs);  def_target(pl_perl); def_target(pl_php);
+def_target_full(pl_ruby);
+def_target_full(pl_python);
+def_target(pl_nodejs);  def_target(pl_perl); def_target(pl_php);
 def_target(pl_lua);
 def_target(pl_rust);  def_target(pl_go);  def_target(pl_java); def_target(pl_dart); def_target(pl_ocaml);
 def_target(pl_r);     def_target(pl_julia);
@@ -2328,7 +2341,7 @@ get_target (const char *input, TargetOp code, char *option)
     }
   else if (TargetOp_Reset_Source==code)
     {
-      if (target->setfn) target->resetfn(option);
+      if (target->resetfn) target->resetfn(option);
       else xy_error (xy_strjoin (3, "chsrc: 暂未对 ", input, " 实现reset功能，欢迎贡献"));
       // puts ("将重置并恢复上游默认使用的源");
     }
