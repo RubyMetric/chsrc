@@ -32,67 +32,45 @@
 // #define NDEBUG
 
 #ifdef _WIN32
-#define xy_on_windows true
-#define xy_on_linux false
-#define xy_on_macos false
-#define xy_on_bsd false
-#define xy_os_devnull "nul"
-#include <windows.h>
-#define xy_useutf8() SetConsoleOutputCP (65001)
+  #define xy_on_windows true
+  #define xy_on_linux false
+  #define xy_on_macos false
+  #define xy_on_bsd false
+  #define xy_os_devnull "nul"
+  #include <windows.h>
+  #define xy_useutf8() SetConsoleOutputCP (65001)
 
 #elif defined(__linux__) || defined(__linux)
-#define xy_on_windows false
-#define xy_on_linux true
-#define xy_on_macos false
-#define xy_on_bsd false
-#define xy_os_devnull "/dev/null"
-#define xy_useutf8()
+  #define xy_on_windows false
+  #define xy_on_linux true
+  #define xy_on_macos false
+  #define xy_on_bsd false
+  #define xy_os_devnull "/dev/null"
+  #define xy_useutf8()
 
 #elif defined(__APPLE__)
-#define xy_on_windows false
-#define xy_on_linux false
-#define xy_on_macos true
-#define xy_on_bsd false
-#define xy_os_devnull "/dev/null"
-#define xy_useutf8()
+  #define xy_on_windows false
+  #define xy_on_linux false
+  #define xy_on_macos true
+  #define xy_on_bsd false
+  #define xy_os_devnull "/dev/null"
+  #define xy_useutf8()
 
 #elif defined(__OpenBSD__) || defined(__NetBSD__) || defined(__FreeBSD__)
-#define xy_on_windows false
-#define xy_on_linux false
-#define xy_on_macos false
-#define xy_on_bsd true
-#define xy_os_devnull "/dev/null"
-#define xy_useutf8()
+  #define xy_on_windows false
+  #define xy_on_linux false
+  #define xy_on_macos false
+  #define xy_on_bsd true
+  #define xy_os_devnull "/dev/null"
+  #define xy_useutf8()
 #endif
 
-void
-putf (double n)
-{
-  printf ("%f\n", n);
-}
-void
-puti (long long n)
-{
-  printf ("%lld\n", n);
-}
-void
-putb (bool n)
-{
-  if (n)
-    puts ("true");
-  else
-    puts ("false");
-}
-void
-print (char *s)
-{
-  printf ("%s", s);
-}
-void
-println (char *s)
-{
-  printf ("%s\n", s);
-}
+void putf (double n)         { printf ("%f\n", n);   }
+void puti (long long n)      { printf ("%lld\n", n); }
+void putb (bool n)           { if (n) puts ("true"); else puts ("false"); }
+void print (const char *s)   { printf ("%s", s);  }
+void println (const char *s) { printf ("%s\n", s);}
+void say (const char *s)     { printf ("%s\n", s);}
 
 #define xy_arylen(x) (sizeof (x) / sizeof (x[0]))
 
