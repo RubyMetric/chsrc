@@ -210,6 +210,7 @@ pl_python_sources[] = {
  * @note 腾讯软件源虽然有npm的名，但名存实亡
  */
 pl_nodejs_sources[] = {
+  {&Upstream,       NULL},
   {&NpmMirror,     "https://registry.npmmirror.com"},
   {&Huawei,        "https://mirrors.huaweicloud.com/repository/npm/"},
   {&Zju,           "https://mirrors.zju.edu.cn/npm"}
@@ -222,6 +223,7 @@ pl_nodejs_sources[] = {
  * 参考: https://help.mirrors.cernet.edu.cn/CPAN/
  */
 pl_perl_sources[] = {
+  {&Upstream,       NULL},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/CPAN/"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CPAN/"},
   {&Bjtu,          "https://mirror.bjtu.edu.cn/cpan/"},
@@ -238,9 +240,10 @@ pl_perl_sources[] = {
  * @note 缺少教育网或开源社区软件源
  */
 pl_php_sources[] = {
-  {&Ali,            "https://mirrors.aliyun.com/composer/"},
-  {&Tencent,        "https://mirrors.tencent.com/composer/"},
-  {&Huawei,         "https://mirrors.huaweicloud.com/repository/php/"}
+  {&Upstream,       NULL},
+  {&Ali,           "https://mirrors.aliyun.com/composer/"},
+  {&Tencent,       "https://mirrors.tencent.com/composer/"},
+  {&Huawei,        "https://mirrors.huaweicloud.com/repository/php/"}
 },
 
 
@@ -251,7 +254,8 @@ pl_php_sources[] = {
  * @note 目前只有唯一一个源
  */
 pl_lua_sources[] = {
-  {&Api7,            "https://luarocks.cn"},
+  {&Upstream,       NULL},
+  {&Api7,          "https://luarocks.cn"},
 },
 
 
@@ -261,10 +265,11 @@ pl_lua_sources[] = {
  * @note 缺少教育网软件源
  */
 pl_go_sources[] = {
-  {&GoProxyCN,    "https://goproxy.cn"},
-  {&Ali,          "https://mirrors.aliyun.com/goproxy/"},
-  {&Huawei,       "https://mirrors.huaweicloud.com/goproxy/"},
-  {&GoProxyIO,    "https://goproxy.io"}
+  {&Upstream,       NULL},
+  {&GoProxyCN,     "https://goproxy.cn"},
+  {&Ali,           "https://mirrors.aliyun.com/goproxy/"},
+  {&Huawei,        "https://mirrors.huaweicloud.com/goproxy/"},
+  {&GoProxyIO,     "https://goproxy.io"}
 },
 
 
@@ -276,6 +281,7 @@ pl_go_sources[] = {
  * @note 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`
  */
 pl_rust_sources[] = {
+  {&Upstream,       NULL},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/"},
@@ -290,6 +296,7 @@ pl_rust_sources[] = {
  * @note 缺少教育网或开源社区软件源
  */
 pl_java_sources[] = {
+  {&Upstream,       NULL},
   {&Ali,           "https://maven.aliyun.com/repository/public/"},
   {&Huawei,        "https://mirrors.huaweicloud.com/repository/maven/"},
   {&Netease,       "http://mirrors.163.com/maven/repository/maven-public/"} // 网易的24小时更新一次
@@ -302,8 +309,9 @@ pl_java_sources[] = {
  * @note 不太好换，且用户可能不多，我们暂时只给用户提供文档
  */
 pl_clojure_sources[] = {
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/help/clojars/"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/help/clojars.html"}
+  {&Upstream,       NULL},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/help/clojars/"},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/help/clojars.html"}
 },
 
 
@@ -314,6 +322,7 @@ pl_clojure_sources[] = {
  *    https://mirrors.huaweicloud.com/mirrorDetail/5ebf85de07b41baf6d0882ab?mirrorName=nuget&catalog=language
  */
 pl_dotnet_sources[] = {
+  {&Upstream,       NULL},
   {&NugetOrg,      "https://www.nuget.org/api/v2/"},
   {&Huawei,        "https://mirrors.huaweicloud.com/repository/nuget/v3"}
 },
@@ -330,6 +339,7 @@ pl_dotnet_sources[] = {
  * 2. https://mirrors.tuna.tsinghua.edu.cn/flutter
  */
 pl_dart_sources[] = {
+  {&Upstream,       NULL},
   // {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/"}, // 不确定SJTUG的flutter镜像给的对不对
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/"},
   {&Tencent,       "https://mirrors.cloud.tencent.com/"},
@@ -342,6 +352,7 @@ pl_dart_sources[] = {
  * 2023-09-10 更新
  */
 pl_haskell_sources[] = {
+  {&Upstream,       NULL},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/hackage"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/hackage"},
   {&Nju,           "https://mirror.nju.edu.cn/hackage"},
@@ -353,6 +364,7 @@ pl_haskell_sources[] = {
  * 2023-09-15 更新
  */
 pl_ocaml_sources[] = {
+  {&Upstream,       NULL},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/git/opam-repository.git"}
 },
 
@@ -366,6 +378,7 @@ pl_ocaml_sources[] = {
  *       我们在换cran的同时，也直接帮助用户换bioconductor
  */
 pl_r_sources[] = {
+  {&Upstream,       NULL},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/cran/"},
   // {&Ali,           "https://mirrors.aliyun.com/CRAN/"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"},
@@ -381,6 +394,7 @@ pl_r_sources[] = {
  * @note 缺少商业公司或开源社区软件源
  */
 pl_julia_sources[] = {
+  {&Upstream,       NULL},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/julia"},
   {&Pku,           "https://mirrors.pku.edu.cn/julia"},
   {&Nju,           "https://mirror.nju.edu.cn/julia"}
@@ -395,14 +409,15 @@ pl_julia_sources[] = {
  */
 static SourceInfo
 os_ubuntu_sources[] = {
-  {&Ali,       "https://mirrors.aliyun.com/ubuntu"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/ubuntu"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/ubuntu"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/ubuntu"},
-  {&Tencent,   "https://mirrors.tencent.com/ubuntu"},
-  {&Huawei,    "https://mirrors.huaweicloud.com/ubuntu"},
-  {&Netease,   "https://mirrors.163.com/ubuntu"},
-  {&Sohu,      "https://mirrors.sohu.com/ubuntu"}
+  {&Upstream,       NULL},
+  {&Ali,           "https://mirrors.aliyun.com/ubuntu"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/ubuntu"},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/ubuntu"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/ubuntu"},
+  {&Tencent,       "https://mirrors.tencent.com/ubuntu"},
+  {&Huawei,        "https://mirrors.huaweicloud.com/ubuntu"},
+  {&Netease,       "https://mirrors.163.com/ubuntu"},
+  {&Sohu,          "https://mirrors.sohu.com/ubuntu"}
 },
 
 
@@ -412,9 +427,10 @@ os_ubuntu_sources[] = {
  * @note: 实际上镜像站里的内容和Ubuntu的不太一样
  */
 os_mint_sources[] = {
-  {&MirrorZ,  "https://mirrors.cernet.edu.cn/linuxmint/"},
-  {&Ali,      "http://mirrors.aliyun.com/linuxmint-packages/"},
-  {&Netease,  "https://mirrors.163.com/linuxmint/packages/"},
+  {&Upstream,       NULL},
+  {&MirrorZ,       "https://mirrors.cernet.edu.cn/linuxmint/"},
+  {&Ali,           "http://mirrors.aliyun.com/linuxmint-packages/"},
+  {&Netease,       "https://mirrors.163.com/linuxmint/packages/"},
 },
 
 
@@ -424,13 +440,14 @@ os_mint_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_deepin_sources[] = {
-  {&Ali,       "https://mirrors.aliyun.com/deepin"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/deepin"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/deepin"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/deepin"},
-  {&Tencent,   "https://mirrors.tencent.com/deepin"},
-  {&Netease,   "https://mirrors.163.com/deepin"},
-  {&Sohu,      "https://mirrors.sohu.com/deepin"}
+  {&Upstream,       NULL},
+  {&Ali,           "https://mirrors.aliyun.com/deepin"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/deepin"},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/deepin"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/deepin"},
+  {&Tencent,       "https://mirrors.tencent.com/deepin"},
+  {&Netease,       "https://mirrors.163.com/deepin"},
+  {&Sohu,          "https://mirrors.sohu.com/deepin"}
 },
 
 
@@ -440,13 +457,14 @@ os_deepin_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_debian_sources[] = {
-  {&Ali,       "https://mirrors.aliyun.com/debian"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/debian"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/debian"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/debian"},
-  {&Tencent,   "https://mirrors.tencent.com/debian"},
-  {&Netease,   "https://mirrors.163.com/debian"},
-  {&Sohu,      "https://mirrors.sohu.com/debian"}
+  {&Upstream,       NULL},
+  {&Ali,           "https://mirrors.aliyun.com/debian"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/debian"},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/debian"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/debian"},
+  {&Tencent,       "https://mirrors.tencent.com/debian"},
+  {&Netease,       "https://mirrors.163.com/debian"},
+  {&Sohu,          "https://mirrors.sohu.com/debian"}
 },
 
 
@@ -456,13 +474,14 @@ os_debian_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_fedora_sources[] = {
-  {&Ali,       "https://mirrors.aliyun.com/fedora"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/fedora"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/fedora"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/fedora"},
-  {&Tencent,   "https://mirrors.tencent.com/fedora"},
-  {&Netease,   "https://mirrors.163.com/fedora"},
-  {&Sohu,      "https://mirrors.sohu.com/fedora"}
+  {&Upstream,       NULL},
+  {&Ali,           "https://mirrors.aliyun.com/fedora"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/fedora"},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/fedora"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/fedora"},
+  {&Tencent,       "https://mirrors.tencent.com/fedora"},
+  {&Netease,       "https://mirrors.163.com/fedora"},
+  {&Sohu,          "https://mirrors.sohu.com/fedora"}
 },
 
 
@@ -472,14 +491,15 @@ os_fedora_sources[] = {
  * TODO: 未经测试是否有效
  */
 os_kali_sources[] = {
-  {&Ali,       "https://mirrors.aliyun.com/kali"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/kali"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/kali"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/kali"},
-  {&Tencent,   "https://mirrors.tencent.com/kali"},
-  {&Huawei,    "https://mirrors.huaweicloud.com/kali"},
-  {&Netease,   "https://mirrors.163.com/kali"},
-  {&Sohu,      "https://mirrors.sohu.com/kali"}
+  {&Upstream,       NULL},
+  {&Ali,           "https://mirrors.aliyun.com/kali"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/kali"},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/kali"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/kali"},
+  {&Tencent,       "https://mirrors.tencent.com/kali"},
+  {&Huawei,        "https://mirrors.huaweicloud.com/kali"},
+  {&Netease,       "https://mirrors.163.com/kali"},
+  {&Sohu,          "https://mirrors.sohu.com/kali"}
 },
 
 
@@ -489,14 +509,15 @@ os_kali_sources[] = {
  * TODO: 源并不完整，且未经测试是否有效
  */
 os_arch_sources[] = {
-  {&Ali,       "https://mirrors.aliyun.com/"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/"},
-  {&Tencent,   "https://mirrors.tencent.com/"},
-  {&Huawei,    "https://mirrors.huaweicloud.com/archlinux/"},
-  {&Netease,   "https://mirrors.163.com/"},
-  {&Sohu,      "https://mirrors.sohu.com/"}
+  {&Upstream,       NULL},
+  {&Ali,           "https://mirrors.aliyun.com/"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/"},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/"},
+  {&Tencent,       "https://mirrors.tencent.com/"},
+  {&Huawei,        "https://mirrors.huaweicloud.com/archlinux/"},
+  {&Netease,       "https://mirrors.163.com/"},
+  {&Sohu,          "https://mirrors.sohu.com/"}
 },
 
 
@@ -506,13 +527,14 @@ os_arch_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_gentoo_sources[] = {
-  {&Ali,       "mirrors.aliyun.com"},
-  {&Bfsu,      "mirrors.bfsu.edu.cn"},
-  {&Ustc,      "mirrors.ustc.edu.cn"},
-  {&Tuna,      "mirrors.tuna.tsinghua.edu.cn"},
-  {&Tencent,   "mirrors.tencent.com"},
-  {&Netease,   "mirrors.163.com"},
-  {&Sohu,      "mirrors.sohu.com"}
+  {&Upstream,       NULL},
+  {&Ali,           "mirrors.aliyun.com"},
+  {&Bfsu,          "mirrors.bfsu.edu.cn"},
+  {&Ustc,          "mirrors.ustc.edu.cn"},
+  {&Tuna,          "mirrors.tuna.tsinghua.edu.cn"},
+  {&Tencent,       "mirrors.tencent.com"},
+  {&Netease,       "mirrors.163.com"},
+  {&Sohu,          "mirrors.sohu.com"}
 },
 
 
@@ -522,6 +544,7 @@ os_gentoo_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_opensuse_sources[] = {
+  {&Upstream,       NULL},
   {&Ali,       "https://mirrors.aliyun.com/opensuse"},
   {&Bfsu,      "https://mirrors.bfsu.edu.cn/opensuse"},
   {&Ustc,      "https://mirrors.ustc.edu.cn/opensuse"},
@@ -538,6 +561,7 @@ os_opensuse_sources[] = {
  * TODO: 源并不完整，且未经测试是否有效
  */
 os_msys2_sources[] = {
+  {&Upstream,       NULL},
   {&Ali,       "https://mirrors.aliyun.com/msys2"},
   {&Bfsu,      "https://mirrors.bfsu.edu.cn/msys2"},
   {&Ustc,      "https://mirrors.ustc.edu.cn/msys2"},
@@ -553,6 +577,7 @@ os_msys2_sources[] = {
  * 2023-09-24 更新
  */
 os_rocky_sources[] = {
+  {&Upstream,       NULL},
   {&Sjtug_Zhiyuan,  "https://mirror.sjtu.edu.cn/rocky"},
   {&Sustech,        "https://mirrors.sustech.edu.cn/rocky-linux"},
   {&Zju,            "https://mirrors.zju.edu.cn/rocky"},
@@ -567,6 +592,7 @@ os_rocky_sources[] = {
  * 2024-04-18 更新
  */
 os_alpine_sources[] = {
+  {&Upstream,       NULL},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/alpine"},
   {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/alpine"},
   {&Sustech,        "https://mirrors.sustech.edu.cn/alpine"},
@@ -582,6 +608,7 @@ os_alpine_sources[] = {
  * 2023-09-24 更新
  */
 os_void_sources[] = {
+  {&Upstream,       NULL},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/voidlinux"},
   {&Sjtug_Zhiyuan,  "https://mirror.sjtu.edu.cn/voidlinux"},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/voidlinux"}
@@ -592,6 +619,7 @@ os_void_sources[] = {
  * 2023-09-29 更新
  */
 os_solus_sources[] = {
+  {&Upstream,       NULL},
   {&Tuna, "https://mirrors.tuna.tsinghua.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"},
   {&Bfsu, "https://mirrors.bfsu.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"},
   {&Nju,  "https://mirror.nju.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"}
@@ -602,6 +630,7 @@ os_solus_sources[] = {
  * 2023-09-29 更新
  */
 os_linuxlite_sources[] = {
+  {&Upstream,       NULL},
   {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/linuxliteos/"}
 },
 
@@ -610,6 +639,7 @@ os_linuxlite_sources[] = {
  * 2023-09-29 更新
  */
 os_trisquel_sources[] = {
+  {&Upstream,       NULL},
   {&Ali,            "https://mirrors.aliyun.com/trisquel/"},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/trisquel/"},
   {&Nju,            "https://mirror.nju.edu.cn/trisquel/"},
@@ -621,6 +651,7 @@ os_trisquel_sources[] = {
  * 2023-09-29 更新
  */
 os_raspberrypi_sources[] = {
+  {&Upstream,       NULL},
   {&MirrorZ,        "https://help.mirrors.cernet.edu.cn/raspberrypi/"},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/raspberrypi/"},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/raspberrypi/"},
@@ -639,6 +670,7 @@ os_raspberrypi_sources[] = {
  * @ccmywish: [2023-09-27] 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数
  */
 os_freebsd_sources[] = {
+  {&Upstream,       NULL},
   {&Ustc,      "mirrors.ustc.edu.cn"},
   {&Nju,       "mirror.nju.edu.cn"},
   {&Netease,   "mirrors.163.com"},
@@ -651,6 +683,7 @@ os_freebsd_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_netbsd_sources[] = {
+  {&Upstream,       NULL},
   {&Ali,       "https://mirrors.aliyun.com/pkgsrc/packages/NetBSD/"},
   {&Bfsu,      "https://mirrors.bfsu.edu.cn/pkgsrc/packages/NetBSD/"},
   {&Ustc,      "https://mirrors.ustc.edu.cn/pkgsrc/packages/NetBSD/"},
@@ -667,6 +700,7 @@ os_netbsd_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_openbsd_sources[] = {
+  {&Upstream,       NULL},
   {&Ali,       "https://mirrors.aliyun.com/OpenBSD/"},
   {&Bfsu,      "https://mirrors.bfsu.edu.cn/OpenBSD/"},
   {&Ustc,      "https://mirrors.ustc.edu.cn/OpenBSD/"},
@@ -683,6 +717,7 @@ os_openbsd_sources[] = {
  * TODO: 1. 源并不完整，且未经测试是否有效
  */
 os_openeuler_sources[] = {
+  {&Upstream,       NULL},
   {&Ali,       "https://mirrors.aliyun.com/openeuler/"},
   {&Bfsu,      "https://mirrors.bfsu.edu.cn/openeuler/"},
   {&Ustc,      "https://mirrors.ustc.edu.cn/openeuler/"},
@@ -709,6 +744,7 @@ os_openkylin_sources[] = {
  * TODO: 未经测试是否有效
  */
 os_ros_sources[] = {
+  {&Upstream,       NULL},
   {&Ali,       "https://mirrors.aliyun.com"},
   {&Bfsu,      "https://mirrors.bfsu.edu.cn"},
   {&Ustc,      "https://mirrors.ustc.edu.cn"},
@@ -740,6 +776,7 @@ wr_winget_sources[] = {
  *       2. 不确定 Sustech 能否工作
  */
 wr_brew_sources[] = {
+  {&Upstream,       NULL},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/"},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/"},
   {&Zju,            "https://mirrors.zju.edu.cn/"},
@@ -754,7 +791,8 @@ wr_brew_sources[] = {
  * @note 目前只有一个源
  */
 wr_flathub_sources[] = {
-  {&Sjtug_Zhiyuan,   "https://mirror.sjtu.edu.cn/flathub"},
+  {&Upstream,       NULL},
+  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/flathub"},
 },
 
 
@@ -766,7 +804,8 @@ wr_flathub_sources[] = {
  *       2. 这些链接将会在setsrc函数中补充完整
  */
 wr_nix_sources[] = {
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/nix-channels/"}
+  {&Upstream,       NULL},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/nix-channels/"}
 },
 
 
@@ -777,7 +816,8 @@ wr_nix_sources[] = {
  * @note 目前只有一个源
  */
 wr_guix_sources[] = {
-  {&Sjtug_Zhiyuan,  "https://mirror.sjtu.edu.cn/git/guix.git"}
+  {&Upstream,       NULL},
+  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/git/guix.git"}
 },
 
 
@@ -788,6 +828,7 @@ wr_guix_sources[] = {
  * @note Emacs用户往往只需要一次性换源，只会极少次调用 chsrc，我们只给用户提供文档
  */
 wr_emacs_sources[] = {
+  {&Upstream,       NULL},
   {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/docs/emacs-elpa"},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/help/elpa/"},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/help/elpa/"},
@@ -803,6 +844,7 @@ wr_emacs_sources[] = {
  * @note 这些链接将会在setsrc函数中补充完整
  */
 wr_anaconda_sources[] = {
+  {&Upstream,       NULL},
   {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/anaconda/"},
   {&Bfsu,            "https://mirrors.bfsu.edu.cn/anaconda/"},
   {&Zju,             "https://mirrors.zju.edu.cn/anaconda/"},
@@ -817,6 +859,7 @@ wr_anaconda_sources[] = {
  * TODO: 1. 暂未添加商业公司源
  */
 wr_tex_sources[] = {
+  {&Upstream,       NULL},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/ctan/systems/texlive/tlnet"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/CTAN/systems/texlive/tlnet"},
