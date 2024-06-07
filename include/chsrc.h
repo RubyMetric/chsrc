@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2024-06-05>
+ * Last modified : <2024-06-07>
  *
  * chsrc:
  *
@@ -21,9 +21,9 @@
 #define chsrc_error(str)   xy_error(xy_2strjoin(App_Prefix, (str)))
 
 
-int Cli_Option_IPv6 = 0;
-int Cli_Optiion_Locally = 0;
-int Cli_Option_InEnglish = 0;
+bool Cli_Option_IPv6 = false;
+bool Cli_Option_Locally = false;
+bool Cli_Option_InEnglish = false;
 
 /**
  * 检测二进制程序是否存在
@@ -156,7 +156,7 @@ test_speed_url (const char *url)
 
   char *ipv6 = ""; // 默认不启用
 
-  if (Cli_Option_IPv6==1) {
+  if (Cli_Option_IPv6==true) {
     ipv6 = "--ipv6";
   }
 
@@ -418,11 +418,17 @@ chsrc_backup (const char *path)
 
 
 /* Target Info */
-typedef struct {
-  void (*setfn)(char *option);
-  void (*getfn)(char *option);
+typedef struct TargetInfo_t {
+  void (*getfn)   (char *option);
+  void (*setfn)   (char *option);
+  void (*resetfn) (char *option);
   SourceInfo *sources;
   size_t      sources_n;
 } TargetInfo;
 
-#define def_target(t) TargetInfo t##_target = {t##_setsrc, t##_getsrc, t##_sources, t##_sources_n}
+// 大部分target还不支持reset，所以暂时先默认设置为NULL来过渡
+#define def_target(t) TargetInfo t##_target = {t##_getsrc, t##_setsrc, NULL, t##_sources, t##_sources_n}
+
+#define def_target_full(t) TargetInfo t##_target = {t##_getsrc, t##_setsrc, t##_resetsrc, t##_sources, t##_sources_n}
+
+#define def_target_noget(t) TargetInfo t##_target = {NULL, t##_setsrc, NULL, t##_sources, t##_sources_n}
