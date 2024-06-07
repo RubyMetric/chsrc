@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2024-06-05>
+ * Last modified : <2024-06-07>
  *
  * chsrc:
  *
@@ -71,7 +71,7 @@ pl_ruby_setsrc (char *option)
     }
 
   char *where = "--global";
-  if (Cli_Optiion_Locally==1)
+  if (Cli_Option_Locally==true)
     {
       where = "--local";
     }
@@ -168,7 +168,7 @@ pl_python_setsrc (char *option)
   if (pdm_exist) {
 
     char *where = "--global";
-    if (Cli_Optiion_Locally==1)
+    if (Cli_Option_Locally==true)
       {
         where = "--local";
       }
@@ -1793,6 +1793,12 @@ wr_winget_setsrc (char *option)
   chsrc_say_thanks (&source);
 }
 
+void
+wr_winget_resetsrc (char *option)
+{
+  chsrc_run ("winget source reset winget");
+}
+
 
 void
 wr_brew_getsrc (char *option)
@@ -2385,15 +2391,15 @@ main (int argc, char const *argv[])
         {
           if (xy_streql (argv[i], "-ipv6"))
             {
-              Cli_Option_IPv6 = 1;
+              Cli_Option_IPv6 = true;
             }
           else if (xy_streql (argv[i], "-local"))
             {
-              Cli_Optiion_Locally = 1;
+              Cli_Option_Locally = true;
             }
           else if (xy_streql (argv[i], "-en") || xy_streql (argv[i], "-english"))
             {
-              Cli_Option_InEnglish = 1;
+              Cli_Option_InEnglish = true;
             }
           else
             {
