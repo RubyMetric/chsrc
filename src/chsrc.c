@@ -1707,7 +1707,7 @@ wr_tex_check_cmd (bool *tlmgr_exist, bool *mpm_exist)
 }
 
 void
-wr_tex_getsrc(char *option)
+wr_tex_getsrc (char *option)
 {
   bool tlmgr_exist, mpm_exist;
   wr_tex_check_cmd (&tlmgr_exist, &mpm_exist);
@@ -1726,7 +1726,7 @@ wr_tex_getsrc(char *option)
  * 参考 https://help.mirrors.cernet.edu.cn/CTAN/
  */
 void
-wr_tex_setsrc(char *option)
+wr_tex_setsrc (char *option)
 {
   bool tlmgr_exist, mpm_exist;
   wr_tex_check_cmd (&tlmgr_exist, &mpm_exist);
@@ -1758,7 +1758,7 @@ wr_tex_setsrc(char *option)
 
 
 void
-wr_emacs_setsrc(char *option)
+wr_emacs_setsrc (char *option)
 {
   int index = use_specific_mirror_or_auto_select (option, wr_emacs);
 
@@ -1772,9 +1772,29 @@ wr_emacs_setsrc(char *option)
 }
 
 
+void
+wr_winget_getsrc (char *option)
+{
+  chsrc_run ("winget source list");
+}
 
 void
-wr_brew_getsrc(char *option)
+wr_winget_setsrc (char *option)
+{
+  int index = use_specific_mirror_or_auto_select (option, wr_winget);
+
+  SourceInfo source = wr_winget_sources[index];
+  chsrc_say_selection (&source);
+
+  chsrc_run ("winget source remove winget");
+  chsrc_run (xy_2strjoin ("winget source add winget ", source.url));
+
+  chsrc_say_thanks (&source);
+}
+
+
+void
+wr_brew_getsrc (char *option)
 {
   char *cmd = "echo HOMEBREW_API_DOMAIN=$HOMEBREW_API_DOMAIN;"
               "echo HOMEBREW_BOTTLE_DOMAIN=$HOMEBREW_BOTTLE_DOMAIN;"
@@ -2062,7 +2082,7 @@ static const char
 };
 
 
-def_target(wr_brew); def_target(wr_tex);
+def_target(wr_winget); def_target(wr_brew); def_target(wr_tex);
 TargetInfo
   wr_flathub_target  = {wr_flathub_setsrc,  NULL,  wr_flathub_sources,  wr_flathub_sources_n},
   wr_nix_target      = {wr_nix_setsrc,      NULL,  wr_nix_sources,      wr_nix_sources_n},
@@ -2071,7 +2091,8 @@ TargetInfo
   wr_anaconda_target = {wr_anaconda_setsrc, NULL,  wr_anaconda_sources, wr_anaconda_sources_n};
 
 static const char
-*wr_brew    [] = {"brew",  "homebrew",     NULL,  t(&wr_brew_target)},
+*wr_winget  [] = {"winget",  NULL,                t(&wr_winget_target)},
+*wr_brew    [] = {"brew",    "homebrew",   NULL,  t(&wr_brew_target)},
 *wr_flathub [] = {"flathub", NULL,                t(&wr_flathub_target)},
 *wr_nix     [] = {"nix",     NULL,                t(&wr_nix_target)},
 *wr_guix    [] = {"guix",    NULL,                t(&wr_guix_target)},
@@ -2080,13 +2101,13 @@ static const char
 *wr_anaconda[] = {"conda", "anaconda",     NULL,  t(&wr_anaconda_target)},
 **wr_softwares[] =
 {
-  wr_brew, wr_flathub, wr_nix, wr_guix, wr_emacs, wr_tex, wr_anaconda
+  wr_winget, wr_brew, wr_flathub, wr_nix, wr_guix, wr_emacs, wr_tex, wr_anaconda
 };
 #undef t
 /************************************** End Target Matrix ****************************************/
 
 
-static const char*
+static const char *
 usage[] = {
   "维护: https://gitee.com/RubyMetric/chsrc\n",
 
@@ -2126,7 +2147,7 @@ print_available_mirrors ()
 
 
 void
-print_supported_targets_ (const char*** array, size_t size)
+print_supported_targets_ (const char ***array, size_t size)
 {
   for (int i=0; i<size; i++)
     {
