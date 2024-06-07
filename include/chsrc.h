@@ -67,21 +67,27 @@ query_program_exist (char *check_cmd, char *prog_name)
 int
 query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
 {
-  if (0==size)
+  if (0==size || 1==size)
     {
       xy_error (xy_strjoin (3, "当前 ", target, " 无任何可用源，请联系维护者"));
       exit (1);
     }
 
-  if (1==size)
+  if (2==size)
     {
-      xy_success (xy_strjoin (4, sources[0].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
+      xy_success (xy_strjoin (4, sources[1].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
+    }
+
+  if (xy_streql ("reset", input))
+    {
+      puts ("使用上游默认源");
+      return 0; // 返回第1个，因为第1个是上游默认源
     }
 
   if (xy_streql ("first", input))
     {
       puts ("使用维护团队测速第一的源");
-      return 1; // 返回第二个，因为第一个是上游默认源
+      return 1; // 返回第2个，因为第1个是上游默认源
     }
 
   int idx = 0;
@@ -219,14 +225,14 @@ get_max_ele_idx_in_dbl_ary (double *array, int size)
 int
 auto_select_ (SourceInfo *sources, size_t size, const char *target)
 {
-  if (0==size)
+  if (0==size || 1==size)
     {
       xy_error (xy_strjoin (3, "chsrc: 当前 ", target, " 无任何可用源，请联系维护者"));
       exit (1);
     }
 
   bool onlyone = false;
-  if (1==size) onlyone = true;
+  if (2==size) onlyone = true;
 
   double speeds[size];
   double speed = 0.0;
@@ -270,14 +276,46 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target)
 
 
 
+bool
+is_upstream (SourceInfo *source)
+{
+  return xy_streql (source->mirror->code, "upstream");
+}
+
+bool
+source_is_null (SourceInfo *source)
+{
+  return source->url == NULL;
+}
+
+
 /**
  * 用于 _setsrc 函数
+ *
+ * 1. 告知用户选择了什么源和镜像
+ * 2. 对选择的源和镜像站进行一定的校验
  */
 void
 chsrc_say_selection (SourceInfo *source)
 {
-  puts (xy_strjoin (5, "选中镜像站: ", xy_str_to_green (source->mirror->abbr), " (", xy_str_to_green (source->mirror->code), ")"));
-  // puts ("--------------------------------");
+  // 由于实现问题，我们把本应该独立出去的默认上游源，也放在了可以换源的数组中，而且放在第一个
+  // chsrc 已经规避用户使用未实现的 `chsrc reset`
+  // 但是某些用户可能摸索着强行使用 chsrc set target upstream，从而执行起该禁用的功能，
+  // 之所以禁用，是因为有的 reset 我们并没有实现，我们在这里阻止这些邪恶的用户
+  if (is_upstream (source) && source_is_null (source))
+    {
+      chsrc_error ("暂未对该软件实现重置");
+      exit (2);
+    }
+  else if (source_is_null (source))
+    {
+      chsrc_error ("该源URL不存在，请向开发团队提交bug");
+      exit (2);
+    }
+  else
+    {
+      puts (xy_strjoin (5, "选中镜像站: ", xy_str_to_green (source->mirror->abbr), " (", xy_str_to_green (source->mirror->code), ")"));
+    }
 }
 
 
@@ -285,7 +323,14 @@ void
 chsrc_say_thanks (SourceInfo *source)
 {
   puts ("--------------------------------");
-  puts (xy_2strjoin ("换源完成，感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+  if (is_upstream (source))
+    {
+      puts ("已重置为上游默认源");
+    }
+  else
+    {
+      puts (xy_2strjoin ("换源完成，感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+    }
 }
 
 
