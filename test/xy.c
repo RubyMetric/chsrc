@@ -3,7 +3,7 @@
  * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-30>
- * Last modified : <2024-05-25>
+ * Last modified : <2024-06-08>
  *
  * test_xy:
  *
@@ -42,6 +42,10 @@ main (int argc, char const *argv[])
   print (xy_str_to_purple ("紫色"));
   print (xy_str_to_cyan ("青色"));
   puts ("");
+
+  xy_info_remarkably  ("app", "提示", "襄阳牛肉面需要搭配黄酒");
+  xy_warn_remarkably  ("app", "警告", "兰州牛肉面，而非兰州拉面");
+  xy_error_remarkably ("app", "错误", "肉丸胡辣汤里没有肉丸");
 
   assert (false == xy_str_end_with ("abcdef", "abcdefg"));
   assert (xy_str_end_with ("abcdef", "def"));
