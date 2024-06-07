@@ -351,7 +351,7 @@ chsrc_ensure_root ()
       else return;
     }
 not_root:
-  xy_error ("chsrc: 请在命令前使用 sudo 来保证必要的权限");
+  xy_error ("chsrc: 请在命令前使用 sudo 或切换为root用户来保证必要的权限");
   exit (1);
 }
 

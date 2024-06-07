@@ -875,7 +875,7 @@ os_ubuntu_setsrc (char *option)
     }
 
   chsrc_run (cmd);
-  chsrc_run ("sudo apt update");
+  chsrc_run ("apt update");
   chsrc_say_thanks (&source);
 }
 
@@ -906,7 +906,7 @@ os_mint_setsrc (char *option)
                             "@g' /etc/apt/sources.list.d/official-package-repositories.list");
 
   chsrc_run (cmd);
-  chsrc_run ("sudo apt update");
+  chsrc_run ("apt update");
   chsrc_say_thanks (&source);
   chsrc_warn ("完成后请不要再使用 mintsources（自带的图形化软件源设置工具）进行任何操作，因为在操作后，无论是否有按“确定”，mintsources 均会覆写我们刚才换源的内容");
 }
@@ -921,7 +921,7 @@ os_debian_getsrc (char *option)
 
 /**
  * Debian Buster 以上版本默认支持 HTTPS 源。如果遇到无法拉取 HTTPS 源的情况，请先使用 HTTP 源并安装
- * sudo apt install apt-transport-https ca-certificates
+ * apt install apt-transport-https ca-certificates
  */
 void
 os_debian_setsrc (char *option)
@@ -934,7 +934,7 @@ os_debian_setsrc (char *option)
   chsrc_say_selection (&source);
 
   chsrc_info ("如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并需要您运行:");
-  puts ("sudo apt install apt-transport-https ca-certificates");
+  puts ("apt install apt-transport-https ca-certificates");
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
@@ -944,7 +944,7 @@ os_debian_setsrc (char *option)
       "@g\' /etc/apt/sources.list");
 
   chsrc_run (cmd);
-  chsrc_run ("sudo apt update");
+  chsrc_run ("apt update");
   chsrc_say_thanks (&source);
 }
 
@@ -972,7 +972,7 @@ os_raspberrypi_setsrc (char *option)
                             "@g' /etc/apt/sources.list.d/raspi.list");
 
   chsrc_run (cmd);
-  chsrc_run ("sudo apt update");
+  chsrc_run ("apt update");
   chsrc_say_thanks (&source);
 }
 
@@ -1005,7 +1005,7 @@ os_deepin_setsrc (char *option)
       "@g\' /etc/apt/sources.list");
 
   chsrc_run (cmd);
-  chsrc_run ("sudo apt update");
+  chsrc_run ("apt update");
   chsrc_say_thanks (&source);
 }
 
@@ -1046,7 +1046,7 @@ os_fedora_setsrc (char *option)
   chsrc_info ("替换文件:/etc/yum.repos.d/fedora-updates.repo");
   chsrc_info ("新增文件:/etc/yum.repos.d/fedora-updates-modular.repo");
 
-  chsrc_run ("sudo dnf makecache");
+  chsrc_run ("dnf makecache");
   chsrc_say_thanks (&source);
 }
 
@@ -1136,7 +1136,7 @@ os_kali_setsrc (char *option)
       "@g\' /etc/apt/sources.list");
 
   chsrc_run (cmd);
-  chsrc_run ("sudo apt update");
+  chsrc_run ("apt update");
   chsrc_say_thanks (&source);
 }
 
@@ -1267,12 +1267,12 @@ os_rocky_setsrc (char *option)
   chsrc_say_selection (&source);
 
   char *cmd = xy_strjoin (3,
-            "sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' "
+            "sed -e 's|^mirrorlist=|#mirrorlist=|g' "
             "-e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=", source.url, "|g' "
             "-i.bak /etc/yum.repos.d/rocky-extras.repo /etc/yum.repos.d/rocky.repo"
             );
   chsrc_run (cmd);
-  chsrc_run ("sudo dnf makecache");
+  chsrc_run ("dnf makecache");
   chsrc_say_thanks (&source);
 }
 
@@ -1361,7 +1361,7 @@ os_solus_setsrc (char *option)
   SourceInfo source = os_solus_sources[index];
   chsrc_say_selection (&source);
 
-  char *cmd = xy_2strjoin ("sudo eopkg add-repo Solus ", source.url);
+  char *cmd = xy_2strjoin ("eopkg add-repo Solus ", source.url);
   chsrc_run (cmd);
   chsrc_say_thanks (&source);
 }
@@ -1375,10 +1375,10 @@ void
 os_manjaro_setsrc (char *option)
 {
   chsrc_ensure_root ();
-  char *cmd = "sudo pacman-mirrors -i -c China -m rank";
+  char *cmd = "pacman-mirrors -i -c China -m rank";
   chsrc_run (cmd);
 
-  chsrc_run ("sudo pacman -Syy");
+  chsrc_run ("pacman -Syy");
 }
 
 
@@ -1407,7 +1407,7 @@ os_trisquel_setsrc (char *option)
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/trisquel/?@", source.url, "@g' /etc/apt/sources.list");
 
   puts (cmd);
-  chsrc_run ("sudo apt update");
+  chsrc_run ("apt update");
   chsrc_say_thanks (&source);
 }
 
@@ -1436,7 +1436,7 @@ os_linuxlite_setsrc (char *option)
 
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/.*/?@", source.url, "@g' /etc/apt/sources.list");
 
-  chsrc_run ("sudo apt update");
+  chsrc_run ("apt update");
   chsrc_say_thanks (&source);
 }
 
@@ -1463,7 +1463,7 @@ os_openeuler_setsrc (char *option)
 
   chsrc_overwrite_file (towrite, "/etc/yum.repos.d/openEuler.repo");
 
-  chsrc_run ("sudo dnf makecache");
+  chsrc_run ("dnf makecache");
   chsrc_say_thanks (&source);
 }
 
@@ -1489,7 +1489,7 @@ os_openkylin_setsrc (char *option)
 
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/openkylin/?@", source.url, "@g'" ETC_APT_SOURCELIST);
   chsrc_run (cmd);
-  chsrc_run ("sudo apt update");
+  chsrc_run ("apt update");
   chsrc_say_thanks (&source);
 }
 
@@ -1506,7 +1506,8 @@ os_openkylin_setsrc (char *option)
 void
 os_freebsd_setsrc (char *option)
 {
-  // chsrc_ensure_root(); // 据 @ykla，FreeBSD不自带 sudo
+  // 据 @ykla，FreeBSD不自带sudo，但是我们依然要保证是root权限
+  chsrc_ensure_root();
 
   int index = use_specific_mirror_or_auto_select (option, os_freebsd);
 
@@ -1689,10 +1690,10 @@ os_ros_setsrc (char *option)
   cmd = xy_strjoin(3, "sed -E -i \'s@https?://.*/ros/ubuntu/?@", source.url, "@/ros/ubuntug\' /etc/apt/sources.list");
   chsrc_run(cmd);
 
-  cmd = "sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654";
+  cmd = "apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654";
   chsrc_run (cmd);
 
-  chsrc_run ("sudo apt update");
+  chsrc_run ("apt update");
   chsrc_say_thanks (&source);
 }
 
@@ -1937,11 +1938,11 @@ wr_flathub_setsrc (char *option)
   xy_warn ("chsrc: 若出现问题，可先调用以下命令:");
   char *note = xy_strjoin (3,
     "wget ", source.url, "/flathub.gpg\n"
-    "sudo flatpak remote-modify --gpg-import=flathub.gpg flathub"
+    "flatpak remote-modify --gpg-import=flathub.gpg flathub"
   );
   puts (note);
 
-  char *cmd = xy_2strjoin ("sudo flatpak remote-modify flathub --url=", source.url);
+  char *cmd = xy_2strjoin ("flatpak remote-modify flathub --url=", source.url);
   chsrc_run (cmd);
 
   chsrc_say_thanks (&source);
