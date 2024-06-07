@@ -2193,14 +2193,14 @@ void
 cli_print_version ()
 {
   puts (xy_strjoin (3, "chsrc: Change Source (GPLv3) ",
-                      xy_str_to_magenta (Chsrc_Version), " by RubyMetric\n"));
+                      xy_str_to_magenta (Chsrc_Version), " by RubyMetric"));
 }
 
 
 void
 cli_print_help ()
 {
-  cli_print_version ();
+  puts("");
   for (int i=0; i<xy_arylen(usage); i++)
     {
       puts (usage[i]);
@@ -2330,7 +2330,9 @@ main (int argc, char const *argv[])
 
   if (argc==0)
     {
-      cli_print_help (); return 0;
+      cli_print_version ();
+      cli_print_help ();
+      return 0;
     }
 
   const char *command = argv[1];
