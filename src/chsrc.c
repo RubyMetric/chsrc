@@ -95,29 +95,36 @@ void
 pl_python_check_cmd (char **prog, bool *pdm_exist)
 {
   *prog = NULL;
-  // 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store
-  char *check_cmd = xy_str_to_quietcmd ("python --version");
-  bool py_exist = query_program_exist (check_cmd, "python");
+  *pdm_exist = false;
 
-  check_cmd = xy_str_to_quietcmd ("pdm --version");
-  *pdm_exist = query_program_exist (check_cmd, "pdm");
+  // 由于Python2和Python3的历史，目前（2024-06）许多python命令实际上仍然是python2
+  // https://gitee.com/RubyMetric/chsrc/issues/I9VZL2
+  // 因此我们首先测试 python3
+  char *check_cmd = xy_str_to_quietcmd ("python3 --version");
+  bool py_exist = query_program_exist (check_cmd, "python3");
 
-  if (!py_exist)
+  if (py_exist)
     {
-      check_cmd = xy_str_to_quietcmd ("python3 --version");
-      py_exist = query_program_exist (check_cmd, "python3");
-      if (py_exist) *prog = "python3";
+      *prog = "python3";
     }
   else
     {
-      *prog = "python";
+      // 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store
+      check_cmd = xy_str_to_quietcmd ("python --version");
+      py_exist = query_program_exist (check_cmd, "python");
+      if (py_exist)
+        {
+          *prog = "python";
+        }
+      else
+        {
+          chsrc_error ("未找到 Python 相关命令，请检查是否存在");
+          exit (1);
+        }
     }
 
-  if (!py_exist)
-    {
-      chsrc_error ("未找到 Python 相关命令，请检查是否存在");
-      exit (1);
-    }
+  check_cmd = xy_str_to_quietcmd ("pdm --version");
+  *pdm_exist = query_program_exist (check_cmd, "pdm");
 }
 
 void
