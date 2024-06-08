@@ -292,6 +292,10 @@ _xy_str_to_terminal_style (int style, const char *str)
 static bool
 xy_streql (const char *str1, const char *str2)
 {
+  if (NULL==str1 || NULL==str2)
+    {
+      return false;
+    }
   return strcmp (str1, str2) == 0 ? true : false;
 }
 
