@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2024-06-07>
+ * Last modified : <2024-06-08>
  *
  * chsrc:
  *
@@ -13,12 +13,18 @@
 #include "xy.h"
 #include "source.h"
 
+#define App_Name "chsrc"
 
-#define App_Prefix "chsrc: "
-#define chsrc_success(str) xy_success(xy_2strjoin(App_Prefix, (str)))
-#define chsrc_info(str)    xy_info(xy_2strjoin(App_Prefix,  (str)))
-#define chsrc_warn(str)    xy_warn(xy_2strjoin(App_Prefix,  (str)))
-#define chsrc_error(str)   xy_error(xy_2strjoin(App_Prefix, (str)))
+#define chsrc_succ(str)  xy_succ(App_Name,str)
+#define chsrc_info(str)  xy_info(App_Name,str)
+#define chsrc_warn(str)  xy_warn(App_Name,str)
+#define chsrc_error(str) xy_error(App_Name,str)
+
+#define chsrc_succ_remarkably(str) xy_succ_remarkably(App_Name,"成功",str);
+#define chsrc_info_remarkably(str) xy_info_remarkably(App_Name,"信息",str);
+#define chsrc_note_remarkably(str) xy_info_remarkably(App_Name,"提示",str);
+#define chsrc_warn_remarkably(str) xy_warn_remarkably(App_Name,"警告",str);
+#define chsrc_error_remarkably(str) xy_error_remarkably(App_Name,"错误",str);
 
 
 bool Cli_Option_IPv6 = false;
@@ -69,13 +75,13 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
 {
   if (0==size || 1==size)
     {
-      xy_error (xy_strjoin (3, "当前 ", target, " 无任何可用源，请联系维护者"));
+      chsrc_error (xy_strjoin (3, "当前 ", target, " 无任何可用源，请联系维护者"));
       exit (1);
     }
 
   if (2==size)
     {
-      xy_success (xy_strjoin (4, sources[1].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
+      chsrc_succ (xy_strjoin (4, sources[1].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
     }
 
   if (xy_streql ("reset", input))
@@ -106,8 +112,8 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
     }
   if (!exist)
     {
-      xy_error (xy_strjoin (3, "镜像站 ", input, " 不存在"));
-      xy_error (xy_2strjoin ("查看可使用源，请使用 chsrc list ", target));
+      chsrc_error (xy_strjoin (3, "镜像站 ", input, " 不存在"));
+      chsrc_error (xy_2strjoin ("查看可使用源，请使用 chsrc list ", target));
       exit (1);
     }
   return idx;
@@ -173,7 +179,7 @@ test_speed_url (const char *url)
                                   " -w \"%{http_code} %{speed_download}\" -m", time_sec ,
                                   " -A chsrc/" Chsrc_Version "  ", url);
 
-  // xy_info (xy_2strjoin ("chsrc: 测速命令 ", curl_cmd));
+  // chsrc_info (xy_2strjoin ("测速命令 ", curl_cmd));
 
   char *buf = xy_getcmd (curl_cmd, 0, NULL);
   // 如果尾部有换行，删除
@@ -227,7 +233,7 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target)
 {
   if (0==size || 1==size)
     {
-      xy_error (xy_strjoin (3, "chsrc: 当前 ", target, " 无任何可用源，请联系维护者"));
+      chsrc_error (xy_strjoin (3, "当前 ", target, " 无任何可用源，请联系维护者"));
       exit (1);
     }
 
@@ -263,7 +269,7 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target)
   int fastidx = get_max_ele_idx_in_dbl_ary (speeds, size);
 
   if (onlyone)
-    xy_success (xy_strjoin (4, sources[fastidx].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
+    chsrc_succ (xy_strjoin (4, sources[fastidx].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
   else
     puts (xy_2strjoin ("最快镜像站: ", xy_str_to_green (sources[fastidx].mirror->name)));
 
@@ -351,7 +357,7 @@ chsrc_ensure_root ()
       else return;
     }
 not_root:
-  xy_error ("chsrc: 请在命令前使用 sudo 或切换为root用户来保证必要的权限");
+  chsrc_error ("请在命令前使用 sudo 或切换为root用户来保证必要的权限");
   exit (1);
 }
 
