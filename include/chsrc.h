@@ -52,12 +52,14 @@ query_program_exist (char *check_cmd, char *prog_name)
   if (0 != ret)
     {
       // xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
-      puts (xy_strjoin (4, xy_str_to_red ("x "), "命令 ", xy_str_to_red (prog_name), " 不存在"));
+      xy_log_remarkably (App_Name, xy_str_to_red ("检查"),
+        xy_strjoin (4, xy_str_to_red ("x "), "命令 ", xy_str_to_red (prog_name), " 不存在"));
       return false;
     }
   else
     {
-      puts (xy_strjoin (4, xy_str_to_green ("√ "), "命令 ", xy_str_to_green (prog_name), " 存在"));
+      xy_log_remarkably (App_Name, xy_str_to_green ("检查"),
+        xy_strjoin (4, xy_str_to_green ("√ "), "命令 ", xy_str_to_green (prog_name), " 存在"));
       return true;
     }
 }
@@ -295,6 +297,8 @@ source_is_null (SourceInfo *source)
 }
 
 
+#define split_between_source_changing_process   puts ("--------------------------------")
+
 /**
  * 用于 _setsrc 函数
  *
@@ -302,7 +306,7 @@ source_is_null (SourceInfo *source)
  * 2. 对选择的源和镜像站进行一定的校验
  */
 void
-chsrc_say_selection (SourceInfo *source)
+chsrc_confirm_selection (SourceInfo *source)
 {
   // 由于实现问题，我们把本应该独立出去的默认上游源，也放在了可以换源的数组中，而且放在第一个
   // chsrc 已经规避用户使用未实现的 `chsrc reset`
@@ -322,13 +326,15 @@ chsrc_say_selection (SourceInfo *source)
     {
       puts (xy_strjoin (5, "选中镜像站: ", xy_str_to_green (source->mirror->abbr), " (", xy_str_to_green (source->mirror->code), ")"));
     }
+
+  split_between_source_changing_process;
 }
 
 
 void
 chsrc_say_thanks (SourceInfo *source)
 {
-  puts ("--------------------------------");
+  split_between_source_changing_process;
   if (is_upstream (source))
     {
       puts (xy_str_to_purple ("已重置为上游默认源"));
