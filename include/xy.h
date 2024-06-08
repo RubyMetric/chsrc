@@ -410,11 +410,13 @@ xy_str_strip (const char *str)
  *                      Logging
  ******************************************************/
 
-#define XY_Log_Success 00001
-#define XY_Log_Info    00001 << 1
-#define XY_Log_Warn    00001 << 2
-#define XY_Log_Error   00001 << 3
+#define XY_Log_Plain   000000001
+#define XY_Log_Success 000000001 << 1
+#define XY_Log_Info    000000001 << 2
+#define XY_Log_Warn    000000001 << 3
+#define XY_Log_Error   000000001 << 4
 
+#define xy_log(prompt, str)  _xy_log (XY_Log_Plain,   prompt, str)
 #define xy_succ(prompt,str)  _xy_log (XY_Log_Success, prompt, str)
 #define xy_info(prompt,str)  _xy_log (XY_Log_Info,    prompt, str)
 #define xy_warn(prompt,str)  _xy_log (XY_Log_Warn,    prompt, str)
@@ -430,7 +432,11 @@ _xy_log (int level, const char *prompt, const char *content)
   /**
    * 'app: content'
    */
-  if (level & XY_Log_Success)
+  if (level & XY_Log_Plain)
+    {
+      str = xy_strjoin (3, prompt,  ": ", content);
+    }
+  else if (level & XY_Log_Success)
     {
       str = xy_strjoin (3, prompt,  ": ", xy_str_to_green (content));
     }
@@ -468,6 +474,7 @@ _xy_log (int level, const char *prompt, const char *content)
 /**
  * remarkably 系列输出受 pip 启发，为了输出方便，使用xy.h的程序应该基于此再定义自己的 app_info_remarkbaly()
  */
+#define xy_log_remarkably(prompt1,prompt2,content)   _xy_log_remarkably(XY_Log_Plain,  prompt1,prompt2,content)
 #define xy_succ_remarkably(prompt1,prompt2,content)  _xy_log_remarkably(XY_Log_Success,prompt1,prompt2,content)
 #define xy_info_remarkably(prompt1,prompt2,content)  _xy_log_remarkably(XY_Log_Info,   prompt1,prompt2,content)
 #define xy_warn_remarkably(prompt1,prompt2,content)  _xy_log_remarkably(XY_Log_Warn,   prompt1,prompt2,content)
@@ -480,7 +487,11 @@ _xy_log_remarkably (int level, const char *prompt1, const char *prompt2, const c
 
   bool to_stderr = false;
 
-  if (level & XY_Log_Success)
+  if (level & XY_Log_Plain)
+    {
+      str = xy_strjoin (6, "[", prompt1, " ", prompt2, "] ", content);
+    }
+  else if (level & XY_Log_Success)
     {
       /* [app 成功]  [app success] */
       str = xy_strjoin (6, "[", prompt1, " ", xy_str_to_green (prompt2), "] ", xy_str_to_green (content));
