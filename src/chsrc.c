@@ -2164,11 +2164,12 @@ static const char
 
 
 static const char *
-usage[] = {
+Chsrc_Usage[] = {
   "维护: https://gitee.com/RubyMetric/chsrc\n",
 
   "使用: chsrc <command> [options] [target] [mirror]",
   "help                      打印此帮助，或 h, -h, --help",
+  "issue                     查看相关issue",
   "list (或 ls, 或 l)        列出可用镜像源，和可换源软件",
   "list mirror/target        列出可用镜像源，或可换源软件",
   "list os/lang/ware         列出可换源的操作系统/编程语言/软件",
@@ -2285,9 +2286,9 @@ void
 cli_print_help ()
 {
   puts("");
-  for (int i=0; i<xy_arylen(usage); i++)
+  for (int i=0; i<xy_arylen(Chsrc_Usage); i++)
     {
-      puts (usage[i]);
+      puts (Chsrc_Usage[i]);
     }
 }
 
@@ -2303,6 +2304,14 @@ cli_print_issues ()
   "目前支持-local选项的源: https://gitee.com/RubyMetric/chsrc/issues/I9V5I0\n"
   "已收录的镜像站:         https://gitee.com/RubyMetric/chsrc/wikis\n"
   );
+
+  char *check_cmd = xy_str_to_quietcmd("gh --version");
+  bool gh_exist = query_program_exist (check_cmd, "gh");
+  if (gh_exist)
+    {
+      check_cmd = xy_str_to_quietcmd ("gh browse --repo RubyMetric/chsrc");
+      system (check_cmd);
+    }
 }
 
 
@@ -2390,18 +2399,18 @@ get_target (const char *input, TargetOp code, char *option)
   if (TargetOp_Set_Source==code)
     {
       if (target->setfn) target->setfn(option);
-      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现set功能，欢迎贡献"));
+      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现set功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_Reset_Source==code)
     {
       if (target->resetfn) target->resetfn(option);
-      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现reset功能，欢迎贡献"));
+      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现reset功能，邀您帮助: chsrc issue"));
       // puts ("将重置并恢复上游默认使用的源");
     }
   else if (TargetOp_Get_Source==code)
     {
       if (target->getfn) target->getfn("");
-      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现get功能，欢迎贡献"));
+      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现get功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_List_Source==code)
     {

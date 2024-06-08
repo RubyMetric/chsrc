@@ -373,7 +373,7 @@ chsrc_say_lastly (SourceInfo *source, const char *last_word)
         {
           chsrc_log ("半自动换源完成，仍需按上述提示手工操作");
         }
-      chsrc_warn ("若您有完全自动化的换源方案，邀您参与贡献");
+      chsrc_warn ("若您有完全自动化的换源方案，邀您帮助: chsrc issue");
     }
   else if (xy_streql (ChsrcTypeManual, last_word))
     {
@@ -385,7 +385,7 @@ chsrc_say_lastly (SourceInfo *source, const char *last_word)
         {
           chsrc_log ("因实现约束需按上述提示手工操作");
         }
-      chsrc_warn ("若您有完全自动化的换源方案，邀您参与贡献");
+      chsrc_warn ("若您有完全自动化的换源方案，邀您帮助: chsrc issue");
     }
   else if (xy_streql (ChsrcTypeUntested, last_word))
     {
@@ -397,7 +397,7 @@ chsrc_say_lastly (SourceInfo *source, const char *last_word)
         {
           chsrc_log ("自动换源完成");
         }
-      chsrc_warn ("该换源步骤已实现但未经测试或存在任何反馈，请报告使用情况");
+      chsrc_warn ("该换源步骤已实现但未经测试或存在任何反馈，请报告使用情况: chsrc issue");
     }
   else
     {
