@@ -1962,6 +1962,61 @@ wr_nix_setsrc (char *option)
 
 
 
+void
+wr_dockerhub_getsrc (char *option)
+{
+  if (xy_on_linux || xy_on_bsd)
+    {
+      chsrc_check_file ("/etc/docker/daemon.json");
+    }
+  else
+    {
+      chsrc_note_remarkably ("请打开Docker Desktop设置");
+      chsrc_note_remarkably ("选择“Docker Engine”选项卡，在该选项卡中找到“registry-mirrors”一栏查看");
+    }
+}
+
+/**
+ * 参考：
+ *  1. https://mirrors.ustc.edu.cn/help/dockerhub.html
+ *  2. https://www.cnblogs.com/yuzhihui/p/17461781.html
+ */
+void
+wr_dockerhub_setsrc (char *option)
+{
+  int index = use_specific_mirror_or_auto_select (option, wr_nix);
+
+  SourceInfo source = wr_nix_sources[index];
+  chsrc_confirm_selection (&source);
+
+  if (xy_on_linux || xy_on_bsd)
+    {
+      char *to_add = xy_strjoin (3, "{\n"
+                                "  \"registry-mirrors\": [\"", source.url, "\"]\n"
+                                "}");
+      chsrc_note_remarkably ("请向 /etc/docker/daemon.json 中添加下述内容:");
+      puts (to_add);
+      if (xy_on_linux)
+        {
+          chsrc_note_remarkably ("然后请运行:");
+          puts ("sudo systemctl restart docker");
+        }
+      else
+        {
+          chsrc_note_remarkably ("然后请手动重启 docker 服务");
+        }
+    }
+  else
+    {
+      chsrc_note_remarkably ("请打开Docker Desktop设置");
+      chsrc_note_remarkably ("选择“Docker Engine”选项卡，在该选项卡中找到“registry-mirrors”一栏，添加镜像地址:");
+      puts (source.url);
+    }
+  chsrc_say_lastly (&source, ChsrcTypeManual);
+}
+
+
+
 /**
  * 参考: https://mirrors.sjtug.sjtu.edu.cn/docs/flathub
  */
@@ -2139,6 +2194,7 @@ static const char
 def_target_full(wr_winget);
 def_target(wr_brew);
 def_target_noget (wr_cocoapods);
+def_target(wr_dockerhub);
 def_target_noget (wr_flathub);
 def_target_noget (wr_nix);
 def_target_noget (wr_guix);
@@ -2149,7 +2205,8 @@ def_target(wr_tex);
 static const char
 *wr_winget  [] = {"winget",  NULL,                t(&wr_winget_target)},
 *wr_brew    [] = {"brew",    "homebrew",   NULL,  t(&wr_brew_target)},
-*wr_cocoapods[] = {"cocoa",   "cocoapods",  "pod", "cocoapod",  NULL,  t(&wr_cocoapods_target)},
+*wr_cocoapods[] = {"cocoa",   "cocoapods","pod", "cocoapod",  NULL,  t(&wr_cocoapods_target)},
+*wr_dockerhub [] ={"dockerhub", "docker",  NULL,  t(&wr_dockerhub_target)},
 *wr_flathub [] = {"flathub", NULL,                t(&wr_flathub_target)},
 *wr_nix     [] = {"nix",     NULL,                t(&wr_nix_target)},
 *wr_guix    [] = {"guix",    NULL,                t(&wr_guix_target)},
@@ -2158,7 +2215,7 @@ static const char
 *wr_anaconda[] = {"conda", "anaconda",     NULL,  t(&wr_anaconda_target)},
 **wr_softwares[] =
 {
-  wr_winget, wr_brew, wr_cocoapods, wr_flathub, wr_nix, wr_guix, wr_emacs, wr_tex, wr_anaconda
+  wr_winget, wr_brew, wr_cocoapods, wr_dockerhub, wr_flathub, wr_nix, wr_guix, wr_emacs, wr_tex, wr_anaconda
 };
 #undef t
 /************************************** End Target Matrix ****************************************/
