@@ -70,6 +70,9 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-armv7-
 ### macOS
 
 ```bash
+# M1/aarch64
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-aarch64-macos -o chsrc; chmod +x ./chsrc
+
 # x64
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-x64-macos -o chsrc; chmod +x ./chsrc
 ```
