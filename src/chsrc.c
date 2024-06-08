@@ -1784,6 +1784,7 @@ wr_emacs_setsrc (char *option)
 }
 
 
+
 void
 wr_winget_getsrc (char *option)
 {
@@ -1810,6 +1811,7 @@ wr_winget_resetsrc (char *option)
 {
   chsrc_run ("winget source reset winget");
 }
+
 
 
 void
@@ -1848,7 +1850,36 @@ wr_brew_setsrc (char *option)
   chsrc_append_to_file (core_git_remote, "~/.bashrc >> ~/.zshrc");
 
   chsrc_say_thanks (&source);
-  puts ("");  chsrc_warn ("请您重启终端使环境变量生效");
+  puts ("");  chsrc_note_remarkably ("请您重启终端使环境变量生效");
+}
+
+
+
+/**
+ * 参考：https://mirrors.tuna.tsinghua.edu.cn/help/CocoaPods/
+ */
+void
+wr_cocoapods_setsrc (char *option)
+{
+  int index = use_specific_mirror_or_auto_select (option, wr_brew);
+
+  SourceInfo source = wr_brew_sources[index];
+  chsrc_confirm_selection (&source);
+
+
+  chsrc_note_remarkably ("请手动执行以下命令:");
+
+  say ("cd ~/.cocoapods/repos");
+  say ("pod repo remove master");
+  char *git_cmd = xy_strjoin (3, "git clone ", source.url, " master");
+  say (git_cmd);
+  say ("");
+
+  chsrc_note_remarkably ("最后进入项目工程目录，在Podfile中第一行加入:");
+  char *source_str = xy_strjoin (3, "source '", source.url, "'");
+  say (source_str);
+
+  chsrc_say_thanks (&source);
 }
 
 
@@ -2100,6 +2131,7 @@ static const char
 
 def_target_full(wr_winget);
 def_target(wr_brew);
+def_target_noget (wr_cocoapods);
 def_target_noget (wr_flathub);
 def_target_noget (wr_nix);
 def_target_noget (wr_guix);
@@ -2110,6 +2142,7 @@ def_target(wr_tex);
 static const char
 *wr_winget  [] = {"winget",  NULL,                t(&wr_winget_target)},
 *wr_brew    [] = {"brew",    "homebrew",   NULL,  t(&wr_brew_target)},
+*wr_cocoapods[] = {"cocoa",   "cocoapods",  "pod", "cocoapod",  NULL,  t(&wr_cocoapods_target)},
 *wr_flathub [] = {"flathub", NULL,                t(&wr_flathub_target)},
 *wr_nix     [] = {"nix",     NULL,                t(&wr_nix_target)},
 *wr_guix    [] = {"guix",    NULL,                t(&wr_guix_target)},
@@ -2118,7 +2151,7 @@ static const char
 *wr_anaconda[] = {"conda", "anaconda",     NULL,  t(&wr_anaconda_target)},
 **wr_softwares[] =
 {
-  wr_winget, wr_brew, wr_flathub, wr_nix, wr_guix, wr_emacs, wr_tex, wr_anaconda
+  wr_winget, wr_brew, wr_cocoapods, wr_flathub, wr_nix, wr_guix, wr_emacs, wr_tex, wr_anaconda
 };
 #undef t
 /************************************** End Target Matrix ****************************************/
