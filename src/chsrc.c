@@ -388,13 +388,13 @@ pl_lua_setsrc (char *option)
                                 "  \"", source.url, "\"\n"
                                 "}");
 
-  chsrc_info ("请手动修改 ~/.luarocks/config.lua 文件 (用于下载):");
+  chsrc_note_remarkably ("请手动修改 ~/.luarocks/config.lua 文件 (用于下载):");
   puts (config);
 
   char *upload_config = xy_strjoin (3, "key = \"<Your API Key>\"\n"
                                       "server = \"", source.url, "\"");
 
-  chsrc_info ("请手动修改  ~/.luarocks/upload_config.lua 文件 (用于上传):");
+  chsrc_note_remarkably ("请手动修改  ~/.luarocks/upload_config.lua 文件 (用于上传):");
   puts (upload_config);
 
   chsrc_say_lastly (&source, ChsrcTypeManual);
@@ -527,9 +527,7 @@ pl_java_getsrc (char *option)
   bool maven_exist, gradle_exist;
   pl_java_check_cmd (&maven_exist, &gradle_exist);
   char *maven_config = pl_java_find_maven_config ();
-
-  char *echo = xy_2strjoin ("请查看 ", maven_config);
-  chsrc_info (echo);
+  chsrc_note_remarkably (xy_2strjoin ("请查看 ", maven_config));
 }
 
 /**
@@ -557,8 +555,7 @@ pl_java_setsrc (char *option)
       "</mirror>");
 
       char *maven_config = pl_java_find_maven_config ();
-      char *echo = xy_strjoin (3, "请在您的 maven 配置文件 ", maven_config, " 中添加:");
-      chsrc_info (echo);
+      chsrc_note_remarkably (xy_strjoin (3, "请在您的 maven 配置文件 ", maven_config, " 中添加:"));
       puts (file);
     }
 
@@ -574,7 +571,7 @@ pl_java_setsrc (char *option)
       "  }\n"
       "}");
 
-      chsrc_info ("请在您的 build.gradle 中添加:");
+      chsrc_note_remarkably ("请在您的 build.gradle 中添加:");
       puts (file);
     }
   chsrc_say_lastly (&source, ChsrcTypeManual);
@@ -681,7 +678,7 @@ pl_haskell_setsrc(char *option)
     config = "~/.cabal/config";
   }
 
-  chsrc_info (xy_strjoin (3,"请向 ", config, " 中手动添加:"));
+  chsrc_note_remarkably (xy_strjoin (3,"请向 ", config, " 中手动添加:"));
   puts (file); puts ("");
 
   config = xy_uniform_path ("~/.stack/config.yaml");
@@ -700,7 +697,8 @@ pl_haskell_setsrc(char *option)
                        "        - fe331502606802feac15e514d9b9ea83fee8b6ffef71335479a2e68d84adc6b0\n"
                        "        key-threshold: 3\n"
                        "        ignore-expiry: no");
-  chsrc_info (xy_strjoin (3,"请向 ", config, " 中手动添加:"));
+
+  chsrc_note_remarkably (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
   puts (file);
   chsrc_say_lastly (&source, ChsrcTypeManual);
 }
@@ -746,7 +744,7 @@ pl_ocaml_setsrc(char *option)
 
   chsrc_run (cmd);
 
-  chsrc_info ("如果是首次使用 opam ，请使用以下命令进行初始化");
+  chsrc_note_remarkably ("如果是首次使用 opam ，请使用以下命令进行初始化");
   puts (xy_2strjoin ("opam init default ", source.url));
 
   chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
@@ -938,7 +936,7 @@ os_debian_setsrc (char *option)
   SourceInfo source = os_debian_sources[index];
   chsrc_confirm_selection (&source);
 
-  chsrc_info ("如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并需要您运行:");
+  chsrc_note_remarkably ("如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并需要您运行:");
   puts ("apt install apt-transport-https ca-certificates");
 
   chsrc_backup (ETC_APT_SOURCELIST);
@@ -1046,10 +1044,10 @@ os_fedora_setsrc (char *option)
 
   chsrc_run (cmd);
 
-  chsrc_info ("替换文件 /etc/yum.repos.d/fedora.repo");
-  chsrc_info ("新增文件 /etc/yum.repos.d/fedora-modular.repo");
-  chsrc_info ("替换文件 /etc/yum.repos.d/fedora-updates.repo");
-  chsrc_info ("新增文件 /etc/yum.repos.d/fedora-updates-modular.repo");
+  chsrc_infolog_remarkably ("已替换文件 /etc/yum.repos.d/fedora.repo");
+  chsrc_infolog_remarkably ("已新增文件 /etc/yum.repos.d/fedora-modular.repo");
+  chsrc_infolog_remarkably ("已替换文件 /etc/yum.repos.d/fedora-updates.repo");
+  chsrc_infolog_remarkably ("已新增文件 /etc/yum.repos.d/fedora-updates-modular.repo");
 
   chsrc_run ("dnf makecache");
   chsrc_say_lastly (&source, ChsrcTypeAuto);
@@ -1103,9 +1101,9 @@ os_opensuse_setsrc (char *option)
   chsrc_run (cmd3);
   chsrc_run (cmd4);
 
-  chsrc_info ("leap 15.3用户还需 要添加sle和backports源");
-  chsrc_info ("另外请确保系统在更新后仅启用了六个软件源，可以使用 zypper lr 检查软件源状态");
-  chsrc_info ("并使用 zypper mr -d 禁用多余的软件源");
+  chsrc_note_remarkably ("leap 15.3用户还需要添加sle和backports源");
+  chsrc_note_remarkably ("另外请确保系统在更新后仅启用了六个软件源，可以使用 zypper lr 检查软件源状态");
+  chsrc_note_remarkably ("并使用 zypper mr -d 禁用多余的软件源");
 
   chsrc_run (cmd5);
   chsrc_run (cmd6);
@@ -1165,7 +1163,7 @@ os_msys2_setsrc (char *option)
   char *prev = xy_strjoin (3, "请针对你的架构下载安装此目录下的文件:",
                               source.url,
                              "distrib/<架构>/");
-  chsrc_info (prev);
+  chsrc_note_remarkably (prev);
 
   char *cmd = xy_strjoin (3, "sed -i \"s#https\?://mirror.msys2.org/#",
                               source.url,
@@ -1210,7 +1208,7 @@ os_arch_setsrc (char *option)
   // TODO: 这里用的是 overwrite 吗？
   chsrc_overwrite_file (new_file, "/etc/pacman.d/mirrorlist");
 
-  chsrc_info ("使用 archlinuxcn");
+  chsrc_infolog_remarkably ("使用 archlinuxcn");
 
   char *towrite = xy_strjoin (3, "[archlinuxcn]\nServer=", source.url, "archlinuxcn/$repo/os/$arch");
   chsrc_append_to_file (towrite, "/etc/pacman.d/mirrorlist");
@@ -1520,7 +1518,7 @@ os_freebsd_setsrc (char *option)
   SourceInfo source = os_freebsd_sources[index];
   chsrc_confirm_selection (&source);
 
-  chsrc_info ("1. 添加 freebsd-pkg 源 (二进制安装包)");
+  chsrc_infolog_remarkably ("1. 添加 freebsd-pkg 源 (二进制安装包)");
   chsrc_ensure_dir ("/usr/local/etc/pkg/repos");
 
   char *conf = xy_strjoin (3, "/usr/local/etc/pkg/repos/", source.mirror->code, ".conf");
@@ -1539,7 +1537,7 @@ os_freebsd_setsrc (char *option)
   chsrc_warn ("若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将'http'改成'https'，最后使用'pkg update -f'刷新缓存即可\n");
   puts ("");
 
-  chsrc_info ("2. 修改 freebsd-ports 源");
+  chsrc_infolog_remarkably ("2. 修改 freebsd-ports 源");
   // @ccmywish: [2023-09-27] 据 @ykla , NJU的freebsd-ports源没有设置 Git，
   //                         但是我认为由于使用Git还是要比非Git方便许多，我们尽可能坚持使用Git
   //                         而 gitup 又要额外修改它自己的配置，比较麻烦
@@ -1553,7 +1551,7 @@ os_freebsd_setsrc (char *option)
       char *git_cmd = xy_strjoin (3, "git clone --depth 1 https://", source.url, "/freebsd-ports/ports.git /usr/ports");
       chsrc_run (git_cmd);
       source = os_freebsd_sources[index]; // 恢复至选中的源
-      chsrc_warn ("下次更新请使用 git -C /usr/ports pull 而非使用 gitup");
+      chsrc_warn_remarkably ("下次更新请使用 git -C /usr/ports pull 而非使用 gitup");
     }
   else
     {
@@ -1563,11 +1561,11 @@ os_freebsd_setsrc (char *option)
       chsrc_run (fetch);
       chsrc_run (unzip);
       chsrc_run (delete);
-      chsrc_warn ("下次更新请重新下载内容至 /usr/ports");
+      chsrc_infolog_remarkably ("下次更新请重新下载内容至 /usr/ports");
     }
 
 
-  chsrc_info ("3. 指定 port 源");
+  chsrc_infolog_remarkably ("3. 指定 port 源");
   // https://help.mirrors.cernet.edu.cn/FreeBSD-ports/
   chsrc_backup ("/etc/make.conf");
 
@@ -1579,26 +1577,26 @@ os_freebsd_setsrc (char *option)
   /*
     chsrc_backup ("/etc/portsnap.conf");
 
-    char* portsnap =xy_strjoin(3,"s@(.*)SERVERNAME=[\\.|a-z|A-Z]*@\\1SERVERNAME=", source.url,
+    char *portsnap =xy_strjoin(3,"s@(.*)SERVERNAME=[\\.|a-z|A-Z]*@\\1SERVERNAME=", source.url,
                                 "@g < /etc/portsnap.conf.bak");
 
     chsrc_overwrite_file (portsnap, "/etc/portsnap.conf");
 
-    chsrc_info("portsnap sources changed");
-    chsrc_info("获取portsnap更新使用此命令: 'portsnap fetch extract'");
+    chsrc_infolog_remarkably ("portsnap sources changed");
+    chsrc_infolog_remarkably ("获取portsnap更新使用此命令: 'portsnap fetch extract'");
   */
 
 
   // HELP: 暂时没有源提供
-  chsrc_warn ("4. 抱歉，目前境内无 freebsd-update 源，若存在请报告issue，谢谢");
+  chsrc_warn_remarkably ("4. 抱歉，目前境内无 freebsd-update 源，若存在请报告issue，谢谢");
   /*
-    chsrc_info("3. 修改 freebsd-update 源");
+    chsrc_infolog_remarkably ("3. 修改 freebsd-update 源");
 
-    char* update_cp="cp /etc/freebsd-update.conf /etc/freebsd-update.conf.bak";
-    chsrc_runcmd(update_cp);
+    char *update_cp = "cp /etc/freebsd-update.conf /etc/freebsd-update.conf.bak";
+    chsrc_run (update_cp);
 
-    char* update =xy_strjoin(3,"s@(.*)SERVERNAME [\\.|a-z|A-Z]*@\\1SERVERNAME ",
-                                source.url,
+    char *update =xy_strjoin (3,"s@(.*)SERVERNAME [\\.|a-z|A-Z]*@\\1SERVERNAME ",
+                                 source.url,
                                 "@g < /etc/freebsd-update.conf.bak");
 
     chsrc_overwrite_file (update, "/etc/freebsd-update.conf");
@@ -1949,12 +1947,12 @@ wr_nix_setsrc (char *option)
 
   chsrc_run ("nix-channel --update");
 
-  chsrc_info ("若您使用的是NixOS，请确认您的系统版本<version>（如22.11），并手动运行:");
+  chsrc_note_remarkably ("若您使用的是NixOS，请确认您的系统版本<version>（如22.11），并手动运行:");
   cmd = xy_strjoin (3, "nix-channel --add ", source.url, "nixpkgs-<version> nixpkgs");
   puts (cmd);
 
   cmd = xy_strjoin (3, "nix.settings.substituters = [ \"", source.url, "store\" ];");
-  chsrc_info ("若您使用的是NixOS，请额外添加下述内容至 configuration.nix 中");
+  chsrc_note_remarkably ("若您使用的是NixOS，请额外添加下述内容至 configuration.nix 中");
   puts (cmd);
 
   chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
@@ -2088,10 +2086,10 @@ wr_anaconda_setsrc (char *option)
       chsrc_run ("conda config --set show_channel_urls yes");
     }
 
-  chsrc_info (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
+  chsrc_note_remarkably (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
   puts (file);
 
-  chsrc_info ("然后运行 conda clean -i 清除索引缓存，保证用的是镜像站提供的索引");
+  chsrc_note_remarkably ("然后运行 conda clean -i 清除索引缓存，保证用的是镜像站提供的索引");
   chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
 }
 
@@ -2282,13 +2280,13 @@ void
 print_supported_targets ()
 {
   chsrc_info ("支持对以下目标换源 (同一行表示这几个命令兼容)"); puts("");
-  chsrc_info ("编程语言开发");
+  puts (xy_str_to_blue ("编程语言开发"));
   puts ("-------------------------");
   print_supported_targets_ (pl_packagers, xy_arylen(pl_packagers));
-  chsrc_info ("操作系统");
+  puts (xy_str_to_blue ("操作系统"));
   puts ("-------------------------");
   print_supported_targets_ (os_systems,   xy_arylen(os_systems));
-  chsrc_info ("软件");
+  puts (xy_str_to_blue ("软件"));
   puts ("-------------------------");
   print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
 }
