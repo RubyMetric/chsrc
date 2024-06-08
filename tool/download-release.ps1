@@ -2,17 +2,11 @@
 # File          : download-release.ps1
 # Authors       : Aoran Zeng <ccmywish@qq.com>
 # Created on    : <2023-09-21>
-# Last modified : <2024-05-25>
+# Last modified : <2024-06-08>
 #
 # download:
 #
 #   Download from GitHub Releases
-# ----------
-# Changelog:
-#
-# ~> v0.1.0
-# <2024-05-25> Rename to download-release
-# <2023-09-21> Create file
 # ---------------------------------------------------------------
 
 $destination = "~\Desktop\chsrc-GitHub-release"
@@ -24,6 +18,7 @@ Set-Location $destination
 $names = @(
   'chsrc-x64-windows.exe'
   'chsrc-x86-windows.exe'
+  'chsrc-aarch64-macos'
   'chsrc-x64-macos'
   'chsrc-x64-linux'
   'chsrc-aarch64-linux'
