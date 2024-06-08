@@ -12,7 +12,7 @@
  *   SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version "v0.1.6-pre-2024/06/08"
+#define Chsrc_Version "v0.1.6-2024/06/08"
 
 #include "chsrc.h"
 
