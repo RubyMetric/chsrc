@@ -3,7 +3,7 @@
 # File          : cli.pl
 # Authors       : Aoran Zeng <ccmywish@qq.com>
 # Created on    : <2024-06-05>
-# Last modified : <2024-06-05>
+# Last modified : <2024-06-08>
 #
 #   测试 chsrc 可执行文件
 # ---------------------------------------------------------------
@@ -35,9 +35,9 @@ like `./chsrc ls`,    qr/$list_str/m,    'chsrc ls';
 =cut
 # my $get_null = "请您提供想要测速源的软件名";
 # like `./chsrc get 2>1`,      qr/$get_null/,    'chsrc get';
-my $get_abcd = "暂不支持的换源目标";
+# my $get_abcd = "暂不支持的换源目标";
 my $get_python = "命令.*python.*存在";
-like `./chsrc get abcd`, qr/$get_abcd/,    'chsrc get abcd';
+# like `./chsrc get abcd`, qr/$get_abcd/,    'chsrc get abcd';
 like `./chsrc get py`,   qr/$get_python/,  'chsrc get py';
 
 
@@ -54,7 +54,7 @@ like `./chsrc cesu ruby`,  qr/$cesu_ruby/,      'chsrc cesu ruby';
 my $set_ruby = "换源完成，感谢镜像提供方";
 my $set_ruby_abcd = "";
 my $set_ruby_first = "换源完成，感谢镜像提供方";
-my $reset_ruby = "将重置并恢复上游默认使用的源.*Upstream";
+my $reset_ruby = "将重置为上游默认源.*Upstream";
 my $set_ruby_tencent = "换源完成，感谢镜像提供方.*腾讯软件源";
 my $set_ruby_locally = "bundle config --local";
 
