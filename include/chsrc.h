@@ -95,7 +95,7 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
 
   if (xy_streql ("first", input))
     {
-      puts ("使用维护团队测速第一的源");
+      puts ("将使用维护团队测速第一的源");
       return 1; // 返回第2个，因为第1个是上游默认源
     }
 
@@ -292,7 +292,7 @@ is_upstream (SourceInfo *source)
 }
 
 bool
-source_is_null (SourceInfo *source)
+source_has_empty_url (SourceInfo *source)
 {
   return source->url == NULL;
 }
@@ -313,12 +313,12 @@ chsrc_confirm_selection (SourceInfo *source)
   // chsrc 已经规避用户使用未实现的 `chsrc reset`
   // 但是某些用户可能摸索着强行使用 chsrc set target upstream，从而执行起该禁用的功能，
   // 之所以禁用，是因为有的 reset 我们并没有实现，我们在这里阻止这些邪恶的用户
-  if (is_upstream (source) && source_is_null (source))
+  if (is_upstream (source) && source_has_empty_url (source))
     {
       chsrc_error ("暂未对该软件实现重置");
       exit (2);
     }
-  else if (source_is_null (source))
+  else if (source_has_empty_url (source))
     {
       chsrc_error ("该源URL不存在，请向开发团队提交bug");
       exit (2);

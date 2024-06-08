@@ -1984,9 +1984,9 @@ wr_dockerhub_getsrc (char *option)
 void
 wr_dockerhub_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, wr_nix);
+  int index = use_specific_mirror_or_auto_select (option, wr_dockerhub);
 
-  SourceInfo source = wr_nix_sources[index];
+  SourceInfo source = wr_dockerhub_sources[index];
   chsrc_confirm_selection (&source);
 
   if (xy_on_linux || xy_on_bsd)
