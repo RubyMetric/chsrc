@@ -54,13 +54,13 @@ query_program_exist (char *check_cmd, char *prog_name)
   if (0 != ret)
     {
       // xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
-      xy_log_remarkably (App_Name, xy_str_to_red ("检查"),
+      xy_log_remarkably (App_Name, xy_str_to_bold (xy_str_to_red ("检查")),
         xy_strjoin (4, xy_str_to_red ("x "), "命令 ", xy_str_to_red (prog_name), " 不存在"));
       return false;
     }
   else
     {
-      xy_log_remarkably (App_Name, xy_str_to_green ("检查"),
+      xy_log_remarkably (App_Name, xy_str_to_bold (xy_str_to_green ("检查")),
         xy_strjoin (4, xy_str_to_green ("√ "), "命令 ", xy_str_to_green (prog_name), " 存在"));
       return true;
     }
