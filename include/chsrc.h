@@ -542,7 +542,7 @@ chsrc_backup (const char *path)
     }
 
   chsrc_run (cmd);
-  chsrc_info (xy_strjoin (3, "备份文件名 ", path, ".bak"));
+  chsrc_info_remarkably (xy_strjoin (3, "备份文件名 ", path, ".bak"));
 }
 
 
