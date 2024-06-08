@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2024-06-05>
+ * Last modified : <2024-06-08>
  *
  * sources:
  *
@@ -784,6 +784,15 @@ wr_brew_sources[] = {
 },
 
 
+/**
+ * 2024-06-08 更新
+ */
+wr_cocoapods_sources[] = {
+  {&Upstream,       NULL},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/git/CocoaPods/Specs.git"}
+},
+
 
 /**
  * 2023-09-11 更新
@@ -894,7 +903,8 @@ def_sources_n(os_deepin);   def_sources_n(os_openeuler); def_sources_n(os_openky
 def_sources_n(os_ros);
 
 def_sources_n(wr_winget);
-def_sources_n(wr_brew);     def_sources_n(wr_flathub);
+def_sources_n(wr_brew);     def_sources_n(wr_cocoapods);
+def_sources_n(wr_flathub);
 def_sources_n(wr_nix);      def_sources_n(wr_guix);
 def_sources_n(wr_tex);      def_sources_n(wr_emacs);
 def_sources_n(wr_anaconda);
