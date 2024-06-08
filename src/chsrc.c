@@ -261,13 +261,14 @@ pl_nodejs_setsrc (char *option)
 
   if (yarn_exist)
     {
-      cmd = xy_str_to_quietcmd (xy_2strjoin ("yarn config set registry ", source.url));
+      // 不再阻止换源命令输出到终端，即不再调用 xy_str_to_quietcmd()
+      cmd = xy_2strjoin ("yarn config set registry ", source.url);
       chsrc_run (cmd);
     }
 
   if (pnpm_exist)
     {
-      cmd = xy_str_to_quietcmd (xy_2strjoin ("pnpm config set registry ", source.url));
+      cmd = xy_2strjoin ("pnpm config set registry ", source.url);
       chsrc_run (cmd);
     }
 
