@@ -2291,6 +2291,19 @@ cli_print_help ()
     }
 }
 
+void
+cli_print_issues ()
+{
+  puts (
+  "chsrc issues: Gitee和GitHub两边同时接受issue\n\n"
+  "- https://gitee.com/RubyMetric/chsrc/issues\n"
+  "- https://github.com/RubyMetric/chsrc/issues\n\n"
+
+  "目前支持reset命令的源:  https://gitee.com/RubyMetric/chsrc/issues/I9V6EV\n"
+  "目前支持-local选项的源: https://gitee.com/RubyMetric/chsrc/issues/I9V5I0\n"
+  "已收录的镜像站:         https://gitee.com/RubyMetric/chsrc/wikis\n"
+  );
+}
 
 
 /**
@@ -2597,6 +2610,16 @@ main (int argc, char const *argv[])
       target = argv[cli_arg_Target_pos];
       matched = get_target (target, TargetOp_Reset_Source, NULL);
       if (!matched) goto not_matched;
+      return 0;
+    }
+
+    /* chsrc issue */
+  else if (xy_streql (command, "issue") ||
+           xy_streql (command, "issues") ||
+           xy_streql (command, "isue") ||
+           xy_streql (command, "i"))
+    {
+      cli_print_issues ();
       return 0;
     }
 
