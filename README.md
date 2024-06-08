@@ -196,7 +196,10 @@ sudo chsrc set netbsd
 ## 软件
 
 ```bash
-chsrc set brew   或 set homebrew
+chsrc set winget
+chsrc set brew      或 set homebrew
+chsrc set cocoapods 或 set cocoa / pod
+chsrc set dockerhub 或 set docker
 chsrc set flathub
 chsrc set nix
 chsrc set guix
