@@ -20,11 +20,11 @@
 #define chsrc_warn(str)  xy_warn(App_Name,str)
 #define chsrc_error(str) xy_error(App_Name,str)
 
-#define chsrc_succ_remarkably(str) xy_succ_remarkably(App_Name,"成功",str);
-#define chsrc_info_remarkably(str) xy_info_remarkably(App_Name,"信息",str);
-#define chsrc_note_remarkably(str) xy_info_remarkably(App_Name,"提示",str);
-#define chsrc_warn_remarkably(str) xy_warn_remarkably(App_Name,"警告",str);
-#define chsrc_error_remarkably(str) xy_error_remarkably(App_Name,"错误",str);
+#define chsrc_succ_remarkably(str)    xy_succ_remarkably(App_Name,"成功",str);
+#define chsrc_info_remarkably(str)    xy_info_remarkably(App_Name,"信息",str);
+#define chsrc_note_remarkably(str)    xy_info_remarkably(App_Name,"提示",str);
+#define chsrc_warn_remarkably(str)    xy_warn_remarkably(App_Name,"警告",str);
+#define chsrc_error_remarkably(str)   xy_error_remarkably(App_Name,"错误",str);
 
 
 bool Cli_Option_IPv6 = false;
@@ -365,10 +365,22 @@ not_root:
 static void
 chsrc_run (const char *cmd)
 {
-  puts ("~~~~~~~~~~~");
-  puts (xy_2strjoin ("运行 ", xy_str_to_blue (cmd)));
-  system (cmd);
+  xy_info_remarkably (App_Name, "运行", cmd);
+  int status = system (cmd);
+  if (0==status)
+    {
+      xy_succ_remarkably (App_Name, "运行", "命令执行成功");
+    }
+  else
+    {
+      char buf[8] = {0};
+      itoa(status, buf, 10);
+      char *str = xy_2strjoin ("命令执行失败，返回码 ", buf);
+      xy_error_remarkably (App_Name, "运行", str);
+    }
+  puts ("");
 }
+
 
 static void
 chsrc_check_file (const char *path)
