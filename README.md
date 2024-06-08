@@ -22,21 +22,14 @@
 
 如果你想要通过 `scoop`，`brew`，`yay` 等系统包管理工具来安装和更新`chsrc`，请帮助我们达到下面的要求。
 
-- [ ] `scoop` 要求 GitHub star 数量超过 **500** 以及/或 **150**个fork
-
-    目前有**341**个star
-
-- [ ] `scoop` 要求英文输出
-
-    本意是中文输出，但是我们将提供选项来进行英文输出。该选项同时有利于BSD用户
-
-- [ ] `homebrew` 要求 GitHub 仓库 **>=30 forks**, **>=30 watchers** or **>=75 stars**
-
-    star数已够，但是fork数仅有**7**
-
 - [ ] 缺乏 `AUR` 维护者
 - [ ] 缺乏 `homebrew` 维护者
-- [x] `scoop` 维护者
+- [ ] `scoop` 维护者
+- [x] `scoop` 要求 GitHub star 数量超过 **500** 以及/或 **150**个fork
+- [x] `homebrew` 要求 GitHub 仓库 **>=30 forks**, **>=30 watchers** or **>=75 stars**
+- [ ] `scoop` 要求英文输出
+
+    `chsrc`本意进行中文输出，但是我们将尽可能提供选项来进行英文输出。该选项同时有利于BSD用户
 
 请访问 [chsrc on GitHub](https://github.com/RubyMetric/chsrc)
 
@@ -102,6 +95,7 @@ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
 使用: chsrc <command> [options] [target] [mirror]
 
 help                    # 打印此帮助，或 h, -h, --help
+issue                   # 查看相关issue
 list (或 ls, 或 l)      # 列出可用镜像源，和可换源软件
 list mirror/target      # 列出可用镜像源，或可换源软件
 list os/lang/ware       # 列出可换源的操作系统/编程语言/软件
