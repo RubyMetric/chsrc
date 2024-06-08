@@ -441,7 +441,7 @@ chsrc_run (const char *cmd)
   else
     {
       char buf[8] = {0};
-      itoa(status, buf, 10);
+      sprintf (buf, "%d", status);
       char *str = xy_2strjoin ("命令执行失败，返回码 ", buf);
       xy_error_remarkably (App_Name, "运行", str);
     }
