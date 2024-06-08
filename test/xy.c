@@ -41,9 +41,17 @@ main (int argc, char const *argv[])
   print (xy_str_to_cyan    ("青色"));
   puts ("");
 
-  xy_info_remarkably  ("app", "提示", "襄阳牛肉面需要搭配黄酒");
-  xy_warn_remarkably  ("app", "警告", "兰州牛肉面，而非兰州拉面");
-  xy_error_remarkably ("app", "错误", "肉丸胡辣汤里没有肉丸");
+  xy_log   ("普通", "输出普通内容");
+  xy_succ  ("成功", "输出成功内容");
+  xy_info  ("信息", "输出信息内容");
+  xy_warn  ("警告", "输出警告内容");
+  xy_error ("错误", "输出错误内容");
+
+  xy_log_remarkably   ("xy.h", "普通", "咸阳油泼面筋道十足辣子香");
+  xy_succ_remarkably  ("xy.h", "成功", "西安花干鸡蛋肉夹馍已出炉");
+  xy_info_remarkably  ("xy.h", "信息", "襄阳牛肉面搭配黄酒更美味");
+  xy_warn_remarkably  ("xy.h", "警告", "兰州牛肉面，而非兰州拉面");
+  xy_error_remarkably ("xy.h", "错误", "西安肉丸胡辣汤里没有肉丸");
 
   assert (false == xy_str_end_with ("abcdef", "abcdefg"));
   assert (xy_str_end_with ("abcdef", "def"));
@@ -75,15 +83,6 @@ main (int argc, char const *argv[])
   assert_str ("DEFdefDEFdef",
               xy_str_gsub ("abcdefabcdef", "abc", "DEF")); // 等量
 
-  xy_succ  ("成功", "输出成功内容");
-  xy_info  ("信息", "输出信息内容");
-  xy_warn  ("警告", "输出警告内容");
-  xy_error ("错误", "输出错误内容");
-
-  xy_succ_remarkably  ("xy.h", "成功", "输出成功内容");
-  xy_info_remarkably  ("xy.h", "信息", "输出信息内容");
-  xy_warn_remarkably  ("xy.h", "警告", "输出警告内容");
-  xy_error_remarkably ("xy.h", "错误", "输出错误内容");
 
   assert (xy_file_exist ("./image/chsrc.png"));
   assert (xy_file_exist (xy_win_powershell_profile));
@@ -92,6 +91,6 @@ main (int argc, char const *argv[])
   puts (xy_uniform_path (" \n ~/haha/test/123 \n\r "));
   assert_str (xy_uniform_path ("~/haha/test"), xy_parent_dir (" ~/haha/test/123"));
 
-  xy_succ ("完成", "测试全部通过");
+  xy_succ ("测试完成", "测试全部通过");
   return 0;
 }
