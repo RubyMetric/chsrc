@@ -494,25 +494,29 @@ _xy_log_remarkably (int level, const char *prompt1, const char *prompt2, const c
   else if (level & XY_Log_Success)
     {
       /* [app 成功]  [app success] */
-      str = xy_strjoin (6, "[", prompt1, " ", xy_str_to_green (prompt2), "] ", xy_str_to_green (content));
+      str = xy_strjoin (6,
+        "[", xy_str_to_green (prompt1), " ", xy_str_to_bold (xy_str_to_green (prompt2)), "] ", xy_str_to_green (content));
     }
   else if (level & XY_Log_Info)
     {
       /* [app 信息]  [app info]
          [app 提示]  [app notice]
       */
-      str = xy_strjoin (6, "[", prompt1, " ", xy_str_to_blue (prompt2), "] ", xy_str_to_blue (content));
+      str = xy_strjoin (6,
+        "[", xy_str_to_blue (prompt1), " ", xy_str_to_bold (xy_str_to_blue (prompt2)), "] ", xy_str_to_blue (content));
     }
   else if (level & XY_Log_Warn)
     {
       /* [app 警告]  [app warn] */
-      str = xy_strjoin (6,  "[", prompt1, " ", xy_str_to_yellow (prompt2), "] ", xy_str_to_yellow (content));
+      str = xy_strjoin (6,
+        "[", xy_str_to_yellow (prompt1), " ", xy_str_to_bold (xy_str_to_yellow (prompt2)), "] ", xy_str_to_yellow (content));
       to_stderr = true;
     }
   else if (level & XY_Log_Error)
     {
       /* [app 错误]  [app error] */
-      str = xy_strjoin (6,  "[", prompt1, " ", xy_str_to_red (prompt2), "] ", xy_str_to_red (content));
+      str = xy_strjoin (6,
+        "[", xy_str_to_red (prompt1), " ", xy_str_to_bold (xy_str_to_red (prompt2)), "] ", xy_str_to_red (content));
       to_stderr = true;
     }
   else
