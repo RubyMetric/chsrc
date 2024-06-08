@@ -19,11 +19,11 @@ main (int argc, char const *argv[])
   puti (3);
   double dbl = 3.1415;
   putf (dbl);
-  puts (xy_2strjoin ("Xi", "'an"));
-  puts (xy_strjoin  (2, "Xi", "'an"));
-  puts (xy_strjoin  (3, "屈身守分，", "以待天时，", "不可与命争也"));
-  puts (xy_strjoin  (4, "水落鱼梁浅，", "天寒梦泽深。", "羊公碑字在，", "读罢泪沾襟。"));
-  puts (xy_strjoin  (6, "楚山横地出，", "汉水接天回。", "冠盖非新里，", "章华即旧台。", "习池风景异，", "归路满尘埃。"));
+  say (xy_2strjoin ("Xi", "'an"));
+  say (xy_strjoin  (2, "Xi", "'an"));
+  say (xy_strjoin  (3, "屈身守分，", "以待天时，", "不可与命争也"));
+  say (xy_strjoin  (4, "水落鱼梁浅，", "天寒梦泽深。", "羊公碑字在，", "读罢泪沾襟。"));
+  say (xy_strjoin  (6, "楚山横地出，", "汉水接天回。", "冠盖非新里，", "章华即旧台。", "习池风景异，", "归路满尘埃。"));
 
   print (xy_str_to_bold      ("粗体"));
   print (xy_str_to_faint     ("浅体"));
@@ -75,10 +75,15 @@ main (int argc, char const *argv[])
   assert_str ("DEFdefDEFdef",
               xy_str_gsub ("abcdefabcdef", "abc", "DEF")); // 等量
 
-  xy_success ("成功：输出成功内容");
-  xy_info    ("信息: 输出信息内容");
-  xy_warn    ("警告：输出警告内容");
-  xy_error   ("错误：输出错误内容");
+  xy_succ  ("成功", "输出成功内容");
+  xy_info  ("信息", "输出信息内容");
+  xy_warn  ("警告", "输出警告内容");
+  xy_error ("错误", "输出错误内容");
+
+  xy_succ_remarkably  ("xy.h", "成功", "输出成功内容");
+  xy_info_remarkably  ("xy.h", "信息", "输出信息内容");
+  xy_warn_remarkably  ("xy.h", "警告", "输出警告内容");
+  xy_error_remarkably ("xy.h", "错误", "输出错误内容");
 
   assert (xy_file_exist ("./image/chsrc.png"));
   assert (xy_file_exist (xy_win_powershell_profile));
@@ -87,6 +92,6 @@ main (int argc, char const *argv[])
   puts (xy_uniform_path (" \n ~/haha/test/123 \n\r "));
   assert_str (xy_uniform_path ("~/haha/test"), xy_parent_dir (" ~/haha/test/123"));
 
-  xy_success ("测试全部通过");
+  xy_succ ("完成", "测试全部通过");
   return 0;
 }
