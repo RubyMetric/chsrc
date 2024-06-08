@@ -523,8 +523,8 @@ pl_java_getsrc (char *option)
   pl_java_check_cmd (&maven_exist, &gradle_exist);
   char *maven_config = pl_java_find_maven_config ();
 
-  char *echo = xy_2strjoin ("chsrc: 请查看 ", maven_config);
-  xy_info (echo);
+  char *echo = xy_2strjoin ("请查看 ", maven_config);
+  chsrc_info (echo);
 }
 
 /**
@@ -552,8 +552,8 @@ pl_java_setsrc (char *option)
       "</mirror>");
 
       char *maven_config = pl_java_find_maven_config ();
-      char *echo = xy_strjoin (3, "chsrc: 请在您的 maven 配置文件 ", maven_config, " 中添加:");
-      xy_info (echo);
+      char *echo = xy_strjoin (3, "请在您的 maven 配置文件 ", maven_config, " 中添加:");
+      chsrc_info (echo);
       puts (file);
     }
 
@@ -676,7 +676,7 @@ pl_haskell_setsrc(char *option)
     config = "~/.cabal/config";
   }
 
-  xy_info (xy_strjoin (3,"chsrc: 请向 ", config, " 中手动添加:"));
+  chsrc_info (xy_strjoin (3,"请向 ", config, " 中手动添加:"));
   puts (file); puts ("");
 
   config = xy_uniform_path ("~/.stack/config.yaml");
@@ -695,7 +695,7 @@ pl_haskell_setsrc(char *option)
                        "        - fe331502606802feac15e514d9b9ea83fee8b6ffef71335479a2e68d84adc6b0\n"
                        "        key-threshold: 3\n"
                        "        ignore-expiry: no");
-  xy_info (xy_strjoin (3,"chsrc: 请向 ", config, " 中手动添加:"));
+  chsrc_info (xy_strjoin (3,"请向 ", config, " 中手动添加:"));
   puts (file);
   chsrc_say_thanks (&source);
 }
@@ -1024,7 +1024,7 @@ os_fedora_setsrc (char *option)
   SourceInfo source = os_fedora_sources[index];
   chsrc_say_selection (&source);
 
-  xy_warn ("chsrc: fedora 29 及以下版本暂不支持");
+  chsrc_warn ("fedora 29 及以下版本暂不支持");
 
   chsrc_backup ("/etc/yum.repos.d/fedora.repo");
   chsrc_backup ("/etc/yum.repos.d/fedora-updates.repo");
@@ -1098,9 +1098,9 @@ os_opensuse_setsrc (char *option)
   chsrc_run (cmd3);
   chsrc_run (cmd4);
 
-  xy_info ("chsrc: leap 15.3用户还需 要添加sle和backports源");
-  xy_info ("chsrc: 另外请确保系统在更新后仅启用了六个软件源，可以使用 zypper lr 检查软件源状态");
-  xy_info ("chsrc: 并使用 zypper mr -d 禁用多余的软件源");
+  chsrc_info ("leap 15.3用户还需 要添加sle和backports源");
+  chsrc_info ("另外请确保系统在更新后仅启用了六个软件源，可以使用 zypper lr 检查软件源状态");
+  chsrc_info ("并使用 zypper mr -d 禁用多余的软件源");
 
   chsrc_run (cmd5);
   chsrc_run (cmd6);
@@ -1157,10 +1157,10 @@ os_msys2_setsrc (char *option)
   chsrc_backup ("/etc/pacman.d/mirrorlist.mingw64");
   chsrc_backup ("/etc/pacman.d/mirrorlist.msys");
 
-  char *prev = xy_strjoin (3, "chsrc: 请针对你的架构下载安装此目录下的文件:",
+  char *prev = xy_strjoin (3, "请针对你的架构下载安装此目录下的文件:",
                               source.url,
                              "distrib/<架构>/");
-  xy_info (prev);
+  chsrc_info (prev);
 
   char *cmd = xy_strjoin (3, "sed -i \"s#https\?://mirror.msys2.org/#",
                              source.url,
@@ -1713,7 +1713,7 @@ wr_tex_check_cmd (bool *tlmgr_exist, bool *mpm_exist)
 
   if (!*tlmgr_exist && !*mpm_exist)
     {
-      xy_error ("chsrc: 未找到 tlmgr 或 mpm 命令，请检查是否存在（其一）");
+      chsrc_error ("未找到 tlmgr 或 mpm 命令，请检查是否存在（其一）");
       exit(1);
     }
 }
@@ -1868,7 +1868,7 @@ wr_guix_setsrc (char *option)
                                "       (inherit (car %default-channels))\n"
                                "       (url \"", source.url, "\")))");
 
-  xy_warn ("chsrc: 为防止扰乱配置文件，请您手动写入以下内容到 ~/.config/guix/channels.scm 文件中");
+  chsrc_warn ("为防止扰乱配置文件，请您手动写入以下内容到 ~/.config/guix/channels.scm 文件中");
   puts (file);
   chsrc_say_thanks (&source);
 }
@@ -1935,7 +1935,7 @@ wr_flathub_setsrc (char *option)
   SourceInfo source = wr_flathub_sources[index];
   chsrc_say_selection (&source);
 
-  xy_warn ("chsrc: 若出现问题，可先调用以下命令:");
+  chsrc_warn ("若出现问题，可先调用以下命令:");
   char *note = xy_strjoin (3,
     "wget ", source.url, "/flathub.gpg\n"
     "flatpak remote-modify --gpg-import=flathub.gpg flathub"
@@ -1989,16 +1989,16 @@ wr_anaconda_setsrc (char *option)
       bool exist = query_program_exist (check_cmd, "conda");
       if (!exist)
         {
-          xy_error ("chsrc: 未找到 conda 命令，请检查是否存在");
+          chsrc_error ("未找到 conda 命令，请检查是否存在");
           exit (1);
         }
       chsrc_run ("conda config --set show_channel_urls yes");
     }
 
-  xy_info (xy_strjoin (3, "chsrc: 请向 ", config, " 中手动添加:"));
+  chsrc_info (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
   puts (file);
 
-  xy_info ("chsrc: 然后运行 conda clean -i 清除索引缓存，保证用的是镜像站提供的索引");
+  chsrc_info ("然后运行 conda clean -i 清除索引缓存，保证用的是镜像站提供的索引");
   chsrc_say_thanks (&source);
 }
 
@@ -2151,8 +2151,8 @@ usage[] = {
 void
 print_available_mirrors ()
 {
-  xy_info ("chsrc: 支持以下镜像站");
-  puts (xy_str_to_yellow ("chsrc: 下方 code 列，可用于指定使用某镜像站，请使用 chsrc set <target> <code>"));
+  chsrc_info ("支持以下镜像站");
+  puts (xy_str_to_yellow ("下方 code 列，可用于指定使用某镜像站，请使用 chsrc set <target> <code>"));
   printf ("%-14s%-30s%-41s ", "code", "服务商缩写", "服务商URL"); puts("服务商名称");
   puts   ("-------------------------------------------------------------------------------------------------");
   for (int i=0; i<xy_arylen(available_mirrors); i++)
@@ -2183,14 +2183,14 @@ print_supported_targets_ (const char ***array, size_t size)
 void
 print_supported_targets ()
 {
-  xy_info ("chsrc: 支持对以下目标换源 (同一行表示这几个命令兼容)"); puts("");
-  xy_info ("编程语言开发");
+  chsrc_info ("支持对以下目标换源 (同一行表示这几个命令兼容)"); puts("");
+  chsrc_info ("编程语言开发");
   puts ("-------------------------");
   print_supported_targets_ (pl_packagers, xy_arylen(pl_packagers));
-  xy_info ("操作系统");
+  chsrc_info ("操作系统");
   puts ("-------------------------");
   print_supported_targets_ (os_systems,   xy_arylen(os_systems));
-  xy_info ("软件");
+  chsrc_info ("软件");
   puts ("-------------------------");
   print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
 }
@@ -2198,21 +2198,21 @@ print_supported_targets ()
 void
 print_supported_pl ()
 {
-  xy_info ("chsrc: 支持对以下编程语言生态换源 (同一行表示这几个命令兼容)");
+  chsrc_info ("支持对以下编程语言生态换源 (同一行表示这几个命令兼容)");
   print_supported_targets_ (pl_packagers,   xy_arylen(pl_packagers));
 }
 
 void
 print_supported_os ()
 {
-  xy_info ("chsrc: 支持对以下操作系统换源 (同一行表示这几个命令兼容)");
+  chsrc_info ("支持对以下操作系统换源 (同一行表示这几个命令兼容)");
   print_supported_targets_ (os_systems,   xy_arylen(os_systems));
 }
 
 void
 print_supported_wr ()
 {
-  xy_info ("chsrc: 支持对以下软件换源 (同一行表示这几个命令兼容)");
+  chsrc_info ("支持对以下软件换源 (同一行表示这几个命令兼容)");
   print_supported_targets_ (wr_softwares,   xy_arylen(wr_softwares));
 }
 
@@ -2338,23 +2338,23 @@ get_target (const char *input, TargetOp code, char *option)
   if (TargetOp_Set_Source==code)
     {
       if (target->setfn) target->setfn(option);
-      else xy_error (xy_strjoin (3, "chsrc: 暂未对 ", input, " 实现set功能，欢迎贡献"));
+      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现set功能，欢迎贡献"));
     }
   else if (TargetOp_Reset_Source==code)
     {
       if (target->resetfn) target->resetfn(option);
-      else xy_error (xy_strjoin (3, "chsrc: 暂未对 ", input, " 实现reset功能，欢迎贡献"));
+      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现reset功能，欢迎贡献"));
       // puts ("将重置并恢复上游默认使用的源");
     }
   else if (TargetOp_Get_Source==code)
     {
       if (target->getfn) target->getfn("");
-      else xy_error (xy_strjoin (3, "chsrc: 暂未对 ", input, " 实现get功能，欢迎贡献"));
+      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现get功能，欢迎贡献"));
     }
   else if (TargetOp_List_Source==code)
     {
-      xy_info (xy_strjoin (3, "chsrc: 对 ", input ," 支持以下镜像站"));
-      puts (xy_str_to_yellow (xy_strjoin (3, "chsrc: 下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>")));
+      chsrc_info (xy_strjoin (3, "对 ", input ," 支持以下镜像站"));
+      puts (xy_str_to_yellow (xy_strjoin (3, "下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>")));
       printf ("%-14s%-35s%-45s ", "code", "服务商缩写", "服务源URL"); puts("服务商名称");
       puts   ("--------------------------------------------------------------------------------------------------------");
       print_supported_sources_for_target (target->sources, target->sources_n);
@@ -2365,7 +2365,7 @@ get_target (const char *input, TargetOp code, char *option)
       bool exist_b = query_program_exist (check_cmd, "curl");
       if (!exist_b)
         {
-          xy_error ("chsrc: 没有curl命令，无法测速");
+          chsrc_error ("没有curl命令，无法测速");
           exit (1);
         }
       auto_select_ (target->sources, target->sources_n, input-3);
@@ -2498,7 +2498,7 @@ main (int argc, char const *argv[])
     {
       if (argc < cli_arg_Target_pos)
         {
-          xy_error ("chsrc: 请您提供想要测速源的软件名; 使用 chsrc list targets 查看所有支持的软件");
+          chsrc_error ("请您提供想要测速源的软件名; 使用 chsrc list targets 查看所有支持的软件");
           return 1;
         }
       target = argv[cli_arg_Target_pos];
@@ -2514,7 +2514,7 @@ main (int argc, char const *argv[])
     {
       if (argc < cli_arg_Target_pos)
         {
-          xy_error ("chsrc: 请您提供想要查看源的软件名; 使用 chsrc list targets 查看所有支持的软件");
+          chsrc_error ("请您提供想要查看源的软件名; 使用 chsrc list targets 查看所有支持的软件");
           return 1;
         }
       target = argv[cli_arg_Target_pos];
@@ -2529,7 +2529,7 @@ main (int argc, char const *argv[])
     {
       if (argc < cli_arg_Target_pos)
         {
-          xy_error ("chsrc: 请您提供想要设置源的软件名; 使用 chsrc list targets 查看所有支持的软件");
+          chsrc_error ("请您提供想要设置源的软件名; 使用 chsrc list targets 查看所有支持的软件");
           return 1;
         }
 
@@ -2551,7 +2551,7 @@ main (int argc, char const *argv[])
     {
       if (argc < cli_arg_Target_pos)
         {
-          xy_error ("chsrc: 请您提供想要重置源的软件名; 使用 chsrc list targets 查看所有支持的软件");
+          chsrc_error ("请您提供想要重置源的软件名; 使用 chsrc list targets 查看所有支持的软件");
           return 1;
         }
 
@@ -2564,14 +2564,14 @@ main (int argc, char const *argv[])
   /* 不支持的命令 */
   else
     {
-      xy_error (xy_strjoin (3, "chsrc: 不支持的命令 ", command, ". 请使用 chsrc help 查看使用方式"));
+      chsrc_error (xy_strjoin (3, "不支持的命令 ", command, ". 请使用 chsrc help 查看使用方式"));
       return 1;
     }
 
 not_matched:
   if (!matched)
     {
-      xy_info ("chsrc: 暂不支持的换源目标，请使用 chsrc list targets 查看可换源软件");
+      chsrc_error ("暂不支持的换源目标，请使用 chsrc list targets 查看可换源软件");
       return 1;
     }
 }
