@@ -84,62 +84,6 @@ xy_malloc0 (size_t size)
   return ptr;
 }
 
-#define XY_Log_Info 00001
-#define XY_Log_Success 00001 << 1
-#define XY_Log_Warn 00001 << 2
-#define XY_Log_Error 00001 << 3
-
-#define xy_success(str) _xy_log (XY_Log_Success, str)
-#define xy_info(str) _xy_log (XY_Log_Info, str)
-#define xy_warn(str) _xy_log (XY_Log_Warn, str)
-#define xy_error(str) _xy_log (XY_Log_Error, str)
-
-static void
-_xy_log (int level, const char *str)
-{
-  char *color_fmt_str = NULL;
-
-  bool to_stderr = false;
-
-  if (level & XY_Log_Info)
-    {
-      color_fmt_str = "\033[34m%s\033[0m"; // 蓝色
-    }
-  else if (level & XY_Log_Success)
-    {
-      color_fmt_str = "\033[32m%s\033[0m"; // 绿色
-    }
-  else if (level & XY_Log_Warn)
-    {
-      color_fmt_str = "\033[33m%s\033[0m\n"; // 黄色
-      to_stderr = true;
-    }
-  else if (level & XY_Log_Error)
-    {
-      color_fmt_str = "\033[31m%s\033[0m\n"; // 红色
-      to_stderr = true;
-    }
-  else
-    {
-      // xy_assert ("CAN'T REACH!");
-    }
-
-  // -2 把中间%s减掉
-  size_t len = strlen (color_fmt_str) - 2;
-  char *buf = malloc (strlen (str) + len + 1);
-
-  sprintf (buf, color_fmt_str, str);
-  if (to_stderr)
-    {
-      fprintf (stderr, "%s", buf);
-    }
-  else
-    {
-      puts (buf);
-    }
-  free (buf);
-}
-
 
 /******************************************************
  *                      String
@@ -254,7 +198,7 @@ xy_strjoin (unsigned int count, ...)
         }
       if (NULL == ret)
         {
-          xy_error ("xy: No availble memory!");
+          fprintf (stderr, "xy.h: No availble memory!");
           return NULL;
         }
       strcpy (cur, str);
@@ -276,35 +220,34 @@ xy_strdup (const char *str)
   return new;
 }
 
-#define XY_Str_Bold 1
-#define XY_Str_Faint 2
-#define XY_Str_Italic 3
+#define XY_Str_Bold      1
+#define XY_Str_Faint     2
+#define XY_Str_Italic    3
 #define XY_Str_Underline 4
-#define XY_Str_Blink 5
-#define XY_Str_Cross 9
+#define XY_Str_Blink     5
+#define XY_Str_Cross     9
 
-#define xy_str_to_bold(str) _xy_str_to_terminal_style (XY_Str_Bold, str)
-#define xy_str_to_faint(str) _xy_str_to_terminal_style (XY_Str_Faint, str)
-#define xy_str_to_italic(str) _xy_str_to_terminal_style (XY_Str_Italic, str)
-#define xy_str_to_underline(str)                                              \
-  _xy_str_to_terminal_style (XY_Str_Underline, str)
-#define xy_str_to_blink(str) _xy_str_to_terminal_style (XY_Str_Blink, str)
-#define xy_str_to_cross(str) _xy_str_to_terminal_style (XY_Str_Cross, str)
+#define xy_str_to_bold(str)      _xy_str_to_terminal_style (XY_Str_Bold, str)
+#define xy_str_to_faint(str)     _xy_str_to_terminal_style (XY_Str_Faint, str)
+#define xy_str_to_italic(str)    _xy_str_to_terminal_style (XY_Str_Italic, str)
+#define xy_str_to_underline(str) _xy_str_to_terminal_style (XY_Str_Underline, str)
+#define xy_str_to_blink(str)     _xy_str_to_terminal_style (XY_Str_Blink, str)
+#define xy_str_to_cross(str)     _xy_str_to_terminal_style (XY_Str_Cross, str)
 
-#define XY_Str_Red 31
-#define XY_Str_Green 32
-#define XY_Str_Yellow 33
-#define XY_Str_Blue 34
+#define XY_Str_Red     31
+#define XY_Str_Green   32
+#define XY_Str_Yellow  33
+#define XY_Str_Blue    34
 #define XY_Str_Magenta 35
-#define XY_Str_Cyan 36
+#define XY_Str_Cyan    36
 
-#define xy_str_to_red(str) _xy_str_to_terminal_style (XY_Str_Red, str)
-#define xy_str_to_green(str) _xy_str_to_terminal_style (XY_Str_Green, str)
-#define xy_str_to_yellow(str) _xy_str_to_terminal_style (XY_Str_Yellow, str)
-#define xy_str_to_blue(str) _xy_str_to_terminal_style (XY_Str_Blue, str)
+#define xy_str_to_red(str)     _xy_str_to_terminal_style (XY_Str_Red, str)
+#define xy_str_to_green(str)   _xy_str_to_terminal_style (XY_Str_Green, str)
+#define xy_str_to_yellow(str)  _xy_str_to_terminal_style (XY_Str_Yellow, str)
+#define xy_str_to_blue(str)    _xy_str_to_terminal_style (XY_Str_Blue, str)
 #define xy_str_to_magenta(str) _xy_str_to_terminal_style (XY_Str_Magenta, str)
-#define xy_str_to_purple xy_str_to_magenta
-#define xy_str_to_cyan(str) _xy_str_to_terminal_style (XY_Str_Cyan, str)
+#define xy_str_to_purple        xy_str_to_magenta
+#define xy_str_to_cyan(str)    _xy_str_to_terminal_style (XY_Str_Cyan, str)
 
 static char *
 _xy_str_to_terminal_style (int style, const char *str)
@@ -462,42 +405,121 @@ xy_str_strip (const char *str)
   return new;
 }
 
+
 /******************************************************
  *                      Logging
  ******************************************************/
 
+#define XY_Log_Success 00001
+#define XY_Log_Info    00001 << 1
+#define XY_Log_Warn    00001 << 2
+#define XY_Log_Error   00001 << 3
+
+#define xy_succ(prompt,str)  _xy_log (XY_Log_Success, prompt, str)
+#define xy_info(prompt,str)  _xy_log (XY_Log_Info,    prompt, str)
+#define xy_warn(prompt,str)  _xy_log (XY_Log_Warn,    prompt, str)
+#define xy_error(prompt,str) _xy_log (XY_Log_Error,   prompt, str)
+
+static void
+_xy_log (int level, const char *prompt, const char *content)
+{
+  char *str = NULL;
+
+  bool to_stderr = false;
+
+  /**
+   * 'app: content'
+   */
+  if (level & XY_Log_Success)
+    {
+      str = xy_strjoin (3, prompt,  ": ", xy_str_to_green (content));
+    }
+  else if (level & XY_Log_Info)
+    {
+      str = xy_strjoin (3, prompt,  ": ", xy_str_to_blue (content));
+    }
+  else if (level & XY_Log_Warn)
+    {
+      str = xy_strjoin (3, prompt,  ": ", xy_str_to_yellow (content));
+      to_stderr = true;
+    }
+  else if (level & XY_Log_Error)
+    {
+      str = xy_strjoin (3, prompt,  ": ", xy_str_to_red (content));
+      to_stderr = true;
+    }
+  else
+    {
+      // xy_assert ("CAN'T REACH!");
+    }
+
+  if (to_stderr)
+    {
+      fprintf (stderr, "%s\n", str);
+    }
+  else
+    {
+      puts (str);
+    }
+  free (str);
+}
+
+
 /**
  * remarkably 系列输出受 pip 启发，为了输出方便，使用xy.h的程序应该基于此再定义自己的 app_info_remarkbaly()
- * [app 信息]  [app info]
- * [app 提示]  [app notice]
  */
-void
-xy_info_remarkably (const char* prompt1, const char *prompt2, const char *content)
+#define xy_succ_remarkably(prompt1,prompt2,content)  _xy_log_remarkably(XY_Log_Success,prompt1,prompt2,content)
+#define xy_info_remarkably(prompt1,prompt2,content)  _xy_log_remarkably(XY_Log_Info,   prompt1,prompt2,content)
+#define xy_warn_remarkably(prompt1,prompt2,content)  _xy_log_remarkably(XY_Log_Warn,   prompt1,prompt2,content)
+#define xy_error_remarkably(prompt1,prompt2,content) _xy_log_remarkably(XY_Log_Error,  prompt1,prompt2,content)
+
+static void
+_xy_log_remarkably (int level, const char *prompt1, const char *prompt2, const char *content)
 {
-  puts (
-    xy_strjoin (6, "[", prompt1, " ", xy_str_to_blue (prompt2), "] ", xy_str_to_blue (content))
-  );
+  char *str = NULL;
+
+  bool to_stderr = false;
+
+  if (level & XY_Log_Success)
+    {
+      /* [app 成功]  [app success] */
+      str = xy_strjoin (6, "[", prompt1, " ", xy_str_to_green (prompt2), "] ", xy_str_to_green (content));
+    }
+  else if (level & XY_Log_Info)
+    {
+      /* [app 信息]  [app info]
+         [app 提示]  [app notice]
+      */
+      str = xy_strjoin (6, "[", prompt1, " ", xy_str_to_blue (prompt2), "] ", xy_str_to_blue (content));
+    }
+  else if (level & XY_Log_Warn)
+    {
+      /* [app 警告]  [app warn] */
+      str = xy_strjoin (6,  "[", prompt1, " ", xy_str_to_yellow (prompt2), "] ", xy_str_to_yellow (content));
+      to_stderr = true;
+    }
+  else if (level & XY_Log_Error)
+    {
+      /* [app 错误]  [app error] */
+      str = xy_strjoin (6,  "[", prompt1, " ", xy_str_to_red (prompt2), "] ", xy_str_to_red (content));
+      to_stderr = true;
+    }
+  else
+    {
+      // xy_assert ("CAN'T REACH!");
+    }
+
+  if (to_stderr)
+    {
+      fprintf (stderr, "%s\n", str);
+    }
+  else
+    {
+      puts (str);
+    }
+  free (str);
 }
 
-/**
- * [app 警告]  [app warn]
- */
-void
-xy_warn_remarkably (const char* prompt1, const char *prompt2, const char *content)
-{
-  char *buf = xy_strjoin (6,  "[", prompt1, " ", xy_str_to_yellow (prompt2), "] ", xy_str_to_yellow (content));
-  fprintf (stderr, "%s\n", buf);
-}
-
-/**
- * [app 错误]  [app error]
- */
-void
-xy_error_remarkably (const char* prompt1, const char *prompt2, const char *content)
-{
-  char *buf = xy_strjoin (6,  "[", prompt1, " ", xy_str_to_red (prompt2), "] ", xy_str_to_red (content));
-  fprintf (stderr, "%s\n", buf);
-}
 
 
 /******************************************************
