@@ -42,6 +42,9 @@ void
 pl_ruby_setsrc (char *option)
 {
   int index = 0;
+
+  char *chsrc_type = xy_streql (option, ChsrcTypeReset) ? ChsrcTypeReset : ChsrcTypeAuto;
+
   char *check_cmd = xy_str_to_quietcmd ("gem -v");
   bool exist = query_program_exist (check_cmd, "gem");
   if (!exist)
@@ -79,7 +82,7 @@ pl_ruby_setsrc (char *option)
   cmd = xy_strjoin (4, "bundle config ", where, " 'mirror.https://rubygems.org' ", source.url);
   chsrc_run (cmd);
 
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, chsrc_type);
   // puts ("");
   // chsrc_warn ("维护者提醒您: Ruby的镜像源目前仅有 腾讯软件源，RubyChina，华为开源镜像站 实现正确");
   // chsrc_warn ("而其它如Tuna,Bfsu,Ali目前都实现的有问题，请勿使用");
@@ -88,7 +91,7 @@ pl_ruby_setsrc (char *option)
 void
 pl_ruby_resetsrc (char *option)
 {
-  pl_ruby_setsrc ("reset");
+  pl_ruby_setsrc (ChsrcTypeReset);
 }
 
 
@@ -158,6 +161,7 @@ void
 pl_python_setsrc (char *option)
 {
   int index = 0;
+  char *chsrc_type = xy_streql (option, ChsrcTypeReset) ? ChsrcTypeReset : ChsrcTypeAuto;
   char *prog = NULL;
   bool pdm_exist = false;
   pl_python_check_cmd (&prog, &pdm_exist);
@@ -182,13 +186,13 @@ pl_python_setsrc (char *option)
     chsrc_run (cmd);
   }
 
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, chsrc_type);
 }
 
 void
 pl_python_resetsrc (char *option)
 {
-  pl_python_setsrc ("reset");
+  pl_python_setsrc (ChsrcTypeReset);
 }
 
 
@@ -267,7 +271,7 @@ pl_nodejs_setsrc (char *option)
       chsrc_run (cmd);
     }
 
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
 
@@ -313,7 +317,7 @@ pl_perl_setsrc (char *option)
 
   chsrc_warn ("请您使用 perl -v 以及 cpan -v，若 Perl >= v5.36 或 CPAN >= 2.29，请额外手动调用下面的命令");
   puts ("perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('pushy_https', 0);; CPAN::HandleConfig->commit()\"");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
 }
 
 
@@ -357,7 +361,7 @@ pl_php_setsrc (char *option)
   char* cmd = xy_2strjoin ("composer config -g repo.packagist composer ", source.url);
   chsrc_run (cmd);
 
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
 }
 
 
@@ -392,7 +396,7 @@ pl_lua_setsrc (char *option)
   chsrc_info ("请手动修改  ~/.luarocks/upload_config.lua 文件 (用于上传):");
   puts (upload_config);
 
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeManual);
 }
 
 
@@ -435,7 +439,7 @@ pl_go_setsrc (char *option)
 
   cmd = xy_strjoin (3, "go env -w GOPROXY=", source.url, ",direct");
   chsrc_run (cmd);
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
 
@@ -466,7 +470,7 @@ pl_rust_setsrc (char *option)
 
   chsrc_warn (xy_strjoin (3, "请您手动写入以下内容到 ", xy_uniform_path("~/.cargo"), " 文件中:"));
   puts (file);
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeManual);
 }
 
 
@@ -572,7 +576,7 @@ pl_java_setsrc (char *option)
       chsrc_info ("请在您的 build.gradle 中添加:");
       puts (file);
     }
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeManual);
 }
 
 
@@ -587,7 +591,7 @@ pl_clojure_setsrc (char *option)
 
   chsrc_warn ("抱歉，Clojure换源较复杂，您可手动查阅并换源:");
   puts (source.url);
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeManual);
 }
 
 
@@ -652,7 +656,7 @@ pl_dart_setsrc (char *option)
       towrite = xy_strjoin (3, "export FLUTTER_STORAGE_BASE_URL=\"", flutter, "\"");
       chsrc_append_to_file (towrite, "~/.bashrc >> ~/.zshrc");
     }
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
@@ -665,9 +669,9 @@ pl_haskell_setsrc(char *option)
   SourceInfo source = pl_haskell_sources[index];
   chsrc_confirm_selection (&source);
 
-  char* file = xy_strjoin (3, "repository mirror\n"
-                             "  url: ", source.url,
-                          "\n  secure: True");
+  char *file = xy_strjoin (3, "repository mirror\n"
+                              "  url: ", source.url,
+                            "\n  secure: True");
 
   char *config = NULL;
   if (xy_on_windows) {
@@ -697,7 +701,7 @@ pl_haskell_setsrc(char *option)
                        "        ignore-expiry: no");
   chsrc_info (xy_strjoin (3,"请向 ", config, " 中手动添加:"));
   puts (file);
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeManual);
 }
 
 
@@ -744,13 +748,13 @@ pl_ocaml_setsrc(char *option)
   chsrc_info ("如果是首次使用 opam ，请使用以下命令进行初始化");
   puts (xy_2strjoin ("opam init default ", source.url));
 
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
 }
 
 
 
 void
-pl_r_getsrc (char* option)
+pl_r_getsrc (char *option)
 {
   // 或参考：https://zhuanlan.zhihu.com/p/585036231
   //
@@ -795,7 +799,7 @@ pl_r_setsrc (char *option)
       chsrc_append_to_file (towrite1, "~/.Rprofile");
       chsrc_append_to_file (towrite2, "~/.Rprofile");
     }
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
 
@@ -829,7 +833,7 @@ pl_julia_setsrc (char *option)
   const char *towrite = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
 
   chsrc_append_to_file (towrite, "~/.julia/config/startup.jl");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
@@ -876,7 +880,7 @@ os_ubuntu_setsrc (char *option)
 
   chsrc_run (cmd);
   chsrc_run ("apt update");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
 
@@ -907,7 +911,7 @@ os_mint_setsrc (char *option)
 
   chsrc_run (cmd);
   chsrc_run ("apt update");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
   chsrc_warn ("完成后请不要再使用 mintsources（自带的图形化软件源设置工具）进行任何操作，因为在操作后，无论是否有按“确定”，mintsources 均会覆写我们刚才换源的内容");
 }
 
@@ -940,12 +944,12 @@ os_debian_setsrc (char *option)
 
   char *cmd = xy_strjoin(3,
       "sed -E -i \'s@https?://.*/debian/?@",
-      source.url,
+       source.url,
       "@g\' /etc/apt/sources.list");
 
   chsrc_run (cmd);
   chsrc_run ("apt update");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
 
@@ -973,7 +977,7 @@ os_raspberrypi_setsrc (char *option)
 
   chsrc_run (cmd);
   chsrc_run ("apt update");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
@@ -1001,12 +1005,12 @@ os_deepin_setsrc (char *option)
 
   char *cmd = xy_strjoin (3,
       "sed -E -i \'s@https?://.*/deepin/?@",
-      source.url,
+       source.url,
       "@g\' /etc/apt/sources.list");
 
   chsrc_run (cmd);
   chsrc_run ("apt update");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
@@ -1041,13 +1045,13 @@ os_fedora_setsrc (char *option)
 
   chsrc_run (cmd);
 
-  chsrc_info ("替换文件:/etc/yum.repos.d/fedora.repo");
-  chsrc_info ("新增文件:/etc/yum.repos.d/fedora-modular.repo");
-  chsrc_info ("替换文件:/etc/yum.repos.d/fedora-updates.repo");
-  chsrc_info ("新增文件:/etc/yum.repos.d/fedora-updates-modular.repo");
+  chsrc_info ("替换文件 /etc/yum.repos.d/fedora.repo");
+  chsrc_info ("新增文件 /etc/yum.repos.d/fedora-modular.repo");
+  chsrc_info ("替换文件 /etc/yum.repos.d/fedora-updates.repo");
+  chsrc_info ("新增文件 /etc/yum.repos.d/fedora-updates-modular.repo");
 
   chsrc_run ("dnf makecache");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
 
@@ -1104,7 +1108,7 @@ os_opensuse_setsrc (char *option)
 
   chsrc_run (cmd5);
   chsrc_run (cmd6);
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
@@ -1132,12 +1136,12 @@ os_kali_setsrc (char *option)
 
   char *cmd = xy_strjoin (3,
       "sed -E -i \'s@https?://.*/kali/?@",
-      source.url,
+       source.url,
       "@g\' /etc/apt/sources.list");
 
   chsrc_run (cmd);
   chsrc_run ("apt update");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
 
@@ -1163,11 +1167,11 @@ os_msys2_setsrc (char *option)
   chsrc_info (prev);
 
   char *cmd = xy_strjoin (3, "sed -i \"s#https\?://mirror.msys2.org/#",
-                             source.url,
-                            "#g\" /etc/pacman.d/mirrorlist* ");
+                              source.url,
+                             "#g\" /etc/pacman.d/mirrorlist* ");
 
   chsrc_run (cmd);
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
@@ -1220,7 +1224,7 @@ os_arch_setsrc (char *option)
     {
       chsrc_run ("pacman -Syy");
     }
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
@@ -1248,7 +1252,7 @@ os_gentoo_setsrc (char *option)
   char *towrite = xy_strjoin (3, "GENTOO_MIRRORS=\"https://", source.url, "gentoo\"");
 
   chsrc_append_to_file (towrite, "/etc/portage/make.conf");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
@@ -1273,7 +1277,7 @@ os_rocky_setsrc (char *option)
             );
   chsrc_run (cmd);
   chsrc_run ("dnf makecache");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
@@ -1303,7 +1307,7 @@ os_alpine_setsrc (char *option)
   chsrc_run (cmd);
 
   chsrc_run ("apk update");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
@@ -1343,7 +1347,7 @@ os_void_setsrc (char *option)
 
   chsrc_warn ("若报错可尝试使用以下命令");
   puts (cmd);
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
@@ -1363,7 +1367,7 @@ os_solus_setsrc (char *option)
 
   char *cmd = xy_2strjoin ("eopkg add-repo Solus ", source.url);
   chsrc_run (cmd);
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
 
@@ -1379,6 +1383,7 @@ os_manjaro_setsrc (char *option)
   chsrc_run (cmd);
 
   chsrc_run ("pacman -Syy");
+  chsrc_say_lastly (NULL, ChsrcTypeAuto);
 }
 
 
@@ -1408,7 +1413,7 @@ os_trisquel_setsrc (char *option)
 
   puts (cmd);
   chsrc_run ("apt update");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
@@ -1437,7 +1442,7 @@ os_linuxlite_setsrc (char *option)
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/.*/?@", source.url, "@g' /etc/apt/sources.list");
 
   chsrc_run ("apt update");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
 
@@ -1464,7 +1469,7 @@ os_openeuler_setsrc (char *option)
   chsrc_overwrite_file (towrite, "/etc/yum.repos.d/openEuler.repo");
 
   chsrc_run ("dnf makecache");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
 
@@ -1490,7 +1495,7 @@ os_openkylin_setsrc (char *option)
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/openkylin/?@", source.url, "@g'" ETC_APT_SOURCELIST);
   chsrc_run (cmd);
   chsrc_run ("apt update");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
@@ -1598,7 +1603,7 @@ os_freebsd_setsrc (char *option)
     chsrc_overwrite_file (update, "/etc/freebsd-update.conf");
   */
 
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
 }
 
 
@@ -1638,7 +1643,7 @@ os_netbsd_setsrc (char *option)
   char *url = xy_strjoin (5, source.url, arch, "/", version, "/All");
   chsrc_overwrite_file (url, "/usr/pkg/etc/pkgin/repositories.conf");
 
-  chsrc_say_thanks(&source);
+  chsrc_say_lastly(&source, ChsrcTypeUntested);
 }
 
 
@@ -1667,7 +1672,7 @@ os_openbsd_setsrc (char *option)
   chsrc_backup ("/etc/installurl");
   chsrc_overwrite_file (source.url, "/etc/installurl");
 
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 /**
@@ -1694,7 +1699,7 @@ os_ros_setsrc (char *option)
   chsrc_run (cmd);
 
   chsrc_run ("apt update");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
@@ -1763,7 +1768,7 @@ wr_tex_setsrc (char *option)
       chsrc_run (cmd);
     }
 
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
@@ -1777,10 +1782,10 @@ wr_emacs_setsrc (char *option)
   SourceInfo source = wr_emacs_sources[index];
   chsrc_confirm_selection (&source);
 
-  chsrc_warn ("抱歉，Emacs换源涉及Elisp，您可手动查阅并换源:");
+  chsrc_warn ("Emacs换源涉及Elisp，需要手动查阅并换源:");
   puts (source.url);
 
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeManual);
 }
 
 
@@ -1803,13 +1808,14 @@ wr_winget_setsrc (char *option)
   chsrc_run ("winget source remove winget");
   chsrc_run (xy_2strjoin ("winget source add winget ", source.url));
 
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
 void
 wr_winget_resetsrc (char *option)
 {
   chsrc_run ("winget source reset winget");
+  chsrc_say_lastly (NULL, ChsrcTypeAuto);
 }
 
 
@@ -1849,8 +1855,8 @@ wr_brew_setsrc (char *option)
   chsrc_append_to_file (brew_git_remote, "~/.bashrc >> ~/.zshrc");
   chsrc_append_to_file (core_git_remote, "~/.bashrc >> ~/.zshrc");
 
-  chsrc_say_thanks (&source);
-  puts ("");  chsrc_note_remarkably ("请您重启终端使环境变量生效");
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
+  chsrc_note_remarkably ("请您重启终端使环境变量生效");
 }
 
 
@@ -1879,7 +1885,7 @@ wr_cocoapods_setsrc (char *option)
   char *source_str = xy_strjoin (3, "source '", source.url, "'");
   say (source_str);
 
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeManual);
 }
 
 
@@ -1901,7 +1907,7 @@ wr_guix_setsrc (char *option)
 
   chsrc_warn ("为防止扰乱配置文件，请您手动写入以下内容到 ~/.config/guix/channels.scm 文件中");
   puts (file);
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeManual);
 }
 
 
@@ -1950,7 +1956,7 @@ wr_nix_setsrc (char *option)
   chsrc_info ("若您使用的是NixOS，请额外添加下述内容至 configuration.nix 中");
   puts (cmd);
 
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
 }
 
 
@@ -1976,7 +1982,7 @@ wr_flathub_setsrc (char *option)
   char *cmd = xy_2strjoin ("flatpak remote-modify flathub --url=", source.url);
   chsrc_run (cmd);
 
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
 
@@ -2030,7 +2036,7 @@ wr_anaconda_setsrc (char *option)
   puts (file);
 
   chsrc_info ("然后运行 conda clean -i 清除索引缓存，保证用的是镜像站提供的索引");
-  chsrc_say_thanks (&source);
+  chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
 }
 
 

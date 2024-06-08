@@ -15,14 +15,15 @@
 
 #define App_Name "chsrc"
 
+#define chsrc_log(str)   xy_log(App_Name,str)
 #define chsrc_succ(str)  xy_succ(App_Name,str)
 #define chsrc_info(str)  xy_info(App_Name,str)
 #define chsrc_warn(str)  xy_warn(App_Name,str)
 #define chsrc_error(str) xy_error(App_Name,str)
 
 #define chsrc_succ_remarkably(str)    xy_succ_remarkably(App_Name,"成功",str);
-#define chsrc_info_remarkably(str)    xy_info_remarkably(App_Name,"信息",str);
-#define chsrc_note_remarkably(str)    xy_info_remarkably(App_Name,"提示",str);
+#define chsrc_info_remarkably(str)    xy_info_remarkably(App_Name,"提示",str);
+#define chsrc_note_remarkably(str)    xy_warn_remarkably(App_Name,"提示",str);
 #define chsrc_warn_remarkably(str)    xy_warn_remarkably(App_Name,"警告",str);
 #define chsrc_error_remarkably(str)   xy_error_remarkably(App_Name,"错误",str);
 
@@ -331,17 +332,76 @@ chsrc_confirm_selection (SourceInfo *source)
 }
 
 
+#define ChsrcTypeAuto     "auto"
+#define ChsrcTypeReset    "reset"
+#define ChsrcTypeSemiAuto "semiauto"
+#define ChsrcTypeManual   "manual"
+#define ChsrcTypeUntested "untested"
+
+/**
+ * @param source    可为NULL
+ * @param last_word 5种选择：ChsrcTypeAuto | ChsrcTypeReset | ChsrcTypeSemiAuto | ChsrcTypeManual | ChsrcTypeUntested
+ */
 void
-chsrc_say_thanks (SourceInfo *source)
+chsrc_say_lastly (SourceInfo *source, const char *last_word)
 {
   split_between_source_changing_process;
-  if (is_upstream (source))
+
+  if (xy_streql (ChsrcTypeAuto, last_word))
     {
-      puts (xy_str_to_purple ("已重置为上游默认源"));
+      if (source)
+        {
+          chsrc_log (xy_2strjoin ("全自动换源完成，感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+        }
+      else
+        {
+          chsrc_log ("全自动换源完成");
+        }
+    }
+  else if (xy_streql (ChsrcTypeReset, last_word))
+    {
+      // is_upstream (source)
+      chsrc_log (xy_str_to_purple ("已重置为上游默认源"));
+    }
+  else if (xy_streql (ChsrcTypeSemiAuto, last_word))
+    {
+      if (source)
+        {
+          chsrc_log (xy_2strjoin ("半自动换源完成，仍需按上述提示手工操作，感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+        }
+      else
+        {
+          chsrc_log ("半自动换源完成，仍需按上述提示手工操作");
+        }
+      chsrc_warn ("若您有完全自动化的换源方案，邀您参与贡献");
+    }
+  else if (xy_streql (ChsrcTypeManual, last_word))
+    {
+      if (source)
+        {
+          chsrc_log (xy_2strjoin ("因实现约束需按上述提示手工操作，感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+        }
+      else
+        {
+          chsrc_log ("因实现约束需按上述提示手工操作");
+        }
+      chsrc_warn ("若您有完全自动化的换源方案，邀您参与贡献");
+    }
+  else if (xy_streql (ChsrcTypeUntested, last_word))
+    {
+      if (source)
+        {
+          chsrc_log (xy_2strjoin ("感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+        }
+      else
+        {
+          chsrc_log ("自动换源完成");
+        }
+      chsrc_warn ("该换源步骤已实现但未经测试或存在任何反馈，请报告使用情况");
     }
   else
     {
-      puts (xy_2strjoin ("换源完成，感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+      puts (last_word);
     }
 }
 
