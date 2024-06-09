@@ -14,6 +14,24 @@
 
 <br>
 
+## `chsrc` 的设计理念
+
+1. `No UFO`
+
+  我已经受够了各种软件在我的C盘里给我塞一堆零散的不知名文件，它们连后缀都没有，它的文件名足够稀里糊涂以致于你无论如何都猜不到是哪个软件在用它。等你抱着好奇心打开一看，这竟然还是一种自定义格式。
+
+  好吧，对此我要发明一个新的词：**`UFO`**: **Unidentified File Objects**
+
+  `chsrc` 除了一个二进制文件外，别无他物。不会在你计算机的某个犄角旮旯里放一个莫名其妙的
+
+2. `Convention over Configuration`
+
+  来自Ruby社区的优良传统
+
+  我不想要有任何类似 `CHSRC_CONF` 的环境变量，也不想有类似任何 `chsrc.conf` 的文件，当然，更不要某种注册表
+
+<br>
+
 ## 示例
 
 <div align="center">
@@ -73,7 +91,7 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-armv7-
 
 ### macOS
 
-可以通过 `homebrew` 安装，感谢 @Aaron-212 与 @chenrui333
+可以通过 `homebrew` 安装，感谢 [@Aaron-212](https://github.com/Aaron-212) 与 [@chenrui333](https://github.com/chenrui333)
 
 ```bash
 brew install chsrc
