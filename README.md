@@ -27,8 +27,8 @@
 如果你想要通过 `scoop`，`brew`，`yay` 等系统包管理工具来安装和更新`chsrc`，请帮助我们达到下面的要求。
 
 - [ ] 缺乏 `AUR` 维护者
-- [ ] 缺乏 `homebrew` 维护者
-- [ ] `scoop` 维护者
+- [x]  `homebrew` 维护者
+- [ ] 缺乏 `scoop` 维护者
 - [x] `scoop` 要求 GitHub star 数量超过 **500** 以及/或 **150**个 fork
 - [x] `homebrew` 要求 GitHub 仓库 **>=30 forks**, **>=30 watchers** or **>=75 stars**
 - [ ] `scoop` 要求英文输出
@@ -72,6 +72,14 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-armv7-
 ```
 
 ### macOS
+
+可以通过 `homebrew` 安装，感谢 @Aaron-212 与 @chenrui333
+
+```bash
+brew install chsrc
+```
+
+或手动下载二进制文件
 
 ```bash
 # M1/aarch64
