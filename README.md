@@ -2,6 +2,10 @@
   <img alt="chsrc logo" src="image/chsrc.png"/>
 </div>
 
+<a href="https://repology.org/project/chsrc/versions">
+    <img src="https://repology.org/badge/vertical-allrepos/chsrc.svg" alt="Packaging status" align="right">
+</a>
+
 全平台命令行换源工具，**目标支持 Linux (包括麒麟、openEuler、deepin 等), Windows, macOS, BSD 等尽可能多的操作系统，龙芯、飞腾、RISC-V 等尽可能多的 CPU**。
 
 我们使用 **C99** 来完成上述目标。我们并不使用 Python 或 JS 等解释语言，因为一个简单的换源工具，不应该强行塞给用户一个庞大的解释器和数十、数百 MB 其他文件。
@@ -40,10 +44,6 @@
 ## 安装
 
 以下方式均下载到当前目录，可直接通过 `./chsrc` 运行。
-
-## Packaging Status
-
-[![Packaging status](https://repology.org/badge/vertical-allrepos/chsrc.svg)](https://repology.org/project/chsrc/versions)
 
 ### Windows
 
