@@ -10,7 +10,7 @@
 
 我们使用 **C99** 来完成上述目标。我们并不使用 Python 或 JS 等解释语言，因为一个简单的换源工具，不应该强行塞给用户一个庞大的解释器和数十、数百 MB 其他文件。
 
-本软件为**自由软件**，SDPX 软件许可证为 "GPL-3.0-or-later and MIT"。
+本软件为**自由软件**，SDPX 软件许可证为 `GPL-3.0-or-later and MIT`
 
 <br>
 
@@ -234,6 +234,13 @@ make test    # 测试命令
 make test-xy # 测试 xy.h
 make clean
 ```
+
+<br>
+
+## 许可证
+
+- `chsrc` 主程序采用 `GPL-3.0-or-later` 许可证，保证该软件的永久自由
+- `xy.h` 使用 `MIT` 许可证，保证该库可以在尽可能多的情况下复用
 
 <br>
 
