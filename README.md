@@ -2,9 +2,13 @@
   <img alt="chsrc logo" src="image/chsrc.png"/>
 </div>
 
-全平台命令行换源工具，**目标支持 Linux (包括麒麟、openEuler、deepin等), Windows, macOS, BSD 等尽可能多的操作系统，龙芯、飞腾、RISC-V 等尽可能多的CPU**。
+<a href="https://repology.org/project/chsrc/versions">
+    <img src="https://repology.org/badge/vertical-allrepos/chsrc.svg" alt="Packaging status" align="right">
+</a>
 
-我们使用 **C99** 来完成上述目标。我们并不使用Python或JS等解释语言，因为一个简单的换源工具，不应该强行塞给用户一个庞大的解释器和数十、数百MB其他文件。
+全平台命令行换源工具，**目标支持 Linux (包括麒麟、openEuler、deepin 等), Windows, macOS, BSD 等尽可能多的操作系统，龙芯、飞腾、RISC-V 等尽可能多的 CPU**。
+
+我们使用 **C99** 来完成上述目标。我们并不使用 Python 或 JS 等解释语言，因为一个简单的换源工具，不应该强行塞给用户一个庞大的解释器和数十、数百 MB 其他文件。
 
 本软件为**自由软件**，SDPX 软件许可证为 "GPL-3.0-or-later and MIT"。
 
@@ -25,11 +29,11 @@
 - [ ] 缺乏 `AUR` 维护者
 - [ ] 缺乏 `homebrew` 维护者
 - [ ] `scoop` 维护者
-- [x] `scoop` 要求 GitHub star 数量超过 **500** 以及/或 **150**个fork
+- [x] `scoop` 要求 GitHub star 数量超过 **500** 以及/或 **150**个 fork
 - [x] `homebrew` 要求 GitHub 仓库 **>=30 forks**, **>=30 watchers** or **>=75 stars**
 - [ ] `scoop` 要求英文输出
 
-    `chsrc`本意进行中文输出，但是我们将尽可能提供选项来进行英文输出。该选项同时有利于BSD用户
+  `chsrc`本意进行中文输出，但是我们将尽可能提供选项来进行英文输出。该选项同时有利于 BSD 用户
 
 请访问 [chsrc on GitHub](https://github.com/RubyMetric/chsrc)
 
@@ -129,6 +133,7 @@ chsrc set ruby first     # 使用维护团队测试的最快镜像站
 ```
 
 对部分[支持局部换源](https://gitee.com/RubyMetric/chsrc/issues/I9V5I0)的，可以避免全局换源。
+
 ```bash
 chsrc set -local bundler
 chsrc set -local pdm
@@ -237,8 +242,9 @@ make clean
 感谢各个镜像站提供的优质免费镜像服务，使用的镜像站见 [source.h](./include/source.h).
 
 另外感谢以下项目:
+
 1. [MirrorZ 教育网镜像站](https://help.mirrors.cernet.edu.cn/)
 2. [清华大学 Tuna](https://mirrors.tuna.tsinghua.edu.cn/)
-3. [Thanks Mirror项目](https://github.com/eryajf/Thanks-Mirror) by [@eryajf](https://github.com/eryajf)
+3. [Thanks Mirror 项目](https://github.com/eryajf/Thanks-Mirror) by [@eryajf](https://github.com/eryajf)
 
 <br>
