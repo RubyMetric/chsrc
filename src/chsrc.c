@@ -867,7 +867,8 @@ ensure_apt_sourcelist (int debian_type)
       chsrc_warn_remarkably (ETC_APT_SOURCELIST " 文件缺失，将替补")
     }
 
-  char *codename = xy_run ("sed -nr 's/VERSION_CODENAME=(.*)/\1/p' " ETC_OSRELEASE, 0, NULL);
+  // 反向引用需要escape一下
+  char *codename = xy_run ("sed -nr 's/VERSION_CODENAME=(.*)/\\1/p' " ETC_OSRELEASE, 0, NULL);
   codename = xy_str_delete_suffix (codename, "\n");
 
   char *makeup = NULL;
