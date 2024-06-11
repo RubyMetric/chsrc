@@ -252,9 +252,15 @@ pl_nodejs_setsrc (char *option)
 
   char *cmd = NULL;
 
+  char *where = "";
+  if (Cli_Option_Locally==true)
+    {
+      where = "--location project ";
+    }
+
   if (npm_exist)
     {
-      cmd = xy_2strjoin ("npm config set registry ", source.url);
+      cmd = xy_strjoin (4, "npm config ", where, "set registry ", source.url);
       chsrc_run (cmd);
     }
 
