@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2024-06-08>
+ * Last modified : <2024-06-11>
  *
  * chsrc:
  *
@@ -27,6 +27,21 @@
 #define chsrc_note_remarkably(str)    xy_warn_remarkably(App_Name,"提示",str);
 #define chsrc_warn_remarkably(str)    xy_warn_remarkably(App_Name,"警告",str);
 #define chsrc_error_remarkably(str)   xy_error_remarkably(App_Name,"错误",str);
+
+void
+chsrc_check_remarkably (const char *check_what, const char *check_type, bool exist)
+{
+  if (!exist)
+    {
+      xy_log_remarkably (App_Name, xy_str_to_bold (xy_str_to_red ("检查")),
+                         xy_strjoin (5, xy_str_to_red ("x "), check_type, " ", xy_str_to_red (check_what), " 不存在"));
+    }
+  else
+    {
+      xy_log_remarkably (App_Name, xy_str_to_bold (xy_str_to_green ("检查")),
+                        xy_strjoin (5, xy_str_to_green ("√ "), check_type, " ", xy_str_to_green (check_what), " 存在"));
+    }
+}
 
 
 bool Cli_Option_IPv6 = false;
@@ -54,14 +69,12 @@ query_program_exist (char *check_cmd, char *prog_name)
   if (0 != ret)
     {
       // xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
-      xy_log_remarkably (App_Name, xy_str_to_bold (xy_str_to_red ("检查")),
-        xy_strjoin (4, xy_str_to_red ("x "), "命令 ", xy_str_to_red (prog_name), " 不存在"));
+      chsrc_check_remarkably (prog_name, "命令", false);
       return false;
     }
   else
     {
-      xy_log_remarkably (App_Name, xy_str_to_bold (xy_str_to_green ("检查")),
-        xy_strjoin (4, xy_str_to_green ("√ "), "命令 ", xy_str_to_green (prog_name), " 存在"));
+      chsrc_check_remarkably (prog_name, "命令", true);
       return true;
     }
 }
