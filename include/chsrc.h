@@ -185,7 +185,7 @@ test_speed_url (const char *url)
 
   // chsrc_info (xy_2strjoin ("测速命令 ", curl_cmd));
 
-  char *buf = xy_getcmd (curl_cmd, 0, NULL);
+  char *buf = xy_run (curl_cmd, 0, NULL);
   // 如果尾部有换行，删除
   buf = xy_str_strip (buf);
 
@@ -414,7 +414,7 @@ chsrc_ensure_root ()
   char *euid = getenv ("$EUID");
   if (NULL==euid)
     {
-      char *buf = xy_getcmd ("id -u", 0, NULL);
+      char *buf = xy_run ("id -u", 0, NULL);
       if (0!=atoi(buf)) goto not_root;
       else return;
     }

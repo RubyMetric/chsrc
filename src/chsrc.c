@@ -12,7 +12,8 @@
  *   SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version "v0.1.6-2024/06/08"
+#define Chsrc_Version      "v0.1.6-2024/06/08"
+#define Chsrc_Maintain_URL "https://gitee.com/RubyMetric/chsrc"
 
 #include "chsrc.h"
 
@@ -60,7 +61,7 @@ pl_ruby_setsrc (char *option)
 
   char *cmd = NULL;
 
-  xy_getcmd ("gem sources -l", 0, pl_ruby_remove_gem_source);
+  xy_run ("gem sources -l", 0, pl_ruby_remove_gem_source);
 
   cmd = xy_2strjoin ("gem source -a ", source.url);
   chsrc_run (cmd);
@@ -513,7 +514,7 @@ pl_java_check_cmd (bool* maven_exist, bool* gradle_exist)
 char*
 pl_java_find_maven_config ()
 {
-  char *buf = xy_getcmd ("mvn -v", 2, NULL);
+  char *buf = xy_run ("mvn -v", 2, NULL);
   char *maven_home = xy_str_delete_prefix (buf, "Maven home: ");
   maven_home = xy_str_strip (maven_home);
 
@@ -865,7 +866,7 @@ os_ubuntu_setsrc (char *option)
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
-  char *arch = xy_getcmd ("arch", 0, NULL);
+  char *arch = xy_run ("arch", 0, NULL);
   char *cmd  = NULL;
   if (strncmp (arch, "x86_64", 6)==0)
     {
@@ -1192,7 +1193,7 @@ os_arch_setsrc (char *option)
 
   bool  arch_flag = false;
   char *new_file  = NULL;
-  char *arch = xy_getcmd ("arch", 0, NULL);
+  char *arch = xy_run ("arch", 0, NULL);
 
   if (strncmp(arch, "x86_64", 6)==0)
     {
@@ -1635,9 +1636,9 @@ os_netbsd_setsrc (char *option)
 
   chsrc_backup ("/usr/pkg/etc/pkgin/repositories.conf");
 
-  char *arch = xy_getcmd("arch", 0, NULL);
+  char *arch = xy_run("arch", 0, NULL);
   char *vercmd  = "cat /etc/os-release | grep \"VERSION=\" | grep -Po \"[8-9].[0-9]+\"";
-  char *version = xy_getcmd (vercmd, 0, NULL);
+  char *version = xy_run (vercmd, 0, NULL);
 
   char *url = xy_strjoin (5, source.url, arch, "/", version, "/All");
   chsrc_overwrite_file (url, "/usr/pkg/etc/pkgin/repositories.conf");
