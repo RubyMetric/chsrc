@@ -1,13 +1,13 @@
 /** ------------------------------------------------------------
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * -------------------------------------------------------------
  * File          : chsrc.h
- * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
+ *               | Heng Guo   <2085471348@qq.com>
  * Created on    : <2023-08-29>
  * Last modified : <2024-06-11>
  *
- * chsrc:
- *
- *   chsrc.c 头文件
+ * chsrc 头文件
  * ------------------------------------------------------------*/
 
 #include "xy.h"

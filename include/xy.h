@@ -1,24 +1,21 @@
 /** ------------------------------------------------------------
+ * SPDX-License-Identifier: MIT
+ * -------------------------------------------------------------
  * File          : xy.h
- * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
+ *               | Heng Guo   <2085471348@qq.com>
  * Created on    : <2023-08-28>
  * Last modified : <2024-06-11>
  *
- * xy:
- *
- *   y = f(x)
- *
- *   Corss-Platform C utilities for CLI applications in Ruby flavor
- *
- *   该文件采用 MIT 许可证，请查阅 LICENSE.txt 文件
+ * xy: 襄阳、咸阳
+ * Corss-Platform C utilities for CLI applications in Ruby flavor
  * ------------------------------------------------------------*/
 
 #ifndef XY_H
 #define XY_H
 
 #define _XY_Version      "v0.1.2-2024/06/11"
-#define _XY_Maintain_URL "https://gitee.com/RubyMetric/chsrc/blob/main/xy.h"
+#define _XY_Maintain_URL "https://gitee.com/RubyMetric/chsrc/blob/main/include/xy.h"
 
 #include <assert.h>
 #include <stdarg.h>

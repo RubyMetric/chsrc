@@ -1,15 +1,13 @@
 /** ------------------------------------------------------------
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * -------------------------------------------------------------
  * File          : chsrc.c
- * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
+ *               | Heng Guo   <2085471348@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2024-06-11>
+ * Last modified : Same With Chsrc_Version
  *
- * chsrc:
- *
- *   Change Source —— 命令行换源工具
- *
- *   SPDX-License-Identifier: GPL-3.0-or-later
+ * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
 #define Chsrc_Version      "v0.1.7.pre-2024/06/11"
