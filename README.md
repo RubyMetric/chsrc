@@ -67,26 +67,26 @@
 
 ```bash
 # x64
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-x64-windows.exe -o chsrc.exe
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-windows.exe -o chsrc.exe
 
 # x86
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-x86-windows.exe -o chsrc.exe
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windows.exe -o chsrc.exe
 ```
 
 ### Linux
 
 ```bash
 # x64
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-x64-linux -o chsrc; chmod +x ./chsrc
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-linux -o chsrc; chmod +x ./chsrc
 
 # aarch64
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-aarch64-linux -o chsrc; chmod +x ./chsrc
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-aarch64-linux -o chsrc; chmod +x ./chsrc
 
 # riscv64
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-riscv64-linux -o chsrc; chmod +x ./chsrc
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-riscv64-linux -o chsrc; chmod +x ./chsrc
 
 # armv7
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-armv7-linux -o chsrc; chmod +x ./chsrc
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-armv7-linux -o chsrc; chmod +x ./chsrc
 ```
 
 ### macOS
@@ -101,10 +101,10 @@ brew install chsrc
 
 ```bash
 # M1/aarch64
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-aarch64-macos -o chsrc; chmod +x ./chsrc
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-aarch64-macos -o chsrc; chmod +x ./chsrc
 
 # x64
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/latest/chsrc-x64-macos -o chsrc; chmod +x ./chsrc
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-macos -o chsrc; chmod +x ./chsrc
 ```
 
 ### BSD
