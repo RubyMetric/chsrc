@@ -2,7 +2,7 @@
 # File          : download-release.ps1
 # Authors       : Aoran Zeng <ccmywish@qq.com>
 # Created on    : <2023-09-21>
-# Last modified : <2024-06-08>
+# Last modified : <2024-06-11>
 #
 # download:
 #
@@ -27,7 +27,7 @@ $names = @(
 )
 
 # Like https://github.com/RubyMetric/chsrc/releases/download/latest/chsrc-x64-windows.exe
-$url_prefix = "https://github.com/RubyMetric/chsrc/releases/download/latest/"
+$url_prefix = "https://github.com/RubyMetric/chsrc/releases/download/pre/"
 
 foreach ($name in $names) {
   curl -LO "${url_prefix}${name}"
