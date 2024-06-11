@@ -24,7 +24,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       # if: startsWith(github.ref, 'refs/tags/')
       with:
-        tag_name: latest
+        tag_name: pre
         files: |
           chsrc-aarch64-macos
         token: ${{ secrets.CHSRC_UPLOAD }}
@@ -48,7 +48,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       # if: startsWith(github.ref, 'refs/tags/')
       with:
-        tag_name: latest
+        tag_name: pre
         files: |
           chsrc-x64-macos
         token: ${{ secrets.CHSRC_UPLOAD }}
