@@ -2317,7 +2317,7 @@ Chsrc_Usage[] = {
 
   "选项:",
   "-ipv6                     使用IPv6测速",
-  "-local                    仅对某项目而非全局换源 (仅部分软件如bundler,pdm支持)"
+  "-local                    仅对某项目而非全局换源 (通过issue命令查看支持情况)"
 };
 
 
