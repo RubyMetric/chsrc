@@ -72,13 +72,13 @@ pl_ruby_setsrc (char *option)
       return;
     }
 
-  char *where = "--global";
+  char *where = " --global ";
   if (Cli_Option_Locally==true)
     {
-      where = "--local";
+      where = " --local ";
     }
 
-  cmd = xy_strjoin (4, "bundle config ", where, " 'mirror.https://rubygems.org' ", source.url);
+  cmd = xy_strjoin (4, "bundle config", where, "'mirror.https://rubygems.org' ", source.url);
   chsrc_run (cmd);
 
   chsrc_say_lastly (&source, chsrc_type);
@@ -175,13 +175,13 @@ pl_python_setsrc (char *option)
 
   if (pdm_exist) {
 
-    char *where = "--global";
+    char *where = " --global ";
     if (Cli_Option_Locally==true)
       {
-        where = "--local";
+        where = " --local ";
       }
 
-    cmd = xy_strjoin (4, "pdm config ", where, " pypi.url ", source.url);
+    cmd = xy_strjoin (4, "pdm config", where, "pypi.url ", source.url);
     chsrc_run (cmd);
   }
 
@@ -252,15 +252,15 @@ pl_nodejs_setsrc (char *option)
 
   char *cmd = NULL;
 
-  char *where = "";
+  char *where = " ";
   if (Cli_Option_Locally==true)
     {
-      where = "--location project ";
+      where = " --location project ";
     }
 
   if (npm_exist)
     {
-      cmd = xy_strjoin (4, "npm config ", where, "set registry ", source.url);
+      cmd = xy_strjoin (4, "npm config", where, "set registry ", source.url);
       chsrc_run (cmd);
     }
 
@@ -364,7 +364,13 @@ pl_php_setsrc (char *option)
   SourceInfo source = pl_php_sources[index];
   chsrc_confirm_selection (&source);
 
-  char* cmd = xy_2strjoin ("composer config -g repo.packagist composer ", source.url);
+  char *where = " -g ";
+  if (Cli_Option_Locally==true)
+    {
+      where = " ";
+    }
+
+  char *cmd = xy_strjoin (4, "composer config", where, "repo.packagist composer ", source.url);
   chsrc_run (cmd);
 
   chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
