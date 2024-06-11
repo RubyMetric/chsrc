@@ -3,7 +3,7 @@
  * License       : GPLv3
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2024-06-08>
+ * Last modified : <2024-06-11>
  *
  * chsrc:
  *
@@ -12,7 +12,7 @@
  *   SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version      "v0.1.6-2024/06/08"
+#define Chsrc_Version      "v0.1.7.pre-2024/06/11"
 #define Chsrc_Maintain_URL "https://gitee.com/RubyMetric/chsrc"
 
 #include "chsrc.h"
@@ -843,6 +843,41 @@ pl_julia_setsrc (char *option)
 
 
 #define ETC_APT_SOURCELIST "/etc/apt/sources.list"
+#define ETC_OSRELEASE      "/etc/os-release"
+
+
+/**
+ * 当不存在该文件时，我们只能拼凑一个假的出来，但该函数目前只适用于 Ubuntu
+ * 因为其它的 Debian 变体可能不使用 ETC_APT_SOURCELIST，也可能并不适用 `VERSION_CODENAME`
+ */
+void
+makeup_etc_apt_sourcelist ()
+{
+  bool exist = xy_file_exist (ETC_APT_SOURCELIST);
+
+  if (exist)
+    {
+      chsrc_infolog_remarkably (ETC_APT_SOURCELIST "存在");
+      return;
+    }
+  else
+    {
+      chsrc_error_remarkably (ETC_APT_SOURCELIST "缺失，将替补")
+    }
+
+  char *codename = xy_run ("sed -nr 's/VERSION_CODENAME=(.*)/\1/p' " ETC_OSRELEASE, 0, NULL);
+
+  char *makeup = xy_strjoin (9,
+                 "deb " Chsrc_Maintain_URL, codename,  " main restricted universe multiverse\n"
+                 "deb " Chsrc_Maintain_URL, codename,  "-updates main restricted universe multiverse\n"
+                 "deb " Chsrc_Maintain_URL, codename,  "-backports main restricted universe multiverse\n"
+                 "deb " Chsrc_Maintain_URL, codename,  "-security main restricted universe multiverse\n");
+
+  FILE *f = fopen (ETC_APT_SOURCELIST, "w");
+  fwrite (makeup, strlen(makeup), 1, f);
+  fclose (f);
+}
+
 
 
 void
@@ -859,6 +894,8 @@ os_ubuntu_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
+  makeup_etc_apt_sourcelist ();
+
   int index = use_specific_mirror_or_auto_select (option, os_ubuntu);
 
   SourceInfo source = os_ubuntu_sources[index];
@@ -870,12 +907,11 @@ os_ubuntu_setsrc (char *option)
   char *cmd  = NULL;
   if (strncmp (arch, "x86_64", 6)==0)
     {
-      cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu/?@", source.url, "@g\' /etc/apt/sources.list");
+      cmd = xy_strjoin (3, "sed -E -i \'s@^https?://.*$@", source.url, "@g\' " ETC_APT_SOURCELIST);
     }
   else
     {
-    cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu-ports/?@", source.url,
-                         "-ports@g\' /etc/apt/sources.list");
+      cmd = xy_strjoin (3, "sed -E -i \'s@^https?://.*$@", source.url, "-ports@g\' " ETC_APT_SOURCELIST);
     }
 
   chsrc_run (cmd);
