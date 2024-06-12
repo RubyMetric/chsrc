@@ -5,7 +5,7 @@
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  *               | Heng Guo   <2085471348@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2024-06-11>
+ * Last modified : <2024-06-13>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -256,6 +256,14 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target)
 
   bool onlyone = false;
   if (2==size) onlyone = true;
+
+  char *check_curl = xy_str_to_quietcmd ("curl --version");
+  bool  exist_curl = query_program_exist (check_curl, "curl");
+  if (!exist_curl)
+    {
+      chsrc_error ("没有curl命令，无法测速");
+      exit (1);
+    }
 
   double speeds[size];
   double speed = 0.0;

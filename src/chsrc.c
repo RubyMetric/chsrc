@@ -10,7 +10,7 @@
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version      "v0.1.7.pre-2024/06/12"
+#define Chsrc_Version      "v0.1.7.pre-2024/06/13"
 #define Chsrc_Maintain_URL "https://gitee.com/RubyMetric/chsrc"
 
 #include "chsrc.h"
@@ -2654,13 +2654,6 @@ get_target (const char *input, TargetOp code, char *option)
     }
   else if (TargetOp_Cesu_Source==code)
     {
-      char* check_cmd = xy_str_to_quietcmd ("curl --version");
-      bool exist_b = query_program_exist (check_cmd, "curl");
-      if (!exist_b)
-        {
-          chsrc_error ("没有curl命令，无法测速");
-          exit (1);
-        }
       auto_select_ (target->sources, target->sources_n, input-3);
       return true;
     }
