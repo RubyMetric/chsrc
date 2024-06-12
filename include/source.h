@@ -734,13 +734,23 @@ os_openbsd_sources[] = {
  */
 os_openeuler_sources[] = {
   {&Upstream,       NULL},
-  {&Ali,       "https://mirrors.aliyun.com/openeuler/"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/openeuler/"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/openeuler/"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/openeuler/"},
-  {&Tencent,   "https://mirrors.tencent.com/openeuler/"},
-  {&Netease,   "https://mirrors.163.com/openeuler/"},
-  {&Sohu,      "https://mirrors.sohu.com/openeuler/"}
+  {&Ali,            "https://mirrors.aliyun.com/openeuler/"},
+  {&Bfsu,           "https://mirrors.bfsu.edu.cn/openeuler/"},
+  {&Ustc,           "https://mirrors.ustc.edu.cn/openeuler/"},
+  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/openeuler/"},
+  {&Tencent,        "https://mirrors.tencent.com/openeuler/"},
+  {&Netease,        "https://mirrors.163.com/openeuler/"},
+  {&Sohu,           "https://mirrors.sohu.com/openeuler/"}
+},
+
+
+/**
+ * 2024-06-12 更新
+ */
+os_anolis_sources[] = {
+  {&Upstream,       NULL},
+  {&Ali,            "https://mirrors.aliyun.com/anolis"},
+  {&Hust,           "https://mirrors.hust.edu.cn/anolis"}
 },
 
 
@@ -930,8 +940,11 @@ def_sources_n(os_solus);
 def_sources_n(os_trisquel); def_sources_n(os_linuxlite); def_sources_n(os_raspberrypi);
 
 def_sources_n(os_freebsd);  def_sources_n(os_netbsd);    def_sources_n(os_openbsd);
-def_sources_n(os_deepin);   def_sources_n(os_openeuler); def_sources_n(os_openkylin);
+
 def_sources_n(os_ros);
+
+def_sources_n(os_deepin);   def_sources_n(os_openeuler); def_sources_n(os_openkylin);
+def_sources_n(os_anolis);
 
 def_sources_n(wr_winget);
 def_sources_n(wr_brew);     def_sources_n(wr_cocoapods);
