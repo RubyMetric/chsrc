@@ -85,7 +85,7 @@ query_file_exist (char *path)
 {
   if (xy_file_exist (path))
     {
-      chsrc_check_remarkably (path, "文件", false);
+      chsrc_check_remarkably (path, "文件", true);
       return true;
     }
   else
