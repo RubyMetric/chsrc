@@ -913,10 +913,53 @@ ensure_apt_sourcelist (int debian_type)
 
 
 
+/**
+ * @note 从 24.04 开始，Ubuntu 的软件源配置文件变更为 DEB822 格式，
+ *       路径为:  /etc/apt/sources.list.d/ubuntu.sources
+ */
+#define ETC_APT_DEB822_UBUNTU_SOURCES "/etc/apt/sources.list.d/ubuntu.sources"
+
 void
 os_ubuntu_getsrc (char *option)
 {
+  bool deb822_exist = xy_file_exist (ETC_APT_DEB822_UBUNTU_SOURCES);
+  if (deb822_exist)
+    {
+      chsrc_check_file (ETC_APT_DEB822_UBUNTU_SOURCES);
+      return;
+    }
+
   chsrc_check_file (ETC_APT_SOURCELIST);
+}
+
+
+/**
+ * 此函数基本和 os_ubuntu_setsrc() 一致
+ */
+void
+os_ubuntu_setsrc_for_deb822 (char *option)
+{
+  int index = use_specific_mirror_or_auto_select (option, os_ubuntu);
+
+  SourceInfo source = os_ubuntu_sources[index];
+  chsrc_confirm_selection (&source);
+
+  chsrc_backup (ETC_APT_DEB822_UBUNTU_SOURCES);
+
+  char *arch = xy_run ("arch", 0, NULL);
+  char *cmd  = NULL;
+  if (strncmp (arch, "x86_64", 6)==0)
+    {
+      cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu/?@", source.url, "@g\' " ETC_APT_DEB822_UBUNTU_SOURCES);
+    }
+  else
+    {
+      cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu-ports/?@", source.url, "-ports@g\' " ETC_APT_DEB822_UBUNTU_SOURCES);
+    }
+
+  chsrc_run (cmd);
+  chsrc_run ("apt update");
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
 /**
@@ -926,6 +969,14 @@ void
 os_ubuntu_setsrc (char *option)
 {
   chsrc_ensure_root ();
+
+  bool deb822_exist = xy_file_exist (ETC_APT_DEB822_UBUNTU_SOURCES);
+  if (deb822_exist)
+    {
+      chsrc_warn_remarkably ("对新格式换源");
+      os_ubuntu_setsrc_for_deb822 (option);
+      return;
+    }
 
   bool sourcelist_exist = ensure_apt_sourcelist (Debian_deriv_ubuntu);
 
@@ -959,7 +1010,7 @@ os_ubuntu_setsrc (char *option)
 
 
 void
-os_mint_getsrc(char *option)
+os_mint_getsrc (char *option)
 {
   chsrc_check_file ("/etc/apt/sources.list.d/official-package-repositories.list");
 }
