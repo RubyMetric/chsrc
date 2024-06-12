@@ -10,7 +10,7 @@
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version      "v0.1.7.pre-2024/06/11"
+#define Chsrc_Version      "v0.1.7.pre-2024/06/12"
 #define Chsrc_Maintain_URL "https://gitee.com/RubyMetric/chsrc"
 
 #include "chsrc.h"
@@ -1358,6 +1358,28 @@ os_rocky_setsrc (char *option)
 }
 
 
+/**
+ * 参考: https://developer.aliyun.com/mirror/almalinux
+ */
+void
+os_alma_setsrc (char *option)
+{
+  chsrc_ensure_root ();
+
+  int index = use_specific_mirror_or_auto_select (option, os_rocky);
+
+  SourceInfo source = os_rocky_sources[index];
+  chsrc_confirm_selection (&source);
+
+  char *cmd = xy_strjoin (3,
+    "sed -e 's|^mirrorlist=|#mirrorlist=|g' -e 's|^#\\s*baseurl=https://repo.almalinux.org/almalinux|baseurl=", source.url, "|g'  -i.bak  /etc/yum.repos.d/almalinux*.repo");
+
+  chsrc_run (cmd);
+  chsrc_run ("dnf makecache");
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
+}
+
+
 
 void
 os_alpine_getsrc (char *option)
@@ -2222,6 +2244,7 @@ def_target_noget(os_opensuse);
 def_target_noget(os_arch);
 def_target_noget(os_gentoo);
 def_target_noget(os_rocky);
+def_target_noget(os_alma);
 def_target_noget(os_solus);
 def_target_noget(os_freebsd);
 def_target_noget(os_openeuler);
@@ -2241,6 +2264,7 @@ static const char
 *os_manjaro    [] = {"manjaro",              NULL,  t(&os_manjaro_target)},
 *os_gentoo     [] = {"gentoo",               NULL,  t(&os_gentoo_target)},
 *os_rocky      [] = {"rocky",  "rockylinux", NULL,  t(&os_rocky_target)},
+*os_alma       [] = {"alma",   "almalinux",  NULL,  t(&os_alma_target)},
 *os_alpine     [] = {"alpine",               NULL,  t(&os_alpine_target)},
 *os_void       [] = {"void",   "voidlinux",  NULL,  t(&os_void_target)},
 *os_solus      [] = {"solus",                NULL,  t(&os_solus_target)},
@@ -2258,7 +2282,7 @@ static const char
 {
   os_ubuntu,  os_mint,    os_debian,  os_fedora,  os_opensuse, os_kali,
   os_arch,    os_manjaro, os_gentoo,
-  os_rocky,
+  os_rocky,   os_alma,
   os_alpine,   os_void,      os_solus,          os_ros,
   os_trisquel, os_linuxlite, os_raspberrypi,
   os_deepin,   os_openeuler, os_openkylin,
