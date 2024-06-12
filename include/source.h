@@ -591,6 +591,20 @@ os_rocky_sources[] = {
 
 
 /**
+ * 2024-06-12 更新
+ */
+os_alma_sources[] = {
+  {&Upstream,       NULL},
+  {&Ali,           "https://mirrors.aliyun.com/almalinux"},
+  {&Volcengine,    "https://mirrors.volces.com/almalinux"},
+  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/almalinux"},
+  {&Zju,           "https://mirrors.zju.edu.cn/almalinux"},
+  {&Nju,           "https://mirror.nju.edu.cn/almalinux"},
+
+},
+
+
+/**
  * 2024-04-18 更新
  */
 os_alpine_sources[] = {
@@ -909,7 +923,8 @@ def_sources_n(os_ubuntu);   def_sources_n(os_mint);
 def_sources_n(os_debian);   def_sources_n(os_fedora);
 def_sources_n(os_kali);     def_sources_n(os_opensuse);
 def_sources_n(os_arch);     def_sources_n(os_msys2);     def_sources_n(os_gentoo);
-def_sources_n(os_alpine);   def_sources_n(os_rocky);     def_sources_n(os_void);
+def_sources_n(os_alpine);   def_sources_n(os_rocky);     def_sources_n(os_alma);
+def_sources_n(os_void);
 def_sources_n(os_solus);
 
 def_sources_n(os_trisquel); def_sources_n(os_linuxlite); def_sources_n(os_raspberrypi);
