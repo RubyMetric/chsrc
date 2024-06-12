@@ -867,16 +867,15 @@ pl_julia_setsrc (char *option)
 bool
 ensure_apt_sourcelist (int debian_type)
 {
-  bool exist = xy_file_exist (ETC_APT_SOURCELIST);
+  bool exist = query_file_exist (ETC_APT_SOURCELIST);
 
   if (exist)
     {
-      chsrc_infolog_remarkably (ETC_APT_SOURCELIST " 存在");
       return true;
     }
   else
     {
-      chsrc_note_remarkably (ETC_APT_SOURCELIST " 文件缺失，将替补")
+      chsrc_note_remarkably ("将生成新的源配置文件");
     }
 
   // 反向引用需要escape一下
@@ -922,14 +921,20 @@ ensure_apt_sourcelist (int debian_type)
 void
 os_ubuntu_getsrc (char *option)
 {
-  bool deb822_exist = xy_file_exist (ETC_APT_DEB822_UBUNTU_SOURCES);
-  if (deb822_exist)
+  if (query_file_exist (ETC_APT_DEB822_UBUNTU_SOURCES))
     {
       chsrc_take_a_look_at_file (ETC_APT_DEB822_UBUNTU_SOURCES);
       return;
     }
 
-  chsrc_take_a_look_at_file (ETC_APT_SOURCELIST);
+  if (query_file_exist (ETC_APT_SOURCELIST))
+    {
+      chsrc_take_a_look_at_file (ETC_APT_SOURCELIST);
+      return;
+    }
+
+  chsrc_error_remarkably ("缺少源配置文件！但仍可直接通过 chsrc set ubuntu 来添加使用新的源");
+  return;
 }
 
 
@@ -970,10 +975,9 @@ os_ubuntu_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  bool deb822_exist = xy_file_exist (ETC_APT_DEB822_UBUNTU_SOURCES);
-  if (deb822_exist)
+  if (query_file_exist (ETC_APT_DEB822_UBUNTU_SOURCES))
     {
-      chsrc_note_remarkably ("对新格式换源");
+      chsrc_note_remarkably ("将基于新格式换源");
       os_ubuntu_setsrc_for_deb822 (option);
       return;
     }

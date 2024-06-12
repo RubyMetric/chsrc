@@ -80,6 +80,22 @@ query_program_exist (char *check_cmd, char *prog_name)
 }
 
 
+bool
+query_file_exist (char *path)
+{
+  if (xy_file_exist (path))
+    {
+      chsrc_check_remarkably (path, "文件", false);
+      return true;
+    }
+  else
+    {
+      chsrc_check_remarkably (path, "文件", false);
+      return false;
+    }
+}
+
+
 /**
  * 用于 _setsrc 函数，检测用户输入的镜像站code，是否存在于该target可用源中
  *
