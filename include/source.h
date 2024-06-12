@@ -5,7 +5,7 @@
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  *               | Heng Guo   <2085471348@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2024-06-08>
+ * Last modified : <2024-06-12>
  *
  * 镜像站与换源信息
  * ------------------------------------------------------------*/
@@ -93,6 +93,9 @@ MirrorSite
   Huawei   = {"huawei",  "Huawei Cloud", "华为开源镜像站",  "https://mirrors.huaweicloud.com/",
               "https://mirrors.huaweicloud.com/debian" Big_File_debian },
 
+  Volcengine = {"volc",  "Volcengine",   "火山引擎开源软件镜像站", "https://developer.volcengine.com/mirror/",
+              "https://mirrors.volces.com/debian" Big_File_debian },
+
   Netease  = {"netease", "Netease",  "网易开源镜像站",      "https://mirrors.163.com/",
               "https://mirrors.163.com/deepin-cd" Big_File_deepin},
 
@@ -127,7 +130,7 @@ MirrorSite
 MirrorSite*
 available_mirrors[] = {
   &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Hust, &Nju, // &Cqu,
-  &Ali,  &Tencent, &Huawei, &Netease, &Sohu, &Api7,
+  &Ali,  &Tencent, &Huawei, &Volcengine,  &Netease, &Sohu, &Api7,
   &RubyChina, &EmacsChina, &NpmMirror, &GoProxyCN, &GoProxyIO,
   // 暂不支持 &NugetOrg
 
