@@ -205,6 +205,7 @@ sudo chsrc set arch  # 同时使用 archlinuxcn
 sudo chsrc set manjaro
 sudo chsrc set gentoo
 sudo chsrc set rocky 或 set rockylinux
+sudo chsrc set alma  或 set almalinux
 sudo chsrc set alpine
 sudo chsrc set void  或 set voidlinux
 sudo chsrc set solus
@@ -213,9 +214,10 @@ sudo chsrc set trisquel
 sudo chsrc set lite  或 set linuxlite
 sudo chsrc set raspi 或 set raspberrypi
 
-sudo chsrc set deepin
 sudo chsrc set euler  或 set openeuler
+sudo chsrc set anolis 或 set openanolis
 sudo chsrc set kylin  或 set openkylin
+sudo chsrc set deepin
 
 chsrc set msys2 或 set msys
 
