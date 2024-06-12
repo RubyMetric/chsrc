@@ -1366,9 +1366,9 @@ os_alma_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_rocky);
+  int index = use_specific_mirror_or_auto_select (option, os_alma);
 
-  SourceInfo source = os_rocky_sources[index];
+  SourceInfo source = os_alma_sources[index];
   chsrc_confirm_selection (&source);
 
   char *cmd = xy_strjoin (3,
@@ -1571,6 +1571,27 @@ os_openeuler_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
+
+/**
+ * 参考: https://mirrors.hust.edu.cn/docs/anolis
+ */
+void
+os_anolis_setsrc (char *option)
+{
+  chsrc_ensure_root ();
+
+  int index = use_specific_mirror_or_auto_select (option, os_anolis);
+
+  SourceInfo source = os_anolis_sources[index];
+  chsrc_confirm_selection (&source);
+
+  char *cmd = xy_strjoin (3, "sed -i.bak -E 's|https?://(mirrors\\.openanolis\\.cn/anolis)|", source.url, "|g' /etc/yum.repos.d/*.repo");
+  chsrc_run (cmd);
+
+  chsrc_run ("dnf makecache");
+  chsrc_run ("dnf update");
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
+}
 
 
 void
@@ -2248,6 +2269,7 @@ def_target_noget(os_alma);
 def_target_noget(os_solus);
 def_target_noget(os_freebsd);
 def_target_noget(os_openeuler);
+def_target_noget(os_anolis);
 def_target_noget(os_ros);
 def_target_noget(os_msys2);
 TargetInfo os_manjaro_target = {NULL, os_manjaro_setsrc, NULL, NULL, 0};
@@ -2276,6 +2298,7 @@ static const char
 *os_openbsd    [] = {"openbsd",              NULL,  t(&os_openbsd_target)},
 *os_deepin     [] = {"deepin",               NULL,  t(&os_deepin_target)},
 *os_openeuler  [] = {"euler",  "openeuler",  NULL,  t(&os_openeuler_target)},
+*os_anolis     [] = {"anolis", "openanolis", NULL,  t(&os_anolis_target)},
 *os_openkylin  [] = {"kylin",  "openkylin",  NULL,  t(&os_openkylin_target)},
 *os_ros        [] = {"ros",    "ros2",       NULL,  t(&os_ros_target)},
 **os_systems[] =
@@ -2285,7 +2308,7 @@ static const char
   os_rocky,   os_alma,
   os_alpine,   os_void,      os_solus,          os_ros,
   os_trisquel, os_linuxlite, os_raspberrypi,
-  os_deepin,   os_openeuler, os_openkylin,
+  os_deepin,   os_openeuler, os_anolis,         os_openkylin,
   os_msys2,
   os_freebsd,  os_netbsd,    os_openbsd,
 };
