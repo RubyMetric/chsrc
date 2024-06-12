@@ -876,7 +876,7 @@ ensure_apt_sourcelist (int debian_type)
     }
   else
     {
-      chsrc_warn_remarkably (ETC_APT_SOURCELIST " 文件缺失，将替补")
+      chsrc_note_remarkably (ETC_APT_SOURCELIST " 文件缺失，将替补")
     }
 
   // 反向引用需要escape一下
@@ -973,7 +973,7 @@ os_ubuntu_setsrc (char *option)
   bool deb822_exist = xy_file_exist (ETC_APT_DEB822_UBUNTU_SOURCES);
   if (deb822_exist)
     {
-      chsrc_warn_remarkably ("对新格式换源");
+      chsrc_note_remarkably ("对新格式换源");
       os_ubuntu_setsrc_for_deb822 (option);
       return;
     }
@@ -1723,7 +1723,7 @@ os_freebsd_setsrc (char *option)
       char *git_cmd = xy_strjoin (3, "git clone --depth 1 https://", source.url, "/freebsd-ports/ports.git /usr/ports");
       chsrc_run (git_cmd);
       source = os_freebsd_sources[index]; // 恢复至选中的源
-      chsrc_warn_remarkably ("下次更新请使用 git -C /usr/ports pull 而非使用 gitup");
+      chsrc_note_remarkably ("下次更新请使用 git -C /usr/ports pull 而非使用 gitup");
     }
   else
     {
@@ -1760,7 +1760,7 @@ os_freebsd_setsrc (char *option)
 
 
   // HELP: 暂时没有源提供
-  chsrc_warn_remarkably ("4. 抱歉，目前境内无 freebsd-update 源，若存在请报告issue，谢谢");
+  chsrc_note_remarkably ("4. 抱歉，目前境内无 freebsd-update 源，若存在请报告issue，谢谢");
   /*
     chsrc_infolog_remarkably ("3. 修改 freebsd-update 源");
 
