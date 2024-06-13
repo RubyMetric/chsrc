@@ -126,7 +126,9 @@ MirrorSite
   NugetOrg   = {"nuget.org",   "NuGet Org",    "Nuget Organization", "https://www.nuget.org/",              NULL},
   EmacsChina = {"emacschina",  "EmacsChina",   "Emacs China 社区",    "https://elpamirror.emacs-china.org/", NULL},
 
-  Huecker    = {"huecker",     "(Russia) Huecker", "俄罗斯 Huecker.io",   "https://huecker.io/", NULL};
+  Huecker    = {"huecker",     "(Russia) Huecker", "俄罗斯 Huecker.io",   "https://huecker.io/",
+                // 同 DaoCloud，没有合适的下载链接，先随便给一个，以避免 bug
+                "https://huecker.io/en/use.html"};
 
 
 MirrorSite
