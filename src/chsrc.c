@@ -10,7 +10,7 @@
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version      "v0.1.7.pre-2024/06/13"
+#define Chsrc_Version      "v0.1.7.pre-2024/06/14"
 #define Chsrc_Maintain_URL "https://gitee.com/RubyMetric/chsrc"
 
 #include "chsrc.h"
@@ -26,7 +26,7 @@ void
 pl_ruby_remove_gem_source (const char *source)
 {
   char *cmd = NULL;
-  if (xy_str_start_with (source, "http"))
+  if (is_url (source))
     {
       cmd = xy_str_delete_suffix (source, "\n");
       cmd = xy_2strjoin ("gem sources -r ", cmd);
@@ -42,30 +42,10 @@ pl_ruby_setsrc (char *option)
 {
   char *chsrc_type = xy_streql (option, ChsrcTypeReset) ? ChsrcTypeReset : ChsrcTypeAuto;
 
-  char *check_cmd = xy_str_to_quietcmd ("gem -v");
-  bool exist = query_program_exist (check_cmd, "gem");
-  if (!exist)
-    {
-      chsrc_error ("未找到 gem 命令，请检查是否存在");
-      return;
-    }
+  chsrc_ensure_program ("gem");
 
   SourceInfo source;
   chsrc_yield_source (pl_ruby);
-
-  /*
-  if (is_url (option))
-    {
-      SourceInfo tmp = { &UserDefine, option };
-      source = tmp;
-    }
-  else
-    {
-      int index = use_specific_mirror_or_auto_select (option, pl_ruby);
-      source = pl_ruby_sources[index];
-    }
-  */
-
   chsrc_confirm_selection (&source);
 
   char *cmd = NULL;
@@ -75,13 +55,8 @@ pl_ruby_setsrc (char *option)
   cmd = xy_2strjoin ("gem source -a ", source.url);
   chsrc_run (cmd);
 
-  check_cmd = xy_str_to_quietcmd ("bundle -v");
-  exist = query_program_exist (check_cmd, "bundle");
-  if (!exist)
-    {
-      chsrc_error ("未找到 bundle 命令，请检查是否存在");
-      return;
-    }
+
+  chsrc_ensure_program ("bundle");
 
   char *where = " --global ";
   if (Cli_Option_Locally==true)
@@ -115,11 +90,12 @@ pl_python_check_cmd (char **prog, bool *pdm_exist)
   *prog = NULL;
   *pdm_exist = false;
 
+  bool py_exist = false;
+
   // 由于Python2和Python3的历史，目前（2024-06）许多python命令实际上仍然是python2
   // https://gitee.com/RubyMetric/chsrc/issues/I9VZL2
   // 因此我们首先测试 python3
-  char *check_cmd = xy_str_to_quietcmd ("python3 --version");
-  bool py_exist = query_program_exist (check_cmd, "python3");
+  py_exist = chsrc_check_program ("python3");
 
   if (py_exist)
     {
@@ -128,8 +104,7 @@ pl_python_check_cmd (char **prog, bool *pdm_exist)
   else
     {
       // 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store
-      check_cmd = xy_str_to_quietcmd ("python --version");
-      py_exist = query_program_exist (check_cmd, "python");
+      py_exist = chsrc_check_program ("python");
       if (py_exist)
         {
           *prog = "python";
@@ -141,8 +116,7 @@ pl_python_check_cmd (char **prog, bool *pdm_exist)
         }
     }
 
-  check_cmd = xy_str_to_quietcmd ("pdm --version");
-  *pdm_exist = query_program_exist (check_cmd, "pdm");
+  *pdm_exist = chsrc_check_program ("pdm");
 }
 
 void
@@ -293,14 +267,7 @@ pl_nodejs_setsrc (char *option)
 void
 pl_perl_check_cmd ()
 {
-  char *check_cmd = xy_str_to_quietcmd ("perl --version");
-  bool exist = query_program_exist (check_cmd, "perl");
-
-  if (!exist)
-    {
-      chsrc_error ("未找到 perl 命令，请检查是否存在");
-      exit (1);
-    }
+  chsrc_ensure_program ("perl");
 }
 
 void
@@ -338,14 +305,7 @@ pl_perl_setsrc (char *option)
 void
 pl_php_check_cmd ()
 {
-  char *check_cmd = xy_str_to_quietcmd ("composer --version");
-  bool exist = query_program_exist (check_cmd, "composer");
-
-  if (!exist)
-    {
-      chsrc_error ("未找到 composer 命令，请检查是否存在");
-      exit (1);
-    }
+  chsrc_ensure_program ("composer");
 }
 
 /**
@@ -510,12 +470,8 @@ pl_dotnet_setsrc (char *option)
 void
 pl_java_check_cmd (bool *maven_exist, bool *gradle_exist)
 {
-  char *check_cmd = NULL;
-  check_cmd    = xy_str_to_quietcmd ("mvn --version");
-  *maven_exist = query_program_exist (check_cmd, "mvn");
-
-  check_cmd     = xy_str_to_quietcmd ("gradle --version");
-  *gradle_exist = query_program_exist (check_cmd, "gradle");
+  *maven_exist  = chsrc_check_program ("mvn");
+  *gradle_exist = chsrc_check_program ("gradle");
 
   if (! *maven_exist && ! *gradle_exist)
     {
@@ -721,14 +677,7 @@ pl_haskell_setsrc (char *option)
 void
 pl_ocaml_check_cmd ()
 {
-  char *check_cmd = xy_str_to_quietcmd("opam --version");
-  bool exist = query_program_exist (check_cmd, "opam");
-
-  if (!exist)
-    {
-      chsrc_error ("未找到 opam 命令，请检查是否存在");
-      exit (1);
-    }
+  chsrc_ensure_program ("opam");
 }
 
 void
@@ -1662,7 +1611,7 @@ void
 os_freebsd_setsrc (char *option)
 {
   // 据 @ykla，FreeBSD不自带sudo，但是我们依然要保证是root权限
-  chsrc_ensure_root();
+  chsrc_ensure_root ();
 
   int index = use_specific_mirror_or_auto_select (option, os_freebsd);
 
@@ -1857,11 +1806,8 @@ os_ros_setsrc (char *option)
 void
 wr_tex_check_cmd (bool *tlmgr_exist, bool *mpm_exist)
 {
-  char *check_cmd = xy_str_to_quietcmd ("tlmgr --version");
-  *tlmgr_exist = query_program_exist (check_cmd, "tlmgr");
-
-  check_cmd = xy_str_to_quietcmd ("mpm --version");
-  *mpm_exist = query_program_exist (check_cmd, "mpm");
+  *tlmgr_exist = chsrc_check_program ("tlmgr");
+  *mpm_exist = chsrc_check_program ("mpm");
 
   if (!*tlmgr_exist && !*mpm_exist)
     {
@@ -2055,14 +2001,7 @@ wr_guix_setsrc (char *option)
 void
 wr_nix_check_cmd ()
 {
-  char *check_cmd = xy_str_to_quietcmd ("nix-channel --version");
-  bool exist = query_program_exist (check_cmd, "nix-channel");
-
-  if (!exist)
-    {
-      chsrc_error ("未找到 nix-channel 命令，请检查是否存在");
-      exit (1);
-    }
+  chsrc_ensure_program ("nix-channel");
 }
 
 /**
@@ -2213,8 +2152,7 @@ wr_anaconda_setsrc (char *option)
 
   if (xy_on_windows)
     {
-      char *check_cmd = xy_str_to_quietcmd("conda --version");
-      bool exist = query_program_exist (check_cmd, "conda");
+      bool exist = chsrc_check_program ("conda");
       if (!exist)
         {
           chsrc_error ("未找到 conda 命令，请检查是否存在");
@@ -2502,12 +2440,10 @@ cli_print_issues ()
   "已收录的镜像站:         https://gitee.com/RubyMetric/chsrc/wikis\n"
   );
 
-  char *check_cmd = xy_str_to_quietcmd("gh --version");
-  bool gh_exist = query_program_exist (check_cmd, "gh");
-  if (gh_exist)
+  if (chsrc_check_program ("gh"))
     {
-      check_cmd = xy_str_to_quietcmd ("gh browse --repo RubyMetric/chsrc");
-      system (check_cmd);
+      char *cmd = xy_str_to_quietcmd ("gh browse --repo RubyMetric/chsrc");
+      system (cmd);
     }
 }
 

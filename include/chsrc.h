@@ -88,6 +88,37 @@ query_program_exist (char *check_cmd, char *prog_name)
 }
 
 
+/**
+ * @note 此函数只能对接受 --version 选项的程序有效
+ */
+bool
+chsrc_check_program (char *prog_name)
+{
+  char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (prog_name, " --version"));
+  return query_program_exist (quiet_cmd, prog_name);
+}
+
+
+/**
+ * @note 此函数具有强制性，检测不到就直接退出
+ */
+void
+chsrc_ensure_program (char *prog_name)
+{
+  char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (prog_name, " --version"));
+  bool exist = query_program_exist (quiet_cmd, prog_name);
+  if (exist)
+    {
+      // OK, nothing should be done
+    }
+  else
+    {
+      chsrc_error (xy_strjoin (3, "未找到 ", prog_name, " 命令，请检查是否存在"));
+      exit (1);
+    }
+}
+
+
 bool
 query_file_exist (char *path)
 {
