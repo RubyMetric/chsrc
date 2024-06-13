@@ -170,15 +170,13 @@ pl_python_getsrc (char *option)
 void
 pl_python_setsrc (char *option)
 {
-  int index = 0;
   char *chsrc_type = xy_streql (option, ChsrcTypeReset) ? ChsrcTypeReset : ChsrcTypeAuto;
   char *prog = NULL;
   bool pdm_exist = false;
   pl_python_check_cmd (&prog, &pdm_exist);
 
-  index = use_specific_mirror_or_auto_select (option, pl_python);
-
-  SourceInfo source = pl_python_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (pl_python);
   chsrc_confirm_selection (&source);
 
   char *cmd = xy_2strjoin (prog, xy_2strjoin (" -m pip config set global.index-url ", source.url));
@@ -256,9 +254,8 @@ pl_nodejs_setsrc (char *option)
   bool npm_exist, yarn_exist, pnpm_exist;
   pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
-  int index = use_specific_mirror_or_auto_select (option, pl_nodejs);
-
-  SourceInfo source = pl_nodejs_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (pl_nodejs);
   chsrc_confirm_selection (&source);
 
   char *cmd = NULL;
@@ -323,9 +320,8 @@ pl_perl_getsrc (char *option)
 void
 pl_perl_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, pl_perl);
-
-  SourceInfo source = pl_perl_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (pl_perl);
   chsrc_confirm_selection (&source);
 
   char *cmd = xy_strjoin (3,
@@ -370,9 +366,8 @@ pl_php_setsrc (char *option)
 {
   pl_php_check_cmd ();
 
-  int index = use_specific_mirror_or_auto_select (option, pl_php);
-
-  SourceInfo source = pl_php_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (pl_php);
   chsrc_confirm_selection (&source);
 
   char *where = " -g ";
@@ -401,9 +396,8 @@ pl_lua_getsrc (char *option)
 void
 pl_lua_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, pl_lua);
-
-  SourceInfo source = pl_lua_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (pl_lua);
   chsrc_confirm_selection (&source);
 
   char *config = xy_strjoin (3, "rocks_servers = {\n"
@@ -452,9 +446,8 @@ pl_go_setsrc (char *option)
 {
   pl_go_check_cmd ();
 
-  int index = use_specific_mirror_or_auto_select (option, pl_go);
-
-  SourceInfo source = pl_go_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (pl_go);
   chsrc_confirm_selection (&source);
 
   char *cmd = "go env -w GO111MODULE=on";
@@ -479,9 +472,8 @@ pl_rust_getsrc (char *option)
 void
 pl_rust_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, pl_rust);
-
-  SourceInfo source = pl_rust_sources[index];
+   SourceInfo source;
+  chsrc_yield_source (pl_rust);
   chsrc_confirm_selection (&source);
 
   const char* file = xy_strjoin (3,
@@ -499,7 +491,7 @@ pl_rust_setsrc (char *option)
 
 
 void
-pl_dotnet_getsrc (char* option)
+pl_dotnet_getsrc (char *option)
 {
   chsrc_error ("暂时无法查看NuGet源，若有需求，请您提交issue");
 }
@@ -508,7 +500,7 @@ pl_dotnet_getsrc (char* option)
  * NuGet 换源
  */
 void
-pl_dotnet_setsrc (char* option)
+pl_dotnet_setsrc (char *option)
 {
   chsrc_error ("暂时无法为NuGet换源，若有需求，请您提交issue");
 }
@@ -516,7 +508,7 @@ pl_dotnet_setsrc (char* option)
 
 
 void
-pl_java_check_cmd (bool* maven_exist, bool* gradle_exist)
+pl_java_check_cmd (bool *maven_exist, bool *gradle_exist)
 {
   char *check_cmd = NULL;
   check_cmd    = xy_str_to_quietcmd ("mvn --version");
@@ -532,7 +524,7 @@ pl_java_check_cmd (bool* maven_exist, bool* gradle_exist)
     }
 }
 
-char*
+char *
 pl_java_find_maven_config ()
 {
   char *buf = xy_run ("mvn -v", 2, NULL);
@@ -561,9 +553,8 @@ pl_java_setsrc (char *option)
   bool maven_exist, gradle_exist;
   pl_java_check_cmd (&maven_exist, &gradle_exist);
 
-  int index = use_specific_mirror_or_auto_select (option, pl_java);
-
-  SourceInfo source = pl_java_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (pl_java);
   chsrc_confirm_selection(&source);
 
   if (maven_exist)
@@ -604,9 +595,8 @@ pl_java_setsrc (char *option)
 void
 pl_clojure_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, pl_clojure);
-
-  SourceInfo source = pl_clojure_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (pl_clojure);
   chsrc_confirm_selection (&source);
 
   chsrc_warn ("抱歉，Clojure换源较复杂，您可手动查阅并换源:");
@@ -638,9 +628,8 @@ pl_dart_getsrc (char *option)
 void
 pl_dart_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, pl_dart);
-
-  SourceInfo source = pl_dart_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (pl_dart);
   chsrc_confirm_selection(&source);
 
   char *towrite = NULL;
@@ -684,9 +673,8 @@ pl_dart_setsrc (char *option)
 void
 pl_haskell_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, pl_haskell);
-
-  SourceInfo source = pl_haskell_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (pl_haskell);
   chsrc_confirm_selection (&source);
 
   char *file = xy_strjoin (3, "repository mirror\n"
@@ -694,13 +682,16 @@ pl_haskell_setsrc (char *option)
                             "\n  secure: True");
 
   char *config = NULL;
-  if (xy_on_windows) {
-    config = xy_uniform_path ("~/AppData/Roaming/cabal/config");
-  } else {
-    config = "~/.cabal/config";
-  }
+  if (xy_on_windows)
+    {
+      config = xy_uniform_path ("~/AppData/Roaming/cabal/config");
+    }
+  else
+    {
+      config = "~/.cabal/config";
+    }
 
-  chsrc_note_remarkably (xy_strjoin (3,"请向 ", config, " 中手动添加:"));
+  chsrc_note_remarkably (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
   puts (file); puts ("");
 
   config = xy_uniform_path ("~/.stack/config.yaml");
@@ -755,14 +746,13 @@ pl_ocaml_setsrc(char *option)
 {
   pl_ocaml_check_cmd ();
 
-  int index = use_specific_mirror_or_auto_select (option, pl_ocaml);
-
-  SourceInfo source = pl_ocaml_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (pl_ocaml);
   chsrc_confirm_selection (&source);
 
   char *cmd = xy_strjoin (3, "opam repo set-url default ",
-    source.url,
-    " --all --set-default");
+                              source.url,
+                             " --all --set-default");
 
   chsrc_run (cmd);
 
@@ -798,9 +788,8 @@ pl_r_getsrc (char *option)
 void
 pl_r_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, pl_r);
-
-  SourceInfo source = pl_r_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (pl_r);
   chsrc_confirm_selection (&source);
 
   char *bioconductor_url = xy_str_delete_suffix (xy_str_delete_suffix (source.url, "cran/"), "CRAN/");
@@ -846,9 +835,8 @@ pl_julia_getsrc (char *option)
 void
 pl_julia_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, pl_julia);
-
-  SourceInfo source = pl_julia_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (pl_julia);
   chsrc_confirm_selection (&source);
 
   const char *towrite = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
@@ -955,9 +943,8 @@ os_ubuntu_getsrc (char *option)
 void
 os_ubuntu_setsrc_for_deb822 (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, os_ubuntu);
-
-  SourceInfo source = os_ubuntu_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_ubuntu);
   chsrc_confirm_selection (&source);
 
   chsrc_backup (ETC_APT_DEB822_UBUNTU_SOURCES);
@@ -995,9 +982,8 @@ os_ubuntu_setsrc (char *option)
 
   bool sourcelist_exist = ensure_apt_sourcelist (Debian_deriv_ubuntu);
 
-  int index = use_specific_mirror_or_auto_select (option, os_ubuntu);
-
-  SourceInfo source = os_ubuntu_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_ubuntu);
   chsrc_confirm_selection (&source);
 
   // 不存在的时候，用的是我们生成的无效文件，不要备份
@@ -1038,9 +1024,8 @@ os_mint_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_mint);
-
-  SourceInfo source = os_mint_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_mint);
   chsrc_confirm_selection (&source);
 
   chsrc_backup ("/etc/apt/sources.list.d/official-package-repositories.list");
@@ -1074,9 +1059,8 @@ os_debian_setsrc (char *option)
   // Docker环境下，Debian镜像可能不存在该文件
   bool sourcelist_exist = ensure_apt_sourcelist (Debian_debian);
 
-  int index = use_specific_mirror_or_auto_select (option, os_debian);
-
-  SourceInfo source = os_debian_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_debian);
   chsrc_confirm_selection (&source);
 
   chsrc_note_remarkably ("如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并需要您运行:");
@@ -1108,9 +1092,8 @@ os_raspberrypi_setsrc (char *option)
 {
   // chsrc_ensure_root(); // HELP: 不确定是否需要
 
-  int index = use_specific_mirror_or_auto_select (option, os_raspberrypi);
-
-  SourceInfo source = os_raspberrypi_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_raspberrypi);
   chsrc_confirm_selection (&source);
 
   chsrc_backup ("/etc/apt/sources.list.d/raspi.list");
@@ -1139,17 +1122,15 @@ os_deepin_setsrc (char *option)
 {
   chsrc_ensure_root();
 
-  int index = use_specific_mirror_or_auto_select (option, os_deepin);
-
-  SourceInfo source = os_deepin_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_deepin);
   chsrc_confirm_selection (&source);
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
-  char *cmd = xy_strjoin (3,
-      "sed -E -i \'s@https?://.*/deepin/?@",
-       source.url,
-      "@g\' /etc/apt/sources.list");
+  char *cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/deepin/?@",
+                              source.url,
+                              "@g\' /etc/apt/sources.list");
 
   chsrc_run (cmd);
   chsrc_run ("apt update");
@@ -1166,12 +1147,11 @@ os_fedora_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_fedora);
-
-  SourceInfo source = os_fedora_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_fedora);
   chsrc_confirm_selection (&source);
 
-  chsrc_warn ("fedora 29 及以下版本暂不支持");
+  chsrc_warn_remarkably ("Fedora 29 及以下版本暂不支持");
 
   chsrc_backup ("/etc/yum.repos.d/fedora.repo");
   chsrc_backup ("/etc/yum.repos.d/fedora-updates.repo");
@@ -1207,9 +1187,8 @@ os_opensuse_setsrc (char *option)
 {
   chsrc_ensure_root (); // HELP: 不知道是否需要确保root权限
 
-  int index = use_specific_mirror_or_auto_select (option, os_opensuse);
-
-  SourceInfo source = os_opensuse_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_opensuse);
   chsrc_confirm_selection (&source);
 
   char *source_nselect = "zypper mr -da";
@@ -1270,21 +1249,19 @@ os_kali_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_kali);
-
-  SourceInfo source = os_kali_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_kali);
   chsrc_confirm_selection (&source);
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
-  char *cmd = xy_strjoin (3,
-      "sed -E -i \'s@https?://.*/kali/?@",
-       source.url,
-      "@g\' /etc/apt/sources.list");
+  char *cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/kali/?@",
+                              source.url,
+                             "@g\' /etc/apt/sources.list");
 
   chsrc_run (cmd);
   chsrc_run ("apt update");
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
@@ -1295,9 +1272,8 @@ os_kali_setsrc (char *option)
 void
 os_msys2_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, os_msys2);
-
-  SourceInfo source = os_msys2_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_msys2);
   chsrc_confirm_selection (&source);
 
   chsrc_backup ("/etc/pacman.d/mirrorlist.mingw32");
@@ -1327,9 +1303,8 @@ os_arch_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_arch);
-
-  SourceInfo source = os_arch_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_arch);
   chsrc_confirm_selection (&source);
 
   chsrc_backup ("/etc/pacman.d/mirrorlist");
@@ -1380,9 +1355,8 @@ os_gentoo_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_gentoo);
-
-  SourceInfo source = os_arch_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_gentoo);
   chsrc_confirm_selection (&source);
 
   chsrc_backup ("/etc/portage/repos.conf/gentoo.conf");
@@ -1408,9 +1382,8 @@ os_rocky_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_rocky);
-
-  SourceInfo source = os_rocky_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_rocky);
   chsrc_confirm_selection (&source);
 
   char *cmd = xy_strjoin (3,
@@ -1432,9 +1405,8 @@ os_alma_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_alma);
-
-  SourceInfo source = os_alma_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_alma);
   chsrc_confirm_selection (&source);
 
   char *cmd = xy_strjoin (3,
@@ -1461,9 +1433,8 @@ os_alpine_setsrc (char *option)
 {
   // chsrc_ensure_root(); // HELP: 不确定是否需要root
 
-  int index = use_specific_mirror_or_auto_select (option, os_alpine);
-
-  SourceInfo source = os_alpine_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_alpine);
   chsrc_confirm_selection (&source);
 
   char* cmd = xy_strjoin (3,
@@ -1492,9 +1463,8 @@ os_void_setsrc (char *option)
 {
   // chsrc_ensure_root(); // HELP: 不确定是否需要root
 
-  int index = use_specific_mirror_or_auto_select (option, os_void);
-
-  SourceInfo source = os_void_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_void);
   chsrc_confirm_selection (&source);
 
   chsrc_ensure_dir ("/etc/xbps.d");
@@ -1525,9 +1495,8 @@ os_solus_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_solus);
-
-  SourceInfo source = os_solus_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_solus);
   chsrc_confirm_selection (&source);
 
   char *cmd = xy_2strjoin ("eopkg add-repo Solus ", source.url);
@@ -1567,9 +1536,8 @@ os_trisquel_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_trisquel);
-
-  SourceInfo source = os_trisquel_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_trisquel);
   chsrc_confirm_selection (&source);
 
   chsrc_backup (ETC_APT_SOURCELIST);
@@ -1597,9 +1565,8 @@ os_linuxlite_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_linuxlite);
-
-  SourceInfo source = os_linuxlite_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_linuxlite);
   chsrc_confirm_selection (&source);
 
   chsrc_backup (ETC_APT_SOURCELIST);
@@ -1620,9 +1587,8 @@ os_openeuler_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_openeuler);
-
-  SourceInfo source = os_openeuler_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_openeuler);
   chsrc_confirm_selection (&source);
 
   chsrc_backup ("/etc/yum.repos.d/openEuler.repo");
@@ -1646,9 +1612,8 @@ os_anolis_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_anolis);
-
-  SourceInfo source = os_anolis_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_anolis);
   chsrc_confirm_selection (&source);
 
   char *cmd = xy_strjoin (3, "sed -i.bak -E 's|https?://(mirrors\\.openanolis\\.cn/anolis)|", source.url, "|g' /etc/yum.repos.d/*.repo");
@@ -1671,9 +1636,8 @@ os_openkylin_setsrc (char *option)
 {
   chsrc_ensure_root();
 
-  int index = use_specific_mirror_or_auto_select (option, os_openkylin);
-
-  SourceInfo source = os_openkylin_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_openkylin);
   chsrc_confirm_selection (&source);
 
   chsrc_backup (ETC_APT_SOURCELIST);
@@ -1815,9 +1779,8 @@ os_netbsd_setsrc (char *option)
 {
   chsrc_ensure_root (); // HELP: 不知道是否需要确保root权限
 
-  int index = use_specific_mirror_or_auto_select (option, os_netbsd);
-
-  SourceInfo source = os_netbsd_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_netbsd);
   chsrc_confirm_selection (&source);
 
   chsrc_backup ("/usr/pkg/etc/pkgin/repositories.conf");
@@ -1850,9 +1813,8 @@ os_openbsd_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_openbsd);
-
-  SourceInfo source = os_openbsd_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_openbsd);
   chsrc_confirm_selection (&source);
 
   chsrc_backup ("/etc/installurl");
@@ -1870,9 +1832,8 @@ os_ros_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_ros);
-
-  SourceInfo source = os_ros_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (os_ros);
   chsrc_confirm_selection (&source);
 
   chsrc_backup ("/etc/apt/sources.list.d/ros-latest.list");

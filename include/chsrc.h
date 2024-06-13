@@ -266,7 +266,7 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target)
 {
   if (0==size || 1==size)
     {
-      chsrc_error (xy_strjoin (3, "当前 ", target, " 无任何可用源，请联系维护者"));
+      chsrc_error (xy_strjoin (3, "当前 ", target, " 无任何可用源，请联系维护者: chsrc issue"));
       exit (1);
     }
 
@@ -365,7 +365,7 @@ source_has_empty_url (SourceInfo *source)
   else \
     { \
       int __index = use_specific_mirror_or_auto_select (option, for_what); \
-      source = pl_ruby_sources[__index]; \
+      source = for_what##_sources[__index]; \
     }
 
 
