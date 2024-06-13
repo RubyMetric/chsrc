@@ -5,7 +5,7 @@
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  *               | Heng Guo   <2085471348@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2024-06-13>
+ * Last modified : <2024-06-14>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -47,6 +47,14 @@ chsrc_check_remarkably (const char *check_what, const char *check_type, bool exi
 bool Cli_Option_IPv6 = false;
 bool Cli_Option_Locally = false;
 bool Cli_Option_InEnglish = false;
+
+
+bool
+is_url (const char *str)
+{
+  return (xy_str_start_with (str, "http://") || xy_str_start_with (str, "https://"));
+}
+
 
 /**
  * 检测二进制程序是否存在
@@ -106,6 +114,12 @@ query_file_exist (char *path)
 int
 query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
 {
+  if (is_url (input))
+    {
+      chsrc_error ("暂不支持对该软件使用用户自定义源，请联系开发者询问原因或请求支持");
+      exit (1);
+    }
+
   if (0==size || 1==size)
     {
       chsrc_error (xy_strjoin (3, "当前 ", target, " 无任何可用源，请联系维护者"));
@@ -322,11 +336,6 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target)
   (NULL!=(input)) ? find_mirror(s, input) : auto_select(s)
 
 
-bool
-is_url (const char *str)
-{
-  return (xy_str_start_with (str, "http://") || xy_str_start_with (str, "https://"));
-}
 
 bool
 source_is_upstream (SourceInfo *source)
