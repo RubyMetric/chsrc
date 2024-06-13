@@ -96,7 +96,9 @@ MirrorSite
   Volcengine = {"volc",  "Volcengine",   "火山引擎开源软件镜像站", "https://developer.volcengine.com/mirror/",
               "https://mirrors.volces.com/debian" Big_File_debian },
 
-  DaoCloud = {"daocloud", "DaoCloud","上海道客网络科技有限公司", "https://www.daocloud.io/", NULL},
+  // 没有找到 DaoCloud 合适的下载链接，先随便给一个，以规避 chsrc 自动测速时所有 dockerhub 镜像站都没有测速链接带来的 bug
+  DaoCloud = {"daocloud", "DaoCloud","上海道客网络科技有限公司", "https://www.daocloud.io/",
+              "https://qiniu-download-public.daocloud.io/DaoCloud_Enterprise/dce5/offline-community-v0.18.0-amd64.tar"},
 
   Netease  = {"netease", "Netease",  "网易开源镜像站",      "https://mirrors.163.com/",
               "https://mirrors.163.com/deepin-cd" Big_File_deepin},
