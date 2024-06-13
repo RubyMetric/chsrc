@@ -40,8 +40,6 @@ pl_ruby_remove_gem_source (const char *source)
 void
 pl_ruby_setsrc (char *option)
 {
-  int index = 0;
-
   char *chsrc_type = xy_streql (option, ChsrcTypeReset) ? ChsrcTypeReset : ChsrcTypeAuto;
 
   char *check_cmd = xy_str_to_quietcmd ("gem -v");
@@ -52,9 +50,19 @@ pl_ruby_setsrc (char *option)
       return;
     }
 
-  index = use_specific_mirror_or_auto_select (option, pl_ruby);
+  SourceInfo source;
 
-  SourceInfo source = pl_ruby_sources[index];
+  if (is_url (option))
+    {
+      SourceInfo tmp = { &UserDefine, option };
+      source = tmp;
+    }
+  else
+    {
+      int index = use_specific_mirror_or_auto_select (option, pl_ruby);
+      source = pl_ruby_sources[index];
+    }
+
   chsrc_confirm_selection (&source);
 
   char *cmd = NULL;
@@ -671,7 +679,7 @@ pl_dart_setsrc (char *option)
 
 
 void
-pl_haskell_setsrc(char *option)
+pl_haskell_setsrc (char *option)
 {
   int index = use_specific_mirror_or_auto_select (option, pl_haskell);
 
@@ -2429,7 +2437,7 @@ print_available_mirrors ()
 {
   chsrc_info ("支持以下镜像站");
   puts (xy_str_to_yellow ("下方 code 列，可用于指定使用某镜像站，请使用 chsrc set <target> <code>"));
-  printf ("%-14s%-30s%-41s ", "code", "服务商缩写", "服务商URL"); puts("服务商名称");
+  printf ("%-14s%-30s%-41s ", "code", "服务商简写", "服务商URL"); puts("服务商名称");
   puts   ("-------------------------------------------------------------------------------------------------");
   for (int i=0; i<xy_arylen(available_mirrors); i++)
     {
@@ -2652,7 +2660,7 @@ get_target (const char *input, TargetOp code, char *option)
     {
       chsrc_info (xy_strjoin (3, "对 ", input ," 支持以下镜像站"));
       puts (xy_str_to_yellow (xy_strjoin (3, "下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>")));
-      printf ("%-14s%-35s%-45s ", "code", "服务商缩写", "服务源URL"); puts("服务商名称");
+      printf ("%-14s%-35s%-45s ", "code", "服务商简写", "服务源URL"); puts("服务商名称");
       puts   ("--------------------------------------------------------------------------------------------------------");
       print_supported_sources_for_target (target->sources, target->sources_n);
     }
@@ -2824,12 +2832,12 @@ main (int argc, char const *argv[])
         }
 
       target = argv[cli_arg_Target_pos];
-      char *mirror = NULL;
+      char *mirrorCode_or_url = NULL;
       if (argc >= cli_arg_Mirror_pos) {
-        mirror = xy_strdup (argv[cli_arg_Mirror_pos]);
+        mirrorCode_or_url = xy_strdup (argv[cli_arg_Mirror_pos]);
       }
 
-      matched = get_target (target, TargetOp_Set_Source, mirror);
+      matched = get_target (target, TargetOp_Set_Source, mirrorCode_or_url);
       if (!matched) goto not_matched;
       return 0;
     }

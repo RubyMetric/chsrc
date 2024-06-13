@@ -5,7 +5,7 @@
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  *               | Heng Guo   <2085471348@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2024-06-12>
+ * Last modified : <2024-06-13>
  *
  * 镜像站与换源信息
  * ------------------------------------------------------------*/
@@ -124,7 +124,10 @@ MirrorSite
 
 
 MirrorSite
-  Upstream = {"upstream",   "Upstream",     "上游默认源",      NULL,     NULL};
+  Upstream = {"upstream",     "Upstream",     "上游默认源",     NULL,     NULL};
+MirrorSite
+  UserDefine = {"user",       "用户自定义",     "用户自定义",     NULL,     NULL};
+
 
 
 MirrorSite*
@@ -134,7 +137,7 @@ available_mirrors[] = {
   &RubyChina, &EmacsChina, &NpmMirror, &GoProxyCN, &GoProxyIO,
   // 暂不支持 &NugetOrg
 
-  // 不要列出 &Upstream
+  // 不要列出 &Upstream 和 &UserDdefine
 };
 
 

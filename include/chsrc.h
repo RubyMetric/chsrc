@@ -322,11 +322,22 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target)
   (NULL!=(input)) ? find_mirror(s, input) : auto_select(s)
 
 
+bool
+is_url (const char *str)
+{
+  return (xy_str_start_with (str, "http://") || xy_str_start_with (str, "https://"));
+}
 
 bool
-is_upstream (SourceInfo *source)
+source_is_upstream (SourceInfo *source)
 {
   return xy_streql (source->mirror->code, "upstream");
+}
+
+bool
+source_is_userdefine (SourceInfo *source)
+{
+  return xy_streql (source->mirror->code, "user");
 }
 
 bool
@@ -334,6 +345,8 @@ source_has_empty_url (SourceInfo *source)
 {
   return source->url == NULL;
 }
+
+
 
 
 #define split_between_source_changing_process   puts ("--------------------------------")
@@ -351,7 +364,7 @@ chsrc_confirm_selection (SourceInfo *source)
   // chsrc 已经规避用户使用未实现的 `chsrc reset`
   // 但是某些用户可能摸索着强行使用 chsrc set target upstream，从而执行起该禁用的功能，
   // 之所以禁用，是因为有的 reset 我们并没有实现，我们在这里阻止这些邪恶的用户
-  if (is_upstream (source) && source_has_empty_url (source))
+  if (source_is_upstream (source) && source_has_empty_url (source))
     {
       chsrc_error ("暂未对该软件实现重置");
       exit (2);
@@ -389,7 +402,14 @@ chsrc_say_lastly (SourceInfo *source, const char *last_word)
     {
       if (source)
         {
-          chsrc_log (xy_2strjoin ("全自动换源完成，感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+          if (source_is_userdefine (source))
+            {
+              chsrc_log ("全自动换源完成; 邀您参与贡献，帮助其他人使用该URL换源: chsrc issue");
+            }
+          else
+            {
+              chsrc_log (xy_2strjoin ("全自动换源完成，感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+            }
         }
       else
         {
@@ -398,14 +418,21 @@ chsrc_say_lastly (SourceInfo *source, const char *last_word)
     }
   else if (xy_streql (ChsrcTypeReset, last_word))
     {
-      // is_upstream (source)
+      // source_is_upstream (source)
       chsrc_log (xy_str_to_purple ("已重置为上游默认源"));
     }
   else if (xy_streql (ChsrcTypeSemiAuto, last_word))
     {
       if (source)
         {
-          chsrc_log (xy_2strjoin ("半自动换源完成，仍需按上述提示手工操作，感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+          if (source_is_userdefine (source))
+            {
+              chsrc_log ("半自动换源完成，仍需按上述提示手工操作; 邀您参与贡献，帮助其他人使用该URL换源: chsrc issue");
+            }
+          else
+            {
+              chsrc_log (xy_2strjoin ("半自动换源完成，仍需按上述提示手工操作，感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+            }
         }
       else
         {
@@ -417,7 +444,14 @@ chsrc_say_lastly (SourceInfo *source, const char *last_word)
     {
       if (source)
         {
-          chsrc_log (xy_2strjoin ("因实现约束需按上述提示手工操作，感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+          if (source_is_userdefine (source))
+            {
+              chsrc_log ("因实现约束需按上述提示手工操作; 邀您参与贡献，帮助其他人使用该URL换源: chsrc issue");
+            }
+          else
+            {
+              chsrc_log (xy_2strjoin ("因实现约束需按上述提示手工操作，感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+            }
         }
       else
         {
@@ -429,7 +463,14 @@ chsrc_say_lastly (SourceInfo *source, const char *last_word)
     {
       if (source)
         {
-          chsrc_log (xy_2strjoin ("感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+          if (source_is_userdefine (source))
+            {
+              chsrc_log ("邀您参与贡献，帮助其他人使用该URL换源: chsrc issue");
+            }
+          else
+            {
+              chsrc_log (xy_2strjoin ("感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+            }
         }
       else
         {
