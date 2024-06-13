@@ -346,6 +346,27 @@ source_has_empty_url (SourceInfo *source)
   return source->url == NULL;
 }
 
+/**
+ * 用户*只可能*通过下面三种方式来换源，无论哪一种都会返回一个 SourceInfo 出来
+ *
+ * 1. 用户指定 MirrorCode
+ * 2. 用户什么都没指定 (将测速选择最快镜像)
+ * 3. 用户给了一个 URL
+ *
+ * @dependency 变量 option
+ * @dependency 变量 source
+ */
+#define chsrc_yield_source(for_what) \
+  if (is_url (option)) \
+    { \
+      SourceInfo __tmp = { &UserDefine, option }; \
+      source = __tmp; \
+    } \
+  else \
+    { \
+      int __index = use_specific_mirror_or_auto_select (option, for_what); \
+      source = pl_ruby_sources[__index]; \
+    }
 
 
 

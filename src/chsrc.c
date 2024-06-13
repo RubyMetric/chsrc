@@ -51,7 +51,9 @@ pl_ruby_setsrc (char *option)
     }
 
   SourceInfo source;
+  chsrc_yield_source (pl_ruby);
 
+  /*
   if (is_url (option))
     {
       SourceInfo tmp = { &UserDefine, option };
@@ -62,6 +64,7 @@ pl_ruby_setsrc (char *option)
       int index = use_specific_mirror_or_auto_select (option, pl_ruby);
       source = pl_ruby_sources[index];
     }
+  */
 
   chsrc_confirm_selection (&source);
 
