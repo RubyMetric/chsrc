@@ -5,7 +5,7 @@
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  *               | Heng Guo   <2085471348@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2024-06-13>
+ * Last modified : <2024-06-14>
  *
  * 镜像站与换源信息
  * ------------------------------------------------------------*/
@@ -96,6 +96,8 @@ MirrorSite
   Volcengine = {"volc",  "Volcengine",   "火山引擎开源软件镜像站", "https://developer.volcengine.com/mirror/",
               "https://mirrors.volces.com/debian" Big_File_debian },
 
+  DaoCloud = {"daocloud", "DaoCloud","上海道客网络科技有限公司", "https://www.daocloud.io/", NULL},
+
   Netease  = {"netease", "Netease",  "网易开源镜像站",      "https://mirrors.163.com/",
               "https://mirrors.163.com/deepin-cd" Big_File_deepin},
 
@@ -119,8 +121,10 @@ MirrorSite
   GoProxyIO = {"goproxy.io",   "GOPROXY.IO",   "GOPROXY.IO",         "https://goproxy.io/",
                "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"},   // 30 MB
 
-  NugetOrg   = {"nuget.org",    "NuGet Org",   "Nuget Organization", "https://www.nuget.org/",               NULL},
-  EmacsChina = {"emacschina",  "EmacsChina",   "Emacs China 社区",    "https://elpamirror.emacs-china.org/", NULL};
+  NugetOrg   = {"nuget.org",   "NuGet Org",    "Nuget Organization", "https://www.nuget.org/",              NULL},
+  EmacsChina = {"emacschina",  "EmacsChina",   "Emacs China 社区",    "https://elpamirror.emacs-china.org/", NULL},
+
+  Huecker    = {"huecker",     "(Russia) Huecker", "俄罗斯 Huecker.io",   "https://huecker.io/", NULL};
 
 
 MirrorSite
@@ -823,7 +827,7 @@ wr_cocoapods_sources[] = {
 },
 
 /**
- * 2024-06-08 更新
+ * 2024-06-14 更新
  *
  * @note USTC 与 SJTUG 于 2024-06-06 停止支持 DockerHub
  * @note NJU 于 2024-06-07 停止支持 DockerHub
@@ -833,6 +837,13 @@ wr_cocoapods_sources[] = {
 wr_dockerhub_sources[] = {
   {&Upstream,       NULL},
   // {&Ustc,       "https://docker.mirrors.ustc.edu.cn/"},
+
+  // https://github.com/DaoCloud/public-image-mirror
+  {&DaoCloud,      "https://docker.m.daocloud.io"},
+
+  // 暂时加入，未来若国内镜像恢复，将删除
+  // https://huecker.io/en/use.html#unbanned
+  {&Huecker,       "https://huecker.io"}
 },
 
 
