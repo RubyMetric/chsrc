@@ -5,7 +5,7 @@
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  *               | Heng Guo   <2085471348@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2024-06-11>
+ * Last modified : <2024-06-14>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C utilities for CLI applications in Ruby flavor
@@ -14,7 +14,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version      "v0.1.2-2024/06/11"
+#define _XY_Version      "v0.1.2-2024/06/14"
 #define _XY_Maintain_URL "https://gitee.com/RubyMetric/chsrc/blob/main/include/xy.h"
 
 #include <assert.h>
@@ -335,6 +335,11 @@ xy_str_end_with (const char *str, const char *suffix)
 static bool
 xy_str_start_with (const char *str, const char *prefix)
 {
+  if (NULL==str || NULL==prefix)
+    {
+      return false;
+    }
+
   size_t len1 = strlen (str);
   size_t len2 = strlen (prefix);
 
