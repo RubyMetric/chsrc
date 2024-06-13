@@ -1895,9 +1895,8 @@ wr_tex_setsrc (char *option)
   bool tlmgr_exist, mpm_exist;
   wr_tex_check_cmd (&tlmgr_exist, &mpm_exist);
 
-  int index = use_specific_mirror_or_auto_select (option, wr_tex);
-
-  SourceInfo source = wr_tex_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (wr_tex);
   chsrc_confirm_selection (&source);
 
   char *cmd = NULL;
@@ -1924,9 +1923,8 @@ wr_tex_setsrc (char *option)
 void
 wr_emacs_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, wr_emacs);
-
-  SourceInfo source = wr_emacs_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (wr_emacs);
   chsrc_confirm_selection (&source);
 
   chsrc_warn ("Emacs换源涉及Elisp，需要手动查阅并换源:");
@@ -1947,9 +1945,8 @@ wr_winget_getsrc (char *option)
 void
 wr_winget_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, wr_winget);
-
-  SourceInfo source = wr_winget_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (wr_winget);
   chsrc_confirm_selection (&source);
 
   chsrc_run ("winget source remove winget");
@@ -1987,9 +1984,8 @@ wr_brew_getsrc (char *option)
 void
 wr_brew_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, wr_brew);
-
-  SourceInfo source = wr_brew_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (wr_brew);
   chsrc_confirm_selection (&source);
 
   char *api_domain      = xy_strjoin (3, "export HOMEBREW_API_DOMAIN=\"",      xy_2strjoin (source.url, "homebrew-bottles/api"), "\"");
@@ -2014,11 +2010,9 @@ wr_brew_setsrc (char *option)
 void
 wr_cocoapods_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, wr_brew);
-
-  SourceInfo source = wr_brew_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (wr_cocoapods);
   chsrc_confirm_selection (&source);
-
 
   chsrc_note_remarkably ("请手动执行以下命令:");
 
@@ -2043,9 +2037,8 @@ wr_cocoapods_setsrc (char *option)
 void
 wr_guix_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, wr_guix);
-
-  SourceInfo source = wr_guix_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (wr_guix);
   chsrc_confirm_selection (&source);
 
   char *file =  xy_strjoin (3, "(list (channel\n"
@@ -2082,9 +2075,8 @@ wr_nix_setsrc (char *option)
 {
   wr_nix_check_cmd ();
 
-  int index = use_specific_mirror_or_auto_select (option, wr_nix);
-
-  SourceInfo source = wr_nix_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (wr_nix);
   chsrc_confirm_selection (&source);
 
   char *cmd = xy_strjoin (3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
@@ -2130,9 +2122,8 @@ wr_dockerhub_getsrc (char *option)
 void
 wr_dockerhub_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, wr_dockerhub);
-
-  SourceInfo source = wr_dockerhub_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (wr_dockerhub);
   chsrc_confirm_selection (&source);
 
   if (xy_on_linux || xy_on_bsd)
@@ -2169,9 +2160,8 @@ wr_dockerhub_setsrc (char *option)
 void
 wr_flathub_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, wr_flathub);
-
-  SourceInfo source = wr_flathub_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (wr_flathub);
   chsrc_confirm_selection (&source);
 
   chsrc_warn ("若出现问题，可先调用以下命令:");
@@ -2192,9 +2182,8 @@ wr_flathub_setsrc (char *option)
 void
 wr_anaconda_setsrc (char *option)
 {
-  int index = use_specific_mirror_or_auto_select (option, wr_anaconda);
-
-  SourceInfo source = wr_anaconda_sources[index];
+  SourceInfo source;
+  chsrc_yield_source (wr_anaconda);
   chsrc_confirm_selection (&source);
 
   char *main  = xy_2strjoin (source.url, "pkgs/main");
