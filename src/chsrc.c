@@ -2397,6 +2397,7 @@ Chsrc_Usage[] = {
   "set  <target>             换源，自动测速后挑选最快源",
   "set  <target>  first      换源，使用维护团队测速第一的源",
   "set  <target> <mirror>    换源，指定使用某镜像站 (通过list命令查看)",
+  "set  <target> https://abc 换源，用户自定义源URL",
   "reset <target>            重置，使用上游默认使用的源\n",
 
   "选项:",
