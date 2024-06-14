@@ -424,7 +424,7 @@ source_has_empty_url (SourceInfo *source)
  * 2. 对选择的源和镜像站进行一定的校验
  */
 void
-chsrc_confirm_selection (SourceInfo *source)
+chsrc_confirm_source (SourceInfo *source)
 {
   // 由于实现问题，我们把本应该独立出去的默认上游源，也放在了可以换源的数组中，而且放在第一个
   // chsrc 已经规避用户使用未实现的 `chsrc reset`

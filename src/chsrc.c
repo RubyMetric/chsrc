@@ -46,7 +46,7 @@ pl_ruby_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (pl_ruby);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *cmd = NULL;
 
@@ -151,7 +151,7 @@ pl_python_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (pl_python);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *cmd = xy_2strjoin (prog, xy_2strjoin (" -m pip config set global.index-url ", source.url));
   chsrc_run (cmd);
@@ -230,7 +230,7 @@ pl_nodejs_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (pl_nodejs);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *cmd = NULL;
 
@@ -289,7 +289,7 @@ pl_perl_setsrc (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (pl_perl);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *cmd = xy_strjoin (3,
   "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('urllist', 'unshift', '", source.url, "'); CPAN::HandleConfig->commit()\"");
@@ -328,7 +328,7 @@ pl_php_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (pl_php);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *where = " -g ";
   if (Cli_Option_Locally==true)
@@ -358,7 +358,7 @@ pl_lua_setsrc (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (pl_lua);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *config = xy_strjoin (3, "rocks_servers = {\n"
                                 "  \"", source.url, "\"\n"
@@ -408,7 +408,7 @@ pl_go_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (pl_go);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *cmd = "go env -w GO111MODULE=on";
   chsrc_run (cmd);
@@ -434,7 +434,7 @@ pl_rust_setsrc (char *option)
 {
    SourceInfo source;
   chsrc_yield_source (pl_rust);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   const char* file = xy_strjoin (3,
     "[source.crates-io]\n"
@@ -511,7 +511,7 @@ pl_java_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (pl_java);
-  chsrc_confirm_selection(&source);
+  chsrc_confirm_source (&source);
 
   if (maven_exist)
     {
@@ -530,7 +530,7 @@ pl_java_setsrc (char *option)
 
   if (gradle_exist)
     {
-      if (maven_exist) puts("");
+      if (maven_exist) puts ("");
       const char* file = xy_strjoin (3,
       "allprojects {\n"
       "  repositories {\n"
@@ -553,7 +553,7 @@ pl_clojure_setsrc (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (pl_clojure);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_warn ("抱歉，Clojure换源较复杂，您可手动查阅并换源:");
   puts (source.url);
@@ -586,7 +586,7 @@ pl_dart_setsrc (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (pl_dart);
-  chsrc_confirm_selection(&source);
+  chsrc_confirm_source (&source);
 
   char *towrite = NULL;
 
@@ -631,7 +631,7 @@ pl_haskell_setsrc (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (pl_haskell);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *file = xy_strjoin (3, "repository mirror\n"
                               "  url: ", source.url,
@@ -697,7 +697,7 @@ pl_ocaml_setsrc(char *option)
 
   SourceInfo source;
   chsrc_yield_source (pl_ocaml);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *cmd = xy_strjoin (3, "opam repo set-url default ",
                               source.url,
@@ -739,7 +739,7 @@ pl_r_setsrc (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (pl_r);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *bioconductor_url = xy_str_delete_suffix (xy_str_delete_suffix (source.url, "cran/"), "CRAN/");
   bioconductor_url = xy_2strjoin(bioconductor_url, "bioconductor");
@@ -786,7 +786,7 @@ pl_julia_setsrc (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (pl_julia);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   const char *towrite = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
 
@@ -932,7 +932,7 @@ os_ubuntu_setsrc_for_deb822 (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (os_ubuntu);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_backup (ETC_APT_DEB822_Ubuntu_Sources);
 
@@ -971,7 +971,7 @@ os_ubuntu_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_ubuntu);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   // 不存在的时候，用的是我们生成的无效文件，不要备份
   if (sourcelist_exist)
@@ -1013,7 +1013,7 @@ os_mint_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_mint);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_backup ("/etc/apt/sources.list.d/official-package-repositories.list");
 
@@ -1052,7 +1052,7 @@ os_debian_setsrc_for_deb822 (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (os_debian);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_note_remarkably ("如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并需要您运行:");
   puts ("apt install apt-transport-https ca-certificates");
@@ -1093,7 +1093,7 @@ os_debian_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_debian);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_note_remarkably ("如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并需要您运行:");
   puts ("apt install apt-transport-https ca-certificates");
@@ -1126,7 +1126,7 @@ os_raspberrypi_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_raspberrypi);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_backup ("/etc/apt/sources.list.d/raspi.list");
 
@@ -1156,7 +1156,7 @@ os_deepin_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_deepin);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
@@ -1181,7 +1181,7 @@ os_fedora_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_fedora);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_warn_remarkably ("Fedora 29 及以下版本暂不支持");
 
@@ -1221,7 +1221,7 @@ os_opensuse_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_opensuse);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *source_nselect = "zypper mr -da";
   chsrc_run (source_nselect);
@@ -1283,7 +1283,7 @@ os_kali_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_kali);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
@@ -1306,7 +1306,7 @@ os_msys2_setsrc (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (os_msys2);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_backup ("/etc/pacman.d/mirrorlist.mingw32");
   chsrc_backup ("/etc/pacman.d/mirrorlist.mingw64");
@@ -1337,7 +1337,7 @@ os_arch_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_arch);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_backup ("/etc/pacman.d/mirrorlist");
 
@@ -1389,7 +1389,7 @@ os_gentoo_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_gentoo);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_backup ("/etc/portage/repos.conf/gentoo.conf");
 
@@ -1416,7 +1416,7 @@ os_rocky_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_rocky);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *cmd = xy_strjoin (3,
             "sed -e 's|^mirrorlist=|#mirrorlist=|g' "
@@ -1439,7 +1439,7 @@ os_alma_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_alma);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *cmd = xy_strjoin (3,
     "sed -e 's|^mirrorlist=|#mirrorlist=|g' -e 's|^#\\s*baseurl=https://repo.almalinux.org/almalinux|baseurl=", source.url, "|g'  -i.bak  /etc/yum.repos.d/almalinux*.repo");
@@ -1467,7 +1467,7 @@ os_alpine_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_alpine);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char* cmd = xy_strjoin (3,
             "sed -i 's#https\\?://dl-cdn.alpinelinux.org/alpine#", source.url, "#g' /etc/apk/repositories"
@@ -1497,7 +1497,7 @@ os_void_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_void);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_ensure_dir ("/etc/xbps.d");
   char *cmd = "cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/";
@@ -1529,7 +1529,7 @@ os_solus_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_solus);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *cmd = xy_2strjoin ("eopkg add-repo Solus ", source.url);
   chsrc_run (cmd);
@@ -1570,7 +1570,7 @@ os_trisquel_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_trisquel);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
@@ -1599,7 +1599,7 @@ os_linuxlite_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_linuxlite);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
@@ -1621,7 +1621,7 @@ os_openeuler_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_openeuler);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_backup ("/etc/yum.repos.d/openEuler.repo");
 
@@ -1646,7 +1646,7 @@ os_anolis_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_anolis);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *cmd = xy_strjoin (3, "sed -i.bak -E 's|https?://(mirrors\\.openanolis\\.cn/anolis)|", source.url, "|g' /etc/yum.repos.d/*.repo");
   chsrc_run (cmd);
@@ -1670,7 +1670,7 @@ os_openkylin_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_openkylin);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_backup (ETC_APT_SOURCELIST);
 
@@ -1699,7 +1699,7 @@ os_freebsd_setsrc (char *option)
   int index = use_specific_mirror_or_auto_select (option, os_freebsd);
 
   SourceInfo source = os_freebsd_sources[index];
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_infolog_remarkably ("1. 添加 freebsd-pkg 源 (二进制安装包)");
   chsrc_ensure_dir ("/usr/local/etc/pkg/repos");
@@ -1813,7 +1813,7 @@ os_netbsd_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_netbsd);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_backup ("/usr/pkg/etc/pkgin/repositories.conf");
 
@@ -1847,7 +1847,7 @@ os_openbsd_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_openbsd);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_backup ("/etc/installurl");
   chsrc_overwrite_file (source.url, "/etc/installurl");
@@ -1866,7 +1866,7 @@ os_ros_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (os_ros);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_backup ("/etc/apt/sources.list.d/ros-latest.list");
 
@@ -1926,7 +1926,7 @@ wr_tex_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (wr_tex);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *cmd = NULL;
 
@@ -1954,7 +1954,7 @@ wr_emacs_setsrc (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (wr_emacs);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_warn ("Emacs换源涉及Elisp，需要手动查阅并换源:");
   puts (source.url);
@@ -1976,7 +1976,7 @@ wr_winget_setsrc (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (wr_winget);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_run ("winget source remove winget");
   chsrc_run (xy_2strjoin ("winget source add winget ", source.url));
@@ -2015,7 +2015,7 @@ wr_brew_setsrc (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (wr_brew);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *api_domain      = xy_strjoin (3, "export HOMEBREW_API_DOMAIN=\"",      xy_2strjoin (source.url, "homebrew-bottles/api"), "\"");
   char *bottle_domain   = xy_strjoin (3, "export HOMEBREW_BOTTLE_DOMAIN=\"",   xy_2strjoin (source.url, "homebrew-bottles"), "\"");
@@ -2041,7 +2041,7 @@ wr_cocoapods_setsrc (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (wr_cocoapods);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_note_remarkably ("请手动执行以下命令:");
 
@@ -2068,7 +2068,7 @@ wr_guix_setsrc (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (wr_guix);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *file =  xy_strjoin (3, "(list (channel\n"
                                "       (inherit (car %default-channels))\n"
@@ -2099,7 +2099,7 @@ wr_nix_setsrc (char *option)
 
   SourceInfo source;
   chsrc_yield_source (wr_nix);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *cmd = xy_strjoin (3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
   chsrc_run (cmd);
@@ -2146,7 +2146,7 @@ wr_dockerhub_setsrc (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (wr_dockerhub);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   if (xy_on_linux || xy_on_bsd)
     {
@@ -2184,7 +2184,7 @@ wr_flathub_setsrc (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (wr_flathub);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   chsrc_warn ("若出现问题，可先调用以下命令:");
   char *note = xy_strjoin (3,
@@ -2206,7 +2206,7 @@ wr_anaconda_setsrc (char *option)
 {
   SourceInfo source;
   chsrc_yield_source (wr_anaconda);
-  chsrc_confirm_selection (&source);
+  chsrc_confirm_source (&source);
 
   char *main  = xy_2strjoin (source.url, "pkgs/main");
   char *r     = xy_2strjoin (source.url, "pkgs/r");
