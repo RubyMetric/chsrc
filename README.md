@@ -47,8 +47,6 @@
 - [ ] 缺乏 `AUR` 维护者
 - [x]  `homebrew` 维护者
 - [ ] 缺乏 `scoop` 维护者
-- [x] `scoop` 要求 GitHub star 数量超过 **500** 以及/或 **150**个 fork
-- [x] `homebrew` 要求 GitHub 仓库 **>=30 forks**, **>=30 watchers** or **>=75 stars**
 - [ ] `scoop` 要求英文输出
 
   `chsrc`本意进行中文输出，但是我们将尽可能提供选项来进行英文输出。该选项同时有利于 BSD 用户
@@ -97,7 +95,7 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-armv7-lin
 brew install chsrc
 ```
 
-或手动下载二进制文件
+或手动下载二进制文件 (最新版，有时比 `homebrew` 提供的更新)
 
 ```bash
 # M1/aarch64
@@ -127,33 +125,36 @@ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
 ```bash
 使用: chsrc <command> [options] [target] [mirror]
 
-help                    # 打印此帮助，或 h, -h, --help
-issue                   # 查看相关issue
-list (或 ls, 或 l)      # 列出可用镜像源，和可换源软件
-list mirror/target      # 列出可用镜像源，或可换源软件
-list os/lang/ware       # 列出可换源的操作系统/编程语言/软件
-list <target>           # 查看该软件可以使用哪些源
+help                      # 打印此帮助，或 h, -h, --help
+issue                     # 查看相关issue
+list (或 ls, 或 l)        # 列出可用镜像源，和可换源软件
+list mirror/target        # 列出可用镜像源，或可换源软件
+list os/lang/ware         # 列出可换源的操作系统/编程语言/软件
+list <target>             # 查看该软件可以使用哪些源
 
-cesu <target>           # 对该软件所有源测速
-get  <target>           # 查看当前软件的源使用情况
+cesu <target>             # 对该软件所有源测速
+get  <target>             # 查看当前软件的源使用情况
 
-set  <target>           # 换源，自动测速后挑选最快源
-set  <target>  first    # 换源，使用维护团队测速第一的源
-set  <target> <mirror>  # 换源，指定使用某镜像站 (通过list命令查看)
-reset <target>          # 重置，使用上游默认使用的源
+set  <target>             # 换源，自动测速后挑选最快源
+set  <target>  first      # 换源，使用维护团队测速第一的源
+set  <target> <mirror>    # 换源，指定使用某镜像站 (通过list命令查看)
+set  <target> https://abc # 换源，用户自定义源URL
+reset <target>            # 重置，使用上游默认使用的源
 
 选项:
--ipv6                   # 使用IPv6测速
--local                  # 仅对某项目而非全局换源 (仅部分软件如bundler,pdm支持)
+-ipv6                     # 使用IPv6测速
+-local                    # 仅对某项目而非全局换源 (仅部分软件如bundler,pdm支持)
 ```
 
-当你**不想自动测速的时候**，你可以直接指定某镜像站，以及指定维护团队已测试的最快镜像站。
+当你**不想自动测速的时候**，你可以直接指定某镜像站，源URL，以及指定维护团队已测试的最快镜像站。
 
 ```bash
 chsrc set ruby           # 测速，寻找最快者，换源
 # 或
 chsrc ls  ruby           # 列出可用的镜像站
 chsrc set ruby rubychina # 使用 RubyChina 作为镜像站
+# 或您有自己的镜像地址
+chsrc set ruby https://gems.ruby-china.com/ # 使用自定义URL
 # 或
 chsrc set ruby first     # 使用维护团队测试的最快镜像站
 ```
