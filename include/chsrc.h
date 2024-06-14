@@ -15,6 +15,11 @@
 
 #define App_Name "chsrc"
 
+#define Exit_UserCause    1
+#define Exit_Unsupported  2
+#define Exit_MatinerIssue 3
+#define Exit_FatalError   4
+
 #define chsrc_log(str)   xy_log(App_Name,str)
 #define chsrc_succ(str)  xy_succ(App_Name,str)
 #define chsrc_info(str)  xy_info(App_Name,str)
@@ -114,7 +119,7 @@ chsrc_ensure_program (char *prog_name)
   else
     {
       chsrc_error (xy_strjoin (3, "未找到 ", prog_name, " 命令，请检查是否存在"));
-      exit (1);
+      exit (Exit_UserCause);
     }
 }
 
@@ -148,13 +153,13 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
   if (is_url (input))
     {
       chsrc_error ("暂不支持对该软件使用用户自定义源，请联系开发者询问原因或请求支持");
-      exit (1);
+      exit (Exit_Unsupported);
     }
 
   if (0==size || 1==size)
     {
       chsrc_error (xy_strjoin (3, "当前 ", target, " 无任何可用源，请联系维护者"));
-      exit (1);
+      exit (Exit_MatinerIssue);
     }
 
   if (2==size)
@@ -192,7 +197,7 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
     {
       chsrc_error (xy_strjoin (3, "镜像站 ", input, " 不存在"));
       chsrc_error (xy_2strjoin ("查看可使用源，请使用 chsrc list ", target));
-      exit (1);
+      exit (Exit_UserCause);
     }
   return idx;
 }
@@ -312,7 +317,7 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target)
   if (0==size || 1==size)
     {
       chsrc_error (xy_strjoin (3, "当前 ", target, " 无任何可用源，请联系维护者: chsrc issue"));
-      exit (1);
+      exit (Exit_MatinerIssue);
     }
 
   bool onlyone = false;
@@ -323,7 +328,7 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target)
   if (!exist_curl)
     {
       chsrc_error ("没有curl命令，无法测速");
-      exit (1);
+      exit (Exit_UserCause);
     }
 
   double speeds[size];
@@ -428,12 +433,12 @@ chsrc_confirm_selection (SourceInfo *source)
   if (source_is_upstream (source) && source_has_empty_url (source))
     {
       chsrc_error ("暂未对该软件实现重置");
-      exit (2);
+      exit (Exit_Unsupported);
     }
   else if (source_has_empty_url (source))
     {
       chsrc_error ("该源URL不存在，请向开发团队提交bug");
-      exit (2);
+      exit (Exit_FatalError);
     }
   else
     {
@@ -564,7 +569,7 @@ chsrc_ensure_root ()
     }
 not_root:
   chsrc_error ("请在命令前使用 sudo 或切换为root用户来保证必要的权限");
-  exit (1);
+  exit (Exit_UserCause);
 }
 
 

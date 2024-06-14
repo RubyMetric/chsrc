@@ -5,7 +5,7 @@
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  *               | Heng Guo   <2085471348@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : Same With Chsrc_Version
+ * Last modified : <2024-06-14>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
@@ -112,7 +112,7 @@ pl_python_check_cmd (char **prog, bool *pdm_exist)
       else
         {
           chsrc_error ("未找到 Python 相关命令，请检查是否存在");
-          exit (1);
+          exit (Exit_UserCause);
         }
     }
 
@@ -194,7 +194,7 @@ pl_nodejs_check_cmd (bool *npm_exist, bool *yarn_exist, bool *pnpm_exist)
   if (!*npm_exist && !*yarn_exist && !*pnpm_exist)
     {
       chsrc_error ("未找到 npm 或 yarn 或 pnpm 命令，请检查是否存在其一");
-      exit (1);
+      exit (Exit_UserCause);
     }
 }
 
@@ -387,7 +387,7 @@ pl_go_check_cmd ()
   if (!exist)
     {
       chsrc_error ("未找到 go 相关命令，请检查是否存在");
-      exit (1);
+      exit (Exit_UserCause);
     }
 }
 
@@ -476,7 +476,7 @@ pl_java_check_cmd (bool *maven_exist, bool *gradle_exist)
   if (! *maven_exist && ! *gradle_exist)
     {
       chsrc_error ("maven 与 gradle 命令均未找到，请检查是否存在其一");
-      exit (1);
+      exit (Exit_UserCause);
     }
 }
 
@@ -882,7 +882,7 @@ ensure_apt_sourcelist (int debian_type)
       else
         {
           chsrc_error ("您的Debian版本过低(<10)，暂不支持换源");
-          exit (2);
+          exit (Exit_Unsupported);
         }
     }
 
@@ -2239,7 +2239,7 @@ wr_anaconda_setsrc (char *option)
       if (!exist)
         {
           chsrc_error ("未找到 conda 命令，请检查是否存在");
-          exit (1);
+          exit (Exit_UserCause);
         }
       chsrc_run ("conda config --set show_channel_urls yes");
     }
