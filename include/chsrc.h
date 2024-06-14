@@ -703,8 +703,8 @@ chsrc_backup (const char *path)
       cmd = xy_strjoin (5, "cp ", path, " ", path, ".bak --backup='t'");
     }
 
-  chsrc_run (cmd, RunOpt_Default);
-  chsrc_note_remarkably (xy_strjoin (3, "备份文件名 ", path, ".bak"));
+  chsrc_run (cmd, RunOpt_No_Last_New_Line);
+  chsrc_note_remarkably (xy_strjoin (3, "备份文件名为 ", path, ".bak"));
 }
 
 
