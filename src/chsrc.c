@@ -815,7 +815,7 @@ pl_julia_setsrc (char *option)
 bool
 ensure_apt_sourcelist (int debian_type)
 {
-  bool exist = query_file_exist (ETC_APT_SOURCELIST);
+  bool exist = chsrc_check_file (ETC_APT_SOURCELIST);
 
   if (exist)
     {
@@ -907,13 +907,13 @@ ensure_apt_sourcelist (int debian_type)
 void
 os_ubuntu_getsrc (char *option)
 {
-  if (query_file_exist (ETC_APT_DEB822_Ubuntu_Sources))
+  if (chsrc_check_file (ETC_APT_DEB822_Ubuntu_Sources))
     {
       chsrc_take_a_look_at_file (ETC_APT_DEB822_Ubuntu_Sources);
       return;
     }
 
-  if (query_file_exist (ETC_APT_SOURCELIST))
+  if (chsrc_check_file (ETC_APT_SOURCELIST))
     {
       chsrc_take_a_look_at_file (ETC_APT_SOURCELIST);
       return;
@@ -960,7 +960,7 @@ os_ubuntu_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  if (query_file_exist (ETC_APT_DEB822_Ubuntu_Sources))
+  if (chsrc_check_file (ETC_APT_DEB822_Ubuntu_Sources))
     {
       chsrc_note_remarkably ("将基于新格式换源");
       os_ubuntu_setsrc_for_deb822 (option);
@@ -1031,13 +1031,13 @@ os_mint_setsrc (char *option)
 void
 os_debian_getsrc (char *option)
 {
-  if (query_file_exist (ETC_APT_DEB822_Debian_Sources))
+  if (chsrc_check_file (ETC_APT_DEB822_Debian_Sources))
     {
       chsrc_take_a_look_at_file (ETC_APT_DEB822_Debian_Sources);
       return;
     }
 
-  if (query_file_exist (ETC_APT_SOURCELIST))
+  if (chsrc_check_file (ETC_APT_SOURCELIST))
     {
       chsrc_take_a_look_at_file (ETC_APT_SOURCELIST);
       return;
@@ -1080,7 +1080,7 @@ os_debian_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  if (query_file_exist (ETC_APT_DEB822_Debian_Sources))
+  if (chsrc_check_file (ETC_APT_DEB822_Debian_Sources))
     {
       chsrc_note_remarkably ("将基于新格式换源");
       os_debian_setsrc_for_deb822 (option);

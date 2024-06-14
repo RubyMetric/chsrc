@@ -125,7 +125,7 @@ chsrc_ensure_program (char *prog_name)
 
 
 bool
-query_file_exist (char *path)
+chsrc_check_file (char *path)
 {
   if (xy_file_exist (path))
     {
