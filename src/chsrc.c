@@ -1140,17 +1140,17 @@ os_raspberrypi_setsrc (char *option)
 }
 
 
-
+#define OS_Armbian_SOURCELIST "/etc/apt/sources.list.d/armbian.list"
 void
 os_armbian_getsrc (char *option)
 {
-  if (chsrc_check_file ("/etc/apt/sources.list.d/armbian.list"))
-  {
-    chsrc_take_a_look_at_file ("/etc/apt/sources.list.d/armbian.list");
-    return;
-  }
+  if (chsrc_check_file (OS_Armbian_SOURCELIST))
+    {
+      chsrc_take_a_look_at_file (OS_Armbian_SOURCELIST);
+      return;
+    }
 
-  chsrc_error_remarkably ("缺少源配置文件！路径：/etc/apt/sources.list.d/armbian.list");
+  chsrc_error_remarkably ("缺少源配置文件！路径：" OS_Armbian_SOURCELIST);
 }
 
 /**
@@ -1165,15 +1165,16 @@ os_armbian_setsrc (char *option)
   chsrc_yield_source (os_armbian);
   chsrc_confirm_source (&source);
 
-  chsrc_backup ("/etc/apt/sources.list.d/armbian.list");
+  chsrc_backup (OS_Armbian_SOURCELIST);
 
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?[^ ]*armbian/?[^ ]*@", source.url,
-                            "@g' /etc/apt/sources.list.d/armbian.list");
+                             "@g' " OS_Armbian_SOURCELIST);
 
   chsrc_run (cmd, RunOpt_Fatal_On_Error);
   chsrc_run ("apt update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
+#undef OS_Armbian_SOURCELIST
 
 
 
