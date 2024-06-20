@@ -4,6 +4,8 @@
  * File          : chsrc.h
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  *               | Heng Guo   <2085471348@qq.com>
+ * Contributors  : Null Nil   <null@nil.com>
+ *               |
  * Created on    : <2023-08-29>
  * Last modified : <2024-06-14>
  *

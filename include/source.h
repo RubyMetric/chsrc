@@ -4,9 +4,10 @@
  * File          : source.h
  * Authors       : Aoran Zeng    <ccmywish@qq.com>
  *               | Heng Guo      <2085471348@qq.com>
- *               | Shengwei Chen <414685209@qq.com>
+ * Contributors  : Shengwei Chen <414685209@qq.com>
+ *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-06-20>
+ * Last modified : <2024-06-21>
  *
  * 镜像站与换源信息
  * ------------------------------------------------------------*/

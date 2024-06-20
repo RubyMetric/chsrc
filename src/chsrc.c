@@ -4,14 +4,17 @@
  * File          : chsrc.c
  * Authors       : Aoran Zeng    <ccmywish@qq.com>
  *               | Heng Guo      <2085471348@qq.com>
+ * Contributors  : Aaron Ruan    <aaron212cn@outlook.com>
+ *               | Rui Chen      <rui@chenrui.dev>
  *               | Shengwei Chen <414685209@qq.com>
+ *               |
  * Created on    : <2023-08-28>
- * Last modified : <2024-06-20>
+ * Last modified : <2024-06-21>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version      "v0.1.7.pre-2024/06/14"
+#define Chsrc_Version      "v0.1.7.pre4-2024/06/20"
 #define Chsrc_Maintain_URL "https://gitee.com/RubyMetric/chsrc"
 
 #include "chsrc.h"
