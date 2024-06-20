@@ -2,10 +2,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File          : chsrc.c
- * Authors       : Aoran Zeng <ccmywish@qq.com>
- *               | Heng Guo   <2085471348@qq.com>
+ * Authors       : Aoran Zeng    <ccmywish@qq.com>
+ *               | Heng Guo      <2085471348@qq.com>
+ *               | Shengwei Chen <414685209@qq.com>
  * Created on    : <2023-08-28>
- * Last modified : <2024-06-14>
+ * Last modified : <2024-06-20>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
@@ -1136,6 +1137,42 @@ os_raspberrypi_setsrc (char *option)
   chsrc_run (cmd, RunOpt_Fatal_On_Error);
   chsrc_run ("apt update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeUntested);
+}
+
+
+
+void
+os_armbian_getsrc (char *option)
+{
+  if (chsrc_check_file ("/etc/apt/sources.list.d/armbian.list"))
+  {
+    chsrc_take_a_look_at_file ("/etc/apt/sources.list.d/armbian.list");
+    return;
+  }
+
+  chsrc_error_remarkably ("缺少源配置文件！路径：/etc/apt/sources.list.d/armbian.list");
+}
+
+/**
+ * 参考: https://mirrors.tuna.tsinghua.edu.cn/help/armbian
+ */
+void
+os_armbian_setsrc (char *option)
+{
+  chsrc_ensure_root ();
+
+  SourceInfo source;
+  chsrc_yield_source (os_armbian);
+  chsrc_confirm_source (&source);
+
+  chsrc_backup ("/etc/apt/sources.list.d/armbian.list");
+
+  char *cmd = xy_strjoin (3, "sed -E -i 's@https?[^ ]*armbian/?[^ ]*@", source.url,
+                            "@g' /etc/apt/sources.list.d/armbian.list");
+
+  chsrc_run (cmd, RunOpt_Fatal_On_Error);
+  chsrc_run ("apt update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
 
@@ -2297,6 +2334,7 @@ def_target(os_alpine); def_target(os_void); def_target(os_trisquel); def_target(
 def_target(os_netbsd); def_target(os_openbsd);
 def_target(os_deepin); def_target(os_openkylin);
 def_target(os_raspberrypi);
+def_target(os_armbian);
 def_target_noget(os_fedora);
 def_target_noget(os_opensuse);
 def_target_noget(os_arch);
@@ -2330,6 +2368,7 @@ static const char
 *os_trisquel   [] = {"trisquel",             NULL,  t(&os_trisquel_target)},
 *os_linuxlite  [] = {"lite",   "linuxlite",  NULL,  t(&os_linuxlite_target)},
 *os_raspberrypi[] = {"raspi",  "raspberrypi",NULL,  t(&os_raspberrypi_target)},
+*os_armbian    [] = {"armbian",              NULL,  t(&os_armbian_target)},
 *os_freebsd    [] = {"freebsd",              NULL,  t(&os_freebsd_target)},
 *os_netbsd     [] = {"netbsd",               NULL,  t(&os_netbsd_target)},
 *os_openbsd    [] = {"openbsd",              NULL,  t(&os_openbsd_target)},
@@ -2344,7 +2383,7 @@ static const char
   os_arch,    os_manjaro, os_gentoo,
   os_rocky,   os_alma,
   os_alpine,   os_void,      os_solus,          os_ros,
-  os_trisquel, os_linuxlite, os_raspberrypi,
+  os_trisquel, os_linuxlite, os_raspberrypi,    os_armbian,
   os_deepin,   os_openeuler, os_anolis,         os_openkylin,
   os_msys2,
   os_freebsd,  os_netbsd,    os_openbsd,

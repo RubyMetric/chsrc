@@ -2,10 +2,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File          : source.h
- * Authors       : Aoran Zeng <ccmywish@qq.com>
- *               | Heng Guo   <2085471348@qq.com>
+ * Authors       : Aoran Zeng    <ccmywish@qq.com>
+ *               | Heng Guo      <2085471348@qq.com>
+ *               | Shengwei Chen <414685209@qq.com>
  * Created on    : <2023-08-29>
- * Last modified : <2024-06-14>
+ * Last modified : <2024-06-20>
  *
  * 镜像站与换源信息
  * ------------------------------------------------------------*/
@@ -689,6 +690,21 @@ os_raspberrypi_sources[] = {
 
 
 /**
+ * 2024-06-20 更新
+ */
+os_armbian_sources[] = {
+    {&Upstream,       NULL},
+    {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/armbian"},
+    {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/armbian"},
+    {&Bfsu,          "https://mirrors.bfsu.edu.cn/armbian"},
+    {&Sustech,       "https://mirrors.sustech.edu.cn/armbian"},
+    {&Ustc,          "https://mirrors.ustc.edu.cn/armbian"},
+    {&Nju,           "https://mirrors.nju.edu.cn/armbian"},
+    {&Ali,           "https://mirrors.aliyun.com/armbian"},
+},
+
+
+/**
  * 2023-09-27 更新
  *
  * @note 该源需要 FreeBSD 中文社区积极参与维护
@@ -956,6 +972,7 @@ def_sources_n(os_void);
 def_sources_n(os_solus);
 
 def_sources_n(os_trisquel); def_sources_n(os_linuxlite); def_sources_n(os_raspberrypi);
+def_sources_n(os_armbian);
 
 def_sources_n(os_freebsd);  def_sources_n(os_netbsd);    def_sources_n(os_openbsd);
 
