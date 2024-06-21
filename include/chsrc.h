@@ -7,7 +7,7 @@
  * Contributors  : Null Nil   <null@nil.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-06-14>
+ * Last modified : <2024-06-21>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -709,6 +709,37 @@ chsrc_backup (const char *path)
   chsrc_note_remarkably (xy_strjoin (3, "备份文件名为 ", path, ".bak"));
 }
 
+
+static char *
+chsrc_get_cpuarch ()
+{
+  char *ret;
+  bool exist;
+
+  if (xy_on_windows)
+    {
+      xy_unimplement;
+    }
+
+  exist = chsrc_check_program ("arch");
+  if (exist)
+    {
+      ret = xy_run ("arch", 0, NULL);
+      return ret;
+    }
+
+  exist = chsrc_check_program ("uname");
+  if (exist)
+    {
+      ret = xy_run ("uname -p", 0, NULL);
+      return ret;
+    }
+  else
+    {
+      chsrc_error ("无法检测到CPU类型");
+      exit (Exit_UserCause);
+    }
+}
 
 
 /* Target Info */

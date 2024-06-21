@@ -14,7 +14,7 @@
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version      "v0.1.7.pre5-2024/06/21"
+#define Chsrc_Version      "v0.1.7.rc1-2024/06/21"
 #define Chsrc_Maintain_URL "https://gitee.com/RubyMetric/chsrc"
 
 #include "chsrc.h"
@@ -940,7 +940,7 @@ os_ubuntu_setsrc_for_deb822 (char *option)
 
   chsrc_backup (ETC_APT_DEB822_Ubuntu_Sources);
 
-  char *arch = xy_run ("arch", 0, NULL);
+  char *arch = chsrc_get_cpuarch ();
   char *cmd  = NULL;
   if (strncmp (arch, "x86_64", 6)==0)
     {
@@ -983,9 +983,9 @@ os_ubuntu_setsrc (char *option)
       chsrc_backup (ETC_APT_SOURCELIST);
     }
 
-  char *arch = xy_run ("arch", 0, NULL);
+  char *arch = chsrc_get_cpuarch ();
   char *cmd  = NULL;
-  if (strncmp (arch, "x86_64", 6)==0)
+  if (0==strncmp (arch, "x86_64", 6))
     {
       cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu/?@", source.url, "@g\' " ETC_APT_SOURCELIST);
     }
@@ -1384,7 +1384,7 @@ os_arch_setsrc (char *option)
 
   bool  arch_flag = false;
   char *new_file  = NULL;
-  char *arch = xy_run ("arch", 0, NULL);
+  char *arch = chsrc_get_cpuarch ();
 
   if (strncmp(arch, "x86_64", 6)==0)
     {
@@ -1858,14 +1858,14 @@ os_netbsd_setsrc (char *option)
 
   chsrc_backup ("/usr/pkg/etc/pkgin/repositories.conf");
 
-  char *arch = xy_run("arch", 0, NULL);
+  char *arch = chsrc_get_cpuarch ();
   char *vercmd  = "cat /etc/os-release | grep \"VERSION=\" | grep -Po \"[8-9].[0-9]+\"";
   char *version = xy_run (vercmd, 0, NULL);
 
   char *url = xy_strjoin (5, source.url, arch, "/", version, "/All");
   chsrc_overwrite_file (url, "/usr/pkg/etc/pkgin/repositories.conf");
 
-  chsrc_say_lastly(&source, ChsrcTypeUntested);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
 
