@@ -7,7 +7,7 @@
  * Contributors  : Null Nil   <null@nil.com>
  *               |
  * Created on    : <2023-08-28>
- * Last modified : <2024-06-14>
+ * Last modified : <2024-06-21>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C utilities for CLI applications in Ruby flavor
@@ -16,7 +16,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version      "v0.1.2-2024/06/14"
+#define _XY_Version      "v0.1.2.3-2024/06/21"
 #define _XY_Maintain_URL "https://gitee.com/RubyMetric/chsrc/blob/main/include/xy.h"
 
 #include <assert.h>
@@ -71,9 +71,13 @@ void print (const char *s)   { printf ("%s", s);  }
 void println (const char *s) { printf ("%s\n", s);}
 void say (const char *s)     { printf ("%s\n", s);}
 
-#define xy_arylen(x) (sizeof (x) / sizeof (x[0]))
-
 #define assert_str(a, b) assert (xy_streql ((a), (b)))
+
+#define xy_unsupport   assert(!"Unsuppoted")
+#define xy_unimplement assert(!"Unimplemented temporarily")
+#define xy_unreach     assert(!"This code shouldn't be reached")
+
+#define xy_arylen(x) (sizeof (x) / sizeof (x[0]))
 
 static inline void *
 xy_malloc0 (size_t size)
