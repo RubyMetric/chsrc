@@ -1,13 +1,13 @@
 /** ------------------------------------------------------------
+ * SPDX-License-Identifier: MIT
+ * -------------------------------------------------------------
  * File          : xy.c
  * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-30>
- * Last modified : <2024-06-08>
+ * Last modified : <2024-06-21>
  *
- * test_xy:
- *
- *   测试 xy.h
+ * 测试 xy.h
  * ------------------------------------------------------------*/
 
 #include "xy.h"
@@ -92,5 +92,9 @@ main (int argc, char const *argv[])
   assert_str (xy_uniform_path ("~/haha/test"), xy_parent_dir (" ~/haha/test/123"));
 
   xy_succ ("测试完成", "测试全部通过");
+
+  // xy_unimplement;
+  // xy_unsupport;
+  // xy_unreach;
   return 0;
 }
