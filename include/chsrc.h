@@ -576,10 +576,10 @@ not_root:
 }
 
 
-#define RunOpt_Default           0x0000
-#define RunOpt_No_Note_On_Sccess 0x0001  // 运行成功不提示用户，只有运行失败时才提示用户
-#define RunOpt_No_Last_New_Line  0x0010  // 不输出最后的空行
-#define RunOpt_Fatal_On_Error    0x0100  // 若命令运行失败，直接退出
+#define RunOpt_Default           0x0000  // 默认若命令运行失败，直接退出
+#define RunOpt_No_Note_On_Sccess 0x0010  // 运行成功不提示用户，只有运行失败时才提示用户
+#define RunOpt_No_Last_New_Line  0x0100  // 不输出最后的空行
+#define RunOpt_No_Exit_On_Error  0x1000  // 命令运行失败也不退出
 
 static void
 chsrc_run (const char *cmd, int run_option)
@@ -599,7 +599,7 @@ chsrc_run (const char *cmd, int run_option)
       sprintf (buf, "%d", status);
       char *str = xy_2strjoin ("命令执行失败，返回码 ", buf);
       xy_error_remarkably (App_Name, "运行", str);
-      if (run_option & RunOpt_Fatal_On_Error)
+      if (! (run_option & RunOpt_No_Exit_On_Error))
         {
           chsrc_error ("关键错误，强制结束");
           exit (Exit_FatalUnkownError);

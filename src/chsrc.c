@@ -952,8 +952,8 @@ os_ubuntu_setsrc_for_deb822 (char *option)
       cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu-ports/?@", source.url, "-ports@g\' " ETC_APT_DEB822_Ubuntu_Sources);
     }
 
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
-  chsrc_run ("apt update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
@@ -995,8 +995,8 @@ os_ubuntu_setsrc (char *option)
       cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu-ports/?@", source.url, "-ports@g\' " ETC_APT_SOURCELIST);
     }
 
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
-  chsrc_run ("apt update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
@@ -1025,8 +1025,8 @@ os_mint_setsrc (char *option)
   char* cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/.*/?@", source.url,
                             "@g' /etc/apt/sources.list.d/official-package-repositories.list");
 
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
-  chsrc_run ("apt update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeAuto);
   chsrc_warn ("完成后请不要再使用 mintsources（自带的图形化软件源设置工具）进行任何操作，因为在操作后，无论是否有按“确定”，mintsources 均会覆写我们刚才换源的内容");
 }
@@ -1065,13 +1065,13 @@ os_debian_setsrc_for_deb822 (char *option)
   chsrc_backup (ETC_APT_DEB822_Debian_Sources);
 
   char *cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/debian/?@", source.url, "@g\' " ETC_APT_DEB822_Debian_Sources);
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
+  chsrc_run (cmd, RunOpt_Default);
 
   // debian-security 源和其他源不一样
   cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/debian-security/?@", source.url, "-security", "@g\' " ETC_APT_DEB822_Debian_Sources);
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
+  chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_run ("apt update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
@@ -1111,8 +1111,8 @@ os_debian_setsrc (char *option)
 
   char *cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/debian/?@", source.url, "@g\' " ETC_APT_SOURCELIST);
 
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
-  chsrc_run ("apt update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
@@ -1138,8 +1138,8 @@ os_raspberrypi_setsrc (char *option)
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/.*/?@", source.url,
                             "@g' /etc/apt/sources.list.d/raspi.list");
 
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
-  chsrc_run ("apt update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
@@ -1174,8 +1174,8 @@ os_armbian_setsrc (char *option)
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?[^ ]*armbian/?[^ ]*@", source.url,
                              "@g' " OS_Armbian_SOURCELIST);
 
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
-  chsrc_run ("apt update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 #undef OS_Armbian_SOURCELIST
@@ -1207,7 +1207,7 @@ os_deepin_setsrc (char *option)
                               "@g\' /etc/apt/sources.list");
 
   chsrc_run (cmd, RunOpt_Default);
-  chsrc_run ("apt update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
@@ -1240,14 +1240,14 @@ os_fedora_setsrc (char *option)
          "/etc/yum.repos.d/fedora-updates.repo ",
          "/etc/yum.repos.d/fedora-updates-modular.repo");
 
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
+  chsrc_run (cmd, RunOpt_Default);
 
   chsrc_infolog_remarkably ("已替换文件 /etc/yum.repos.d/fedora.repo");
   chsrc_infolog_remarkably ("已新增文件 /etc/yum.repos.d/fedora-modular.repo");
   chsrc_infolog_remarkably ("已替换文件 /etc/yum.repos.d/fedora-updates.repo");
   chsrc_infolog_remarkably ("已新增文件 /etc/yum.repos.d/fedora-updates-modular.repo");
 
-  chsrc_run ("dnf makecache", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
@@ -1333,8 +1333,8 @@ os_kali_setsrc (char *option)
                               source.url,
                              "@g\' /etc/apt/sources.list");
 
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
-  chsrc_run ("apt update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
@@ -1363,7 +1363,7 @@ os_msys2_setsrc (char *option)
                               source.url,
                              "#g\" /etc/pacman.d/mirrorlist* ");
 
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
+  chsrc_run (cmd, RunOpt_Default);
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
@@ -1410,11 +1410,11 @@ os_arch_setsrc (char *option)
 
   if (arch_flag)
     {
-      chsrc_run ("pacman -Syyu", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+      chsrc_run ("pacman -Syyu", RunOpt_No_Last_New_Line);
     }
   else
     {
-      chsrc_run ("pacman -Syy", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+      chsrc_run ("pacman -Syy", RunOpt_No_Last_New_Line);
     }
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
@@ -1438,7 +1438,7 @@ os_gentoo_setsrc (char *option)
   char *cmd = xy_strjoin (3, "sed -i \"s#rsync://.*/gentoo-portage#rsync://",
                              source.url,
                             "gentoo-portage#g");
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
+  chsrc_run (cmd, RunOpt_Default);
 
   char *towrite = xy_strjoin (3, "GENTOO_MIRRORS=\"https://", source.url, "gentoo\"");
 
@@ -1465,8 +1465,8 @@ os_rocky_setsrc (char *option)
             "-e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=", source.url, "|g' "
             "-i.bak /etc/yum.repos.d/rocky-extras.repo /etc/yum.repos.d/rocky.repo"
             );
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
-  chsrc_run ("dnf makecache", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
@@ -1486,8 +1486,8 @@ os_alma_setsrc (char *option)
   char *cmd = xy_strjoin (3,
     "sed -e 's|^mirrorlist=|#mirrorlist=|g' -e 's|^#\\s*baseurl=https://repo.almalinux.org/almalinux|baseurl=", source.url, "|g'  -i.bak  /etc/yum.repos.d/almalinux*.repo");
 
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
-  chsrc_run ("dnf makecache", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
@@ -1514,9 +1514,9 @@ os_alpine_setsrc (char *option)
   char* cmd = xy_strjoin (3,
             "sed -i 's#https\\?://dl-cdn.alpinelinux.org/alpine#", source.url, "#g' /etc/apk/repositories"
             );
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
+  chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_run ("apk update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run ("apk update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
@@ -1590,7 +1590,7 @@ os_manjaro_setsrc (char *option)
   char *cmd = "pacman-mirrors -i -c China -m rank";
   chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_run ("pacman -Syy", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run ("pacman -Syy", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (NULL, ChsrcTypeAuto);
 }
 
@@ -1618,8 +1618,8 @@ os_trisquel_setsrc (char *option)
 
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/trisquel/?@", source.url, "@g' /etc/apt/sources.list");
 
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
-  chsrc_run ("apt update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
@@ -1647,7 +1647,7 @@ os_linuxlite_setsrc (char *option)
 
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/.*/?@", source.url, "@g' /etc/apt/sources.list");
 
-  chsrc_run ("apt update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
@@ -1673,7 +1673,7 @@ os_openeuler_setsrc (char *option)
 
   chsrc_overwrite_file (towrite, "/etc/yum.repos.d/openEuler.repo");
 
-  chsrc_run ("dnf makecache", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
@@ -1691,10 +1691,10 @@ os_anolis_setsrc (char *option)
   chsrc_confirm_source (&source);
 
   char *cmd = xy_strjoin (3, "sed -i.bak -E 's|https?://(mirrors\\.openanolis\\.cn/anolis)|", source.url, "|g' /etc/yum.repos.d/*.repo");
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
+  chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_run ("dnf makecache", RunOpt_Fatal_On_Error);
-  chsrc_run ("dnf update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run ("dnf makecache", RunOpt_Default);
+  chsrc_run ("dnf update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
@@ -1717,8 +1717,8 @@ os_openkylin_setsrc (char *option)
   chsrc_backup (ETC_APT_SOURCELIST);
 
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/openkylin/?@", source.url, "@g'" ETC_APT_SOURCELIST);
-  chsrc_run (cmd, RunOpt_Fatal_On_Error);
-  chsrc_run ("apt update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
@@ -1914,12 +1914,12 @@ os_ros_setsrc (char *option)
 
   char *cmd  = NULL;
   cmd = xy_strjoin(3, "sed -E -i \'s@https?://.*/ros/ubuntu/?@", source.url, "@/ros/ubuntug\' /etc/apt/sources.list");
-  chsrc_run(cmd, RunOpt_Fatal_On_Error);
+  chsrc_run(cmd, RunOpt_Default);
 
   cmd = "apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654";
   chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_run ("apt update", RunOpt_Fatal_On_Error | RunOpt_No_Last_New_Line);
+  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
