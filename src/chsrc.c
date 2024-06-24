@@ -9,7 +9,7 @@
  *               | Shengwei Chen <414685209@qq.com>
  *               |
  * Created on    : <2023-08-28>
- * Last modified : <2024-06-21>
+ * Last modified : <2024-06-24>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
@@ -157,20 +157,21 @@ pl_python_setsrc (char *option)
   chsrc_yield_source (pl_python);
   chsrc_confirm_source (&source);
 
-  char *cmd = xy_2strjoin (prog, xy_2strjoin (" -m pip config set global.index-url ", source.url));
+  // 这里用的是 config --user，会写入用户目录（而不是项目目录）
+  // GitHub#39
+  char *cmd = xy_2strjoin (prog, xy_2strjoin (" -m pip config --user set global.index-url ", source.url));
   chsrc_run (cmd, RunOpt_Default);
 
-  if (pdm_exist) {
-
-    char *where = " --global ";
-    if (Cli_Option_Locally==true)
-      {
-        where = " --local ";
-      }
-
-    cmd = xy_strjoin (4, "pdm config", where, "pypi.url ", source.url);
-    chsrc_run (cmd, RunOpt_Default);
-  }
+  if (pdm_exist)
+    {
+      char *where = " --global ";
+      if (Cli_Option_Locally==true)
+        {
+          where = " --local ";
+        }
+      cmd = xy_strjoin (4, "pdm config", where, "pypi.url ", source.url);
+      chsrc_run (cmd, RunOpt_Default);
+    }
 
   chsrc_say_lastly (&source, chsrc_type);
 }
