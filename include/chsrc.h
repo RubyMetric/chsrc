@@ -7,7 +7,7 @@
  * Contributors  : Null Nil   <null@nil.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-06-21>
+ * Last modified : <2024-06-24>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -599,7 +599,7 @@ chsrc_run (const char *cmd, int run_option)
       sprintf (buf, "%d", status);
       char *str = xy_2strjoin ("命令执行失败，返回码 ", buf);
       xy_error_remarkably (App_Name, "运行", str);
-      if (RunOpt_Fatal_On_Error)
+      if (run_option & RunOpt_Fatal_On_Error)
         {
           chsrc_error ("关键错误，强制结束");
           exit (Exit_FatalUnkownError);
