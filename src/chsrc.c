@@ -69,7 +69,7 @@ pl_ruby_setsrc (char *option)
     }
 
   cmd = xy_strjoin (4, "bundle config", where, "'mirror.https://rubygems.org' ", source.url);
-  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
   chsrc_say_lastly (&source, chsrc_type);
   // puts ("");
