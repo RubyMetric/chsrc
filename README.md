@@ -2,33 +2,11 @@
   <img alt="chsrc logo" src="image/chsrc.png"/>
 </div>
 
-<a href="https://repology.org/project/chsrc/versions">
-    <img src="https://repology.org/badge/vertical-allrepos/chsrc.svg" alt="Packaging status" align="right">
-</a>
-
 全平台命令行换源工具，**目标支持 Linux (包括麒麟、openEuler、deepin 等), Windows, macOS, BSD 等尽可能多的操作系统，龙芯、飞腾、RISC-V 等尽可能多的 CPU**。
 
 我们使用 **C99** 来完成上述目标。我们并不使用 Python 或 JS 等解释语言，因为一个简单的换源工具，不应该强行塞给用户一个庞大的解释器和数十、数百 MB 其他文件。
 
 本软件为**自由软件**，SDPX 软件许可证为 `GPL-3.0-or-later and MIT`
-
-<br>
-
-## `chsrc` 的设计理念
-
-1. **[No UFO](https://www.yuque.com/ccmywish/blog/no-ufo)**
-
-    我已经受够了各种软件在我的C盘或`$HOME`里给我塞一堆**零散**的不知名文件，它往往**连后缀都没有**，它的文件名足够隐晦以致于**你无论如何都猜不到是哪个软件在用它**。等你抱着好奇心打开一看，这竟然还是一种**自定义格式**。
-
-    好吧，对此我要创造一个新词：**UFO: Unidentified File Objects**
-
-    `chsrc` 除了一个二进制文件外，别无他物。不会在你计算机的某个犄角旮旯里放一些莫名其妙的文件
-
-2. **Convention over Configuration**
-
-    来自Ruby社区的优良传统。想想看: `/etc` 里每个文件都有一套自己的配置格式
-
-    我不想要有任何类似 `CHSRC_CONF` 的环境变量，也不想有任何类似 `.chsrc` 的配置文件 (**如果你是BSD用户，你会愤怒，因为你还存在一个叫作 `.cshrc` 的文件**)
 
 <br>
 
@@ -49,15 +27,15 @@
 - [ ] 缺乏 `scoop` 维护者
 - [ ] `scoop` 要求英文输出
 
-  `chsrc`本意进行中文输出，但是我们将尽可能提供选项来进行英文输出。该选项同时有利于 BSD 用户
-
-请访问 [chsrc on GitHub](https://github.com/RubyMetric/chsrc)
-
 若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
 
 <br>
 
 ## 安装
+
+<a href="https://repology.org/project/chsrc/versions">
+    <img src="https://repology.org/badge/vertical-allrepos/chsrc.svg" alt="Packaging status" align="right">
+</a>
 
 以下方式均下载到当前目录，可直接通过 `./chsrc` 运行。
 
@@ -202,7 +180,8 @@ sudo chsrc set debian
 sudo chsrc set fedora
 sudo chsrc set suse  或 set opensuse
 sudo chsrc set kali
-sudo chsrc set arch  # 同时使用 archlinuxcn
+sudo chsrc set arch
+sudo chsrc set archlinuxcn
 sudo chsrc set manjaro
 sudo chsrc set gentoo
 sudo chsrc set rocky 或 set rockylinux
