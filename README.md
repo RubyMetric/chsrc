@@ -23,7 +23,7 @@
 如果你想要通过 `scoop`，`brew`，`yay` 等系统包管理工具来安装和更新`chsrc`，请帮助我们达到下面的要求。
 
 - [ ] 缺乏 `AUR` 维护者
-- [x]  `homebrew` 维护者
+- [x] `homebrew` 维护者
 - [ ] 缺乏 `scoop` 维护者
 - [ ] `scoop` 要求英文输出
 
