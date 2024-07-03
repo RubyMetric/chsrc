@@ -7,7 +7,7 @@
  * Contributors  : Null Nil   <null@nil.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-06-24>
+ * Last modified : <2024-07-03>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -662,6 +662,25 @@ chsrc_append_to_file (const char *str, const char *file)
   else
     {
       cmd = xy_strjoin (4, "echo '", str, "' >> ", file);
+    }
+  chsrc_run (cmd, RunOpt_Default);
+}
+
+static void
+chsrc_prepend_to_file (const char *str, const char *file)
+{
+  file = xy_uniform_path (file);
+  char *dir = xy_parent_dir (file);
+  chsrc_ensure_dir (dir);
+
+  char *cmd = NULL;
+  if (xy_on_windows)
+    {
+      xy_unimplement;
+    }
+  else
+    {
+      cmd = xy_strjoin (4, "sed -i '1i ", str, "'", file);
     }
   chsrc_run (cmd, RunOpt_Default);
 }
