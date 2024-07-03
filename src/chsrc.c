@@ -2358,7 +2358,7 @@ static const char
 *pl_lua   [] = {"lua",   "luarocks",                     NULL,  t(&pl_lua_target)},
 *pl_go    [] = {"go",    "golang",  "goproxy",           NULL,  t(&pl_go_target)} ,
 *pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  t(&pl_rust_target)},
-*pl_java  [] = {"java",  "maven",   "gradle",            NULL,  t(&pl_java_target)},
+*pl_java  [] = {"java",  "maven",   "mvn",    "gradle",  NULL,  t(&pl_java_target)},
 *pl_clojure[] ={"clojure","clojars","cloj",   "lein",   "leiningen",  NULL, t(&pl_clojure_target)},
 *pl_dart  [] = {"dart",  "pub",     "flutter",           NULL,  t(&pl_dart_target)},
 *pl_dotnet[] = {"nuget", "net",     ".net",   "dotnet",  NULL,  t(&pl_dotnet_target)},
