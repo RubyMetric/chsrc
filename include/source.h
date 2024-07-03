@@ -520,16 +520,17 @@ os_kali_sources[] = {
 
 /**
  * 2024-07-03 更新
+ * @note 不要给后面加 / ，因为ARM情况下，还要额外加一个 arm 后缀
  */
 os_arch_sources[] = {
   {&Upstream,       NULL},
-  {&Ali,           "https://mirrors.aliyun.com/archlinux/"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/archlinux/"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/archlinux/"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/archlinux/"},
-  {&Tencent,       "https://mirrors.tencent.com/archlinux/"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/archlinux/"}, // 不支持 archlinuxcn
-  {&Netease,       "https://mirrors.163.com/archlinux/"},         // archlinuxcn 的URL和其他镜像站不同
+  {&Ali,           "https://mirrors.aliyun.com/archlinux"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/archlinux"},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/archlinux"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/archlinux"},
+  {&Tencent,       "https://mirrors.tencent.com/archlinux"},
+  {&Huawei,        "https://mirrors.huaweicloud.com/archlinux"}, // 不支持 archlinuxcn
+  {&Netease,       "https://mirrors.163.com/archlinux"},         // archlinuxcn 的URL和其他镜像站不同
   // {&Sohu,          "https://mirrors.sohu.com/archlinux"}       // 不支持 archlinuxcn
 },
 

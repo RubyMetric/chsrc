@@ -1369,12 +1369,18 @@ os_msys2_setsrc (char *option)
 
 
 
+#define OS_Pacman_MirrorList "/etc/pacman.d/mirrorlist"
+void
+os_arch_getsrc (char *option)
+{
+  chsrc_take_a_look_at_file (OS_Pacman_MirrorList);
+}
+
 /**
  * 参考:
  * 1. https://mirrors.tuna.tsinghua.edu.cn/help/archlinux/
  * 2. https://mirrors.tuna.tsinghua.edu.cn/help/archlinuxarm/
  */
-#define OS_Pacman_MirrorList "/etc/pacman.d/mirrorlist"
 void
 os_arch_setsrc (char *option)
 {
@@ -1386,32 +1392,25 @@ os_arch_setsrc (char *option)
 
   chsrc_backup (OS_Pacman_MirrorList);
 
-  bool  arch_flag = false;
-  char *new_file  = NULL;
+  bool  is_x86 = false;
+  char *to_write = NULL;
   char *arch = chsrc_get_cpuarch ();
 
   if (strncmp(arch, "x86_64", 6)==0)
     {
-      arch_flag = true;
-      new_file = xy_strjoin (3, "Server = ", source.url, "archlinux/$repo/os/$arch");
+      is_x86 = true;
+      to_write = xy_strjoin (3, "Server = ", source.url, "/$repo/os/$arch");
     }
   else
     {
-      arch_flag = false;
-      new_file = xy_strjoin (3, "Server = ", source.url, "archlinuxarm/$repo/os/$arch");
+      is_x86 = false;
+      to_write = xy_strjoin (3, "Server = ", source.url, "arm/$arch/$repo");
     }
 
-  // TODO: 这里用的是 overwrite 吗？
-  chsrc_overwrite_file (new_file, OS_Pacman_MirrorList);
+  // 越前面的优先级越高
+  chsrc_prepend_to_file (to_write, OS_Pacman_MirrorList);
 
-  chsrc_infolog_remarkably ("使用 archlinuxcn");
-
-  char *towrite = xy_strjoin (3, "[archlinuxcn]\nServer = ", source.url, "archlinuxcn/$arch");
-  chsrc_append_to_file (towrite, OS_Pacman_MirrorList);
-
-  chsrc_run ("pacman -Sy archlinux-keyring", RunOpt_Default);
-
-  if (arch_flag)
+  if (is_x86)
     {
       chsrc_run ("pacman -Syyu", RunOpt_No_Last_New_Line);
     }
@@ -1444,14 +1443,14 @@ os_archlinuxcn_setsrc (char *option)
   chsrc_backup (OS_Pacman_MirrorList);
 
   bool  arch_flag = false;
-  char *new_file  = NULL;
   char *arch = chsrc_get_cpuarch ();
 
   char *towrite = xy_strjoin (3, "[archlinuxcn]\nServer = ", source.url, "$arch");
-  chsrc_append_to_file (towrite, OS_Pacman_MirrorList);
+  // 越前面的优先级越高
+  chsrc_prepend_to_file (towrite, OS_Pacman_MirrorList);
 
   chsrc_run ("pacman-key --lsign-key \"farseerfc@archlinux.org\"", RunOpt_No_Exit_On_Error);
-  chsrc_run ("pacman -Sy archlinux-keyring", RunOpt_Default);
+  chsrc_run ("pacman -Sy archlinuxcn-keyring", RunOpt_Default);
 
   chsrc_run ("pacman -Syy", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeUntested);
@@ -2270,7 +2269,7 @@ wr_flathub_setsrc (char *option)
   chsrc_yield_source (wr_flathub);
   chsrc_confirm_source (&source);
 
-  chsrc_warn ("若出现问题，可先调用以下命令:");
+  chsrc_warn_remarkably ("若出现问题，可先调用以下命令:");
   char *note = xy_strjoin (3,
     "wget ", source.url, "/flathub.gpg\n"
     "flatpak remote-modify --gpg-import=flathub.gpg flathub"
@@ -2382,9 +2381,9 @@ def_target(os_netbsd); def_target(os_openbsd);
 def_target(os_deepin); def_target(os_openkylin);
 def_target(os_raspberrypi);
 def_target(os_armbian);
+def_target(os_arch); def_target(os_archlinuxcn);
 def_target_noget(os_fedora);
 def_target_noget(os_opensuse);
-def_target_noget(os_arch); def_target(os_archlinuxcn);
 def_target_noget(os_gentoo);
 def_target_noget(os_rocky);
 def_target_noget(os_alma);
