@@ -9,12 +9,12 @@
  *               | Shengwei Chen <414685209@qq.com>
  *               |
  * Created on    : <2023-08-28>
- * Last modified : <2024-06-24>
+ * Last modified : <2024-07-03>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version      "v0.1.7.rc1-2024/06/21"
+#define Chsrc_Version      "v0.1.7.rc2-2024/07/03"
 #define Chsrc_Maintain_URL "https://gitee.com/RubyMetric/chsrc"
 
 #include "chsrc.h"
@@ -1370,8 +1370,11 @@ os_msys2_setsrc (char *option)
 
 
 /**
- * 参考: https://mirrors.tuna.tsinghua.edu.cn/help/archlinuxcn/
+ * 参考:
+ * 1. https://mirrors.tuna.tsinghua.edu.cn/help/archlinux/
+ * 2. https://mirrors.tuna.tsinghua.edu.cn/help/archlinuxarm/
  */
+#define OS_Pacman_MirrorList "/etc/pacman.d/mirrorlist"
 void
 os_arch_setsrc (char *option)
 {
@@ -1381,7 +1384,7 @@ os_arch_setsrc (char *option)
   chsrc_yield_source (os_arch);
   chsrc_confirm_source (&source);
 
-  chsrc_backup ("/etc/pacman.d/mirrorlist");
+  chsrc_backup (OS_Pacman_MirrorList);
 
   bool  arch_flag = false;
   char *new_file  = NULL;
@@ -1399,12 +1402,12 @@ os_arch_setsrc (char *option)
     }
 
   // TODO: 这里用的是 overwrite 吗？
-  chsrc_overwrite_file (new_file, "/etc/pacman.d/mirrorlist");
+  chsrc_overwrite_file (new_file, OS_Pacman_MirrorList);
 
   chsrc_infolog_remarkably ("使用 archlinuxcn");
 
-  char *towrite = xy_strjoin (3, "[archlinuxcn]\nServer=", source.url, "archlinuxcn/$repo/os/$arch");
-  chsrc_append_to_file (towrite, "/etc/pacman.d/mirrorlist");
+  char *towrite = xy_strjoin (3, "[archlinuxcn]\nServer = ", source.url, "archlinuxcn/$arch");
+  chsrc_append_to_file (towrite, OS_Pacman_MirrorList);
 
   chsrc_run ("pacman -Sy archlinux-keyring", RunOpt_Default);
 
@@ -1420,6 +1423,40 @@ os_arch_setsrc (char *option)
 }
 
 
+void
+os_archlinuxcn_getsrc (char *option)
+{
+  chsrc_take_a_look_at_file (OS_Pacman_MirrorList);
+}
+
+/**
+ * 参考 https://mirrors.tuna.tsinghua.edu.cn/help/archlinuxcn/
+ */
+void
+os_archlinuxcn_setsrc (char *option)
+{
+  chsrc_ensure_root ();
+
+  SourceInfo source;
+  chsrc_yield_source (os_archlinuxcn);
+  chsrc_confirm_source (&source);
+
+  chsrc_backup (OS_Pacman_MirrorList);
+
+  bool  arch_flag = false;
+  char *new_file  = NULL;
+  char *arch = chsrc_get_cpuarch ();
+
+  char *towrite = xy_strjoin (3, "[archlinuxcn]\nServer = ", source.url, "$arch");
+  chsrc_append_to_file (towrite, OS_Pacman_MirrorList);
+
+  chsrc_run ("pacman-key --lsign-key \"farseerfc@archlinux.org\"", RunOpt_No_Exit_On_Error);
+  chsrc_run ("pacman -Sy archlinux-keyring", RunOpt_Default);
+
+  chsrc_run ("pacman -Syy", RunOpt_No_Last_New_Line);
+  chsrc_say_lastly (&source, ChsrcTypeUntested);
+}
+#undef OS_Pacman_MirrorList
 
 /**
  * HELP: 未经测试
@@ -2347,7 +2384,7 @@ def_target(os_raspberrypi);
 def_target(os_armbian);
 def_target_noget(os_fedora);
 def_target_noget(os_opensuse);
-def_target_noget(os_arch);
+def_target_noget(os_arch); def_target(os_archlinuxcn);
 def_target_noget(os_gentoo);
 def_target_noget(os_rocky);
 def_target_noget(os_alma);
@@ -2367,7 +2404,8 @@ static const char
 *os_opensuse   [] = {"suse",   "opensuse",   NULL,  t(&os_opensuse_target)},
 *os_kali       [] = {"kali",                 NULL,  t(&os_kali_target)},
 *os_msys2      [] = {"msys2",   "msys",      NULL,  t(&os_msys2_target)},
-*os_arch       [] = {"arch",                 NULL,  t(&os_arch_target)},
+*os_arch       [] = {"arch",    "archlinux", NULL,  t(&os_arch_target)},
+*os_archlinuxcn[] = {"archlinuxcn", "archcn",NULL,  t(&os_archlinuxcn_target)},
 *os_manjaro    [] = {"manjaro",              NULL,  t(&os_manjaro_target)},
 *os_gentoo     [] = {"gentoo",               NULL,  t(&os_gentoo_target)},
 *os_rocky      [] = {"rocky",  "rockylinux", NULL,  t(&os_rocky_target)},
@@ -2390,7 +2428,7 @@ static const char
 **os_systems[] =
 {
   os_ubuntu,  os_mint,    os_debian,  os_fedora,  os_opensuse, os_kali,
-  os_arch,    os_manjaro, os_gentoo,
+  os_arch,    os_archlinuxcn, os_manjaro, os_gentoo,
   os_rocky,   os_alma,
   os_alpine,   os_void,      os_solus,          os_ros,
   os_trisquel, os_linuxlite, os_raspberrypi,    os_armbian,
