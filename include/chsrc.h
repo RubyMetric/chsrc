@@ -680,7 +680,7 @@ chsrc_prepend_to_file (const char *str, const char *file)
     }
   else
     {
-      cmd = xy_strjoin (4, "sed -i '1i ", str, "'", file);
+      cmd = xy_strjoin (4, "sed -i '1i ", str, "' ", file);
     }
   chsrc_run (cmd, RunOpt_Default);
 }
@@ -750,7 +750,7 @@ chsrc_get_cpuarch ()
   exist = chsrc_check_program ("uname");
   if (exist)
     {
-      ret = xy_run ("uname -p", 0, NULL);
+      ret = xy_run ("uname -m", 0, NULL);
       return ret;
     }
   else
