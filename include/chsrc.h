@@ -7,7 +7,7 @@
  * Contributors  : Peng Gao   <gn3po4g@outlook.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-07-03>
+ * Last modified : <2024-07-08>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -724,7 +724,7 @@ chsrc_backup (const char *path)
       cmd = xy_strjoin (5, "cp ", path, " ", path, ".bak --backup='t'");
     }
 
-  chsrc_run (cmd, RunOpt_No_Last_New_Line);
+  chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_No_Note_On_Sccess);
   chsrc_note_remarkably (xy_strjoin (3, "备份文件名为 ", path, ".bak"));
 }
 
