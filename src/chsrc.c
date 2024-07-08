@@ -9,7 +9,7 @@
  *               | Shengwei Chen <414685209@qq.com>
  *               |
  * Created on    : <2023-08-28>
- * Last modified : <2024-07-03>
+ * Last modified : <2024-07-08>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
@@ -1064,11 +1064,11 @@ os_debian_setsrc_for_deb822 (char *option)
 
   chsrc_backup (ETC_APT_DEB822_Debian_Sources);
 
-  char *cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/debian/?@", source.url, "@g\' " ETC_APT_DEB822_Debian_Sources);
+  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/debian/?@", source.url, "@g' " ETC_APT_DEB822_Debian_Sources);
   chsrc_run (cmd, RunOpt_Default);
 
   // debian-security 源和其他源不一样
-  cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/debian-security/?@", source.url, "-security", "@g\' " ETC_APT_DEB822_Debian_Sources);
+  cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/debian-security/?@", source.url, "-security@g' " ETC_APT_DEB822_Debian_Sources);
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
