@@ -14,7 +14,7 @@
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version      "v0.1.7.rc4-2024/07/09"
+#define Chsrc_Version      "v0.1.7.rc5-2024/07/09"
 #define Chsrc_Maintain_URL "https://gitee.com/RubyMetric/chsrc"
 
 #include "chsrc.h"
@@ -2592,7 +2592,7 @@ print_supported_sources_for_target (SourceInfo sources[], size_t size)
 void
 cli_print_version ()
 {
-  puts (xy_strjoin (3, "chsrc: Change Source (GPLv3) ",
+  puts (xy_strjoin (3, "chsrc: Change Source (GPL-3.0) ",
                       xy_str_to_magenta (Chsrc_Version), " by RubyMetric"));
 }
 
