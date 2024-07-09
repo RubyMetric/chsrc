@@ -7,7 +7,7 @@
  * Contributors  : Null Nil   <null@nil.com>
  *               |
  * Created on    : <2023-08-28>
- * Last modified : <2024-06-21>
+ * Last modified : <2024-07-09>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C utilities for CLI applications in Ruby flavor
@@ -16,7 +16,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version      "v0.1.2.3-2024/06/21"
+#define _XY_Version      "v0.1.3.0-2024/07/09"
 #define _XY_Maintain_URL "https://gitee.com/RubyMetric/chsrc/blob/main/include/xy.h"
 
 #include <assert.h>
@@ -642,6 +642,48 @@ xy_file_exist (const char *path)
         }
     }
   return access (newpath, 0) ? false : true;
+}
+
+static bool
+xy_dir_exist (const char *path)
+{
+  const char *dir = path;
+  if (xy_on_windows)
+    {
+      if (xy_str_start_with (path, "~"))
+        {
+          dir = xy_2strjoin (xy_os_home, path + 1);
+        }
+    }
+
+  if (xy_on_windows)
+    {
+      // 也可以用 opendir() #include <dirent.h>
+      DWORD attr = GetFileAttributesA (dir);
+
+      if (attr == INVALID_FILE_ATTRIBUTES)
+        {
+          // Q: 我们应该报错吗？
+          return false;
+        }
+      else if (attr & FILE_ATTRIBUTE_DIRECTORY)
+        {
+          return true;
+        }
+      else
+        {
+          return false;
+        }
+    }
+  else
+    {
+      int status = system (xy_2strjoin ("test -d ", dir));
+
+      if (0==status)
+        return true;
+      else
+        return false;
+    }
 }
 
 /**
