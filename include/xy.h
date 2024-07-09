@@ -644,6 +644,10 @@ xy_file_exist (const char *path)
   return access (newpath, 0) ? false : true;
 }
 
+/**
+ * @note xy_file_exist() 和 xy_dir_exist() 两个函数在所有平台默认都支持使用 '~'，
+ *       但实现中都没有调用 xy_uniform_path()，以防万一，调用前可能需要用户手动调用它
+ */
 static bool
 xy_dir_exist (const char *path)
 {
