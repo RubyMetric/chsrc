@@ -7,7 +7,7 @@
  * Contributors  : Peng Gao   <gn3po4g@outlook.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-07-08>
+ * Last modified : <2024-07-09>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -709,9 +709,9 @@ chsrc_backup (const char *path)
 {
   char *cmd = NULL;
 
-  if (xy_on_bsd)
+  if (xy_on_bsd || xy_on_macos)
     {
-      // 似乎BSD的cp并没有 --backup='t' 选项
+      /* BSD 和 macOS 的 cp 不支持 --backup 选项 */
       cmd = xy_strjoin (5, "cp -f ", path, " ", path, ".bak");
     }
   else if (xy_on_windows)
