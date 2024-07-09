@@ -671,7 +671,7 @@ chsrc_append_to_file (const char *str, const char *file)
     {
       cmd = xy_strjoin (4, "echo '", str, "' >> ", file);
     }
-  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_No_Note_On_Sccess);
 }
 
 static void
@@ -690,7 +690,7 @@ chsrc_prepend_to_file (const char *str, const char *file)
     {
       cmd = xy_strjoin (4, "sed -i '1i ", str, "' ", file);
     }
-  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_No_Note_On_Sccess);
 }
 
 static void
