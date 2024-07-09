@@ -2101,17 +2101,27 @@ wr_brew_setsrc (char *option)
   char *brew_git_remote = xy_strjoin (3, "export HOMEBREW_BREW_GIT_REMOTE=\"", xy_2strjoin (source.url, "git/homebrew/brew.git"), "\"");
   char *core_git_remote = xy_strjoin (3, "export HOMEBREW_CORE_GIT_REMOTE=\"", xy_2strjoin (source.url, "git/homebrew/homebrew-core.git"), "\"");
 
-  chsrc_backup ("~/.zshrc");
-  chsrc_backup ("~/.bashrc");
+  char *zshrc = "~/.zshrc";
+  chsrc_backup (zshrc);
+  chsrc_append_to_file (splitter,        zshrc);
+  chsrc_append_to_file (api_domain,      zshrc);
+  chsrc_append_to_file (bottle_domain,   zshrc);
+  chsrc_append_to_file (brew_git_remote, zshrc);
+  chsrc_append_to_file (core_git_remote, zshrc);
 
-  chsrc_append_to_file (splitter,        "~/.bashrc >> ~/.zshrc");
-  chsrc_append_to_file (api_domain,      "~/.bashrc >> ~/.zshrc");
-  chsrc_append_to_file (bottle_domain,   "~/.bashrc >> ~/.zshrc");
-  chsrc_append_to_file (brew_git_remote, "~/.bashrc >> ~/.zshrc");
-  chsrc_append_to_file (core_git_remote, "~/.bashrc >> ~/.zshrc");
+  char *bashrc = "~/.bashrc";
+  if (xy_file_exist (bashrc))
+    {
+      chsrc_backup ("~/.bashrc");
+      chsrc_append_to_file (splitter,        bashrc);
+      chsrc_append_to_file (api_domain,      bashrc);
+      chsrc_append_to_file (bottle_domain,   bashrc);
+      chsrc_append_to_file (brew_git_remote, bashrc);
+      chsrc_append_to_file (core_git_remote, bashrc);
+    }
 
   chsrc_say_lastly (&source, ChsrcTypeAuto);
-  chsrc_note_remarkably ("请您重启终端使环境变量生效");
+  chsrc_note_remarkably ("请您重启终端使Homebrew环境变量生效");
 }
 
 
