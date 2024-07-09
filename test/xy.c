@@ -5,7 +5,7 @@
  * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-30>
- * Last modified : <2024-06-21>
+ * Last modified : <2024-07-09>
  *
  * 测试 xy.h
  * ------------------------------------------------------------*/
@@ -85,8 +85,19 @@ main (int argc, char const *argv[])
 
 
   assert (xy_file_exist ("./image/chsrc.png"));
-  assert (xy_file_exist (xy_win_powershell_profile));
-  assert (true == xy_file_exist (xy_win_powershellv5_profile));
+  assert (xy_dir_exist ("~"));
+  if (xy_on_windows)
+    {
+      assert (xy_file_exist (xy_win_powershell_profile));
+      assert (true == xy_file_exist (xy_win_powershellv5_profile));
+      assert (xy_dir_exist ("C:\\Users"));
+    }
+  else
+    {
+      assert (xy_file_exist ("~/.bashrc"));
+      assert (xy_dir_exist ("/etc"));
+    }
+
 
   puts (xy_uniform_path (" \n ~/haha/test/123 \n\r "));
   assert_str (xy_uniform_path ("~/haha/test"), xy_parent_dir (" ~/haha/test/123"));
