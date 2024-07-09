@@ -634,9 +634,35 @@ chsrc_ensure_dir (const char *dir)
 {
   dir = xy_uniform_path (dir);
   char *mkdir_cmd = NULL;
+
   if (xy_on_windows)
     {
-      mkdir_cmd = "md ";
+      // 也可以用 opendir() #include <dirent.h>
+      DWORD attr = GetFileAttributesA(dir);
+
+      if (attr == INVALID_FILE_ATTRIBUTES)
+        {
+          // Q: 我们应该报错吗？
+          // chsrc_error ("目录路径错误");
+          // exit (Exit_MatinerIssue);
+        }
+      else
+        {
+          if (attr & FILE_ATTRIBUTE_DIRECTORY)
+            return;
+        }
+    }
+  else
+    {
+      int status = system (xy_2strjoin ("test -d ", dir));
+      if (0==status)
+        return;
+    }
+
+  // 不存在就生成
+  if (xy_on_windows)
+    {
+      mkdir_cmd = "md ";  // 已存在时返回 errorlevel = 1
     }
   else
     {
