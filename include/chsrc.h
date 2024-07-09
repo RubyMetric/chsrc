@@ -614,7 +614,7 @@ chsrc_run (const char *cmd, int run_option)
 
 
 static void
-chsrc_take_a_look_at_file (const char *path)
+chsrc_view_file (const char *path)
 {
   char *cmd = NULL;
   path = xy_uniform_path (path);

@@ -351,8 +351,8 @@ pl_php_setsrc (char *option)
 void
 pl_lua_getsrc (char *option)
 {
-  chsrc_take_a_look_at_file ("~/.luarocks/config.lua");
-  chsrc_take_a_look_at_file ("~/.luarocks/upload_config.lua");
+  chsrc_view_file ("~/.luarocks/config.lua");
+  chsrc_view_file ("~/.luarocks/upload_config.lua");
 }
 
 /**
@@ -428,7 +428,7 @@ pl_go_setsrc (char *option)
 void
 pl_rust_getsrc (char *option)
 {
-  chsrc_take_a_look_at_file ("~/.cargo");
+  chsrc_view_file ("~/.cargo");
 }
 
 /**
@@ -728,11 +728,11 @@ pl_r_getsrc (char *option)
   //
   if (xy_on_windows)
     {
-      chsrc_take_a_look_at_file ("~/Documents/.Rprofile");
+      chsrc_view_file ("~/Documents/.Rprofile");
     }
   else
     {
-      chsrc_take_a_look_at_file ("~/.Rprofile");
+      chsrc_view_file ("~/.Rprofile");
     }
 }
 
@@ -778,7 +778,7 @@ pl_r_setsrc (char *option)
 void
 pl_julia_getsrc (char *option)
 {
-  chsrc_take_a_look_at_file ("~/.julia/config/startup.jl");
+  chsrc_view_file ("~/.julia/config/startup.jl");
 }
 
 /**
@@ -914,13 +914,13 @@ os_ubuntu_getsrc (char *option)
 {
   if (chsrc_check_file (ETC_APT_DEB822_Ubuntu_Sources))
     {
-      chsrc_take_a_look_at_file (ETC_APT_DEB822_Ubuntu_Sources);
+      chsrc_view_file (ETC_APT_DEB822_Ubuntu_Sources);
       return;
     }
 
   if (chsrc_check_file (ETC_APT_SOURCELIST))
     {
-      chsrc_take_a_look_at_file (ETC_APT_SOURCELIST);
+      chsrc_view_file (ETC_APT_SOURCELIST);
       return;
     }
 
@@ -1005,7 +1005,7 @@ os_ubuntu_setsrc (char *option)
 void
 os_mint_getsrc (char *option)
 {
-  chsrc_take_a_look_at_file ("/etc/apt/sources.list.d/official-package-repositories.list");
+  chsrc_view_file ("/etc/apt/sources.list.d/official-package-repositories.list");
 }
 
 /**
@@ -1038,13 +1038,13 @@ os_debian_getsrc (char *option)
 {
   if (chsrc_check_file (ETC_APT_DEB822_Debian_Sources))
     {
-      chsrc_take_a_look_at_file (ETC_APT_DEB822_Debian_Sources);
+      chsrc_view_file (ETC_APT_DEB822_Debian_Sources);
       return;
     }
 
   if (chsrc_check_file (ETC_APT_SOURCELIST))
     {
-      chsrc_take_a_look_at_file (ETC_APT_SOURCELIST);
+      chsrc_view_file (ETC_APT_SOURCELIST);
       return;
     }
 
@@ -1121,7 +1121,7 @@ os_debian_setsrc (char *option)
 void
 os_raspberrypi_getsrc (char *option)
 {
-  chsrc_take_a_look_at_file ("/etc/apt/sources.list.d/raspi.list");
+  chsrc_view_file ("/etc/apt/sources.list.d/raspi.list");
 }
 
 void
@@ -1150,7 +1150,7 @@ os_armbian_getsrc (char *option)
 {
   if (chsrc_check_file (OS_Armbian_SOURCELIST))
     {
-      chsrc_take_a_look_at_file (OS_Armbian_SOURCELIST);
+      chsrc_view_file (OS_Armbian_SOURCELIST);
       return;
     }
 
@@ -1185,7 +1185,7 @@ os_armbian_setsrc (char *option)
 void
 os_deepin_getsrc(char *option)
 {
-  chsrc_take_a_look_at_file (ETC_APT_SOURCELIST);
+  chsrc_view_file (ETC_APT_SOURCELIST);
 }
 
 /**
@@ -1312,7 +1312,7 @@ os_opensuse_setsrc (char *option)
 void
 os_kali_getsrc (char *option)
 {
-  chsrc_take_a_look_at_file (ETC_APT_SOURCELIST);
+  chsrc_view_file (ETC_APT_SOURCELIST);
 }
 
 /**
@@ -1373,7 +1373,7 @@ os_msys2_setsrc (char *option)
 void
 os_arch_getsrc (char *option)
 {
-  chsrc_take_a_look_at_file (OS_Pacman_MirrorList);
+  chsrc_view_file (OS_Pacman_MirrorList);
 }
 
 /**
@@ -1425,7 +1425,7 @@ os_arch_setsrc (char *option)
 void
 os_archlinuxcn_getsrc (char *option)
 {
-  chsrc_take_a_look_at_file (OS_Pacman_MirrorList);
+  chsrc_view_file (OS_Pacman_MirrorList);
 }
 
 /**
@@ -1532,7 +1532,7 @@ os_alma_setsrc (char *option)
 void
 os_alpine_getsrc (char *option)
 {
-  chsrc_take_a_look_at_file ("/etc/apk/repositories");
+  chsrc_view_file ("/etc/apk/repositories");
 }
 
 /**
@@ -1635,7 +1635,7 @@ os_manjaro_setsrc (char *option)
 void
 os_trisquel_getsrc (char *option)
 {
-  chsrc_take_a_look_at_file (ETC_APT_SOURCELIST);
+  chsrc_view_file (ETC_APT_SOURCELIST);
 }
 
 /**
@@ -1664,7 +1664,7 @@ os_trisquel_setsrc (char *option)
 void
 os_linuxlite_getsrc (char *option)
 {
-  chsrc_take_a_look_at_file (ETC_APT_SOURCELIST);
+  chsrc_view_file (ETC_APT_SOURCELIST);
 }
 
 /**
@@ -1738,7 +1738,7 @@ os_anolis_setsrc (char *option)
 void
 os_openkylin_getsrc (char *option)
 {
-  chsrc_take_a_look_at_file (ETC_APT_SOURCELIST);
+  chsrc_view_file (ETC_APT_SOURCELIST);
 }
 
 void
@@ -1871,7 +1871,7 @@ os_freebsd_setsrc (char *option)
 void
 os_netbsd_getsrc (char *option)
 {
-  chsrc_take_a_look_at_file ("/usr/pkg/etc/pkgin/repositories.conf");
+  chsrc_view_file ("/usr/pkg/etc/pkgin/repositories.conf");
 }
 
 /**
@@ -1910,7 +1910,7 @@ os_netbsd_setsrc (char *option)
 void
 os_openbsd_getsrc (char *option)
 {
-  chsrc_take_a_look_at_file ("/etc/installurl");
+  chsrc_view_file ("/etc/installurl");
 }
 
 /**
@@ -2210,7 +2210,7 @@ wr_dockerhub_getsrc (char *option)
 {
   if (xy_on_linux || xy_on_bsd)
     {
-      chsrc_take_a_look_at_file ("/etc/docker/daemon.json");
+      chsrc_view_file ("/etc/docker/daemon.json");
     }
   else
     {
