@@ -637,15 +637,13 @@ _xy_win_powershellv5_profile ()
 static bool
 xy_file_exist (const char *path)
 {
-  const char *newpath = path;
-  if (xy_on_windows)
+  const char *new_path = path;
+  if (xy_str_start_with (path, "~"))
     {
-      if (xy_str_start_with (path, "~"))
-        {
-          newpath = xy_2strjoin (xy_os_home, path + 1);
-        }
+      new_path = xy_2strjoin (xy_os_home, path + 1);
     }
-  return access (newpath, 0) ? false : true;
+  // 0 即 F_OK
+  return (0==access (new_path, 0)) ? true : false;
 }
 
 /**
