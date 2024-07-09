@@ -670,7 +670,8 @@ chsrc_ensure_dir (const char *dir)
     }
   char *cmd = xy_2strjoin (mkdir_cmd, dir);
   cmd = xy_str_to_quietcmd (cmd);
-  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_No_Note_On_Sccess);
+  chsrc_note_remarkably (xy_2strjoin ("目录不存在，已自动创建 ", dir));
 }
 
 static void
