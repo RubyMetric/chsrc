@@ -31,6 +31,7 @@
 // #define NDEBUG
 
 #ifdef _WIN32
+  #define XY_On_Windows 1
   #define xy_on_windows true
   #define xy_on_linux false
   #define xy_on_macos false
@@ -40,6 +41,7 @@
   #define xy_useutf8() SetConsoleOutputCP (65001)
 
 #elif defined(__linux__) || defined(__linux)
+  #define XY_On_Linux 1
   #define xy_on_windows false
   #define xy_on_linux true
   #define xy_on_macos false
@@ -48,6 +50,7 @@
   #define xy_useutf8()
 
 #elif defined(__APPLE__)
+  #define XY_On_macOS 1
   #define xy_on_windows false
   #define xy_on_linux false
   #define xy_on_macos true
@@ -56,6 +59,7 @@
   #define xy_useutf8()
 
 #elif defined(__OpenBSD__) || defined(__NetBSD__) || defined(__FreeBSD__)
+  #define XY_On_BSD 1
   #define xy_on_windows false
   #define xy_on_linux false
   #define xy_on_macos false
@@ -662,6 +666,7 @@ xy_dir_exist (const char *path)
 
   if (xy_on_windows)
     {
+#ifdef XY_On_Windows
       // 也可以用 opendir() #include <dirent.h>
       DWORD attr = GetFileAttributesA (dir);
 
@@ -678,6 +683,7 @@ xy_dir_exist (const char *path)
         {
           return false;
         }
+#endif
     }
   else
     {
