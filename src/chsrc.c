@@ -9,12 +9,12 @@
  *               | Shengwei Chen <414685209@qq.com>
  *               |
  * Created on    : <2023-08-28>
- * Last modified : <2024-07-08>
+ * Last modified : <2024-07-09>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version      "v0.1.7.rc3-2024/07/08"
+#define Chsrc_Version      "v0.1.7.rc4-2024/07/09"
 #define Chsrc_Maintain_URL "https://gitee.com/RubyMetric/chsrc"
 
 #include "chsrc.h"
