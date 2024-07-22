@@ -429,7 +429,7 @@ pl_go_setsrc (char *option)
 void
 pl_rust_getsrc (char *option)
 {
-  chsrc_view_file ("~/.cargo");
+  chsrc_view_file ("~/.cargo/config.toml");
 }
 
 /**
@@ -438,7 +438,7 @@ pl_rust_getsrc (char *option)
 void
 pl_rust_setsrc (char *option)
 {
-   SourceInfo source;
+  SourceInfo source;
   chsrc_yield_source (pl_rust);
   chsrc_confirm_source (&source);
 
@@ -449,7 +449,7 @@ pl_rust_setsrc (char *option)
     "[source.mirror]\n"
     "registry = \"sparse+", source.url, "\"");
 
-  chsrc_warn (xy_strjoin (3, "请您手动写入以下内容到 ", xy_uniform_path("~/.cargo/config.toml"), " 文件中:"));
+  chsrc_warn (xy_strjoin (3, "请您手动写入以下内容到 ", xy_uniform_path ("~/.cargo/config.toml"), " 文件中:"));
   puts (file);
   chsrc_say_lastly (&source, ChsrcTypeManual);
 }
