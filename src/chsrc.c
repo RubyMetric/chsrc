@@ -7,9 +7,10 @@
  * Contributors  : Aaron Ruan    <aaron212cn@outlook.com>
  *               | Rui Chen      <rui@chenrui.dev>
  *               | Shengwei Chen <414685209@qq.com>
+ *               | BlockLune     <blocklune@gmail.com>
  *               |
  * Created on    : <2023-08-28>
- * Last modified : <2024-07-09>
+ * Last modified : <2024-07-22>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
