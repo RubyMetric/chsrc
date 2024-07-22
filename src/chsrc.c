@@ -7,9 +7,10 @@
  * Contributors  : Aaron Ruan    <aaron212cn@outlook.com>
  *               | Rui Chen      <rui@chenrui.dev>
  *               | Shengwei Chen <414685209@qq.com>
+ *               | BlockLune     <blocklune@gmail.com>
  *               |
  * Created on    : <2023-08-28>
- * Last modified : <2024-07-09>
+ * Last modified : <2024-07-22>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
@@ -448,7 +449,7 @@ pl_rust_setsrc (char *option)
     "[source.mirror]\n"
     "registry = \"sparse+", source.url, "\"");
 
-  chsrc_warn (xy_strjoin (3, "请您手动写入以下内容到 ", xy_uniform_path("~/.cargo"), " 文件中:"));
+  chsrc_warn (xy_strjoin (3, "请您手动写入以下内容到 ", xy_uniform_path("~/.cargo/config.toml"), " 文件中:"));
   puts (file);
   chsrc_say_lastly (&source, ChsrcTypeManual);
 }
