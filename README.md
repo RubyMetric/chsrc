@@ -10,7 +10,7 @@
 
 <br>
 
-## 示例
+## 📌 示例
 
 <div align="center">
   <img alt="chsrc logo" src="image/example.png"/>
@@ -18,7 +18,7 @@
 
 <br>
 
-## 安装
+## 🚀 安装
 
 <a href="https://repology.org/project/chsrc/versions">
     <img src="https://repology.org/badge/vertical-allrepos/chsrc.svg" alt="Packaging status" align="right">
@@ -34,20 +34,19 @@
 
 ---
 
-以下手动方式均下载到当前目录，可直接通过 `./chsrc` 运行。
+> [!TIP]
+> 若通过下述手动方式安装，则会下载到当前目录，可直接通过 `./chsrc` 运行
 
 <details>
 <summary>Windows</summary>
 
-<br>
-
-可通过 `scoop` 安装，感谢 [@Gn3po4g](https://github.com/Gn3po4g) 与 [@niheaven](https://github.com/niheaven)
+- 可通过 `scoop` 安装，感谢 [@Gn3po4g](https://github.com/Gn3po4g) 与 [@niheaven](https://github.com/niheaven)
 
 ```bash
 $ scoop install chsrc
 ```
 
-或手动下载二进制文件，这是最新版，往往比 `scoop` 提供的更新，适用于修复 Bug、添加新功能后及时使用，以及未安装 `scoop` 时
+- 或手动下载二进制文件，这是最新版，往往比 `scoop` 提供的更新，适用于修复 Bug、添加新功能后及时使用，以及未安装 `scoop` 时
 
 ```bash
 # x64
@@ -60,8 +59,6 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windo
 
 <details>
 <summary>Linux</summary>
-
-<br>
 
 ```bash
 # x64
@@ -81,15 +78,13 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-armv7-lin
 <details>
 <summary>macOS</summary>
 
-<br>
-
-可通过 `homebrew` 安装，感谢 [@Aaron-212](https://github.com/Aaron-212) 与 [@chenrui333](https://github.com/chenrui333)
+- 可通过 `homebrew` 安装，感谢 [@Aaron-212](https://github.com/Aaron-212) 与 [@chenrui333](https://github.com/chenrui333)
 
 ```bash
 $ brew install chsrc
 ```
 
-或手动下载二进制文件，这是最新版，往往比 `homebrew` 提供的更新，适用于修复 Bug、添加新功能后及时使用
+- 或手动下载二进制文件，这是最新版，往往比 `homebrew` 提供的更新，适用于修复 Bug、添加新功能后及时使用
 
 ```bash
 # arm/aarch64
@@ -103,8 +98,6 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-macos
 <details>
 <summary>BSD</summary>
 
-<br>
-
 ```bash
 git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc
 clang -Iinclude src/chsrc.c -o chsrc
@@ -114,8 +107,6 @@ clang -Iinclude src/chsrc.c -o chsrc
 <details>
 <summary>其他平台</summary>
 
-<br>
-
 ```bash
 git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
 ```
@@ -123,7 +114,7 @@ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
 
 <br>
 
-## 使用
+## 💡 使用
 
 ```bash
 使用: chsrc <command> [options] [target] [mirror]
@@ -252,7 +243,7 @@ chsrc set conda  或 set anaconda
 
 <br>
 
-## 开发
+## 🛠️ 开发
 
 请安装好 `gcc`或`clang` 和 `make` 以及 `curl`
 
@@ -271,14 +262,14 @@ make clean
 
 <br>
 
-## 许可证
+## 📝 许可证
 
 - `chsrc` 主程序采用 `GPL-3.0-or-later` 许可证，保证该软件的永久自由
 - `xy.h` 使用 `MIT` 许可证，保证该库可以在尽可能多的情况下复用
 
 <br>
 
-## 致谢
+## ❤️ 致谢
 
 感谢各个镜像站提供的优质免费镜像服务，使用的镜像站见 [source.h](./include/source.h).
 
