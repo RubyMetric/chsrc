@@ -7,7 +7,7 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-07-03>
+ * Last modified : <2024-07-24>
  *
  * 镜像站与换源信息
  * ------------------------------------------------------------*/
@@ -108,7 +108,9 @@ MirrorSite
   Sohu     = {"sohu",    "SOHU",     "搜狐开源镜像站",      "https://mirrors.sohu.com/",
               "https://mirrors.sohu.com/deepin-cd" Big_File_deepin},
 
-  Api7     = {"api7",    "api7.ai",  "深圳支流科技有限公司", "https://www.apiseven.com/", NULL};
+  Api7     = {"api7",    "api7.ai",  "深圳支流科技有限公司", "https://www.apiseven.com/", NULL},
+
+  Fit2Cloud = {"fit2cloud", "FIT2CLOUD", "杭州飞致云信息科技有限公司", "https://www.fit2cloud.com/", NULL};
 
 // 开源社区
 MirrorSite
@@ -143,7 +145,7 @@ MirrorSite
 MirrorSite*
 available_mirrors[] = {
   &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Hust, &Nju, // &Cqu,
-  &Ali,  &Tencent, &Huawei, &Volcengine,  &Netease, &Sohu, &Api7,
+  &Ali,  &Tencent, &Huawei, &Volcengine,  &Netease, &Sohu, &Api7, &Fit2Cloud,
   &RubyChina, &EmacsChina, &NpmMirror, &GoProxyCN, &GoProxyIO,
   // 暂不支持 &NugetOrg
 
@@ -158,23 +160,11 @@ typedef struct {
 
 
 /**
- * 源信息
- *
- * @note 我们要求每个源最好情况下
- *  1. 至少有一个教育网镜像
- *  2. 至少有一个商业公司或开源社区维护的镜像
- */
-
-
-/**
  * 2024-05-25 更新
  *
  * @note
  * 下面的源，并非都实现正确，
  * BFSU 和 Tuna 以及 阿里的镜像都有问题，会循环遍历一个gem的所有版本，导致安装时间相当长
- *
- * @note
- * 2024-04-18: @ccmywish: 华为云镜像正确可用
  *
  * @note 网络情况
  * 若实现正确:
@@ -863,7 +853,7 @@ wr_cocoapods_sources[] = {
 },
 
 /**
- * 2024-06-14 更新
+ * 2024-07-24 更新
  *
  * @note USTC 与 SJTUG 于 2024-06-06 停止支持 DockerHub
  * @note NJU 于 2024-06-07 停止支持 DockerHub
@@ -876,6 +866,7 @@ wr_dockerhub_sources[] = {
 
   // https://github.com/DaoCloud/public-image-mirror
   {&DaoCloud,      "https://docker.m.daocloud.io"},
+  {&Fit2Cloud,      "https://docker.1panel.live"},
 
   // 暂时加入，未来若国内镜像恢复，将删除
   // https://huecker.io/en/use.html#unbanned
