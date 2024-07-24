@@ -24,7 +24,8 @@
     <img src="https://repology.org/badge/vertical-allrepos/chsrc.svg" alt="Packaging status" align="right">
 </a>
 
-如果你想要通过 `yay`,`apt`,`dnf` 等系统包管理工具来安装和更新`chsrc`，若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
+> [!NOTE]
+> 想通过 `yay`,`pacman`,`apt`,`dnf` 等系统包管理工具来安装和更新`chsrc`？若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
 
 - [x] `homebrew` 维护者
 - [x] `scoop` 维护者
@@ -35,15 +36,19 @@
 
 以下手动方式均下载到当前目录，可直接通过 `./chsrc` 运行。
 
-### Windows
+<details>
+<summary>Windows</summary>
 
-可以通过 `scoop` 安装，感谢 [@Gn3po4g](https://github.com/Gn3po4g) 与 [@niheaven](https://github.com/niheaven)
+可通过 `scoop` 安装，感谢 [@Gn3po4g](https://github.com/Gn3po4g) 与 [@niheaven](https://github.com/niheaven)
 
 ```bash
 $ scoop install chsrc
 ```
 
-或手动下载二进制文件 (最新版，有时比 `scoop` 提供的更新)
+或手动下载二进制文件
+
+> [!TIP]
+> 最新版，往往比 `scoop` 提供的更新，适用于修复 Bug、添加新功能后及时使用，以及未安装 `scoop` 时
 
 ```bash
 # x64
@@ -52,8 +57,10 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-windo
 # x86
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windows.exe -o chsrc.exe
 ```
+</details>
 
-### Linux
+<details>
+<summary>Linux</summary>
 
 ```bash
 # x64
@@ -68,16 +75,21 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-riscv64-l
 # armv7
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-armv7-linux -o chsrc; chmod +x ./chsrc
 ```
+</details>
 
-### macOS
+<details>
+<summary>macOS</summary>
 
-可以通过 `homebrew` 安装，感谢 [@Aaron-212](https://github.com/Aaron-212) 与 [@chenrui333](https://github.com/chenrui333)
+可通过 `homebrew` 安装，感谢 [@Aaron-212](https://github.com/Aaron-212) 与 [@chenrui333](https://github.com/chenrui333)
 
 ```bash
 $ brew install chsrc
 ```
 
-或手动下载二进制文件 (最新版，有时比 `homebrew` 提供的更新)
+或手动下载二进制文件
+
+> [!TIP]
+> 最新版，往往比 `homebrew` 提供的更新，适用于修复bug、添加新功能后及时使用
 
 ```bash
 # arm/aarch64
@@ -86,19 +98,24 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-aarch64-m
 # x64
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-macos -o chsrc; chmod +x ./chsrc
 ```
+</details>
 
-### BSD
+<details>
+<summary>BSD</summary>
 
 ```bash
 git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc
 clang -Iinclude src/chsrc.c -o chsrc
 ```
+</details>
 
-### 其他平台
+<details>
+<summary>其他平台</summary>
 
 ```bash
 git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
 ```
+</details>
 
 <br>
 
