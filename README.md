@@ -39,16 +39,15 @@
 <details>
 <summary>Windows</summary>
 
+<br>
+
 可通过 `scoop` 安装，感谢 [@Gn3po4g](https://github.com/Gn3po4g) 与 [@niheaven](https://github.com/niheaven)
 
 ```bash
 $ scoop install chsrc
 ```
 
-或手动下载二进制文件
-
-> [!TIP]
-> 最新版，往往比 `scoop` 提供的更新，适用于修复 Bug、添加新功能后及时使用，以及未安装 `scoop` 时
+或手动下载二进制文件，这是最新版，往往比 `scoop` 提供的更新，适用于修复 Bug、添加新功能后及时使用，以及未安装 `scoop` 时
 
 ```bash
 # x64
@@ -61,6 +60,8 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windo
 
 <details>
 <summary>Linux</summary>
+
+<br>
 
 ```bash
 # x64
@@ -80,16 +81,15 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-armv7-lin
 <details>
 <summary>macOS</summary>
 
+<br>
+
 可通过 `homebrew` 安装，感谢 [@Aaron-212](https://github.com/Aaron-212) 与 [@chenrui333](https://github.com/chenrui333)
 
 ```bash
 $ brew install chsrc
 ```
 
-或手动下载二进制文件
-
-> [!TIP]
-> 最新版，往往比 `homebrew` 提供的更新，适用于修复bug、添加新功能后及时使用
+或手动下载二进制文件，这是最新版，往往比 `homebrew` 提供的更新，适用于修复 Bug、添加新功能后及时使用
 
 ```bash
 # arm/aarch64
@@ -103,6 +103,8 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-macos
 <details>
 <summary>BSD</summary>
 
+<br>
+
 ```bash
 git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc
 clang -Iinclude src/chsrc.c -o chsrc
@@ -111,6 +113,8 @@ clang -Iinclude src/chsrc.c -o chsrc
 
 <details>
 <summary>其他平台</summary>
+
+<br>
 
 ```bash
 git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
