@@ -10,13 +10,14 @@
  *               | BlockLune     <blocklune@gmail.com>
  *               |
  * Created on    : <2023-08-28>
- * Last modified : <2024-07-22>
+ * Last modified : <2024-07-24>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version      "v0.1.7-2024/07/22"
-#define Chsrc_Maintain_URL "https://gitee.com/RubyMetric/chsrc"
+#define Chsrc_Version       "v0.1.7.1-2024/07/24"
+#define Chsrc_Maintain_URL  "https://github.com/RubyMetric/chsrc"
+#define Chsrc_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc"
 
 #include "chsrc.h"
 
@@ -2480,7 +2481,7 @@ static const char
 
 static const char *
 Chsrc_Usage[] = {
-  "维护: https://gitee.com/RubyMetric/chsrc\n",
+  "维护: " Chsrc_Maintain_URL "\n",
 
   "使用: chsrc <command> [options] [target] [mirror]",
   "help                      打印此帮助，或 h, -h, --help",
@@ -2601,8 +2602,8 @@ cli_print_version ()
 void
 cli_print_help ()
 {
-  puts("");
-  for (int i=0; i<xy_arylen(Chsrc_Usage); i++)
+  puts ("");
+  for (int i=0; i<xy_arylen (Chsrc_Usage); i++)
     {
       puts (Chsrc_Usage[i]);
     }
