@@ -10,12 +10,12 @@
  *               | BlockLune     <blocklune@gmail.com>
  *               |
  * Created on    : <2023-08-28>
- * Last modified : <2024-07-24>
+ * Last modified : <2024-07-29>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version       "v0.1.7.1-2024/07/24"
+#define Chsrc_Version       "v0.1.7.1dev1-2024/07/29"
 #define Chsrc_Maintain_URL  "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc"
 
@@ -1451,7 +1451,7 @@ os_archlinuxcn_setsrc (char *option)
   // 越前面的优先级越高
   chsrc_prepend_to_file (towrite, OS_Pacman_MirrorList);
 
-  chsrc_run ("pacman-key --lsign-key \"farseerfc@archlinux.org\"", RunOpt_No_Exit_On_Error);
+  chsrc_run ("pacman-key --lsign-key \"farseerfc@archlinux.org\"", RunOpt_Dont_Abort_On_Failure);
   chsrc_run ("pacman -Sy archlinuxcn-keyring", RunOpt_Default);
 
   chsrc_run ("pacman -Syy", RunOpt_No_Last_New_Line);

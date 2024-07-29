@@ -7,7 +7,7 @@
  * Contributors  : Peng Gao   <gn3po4g@outlook.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-07-09>
+ * Last modified : <2024-07-29>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -576,10 +576,10 @@ not_root:
 }
 
 
-#define RunOpt_Default           0x0000  // 默认若命令运行失败，直接退出
-#define RunOpt_No_Note_On_Sccess 0x0010  // 运行成功不提示用户，只有运行失败时才提示用户
-#define RunOpt_No_Last_New_Line  0x0100  // 不输出最后的空行
-#define RunOpt_No_Exit_On_Error  0x1000  // 命令运行失败也不退出
+#define RunOpt_Default                0x0000  // 默认若命令运行失败，直接退出
+#define RunOpt_Dont_Notify_On_Success 0x0010  // 运行成功不提示用户，只有运行失败时才提示用户
+#define RunOpt_No_Last_New_Line       0x0100  // 不输出最后的空行
+#define RunOpt_Dont_Abort_On_Failure  0x1000  // 命令运行失败也不退出
 
 static void
 chsrc_run (const char *cmd, int run_option)
@@ -588,7 +588,7 @@ chsrc_run (const char *cmd, int run_option)
   int status = system (cmd);
   if (0==status)
     {
-      if (! (RunOpt_No_Note_On_Sccess & run_option))
+      if (! (RunOpt_Dont_Notify_On_Success & run_option))
         {
           xy_succ_remarkably (App_Name, "运行", "命令执行成功");
         }
@@ -599,7 +599,7 @@ chsrc_run (const char *cmd, int run_option)
       sprintf (buf, "%d", status);
       char *str = xy_2strjoin ("命令执行失败，返回码 ", buf);
       xy_error_remarkably (App_Name, "运行", str);
-      if (! (run_option & RunOpt_No_Exit_On_Error))
+      if (! (run_option & RunOpt_Dont_Abort_On_Failure))
         {
           chsrc_error ("关键错误，强制结束");
           exit (Exit_FatalUnkownError);
@@ -626,7 +626,7 @@ chsrc_view_file (const char *path)
     {
       cmd = xy_2strjoin ("cat ", path);
     }
-  chsrc_run (cmd, RunOpt_No_Note_On_Sccess|RunOpt_No_Last_New_Line);
+  chsrc_run (cmd, RunOpt_Dont_Notify_On_Success|RunOpt_No_Last_New_Line);
 }
 
 static void
@@ -651,7 +651,7 @@ chsrc_ensure_dir (const char *dir)
     }
   char *cmd = xy_2strjoin (mkdir_cmd, dir);
   cmd = xy_str_to_quietcmd (cmd);
-  chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_No_Note_On_Sccess);
+  chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_Dont_Notify_On_Success);
   chsrc_note_remarkably (xy_2strjoin ("目录不存在，已自动创建 ", dir));
 }
 
@@ -671,7 +671,7 @@ chsrc_append_to_file (const char *str, const char *file)
     {
       cmd = xy_strjoin (4, "echo '", str, "' >> ", file);
     }
-  chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_No_Note_On_Sccess);
+  chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_Dont_Notify_On_Success);
 }
 
 static void
@@ -690,7 +690,7 @@ chsrc_prepend_to_file (const char *str, const char *file)
     {
       cmd = xy_strjoin (4, "sed -i '1i ", str, "' ", file);
     }
-  chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_No_Note_On_Sccess);
+  chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_Dont_Notify_On_Success);
 }
 
 static void
@@ -732,7 +732,7 @@ chsrc_backup (const char *path)
       cmd = xy_strjoin (5, "cp ", path, " ", path, ".bak --backup='t'");
     }
 
-  chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_No_Note_On_Sccess);
+  chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_Dont_Notify_On_Success);
   chsrc_note_remarkably (xy_strjoin (3, "备份文件名为 ", path, ".bak"));
 }
 
