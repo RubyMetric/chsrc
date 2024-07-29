@@ -716,6 +716,13 @@ static void
 chsrc_backup (const char *path)
 {
   char *cmd = NULL;
+  bool exist = xy_file_exist (path);
+
+  if (!exist)
+    {
+      chsrc_note_remarkably (xy_2strjoin ("文件不存在,跳过备份: ", path));
+      return;
+    }
 
   if (xy_on_bsd || xy_on_macos)
     {
