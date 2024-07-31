@@ -1,5 +1,6 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
+ * Copyright © 2023-2024 Aoran Zeng, Heng Guo
  * -------------------------------------------------------------
  * File          : chsrc.h
  * Authors       : Aoran Zeng <ccmywish@qq.com>
@@ -254,15 +255,16 @@ test_speed_url (const char *url)
 
   char *ipv6 = ""; // 默认不启用
 
-  if (Cli_Option_IPv6==true) {
-    ipv6 = "--ipv6";
-  }
+  if (Cli_Option_IPv6==true)
+    {
+      ipv6 = "--ipv6";
+    }
 
   // 我们用 —L，因为Ruby China源会跳转到其他地方
   // npmmirror 也会跳转
   char *curl_cmd = xy_strjoin (7, "curl -qsL ", ipv6,
                                   " -o " xy_os_devnull,
-                                  " -w \"%{http_code} %{speed_download}\" -m", time_sec ,
+                                  " -w \"%{http_code} %{speed_download}\" -m", time_sec,
                                   " -A chsrc/" Chsrc_Version "  ", url);
 
   // chsrc_info (xy_2strjoin ("测速命令 ", curl_cmd));
@@ -618,7 +620,7 @@ chsrc_view_file (const char *path)
 {
   char *cmd = NULL;
   path = xy_uniform_path (path);
-  if(xy_on_windows)
+  if (xy_on_windows)
     {
       cmd = xy_2strjoin ("type ", path);
     }

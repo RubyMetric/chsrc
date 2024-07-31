@@ -1,5 +1,6 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
+ * Copyright © 2023-2024 Aoran Zeng, Heng Guo
  * -------------------------------------------------------------
  * File          : chsrc.c
  * Authors       : Aoran Zeng    <ccmywish@qq.com>
@@ -10,7 +11,7 @@
  *               | BlockLune     <blocklune@gmail.com>
  *               |
  * Created on    : <2023-08-28>
- * Last modified : <2024-07-29>
+ * Last modified : <2024-07-31>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
@@ -134,10 +135,11 @@ pl_python_getsrc (char *option)
   char *cmd = xy_2strjoin (prog, " -m pip config get global.index-url");
   chsrc_run (cmd, RunOpt_Default);
 
-  if (pdm_exist) {
-    cmd = "pdm config --global pypi.url";
-    chsrc_run (cmd, RunOpt_Default);
-  }
+  if (pdm_exist)
+    {
+      cmd = "pdm config --global pypi.url";
+      chsrc_run (cmd, RunOpt_Default);
+    }
 }
 
 /**
@@ -2733,7 +2735,7 @@ get_target (const char *input, TargetOp code, char *option)
     }
   else if (TargetOp_List_Source==code)
     {
-      chsrc_info (xy_strjoin (3, "对 ", input ," 支持以下镜像站"));
+      chsrc_info (xy_strjoin (3, "对 ", input, " 支持以下镜像站"));
       chsrc_info (xy_strjoin (3, "下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>\n"));
       printf ("%-14s%-35s%-45s ", "code", "服务商简写", "服务源URL"); puts ("服务商名称");
       puts   ("--------------------------------------------------------------------------------------------------------");
@@ -2836,28 +2838,28 @@ main (int argc, char const *argv[])
       else
         {
           target = argv[cli_arg_Target_pos];
-          if (xy_streql(target,"mirrors") || xy_streql(target,"mirror"))
+          if (xy_streql (target, "mirrors") || xy_streql (target, "mirror"))
             {
-              print_available_mirrors(); return 0;
+              print_available_mirrors (); return 0;
             }
-          else if (xy_streql(target,"targets") || xy_streql(target,"target"))
+          else if (xy_streql (target, "targets") || xy_streql (target, "target"))
             {
-              print_supported_targets(); return 0;
+              print_supported_targets (); return 0;
             }
-          else if (xy_streql(target,"os"))
+          else if (xy_streql (target, "os"))
             {
-              print_supported_os(); return 0;
+              print_supported_os (); return 0;
             }
-          else if (xy_streql(target,"lang") || xy_streql(target,"pl") || xy_streql(target,"language"))
+          else if (xy_streql (target, "lang") || xy_streql (target, "pl") || xy_streql (target, "language"))
             {
               print_supported_pl(); return 0;
             }
-          else if (xy_streql(target,"ware") || xy_streql(target,"software"))
+          else if (xy_streql (target, "ware") || xy_streql (target, "software"))
             {
-              print_supported_wr(); return 0;
+              print_supported_wr (); return 0;
             }
 
-          matched = get_target(target, TargetOp_List_Source, NULL);
+          matched = get_target (target, TargetOp_List_Source, NULL);
           if (!matched) goto not_matched;
         }
       return 0;
@@ -2908,9 +2910,10 @@ main (int argc, char const *argv[])
 
       target = argv[cli_arg_Target_pos];
       char *mirrorCode_or_url = NULL;
-      if (argc >= cli_arg_Mirror_pos) {
-        mirrorCode_or_url = xy_strdup (argv[cli_arg_Mirror_pos]);
-      }
+      if (argc >= cli_arg_Mirror_pos)
+        {
+          mirrorCode_or_url = xy_strdup (argv[cli_arg_Mirror_pos]);
+        }
 
       matched = get_target (target, TargetOp_Set_Source, mirrorCode_or_url);
       if (!matched) goto not_matched;
