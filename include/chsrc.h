@@ -7,7 +7,7 @@
  * Contributors  : Peng Gao   <gn3po4g@outlook.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-07-29>
+ * Last modified : <2024-07-31>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -29,12 +29,12 @@
 #define chsrc_warn(str)  xy_warn(App_Name,str)
 #define chsrc_error(str) xy_error(App_Name,str)
 
-#define chsrc_succ_remarkably(str)    xy_succ_remarkably(App_Name,"成功",str);
-#define chsrc_infolog_remarkably(str) xy_info_remarkably(App_Name,"LOG",str);
-#define chsrc_info_remarkably(str)    xy_info_remarkably(App_Name,"提示",str);
-#define chsrc_note_remarkably(str)    xy_warn_remarkably(App_Name,"提示",str);
-#define chsrc_warn_remarkably(str)    xy_warn_remarkably(App_Name,"警告",str);
-#define chsrc_error_remarkably(str)   xy_error_remarkably(App_Name,"错误",str);
+#define chsrc_succ_remarkably(str)    xy_succ_remarkably(App_Name,"成功",str)
+#define chsrc_infolog_remarkably(str) xy_info_remarkably(App_Name,"LOG",str)
+#define chsrc_info_remarkably(str)    xy_info_remarkably(App_Name,"提示",str)
+#define chsrc_note_remarkably(str)    xy_warn_remarkably(App_Name,"提示",str)
+#define chsrc_warn_remarkably(str)    xy_warn_remarkably(App_Name,"警告",str)
+#define chsrc_error_remarkably(str)   xy_error_remarkably(App_Name,"错误",str)
 
 void
 chsrc_check_remarkably (const char *check_what, const char *check_type, bool exist)
