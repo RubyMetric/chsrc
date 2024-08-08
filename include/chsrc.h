@@ -8,7 +8,7 @@
  * Contributors  : Peng Gao   <gn3po4g@outlook.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-07-31>
+ * Last modified : <2024-08-08>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -30,24 +30,31 @@
 #define chsrc_warn(str)  xy_warn(App_Name,str)
 #define chsrc_error(str) xy_error(App_Name,str)
 
-#define chsrc_succ_remarkably(str)    xy_succ_remarkably(App_Name,"成功",str)
-#define chsrc_infolog_remarkably(str) xy_info_remarkably(App_Name,"LOG",str)
-#define chsrc_info_remarkably(str)    xy_info_remarkably(App_Name,"提示",str)
-#define chsrc_note_remarkably(str)    xy_warn_remarkably(App_Name,"提示",str)
-#define chsrc_warn_remarkably(str)    xy_warn_remarkably(App_Name,"警告",str)
-#define chsrc_error_remarkably(str)   xy_error_remarkably(App_Name,"错误",str)
+// 2系列都是带有括号的
+#define chsrc_succ2(str)  xy_succ_brkt(App_Name,"成功",str)
+#define chsrc_log2(str)   xy_info_brkt(App_Name,"LOG",str)
+#define chsrc_warn2(str)  xy_warn_brkt(App_Name,"警告",str)
+#define chsrc_error2(str) xy_error_brkt(App_Name,"错误",str)
+
+void
+chsrc_note2 (const char* str)
+{
+  char *prompt = xy_2strjoin (App_Name " ", xy_str_to_bold (xy_str_to_yellow ("提示")));
+  xy_log_brkt_to (prompt, xy_str_to_yellow (str), stdout);
+}
+
 
 void
 chsrc_check_remarkably (const char *check_what, const char *check_type, bool exist)
 {
   if (!exist)
     {
-      xy_log_remarkably (App_Name, xy_str_to_bold (xy_str_to_red ("检查")),
+      xy_log_brkt (App_Name, xy_str_to_bold (xy_str_to_red ("检查")),
                          xy_strjoin (5, xy_str_to_red ("x "), check_type, " ", xy_str_to_red (check_what), " 不存在"));
     }
   else
     {
-      xy_log_remarkably (App_Name, xy_str_to_bold (xy_str_to_green ("检查")),
+      xy_log_brkt (App_Name, xy_str_to_bold (xy_str_to_green ("检查")),
                         xy_strjoin (5, xy_str_to_green ("√ "), check_type, " ", xy_str_to_green (check_what), " 存在"));
     }
 }
@@ -586,13 +593,13 @@ not_root:
 static void
 chsrc_run (const char *cmd, int run_option)
 {
-  xy_info_remarkably (App_Name, "运行", cmd);
+  xy_info_brkt (App_Name, "运行", cmd);
   int status = system (cmd);
   if (0==status)
     {
       if (! (RunOpt_Dont_Notify_On_Success & run_option))
         {
-          xy_succ_remarkably (App_Name, "运行", "命令执行成功");
+          xy_succ_brkt (App_Name, "运行", "命令执行成功");
         }
     }
   else
@@ -600,7 +607,7 @@ chsrc_run (const char *cmd, int run_option)
       char buf[8] = {0};
       sprintf (buf, "%d", status);
       char *str = xy_2strjoin ("命令执行失败，返回码 ", buf);
-      xy_error_remarkably (App_Name, "运行", str);
+      xy_error_brkt (App_Name, "运行", str);
       if (! (run_option & RunOpt_Dont_Abort_On_Failure))
         {
           chsrc_error ("关键错误，强制结束");
@@ -654,7 +661,7 @@ chsrc_ensure_dir (const char *dir)
   char *cmd = xy_2strjoin (mkdir_cmd, dir);
   cmd = xy_str_to_quietcmd (cmd);
   chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_Dont_Notify_On_Success);
-  chsrc_note_remarkably (xy_2strjoin ("目录不存在，已自动创建 ", dir));
+  chsrc_note2 (xy_2strjoin ("目录不存在，已自动创建 ", dir));
 }
 
 static void
@@ -722,7 +729,7 @@ chsrc_backup (const char *path)
 
   if (!exist)
     {
-      chsrc_note_remarkably (xy_2strjoin ("文件不存在,跳过备份: ", path));
+      chsrc_note2 (xy_2strjoin ("文件不存在,跳过备份: ", path));
       return;
     }
 
@@ -742,7 +749,7 @@ chsrc_backup (const char *path)
     }
 
   chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_Dont_Notify_On_Success);
-  chsrc_note_remarkably (xy_strjoin (3, "备份文件名为 ", path, ".bak"));
+  chsrc_note2 (xy_strjoin (3, "备份文件名为 ", path, ".bak"));
 }
 
 
