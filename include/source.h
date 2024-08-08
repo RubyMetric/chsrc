@@ -128,21 +128,6 @@ typedef struct {
 
 static SourceInfo
 /**
- * @time 2024-05-24 更新
- * @note 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`
- */
-pl_rust_sources[] = {
-  {&Upstream,       NULL},
-  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/crates.io-index/"},
-  {&Hust,          "https://mirrors.hust.edu.cn/crates.io-index/"}
-},
-
-
-
-/**
  * @time 2023-09-10 更新
  * @note 不太好换，且用户可能不多，我们暂时只给用户提供文档
  */
@@ -746,7 +731,6 @@ wr_tex_sources[] = {
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
 
-def_sources_n(pl_rust);
 def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);   def_sources_n(pl_dart);      def_sources_n(pl_haskell);
 def_sources_n(pl_ocaml);

@@ -30,36 +30,7 @@
 #include "recipe/lang/lua.c"
 #include "recipe/lang/go.c"
 #include "recipe/lang/java.c"
-
-
-void
-pl_rust_getsrc (char *option)
-{
-  chsrc_view_file ("~/.cargo/config.toml");
-}
-
-/**
- * Rust 换源，参考：https://mirrors.tuna.tsinghua.edu.cn/help/crates.io-index/
- */
-void
-pl_rust_setsrc (char *option)
-{
-  SourceInfo source;
-  chsrc_yield_source (pl_rust);
-  chsrc_confirm_source (&source);
-
-  const char* file = xy_strjoin (3,
-    "[source.crates-io]\n"
-    "replace-with = 'mirror'\n\n"
-
-    "[source.mirror]\n"
-    "registry = \"sparse+", source.url, "\"");
-
-  chsrc_note2 (xy_strjoin (3, "请您手动写入以下内容到 ", xy_uniform_path ("~/.cargo/config.toml"), " 文件中:"));
-  puts (file);
-  chsrc_say_lastly (&source, ChsrcTypeManual);
-}
-
+#include "recipe/lang/rust.c"
 
 
 void
@@ -1812,7 +1783,7 @@ wr_anaconda_setsrc (char *option)
 
 
 /************************************** Begin Target Matrix ****************************************/
-def_target(pl_rust);  def_target(pl_dart); def_target(pl_ocaml);
+def_target(pl_dart); def_target(pl_ocaml);
 def_target(pl_r);     def_target(pl_julia);
 def_target_noget (pl_clojure);
 def_target_noget (pl_dotnet);
