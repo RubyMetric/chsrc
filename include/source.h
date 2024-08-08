@@ -188,26 +188,6 @@ pl_ruby_sources[] = {
 },
 
 
-/**
- * 2024-05-24 更新
- *
- * @note 不要添加Zju，浙大的pypi在校外访问会自动转向Tuna
- */
-pl_python_sources[] = {
-  {&Upstream,      "https://pypi.org/simple"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/pypi/web/simple"},
-  {&Lzuoss,        "https://mirror.lzu.edu.cn/pypi/web/simple"},
-  {&Jlu,           "https://mirrors.jlu.edu.cn/pypi/web/simple"},
-  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/pypi/web/simple"},
-  {&Tuna,          "https://pypi.tuna.tsinghua.edu.cn/simple"},
-  {&Ali,           "https://mirrors.aliyun.com/pypi/simple/"},
-  {&Tencent,       "https://mirrors.cloud.tencent.com/pypi/simple"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/repository/pypi/simple"},
-  {&Hust,          "https://mirrors.hust.edu.cn/pypi/web/simple"}
-  // {&Netease,    "https://mirrors.163.com/.help/pypi.html"} // 不用，24小时更新一次
-},
-
-
 
 /**
  * 2024-04-18 更新
@@ -963,7 +943,7 @@ wr_tex_sources[] = {
 
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
-def_sources_n(pl_ruby);     def_sources_n(pl_python);    def_sources_n(pl_nodejs);
+def_sources_n(pl_ruby);     def_sources_n(pl_nodejs);
 def_sources_n(pl_perl);     def_sources_n(pl_php);       def_sources_n(pl_lua);
 def_sources_n(pl_go);       def_sources_n(pl_rust);
 def_sources_n(pl_java);     def_sources_n(pl_clojure);

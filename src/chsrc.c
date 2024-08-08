@@ -87,106 +87,7 @@ pl_ruby_resetsrc (char *option)
 }
 
 
-/**
- * @param[out] prog      返回 Python 的可用名，如果不可用，则返回 NULL
- * @param[out] pdm_exist 判断 pdm 是否存在
- */
-void
-pl_python_check_cmd (char **prog, bool *pdm_exist)
-{
-  *prog = NULL;
-  *pdm_exist = false;
-
-  bool py_exist = false;
-
-  // 由于Python2和Python3的历史，目前（2024-06）许多python命令实际上仍然是python2
-  // https://gitee.com/RubyMetric/chsrc/issues/I9VZL2
-  // 因此我们首先测试 python3
-  py_exist = chsrc_check_program ("python3");
-
-  if (py_exist)
-    {
-      *prog = "python3";
-    }
-  else
-    {
-      // 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store
-      py_exist = chsrc_check_program ("python");
-      if (py_exist)
-        {
-          *prog = "python";
-        }
-      else
-        {
-          chsrc_error ("未找到 Python 相关命令，请检查是否存在");
-          exit (Exit_UserCause);
-        }
-    }
-
-  *pdm_exist = chsrc_check_program ("pdm");
-}
-
-void
-pl_python_getsrc (char *option)
-{
-  char *prog = NULL;
-  bool pdm_exist = false;
-  pl_python_check_cmd (&prog, &pdm_exist);
-  char *cmd = xy_2strjoin (prog, " -m pip config get global.index-url");
-  chsrc_run (cmd, RunOpt_Default);
-
-  if (pdm_exist)
-    {
-      cmd = "pdm config --global pypi.url";
-      chsrc_run (cmd, RunOpt_Default);
-    }
-}
-
-/**
- * Python换源，参考：
- * 1. https://mirrors.tuna.tsinghua.edu.cn/help/pypi/
- * 2. https://github.com/RubyMetric/chsrc/issues/19
- *
- * 经测试，Windows上调用换源命令，会写入 C:\Users\RubyMetric\AppData\Roaming\pip\pip.ini
- */
-void
-pl_python_setsrc (char *option)
-{
-  char *chsrc_type = xy_streql (option, ChsrcTypeReset) ? ChsrcTypeReset : ChsrcTypeAuto;
-  char *prog = NULL;
-  bool pdm_exist = false;
-  pl_python_check_cmd (&prog, &pdm_exist);
-
-  SourceInfo source;
-  chsrc_yield_source (pl_python);
-  chsrc_confirm_source (&source);
-
-  // 这里用的是 config --user，会写入用户目录（而不是项目目录）
-  // GitHub#39
-  char *cmd = xy_2strjoin (prog, xy_2strjoin (" -m pip config --user set global.index-url ", source.url));
-  chsrc_run (cmd, RunOpt_Default);
-
-  if (pdm_exist)
-    {
-      char *where = " --global ";
-      if (Cli_Option_Locally==true)
-        {
-          where = " --local ";
-        }
-      cmd = xy_strjoin (4, "pdm config", where, "pypi.url ", source.url);
-      chsrc_run (cmd, RunOpt_Default);
-    }
-
-  chsrc_say_lastly (&source, chsrc_type);
-}
-
-void
-pl_python_resetsrc (char *option)
-{
-  pl_python_setsrc (ChsrcTypeReset);
-}
-
-
+#include "recipe/lang/python.c"
 
 void
 pl_nodejs_check_cmd (bool *npm_exist, bool *yarn_exist, bool *pnpm_exist)
@@ -2356,7 +2257,6 @@ wr_anaconda_setsrc (char *option)
 
 /************************************** Begin Target Matrix ****************************************/
 def_target_full(pl_ruby);
-def_target_full(pl_python);
 def_target(pl_nodejs);  def_target(pl_perl); def_target(pl_php);
 def_target(pl_lua);
 def_target(pl_rust);  def_target(pl_go);  def_target(pl_java); def_target(pl_dart); def_target(pl_ocaml);
@@ -2369,7 +2269,7 @@ def_target_noget (pl_haskell);
 #define t(a) (const char*)(a)
 static const char
 *pl_ruby  [] = {"gem",   "ruby",    "rubygem", "rb", "rubygems", "bundler",  NULL, t(&pl_ruby_target)},
-*pl_python[] = {"pip",   "python",  "pypi",    "py", "pdm",                  NULL, t(&pl_python_target)},
+*pl_python[] = {"pip",   "python",  "pypi",    "py", "poetry",   "pdm",      NULL, t(&pl_python_target)},
 *pl_nodejs[] = {"npm",   "node",    "nodejs",  "js", "yarn", "pnpm",         NULL, t(&pl_nodejs_target)},
 *pl_perl  [] = {"perl",  "cpan",                         NULL,  t(&pl_perl_target)},
 *pl_php   [] = {"php",   "composer",                     NULL,  t(&pl_php_target)},
