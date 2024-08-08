@@ -189,48 +189,7 @@ pl_php_setsrc (char *option)
 }
 
 #include "recipe/lang/lua.c"
-
-
-void
-pl_go_check_cmd ()
-{
-  char *check_cmd = xy_str_to_quietcmd ("go version");
-  bool exist = query_program_exist (check_cmd, "go");
-
-  if (!exist)
-    {
-      chsrc_error ("未找到 go 相关命令，请检查是否存在");
-      exit (Exit_UserCause);
-    }
-}
-
-void
-pl_go_getsrc (char *option)
-{
-  pl_go_check_cmd ();
-  chsrc_run ("go env GOPROXY", RunOpt_Default);
-}
-
-/**
- * Go换源，参考：https://goproxy.cn/
- */
-void
-pl_go_setsrc (char *option)
-{
-  pl_go_check_cmd ();
-
-  SourceInfo source;
-  chsrc_yield_source (pl_go);
-  chsrc_confirm_source (&source);
-
-  char *cmd = "go env -w GO111MODULE=on";
-  chsrc_run (cmd, RunOpt_Default);
-
-  cmd = xy_strjoin (3, "go env -w GOPROXY=", source.url, ",direct");
-  chsrc_run (cmd, RunOpt_Default);
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
-}
-
+#include "recipe/lang/go.c"
 
 
 void
@@ -2108,7 +2067,7 @@ wr_anaconda_setsrc (char *option)
 
 /************************************** Begin Target Matrix ****************************************/
 def_target(pl_nodejs);  def_target(pl_perl); def_target(pl_php);
-def_target(pl_rust);  def_target(pl_go);  def_target(pl_java); def_target(pl_dart); def_target(pl_ocaml);
+def_target(pl_rust);   def_target(pl_java); def_target(pl_dart); def_target(pl_ocaml);
 def_target(pl_r);     def_target(pl_julia);
 def_target_noget (pl_clojure);
 def_target_noget (pl_dotnet);

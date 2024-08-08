@@ -112,12 +112,6 @@ MirrorSite
                // 注意，这个是跳转后的地址，不确定未来会不会改变
                "https://cdn.npmmirror.com/packages/%40tensorflow/tfjs/4.10.0/tfjs-4.10.0.tgz"}, // 29MB
 
-  GoProxyCN = {"goproxy.cn",   "Goproxy.cn",   "Goproxy.cn (七牛云赞助)",   "https://goproxy.cn/",
-               "https://goproxy.cn/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"},  // 30 MB
-
-  GoProxyIO = {"goproxy.io",   "GOPROXY.IO",   "GOPROXY.IO",         "https://goproxy.io/",
-               "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"},   // 30 MB
-
   NugetOrg   = {"nuget.org",   "NuGet Org",    "Nuget Organization", "https://www.nuget.org/",              NULL},
   EmacsChina = {"emacschina",  "EmacsChina",   "Emacs China 社区",    "https://elpamirror.emacs-china.org/", NULL};
 
@@ -183,20 +177,6 @@ pl_php_sources[] = {
   {&Huawei,        "https://mirrors.huaweicloud.com/repository/php/"}
 },
 
-
-
-/**
- * 2024-04-18 更新
- *
- * @note 缺少教育网软件源
- */
-pl_go_sources[] = {
-  {&Upstream,       NULL},
-  {&GoProxyCN,     "https://goproxy.cn"},
-  {&Ali,           "https://mirrors.aliyun.com/goproxy/"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/goproxy/"},
-  {&GoProxyIO,     "https://goproxy.io"}
-},
 
 
 /**
@@ -863,7 +843,7 @@ wr_tex_sources[] = {
 
 def_sources_n(pl_nodejs);
 def_sources_n(pl_perl);     def_sources_n(pl_php);
-def_sources_n(pl_go);       def_sources_n(pl_rust);
+def_sources_n(pl_rust);
 def_sources_n(pl_java);     def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);   def_sources_n(pl_dart);      def_sources_n(pl_haskell);
 def_sources_n(pl_ocaml);
