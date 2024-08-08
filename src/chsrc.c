@@ -11,7 +11,7 @@
  *               | BlockLune     <blocklune@gmail.com>
  *               |
  * Created on    : <2023-08-28>
- * Last modified : <2024-08-08>
+ * Last modified : <2024-08-09>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
@@ -2410,6 +2410,7 @@ Chsrc_Usage[] = {
   "reset <target>            重置，使用上游默认使用的源\n",
 
   "选项:",
+  "-dry                      Dry Run，模拟换源过程，命令仅打印并不运行",
   "-ipv6                     使用IPv6测速",
   "-local                    仅对某项目而非全局换源 (通过issue命令查看支持情况)"
 };
@@ -2698,6 +2699,11 @@ main (int argc, char const *argv[])
           else if (xy_streql (argv[i], "-en") || xy_streql (argv[i], "-english"))
             {
               Cli_Option_InEnglish = true;
+            }
+          else if (xy_streql (argv[i], "-dry"))
+            {
+              CliOpt_DryRun = true;
+              chsrc_log (to_boldyellow ("**开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行**\n"));
             }
           else
             {

@@ -8,7 +8,7 @@
  * Contributors  : Peng Gao   <gn3po4g@outlook.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-08-08>
+ * Last modified : <2024-08-09>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -92,7 +92,7 @@ chsrc_log_cmd_result (bool result, int ret_code)
 bool Cli_Option_IPv6 = false;
 bool Cli_Option_Locally = false;
 bool Cli_Option_InEnglish = false;
-
+bool CliOpt_DryRun = false;
 
 bool
 is_url (const char *str)
@@ -361,8 +361,13 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target)
       exit (Exit_MatinerIssue);
     }
 
-  bool onlyone = false;
-  if (2==size) onlyone = true;
+  if (CliOpt_DryRun)
+    {
+      return 1; // Dry Run 时，跳过测速
+    }
+
+  bool only_one = false;
+  if (2==size) only_one = true;
 
   char *check_curl = xy_str_to_quietcmd ("curl --version");
   bool  exist_curl = query_program_exist (check_curl, "curl");
@@ -374,38 +379,39 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target)
 
   double speeds[size];
   double speed = 0.0;
-  for (int i=0;i<size;i++)
-  {
-    SourceInfo src = sources[i];
-    const char* url = src.mirror->__bigfile_url;
-    if (NULL==url)
-      {
-        if (xy_streql ("upstream", src.mirror->code))
-          {
-            continue; // 上游默认源不测速
-          }
-        else
-          {
-            chsrc_warn (xy_strjoin (3, "开发者未提供 ",  src.mirror->code, " 镜像站测速链接，跳过该站点"));
-            speed = 0;
-          }
-      }
-    else
-      {
-        printf ("%s", xy_strjoin (3, "测速 ", src.mirror->site , " ... "));
-        fflush (stdout);
-        speed = test_speed_url (url);
-      }
-    speeds[i] = speed;
-  }
-  int fastidx = get_max_ele_idx_in_dbl_ary (speeds, size);
+  for (int i=0; i<size; i++)
+    {
+      SourceInfo src = sources[i];
+      const char* url = src.mirror->__bigfile_url;
+      if (NULL==url)
+        {
+          if (xy_streql ("upstream", src.mirror->code))
+            {
+              continue; // 上游默认源不测速
+            }
+          else
+            {
+              chsrc_warn (xy_strjoin (3, "开发者未提供 ",  src.mirror->code, " 镜像站测速链接，跳过该站点"));
+              speed = 0;
+            }
+        }
+      else
+        {
+          printf ("%s", xy_strjoin (3, "测速 ", src.mirror->site , " ... "));
+          fflush (stdout);
+          speed = test_speed_url (url);
+        }
+      speeds[i] = speed;
+    }
 
-  if (onlyone)
-    chsrc_succ (xy_strjoin (4, sources[fastidx].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
+  int fast_idx = get_max_ele_idx_in_dbl_ary (speeds, size);
+
+  if (only_one)
+    chsrc_succ (xy_strjoin (4, sources[fast_idx].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
   else
-    puts (xy_2strjoin ("最快镜像站: ", to_green (sources[fastidx].mirror->name)));
+    puts (xy_2strjoin ("最快镜像站: ", to_green (sources[fast_idx].mirror->name)));
 
-  return fastidx;
+  return fast_idx;
 }
 
 
@@ -623,6 +629,12 @@ static void
 chsrc_run (const char *cmd, int run_option)
 {
   xy_log_brkt (to_blue (App_Name), to_boldblue ("运行"), to_blue (cmd));
+
+  if (CliOpt_DryRun)
+    {
+      return; // Dry Run 此时立即结束，并不真正执行
+    }
+
   int status = system (cmd);
   if (0==status)
     {
