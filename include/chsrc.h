@@ -60,6 +60,23 @@ chsrc_check_remarkably (const char *check_what, const char *check_type, bool exi
 }
 
 
+void
+chsrc_log_cmd_result (bool result, int ret_code)
+{
+  if (result)
+    {
+      xy_log_brkt (App_Name, to_boldgreen ("运行"), xy_2strjoin (to_green ("√ "), "命令执行成功"));
+    }
+  else
+    {
+      char buf[8] = {0};
+      sprintf (buf, "%d", ret_code);
+      char *log = xy_strjoin (3, to_red ("x "), "命令执行失败，返回码 ", to_boldred (buf));
+      xy_log_brkt (App_Name, to_boldred ("运行"), log);
+    }
+}
+
+
 bool Cli_Option_IPv6 = false;
 bool Cli_Option_Locally = false;
 bool Cli_Option_InEnglish = false;
@@ -599,15 +616,12 @@ chsrc_run (const char *cmd, int run_option)
     {
       if (! (RunOpt_Dont_Notify_On_Success & run_option))
         {
-          xy_succ_brkt (App_Name, "运行", "命令执行成功");
+          chsrc_log_cmd_result (true, status);
         }
     }
   else
     {
-      char buf[8] = {0};
-      sprintf (buf, "%d", status);
-      char *str = xy_2strjoin ("命令执行失败，返回码 ", buf);
-      xy_error_brkt (App_Name, "运行", str);
+      chsrc_log_cmd_result (false, status);
       if (! (run_option & RunOpt_Dont_Abort_On_Failure))
         {
           chsrc_error ("关键错误，强制结束");
