@@ -26,48 +26,7 @@
 #include "recipe/lang/python.c"
 #include "recipe/lang/nodejs.c"
 #include "recipe/lang/perl.c"
-
-
-void
-pl_php_check_cmd ()
-{
-  chsrc_ensure_program ("composer");
-}
-
-/**
- * 已在Windows上测试通过，待其他平台PHP用户确认
- */
-void
-pl_php_getsrc (char *option)
-{
-  pl_php_check_cmd ();
-  chsrc_run ("composer config -g repositories", RunOpt_Default);
-}
-
-/**
- * PHP 换源，参考：https://developer.aliyun.com/composer
- */
-void
-pl_php_setsrc (char *option)
-{
-  pl_php_check_cmd ();
-
-  SourceInfo source;
-  chsrc_yield_source (pl_php);
-  chsrc_confirm_source (&source);
-
-  char *where = " -g ";
-  if (CliOpt_Locally==true)
-    {
-      where = " ";
-    }
-
-  char *cmd = xy_strjoin (4, "composer config", where, "repo.packagist composer ", source.url);
-  chsrc_run (cmd, RunOpt_Default);
-
-  chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
-}
-
+#include "recipe/lang/php.c"
 #include "recipe/lang/lua.c"
 #include "recipe/lang/go.c"
 
@@ -1932,7 +1891,6 @@ wr_anaconda_setsrc (char *option)
 
 
 /************************************** Begin Target Matrix ****************************************/
-def_target(pl_php);
 def_target(pl_rust);   def_target(pl_java); def_target(pl_dart); def_target(pl_ocaml);
 def_target(pl_r);     def_target(pl_julia);
 def_target_noget (pl_clojure);

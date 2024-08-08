@@ -128,19 +128,6 @@ typedef struct {
 
 static SourceInfo
 /**
- * @time 2024-04-18 更新
- * @note 缺少教育网或开源社区软件源
- */
-pl_php_sources[] = {
-  {&Upstream,       NULL},
-  {&Ali,           "https://mirrors.aliyun.com/composer/"},
-  {&Tencent,       "https://mirrors.tencent.com/composer/"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/repository/php/"}
-},
-
-
-
-/**
  * @time 2024-05-24 更新
  * @note 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`
  */
@@ -770,7 +757,6 @@ wr_tex_sources[] = {
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
 
-def_sources_n(pl_php);
 def_sources_n(pl_rust);
 def_sources_n(pl_java);     def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);   def_sources_n(pl_dart);      def_sources_n(pl_haskell);
