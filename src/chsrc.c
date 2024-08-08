@@ -2334,6 +2334,18 @@ static const char
   wr_winget, wr_brew, wr_cocoapods, wr_dockerhub, wr_flathub, wr_nix, wr_guix, wr_emacs, wr_tex, wr_anaconda
 };
 #undef t
+
+
+
+static MirrorSite*
+available_mirrors[] = {
+  &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Hust, &Nju, // &Cqu,
+  &Ali,  &Tencent, &Huawei, &Volcengine,  &Netease, &Sohu, &Api7, &Fit2Cloud,
+  &RubyChina, &EmacsChina, &NpmMirror, &GoProxyCN, &GoProxyIO,
+  // 暂不支持 &NugetOrg
+  // 不要列出 &Upstream 和 &UserDdefine
+};
+
 /************************************** End Target Matrix ****************************************/
 
 

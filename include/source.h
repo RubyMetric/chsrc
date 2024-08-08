@@ -99,19 +99,14 @@ MirrorSite
   Volcengine = {"volc",  "Volcengine",   "火山引擎开源软件镜像站", "https://developer.volcengine.com/mirror/",
               "https://mirrors.volces.com/debian" Big_File_debian },
 
-  // 没有找到 DaoCloud 合适的下载链接，先随便给一个，以规避 chsrc 自动测速时所有 dockerhub 镜像站都没有测速链接带来的 bug
-  DaoCloud = {"daocloud", "DaoCloud","上海道客网络科技有限公司", "https://www.daocloud.io/",
-              "https://qiniu-download-public.daocloud.io/DaoCloud_Enterprise/dce5/offline-community-v0.18.0-amd64.tar"},
-
   Netease  = {"netease", "Netease",  "网易开源镜像站",      "https://mirrors.163.com/",
               "https://mirrors.163.com/deepin-cd" Big_File_deepin},
 
   Sohu     = {"sohu",    "SOHU",     "搜狐开源镜像站",      "https://mirrors.sohu.com/",
               "https://mirrors.sohu.com/deepin-cd" Big_File_deepin},
 
-  Api7     = {"api7",    "api7.ai",  "深圳支流科技有限公司", "https://www.apiseven.com/", NULL},
+  Api7     = {"api7",    "api7.ai",  "深圳支流科技有限公司", "https://www.apiseven.com/", NULL};
 
-  Fit2Cloud = {"fit2cloud", "FIT2CLOUD", "杭州飞致云信息科技有限公司", "https://www.fit2cloud.com/", NULL};
 
 // 开源社区
 MirrorSite
@@ -129,11 +124,8 @@ MirrorSite
                "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"},   // 30 MB
 
   NugetOrg   = {"nuget.org",   "NuGet Org",    "Nuget Organization", "https://www.nuget.org/",              NULL},
-  EmacsChina = {"emacschina",  "EmacsChina",   "Emacs China 社区",    "https://elpamirror.emacs-china.org/", NULL},
+  EmacsChina = {"emacschina",  "EmacsChina",   "Emacs China 社区",    "https://elpamirror.emacs-china.org/", NULL};
 
-  Huecker    = {"huecker",     "(Russia) Huecker", "俄罗斯 Huecker.io",   "https://huecker.io/",
-                // 同 DaoCloud，没有合适的下载链接，先随便给一个，以避免 bug
-                "https://huecker.io/en/use.html"};
 
 
 MirrorSite
@@ -142,16 +134,6 @@ MirrorSite
   UserDefine = {"user",       "用户自定义",     "用户自定义",     NULL,     NULL};
 
 
-
-MirrorSite*
-available_mirrors[] = {
-  &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Hust, &Nju, // &Cqu,
-  &Ali,  &Tencent, &Huawei, &Volcengine,  &Netease, &Sohu, &Api7, &Fit2Cloud,
-  &RubyChina, &EmacsChina, &NpmMirror, &GoProxyCN, &GoProxyIO,
-  // 暂不支持 &NugetOrg
-
-  // 不要列出 &Upstream 和 &UserDdefine
-};
 
 
 typedef struct {
