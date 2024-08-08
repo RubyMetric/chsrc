@@ -110,9 +110,6 @@ MirrorSite
 
 // 开源社区
 MirrorSite
-  RubyChina = {"rubychina",    "RubyChina",    "Ruby China 社区",    "https://gems.ruby-china.com/",
-               "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"}, // 9.9 MB
-
   NpmMirror = {"npmmirror",    "npmmirror",    "npmmirror (阿里云赞助)",    "https://npmmirror.com/",
                // 注意，这个是跳转后的地址，不确定未来会不会改变
                "https://cdn.npmmirror.com/packages/%40tensorflow/tfjs/4.10.0/tfjs-4.10.0.tgz"}, // 29MB
@@ -142,34 +139,6 @@ typedef struct {
 } SourceInfo;
 
 
-/**
- * 2024-05-25 更新
- *
- * @note
- * 下面的源，并非都实现正确，
- * BFSU 和 Tuna 以及 阿里的镜像都有问题，会循环遍历一个gem的所有版本，导致安装时间相当长
- *
- * @note 网络情况
- * 若实现正确:
- * 1. 目前北外最快最稳定
- * 2. 腾讯挺快，个别时候不稳定，但稳定时能达到4.5MB甚至以上
- * 3. tuna 有时快有时慢，不稳定，一般在3MB以下
- * 4. rubychina 有时快有时慢，快时一般在 2MB以下，慢时一般在1MB以下
- * 5. 阿里云最不稳定，经常最慢
- */
-static SourceInfo
-pl_ruby_sources[] = {
-  {&Upstream,  "https://rubygems.org"},
-  {&Huawei,    "https://mirrors.huaweicloud.com/repository/rubygems/"},
-  {&Tencent,   "https://mirrors.tencent.com/rubygems/"},
-  {&RubyChina, "https://gems.ruby-china.com/"}
-
-  // {&Bfsu,      "https://mirrors.bfsu.edu.cn/rubygems/"},
-  // {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/"},
-  // {&Ali,       "https://mirrors.aliyun.com/rubygems/"},
-},
-
-
 
 /**
  * 2024-04-18 更新
@@ -178,6 +147,7 @@ pl_ruby_sources[] = {
  *
  * @note 腾讯软件源虽然有npm的名，但名存实亡
  */
+SourceInfo
 pl_nodejs_sources[] = {
   {&Upstream,       NULL},
   {&NpmMirror,     "https://registry.npmmirror.com"},
@@ -904,7 +874,7 @@ wr_tex_sources[] = {
 
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
-def_sources_n(pl_ruby);     def_sources_n(pl_nodejs);
+def_sources_n(pl_nodejs);
 def_sources_n(pl_perl);     def_sources_n(pl_php);       def_sources_n(pl_lua);
 def_sources_n(pl_go);       def_sources_n(pl_rust);
 def_sources_n(pl_java);     def_sources_n(pl_clojure);

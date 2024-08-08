@@ -22,71 +22,7 @@
 
 #include "chsrc.h"
 
-void
-pl_ruby_getsrc (char *option)
-{
-  chsrc_run ("gem sources", RunOpt_Default);
-  chsrc_run ("bundle config get mirror.https://rubygems.org", RunOpt_Default);
-}
-
-void
-pl_ruby_remove_gem_source (const char *source)
-{
-  char *cmd = NULL;
-  if (is_url (source))
-    {
-      cmd = xy_str_delete_suffix (source, "\n");
-      cmd = xy_2strjoin ("gem sources -r ", cmd);
-      chsrc_run (cmd, RunOpt_Default);
-    }
-}
-
-/**
- * Ruby换源，参考：https://gitee.com/RubyMetric/rbenv-cn
- */
-void
-pl_ruby_setsrc (char *option)
-{
-  char *chsrc_type = xy_streql (option, ChsrcTypeReset) ? ChsrcTypeReset : ChsrcTypeAuto;
-
-  chsrc_ensure_program ("gem");
-
-  SourceInfo source;
-  chsrc_yield_source (pl_ruby);
-  chsrc_confirm_source (&source);
-
-  char *cmd = NULL;
-
-  xy_run ("gem sources -l", 0, pl_ruby_remove_gem_source);
-
-  cmd = xy_2strjoin ("gem source -a ", source.url);
-  chsrc_run (cmd, RunOpt_Default);
-
-
-  chsrc_ensure_program ("bundle");
-
-  char *where = " --global ";
-  if (CliOpt_Locally==true)
-    {
-      where = " --local ";
-    }
-
-  cmd = xy_strjoin (4, "bundle config", where, "'mirror.https://rubygems.org' ", source.url);
-  chsrc_run (cmd, RunOpt_No_Last_New_Line);
-
-  chsrc_say_lastly (&source, chsrc_type);
-  // puts ("");
-  // chsrc_note2 ("维护者提醒您: Ruby的镜像源目前仅有 腾讯软件源，RubyChina，华为开源镜像站 实现正确");
-  // chsrc_note2 ("而其它如Tuna,Bfsu,Ali目前都实现的有问题，请勿使用");
-}
-
-void
-pl_ruby_resetsrc (char *option)
-{
-  pl_ruby_setsrc (ChsrcTypeReset);
-}
-
-
+#include "recipe/lang/ruby.c"
 #include "recipe/lang/python.c"
 
 void
@@ -2204,7 +2140,6 @@ wr_anaconda_setsrc (char *option)
 
 
 /************************************** Begin Target Matrix ****************************************/
-def_target_full(pl_ruby);
 def_target(pl_nodejs);  def_target(pl_perl); def_target(pl_php);
 def_target(pl_lua);
 def_target(pl_rust);  def_target(pl_go);  def_target(pl_java); def_target(pl_dart); def_target(pl_ocaml);
