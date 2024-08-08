@@ -8,7 +8,7 @@
  * Contributors  : Null Nil   <null@nil.com>
  *               |
  * Created on    : <2023-08-28>
- * Last modified : <2024-07-09>
+ * Last modified : <2024-08-08>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C utilities for CLI applications in Ruby flavor
@@ -17,7 +17,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version      "v0.1.3.0-2024/07/09"
+#define _XY_Version      "v0.1.4.0-2024/08/08"
 #define _XY_Maintain_URL "https://gitee.com/RubyMetric/chsrc/blob/main/include/xy.h"
 
 #include <assert.h>
@@ -489,16 +489,37 @@ _xy_log (int level, const char *prompt, const char *content)
 
 
 /**
- * remarkably 系列输出受 pip 启发，为了输出方便，使用xy.h的程序应该基于此再定义自己的 app_info_remarkbaly()
+ * brkt 系列输出受 pip 启发，为了输出方便，使用 xy.h 的程序应该
+ *
+ *  1.若想完全自定义颜色和输出位置：
+ *
+ *    应基于下述 xy_log_brkt_to 定义自己的输出函数
+ *
+ *  2.若想自定义颜色，而保持输出到stdout：
+ *
+ *    应基于下述 xy_log_brkt 定义
+ *
+ *  3.若对log无细致要求，想要快速使用log功能：
+ *
+ *    应基于下述 xy_<level>_brkt 定义自己的 app_<level>_brkt()，或直接使用 xy_<level>_brkt
  */
-#define xy_log_remarkably(prompt1,prompt2,content)   _xy_log_remarkably(_XY_Log_Plain,  prompt1,prompt2,content)
-#define xy_succ_remarkably(prompt1,prompt2,content)  _xy_log_remarkably(_XY_Log_Success,prompt1,prompt2,content)
-#define xy_info_remarkably(prompt1,prompt2,content)  _xy_log_remarkably(_XY_Log_Info,   prompt1,prompt2,content)
-#define xy_warn_remarkably(prompt1,prompt2,content)  _xy_log_remarkably(_XY_Log_Warn,   prompt1,prompt2,content)
-#define xy_error_remarkably(prompt1,prompt2,content) _xy_log_remarkably(_XY_Log_Error,  prompt1,prompt2,content)
 
 static void
-_xy_log_remarkably (int level, const char *prompt1, const char *prompt2, const char *content)
+xy_log_brkt_to (const char *prompt, const char *content, FILE *stream)
+{
+  char *str = xy_strjoin (4, "[", prompt, "] ", content);
+  fprintf (stream, "%s\n", str);
+  free (str);
+}
+
+#define xy_log_brkt(prompt1,prompt2,content)   _xy_log_brkt(_XY_Log_Plain,  prompt1,prompt2,content)
+#define xy_succ_brkt(prompt1,prompt2,content)  _xy_log_brkt(_XY_Log_Success,prompt1,prompt2,content)
+#define xy_info_brkt(prompt1,prompt2,content)  _xy_log_brkt(_XY_Log_Info,   prompt1,prompt2,content)
+#define xy_warn_brkt(prompt1,prompt2,content)  _xy_log_brkt(_XY_Log_Warn,   prompt1,prompt2,content)
+#define xy_error_brkt(prompt1,prompt2,content) _xy_log_brkt(_XY_Log_Error,  prompt1,prompt2,content)
+
+static void
+_xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *content)
 {
   char *str = NULL;
 

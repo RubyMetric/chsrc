@@ -5,7 +5,7 @@
  * License       : MIT
  * Authors       : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-08-30>
- * Last modified : <2024-07-09>
+ * Last modified : <2024-08-08>
  *
  * 测试 xy.h
  * ------------------------------------------------------------*/
@@ -47,11 +47,11 @@ main (int argc, char const *argv[])
   xy_warn  ("警告", "输出警告内容");
   xy_error ("错误", "输出错误内容");
 
-  xy_log_remarkably   ("xy.h", "普通", "咸阳油泼面筋道十足辣子香");
-  xy_succ_remarkably  ("xy.h", "成功", "西安花干鸡蛋肉夹馍已出炉");
-  xy_info_remarkably  ("xy.h", "信息", "襄阳牛肉面搭配黄酒更美味");
-  xy_warn_remarkably  ("xy.h", "警告", "兰州牛肉面，而非兰州拉面");
-  xy_error_remarkably ("xy.h", "错误", "西安肉丸胡辣汤里没有肉丸");
+  xy_log_brkt   ("xy.h", "普通", "咸阳油泼面筋道十足辣子香");
+  xy_succ_brkt  ("xy.h", "成功", "西安花干鸡蛋肉夹馍已出炉");
+  xy_info_brkt  ("xy.h", "信息", "襄阳牛肉面搭配黄酒更美味");
+  xy_warn_brkt  ("xy.h", "警告", "兰州牛肉面，而非兰州拉面");
+  xy_error_brkt ("xy.h", "错误", "西安肉丸胡辣汤里没有肉丸");
 
   assert (false == xy_str_end_with ("abcdef", "abcdefg"));
   assert (xy_str_end_with ("abcdef", "def"));
