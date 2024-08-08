@@ -1693,6 +1693,10 @@ os_linuxlite_setsrc (char *option)
 
 
 
+#include "./recipe/os/openwrt.c"
+
+
+
 /**
  * HELP: 未经测试
  */
@@ -2428,23 +2432,28 @@ static const char
 *os_solus      [] = {"solus",                NULL,  t(&os_solus_target)},
 *os_trisquel   [] = {"trisquel",             NULL,  t(&os_trisquel_target)},
 *os_linuxlite  [] = {"lite",   "linuxlite",  NULL,  t(&os_linuxlite_target)},
+*os_ros        [] = {"ros",    "ros2",       NULL,  t(&os_ros_target)},
+
 *os_raspberrypi[] = {"raspi",  "raspberrypi",NULL,  t(&os_raspberrypi_target)},
 *os_armbian    [] = {"armbian",              NULL,  t(&os_armbian_target)},
+*os_openwrt    [] = {"openwrt", "opkg", "LEDE", NULL, t(&os_openwrt_target)},
+
+*os_openkylin  [] = {"kylin",  "openkylin",  NULL,  t(&os_openkylin_target)},
+*os_openeuler  [] = {"euler",  "openeuler",  NULL,  t(&os_openeuler_target)},
+*os_deepin     [] = {"deepin",               NULL,  t(&os_deepin_target)},
+*os_anolis     [] = {"anolis", "openanolis", NULL,  t(&os_anolis_target)},
+
 *os_freebsd    [] = {"freebsd",              NULL,  t(&os_freebsd_target)},
 *os_netbsd     [] = {"netbsd",               NULL,  t(&os_netbsd_target)},
 *os_openbsd    [] = {"openbsd",              NULL,  t(&os_openbsd_target)},
-*os_deepin     [] = {"deepin",               NULL,  t(&os_deepin_target)},
-*os_openeuler  [] = {"euler",  "openeuler",  NULL,  t(&os_openeuler_target)},
-*os_anolis     [] = {"anolis", "openanolis", NULL,  t(&os_anolis_target)},
-*os_openkylin  [] = {"kylin",  "openkylin",  NULL,  t(&os_openkylin_target)},
-*os_ros        [] = {"ros",    "ros2",       NULL,  t(&os_ros_target)},
+
 **os_systems[] =
 {
   os_ubuntu,  os_mint,    os_debian,  os_fedora,  os_opensuse, os_kali,
   os_arch,    os_archlinuxcn, os_manjaro, os_gentoo,
   os_rocky,   os_alma,
   os_alpine,   os_void,      os_solus,          os_ros,
-  os_trisquel, os_linuxlite, os_raspberrypi,    os_armbian,
+  os_trisquel, os_linuxlite, os_raspberrypi,    os_armbian,   os_openwrt,
   os_deepin,   os_openeuler, os_anolis,         os_openkylin,
   os_msys2,
   os_freebsd,  os_netbsd,    os_openbsd,
