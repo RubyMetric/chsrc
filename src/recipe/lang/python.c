@@ -3,7 +3,7 @@
  * -------------------------------------------------------------
  * Contributors  : Aoran Zeng <ccmywish@qq.com>
  * Created on    : <2023-09-01>
- * Last modified : <2024-08-08>
+ * Last modified : <2024-08-09>
  * ------------------------------------------------------------*/
 
 
@@ -125,7 +125,7 @@ pl_python_setsrc (char *option)
   if (pdm_exist)
     {
       char *where = " --global ";
-      if (Cli_Option_Locally==true)
+      if (CliOpt_Locally==true)
         {
           where = " --local ";
         }

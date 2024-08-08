@@ -89,9 +89,9 @@ chsrc_log_cmd_result (bool result, int ret_code)
 }
 
 
-bool Cli_Option_IPv6 = false;
-bool Cli_Option_Locally = false;
-bool Cli_Option_InEnglish = false;
+bool CliOpt_IPv6 = false;
+bool CliOpt_Locally = false;
+bool CliOpt_InEnglish = false;
 bool CliOpt_DryRun = false;
 
 bool
@@ -291,7 +291,7 @@ test_speed_url (const char *url)
 
   char *ipv6 = ""; // 默认不启用
 
-  if (Cli_Option_IPv6==true)
+  if (CliOpt_IPv6==true)
     {
       ipv6 = "--ipv6";
     }

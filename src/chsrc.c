@@ -66,7 +66,7 @@ pl_ruby_setsrc (char *option)
   chsrc_ensure_program ("bundle");
 
   char *where = " --global ";
-  if (Cli_Option_Locally==true)
+  if (CliOpt_Locally==true)
     {
       where = " --local ";
     }
@@ -145,7 +145,7 @@ pl_nodejs_setsrc (char *option)
   char *cmd = NULL;
 
   char *where = " ";
-  if (Cli_Option_Locally==true)
+  if (CliOpt_Locally==true)
     {
       where = " --location project ";
     }
@@ -241,7 +241,7 @@ pl_php_setsrc (char *option)
   chsrc_confirm_source (&source);
 
   char *where = " -g ";
-  if (Cli_Option_Locally==true)
+  if (CliOpt_Locally==true)
     {
       where = " ";
     }
@@ -2690,15 +2690,15 @@ main (int argc, char const *argv[])
         {
           if (xy_streql (argv[i], "-ipv6"))
             {
-              Cli_Option_IPv6 = true;
+              CliOpt_IPv6 = true;
             }
           else if (xy_streql (argv[i], "-local"))
             {
-              Cli_Option_Locally = true;
+              CliOpt_Locally = true;
             }
           else if (xy_streql (argv[i], "-en") || xy_streql (argv[i], "-english"))
             {
-              Cli_Option_InEnglish = true;
+              CliOpt_InEnglish = true;
             }
           else if (xy_streql (argv[i], "-dry"))
             {
