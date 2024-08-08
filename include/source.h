@@ -103,9 +103,7 @@ MirrorSite
               "https://mirrors.163.com/deepin-cd" Big_File_deepin},
 
   Sohu     = {"sohu",    "SOHU",     "搜狐开源镜像站",      "https://mirrors.sohu.com/",
-              "https://mirrors.sohu.com/deepin-cd" Big_File_deepin},
-
-  Api7     = {"api7",    "api7.ai",  "深圳支流科技有限公司", "https://www.apiseven.com/", NULL};
+              "https://mirrors.sohu.com/deepin-cd" Big_File_deepin};
 
 
 // 开源社区
@@ -185,17 +183,6 @@ pl_php_sources[] = {
   {&Huawei,        "https://mirrors.huaweicloud.com/repository/php/"}
 },
 
-
-
-/**
- * 2023-09-27 更新
- *
- * @note 目前只有唯一一个源
- */
-pl_lua_sources[] = {
-  {&Upstream,       NULL},
-  {&Api7,          "https://luarocks.cn"},
-},
 
 
 /**
@@ -875,7 +862,7 @@ wr_tex_sources[] = {
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
 def_sources_n(pl_nodejs);
-def_sources_n(pl_perl);     def_sources_n(pl_php);       def_sources_n(pl_lua);
+def_sources_n(pl_perl);     def_sources_n(pl_php);
 def_sources_n(pl_go);       def_sources_n(pl_rust);
 def_sources_n(pl_java);     def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);   def_sources_n(pl_dart);      def_sources_n(pl_haskell);

@@ -188,40 +188,7 @@ pl_php_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
 }
 
-
-void
-pl_lua_getsrc (char *option)
-{
-  chsrc_view_file ("~/.luarocks/config.lua");
-  chsrc_view_file ("~/.luarocks/upload_config.lua");
-}
-
-/**
- * Lua 换源，参考：https://luarocks.cn/
- */
-void
-pl_lua_setsrc (char *option)
-{
-  SourceInfo source;
-  chsrc_yield_source (pl_lua);
-  chsrc_confirm_source (&source);
-
-  char *config = xy_strjoin (3, "rocks_servers = {\n"
-                                "  \"", source.url, "\"\n"
-                                "}");
-
-  chsrc_note2 ("请手动修改 ~/.luarocks/config.lua 文件 (用于下载):");
-  puts (config);
-
-  char *upload_config = xy_strjoin (3, "key = \"<Your API Key>\"\n"
-                                      "server = \"", source.url, "\"");
-
-  chsrc_note2 ("请手动修改  ~/.luarocks/upload_config.lua 文件 (用于上传):");
-  puts (upload_config);
-
-  chsrc_say_lastly (&source, ChsrcTypeManual);
-}
-
+#include "recipe/lang/lua.c"
 
 
 void
@@ -2141,7 +2108,6 @@ wr_anaconda_setsrc (char *option)
 
 /************************************** Begin Target Matrix ****************************************/
 def_target(pl_nodejs);  def_target(pl_perl); def_target(pl_php);
-def_target(pl_lua);
 def_target(pl_rust);  def_target(pl_go);  def_target(pl_java); def_target(pl_dart); def_target(pl_ocaml);
 def_target(pl_r);     def_target(pl_julia);
 def_target_noget (pl_clojure);

@@ -1,0 +1,58 @@
+/** ------------------------------------------------------------
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * -------------------------------------------------------------
+ * Contributors  : Aoran Zeng <ccmywish@qq.com>
+ * Created on    : <2023-09-27>
+ * Last modified : <2024-08-09>
+ * ------------------------------------------------------------*/
+
+static MirrorSite
+Api7 = {"api7",  "api7.ai",  "深圳支流科技有限公司", "https://www.apiseven.com/", NULL};
+
+
+/**
+ * @time 2023-09-27 更新
+ * @note 目前只有一个源
+ */
+static SourceInfo
+pl_lua_sources[] = {
+  {&Upstream,       NULL},
+  {&Api7,          "https://luarocks.cn"},
+};
+def_sources_n(pl_lua);
+
+
+void
+pl_lua_getsrc (char *option)
+{
+  chsrc_view_file ("~/.luarocks/config.lua");
+  chsrc_view_file ("~/.luarocks/upload_config.lua");
+}
+
+/**
+ * Lua 换源，参考：https://luarocks.cn/
+ */
+void
+pl_lua_setsrc (char *option)
+{
+  SourceInfo source;
+  chsrc_yield_source (pl_lua);
+  chsrc_confirm_source (&source);
+
+  char *config = xy_strjoin (3, "rocks_servers = {\n"
+                                "  \"", source.url, "\"\n"
+                                "}");
+
+  chsrc_note2 ("请手动修改 ~/.luarocks/config.lua 文件 (用于下载):");
+  puts (config);
+
+  char *upload_config = xy_strjoin (3, "key = \"<Your API Key>\"\n"
+                                      "server = \"", source.url, "\"");
+
+  chsrc_note2 ("请手动修改 ~/.luarocks/upload_config.lua 文件 (用于上传):");
+  puts (upload_config);
+
+  chsrc_say_lastly (&source, ChsrcTypeManual);
+}
+
+def_target(pl_lua);
