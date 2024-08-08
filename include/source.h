@@ -34,50 +34,52 @@ typedef struct {
  * 我们目前根据 https://github.com/mirrorz-org/oh-my-mirrorz 挑选速度前10位
  */
 MirrorSite
-  MirrorZ       = {"mirrorz", "MirrorZ",       "MirrorZ 校园网镜像站",       "https://mirrors.cernet.edu.cn/",  NULL},
+MirrorZ       = {"mirrorz", "MirrorZ",       "MirrorZ 校园网镜像站",       "https://mirrors.cernet.edu.cn/",  NULL},
 
-  Tuna          = {"tuna",    "TUNA",          "清华大学开源软件镜像站",     "https://mirrors.tuna.tsinghua.edu.cn/",
-                   "https://mirrors.tuna.tsinghua.edu.cn/speedtest/1000mb.bin"},
+Tuna          = {"tuna",    "TUNA",          "清华大学开源软件镜像站",     "https://mirrors.tuna.tsinghua.edu.cn/",
+                 "https://mirrors.tuna.tsinghua.edu.cn/speedtest/1000mb.bin"},
 
-  Sjtug_Zhiyuan = {"sjtu",    "SJTUG-zhiyuan", "上海交通大学致远镜像站",     "https://mirrors.sjtug.sjtu.edu.cn/",
-                   "https://mirrors.sjtug.sjtu.edu.cn/ctan" Big_File_ctan},
+Sjtug_Zhiyuan = {"sjtu",    "SJTUG-zhiyuan", "上海交通大学致远镜像站",     "https://mirrors.sjtug.sjtu.edu.cn/",
+                 "https://mirrors.sjtug.sjtu.edu.cn/ctan" Big_File_ctan},
 
-  Zju           = {"zju",     "ZJU",           "浙江大学开源软件镜像站",     "https://mirrors.zju.edu.cn/",
-                   "https://mirrors.zju.edu.cn/debian" Big_File_debian},
+Zju           = {"zju",     "ZJU",           "浙江大学开源软件镜像站",     "https://mirrors.zju.edu.cn/",
+                 "https://mirrors.zju.edu.cn/debian" Big_File_debian},
 
-  Lzuoss        = {"lzu",     "LZUOSS",        "兰州大学开源社区镜像站",     "https://mirror.lzu.edu.cn/",
-                   "https://mirror.lzu.edu.cn/CTAN" Big_File_ctan},
+Lzuoss        = {"lzu",     "LZUOSS",        "兰州大学开源社区镜像站",     "https://mirror.lzu.edu.cn/",
+                 "https://mirror.lzu.edu.cn/CTAN" Big_File_ctan},
 
-  Jlu           = {"jlu",     "JLU",           "吉林大学开源镜像站",         "https://mirrors.jlu.edu.cn/",
-                   "https://mirrors.jlu.edu.cn/_static/speedtest.bin"},
+Jlu           = {"jlu",     "JLU",           "吉林大学开源镜像站",         "https://mirrors.jlu.edu.cn/",
+                 "https://mirrors.jlu.edu.cn/_static/speedtest.bin"},
 
-  Bfsu          = {"bfsu",    "BFSU",          "北京外国语大学开源软件镜像站","https://mirrors.bfsu.edu.cn/",
-                   "https://mirrors.bfsu.edu.cn/speedtest/1000mb.bin"},
+Bfsu          = {"bfsu",    "BFSU",          "北京外国语大学开源软件镜像站","https://mirrors.bfsu.edu.cn/",
+                 "https://mirrors.bfsu.edu.cn/speedtest/1000mb.bin"},
 
-  Pku           = {"pku",     "PKU",           "北京大学开源镜像站",         "https://mirrors.pku.edu.cn/",
-                   "https://mirrors.pku.edu.cn/debian" Big_File_debian},
+Pku           = {"pku",     "PKU",           "北京大学开源镜像站",         "https://mirrors.pku.edu.cn/",
+                 "https://mirrors.pku.edu.cn/debian" Big_File_debian},
 
-  Bjtu          = {"bjtu",    "BJTU",          "北京交通大学自由与开源软件镜像站", "https://mirror.bjtu.edu.cn/",
-                   "https://mirror.bjtu.edu.cn/archlinux" Big_File_archlinux},
+Bjtu          = {"bjtu",    "BJTU",          "北京交通大学自由与开源软件镜像站", "https://mirror.bjtu.edu.cn/",
+                 "https://mirror.bjtu.edu.cn/archlinux" Big_File_archlinux},
 
-  Sustech       = {"sustech", "SUSTech",       "南方科技大学开源软件镜像站",  "https://mirrors.sustech.edu.cn/",
-                   "https://mirrors.sustech.edu.cn/site/speedtest/1000mb.bin"},
+Sustech       = {"sustech", "SUSTech",       "南方科技大学开源软件镜像站",  "https://mirrors.sustech.edu.cn/",
+                 "https://mirrors.sustech.edu.cn/site/speedtest/1000mb.bin"},
 
-  Ustc          = {"ustc",    "USTC",          "中国科学技术大学开源镜像站",  "https://mirrors.ustc.edu.cn/",
-                   "https://mirrors.ustc.edu.cn/CTAN" Big_File_ctan},
+Ustc          = {"ustc",    "USTC",          "中国科学技术大学开源镜像站",  "https://mirrors.ustc.edu.cn/",
+                 "https://mirrors.ustc.edu.cn/CTAN" Big_File_ctan},
 
-  Hust          = {"hust",    "HUST",          "华中科技大学开源镜像站",     "https://mirrors.hust.edu.cn/",
-                    "https://mirrors.hust.edu.cn/debian" Big_File_debian},
+Hust          = {"hust",    "HUST",          "华中科技大学开源镜像站",     "https://mirrors.hust.edu.cn/",
+                 "https://mirrors.hust.edu.cn/debian" Big_File_debian},
 
 // 速度暂时处于10位以后，但是目前可用的源
-  Nju           = {"nju",     "NJU",           "南京大学开源镜像站",         "https://mirrors.nju.edu.cn/",
-                   "https://mirrors.nju.edu.cn/archlinux" Big_File_archlinux};
+Nju           = {"nju",     "NJU",           "南京大学开源镜像站",         "https://mirrors.nju.edu.cn/",
+                 "https://mirrors.nju.edu.cn/archlinux" Big_File_archlinux};
 
-
-// @ccmywish: [2023-09-05] 我只使用了不到5次，重庆大学镜像站就把我的ip封杀了，对用户来说封杀策略过严，暂时不可靠，暂时不用
-//
-//  Cqu           = {"cqu",     "CQU",           "重庆大学开源软件镜像站",     "https://mirrors.cqu.edu.cn/",
-//                  "https://mirrors.cqu.edu.cn/speedtest/1000mb.bin"};
+/**
+ * @note by:ccmywish {
+ *   [2023-09-05] 我只使用了不到5次，重庆大学镜像站就把我的ip封杀了，对用户来说封杀策略过严，暂时不可靠，暂时不用
+ * }
+ */
+//  Cqu       = {"cqu",     "CQU",           "重庆大学开源软件镜像站",     "https://mirrors.cqu.edu.cn/",
+//               "https://mirrors.cqu.edu.cn/speedtest/1000mb.bin"};
 
 
 
@@ -105,12 +107,9 @@ MirrorSite
   Sohu     = {"sohu",    "SOHU",     "搜狐开源镜像站",      "https://mirrors.sohu.com/",
               "https://mirrors.sohu.com/deepin-cd" Big_File_deepin};
 
-
 // 开源社区
 MirrorSite
-  NugetOrg   = {"nuget.org",   "NuGet Org",    "Nuget Organization", "https://www.nuget.org/",              NULL};
-
-
+  NugetOrg   = {"nuget.org",   "NuGet Org",    "Nuget Organization", "https://www.nuget.org/",  NULL};
 
 MirrorSite
   Upstream = {"upstream",     "Upstream",     "上游默认源",     NULL,     NULL};
@@ -128,22 +127,6 @@ typedef struct {
 
 
 static SourceInfo
-/**
- * @time 2024-05-24 更新
- * @ref https://help.mirrors.cernet.edu.cn/CPAN/
- */
-pl_perl_sources[] = {
-  {&Upstream,       NULL},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/CPAN/"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CPAN/"},
-  {&Bjtu,          "https://mirror.bjtu.edu.cn/cpan/"},
-  {&Hust,          "https://mirrors.hust.edu.cn/CPAN/"},
-  {&Ali,           "https://mirrors.aliyun.com/CPAN/"},
-  {&Lzuoss,        "https://mirror.lzu.edu.cn/CPAN/"}
-},
-
-
-
 /**
  * @time 2024-04-18 更新
  * @note 缺少教育网或开源社区软件源
@@ -787,7 +770,7 @@ wr_tex_sources[] = {
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
 
-def_sources_n(pl_perl);     def_sources_n(pl_php);
+def_sources_n(pl_php);
 def_sources_n(pl_rust);
 def_sources_n(pl_java);     def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);   def_sources_n(pl_dart);      def_sources_n(pl_haskell);

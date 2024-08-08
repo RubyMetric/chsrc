@@ -25,44 +25,7 @@
 #include "recipe/lang/ruby.c"
 #include "recipe/lang/python.c"
 #include "recipe/lang/nodejs.c"
-
-
-void
-pl_perl_check_cmd ()
-{
-  chsrc_ensure_program ("perl");
-}
-
-void
-pl_perl_getsrc (char *option)
-{
-  pl_perl_check_cmd ();
-  // @ccmywish: 注意，prettyprint 仅仅是一个内部实现，可能不稳定，如果需要更稳定的，
-  //            可以使用 CPAN::Shell->o('conf', 'urllist');
-  //            另外，上述两种方法无论哪种，都要首先load()
-  char *cmd = "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->prettyprint('urllist')\" ";
-  chsrc_run (cmd, RunOpt_Default);
-}
-
-/**
- * Perl换源，参考：https://help.mirrors.cernet.edu.cn/CPAN/
- */
-void
-pl_perl_setsrc (char *option)
-{
-  SourceInfo source;
-  chsrc_yield_source (pl_perl);
-  chsrc_confirm_source (&source);
-
-  char *cmd = xy_strjoin (3,
-  "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('urllist', 'unshift', '", source.url, "'); CPAN::HandleConfig->commit()\"");
-  chsrc_run (cmd, RunOpt_Default);
-
-  chsrc_note2 ("请您使用 perl -v 以及 cpan -v，若 Perl >= v5.36 或 CPAN >= 2.29，请额外手动调用下面的命令");
-  puts ("perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('pushy_https', 0);; CPAN::HandleConfig->commit()\"");
-  chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
-}
-
+#include "recipe/lang/perl.c"
 
 
 void
@@ -1969,7 +1932,7 @@ wr_anaconda_setsrc (char *option)
 
 
 /************************************** Begin Target Matrix ****************************************/
-def_target(pl_perl); def_target(pl_php);
+def_target(pl_php);
 def_target(pl_rust);   def_target(pl_java); def_target(pl_dart); def_target(pl_ocaml);
 def_target(pl_r);     def_target(pl_julia);
 def_target_noget (pl_clojure);
