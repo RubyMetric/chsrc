@@ -51,8 +51,8 @@
 void
 chsrc_note2 (const char* str)
 {
-  char *prompt = xy_2strjoin (App_Name " ", xy_str_to_bold (xy_str_to_yellow ("提示")));
-  xy_log_brkt_to (prompt, xy_str_to_yellow (str), stdout);
+  char *prompt = xy_2strjoin (to_yellow (App_Name " "), to_boldyellow ("提示"));
+  xy_log_brkt_to (prompt, to_yellow (str), stdout);
 }
 
 
@@ -77,14 +77,14 @@ chsrc_log_cmd_result (bool result, int ret_code)
 {
   if (result)
     {
-      xy_log_brkt (App_Name, to_boldgreen ("运行"), to_green ("√ 命令执行成功"));
+      xy_log_brkt (to_green (App_Name), to_boldgreen ("运行"),  to_green ("√ 命令执行成功"));
     }
   else
     {
       char buf[8] = {0};
       sprintf (buf, "%d", ret_code);
       char *log = xy_2strjoin (to_red ("x 命令执行失败，返回码 "), to_boldred (buf));
-      xy_log_brkt (App_Name, to_boldred ("运行"), log);
+      xy_log_brkt (to_red (App_Name), to_boldred ("运行"), log);
     }
 }
 
@@ -622,7 +622,7 @@ not_root:
 static void
 chsrc_run (const char *cmd, int run_option)
 {
-  xy_log_brkt (App_Name,  to_boldblue ("运行"), to_blue (cmd));
+  xy_log_brkt (to_blue (App_Name), to_boldblue ("运行"), to_blue (cmd));
   int status = system (cmd);
   if (0==status)
     {
