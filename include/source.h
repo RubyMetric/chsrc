@@ -141,17 +141,6 @@ pl_rust_sources[] = {
 },
 
 
-/**
- * @time 2024-04-18 更新
- * @note 缺少教育网或开源社区软件源
- */
-pl_java_sources[] = {
-  {&Upstream,       NULL},
-  {&Ali,           "https://maven.aliyun.com/repository/public/"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/repository/maven/"},
-  {&Netease,       "http://mirrors.163.com/maven/repository/maven-public/"} // 网易的24小时更新一次
-},
-
 
 /**
  * @time 2023-09-10 更新
@@ -758,7 +747,7 @@ wr_tex_sources[] = {
 
 
 def_sources_n(pl_rust);
-def_sources_n(pl_java);     def_sources_n(pl_clojure);
+def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);   def_sources_n(pl_dart);      def_sources_n(pl_haskell);
 def_sources_n(pl_ocaml);
 def_sources_n(pl_r);        def_sources_n(pl_julia);
