@@ -6,7 +6,6 @@
  * Last modified : <2024-08-08>
  * ------------------------------------------------------------*/
 
-#include "xy.h"
 
 /**
  * 2024-05-24 更新
@@ -110,7 +109,7 @@ pl_python_setsrc (char *option)
 
   bool pdm_exist = false,
        poetry_exist = false,
-       uv_exist = false;
+       uv_exist = false;  // 2024-08-08: uv 似乎暂时没有实现该功能
 
   pl_python_check_cmd (&prog, &poetry_exist, &pdm_exist);
 

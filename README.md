@@ -166,8 +166,8 @@ chsrc set -local pdm
 
 ```bash
 chsrc set ruby    或 set gem
-chsrc set python  或 set pip / pdm # 同时换pip和pdm
-chsrc set node    或 set npm / nodejs / yarn / pnpm # 同时换3个
+chsrc set python  或 set pip / poetry / pdm # 同时换pip、poetry 和 pdm 这3个
+chsrc set node    或 set npm / nodejs / yarn / pnpm # 同时换这3个
 chsrc set perl    或 set cpan
 chsrc set php     或 set composer
 chsrc set lua     或 set luarocks
