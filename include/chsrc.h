@@ -37,10 +37,13 @@
 #define chsrc_error2(str) xy_error_brkt(App_Name,"错误",str)
 
 #define to_red(str)        xy_str_to_red(str)
+#define to_blue(str)       xy_str_to_blue(str)
 #define to_green(str)      xy_str_to_green(str)
 #define to_yellow(str)     xy_str_to_yellow(str)
 #define to_purple(str)     xy_str_to_purple(str)
+#define to_bold(str)       xy_str_to_bold(str)
 #define to_boldred(str)    xy_str_to_bold(xy_str_to_red(str))
+#define to_boldblue(str)   xy_str_to_bold(xy_str_to_blue(str))
 #define to_boldgreen(str)  xy_str_to_bold(xy_str_to_green(str))
 #define to_boldyellow(str) xy_str_to_bold(xy_str_to_yellow(str))
 #define to_boldpurple(str) xy_str_to_bold(xy_str_to_purple(str))
@@ -74,13 +77,13 @@ chsrc_log_cmd_result (bool result, int ret_code)
 {
   if (result)
     {
-      xy_log_brkt (App_Name, to_boldgreen ("运行"), xy_2strjoin (to_green ("√ "), "命令执行成功"));
+      xy_log_brkt (App_Name, to_boldgreen ("运行"), to_green ("√ 命令执行成功"));
     }
   else
     {
       char buf[8] = {0};
       sprintf (buf, "%d", ret_code);
-      char *log = xy_strjoin (3, to_red ("x "), "命令执行失败，返回码 ", to_boldred (buf));
+      char *log = xy_2strjoin (to_red ("x 命令执行失败，返回码 "), to_boldred (buf));
       xy_log_brkt (App_Name, to_boldred ("运行"), log);
     }
 }
@@ -619,7 +622,7 @@ not_root:
 static void
 chsrc_run (const char *cmd, int run_option)
 {
-  xy_info_brkt (App_Name, "运行", cmd);
+  xy_log_brkt (App_Name,  to_boldblue ("运行"), to_blue (cmd));
   int status = system (cmd);
   if (0==status)
     {
