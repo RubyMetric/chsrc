@@ -1528,7 +1528,7 @@ os_alma_setsrc (char *option)
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
+  chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
 
