@@ -6,27 +6,23 @@
  * Last modified : <2024-08-09>
  * ------------------------------------------------------------*/
 
-
 static MirrorSite
 RubyChina = {"rubychina",    "RubyChina",    "Ruby China 社区",    "https://gems.ruby-china.com/",
              "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"}; // 9.9 MB
 
-
-
 /**
- * 2024-05-25 更新
+ * @time 2024-05-25 更新
+ * @note {
+ *   下面的源，并非都实现正确，
+ *   BFSU 和 Tuna 以及 阿里的镜像都有问题，会循环遍历一个gem的所有版本，导致安装时间相当长
  *
- * @note
- * 下面的源，并非都实现正确，
- * BFSU 和 Tuna 以及 阿里的镜像都有问题，会循环遍历一个gem的所有版本，导致安装时间相当长
- *
- * @note 网络情况
- * 若实现正确:
- * 1. 目前北外最快最稳定
- * 2. 腾讯挺快，个别时候不稳定，但稳定时能达到4.5MB甚至以上
- * 3. tuna 有时快有时慢，不稳定，一般在3MB以下
- * 4. rubychina 有时快有时慢，快时一般在 2MB以下，慢时一般在1MB以下
- * 5. 阿里云最不稳定，经常最慢
+ *   若实现正确:
+ *     1. 目前北外最快最稳定
+ *     2. 腾讯挺快，个别时候不稳定，但稳定时能达到4.5MB甚至以上
+ *     3. tuna 有时快有时慢，不稳定，一般在3MB以下
+ *     4. rubychina 有时快有时慢，快时一般在 2MB以下，慢时一般在1MB以下
+ *     5. 阿里云最不稳定，经常最慢
+ * }
  */
 static SourceInfo
 pl_ruby_sources[] = {
