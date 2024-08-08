@@ -108,8 +108,8 @@ MirrorSite
 
 // 开源社区
 MirrorSite
-  NugetOrg   = {"nuget.org",   "NuGet Org",    "Nuget Organization", "https://www.nuget.org/",              NULL},
-  EmacsChina = {"emacschina",  "EmacsChina",   "Emacs China 社区",    "https://elpamirror.emacs-china.org/", NULL};
+  NugetOrg   = {"nuget.org",   "NuGet Org",    "Nuget Organization", "https://www.nuget.org/",              NULL};
+
 
 
 MirrorSite
@@ -129,9 +129,8 @@ typedef struct {
 
 static SourceInfo
 /**
- * 2024-05-24 更新
- *
- * 参考: https://help.mirrors.cernet.edu.cn/CPAN/
+ * @time 2024-05-24 更新
+ * @ref https://help.mirrors.cernet.edu.cn/CPAN/
  */
 pl_perl_sources[] = {
   {&Upstream,       NULL},
@@ -146,8 +145,7 @@ pl_perl_sources[] = {
 
 
 /**
- * 2024-04-18 更新
- *
+ * @time 2024-04-18 更新
  * @note 缺少教育网或开源社区软件源
  */
 pl_php_sources[] = {
@@ -160,10 +158,7 @@ pl_php_sources[] = {
 
 
 /**
- * 2024-05-24 更新
- *
- * @note 缺少商业公司或开源社区软件源
- *
+ * @time 2024-05-24 更新
  * @note 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`
  */
 pl_rust_sources[] = {
@@ -177,8 +172,7 @@ pl_rust_sources[] = {
 
 
 /**
- * 2024-04-18 更新
- *
+ * @time 2024-04-18 更新
  * @note 缺少教育网或开源社区软件源
  */
 pl_java_sources[] = {
@@ -190,8 +184,7 @@ pl_java_sources[] = {
 
 
 /**
- * 2023-09-10 更新
- *
+ * @time 2023-09-10 更新
  * @note 不太好换，且用户可能不多，我们暂时只给用户提供文档
  */
 pl_clojure_sources[] = {
@@ -202,10 +195,11 @@ pl_clojure_sources[] = {
 
 
 /**
- * 2024-04-18 更新
- *
- * @note 暂时未实现该换源功能，可参照
- *    https://mirrors.huaweicloud.com/mirrorDetail/5ebf85de07b41baf6d0882ab?mirrorName=nuget&catalog=language
+ * @time 2024-04-18 更新
+ * @note {
+ *   暂时未实现该换源功能，可参照
+ *   https://mirrors.huaweicloud.com/mirrorDetail/5ebf85de07b41baf6d0882ab?mirrorName=nuget&catalog=language
+ * }
  */
 pl_dotnet_sources[] = {
   {&Upstream,       NULL},
@@ -216,13 +210,13 @@ pl_dotnet_sources[] = {
 
 
 /**
- * 2023-09-10 更新
- *
- * @note 我们这里挑选的必须也支持 Flutter
- *
- * 我们将会在setsrc函数中生成
- * 1. https://mirrors.tuna.tsinghua.edu.cn/dart-pub
- * 2. https://mirrors.tuna.tsinghua.edu.cn/flutter
+ * @time 2023-09-10 更新
+ * @note {
+ *   我们这里挑选的必须也支持 Flutter
+ *   我们将会在setsrc函数中生成
+ *     1. https://mirrors.tuna.tsinghua.edu.cn/dart-pub
+ *     2. https://mirrors.tuna.tsinghua.edu.cn/flutter
+ * }
  */
 pl_dart_sources[] = {
   {&Upstream,       NULL},
@@ -235,7 +229,7 @@ pl_dart_sources[] = {
 
 
 /**
- * 2023-09-10 更新
+ * @time 2023-09-10 更新
  */
 pl_haskell_sources[] = {
   {&Upstream,       NULL},
@@ -247,7 +241,7 @@ pl_haskell_sources[] = {
 
 
 /**
- * 2023-09-15 更新
+ * @time 2023-09-15 更新
  */
 pl_ocaml_sources[] = {
   {&Upstream,       NULL},
@@ -258,10 +252,11 @@ pl_ocaml_sources[] = {
 
 
 /**
- * 2023-09-04 更新
- *
- * @note 以下注释的，是不含有bioconductor的镜像站，
- *       我们在换cran的同时，也直接帮助用户换bioconductor
+ * @time 2023-09-04 更新
+ * @note {
+ *   以下注释的，是不含有bioconductor的镜像站，
+ *   我们在换cran的同时，也直接帮助用户换bioconductor
+ * }
  */
 pl_r_sources[] = {
   {&Upstream,       NULL},
@@ -275,8 +270,7 @@ pl_r_sources[] = {
 
 
 /**
- * 2023-09-05 更新
- *
+ * @time 2023-09-05 更新
  * @note 缺少商业公司或开源社区软件源
  */
 pl_julia_sources[] = {
@@ -291,7 +285,7 @@ pl_julia_sources[] = {
 
 
 /**
- * 2024-06-12 更新
+ * @time 2024-06-12 更新
  */
 static SourceInfo
 os_ubuntu_sources[] = {
@@ -309,9 +303,8 @@ os_ubuntu_sources[] = {
 
 
 /**
- * 2023-09-29 更新
- *
- * @note: 实际上镜像站里的内容和Ubuntu的不太一样
+ * @time 2023-09-29 更新
+ * @note 实际上镜像站里的内容和Ubuntu的不太一样
  */
 os_mint_sources[] = {
   {&Upstream,       NULL},
@@ -322,9 +315,8 @@ os_mint_sources[] = {
 
 
 /**
- * 2023-09-06 更新
- *
- * TODO: 1. 源并不完整，且未经测试是否有效
+ * @time 2023-09-06 更新
+ * @note 源并不完整，且未经测试是否有效
  */
 os_deepin_sources[] = {
   {&Upstream,       NULL},
@@ -339,7 +331,7 @@ os_deepin_sources[] = {
 
 
 /**
- * 2024-06-12 更新
+ * @time 2024-06-12 更新
  */
 os_debian_sources[] = {
   {&Upstream,       NULL},
@@ -355,9 +347,8 @@ os_debian_sources[] = {
 
 
 /**
- * 2023-09-02 更新
- *
- * TODO: 1. 源并不完整，且未经测试是否有效
+ * @time 2023-09-02 更新
+ * @note 源并不完整，且未经测试是否有效
  */
 os_fedora_sources[] = {
   {&Upstream,       NULL},
@@ -372,7 +363,7 @@ os_fedora_sources[] = {
 
 
 /**
- * 2024-06-12 更新
+ * @time 2024-06-12 更新
  */
 os_kali_sources[] = {
   {&Upstream,       NULL},
@@ -389,7 +380,7 @@ os_kali_sources[] = {
 
 
 /**
- * 2024-07-03 更新
+ * @time 2024-07-03 更新
  * @note 不要给后面加 / ，因为ARM情况下，还要额外加一个 arm 后缀
  */
 os_arch_sources[] = {
@@ -406,8 +397,7 @@ os_arch_sources[] = {
 
 
 /**
- * 2024-07-03 更新
- *
+ * @time 2024-07-03 更新
  * @note 根据 GitHub:@zheng7fu2 建议，拆分 archlinuxcn 出来
  */
 os_archlinuxcn_sources[] = {
@@ -422,9 +412,8 @@ os_archlinuxcn_sources[] = {
 
 
 /**
- * 2023-09-05 更新
- *
- * TODO: 1. 源并不完整，且未经测试是否有效
+ * @time 2023-09-05 更新
+ * @note 源并不完整，且未经测试是否有效
  */
 os_gentoo_sources[] = {
   {&Upstream,       NULL},
@@ -439,7 +428,7 @@ os_gentoo_sources[] = {
 
 
 /**
- * 2024-06-12 更新
+ * @time 2024-06-12 更新
  */
 os_opensuse_sources[] = {
   {&Upstream,       NULL},
@@ -455,9 +444,8 @@ os_opensuse_sources[] = {
 
 
 /**
- * 2024-04-18 更新
- *
- * TODO: 源并不完整，且未经测试是否有效
+ * @time 2024-04-18 更新
+ * @note 源并不完整，且未经测试是否有效
  */
 os_msys2_sources[] = {
   {&Upstream,       NULL},
@@ -473,7 +461,7 @@ os_msys2_sources[] = {
 
 
 /**
- * 2024-06-12 更新
+ * @time 2024-06-12 更新
  */
 os_rocky_sources[] = {
   {&Upstream,        NULL},
@@ -489,7 +477,7 @@ os_rocky_sources[] = {
 
 
 /**
- * 2024-06-12 更新
+ * @time 2024-06-12 更新
  */
 os_alma_sources[] = {
   {&Upstream,       NULL},
@@ -503,7 +491,7 @@ os_alma_sources[] = {
 
 
 /**
- * 2024-04-18 更新
+ * @time 2024-04-18 更新
  */
 os_alpine_sources[] = {
   {&Upstream,       NULL},
@@ -519,7 +507,7 @@ os_alpine_sources[] = {
 
 
 /**
- * 2023-09-24 更新
+ * @time 2023-09-24 更新
  */
 os_void_sources[] = {
   {&Upstream,       NULL},
@@ -530,7 +518,7 @@ os_void_sources[] = {
 
 
 /**
- * 2023-09-29 更新
+ * @time 2023-09-29 更新
  */
 os_solus_sources[] = {
   {&Upstream,       NULL},
@@ -541,7 +529,7 @@ os_solus_sources[] = {
 
 
 /**
- * 2023-09-29 更新
+ * @time 2023-09-29 更新
  */
 os_linuxlite_sources[] = {
   {&Upstream,       NULL},
@@ -550,7 +538,7 @@ os_linuxlite_sources[] = {
 
 
 /**
- * 2023-09-29 更新
+ * @time 2023-09-29 更新
  */
 os_trisquel_sources[] = {
   {&Upstream,       NULL},
@@ -562,7 +550,7 @@ os_trisquel_sources[] = {
 
 
 /**
- * 2023-09-29 更新
+ * @time 2023-09-29 更新
  */
 os_raspberrypi_sources[] = {
   {&Upstream,       NULL},
@@ -576,7 +564,7 @@ os_raspberrypi_sources[] = {
 
 
 /**
- * 2024-06-20 更新
+ * @time 2024-06-20 更新
  */
 os_armbian_sources[] = {
     {&Upstream,       NULL},
@@ -591,12 +579,12 @@ os_armbian_sources[] = {
 
 
 /**
- * 2023-09-27 更新
+ * @time 2023-09-27 更新
  *
- * @note 该源需要 FreeBSD 中文社区积极参与维护
- *
- * @ccmywish: [2023-09-24] 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports
- * @ccmywish: [2023-09-27] 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数
+ * @note by:ccmywish {
+ *   [2023-09-24] 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports
+ *   [2023-09-27] 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数
+ * }
  */
 os_freebsd_sources[] = {
   {&Upstream,       NULL},
@@ -607,9 +595,8 @@ os_freebsd_sources[] = {
 
 
 /**
- * 2023-09-05 更新
- *
- * TODO: 1. 源并不完整，且未经测试是否有效
+ * @time 2023-09-05 更新
+ * @note 源并不完整，且未经测试是否有效
  */
 os_netbsd_sources[] = {
   {&Upstream,       NULL},
@@ -624,9 +611,8 @@ os_netbsd_sources[] = {
 
 
 /**
- * 2023-09-02 更新
- *
- * TODO: 1. 源并不完整，且未经测试是否有效
+ * @time 2023-09-02 更新
+ * @note 源并不完整，且未经测试是否有效
  */
 os_openbsd_sources[] = {
   {&Upstream,       NULL},
@@ -641,9 +627,8 @@ os_openbsd_sources[] = {
 
 
 /**
- * 2023-09-06 更新
- *
- * TODO: 1. 源并不完整，且未经测试是否有效
+ * @time 2023-09-06 更新
+ * @note 源并不完整，且未经测试是否有效
  */
 os_openeuler_sources[] = {
   {&Upstream,       NULL},
@@ -658,7 +643,7 @@ os_openeuler_sources[] = {
 
 
 /**
- * 2024-06-12 更新
+ * @time 2024-06-12 更新
  */
 os_anolis_sources[] = {
   {&Upstream,       NULL},
@@ -668,7 +653,7 @@ os_anolis_sources[] = {
 
 
 /**
- * 2023-09-29 更新
+ * @time 2023-09-29 更新
  */
 os_openkylin_sources[] = {
   {&Upstream,  "https://archive.openkylin.top/openkylin/"},
@@ -678,9 +663,8 @@ os_openkylin_sources[] = {
 
 
 /**
- * 2024-04-18 更新
- *
- * TODO: 未经测试是否有效
+ * @time 2024-04-18 更新
+ * @note 未经测试是否有效
  */
 os_ros_sources[] = {
   {&Upstream,       NULL},
@@ -697,9 +681,8 @@ os_ros_sources[] = {
 
 
 /**
- * 2024-06-07 更新
- *
- * @note: 目前仅有一个源
+ * @time 2024-06-07 更新
+ * @note 目前仅有一个源
  */
 static SourceInfo
 wr_winget_sources[] = {
@@ -709,10 +692,11 @@ wr_winget_sources[] = {
 
 
 /**
- * 2023-09-10 更新
- *
- * @note 1. 这些链接将会在setsrc函数中补充完整
- *       2. 不确定 Sustech 能否工作
+ * @time 2023-09-10 更新
+ * @note {
+ *   1. 这些链接将会在setsrc函数中补充完整
+ *   2. 不确定 Sustech 能否工作
+ * }
  */
 wr_brew_sources[] = {
   {&Upstream,       NULL},
@@ -724,7 +708,7 @@ wr_brew_sources[] = {
 
 
 /**
- * 2024-06-08 更新
+ * @time 2024-06-08 更新
  */
 wr_cocoapods_sources[] = {
   {&Upstream,       NULL},
@@ -735,8 +719,7 @@ wr_cocoapods_sources[] = {
 
 
 /**
- * 2023-09-11 更新
- *
+ * @time 2023-09-11 更新
  * @note 目前只有一个源
  */
 wr_flathub_sources[] = {
@@ -747,10 +730,11 @@ wr_flathub_sources[] = {
 
 
 /**
- * 2023-09-22 更新
- *
- * @note 1. 目前只有一个源
- *       2. 这些链接将会在setsrc函数中补充完整
+ * @time 2023-09-22 更新
+ * @note {
+ *   1. 目前只有一个源
+ *   2. 这些链接将会在setsrc函数中补充完整
+ * }
  */
 wr_nix_sources[] = {
   {&Upstream,       NULL},
@@ -760,8 +744,7 @@ wr_nix_sources[] = {
 
 
 /**
- * 2023-09-11 更新
- *
+ * @time 2023-09-11 更新
  * @note 目前只有一个源
  */
 wr_guix_sources[] = {
@@ -771,25 +754,9 @@ wr_guix_sources[] = {
 
 
 
-/**
- * 2023-09-10 更新
- *
- * @note Emacs用户往往只需要一次性换源，只会极少次调用 chsrc，我们只给用户提供文档
- */
-wr_emacs_sources[] = {
-  {&Upstream,       NULL},
-  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/docs/emacs-elpa"},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/help/elpa/"},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/help/elpa/"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/help/elpa.html"},
-  {&Zju,            "https://mirrors.zju.edu.cn/docs/elpa/"},
-  {&EmacsChina,     "https://elpamirror.emacs-china.org/"}
-},
-
 
 /**
- * 2023-09-10 更新
- *
+ * @time 2023-09-10 更新
  * @note 这些链接将会在setsrc函数中补充完整
  */
 wr_anaconda_sources[] = {
@@ -803,9 +770,7 @@ wr_anaconda_sources[] = {
 
 
 /**
- * 2023-09-10 更新
- *
- * TODO: 1. 暂未添加商业公司源
+ * @time 2023-09-10 更新
  */
 wr_tex_sources[] = {
   {&Upstream,       NULL},
@@ -853,5 +818,5 @@ def_sources_n(wr_brew);     def_sources_n(wr_cocoapods);
 
 def_sources_n(wr_flathub);
 def_sources_n(wr_nix);      def_sources_n(wr_guix);
-def_sources_n(wr_tex);      def_sources_n(wr_emacs);
+def_sources_n(wr_tex);
 def_sources_n(wr_anaconda);

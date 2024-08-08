@@ -1713,21 +1713,7 @@ wr_tex_setsrc (char *option)
 }
 
 
-
-
-void
-wr_emacs_setsrc (char *option)
-{
-  SourceInfo source;
-  chsrc_yield_source (wr_emacs);
-  chsrc_confirm_source (&source);
-
-  chsrc_note2 ("Emacs换源涉及Elisp，需要手动查阅并换源:");
-  puts (source.url);
-
-  chsrc_say_lastly (&source, ChsrcTypeManual);
-}
-
+#include "recipe/ware/emacs.c"
 
 
 void
@@ -2091,7 +2077,6 @@ def_target_noget (wr_cocoapods);
 def_target_noget (wr_flathub);
 def_target_noget (wr_nix);
 def_target_noget (wr_guix);
-def_target_noget (wr_emacs);
 def_target_noget (wr_anaconda);
 def_target(wr_tex);
 
