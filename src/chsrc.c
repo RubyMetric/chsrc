@@ -24,90 +24,7 @@
 
 #include "recipe/lang/ruby.c"
 #include "recipe/lang/python.c"
-
-void
-pl_nodejs_check_cmd (bool *npm_exist, bool *yarn_exist, bool *pnpm_exist)
-{
-  char *check_cmd = xy_str_to_quietcmd ("npm -v");
-  *npm_exist = query_program_exist (check_cmd, "npm");
-
-  check_cmd = xy_str_to_quietcmd ("yarn -v");
-  *yarn_exist = query_program_exist (check_cmd, "yarn");
-
-  check_cmd = xy_str_to_quietcmd ("pnpm -v");
-  *pnpm_exist = query_program_exist (check_cmd, "pnpm");
-
-  if (!*npm_exist && !*yarn_exist && !*pnpm_exist)
-    {
-      chsrc_error ("未找到 npm 或 yarn 或 pnpm 命令，请检查是否存在其一");
-      exit (Exit_UserCause);
-    }
-}
-
-
-void
-pl_nodejs_getsrc (char *option)
-{
-  bool npm_exist, yarn_exist, pnpm_exist;
-  pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
-
-  if (npm_exist)
-    {
-      chsrc_run ("npm config get registry", RunOpt_Default);
-    }
-  if (yarn_exist)
-    {
-      chsrc_run ("yarn config get registry", RunOpt_Default);
-    }
-  if (pnpm_exist)
-    {
-      chsrc_run ("pnpm config get registry", RunOpt_Default);
-    }
-}
-
-/**
- * NodeJS换源，参考：https://npmmirror.com/
- */
-void
-pl_nodejs_setsrc (char *option)
-{
-  bool npm_exist, yarn_exist, pnpm_exist;
-  pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
-
-  SourceInfo source;
-  chsrc_yield_source (pl_nodejs);
-  chsrc_confirm_source (&source);
-
-  char *cmd = NULL;
-
-  char *where = " ";
-  if (CliOpt_Locally==true)
-    {
-      where = " --location project ";
-    }
-
-  if (npm_exist)
-    {
-      cmd = xy_strjoin (4, "npm config", where, "set registry ", source.url);
-      chsrc_run (cmd, RunOpt_Default);
-    }
-
-  if (yarn_exist)
-    {
-      // 不再阻止换源命令输出到终端，即不再调用 xy_str_to_quietcmd()
-      cmd = xy_2strjoin ("yarn config set registry ", source.url);
-      chsrc_run (cmd, RunOpt_Default);
-    }
-
-  if (pnpm_exist)
-    {
-      cmd = xy_2strjoin ("pnpm config set registry ", source.url);
-      chsrc_run (cmd, RunOpt_Default);
-    }
-
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
-}
-
+#include "recipe/lang/nodejs.c"
 
 
 void
@@ -2066,7 +1983,7 @@ wr_anaconda_setsrc (char *option)
 
 
 /************************************** Begin Target Matrix ****************************************/
-def_target(pl_nodejs);  def_target(pl_perl); def_target(pl_php);
+def_target(pl_perl); def_target(pl_php);
 def_target(pl_rust);   def_target(pl_java); def_target(pl_dart); def_target(pl_ocaml);
 def_target(pl_r);     def_target(pl_julia);
 def_target_noget (pl_clojure);

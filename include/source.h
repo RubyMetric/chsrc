@@ -108,13 +108,8 @@ MirrorSite
 
 // 开源社区
 MirrorSite
-  NpmMirror = {"npmmirror",    "npmmirror",    "npmmirror (阿里云赞助)",    "https://npmmirror.com/",
-               // 注意，这个是跳转后的地址，不确定未来会不会改变
-               "https://cdn.npmmirror.com/packages/%40tensorflow/tfjs/4.10.0/tfjs-4.10.0.tgz"}, // 29MB
-
   NugetOrg   = {"nuget.org",   "NuGet Org",    "Nuget Organization", "https://www.nuget.org/",              NULL},
   EmacsChina = {"emacschina",  "EmacsChina",   "Emacs China 社区",    "https://elpamirror.emacs-china.org/", NULL};
-
 
 
 MirrorSite
@@ -132,22 +127,7 @@ typedef struct {
 
 
 
-/**
- * 2024-04-18 更新
- *
- * Sjtug, Tuna, Lzuoss, Jlu, Bfsu, 网易，搜狐 都没有
- *
- * @note 腾讯软件源虽然有npm的名，但名存实亡
- */
-SourceInfo
-pl_nodejs_sources[] = {
-  {&Upstream,       NULL},
-  {&NpmMirror,     "https://registry.npmmirror.com"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/repository/npm/"},
-  {&Zju,           "https://mirrors.zju.edu.cn/npm"}
-},
-
-
+static SourceInfo
 /**
  * 2024-05-24 更新
  *
@@ -841,7 +821,7 @@ wr_tex_sources[] = {
 
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
-def_sources_n(pl_nodejs);
+
 def_sources_n(pl_perl);     def_sources_n(pl_php);
 def_sources_n(pl_rust);
 def_sources_n(pl_java);     def_sources_n(pl_clojure);
