@@ -2123,59 +2123,7 @@ wr_nix_setsrc (char *option)
 }
 
 
-
-void
-wr_dockerhub_getsrc (char *option)
-{
-  if (xy_on_linux || xy_on_bsd)
-    {
-      chsrc_view_file ("/etc/docker/daemon.json");
-    }
-  else
-    {
-      chsrc_note2 ("请打开Docker Desktop设置");
-      chsrc_note2 ("选择“Docker Engine”选项卡，在该选项卡中找到“registry-mirrors”一栏查看");
-    }
-}
-
-/**
- * 参考：
- *  1. https://mirrors.ustc.edu.cn/help/dockerhub.html
- *  2. https://www.cnblogs.com/yuzhihui/p/17461781.html
- */
-void
-wr_dockerhub_setsrc (char *option)
-{
-  SourceInfo source;
-  chsrc_yield_source (wr_dockerhub);
-  chsrc_confirm_source (&source);
-
-  if (xy_on_linux || xy_on_bsd)
-    {
-      char *to_add = xy_strjoin (3, "{\n"
-                                "  \"registry-mirrors\": [\"", source.url, "\"]\n"
-                                "}");
-      chsrc_note2 ("请向 /etc/docker/daemon.json 中添加下述内容:");
-      puts (to_add);
-      if (xy_on_linux)
-        {
-          chsrc_note2 ("然后请运行:");
-          puts ("sudo systemctl restart docker");
-        }
-      else
-        {
-          chsrc_note2 ("然后请手动重启 docker 服务");
-        }
-    }
-  else
-    {
-      chsrc_note2 ("请打开Docker Desktop设置");
-      chsrc_note2 ("选择“Docker Engine”选项卡，在该选项卡中找到“registry-mirrors”一栏，添加镜像地址:");
-      puts (source.url);
-    }
-  chsrc_say_lastly (&source, ChsrcTypeManual);
-}
-
+#include "recipe/ware/docker.c"
 
 
 /**
@@ -2363,7 +2311,6 @@ static const char
 def_target_full(wr_winget);
 def_target(wr_brew);
 def_target_noget (wr_cocoapods);
-def_target(wr_dockerhub);
 def_target_noget (wr_flathub);
 def_target_noget (wr_nix);
 def_target_noget (wr_guix);

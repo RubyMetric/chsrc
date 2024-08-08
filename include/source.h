@@ -8,7 +8,7 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-07-24>
+ * Last modified : <2024-08-09>
  *
  * 镜像站与换源信息
  * ------------------------------------------------------------*/
@@ -833,27 +833,6 @@ wr_cocoapods_sources[] = {
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/git/CocoaPods/Specs.git"}
 },
 
-/**
- * 2024-07-24 更新
- *
- * @note USTC 与 SJTUG 于 2024-06-06 停止支持 DockerHub
- * @note NJU 于 2024-06-07 停止支持 DockerHub
- *
- * 参考：https://gist.github.com/y0ngb1n/7e8f16af3242c7815e7ca2f0833d3ea6
- */
-wr_dockerhub_sources[] = {
-  {&Upstream,       NULL},
-  // {&Ustc,       "https://docker.mirrors.ustc.edu.cn/"},
-
-  // https://github.com/DaoCloud/public-image-mirror
-  {&DaoCloud,      "https://docker.m.daocloud.io"},
-  {&Fit2Cloud,      "https://docker.1panel.live"},
-
-  // 暂时加入，未来若国内镜像恢复，将删除
-  // https://huecker.io/en/use.html#unbanned
-  {&Huecker,       "https://huecker.io"}
-},
-
 
 
 /**
@@ -972,7 +951,7 @@ def_sources_n(os_anolis);
 
 def_sources_n(wr_winget);
 def_sources_n(wr_brew);     def_sources_n(wr_cocoapods);
-def_sources_n(wr_dockerhub);
+
 def_sources_n(wr_flathub);
 def_sources_n(wr_nix);      def_sources_n(wr_guix);
 def_sources_n(wr_tex);      def_sources_n(wr_emacs);
