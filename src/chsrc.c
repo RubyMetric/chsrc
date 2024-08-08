@@ -76,8 +76,8 @@ pl_ruby_setsrc (char *option)
 
   chsrc_say_lastly (&source, chsrc_type);
   // puts ("");
-  // chsrc_warn ("维护者提醒您: Ruby的镜像源目前仅有 腾讯软件源，RubyChina，华为开源镜像站 实现正确");
-  // chsrc_warn ("而其它如Tuna,Bfsu,Ali目前都实现的有问题，请勿使用");
+  // chsrc_note2 ("维护者提醒您: Ruby的镜像源目前仅有 腾讯软件源，RubyChina，华为开源镜像站 实现正确");
+  // chsrc_note2 ("而其它如Tuna,Bfsu,Ali目前都实现的有问题，请勿使用");
 }
 
 void
@@ -304,7 +304,7 @@ pl_perl_setsrc (char *option)
   "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('urllist', 'unshift', '", source.url, "'); CPAN::HandleConfig->commit()\"");
   chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_warn ("请您使用 perl -v 以及 cpan -v，若 Perl >= v5.36 或 CPAN >= 2.29，请额外手动调用下面的命令");
+  chsrc_note2 ("请您使用 perl -v 以及 cpan -v，若 Perl >= v5.36 或 CPAN >= 2.29，请额外手动调用下面的命令");
   puts ("perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('pushy_https', 0);; CPAN::HandleConfig->commit()\"");
   chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
 }
@@ -452,7 +452,7 @@ pl_rust_setsrc (char *option)
     "[source.mirror]\n"
     "registry = \"sparse+", source.url, "\"");
 
-  chsrc_warn (xy_strjoin (3, "请您手动写入以下内容到 ", xy_uniform_path ("~/.cargo/config.toml"), " 文件中:"));
+  chsrc_note2 (xy_strjoin (3, "请您手动写入以下内容到 ", xy_uniform_path ("~/.cargo/config.toml"), " 文件中:"));
   puts (file);
   chsrc_say_lastly (&source, ChsrcTypeManual);
 }
@@ -564,7 +564,7 @@ pl_clojure_setsrc (char *option)
   chsrc_yield_source (pl_clojure);
   chsrc_confirm_source (&source);
 
-  chsrc_warn ("抱歉，Clojure换源较复杂，您可手动查阅并换源:");
+  chsrc_note2 ("抱歉，Clojure换源较复杂，您可手动查阅并换源:");
   puts (source.url);
   chsrc_say_lastly (&source, ChsrcTypeManual);
 }
@@ -1032,7 +1032,7 @@ os_mint_setsrc (char *option)
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeAuto);
-  chsrc_warn ("完成后请不要再使用 mintsources（自带的图形化软件源设置工具）进行任何操作，因为在操作后，无论是否有按“确定”，mintsources 均会覆写我们刚才换源的内容");
+  chsrc_warn2 ("完成后请不要再使用 mintsources（自带的图形化软件源设置工具）进行任何操作，因为在操作后，无论是否有按“确定”，mintsources 均会覆写我们刚才换源的内容");
 }
 
 
@@ -1229,7 +1229,7 @@ os_fedora_setsrc (char *option)
   chsrc_yield_source (os_fedora);
   chsrc_confirm_source (&source);
 
-  chsrc_warn2 ("Fedora 29 及以下版本暂不支持");
+  chsrc_note2 ("Fedora 29 及以下版本暂不支持");
 
   chsrc_backup ("/etc/yum.repos.d/fedora.repo");
   chsrc_backup ("/etc/yum.repos.d/fedora-updates.repo");
@@ -1796,10 +1796,10 @@ os_freebsd_setsrc (char *option)
                     );
 
   chsrc_overwrite_file (pkg_content, conf);
-  chsrc_warn (
+  chsrc_note2 (
     xy_strjoin (3, "若要使用季度分支，请在", conf ,"中将latest改为quarterly"));
 
-  chsrc_warn ("若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将'http'改成'https'，最后使用'pkg update -f'刷新缓存即可\n");
+  chsrc_note2 ("若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将'http'改成'https'，最后使用'pkg update -f'刷新缓存即可\n");
   puts ("");
 
   chsrc_log2 ("2. 修改 freebsd-ports 源");
@@ -2038,7 +2038,7 @@ wr_emacs_setsrc (char *option)
   chsrc_yield_source (wr_emacs);
   chsrc_confirm_source (&source);
 
-  chsrc_warn ("Emacs换源涉及Elisp，需要手动查阅并换源:");
+  chsrc_note2 ("Emacs换源涉及Elisp，需要手动查阅并换源:");
   puts (source.url);
 
   chsrc_say_lastly (&source, ChsrcTypeManual);
@@ -2171,7 +2171,7 @@ wr_guix_setsrc (char *option)
                                "       (inherit (car %default-channels))\n"
                                "       (url \"", source.url, "\")))");
 
-  chsrc_warn ("为防止扰乱配置文件，请您手动写入以下内容到 ~/.config/guix/channels.scm 文件中");
+  chsrc_note2 ("为防止扰乱配置文件，请您手动写入以下内容到 ~/.config/guix/channels.scm 文件中");
   puts (file);
   chsrc_say_lastly (&source, ChsrcTypeManual);
 }
@@ -2283,7 +2283,7 @@ wr_flathub_setsrc (char *option)
   chsrc_yield_source (wr_flathub);
   chsrc_confirm_source (&source);
 
-  chsrc_warn2 ("若出现问题，可先调用以下命令:");
+  chsrc_note2 ("若出现问题，可先调用以下命令:");
   char *note = xy_strjoin (3,
     "wget ", source.url, "/flathub.gpg\n"
     "flatpak remote-modify --gpg-import=flathub.gpg flathub"
