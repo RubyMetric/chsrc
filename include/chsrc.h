@@ -51,8 +51,7 @@
 void
 chsrc_note2 (const char* str)
 {
-  char *prompt = xy_2strjoin (to_yellow (App_Name " "), to_boldyellow ("提示"));
-  xy_log_brkt_to (prompt, to_yellow (str), stdout);
+  xy_log_brkt (to_yellow (App_Name), to_boldyellow ("提示"), to_yellow (str));
 }
 
 
