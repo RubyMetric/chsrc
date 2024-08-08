@@ -136,6 +136,7 @@ set  <target> https://abc # 换源，用户自定义源URL
 reset <target>            # 重置，使用上游默认使用的源
 
 选项:
+-dry                      # Dry Run，模拟换源过程，命令仅打印并不运行
 -ipv6                     # 使用IPv6测速
 -local                    # 仅对某项目而非全局换源 (仅部分软件如bundler,pdm支持)
 ```
