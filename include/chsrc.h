@@ -36,6 +36,15 @@
 #define chsrc_warn2(str)  xy_warn_brkt(App_Name,"警告",str)
 #define chsrc_error2(str) xy_error_brkt(App_Name,"错误",str)
 
+#define to_red(str)        xy_str_to_red(str)
+#define to_green(str)      xy_str_to_green(str)
+#define to_yellow(str)     xy_str_to_yellow(str)
+#define to_purple(str)     xy_str_to_purple(str)
+#define to_boldred(str)    xy_str_to_bold(xy_str_to_red(str))
+#define to_boldgreen(str)  xy_str_to_bold(xy_str_to_green(str))
+#define to_boldyellow(str) xy_str_to_bold(xy_str_to_yellow(str))
+#define to_boldpurple(str) xy_str_to_bold(xy_str_to_purple(str))
+
 void
 chsrc_note2 (const char* str)
 {
@@ -45,17 +54,17 @@ chsrc_note2 (const char* str)
 
 
 void
-chsrc_check_remarkably (const char *check_what, const char *check_type, bool exist)
+chsrc_log_check_result (const char *check_what, const char *check_type, bool exist)
 {
   if (!exist)
     {
-      xy_log_brkt (App_Name, xy_str_to_bold (xy_str_to_red ("检查")),
-                         xy_strjoin (5, xy_str_to_red ("x "), check_type, " ", xy_str_to_red (check_what), " 不存在"));
+      xy_log_brkt (App_Name, to_boldred ("检查"), xy_strjoin (5,
+                   to_red ("x "), check_type, " ", to_red (check_what), " 不存在"));
     }
   else
     {
-      xy_log_brkt (App_Name, xy_str_to_bold (xy_str_to_green ("检查")),
-                        xy_strjoin (5, xy_str_to_green ("√ "), check_type, " ", xy_str_to_green (check_what), " 存在"));
+      xy_log_brkt (App_Name, to_boldgreen ("检查"), xy_strjoin (5,
+                   to_green ("√ "), check_type, " ", to_green (check_what), " 存在"));
     }
 }
 
@@ -110,12 +119,12 @@ query_program_exist (char *check_cmd, char *prog_name)
   if (0 != ret)
     {
       // xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
-      chsrc_check_remarkably (prog_name, "命令", false);
+      chsrc_log_check_result (prog_name, "命令", false);
       return false;
     }
   else
     {
-      chsrc_check_remarkably (prog_name, "命令", true);
+      chsrc_log_check_result (prog_name, "命令", true);
       return true;
     }
 }
@@ -157,12 +166,12 @@ chsrc_check_file (char *path)
 {
   if (xy_file_exist (path))
     {
-      chsrc_check_remarkably (path, "文件", true);
+      chsrc_log_check_result (path, "文件", true);
       return true;
     }
   else
     {
-      chsrc_check_remarkably (path, "文件", false);
+      chsrc_log_check_result (path, "文件", false);
       return false;
     }
 }
@@ -248,11 +257,11 @@ to_human_readable_speed (double speed)
   sprintf (buf, "%.2f %s", speed, scale[i]);
 
   char *new = NULL;
-  if (i <= 1 ) new = xy_str_to_red (buf);
+  if (i <= 1 ) new = to_red (buf);
   else
     {
-      if (i == 2 && speed < 2.00) new = xy_str_to_yellow (buf);
-      else new = xy_str_to_green (buf);
+      if (i == 2 && speed < 2.00) new = to_yellow (buf);
+      else new = to_green (buf);
     }
   return new;
 }
@@ -308,7 +317,7 @@ test_speed_url (const char *url)
 
   if (200!=http_code)
     {
-      char* httpcodestr = xy_str_to_yellow (xy_2strjoin ("HTTP码 ", buf));
+      char* httpcodestr = to_yellow (xy_2strjoin ("HTTP码 ", buf));
       puts (xy_strjoin (3, speedstr, " | ",  httpcodestr));
     }
   else
@@ -391,7 +400,7 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target)
   if (onlyone)
     chsrc_succ (xy_strjoin (4, sources[fastidx].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
   else
-    puts (xy_2strjoin ("最快镜像站: ", xy_str_to_green (sources[fastidx].mirror->name)));
+    puts (xy_2strjoin ("最快镜像站: ", to_green (sources[fastidx].mirror->name)));
 
   return fastidx;
 }
@@ -471,7 +480,7 @@ chsrc_confirm_source (SourceInfo *source)
     }
   else
     {
-      puts (xy_strjoin (5, "选中镜像站: ", xy_str_to_green (source->mirror->abbr), " (", xy_str_to_green (source->mirror->code), ")"));
+      puts (xy_strjoin (5, "选中镜像站: ", to_green (source->mirror->abbr), " (", to_green (source->mirror->code), ")"));
     }
 
   split_between_source_changing_process;
@@ -503,7 +512,7 @@ chsrc_say_lastly (SourceInfo *source, const char *last_word)
             }
           else
             {
-              chsrc_log (xy_2strjoin ("全自动换源完成，感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+              chsrc_log (xy_2strjoin ("全自动换源完成，感谢镜像提供方: ", to_purple (source->mirror->name)));
             }
         }
       else
@@ -514,7 +523,7 @@ chsrc_say_lastly (SourceInfo *source, const char *last_word)
   else if (xy_streql (ChsrcTypeReset, last_word))
     {
       // source_is_upstream (source)
-      chsrc_log (xy_str_to_purple ("已重置为上游默认源"));
+      chsrc_log (to_purple ("已重置为上游默认源"));
     }
   else if (xy_streql (ChsrcTypeSemiAuto, last_word))
     {
@@ -526,7 +535,7 @@ chsrc_say_lastly (SourceInfo *source, const char *last_word)
             }
           else
             {
-              chsrc_log (xy_2strjoin ("半自动换源完成，仍需按上述提示手工操作，感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+              chsrc_log (xy_2strjoin ("半自动换源完成，仍需按上述提示手工操作，感谢镜像提供方: ", to_purple (source->mirror->name)));
             }
         }
       else
@@ -545,7 +554,7 @@ chsrc_say_lastly (SourceInfo *source, const char *last_word)
             }
           else
             {
-              chsrc_log (xy_2strjoin ("因实现约束需按上述提示手工操作，感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+              chsrc_log (xy_2strjoin ("因实现约束需按上述提示手工操作，感谢镜像提供方: ", to_purple (source->mirror->name)));
             }
         }
       else
@@ -564,7 +573,7 @@ chsrc_say_lastly (SourceInfo *source, const char *last_word)
             }
           else
             {
-              chsrc_log (xy_2strjoin ("感谢镜像提供方: ", xy_str_to_purple (source->mirror->name)));
+              chsrc_log (xy_2strjoin ("感谢镜像提供方: ", to_purple (source->mirror->name)));
             }
         }
       else
