@@ -91,7 +91,7 @@ pl_clojure_setsrc (char *option)
 #include "recipe/os/opensuse.c"
 
 
-#include "recipe/os/yum-family/fedora.c"
+#include "recipe/os/yum-family/Fedora-Linux.c"
 #include "recipe/os/yum-family/AlmaLinux.c"
 
 /**
