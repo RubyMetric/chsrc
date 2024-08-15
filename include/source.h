@@ -168,19 +168,6 @@ pl_dart_sources[] = {
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/"},
   {&Tencent,       "https://mirrors.cloud.tencent.com/"},
   {&Nju,           "https://mirror.nju.edu.cn/"}
-},
-
-
-
-/**
- * @time 2023-09-10 更新
- */
-pl_haskell_sources[] = {
-  {&Upstream,       NULL},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/hackage"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/hackage"},
-  {&Nju,           "https://mirror.nju.edu.cn/hackage"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/hackage"}
 };
 
 
@@ -691,7 +678,7 @@ wr_tex_sources[] = {
 
 
 def_sources_n(pl_clojure);
-def_sources_n(pl_dotnet);   def_sources_n(pl_dart);      def_sources_n(pl_haskell);
+def_sources_n(pl_dotnet);   def_sources_n(pl_dart);
 
 def_sources_n(os_ubuntu);   def_sources_n(os_mint);
 def_sources_n(os_debian);   def_sources_n(os_fedora);

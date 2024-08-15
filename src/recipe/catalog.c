@@ -11,7 +11,6 @@
 def_target(pl_dart);
 def_target_noget (pl_clojure);
 def_target_noget (pl_dotnet);
-def_target_noget (pl_haskell);
 
 
 #define t(a) (const char*)(a)
