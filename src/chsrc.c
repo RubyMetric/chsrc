@@ -75,62 +75,24 @@ pl_clojure_setsrc (char *option)
 #include "recipe/os/apt-family/common.h"
 #include "recipe/os/apt-family/debian.c"
 #include "recipe/os/apt-family/ubuntu.c"
-
 // Debian-based
 #include "recipe/os/apt-family/armbian.c"
 #include "recipe/os/apt-family/raspberrypi.c"
 #include "recipe/os/apt-family/kali.c"
-
 // Ubuntu-based
 #include "recipe/os/apt-family/linuxmint.c"
 #include "recipe/os/apt-family/trisquel.c"
-
 // Independent
 #include "recipe/os/apt-family/ros.c"
 #include "recipe/os/apt-family/deepin.c"
 
 
-/**
- * @note fedora 29 及以下版本暂不支持
- */
-void
-os_fedora_setsrc (char *option)
-{
-  chsrc_ensure_root ();
-
-  SourceInfo source;
-  chsrc_yield_source (os_fedora);
-  chsrc_confirm_source (&source);
-
-  chsrc_note2 ("Fedora 29 及以下版本暂不支持");
-
-  chsrc_backup ("/etc/yum.repos.d/fedora.repo");
-  chsrc_backup ("/etc/yum.repos.d/fedora-updates.repo");
-
-  char* cmd = xy_strjoin (9, "sed -e 's|^metalink=|#metalink=|g' ",
-         "-e 's|^#baseurl=http://download.example/pub/fedora/linux/|baseurl=",
-         source.url,
-         "|g' ",
-         "-i.bak ",
-         "/etc/yum.repos.d/fedora.repo ",
-         "/etc/yum.repos.d/fedora-modular.repo ",
-         "/etc/yum.repos.d/fedora-updates.repo ",
-         "/etc/yum.repos.d/fedora-updates-modular.repo");
-
-  chsrc_run (cmd, RunOpt_Default);
-
-  chsrc_log2 ("已替换文件 /etc/yum.repos.d/fedora.repo");
-  chsrc_log2 ("已新增文件 /etc/yum.repos.d/fedora-modular.repo");
-  chsrc_log2 ("已替换文件 /etc/yum.repos.d/fedora-updates.repo");
-  chsrc_log2 ("已新增文件 /etc/yum.repos.d/fedora-updates-modular.repo");
-
-  chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
-}
 
 #include "recipe/os/opensuse.c"
 
 
+#include "recipe/os/yum-family/fedora.c"
+#include "recipe/os/yum-family/AlmaLinux.c"
 
 /**
  * HELP: 未经测试
@@ -186,26 +148,6 @@ os_rocky_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
-
-/**
- * 参考: https://developer.aliyun.com/mirror/almalinux
- */
-void
-os_alma_setsrc (char *option)
-{
-  chsrc_ensure_root ();
-
-  SourceInfo source;
-  chsrc_yield_source (os_alma);
-  chsrc_confirm_source (&source);
-
-  char *cmd = xy_strjoin (3,
-    "sed -e 's|^mirrorlist=|#mirrorlist=|g' -e 's|^#\\s*baseurl=https://repo.almalinux.org/almalinux|baseurl=", source.url, "|g'  -i.bak  /etc/yum.repos.d/almalinux*.repo");
-
-  chsrc_run (cmd, RunOpt_Default);
-  chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
-}
 
 
 #include "recipe/os/alpine.c"

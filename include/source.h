@@ -153,28 +153,12 @@ pl_dotnet_sources[] = {
 
 
 
-/**
- * @time 2023-09-02 更新
- * @note 源并不完整，且未经测试是否有效
- */
-static SourceInfo
-os_fedora_sources[] = {
-  {&Upstream,       NULL},
-  {&Ali,           "https://mirrors.aliyun.com/fedora"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/fedora"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/fedora"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/fedora"},
-  {&Tencent,       "https://mirrors.tencent.com/fedora"},
-  {&Netease,       "https://mirrors.163.com/fedora"},
-  {&Sohu,          "https://mirrors.sohu.com/fedora"}
-},
-
-
 
 /**
  * @time 2024-04-18 更新
  * @note 源并不完整，且未经测试是否有效
  */
+static SourceInfo
 os_msys2_sources[] = {
   {&Upstream,       NULL},
   {&Ali,            "https://mirrors.aliyun.com/msys2"},
@@ -203,18 +187,6 @@ os_rocky_sources[] = {
   {&Netease,        "https://mirrors.163.com/rocky"}
 },
 
-
-/**
- * @time 2024-06-12 更新
- */
-os_alma_sources[] = {
-  {&Upstream,       NULL},
-  {&Ali,           "https://mirrors.aliyun.com/almalinux"},
-  {&Volcengine,    "https://mirrors.volces.com/almalinux"},
-  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/almalinux"},
-  {&Zju,           "https://mirrors.zju.edu.cn/almalinux"},
-  {&Nju,           "https://mirror.nju.edu.cn/almalinux"},
-},
 
 
 
@@ -377,9 +349,8 @@ wr_tex_sources[] = {
 def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);
 
-def_sources_n(os_fedora);
 def_sources_n(os_msys2);
-def_sources_n(os_rocky);     def_sources_n(os_alma);
+def_sources_n(os_rocky);
 
 def_sources_n(os_linuxlite);
 
