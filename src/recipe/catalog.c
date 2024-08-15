@@ -40,7 +40,6 @@ static const char
 
 
 def_target(os_openkylin);
-def_target_noget(os_openeuler);
 def_target_noget(os_anolis);
 def_target_noget(os_msys2);
 TargetInfo os_manjaro_target = {NULL, os_manjaro_setsrc, NULL, NULL, 0};
@@ -70,10 +69,10 @@ static const char
 *os_armbian    [] = {"armbian",              NULL,  t(&os_armbian_target)},
 *os_openwrt    [] = {"openwrt", "opkg", "LEDE", NULL, t(&os_openwrt_target)},
 
-*os_openkylin  [] = {"kylin",  "openkylin",  NULL,  t(&os_openkylin_target)},
-*os_openeuler  [] = {"euler",  "openeuler",  NULL,  t(&os_openeuler_target)},
+*os_openkylin  [] = {"openkylin",  NULL,            t(&os_openkylin_target)},
+*os_openeuler  [] = {"openeuler",  NULL,            t(&os_openeuler_target)},
+*os_anolis     [] = {"openanolis", NULL,            t(&os_anolis_target)},
 *os_deepin     [] = {"deepin",               NULL,  t(&os_deepin_target)},
-*os_anolis     [] = {"anolis", "openanolis", NULL,  t(&os_anolis_target)},
 
 *os_freebsd    [] = {"freebsd",              NULL,  t(&os_freebsd_target)},
 *os_netbsd     [] = {"netbsd",               NULL,  t(&os_netbsd_target)},

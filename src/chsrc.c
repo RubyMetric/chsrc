@@ -92,9 +92,11 @@ pl_clojure_setsrc (char *option)
 #include "recipe/os/opensuse.c"
 
 
+#include "recipe/os/yum-family/common.h"
 #include "recipe/os/yum-family/Fedora-Linux.c"
 #include "recipe/os/yum-family/AlmaLinux.c"
 #include "recipe/os/yum-family/Rocky-Linux.c"
+#include "recipe/os/yum-family/openEuler.c"
 
 /**
  * HELP: 未经测试
@@ -153,31 +155,6 @@ os_manjaro_setsrc (char *option)
 
 #include "recipe/os/openwrt.c"
 
-
-
-/**
- * HELP: 未经测试
- */
-void
-os_openeuler_setsrc (char *option)
-{
-  chsrc_ensure_root ();
-
-  SourceInfo source;
-  chsrc_yield_source (os_openeuler);
-  chsrc_confirm_source (&source);
-
-  chsrc_backup ("/etc/yum.repos.d/openEuler.repo");
-
-  char *towrite = xy_strjoin (3, "s#http://repo.openeuler.org#",
-                              source.url,
-                              "#\'< /etc/yum.repos.d/openEuler.repo.bak");
-
-  chsrc_overwrite_file (towrite, "/etc/yum.repos.d/openEuler.repo");
-
-  chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
-}
 
 
 /**
