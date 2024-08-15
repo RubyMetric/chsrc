@@ -80,7 +80,7 @@ pl_clojure_setsrc (char *option)
 #include "recipe/os/apt-family/raspberrypi.c"
 #include "recipe/os/apt-family/kali.c"
 // Ubuntu-based
-#include "recipe/os/apt-family/linuxmint.c"
+#include "recipe/os/apt-family/Linux-Mint.c"
 #include "recipe/os/apt-family/trisquel.c"
 #include "recipe/os/apt-family/Linux-Lite.c"
 // Independent
