@@ -37,19 +37,7 @@
 #include "recipe/lang/r.c"
 #include "recipe/lang/julia.c"
 #include "recipe/lang/NuGet.c"
-
-
-void
-pl_clojure_setsrc (char *option)
-{
-  SourceInfo source;
-  chsrc_yield_source (pl_clojure);
-  chsrc_confirm_source (&source);
-
-  chsrc_note2 ("抱歉，Clojure换源较复杂，您可手动查阅并换源:");
-  puts (source.url);
-  chsrc_say_lastly (&source, ChsrcTypeManual);
-}
+#include "recipe/lang/Clojure.c"
 
 
 
@@ -69,7 +57,6 @@ pl_clojure_setsrc (char *option)
 #include "recipe/os/apt-family/openKylin.c"
 #include "recipe/os/apt-family/deepin.c"
 
-
 #include "recipe/os/yum-family/common.h"
 #include "recipe/os/yum-family/Fedora-Linux.c"
 #include "recipe/os/yum-family/AlmaLinux.c"
@@ -77,23 +64,21 @@ pl_clojure_setsrc (char *option)
 #include "recipe/os/yum-family/openEuler.c"
 #include "recipe/os/yum-family/Anolis-OS.c"
 
-#include "recipe/os/opensuse.c"
-
-
 #include "recipe/os/pacman-family/Arch-Linux.c"
 #include "recipe/os/pacman-family/Manjaro-Linux.c"
 #include "recipe/os/pacman-family/MSYS2.c"
 
+#include "recipe/os/opensuse.c"
 #include "recipe/os/gentoo.c"
 #include "recipe/os/alpine.c"
 #include "recipe/os/void.c"
 #include "recipe/os/solus.c"
 #include "recipe/os/openwrt.c"
 
-
 #include "recipe/os/BSD/FreeBSD.c"
 #include "recipe/os/BSD/NetBSD.c"
 #include "recipe/os/BSD/OpenBSD.c"
+
 
 
 #include "recipe/ware/TeX-Live.c"

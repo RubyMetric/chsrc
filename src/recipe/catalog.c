@@ -8,9 +8,6 @@
  * ------------------------------------------------------------*/
 
 /* Begin Target Matrix */
-def_target_noget (pl_clojure);
-
-
 #define t(a) (const char*)(a)
 static const char
 *pl_ruby  [] = {"gem",   "ruby",    "rubygem", "rb", "rubygems", "bundler",  NULL, t(&pl_ruby_target)},
