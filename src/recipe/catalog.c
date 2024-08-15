@@ -9,7 +9,6 @@
 
 /* Begin Target Matrix */
 def_target_noget (pl_clojure);
-def_target_noget (pl_dotnet);
 
 
 #define t(a) (const char*)(a)
@@ -23,17 +22,17 @@ static const char
 *pl_go    [] = {"go",    "golang",  "goproxy",           NULL,  t(&pl_go_target)} ,
 *pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  t(&pl_rust_target)},
 *pl_java  [] = {"java",  "maven",   "mvn",    "gradle",  NULL,  t(&pl_java_target)},
-*pl_clojure[] ={"clojure","clojars","cloj",   "lein",   "leiningen",  NULL, t(&pl_clojure_target)},
+*pl_clojure[]= {"clojure","clojars","cloj",   "lein",   "leiningen",  NULL, t(&pl_clojure_target)},
 *pl_dart  [] = {"dart",  "pub",     "flutter",           NULL,  t(&pl_dart_target)},
-*pl_dotnet[] = {"nuget", "net",     ".net",   "dotnet",  NULL,  t(&pl_dotnet_target)},
-*pl_haskell[] ={"haskell", "cabal", "stack",  "hackage", NULL,  t(&pl_haskell_target)},
-*pl_ocaml[] =  {"ocaml", "opam",                         NULL,  t(&pl_ocaml_target)},
+*pl_nuget[]  = {"nuget", "net",     ".net",   "dotnet",  NULL,  t(&pl_nuget_target)},
+*pl_haskell[]= {"haskell", "cabal", "stack",  "hackage", NULL,  t(&pl_haskell_target)},
+*pl_ocaml[]  = {"ocaml", "opam",                         NULL,  t(&pl_ocaml_target)},
 *pl_r     [] = {"cran",  "r",                            NULL,  t(&pl_r_target)},
 *pl_julia [] = {"julia",                                 NULL,  t(&pl_julia_target)},
 **pl_packagers[] =
 {
   pl_ruby,    pl_python,    pl_nodejs,      pl_perl,    pl_php,      pl_lua,
-  pl_rust,    pl_go,        /*pl_dotnet,*/  pl_java,    pl_clojure,  pl_dart,
+  pl_rust,    pl_go,       /*pl_nuget,*/    pl_java,    pl_clojure,  pl_dart,
   pl_haskell, pl_ocaml,
   pl_r,       pl_julia
 };

@@ -36,23 +36,7 @@
 #include "recipe/lang/ocaml.c"
 #include "recipe/lang/r.c"
 #include "recipe/lang/julia.c"
-
-void
-pl_dotnet_getsrc (char *option)
-{
-  chsrc_error ("暂时无法查看NuGet源，若有需求，请您提交issue");
-}
-
-/**
- * NuGet 换源
- */
-void
-pl_dotnet_setsrc (char *option)
-{
-  chsrc_error ("暂时无法为NuGet换源，若有需求，请您提交issue");
-}
-
-
+#include "recipe/lang/NuGet.c"
 
 
 void

@@ -126,33 +126,19 @@ typedef struct {
 
 
 
-static SourceInfo
 /**
  * @time 2023-09-10 更新
  * @note 不太好换，且用户可能不多，我们暂时只给用户提供文档
  */
+static SourceInfo
 pl_clojure_sources[] = {
   {&Upstream,       NULL},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/help/clojars/"},
   {&Ustc,          "https://mirrors.ustc.edu.cn/help/clojars.html"}
-},
-
-
-/**
- * @time 2024-04-18 更新
- * @note {
- *   暂时未实现该换源功能，可参照
- *   https://mirrors.huaweicloud.com/mirrorDetail/5ebf85de07b41baf6d0882ab?mirrorName=nuget&catalog=language
- * }
- */
-pl_dotnet_sources[] = {
-  {&Upstream,       NULL},
-  {&NugetOrg,      "https://www.nuget.org/api/v2/"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/repository/nuget/v3"}
 };
+
 
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
 
 def_sources_n(pl_clojure);
-def_sources_n(pl_dotnet);
