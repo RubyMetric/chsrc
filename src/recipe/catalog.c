@@ -47,7 +47,6 @@ def_target(os_armbian);
 def_target_noget(os_fedora);
 def_target_noget(os_rocky);
 def_target_noget(os_alma);
-def_target_noget(os_freebsd);
 def_target_noget(os_openeuler);
 def_target_noget(os_anolis);
 def_target_noget(os_ros);

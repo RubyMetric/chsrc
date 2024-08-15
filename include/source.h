@@ -338,22 +338,6 @@ os_armbian_sources[] = {
 },
 
 
-/**
- * @time 2023-09-27 更新
- *
- * @note by:ccmywish {
- *   [2023-09-24] 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports
- *   [2023-09-27] 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数
- * }
- */
-os_freebsd_sources[] = {
-  {&Upstream,       NULL},
-  {&Ustc,      "mirrors.ustc.edu.cn"},
-  {&Nju,       "mirror.nju.edu.cn"},
-  {&Netease,   "mirrors.163.com"},
-},
-
-
 
 /**
  * @time 2023-09-06 更新
@@ -527,8 +511,6 @@ def_sources_n(os_rocky);     def_sources_n(os_alma);
 
 def_sources_n(os_linuxlite); def_sources_n(os_raspberrypi);
 def_sources_n(os_armbian);
-
-def_sources_n(os_freebsd);
 
 def_sources_n(os_ros);
 
