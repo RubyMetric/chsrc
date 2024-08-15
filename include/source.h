@@ -357,21 +357,9 @@ os_alma_sources[] = {
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/almalinux"},
   {&Zju,           "https://mirrors.zju.edu.cn/almalinux"},
   {&Nju,           "https://mirror.nju.edu.cn/almalinux"},
-
 },
 
 
-
-
-/**
- * @time 2023-09-29 更新
- */
-os_solus_sources[] = {
-  {&Upstream,       NULL},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"},
-  {&Nju,            "https://mirror.nju.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"}
-},
 
 
 /**
@@ -642,7 +630,6 @@ def_sources_n(os_kali);     def_sources_n(os_opensuse);
 def_sources_n(os_arch);     def_sources_n(os_archlinuxcn);
 def_sources_n(os_msys2);    def_sources_n(os_gentoo);
 def_sources_n(os_rocky);     def_sources_n(os_alma);
-def_sources_n(os_solus);
 
 def_sources_n(os_trisquel); def_sources_n(os_linuxlite); def_sources_n(os_raspberrypi);
 def_sources_n(os_armbian);

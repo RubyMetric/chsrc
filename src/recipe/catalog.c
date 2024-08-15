@@ -51,7 +51,6 @@ def_target_noget(os_opensuse);
 def_target_noget(os_gentoo);
 def_target_noget(os_rocky);
 def_target_noget(os_alma);
-def_target_noget(os_solus);
 def_target_noget(os_freebsd);
 def_target_noget(os_openeuler);
 def_target_noget(os_anolis);

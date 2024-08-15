@@ -796,24 +796,7 @@ os_alma_setsrc (char *option)
 
 #include "recipe/os/alpine.c"
 #include "recipe/os/void.c"
-
-
-/**
- * 参考: https://help.mirrors.cernet.edu.cn/solus/
- */
-void
-os_solus_setsrc (char *option)
-{
-  chsrc_ensure_root ();
-
-  SourceInfo source;
-  chsrc_yield_source (os_solus);
-  chsrc_confirm_source (&source);
-
-  char *cmd = xy_2strjoin ("eopkg add-repo Solus ", source.url);
-  chsrc_run (cmd, RunOpt_Default);
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
-}
+#include "recipe/os/solus.c"
 
 
 
