@@ -78,7 +78,7 @@ pl_clojure_setsrc (char *option)
 // Debian-based
 #include "recipe/os/apt-family/armbian.c"
 #include "recipe/os/apt-family/raspberrypi.c"
-#include "recipe/os/apt-family/kali.c"
+#include "recipe/os/apt-family/Kali-Linux.c"
 // Ubuntu-based
 #include "recipe/os/apt-family/Linux-Mint.c"
 #include "recipe/os/apt-family/trisquel.c"
