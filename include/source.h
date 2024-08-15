@@ -167,20 +167,6 @@ wr_flathub_sources[] = {
 
 
 /**
- * @time 2023-09-22 更新
- * @note {
- *   1. 目前只有一个源
- *   2. 这些链接将会在setsrc函数中补充完整
- * }
- */
-wr_nix_sources[] = {
-  {&Upstream,       NULL},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/nix-channels/"}
-},
-
-
-
-/**
  * @time 2023-09-11 更新
  * @note 目前只有一个源
  */
@@ -228,6 +214,6 @@ def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);
 
 def_sources_n(wr_flathub);
-def_sources_n(wr_nix);      def_sources_n(wr_guix);
+def_sources_n(wr_guix);
 def_sources_n(wr_tex);
 def_sources_n(wr_anaconda);

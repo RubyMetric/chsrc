@@ -180,7 +180,7 @@ wr_tex_setsrc (char *option)
 #include "recipe/ware/WinGet.c"
 #include "recipe/ware/Homebrew.c"
 #include "recipe/ware/CocoaPods.c"
-
+#include "recipe/ware/Nix.c"
 
 /**
  * 参考: https://mirrors.sjtug.sjtu.edu.cn/docs/guix
@@ -201,46 +201,6 @@ wr_guix_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeManual);
 }
 
-
-
-void
-wr_nix_check_cmd ()
-{
-  chsrc_ensure_program ("nix-channel");
-}
-
-/**
- * 参考:
- *  1. https://mirrors.bfsu.edu.cn/help/nix-channels/
- *  2. https://gitee.com/RubyMetric/chsrc/issues/I83894
- */
-void
-wr_nix_setsrc (char *option)
-{
-  wr_nix_check_cmd ();
-
-  SourceInfo source;
-  chsrc_yield_source (wr_nix);
-  chsrc_confirm_source (&source);
-
-  char *cmd = xy_strjoin (3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
-  chsrc_run (cmd, RunOpt_Default);
-
-  char *towrite = xy_strjoin (3, "substituters = ", source.url, "store https://cache.nixos.org/");
-  chsrc_append_to_file (towrite , "~/.config/nix/nix.conf");
-
-  chsrc_run ("nix-channel --update", RunOpt_Default);
-
-  chsrc_note2 ("若您使用的是NixOS，请确认您的系统版本<version>（如22.11），并手动运行:");
-  cmd = xy_strjoin (3, "nix-channel --add ", source.url, "nixpkgs-<version> nixpkgs");
-  puts (cmd);
-
-  cmd = xy_strjoin (3, "nix.settings.substituters = [ \"", source.url, "store\" ];");
-  chsrc_note2 ("若您使用的是NixOS，请额外添加下述内容至 configuration.nix 中");
-  puts (cmd);
-
-  chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
-}
 
 
 #include "recipe/ware/docker.c"
