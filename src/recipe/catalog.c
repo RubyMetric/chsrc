@@ -39,8 +39,6 @@ static const char
 };
 
 
-TargetInfo os_manjaro_target = {NULL, os_manjaro_setsrc, NULL, NULL, 0};
-
 static const char
 *os_ubuntu     [] = {"ubuntu",               NULL,  t(&os_ubuntu_target)},
 *os_linuxmint  [] = {"linuxmint", "mint",    NULL,  t(&os_linuxmint_target)},

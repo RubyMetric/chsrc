@@ -95,29 +95,15 @@ pl_clojure_setsrc (char *option)
 
 #include "recipe/os/opensuse.c"
 
-#include "recipe/os/arch.c"
-#include "recipe/os/MSYS2.c"
+
+#include "recipe/os/pacman-family/Arch-Linux.c"
+#include "recipe/os/pacman-family/Manjaro-Linux.c"
+#include "recipe/os/pacman-family/MSYS2.c"
 
 #include "recipe/os/gentoo.c"
 #include "recipe/os/alpine.c"
 #include "recipe/os/void.c"
 #include "recipe/os/solus.c"
-
-
-
-/**
- * 似乎会弹出GUI，待确定
- */
-void
-os_manjaro_setsrc (char *option)
-{
-  chsrc_ensure_root ();
-  char *cmd = "pacman-mirrors -i -c China -m rank";
-  chsrc_run (cmd, RunOpt_Default);
-
-  chsrc_run ("pacman -Syy", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (NULL, ChsrcTypeAuto);
-}
 
 
 
