@@ -1,14 +1,29 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * Contributors  : Null Nil <null@nil.com>
- * Created on    : <2024-08-09>
- * Last modified : <2024-08-09>
+ * File Authors  : Aoran Zeng <ccmywish@qq.com>
+ * Contributors  :  Nil Null  <nil@null.org>
+ * Created On    : <2024-08-09>
+ * Last Modified : <2024-08-15>
+ * -------------------------------------------------------------
+ * 本文件作为一个通用模板：
  *
- * 该模版中:
+ *    为一个【换源目标(target)】定义具体的【换源方法(recipe)】
+ *
+ * 模版中:
  * <target>   为该换源目标的名称
  * <category> 为该换源目标的类别，仅有3类: pl,   os, wr
  *            分别对应3个子目录:         lang, os, ware
+ * ------------------------------------------------------------*/
+
+/* 模版文件从下行正式开始 */
+/** ------------------------------------------------------------
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * -------------------------------------------------------------
+ * File Authors  : Nil Null <nil@null.org> 尼尔闹先生
+ * Contributors  : Nul None <nul@none.org> 怒了馕女士
+ * Created On    : <202x-01-01> https://www.yuque.com/ccmywish/blog/nil-null-and-nul-none
+ * Last Modified : <202x-01-01> 请更新文件标头
  * ------------------------------------------------------------*/
 
 /**
@@ -86,5 +101,5 @@ void
 // 定义此 target，参考 "target.h"
 // 下列情形3选1
 def_target_full(<category>_<target>);
-def_target(<category>_<target>)
-def_target_no_get(<category>_<target>)
+def_target(<category>_<target>);
+def_target_no_get(<category>_<target>);
