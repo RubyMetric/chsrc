@@ -43,7 +43,6 @@ def_target(os_mint);  def_target(os_kali);
 def_target(os_linuxlite);
 def_target(os_deepin); def_target(os_openkylin);
 def_target(os_raspberrypi);
-def_target(os_armbian);
 def_target_noget(os_fedora);
 def_target_noget(os_rocky);
 def_target_noget(os_alma);

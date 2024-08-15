@@ -290,21 +290,6 @@ os_raspberrypi_sources[] = {
 },
 
 
-/**
- * @time 2024-06-20 更新
- */
-os_armbian_sources[] = {
-    {&Upstream,       NULL},
-    {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/armbian"},
-    {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/armbian"},
-    {&Bfsu,          "https://mirrors.bfsu.edu.cn/armbian"},
-    {&Sustech,       "https://mirrors.sustech.edu.cn/armbian"},
-    {&Ustc,          "https://mirrors.ustc.edu.cn/armbian"},
-    {&Nju,           "https://mirrors.nju.edu.cn/armbian"},
-    {&Ali,           "https://mirrors.aliyun.com/armbian"},
-},
-
-
 
 /**
  * @time 2023-09-06 更新
@@ -477,7 +462,6 @@ def_sources_n(os_msys2);
 def_sources_n(os_rocky);     def_sources_n(os_alma);
 
 def_sources_n(os_linuxlite); def_sources_n(os_raspberrypi);
-def_sources_n(os_armbian);
 
 def_sources_n(os_ros);
 

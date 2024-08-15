@@ -25,6 +25,12 @@
 #define OS_Is_Debian_Literally  1
 #define OS_Is_Ubuntu            2
 
+
+#define OS_Armbian_SourceList "/etc/apt/sources.list.d/armbian.list"
+
+
+
+
 /**
  * 当不存在该文件时，我们只能拼凑一个假的出来，但该函数目前只适用于 Ubuntu 和 Debian
  * 因为其它的 Debian 变体可能不使用 OS_Apt_SourceList，也可能并不适用 `VERSION_CODENAME`
