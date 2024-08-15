@@ -2,8 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright © 2023-2024 Aoran Zeng, Heng Guo
  * -------------------------------------------------------------
- * File          : source.h
- * Authors       : Aoran Zeng    <ccmywish@qq.com>
+ * File Authors  : Aoran Zeng    <ccmywish@qq.com>
  *               | Heng Guo      <2085471348@qq.com>
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
