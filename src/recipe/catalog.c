@@ -39,7 +39,7 @@ static const char
 };
 
 
-def_target(os_ubuntu); def_target(os_mint); def_target(os_debian);   def_target(os_kali);
+def_target(os_mint);  def_target(os_kali);
 def_target(os_linuxlite);
 def_target(os_deepin); def_target(os_openkylin);
 def_target(os_raspberrypi);

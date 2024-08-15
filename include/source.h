@@ -154,29 +154,11 @@ pl_dotnet_sources[] = {
 
 
 
-
-/**
- * @time 2024-06-12 更新
- */
-static SourceInfo
-os_ubuntu_sources[] = {
-  {&Upstream,       NULL},
-  {&Ali,           "https://mirrors.aliyun.com/ubuntu"},
-  {&Volcengine,    "https://mirrors.volces.com/ubuntu"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/ubuntu"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/ubuntu"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/ubuntu"},
-  {&Tencent,       "https://mirrors.tencent.com/ubuntu"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/ubuntu"},
-  {&Netease,       "https://mirrors.163.com/ubuntu"},
-  {&Sohu,          "https://mirrors.sohu.com/ubuntu"}
-},
-
-
 /**
  * @time 2023-09-29 更新
  * @note 实际上镜像站里的内容和Ubuntu的不太一样
  */
+static SourceInfo
 os_mint_sources[] = {
   {&Upstream,       NULL},
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/linuxmint/"},
@@ -200,21 +182,6 @@ os_deepin_sources[] = {
   {&Sohu,          "https://mirrors.sohu.com/deepin"}
 },
 
-
-/**
- * @time 2024-06-12 更新
- */
-os_debian_sources[] = {
-  {&Upstream,       NULL},
-  {&Ali,           "https://mirrors.aliyun.com/debian"},
-  {&Volcengine,    "https://mirrors.volces.com/debian"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/debian"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/debian"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/debian"},
-  {&Tencent,       "https://mirrors.tencent.com/debian"},
-  {&Netease,       "https://mirrors.163.com/debian"},
-  {&Sohu,          "https://mirrors.sohu.com/debian"}
-},
 
 
 /**
@@ -503,8 +470,8 @@ wr_tex_sources[] = {
 def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);
 
-def_sources_n(os_ubuntu);   def_sources_n(os_mint);
-def_sources_n(os_debian);   def_sources_n(os_fedora);
+def_sources_n(os_mint);
+def_sources_n(os_fedora);
 def_sources_n(os_kali);
 def_sources_n(os_msys2);
 def_sources_n(os_rocky);     def_sources_n(os_alma);

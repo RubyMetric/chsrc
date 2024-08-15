@@ -5,6 +5,8 @@
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-29>
  * Last Modified : <2024-08-16>
+ *
+ * Trisquel基于Ubuntu开发，不含任何专有软件及专有固件，内核使用 Linux-libre
  * ------------------------------------------------------------*/
 
 /**
@@ -24,7 +26,7 @@ def_sources_n(os_trisquel);
 void
 os_trisquel_getsrc (char *option)
 {
-  chsrc_view_file (ETC_APT_SOURCELIST);
+  chsrc_view_file (OS_Apt_SourceList);
 }
 
 /**
@@ -39,7 +41,7 @@ os_trisquel_setsrc (char *option)
   chsrc_yield_source (os_trisquel);
   chsrc_confirm_source (&source);
 
-  chsrc_backup (ETC_APT_SOURCELIST);
+  chsrc_backup (OS_Apt_SourceList);
 
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/trisquel/?@", source.url, "@g' /etc/apt/sources.list");
 
