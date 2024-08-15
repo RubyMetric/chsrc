@@ -93,7 +93,6 @@ static const char
 
 
 def_target_noget (wr_flathub);
-def_target_noget (wr_guix);
 def_target_noget (wr_anaconda);
 def_target(wr_tex);
 

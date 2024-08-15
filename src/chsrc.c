@@ -181,25 +181,7 @@ wr_tex_setsrc (char *option)
 #include "recipe/ware/Homebrew.c"
 #include "recipe/ware/CocoaPods.c"
 #include "recipe/ware/Nix.c"
-
-/**
- * 参考: https://mirrors.sjtug.sjtu.edu.cn/docs/guix
- */
-void
-wr_guix_setsrc (char *option)
-{
-  SourceInfo source;
-  chsrc_yield_source (wr_guix);
-  chsrc_confirm_source (&source);
-
-  char *file =  xy_strjoin (3, "(list (channel\n"
-                               "       (inherit (car %default-channels))\n"
-                               "       (url \"", source.url, "\")))");
-
-  chsrc_note2 ("为防止扰乱配置文件，请您手动写入以下内容到 ~/.config/guix/channels.scm 文件中");
-  puts (file);
-  chsrc_say_lastly (&source, ChsrcTypeManual);
-}
+#include "recipe/ware/Guix.c"
 
 
 

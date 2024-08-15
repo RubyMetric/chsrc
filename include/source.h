@@ -166,16 +166,6 @@ wr_flathub_sources[] = {
 
 
 
-/**
- * @time 2023-09-11 更新
- * @note 目前只有一个源
- */
-wr_guix_sources[] = {
-  {&Upstream,       NULL},
-  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/git/guix.git"}
-},
-
-
 
 
 /**
@@ -214,6 +204,5 @@ def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);
 
 def_sources_n(wr_flathub);
-def_sources_n(wr_guix);
 def_sources_n(wr_tex);
 def_sources_n(wr_anaconda);
