@@ -263,20 +263,6 @@ os_linuxlite_sources[] = {
 
 
 
-/**
- * @time 2023-09-29 更新
- */
-os_raspberrypi_sources[] = {
-  {&Upstream,       NULL},
-  {&MirrorZ,        "https://help.mirrors.cernet.edu.cn/raspberrypi/"},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/raspberrypi/"},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/raspberrypi/"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/raspberrypi/"},
-  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/raspberrypi/"},
-  {&Sustech,        "https://mirrors.sustech.edu.cn/raspberrypi/"}
-},
-
-
 
 /**
  * @time 2023-09-06 更新
@@ -447,7 +433,7 @@ def_sources_n(os_kali);
 def_sources_n(os_msys2);
 def_sources_n(os_rocky);     def_sources_n(os_alma);
 
-def_sources_n(os_linuxlite); def_sources_n(os_raspberrypi);
+def_sources_n(os_linuxlite);
 
 def_sources_n(os_ros);
 

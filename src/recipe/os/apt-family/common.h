@@ -7,6 +7,9 @@
  * Last Modified : <2024-08-16>
  * ------------------------------------------------------------*/
 
+#define OS_Apt_SourceList   "/etc/apt/sources.list"
+#define OS_Apt_SourceList_D "/etc/apt/sources.list.d/"
+
 /**
  * @note 从 Debian 12 开始，Debain 的软件源配置文件变更为 DEB822 格式，
  *       路径为:  /etc/apt/sources.list.d/debian.sources"
@@ -14,21 +17,18 @@
  * @note 从 Ubuntu 24.04 开始，Ubuntu 的软件源配置文件变更为 DEB822 格式，
  *       路径为:  /etc/apt/sources.list.d/ubuntu.sources
  */
-
 #define OS_Debian_SourceList_DEB822 "/etc/apt/sources.list.d/debian.sources"
 #define OS_Ubuntu_SourceList_DEB822 "/etc/apt/sources.list.d/ubuntu.sources"
 
-#define OS_Apt_SourceList "/etc/apt/sources.list"
 
 #define ETC_os_release    "/etc/os-release"
 
 #define OS_Is_Debian_Literally  1
 #define OS_Is_Ubuntu            2
 
-
-#define OS_Armbian_SourceList "/etc/apt/sources.list.d/armbian.list"
-
-
+#define OS_LinuxMint_SourceList   OS_Apt_SourceList_D "official-package-repositories.list"
+#define OS_Armbian_SourceList     OS_Apt_SourceList_D "armbian.list"
+#define OS_RaspberryPi_SourceList OS_Apt_SourceList_D "raspi.list"
 
 
 /**

@@ -75,32 +75,7 @@ pl_clojure_setsrc (char *option)
 #include "recipe/os/apt-family/linuxmint.c"
 #include "recipe/os/apt-family/trisquel.c"
 #include "recipe/os/apt-family/armbian.c"
-
-void
-os_raspberrypi_getsrc (char *option)
-{
-  chsrc_view_file ("/etc/apt/sources.list.d/raspi.list");
-}
-
-void
-os_raspberrypi_setsrc (char *option)
-{
-  // chsrc_ensure_root(); // HELP: 不确定是否需要
-
-  SourceInfo source;
-  chsrc_yield_source (os_raspberrypi);
-  chsrc_confirm_source (&source);
-
-  chsrc_backup ("/etc/apt/sources.list.d/raspi.list");
-
-  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/.*/?@", source.url,
-                            "@g' /etc/apt/sources.list.d/raspi.list");
-
-  chsrc_run (cmd, RunOpt_Default);
-  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
-}
-
+#include "recipe/os/apt-family/raspberrypi.c"
 
 
 

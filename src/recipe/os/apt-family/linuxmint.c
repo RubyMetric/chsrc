@@ -24,7 +24,7 @@ def_sources_n(os_linuxmint);
 void
 os_linuxmint_getsrc (char *option)
 {
-  chsrc_view_file ("/etc/apt/sources.list.d/official-package-repositories.list");
+  chsrc_view_file (OS_LinuxMint_SourceList);
 }
 
 /**
@@ -39,10 +39,10 @@ os_linuxmint_setsrc (char *option)
   chsrc_yield_source (os_linuxmint);
   chsrc_confirm_source (&source);
 
-  chsrc_backup ("/etc/apt/sources.list.d/official-package-repositories.list");
+  chsrc_backup (OS_LinuxMint_SourceList);
 
   char* cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/.*/?@", source.url,
-                            "@g' /etc/apt/sources.list.d/official-package-repositories.list");
+                            "@g' " OS_LinuxMint_SourceList);
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
