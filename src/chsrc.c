@@ -76,6 +76,7 @@ pl_clojure_setsrc (char *option)
 #include "recipe/os/apt-family/trisquel.c"
 #include "recipe/os/apt-family/armbian.c"
 #include "recipe/os/apt-family/raspberrypi.c"
+#include "recipe/os/apt-family/ros.c"
 
 
 
@@ -308,7 +309,7 @@ os_linuxlite_setsrc (char *option)
 
 
 
-#include "./recipe/os/openwrt.c"
+#include "recipe/os/openwrt.c"
 
 
 
@@ -385,33 +386,6 @@ os_openkylin_setsrc (char *option)
 #include "recipe/os/freebsd.c"
 #include "recipe/os/netbsd.c"
 #include "recipe/os/openbsd.c"
-
-/**
- * 参考：
- * https://mirrors.tuna.tsinghua.edu.cn/help/ros/
- */
-void
-os_ros_setsrc (char *option)
-{
-  chsrc_ensure_root ();
-
-  SourceInfo source;
-  chsrc_yield_source (os_ros);
-  chsrc_confirm_source (&source);
-
-  chsrc_backup ("/etc/apt/sources.list.d/ros-latest.list");
-
-  char *cmd  = NULL;
-  cmd = xy_strjoin(3, "sed -E -i \'s@https?://.*/ros/ubuntu/?@", source.url, "@/ros/ubuntug\' /etc/apt/sources.list");
-  chsrc_run(cmd, RunOpt_Default);
-
-  cmd = "apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654";
-  chsrc_run (cmd, RunOpt_Default);
-
-  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
-}
-
 
 
 

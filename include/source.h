@@ -297,23 +297,6 @@ os_openkylin_sources[] = {
   {&Upstream,  "https://archive.openkylin.top/openkylin/"},
   {&Ali,       "https://mirrors.aliyun.com/openkylin/"},
   {&Netease,   "https://mirrors.163.com/openkylin/"},
-},
-
-
-/**
- * @time 2024-04-18 更新
- * @note 未经测试是否有效
- */
-os_ros_sources[] = {
-  {&Upstream,       NULL},
-  {&Ali,       "https://mirrors.aliyun.com"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn"},
-  {&Tencent,   "https://mirrors.tencent.com"},
-  {&Huawei,    "https://mirrors.huaweicloud.com"},
-  {&Netease,   "https://mirrors.163.com"},
-  {&Sohu,      "https://mirrors.sohu.com"}
 };
 
 
@@ -434,8 +417,6 @@ def_sources_n(os_msys2);
 def_sources_n(os_rocky);     def_sources_n(os_alma);
 
 def_sources_n(os_linuxlite);
-
-def_sources_n(os_ros);
 
 def_sources_n(os_deepin);   def_sources_n(os_openeuler); def_sources_n(os_openkylin);
 def_sources_n(os_anolis);

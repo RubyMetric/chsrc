@@ -47,7 +47,6 @@ def_target_noget(os_rocky);
 def_target_noget(os_alma);
 def_target_noget(os_openeuler);
 def_target_noget(os_anolis);
-def_target_noget(os_ros);
 def_target_noget(os_msys2);
 TargetInfo os_manjaro_target = {NULL, os_manjaro_setsrc, NULL, NULL, 0};
 

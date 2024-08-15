@@ -26,7 +26,13 @@
 #define OS_Is_Debian_Literally  1
 #define OS_Is_Ubuntu            2
 
+// independent
+#define OS_ROS_SourceList         OS_Apt_SourceList_D "ros-latest.list"
+
+// Ubuntu based
 #define OS_LinuxMint_SourceList   OS_Apt_SourceList_D "official-package-repositories.list"
+
+// Debian based
 #define OS_Armbian_SourceList     OS_Apt_SourceList_D "armbian.list"
 #define OS_RaspberryPi_SourceList OS_Apt_SourceList_D "raspi.list"
 
