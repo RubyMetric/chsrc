@@ -46,7 +46,6 @@ def_target(os_deepin); def_target(os_openkylin);
 def_target(os_raspberrypi);
 def_target(os_armbian);
 def_target_noget(os_fedora);
-def_target_noget(os_opensuse);
 def_target_noget(os_rocky);
 def_target_noget(os_alma);
 def_target_noget(os_freebsd);
@@ -61,7 +60,7 @@ static const char
 *os_mint       [] = {"mint",                 NULL,  t(&os_mint_target)},
 *os_debian     [] = {"debian",  "deb",       NULL,  t(&os_debian_target)},
 *os_fedora     [] = {"fedora",               NULL,  t(&os_fedora_target)},
-*os_opensuse   [] = {"suse",   "opensuse",   NULL,  t(&os_opensuse_target)},
+*os_opensuse   [] = {"opensuse",   NULL,            t(&os_opensuse_target)},
 *os_kali       [] = {"kali",                 NULL,  t(&os_kali_target)},
 *os_msys2      [] = {"msys2",   "msys",      NULL,  t(&os_msys2_target)},
 *os_arch       [] = {"arch",    "archlinux", NULL,  t(&os_arch_target)},

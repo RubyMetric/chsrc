@@ -252,22 +252,6 @@ os_kali_sources[] = {
 
 
 /**
- * @time 2024-06-12 更新
- */
-os_opensuse_sources[] = {
-  {&Upstream,       NULL},
-  {&Ali,            "https://mirrors.aliyun.com/opensuse"},
-  {&Volcengine,     "https://mirrors.volces.com/opensuse"},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/opensuse"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/opensuse"},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/opensuse"},
-  {&Tencent,        "https://mirrors.tencent.com/opensuse"},
-  {&Netease,        "https://mirrors.163.com/opensuse"},
-  {&Sohu,           "https://mirrors.sohu.com/opensuse"}
-},
-
-
-/**
  * @time 2024-04-18 更新
  * @note 源并不完整，且未经测试是否有效
  */
@@ -568,7 +552,7 @@ def_sources_n(pl_dotnet);
 
 def_sources_n(os_ubuntu);   def_sources_n(os_mint);
 def_sources_n(os_debian);   def_sources_n(os_fedora);
-def_sources_n(os_kali);     def_sources_n(os_opensuse);
+def_sources_n(os_kali);
 def_sources_n(os_msys2);
 def_sources_n(os_rocky);     def_sources_n(os_alma);
 
