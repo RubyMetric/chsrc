@@ -181,20 +181,6 @@ pl_haskell_sources[] = {
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/hackage"},
   {&Nju,           "https://mirror.nju.edu.cn/hackage"},
   {&Ustc,          "https://mirrors.ustc.edu.cn/hackage"}
-},
-
-
-
-
-/**
- * @time 2023-09-05 更新
- * @note 缺少商业公司或开源社区软件源
- */
-pl_julia_sources[] = {
-  {&Upstream,       NULL},
-  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/julia"},
-  {&Pku,           "https://mirrors.pku.edu.cn/julia"},
-  {&Nju,           "https://mirror.nju.edu.cn/julia"}
 };
 
 
@@ -706,7 +692,6 @@ wr_tex_sources[] = {
 
 def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);   def_sources_n(pl_dart);      def_sources_n(pl_haskell);
-def_sources_n(pl_julia);
 
 def_sources_n(os_ubuntu);   def_sources_n(os_mint);
 def_sources_n(os_debian);   def_sources_n(os_fedora);

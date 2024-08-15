@@ -177,43 +177,7 @@ pl_haskell_setsrc (char *option)
 
 #include "recipe/lang/ocaml.c"
 #include "recipe/lang/r.c"
-
-
-
-/**
- * Julia的换源可以通过两种方式
- * 1. 写入 startup.jl
- * 2. 使用环境变量
- *
- * 我们采用第一种
- */
-void
-pl_julia_getsrc (char *option)
-{
-  chsrc_view_file ("~/.julia/config/startup.jl");
-}
-
-/**
- * Julia 换源，参考：
- * 1. https://help.mirrors.cernet.edu.cn/julia/
- * 2. https://docs.julialang.org/en/v1/manual/command-line-interface/#Startup-file
- */
-void
-pl_julia_setsrc (char *option)
-{
-  SourceInfo source;
-  chsrc_yield_source (pl_julia);
-  chsrc_confirm_source (&source);
-
-  const char *towrite = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
-
-  chsrc_append_to_file (towrite, "~/.julia/config/startup.jl");
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
-}
-
-
-
-
+#include "recipe/lang/julia.c"
 
 
 
