@@ -39,7 +39,6 @@ static const char
 };
 
 
-def_target(os_openkylin);
 def_target_noget(os_anolis);
 def_target_noget(os_msys2);
 TargetInfo os_manjaro_target = {NULL, os_manjaro_setsrc, NULL, NULL, 0};

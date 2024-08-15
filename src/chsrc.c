@@ -85,6 +85,7 @@ pl_clojure_setsrc (char *option)
 #include "recipe/os/apt-family/Linux-Lite.c"
 // Independent
 #include "recipe/os/apt-family/ros.c"
+#include "recipe/os/apt-family/openKylin.c"
 #include "recipe/os/apt-family/deepin.c"
 
 
@@ -174,30 +175,6 @@ os_anolis_setsrc (char *option)
 
   chsrc_run ("dnf makecache", RunOpt_Default);
   chsrc_run ("dnf update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
-}
-
-
-void
-os_openkylin_getsrc (char *option)
-{
-  chsrc_view_file (OS_Apt_SourceList);
-}
-
-void
-os_openkylin_setsrc (char *option)
-{
-  chsrc_ensure_root();
-
-  SourceInfo source;
-  chsrc_yield_source (os_openkylin);
-  chsrc_confirm_source (&source);
-
-  chsrc_backup (OS_Apt_SourceList);
-
-  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/openkylin/?@", source.url, "@g'" OS_Apt_SourceList);
-  chsrc_run (cmd, RunOpt_Default);
-  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 

@@ -181,17 +181,8 @@ os_anolis_sources[] = {
   {&Upstream,       NULL},
   {&Ali,            "https://mirrors.aliyun.com/anolis"},
   {&Hust,           "https://mirrors.hust.edu.cn/anolis"}
-},
-
-
-/**
- * @time 2023-09-29 更新
- */
-os_openkylin_sources[] = {
-  {&Upstream,  "https://archive.openkylin.top/openkylin/"},
-  {&Ali,       "https://mirrors.aliyun.com/openkylin/"},
-  {&Netease,   "https://mirrors.163.com/openkylin/"},
 };
+
 
 
 
@@ -307,7 +298,6 @@ def_sources_n(pl_dotnet);
 
 def_sources_n(os_msys2);
 
-def_sources_n(os_openkylin);
 def_sources_n(os_anolis);
 
 def_sources_n(wr_winget);

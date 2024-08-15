@@ -213,9 +213,9 @@ sudo chsrc set raspi 或 set raspberrypi
 sudo chsrc set armbian
 sudo chsrc set openwrt
 
-sudo chsrc set euler  或 set openeuler
-sudo chsrc set anolis 或 set openanolis
-sudo chsrc set kylin  或 set openkylin
+sudo chsrc set openeuler
+sudo chsrc set openanolis
+sudo chsrc set openkylin
 sudo chsrc set deepin
 
 chsrc set msys2 或 set msys
