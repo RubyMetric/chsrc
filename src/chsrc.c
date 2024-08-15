@@ -1584,8 +1584,9 @@ print_available_mirrors ()
 {
   chsrc_info ("支持以下镜像站");
   chsrc_info ("下方 code 列，可用于指定使用某镜像站，请使用 chsrc set <target> <code>\n");
-  printf ("%-14s%-30s%-41s ", "code", "服务商简写", "服务商URL"); puts ("服务商名称");
-  puts   ("-------------------------------------------------------------------------------------------------");
+  printf (" %-13s%-35s%-38s", "code", "镜像站简写", "镜像站URL"); puts ("镜像站名称");
+  puts   ("-------      -----------       -------------------------------------     ---------------------");
+  // puts   ("-------------------------------------------------------------------------------------------------");
   for (int i = 0; i < xy_arylen (available_mirrors); i++)
     {
       MirrorSite* mir = available_mirrors[i];
@@ -1809,8 +1810,8 @@ get_target (const char *input, TargetOp code, char *option)
     {
       chsrc_info (xy_strjoin (3, "对 ", input, " 支持以下镜像站"));
       chsrc_info (xy_strjoin (3, "下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>\n"));
-      printf ("%-14s%-35s%-45s ", "code", "服务商简写", "服务源URL"); puts ("服务商名称");
-      puts   ("--------------------------------------------------------------------------------------------------------");
+      printf (" %-14s%-35s%-43s ", "code", "镜像站简写", "换源URL"); puts ("镜像站名称");
+      puts   ("---------    --------------    -----------------------------------------------    ---------------------");
       print_supported_sources_for_target (target->sources, target->sources_n);
     }
   else if (TargetOp_Cesu_Source==code)
