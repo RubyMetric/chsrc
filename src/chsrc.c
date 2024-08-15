@@ -31,6 +31,11 @@
 #include "recipe/lang/java.c"
 #include "recipe/lang/rust.c"
 
+#include "recipe/lang/dart.c"
+#include "recipe/lang/haskell.c"
+#include "recipe/lang/ocaml.c"
+#include "recipe/lang/r.c"
+#include "recipe/lang/julia.c"
 
 void
 pl_dotnet_getsrc (char *option)
@@ -63,14 +68,6 @@ pl_clojure_setsrc (char *option)
 }
 
 
-#include "recipe/lang/dart.c"
-#include "recipe/lang/haskell.c"
-#include "recipe/lang/ocaml.c"
-#include "recipe/lang/r.c"
-#include "recipe/lang/julia.c"
-
-
-
 
 #include "recipe/os/apt-family/common.h"
 #include "recipe/os/apt-family/debian.c"
@@ -89,10 +86,6 @@ pl_clojure_setsrc (char *option)
 #include "recipe/os/apt-family/deepin.c"
 
 
-
-#include "recipe/os/opensuse.c"
-
-
 #include "recipe/os/yum-family/common.h"
 #include "recipe/os/yum-family/Fedora-Linux.c"
 #include "recipe/os/yum-family/AlmaLinux.c"
@@ -100,39 +93,12 @@ pl_clojure_setsrc (char *option)
 #include "recipe/os/yum-family/openEuler.c"
 #include "recipe/os/yum-family/Anolis-OS.c"
 
-/**
- * HELP: 未经测试
- */
-void
-os_msys2_setsrc (char *option)
-{
-  SourceInfo source;
-  chsrc_yield_source (os_msys2);
-  chsrc_confirm_source (&source);
-
-  chsrc_backup ("/etc/pacman.d/mirrorlist.mingw32");
-  chsrc_backup ("/etc/pacman.d/mirrorlist.mingw64");
-  chsrc_backup ("/etc/pacman.d/mirrorlist.msys");
-
-  char *prev = xy_strjoin (3, "请针对你的架构下载安装此目录下的文件:",
-                              source.url,
-                             "distrib/<架构>/");
-  chsrc_note2 (prev);
-
-  char *cmd = xy_strjoin (3, "sed -i \"s#https\?://mirror.msys2.org/#",
-                              source.url,
-                             "#g\" /etc/pacman.d/mirrorlist* ");
-
-  chsrc_run (cmd, RunOpt_Default);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
-}
-
-
+#include "recipe/os/opensuse.c"
 
 #include "recipe/os/arch.c"
+#include "recipe/os/MSYS2.c"
+
 #include "recipe/os/gentoo.c"
-
-
 #include "recipe/os/alpine.c"
 #include "recipe/os/void.c"
 #include "recipe/os/solus.c"

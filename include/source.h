@@ -153,26 +153,6 @@ pl_dotnet_sources[] = {
 
 
 
-
-/**
- * @time 2024-04-18 更新
- * @note 源并不完整，且未经测试是否有效
- */
-static SourceInfo
-os_msys2_sources[] = {
-  {&Upstream,       NULL},
-  {&Ali,            "https://mirrors.aliyun.com/msys2"},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/msys2"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/msys2"},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/msys2"},
-  {&Tencent,        "https://mirrors.tencent.com/msys2"},
-  {&Huawei,         "https://mirrors.huaweicloud.com/msys2"},
-  {&Netease,        "https://mirrors.163.com/msys2"},
-  {&Sohu,           "https://mirrors.sohu.com/msys2"}
-};
-
-
-
 /**
  * @time 2024-06-07 更新
  * @note 目前仅有一个源
@@ -283,7 +263,6 @@ wr_tex_sources[] = {
 def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);
 
-def_sources_n(os_msys2);
 
 def_sources_n(wr_winget);
 def_sources_n(wr_brew);     def_sources_n(wr_cocoapods);
