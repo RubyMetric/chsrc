@@ -176,54 +176,7 @@ pl_haskell_setsrc (char *option)
 
 
 #include "recipe/lang/ocaml.c"
-
-void
-pl_r_getsrc (char *option)
-{
-  // 或参考：https://zhuanlan.zhihu.com/p/585036231
-  //
-  // options()$repos
-  // options()$BioC_mirror
-  //
-  if (xy_on_windows)
-    {
-      chsrc_view_file ("~/Documents/.Rprofile");
-    }
-  else
-    {
-      chsrc_view_file ("~/.Rprofile");
-    }
-}
-
-/**
- * R 换源，参考：https://help.mirrors.cernet.edu.cn/CRAN/
- */
-void
-pl_r_setsrc (char *option)
-{
-  SourceInfo source;
-  chsrc_yield_source (pl_r);
-  chsrc_confirm_source (&source);
-
-  char *bioconductor_url = xy_str_delete_suffix (xy_str_delete_suffix (source.url, "cran/"), "CRAN/");
-  bioconductor_url = xy_2strjoin(bioconductor_url, "bioconductor");
-
-  const char *towrite1 = xy_strjoin (3, "options(\"repos\" = c(CRAN=\"", source.url, "\"))" );
-  const char *towrite2 = xy_strjoin (3, "options(BioC_mirror=\"", bioconductor_url, "\")" );
-
-  // 或者我们调用 r.exe --slave -e 上面的内容
-  if (xy_on_windows)
-    {
-      chsrc_append_to_file (towrite1, "~/Documents/.Rprofile");
-      chsrc_append_to_file (towrite2, "~/Documents/.Rprofile");
-    }
-  else
-    {
-      chsrc_append_to_file (towrite1, "~/.Rprofile");
-      chsrc_append_to_file (towrite2, "~/.Rprofile");
-    }
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
-}
+#include "recipe/lang/r.c"
 
 
 

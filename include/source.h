@@ -187,24 +187,6 @@ pl_haskell_sources[] = {
 
 
 /**
- * @time 2023-09-04 更新
- * @note {
- *   以下注释的，是不含有bioconductor的镜像站，
- *   我们在换cran的同时，也直接帮助用户换bioconductor
- * }
- */
-pl_r_sources[] = {
-  {&Upstream,       NULL},
-  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/cran/"},
-  // {&Ali,           "https://mirrors.aliyun.com/CRAN/"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"},
-  // {&Sustech,       "https://mirrors.sustech.edu.cn/CRAN"},
-  // {&Bfsu,          "https://mirrors.bfsu.edu.cn/CRAN/"},
-  // {&Bjtu,          "https://mirror.bjtu.edu.cn/cran/"},
-},
-
-
-/**
  * @time 2023-09-05 更新
  * @note 缺少商业公司或开源社区软件源
  */
@@ -724,7 +706,7 @@ wr_tex_sources[] = {
 
 def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);   def_sources_n(pl_dart);      def_sources_n(pl_haskell);
-def_sources_n(pl_r);        def_sources_n(pl_julia);
+def_sources_n(pl_julia);
 
 def_sources_n(os_ubuntu);   def_sources_n(os_mint);
 def_sources_n(os_debian);   def_sources_n(os_fedora);
