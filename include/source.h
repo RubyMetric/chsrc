@@ -154,27 +154,10 @@ pl_dotnet_sources[] = {
 
 
 /**
- * @time 2023-09-06 更新
- * @note 源并不完整，且未经测试是否有效
- */
-static SourceInfo
-os_deepin_sources[] = {
-  {&Upstream,       NULL},
-  {&Ali,           "https://mirrors.aliyun.com/deepin"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/deepin"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/deepin"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/deepin"},
-  {&Tencent,       "https://mirrors.tencent.com/deepin"},
-  {&Netease,       "https://mirrors.163.com/deepin"},
-  {&Sohu,          "https://mirrors.sohu.com/deepin"}
-},
-
-
-
-/**
  * @time 2023-09-02 更新
  * @note 源并不完整，且未经测试是否有效
  */
+static SourceInfo
 os_fedora_sources[] = {
   {&Upstream,       NULL},
   {&Ali,           "https://mirrors.aliyun.com/fedora"},
@@ -184,23 +167,6 @@ os_fedora_sources[] = {
   {&Tencent,       "https://mirrors.tencent.com/fedora"},
   {&Netease,       "https://mirrors.163.com/fedora"},
   {&Sohu,          "https://mirrors.sohu.com/fedora"}
-},
-
-
-/**
- * @time 2024-06-12 更新
- */
-os_kali_sources[] = {
-  {&Upstream,       NULL},
-  {&Ali,           "https://mirrors.aliyun.com/kali"},
-  {&Volcengine,    "https://mirrors.volces.com/kali"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/kali"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/kali"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/kali"},
-  {&Tencent,       "https://mirrors.tencent.com/kali"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/kali"},
-  {&Netease,       "https://mirrors.163.com/kali"},
-  {&Sohu,          "https://mirrors.sohu.com/kali"}
 },
 
 
@@ -412,13 +378,12 @@ def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);
 
 def_sources_n(os_fedora);
-def_sources_n(os_kali);
 def_sources_n(os_msys2);
 def_sources_n(os_rocky);     def_sources_n(os_alma);
 
 def_sources_n(os_linuxlite);
 
-def_sources_n(os_deepin);   def_sources_n(os_openeuler); def_sources_n(os_openkylin);
+def_sources_n(os_openeuler); def_sources_n(os_openkylin);
 def_sources_n(os_anolis);
 
 def_sources_n(wr_winget);

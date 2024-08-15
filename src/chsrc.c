@@ -69,46 +69,25 @@ pl_clojure_setsrc (char *option)
 #include "recipe/lang/r.c"
 #include "recipe/lang/julia.c"
 
+
+
+
 #include "recipe/os/apt-family/common.h"
 #include "recipe/os/apt-family/debian.c"
 #include "recipe/os/apt-family/ubuntu.c"
-#include "recipe/os/apt-family/linuxmint.c"
-#include "recipe/os/apt-family/trisquel.c"
+
+// Debian-based
 #include "recipe/os/apt-family/armbian.c"
 #include "recipe/os/apt-family/raspberrypi.c"
+#include "recipe/os/apt-family/kali.c"
+
+// Ubuntu-based
+#include "recipe/os/apt-family/linuxmint.c"
+#include "recipe/os/apt-family/trisquel.c"
+
+// Independent
 #include "recipe/os/apt-family/ros.c"
-
-
-
-void
-os_deepin_getsrc(char *option)
-{
-  chsrc_view_file (OS_Apt_SourceList);
-}
-
-/**
- * HELP: 未经测试
- */
-void
-os_deepin_setsrc (char *option)
-{
-  chsrc_ensure_root();
-
-  SourceInfo source;
-  chsrc_yield_source (os_deepin);
-  chsrc_confirm_source (&source);
-
-  chsrc_backup (OS_Apt_SourceList);
-
-  char *cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/deepin/?@",
-                              source.url,
-                              "@g\' /etc/apt/sources.list");
-
-  chsrc_run (cmd, RunOpt_Default);
-  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
-}
-
+#include "recipe/os/apt-family/deepin.c"
 
 
 /**
@@ -150,36 +129,6 @@ os_fedora_setsrc (char *option)
 }
 
 #include "recipe/os/opensuse.c"
-
-
-void
-os_kali_getsrc (char *option)
-{
-  chsrc_view_file (OS_Apt_SourceList);
-}
-
-/**
- * HELP: 未经测试
- */
-void
-os_kali_setsrc (char *option)
-{
-  chsrc_ensure_root ();
-
-  SourceInfo source;
-  chsrc_yield_source (os_kali);
-  chsrc_confirm_source (&source);
-
-  chsrc_backup (OS_Apt_SourceList);
-
-  char *cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/kali/?@",
-                              source.url,
-                             "@g\' /etc/apt/sources.list");
-
-  chsrc_run (cmd, RunOpt_Default);
-  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
-}
 
 
 
