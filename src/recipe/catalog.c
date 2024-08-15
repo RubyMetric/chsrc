@@ -8,7 +8,7 @@
  * ------------------------------------------------------------*/
 
 /* Begin Target Matrix */
-def_target(pl_dart); def_target(pl_ocaml);
+def_target(pl_dart);
 def_target(pl_r);     def_target(pl_julia);
 def_target_noget (pl_clojure);
 def_target_noget (pl_dotnet);

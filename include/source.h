@@ -184,15 +184,6 @@ pl_haskell_sources[] = {
 },
 
 
-/**
- * @time 2023-09-15 更新
- */
-pl_ocaml_sources[] = {
-  {&Upstream,       NULL},
-  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/git/opam-repository.git"}
-},
-
-
 
 
 /**
@@ -733,7 +724,6 @@ wr_tex_sources[] = {
 
 def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);   def_sources_n(pl_dart);      def_sources_n(pl_haskell);
-def_sources_n(pl_ocaml);
 def_sources_n(pl_r);        def_sources_n(pl_julia);
 
 def_sources_n(os_ubuntu);   def_sources_n(os_mint);
