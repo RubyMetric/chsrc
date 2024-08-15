@@ -63,70 +63,7 @@ pl_clojure_setsrc (char *option)
 }
 
 
-
-void
-pl_dart_getsrc (char *option)
-{
-  char *cmd = NULL;
-  if (xy_on_windows)
-    {
-      cmd = "set PUB_HOSTED_URL & set FLUTTER_STORAGE_BASE_URL";
-      chsrc_run (cmd, RunOpt_Default);
-    }
-  else
-    {
-      cmd = "echo $PUB_HOSTED_URL; echo $FLUTTER_STORAGE_BASE_URL";
-      chsrc_run (cmd, RunOpt_Default);
-    }
-}
-
-/**
- * Dart pub 换源，参考：https://mirrors.tuna.tsinghua.edu.cn/help/dart-pub/
- */
-void
-pl_dart_setsrc (char *option)
-{
-  SourceInfo source;
-  chsrc_yield_source (pl_dart);
-  chsrc_confirm_source (&source);
-
-  char *towrite = NULL;
-
-  char *pub = xy_2strjoin(source.url, "dart-pub");
-  char *flutter = xy_2strjoin(source.url, "flutter");
-
-  if (xy_on_windows)
-    {
-      if (xy_file_exist (xy_win_powershell_profile))
-        {
-          towrite = xy_strjoin (4, "$env:PUB_HOSTED_URL = \"", pub, "\"");
-          chsrc_append_to_file (towrite, xy_win_powershell_profile);
-
-          towrite = xy_strjoin (4, "$env:FLUTTER_STORAGE_BASE_URL = \"", flutter, "\"");
-          chsrc_append_to_file (towrite, xy_win_powershell_profile);
-        }
-
-      if (xy_file_exist (xy_win_powershellv5_profile))
-        {
-          towrite = xy_strjoin (4, "$env:PUB_HOSTED_URL = \"", pub, "\"");
-          chsrc_append_to_file (towrite, xy_win_powershellv5_profile);
-
-          towrite = xy_strjoin (4, "$env:FLUTTER_STORAGE_BASE_URL = \"", flutter, "\"");
-          chsrc_append_to_file (towrite, xy_win_powershellv5_profile);
-        }
-    }
-  else
-    {
-      towrite = xy_strjoin (3, "export PUB_HOSTED_URL=\"", pub, "\"");
-      chsrc_append_to_file (towrite, "~/.bashrc >> ~/.zshrc");
-
-      towrite = xy_strjoin (3, "export FLUTTER_STORAGE_BASE_URL=\"", flutter, "\"");
-      chsrc_append_to_file (towrite, "~/.bashrc >> ~/.zshrc");
-    }
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
-}
-
-
+#include "recipe/lang/dart.c"
 #include "recipe/lang/haskell.c"
 #include "recipe/lang/ocaml.c"
 #include "recipe/lang/r.c"

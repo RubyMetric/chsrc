@@ -149,25 +149,6 @@ pl_dotnet_sources[] = {
   {&Upstream,       NULL},
   {&NugetOrg,      "https://www.nuget.org/api/v2/"},
   {&Huawei,        "https://mirrors.huaweicloud.com/repository/nuget/v3"}
-},
-
-
-
-/**
- * @time 2023-09-10 更新
- * @note {
- *   我们这里挑选的必须也支持 Flutter
- *   我们将会在setsrc函数中生成
- *     1. https://mirrors.tuna.tsinghua.edu.cn/dart-pub
- *     2. https://mirrors.tuna.tsinghua.edu.cn/flutter
- * }
- */
-pl_dart_sources[] = {
-  {&Upstream,       NULL},
-  // {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/"}, // 不确定SJTUG的flutter镜像给的对不对
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/"},
-  {&Tencent,       "https://mirrors.cloud.tencent.com/"},
-  {&Nju,           "https://mirror.nju.edu.cn/"}
 };
 
 
@@ -678,7 +659,7 @@ wr_tex_sources[] = {
 
 
 def_sources_n(pl_clojure);
-def_sources_n(pl_dotnet);   def_sources_n(pl_dart);
+def_sources_n(pl_dotnet);
 
 def_sources_n(os_ubuntu);   def_sources_n(os_mint);
 def_sources_n(os_debian);   def_sources_n(os_fedora);

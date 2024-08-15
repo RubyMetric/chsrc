@@ -8,7 +8,6 @@
  * ------------------------------------------------------------*/
 
 /* Begin Target Matrix */
-def_target(pl_dart);
 def_target_noget (pl_clojure);
 def_target_noget (pl_dotnet);
 
