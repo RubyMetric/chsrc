@@ -173,16 +173,6 @@ os_msys2_sources[] = {
 
 
 
-/**
- * @time 2023-09-29 更新
- */
-os_linuxlite_sources[] = {
-  {&Upstream,       NULL},
-  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/linuxliteos/"}
-},
-
-
-
 
 /**
  * @time 2023-09-06 更新
@@ -332,8 +322,6 @@ def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);
 
 def_sources_n(os_msys2);
-
-def_sources_n(os_linuxlite);
 
 def_sources_n(os_openeuler); def_sources_n(os_openkylin);
 def_sources_n(os_anolis);
