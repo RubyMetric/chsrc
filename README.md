@@ -192,7 +192,7 @@ chsrc set julia
 
 ```bash
 sudo chsrc set ubuntu
-sudo chsrc set mint  或 linuxmint
+sudo chsrc set linuxmint 或 mint
 sudo chsrc set debian
 sudo chsrc set fedora
 sudo chsrc set suse  或 set opensuse

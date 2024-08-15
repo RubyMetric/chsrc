@@ -39,7 +39,7 @@ static const char
 };
 
 
-def_target(os_mint);  def_target(os_kali);
+def_target(os_kali);
 def_target(os_linuxlite);
 def_target(os_deepin); def_target(os_openkylin);
 def_target(os_raspberrypi);
@@ -54,8 +54,8 @@ TargetInfo os_manjaro_target = {NULL, os_manjaro_setsrc, NULL, NULL, 0};
 
 static const char
 *os_ubuntu     [] = {"ubuntu",               NULL,  t(&os_ubuntu_target)},
-*os_mint       [] = {"mint",                 NULL,  t(&os_mint_target)},
-*os_debian     [] = {"debian",  "deb",       NULL,  t(&os_debian_target)},
+*os_linuxmint  [] = {"linuxmint", "mint",    NULL,  t(&os_linuxmint_target)},
+*os_debian     [] = {"debian",               NULL,  t(&os_debian_target)},
 *os_fedora     [] = {"fedora",               NULL,  t(&os_fedora_target)},
 *os_opensuse   [] = {"opensuse",   NULL,            t(&os_opensuse_target)},
 *os_kali       [] = {"kali",                 NULL,  t(&os_kali_target)},
@@ -88,7 +88,7 @@ static const char
 
 **os_systems[] =
 {
-  os_ubuntu,  os_mint,    os_debian,  os_fedora,  os_opensuse, os_kali,
+  os_debian,  os_ubuntu,  os_linuxmint,   os_fedora,  os_opensuse, os_kali,
   os_arch,    os_archlinuxcn, os_manjaro, os_gentoo,
   os_rocky,   os_alma,
   os_alpine,   os_void,      os_solus,          os_ros,

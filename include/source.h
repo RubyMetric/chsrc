@@ -153,24 +153,11 @@ pl_dotnet_sources[] = {
 
 
 
-
-/**
- * @time 2023-09-29 更新
- * @note 实际上镜像站里的内容和Ubuntu的不太一样
- */
-static SourceInfo
-os_mint_sources[] = {
-  {&Upstream,       NULL},
-  {&MirrorZ,       "https://mirrors.cernet.edu.cn/linuxmint/"},
-  {&Ali,           "http://mirrors.aliyun.com/linuxmint-packages/"},
-  {&Netease,       "https://mirrors.163.com/linuxmint/packages/"},
-},
-
-
 /**
  * @time 2023-09-06 更新
  * @note 源并不完整，且未经测试是否有效
  */
+static SourceInfo
 os_deepin_sources[] = {
   {&Upstream,       NULL},
   {&Ali,           "https://mirrors.aliyun.com/deepin"},
@@ -455,7 +442,6 @@ wr_tex_sources[] = {
 def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);
 
-def_sources_n(os_mint);
 def_sources_n(os_fedora);
 def_sources_n(os_kali);
 def_sources_n(os_msys2);

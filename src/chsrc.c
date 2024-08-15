@@ -69,40 +69,10 @@ pl_clojure_setsrc (char *option)
 #include "recipe/lang/r.c"
 #include "recipe/lang/julia.c"
 
-
-
-void
-os_mint_getsrc (char *option)
-{
-  chsrc_view_file ("/etc/apt/sources.list.d/official-package-repositories.list");
-}
-
-/**
- * 参考: https://help.mirrors.cernet.edu.cn/linuxmint/
- */
-void
-os_mint_setsrc (char *option)
-{
-  chsrc_ensure_root ();
-
-  SourceInfo source;
-  chsrc_yield_source (os_mint);
-  chsrc_confirm_source (&source);
-
-  chsrc_backup ("/etc/apt/sources.list.d/official-package-repositories.list");
-
-  char* cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/.*/?@", source.url,
-                            "@g' /etc/apt/sources.list.d/official-package-repositories.list");
-
-  chsrc_run (cmd, RunOpt_Default);
-  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
-  chsrc_warn2 ("完成后请不要再使用 mintsources（自带的图形化软件源设置工具）进行任何操作，因为在操作后，无论是否有按“确定”，mintsources 均会覆写我们刚才换源的内容");
-}
-
 #include "recipe/os/apt-family/common.h"
 #include "recipe/os/apt-family/debian.c"
 #include "recipe/os/apt-family/ubuntu.c"
+#include "recipe/os/apt-family/linuxmint.c"
 #include "recipe/os/apt-family/trisquel.c"
 #include "recipe/os/apt-family/armbian.c"
 
