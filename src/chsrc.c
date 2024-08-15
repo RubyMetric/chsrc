@@ -898,33 +898,7 @@ os_netbsd_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
-
-
-void
-os_openbsd_getsrc (char *option)
-{
-  chsrc_view_file ("/etc/installurl");
-}
-
-/**
- * 参考：
- * 1. https://mirrors.tuna.tsinghua.edu.cn/help/openbsd/
- * 2. https://book.bsdcn.org/di-26-zhang-openbsd/di-26.2-jie-pei-zhi.html
- */
-void
-os_openbsd_setsrc (char *option)
-{
-  chsrc_ensure_root ();
-
-  SourceInfo source;
-  chsrc_yield_source (os_openbsd);
-  chsrc_confirm_source (&source);
-
-  chsrc_backup ("/etc/installurl");
-  chsrc_overwrite_file (source.url, "/etc/installurl");
-
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
-}
+#include "recipe/os/openbsd.c"
 
 /**
  * 参考：
