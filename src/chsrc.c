@@ -104,15 +104,12 @@ pl_clojure_setsrc (char *option)
 #include "recipe/os/alpine.c"
 #include "recipe/os/void.c"
 #include "recipe/os/solus.c"
-
-
-
 #include "recipe/os/openwrt.c"
 
 
-#include "recipe/os/freebsd.c"
-#include "recipe/os/netbsd.c"
-#include "recipe/os/openbsd.c"
+#include "recipe/os/BSD/FreeBSD.c"
+#include "recipe/os/BSD/NetBSD.c"
+#include "recipe/os/BSD/OpenBSD.c"
 
 
 
