@@ -282,21 +282,6 @@ os_archlinuxcn_sources[] = {
 },
 
 
-/**
- * @time 2023-09-05 更新
- * @note 源并不完整，且未经测试是否有效
- */
-os_gentoo_sources[] = {
-  {&Upstream,       NULL},
-  {&Ali,           "mirrors.aliyun.com"},
-  {&Bfsu,          "mirrors.bfsu.edu.cn"},
-  {&Ustc,          "mirrors.ustc.edu.cn"},
-  {&Tuna,          "mirrors.tuna.tsinghua.edu.cn"},
-  {&Tencent,       "mirrors.tencent.com"},
-  {&Netease,       "mirrors.163.com"},
-  {&Sohu,          "mirrors.sohu.com"}
-},
-
 
 /**
  * @time 2024-06-12 更新
@@ -617,7 +602,7 @@ def_sources_n(os_ubuntu);   def_sources_n(os_mint);
 def_sources_n(os_debian);   def_sources_n(os_fedora);
 def_sources_n(os_kali);     def_sources_n(os_opensuse);
 def_sources_n(os_arch);     def_sources_n(os_archlinuxcn);
-def_sources_n(os_msys2);    def_sources_n(os_gentoo);
+def_sources_n(os_msys2);
 def_sources_n(os_rocky);     def_sources_n(os_alma);
 
 def_sources_n(os_linuxlite); def_sources_n(os_raspberrypi);

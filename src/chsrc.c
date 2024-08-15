@@ -723,32 +723,8 @@ os_archlinuxcn_setsrc (char *option)
 }
 #undef OS_Pacman_MirrorList
 
-/**
- * HELP: 未经测试
- */
-void
-os_gentoo_setsrc (char *option)
-{
-  chsrc_ensure_root ();
 
-  SourceInfo source;
-  chsrc_yield_source (os_gentoo);
-  chsrc_confirm_source (&source);
-
-  chsrc_backup ("/etc/portage/repos.conf/gentoo.conf");
-
-  char *cmd = xy_strjoin (3, "sed -i \"s#rsync://.*/gentoo-portage#rsync://",
-                             source.url,
-                            "gentoo-portage#g");
-  chsrc_run (cmd, RunOpt_Default);
-
-  char *towrite = xy_strjoin (3, "GENTOO_MIRRORS=\"https://", source.url, "gentoo\"");
-
-  chsrc_append_to_file (towrite, "/etc/portage/make.conf");
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
-}
-
-
+#include "recipe/os/gentoo.c"
 
 /**
  * 参考: https://help.mirrors.cernet.edu.cn/rocky/
