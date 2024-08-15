@@ -164,21 +164,6 @@ wr_winget_sources[] = {
 },
 
 
-/**
- * @time 2023-09-10 更新
- * @note {
- *   1. 这些链接将会在setsrc函数中补充完整
- *   2. 不确定 Sustech 能否工作
- * }
- */
-wr_brew_sources[] = {
-  {&Upstream,       NULL},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/"},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/"},
-  {&Zju,            "https://mirrors.zju.edu.cn/"},
-  {&Sustech,        "https://mirrors.sustech.edu.cn/"}
-},
-
 
 /**
  * @time 2024-06-08 更新
@@ -265,7 +250,7 @@ def_sources_n(pl_dotnet);
 
 
 def_sources_n(wr_winget);
-def_sources_n(wr_brew);     def_sources_n(wr_cocoapods);
+def_sources_n(wr_cocoapods);
 
 def_sources_n(wr_flathub);
 def_sources_n(wr_nix);      def_sources_n(wr_guix);
