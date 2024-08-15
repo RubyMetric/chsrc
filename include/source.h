@@ -361,21 +361,6 @@ os_alma_sources[] = {
 },
 
 
-/**
- * @time 2024-04-18 更新
- */
-os_alpine_sources[] = {
-  {&Upstream,       NULL},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/alpine"},
-  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/alpine"},
-  {&Sustech,        "https://mirrors.sustech.edu.cn/alpine"},
-  {&Zju,            "https://mirrors.zju.edu.cn/alpine"},
-  {&Lzuoss,         "https://mirror.lzu.edu.cn/alpine"},
-  {&Ali,            "https://mirrors.aliyun.com/alpine"},
-  {&Tencent,        "https://mirrors.cloud.tencent.com/alpine"},
-  {&Huawei,         "https://mirrors.huaweicloud.com/alpine"}
-},
-
 
 /**
  * @time 2023-09-24 更新
@@ -666,7 +651,7 @@ def_sources_n(os_debian);   def_sources_n(os_fedora);
 def_sources_n(os_kali);     def_sources_n(os_opensuse);
 def_sources_n(os_arch);     def_sources_n(os_archlinuxcn);
 def_sources_n(os_msys2);    def_sources_n(os_gentoo);
-def_sources_n(os_alpine);   def_sources_n(os_rocky);     def_sources_n(os_alma);
+def_sources_n(os_rocky);     def_sources_n(os_alma);
 def_sources_n(os_void);
 def_sources_n(os_solus);
 
