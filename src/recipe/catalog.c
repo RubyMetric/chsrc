@@ -41,7 +41,6 @@ static const char
 
 def_target(os_linuxlite);
 def_target(os_openkylin);
-def_target_noget(os_rocky);
 def_target_noget(os_openeuler);
 def_target_noget(os_anolis);
 def_target_noget(os_msys2);
@@ -59,7 +58,7 @@ static const char
 *os_archlinuxcn[] = {"archlinuxcn", "archcn",NULL,  t(&os_archlinuxcn_target)},
 *os_manjaro    [] = {"manjaro",              NULL,  t(&os_manjaro_target)},
 *os_gentoo     [] = {"gentoo",               NULL,  t(&os_gentoo_target)},
-*os_rocky      [] = {"rocky",  "rockylinux", NULL,  t(&os_rocky_target)},
+*os_rockylinux [] = {"rocky",  "rockylinux", NULL,  t(&os_rockylinux_target)},
 *os_almalinux  [] = {"alma",   "almalinux",  NULL,  t(&os_almalinux_target)},
 *os_alpine     [] = {"alpine",               NULL,  t(&os_alpine_target)},
 *os_void       [] = {"void",   "voidlinux",  NULL,  t(&os_void_target)},
@@ -84,16 +83,17 @@ static const char
 **os_systems[] =
 {
   os_debian,  os_ubuntu,  os_linuxmint,  os_kali,
-  os_trisquel, os_linuxlite, os_raspberrypi,    os_armbian,   os_openwrt,
+  os_trisquel, os_linuxlite, os_raspberrypi,  os_armbian,   os_openwrt,
   os_deepin,   os_openkylin, os_ros,
 
-  os_rocky,
-  os_fedora,   os_almalinux,  os_opensuse,
+  os_fedora,  os_rockylinux, os_almalinux,  os_openeuler, os_anolis,
+
+  os_opensuse,
 
   os_arch,    os_archlinuxcn, os_manjaro, os_gentoo,
 
   os_alpine,   os_void,      os_solus,
-  os_openeuler, os_anolis,
+
   os_msys2,
   os_freebsd,  os_netbsd,    os_openbsd,
 };

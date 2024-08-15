@@ -172,24 +172,6 @@ os_msys2_sources[] = {
 },
 
 
-/**
- * @time 2024-06-12 更新
- */
-os_rocky_sources[] = {
-  {&Upstream,        NULL},
-  {&Ali,            "https://mirrors.aliyun.com/rockylinux"},
-  {&Volcengine,     "https://mirrors.volces.com/rockylinux"},
-  {&Sjtug_Zhiyuan,  "https://mirror.sjtu.edu.cn/rocky"},
-  {&Sustech,        "https://mirrors.sustech.edu.cn/rocky-linux"},
-  {&Zju,            "https://mirrors.zju.edu.cn/rocky"},
-  {&Lzuoss,         "https://mirror.lzu.edu.cn/rocky"},
-  {&Sohu,           "https://mirrors.sohu.com/Rocky"},
-  {&Netease,        "https://mirrors.163.com/rocky"}
-},
-
-
-
-
 
 /**
  * @time 2023-09-29 更新
@@ -350,7 +332,6 @@ def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);
 
 def_sources_n(os_msys2);
-def_sources_n(os_rocky);
 
 def_sources_n(os_linuxlite);
 

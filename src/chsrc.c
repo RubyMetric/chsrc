@@ -93,6 +93,7 @@ pl_clojure_setsrc (char *option)
 
 #include "recipe/os/yum-family/Fedora-Linux.c"
 #include "recipe/os/yum-family/AlmaLinux.c"
+#include "recipe/os/yum-family/Rocky-Linux.c"
 
 /**
  * HELP: 未经测试
@@ -125,29 +126,6 @@ os_msys2_setsrc (char *option)
 
 #include "recipe/os/arch.c"
 #include "recipe/os/gentoo.c"
-
-/**
- * 参考: https://help.mirrors.cernet.edu.cn/rocky/
- */
-void
-os_rocky_setsrc (char *option)
-{
-  chsrc_ensure_root ();
-
-  SourceInfo source;
-  chsrc_yield_source (os_rocky);
-  chsrc_confirm_source (&source);
-
-  char *cmd = xy_strjoin (3,
-            "sed -e 's|^mirrorlist=|#mirrorlist=|g' "
-            "-e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=", source.url, "|g' "
-            "-i.bak /etc/yum.repos.d/rocky-extras.repo /etc/yum.repos.d/rocky.repo"
-            );
-  chsrc_run (cmd, RunOpt_Default);
-  chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
-}
-
 
 
 #include "recipe/os/alpine.c"
