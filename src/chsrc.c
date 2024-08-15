@@ -860,44 +860,7 @@ os_freebsd_setsrc (char *option)
 }
 
 
-
-void
-os_netbsd_getsrc (char *option)
-{
-  chsrc_view_file ("/usr/pkg/etc/pkgin/repositories.conf");
-}
-
-/**
- * 参考:
- * 1. https://mirrors.tuna.tsinghua.edu.cn/help/pkgsrc/
- * 2. https://book.bsdcn.org/di-27-zhang-netbsd/di-27.2-jie-huan-yuan-yu-bao-guan-li-qi.html
- *
- * 根据 @ykla (https://github.com/ykla)
- *    NetBSD 默认状态下没有 pkgsrc，用户可能安装了也可能没安装
- *
- * HELP: 未经测试
- */
-void
-os_netbsd_setsrc (char *option)
-{
-  chsrc_ensure_root (); // HELP: 不知道是否需要确保root权限
-
-  SourceInfo source;
-  chsrc_yield_source (os_netbsd);
-  chsrc_confirm_source (&source);
-
-  chsrc_backup ("/usr/pkg/etc/pkgin/repositories.conf");
-
-  char *arch = chsrc_get_cpuarch ();
-  char *vercmd  = "cat /etc/os-release | grep \"VERSION=\" | grep -Po \"[8-9].[0-9]+\"";
-  char *version = xy_run (vercmd, 0, NULL);
-
-  char *url = xy_strjoin (5, source.url, arch, "/", version, "/All");
-  chsrc_overwrite_file (url, "/usr/pkg/etc/pkgin/repositories.conf");
-
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
-}
-
+#include "recipe/os/netbsd.c"
 #include "recipe/os/openbsd.c"
 
 /**

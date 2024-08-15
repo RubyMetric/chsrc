@@ -354,22 +354,6 @@ os_freebsd_sources[] = {
 },
 
 
-/**
- * @time 2023-09-05 更新
- * @note 源并不完整，且未经测试是否有效
- */
-os_netbsd_sources[] = {
-  {&Upstream,       NULL},
-  {&Ali,       "https://mirrors.aliyun.com/pkgsrc/packages/NetBSD/"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/pkgsrc/packages/NetBSD/"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/pkgsrc/packages/NetBSD/"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/pkgsrc/packages/NetBSD/"},
-  {&Tencent,   "https://mirrors.tencent.com/pkgsrc/packages/NetBSD/"},
-  {&Netease,   "https://mirrors.163.com/pkgsrc/packages/NetBSD/"},
-  {&Sohu,      "https://mirrors.sohu.com/pkgsrc/packages/NetBSD/"}
-},
-
-
 
 /**
  * @time 2023-09-06 更新
@@ -544,7 +528,7 @@ def_sources_n(os_rocky);     def_sources_n(os_alma);
 def_sources_n(os_linuxlite); def_sources_n(os_raspberrypi);
 def_sources_n(os_armbian);
 
-def_sources_n(os_freebsd);  def_sources_n(os_netbsd);
+def_sources_n(os_freebsd);
 
 def_sources_n(os_ros);
 
