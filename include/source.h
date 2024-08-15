@@ -151,29 +151,8 @@ pl_dotnet_sources[] = {
   {&Huawei,        "https://mirrors.huaweicloud.com/repository/nuget/v3"}
 };
 
-
-
-/**
- * @time 2023-09-10 更新
- */
-static SourceInfo
-wr_tex_sources[] = {
-  {&Upstream,       NULL},
-  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/ctan/systems/texlive/tlnet"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/CTAN/systems/texlive/tlnet"},
-  {&Lzuoss,        "https://mirror.lzu.edu.cn/CTAN/systems/texlive/tlnet"},
-  {&Jlu,           "https://mirrors.jlu.edu.cn/CTAN/systems/texlive/tlnet"},
-  {&Sustech,       "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet"}
-};
-
-
-
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
 
 def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);
-
-def_sources_n(wr_tex);
-

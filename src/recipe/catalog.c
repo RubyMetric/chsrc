@@ -91,7 +91,6 @@ static const char
   os_freebsd,  os_netbsd,    os_openbsd,
 };
 
-def_target(wr_tex);
 
 static const char
 *wr_winget  [] = {"winget",  NULL,                t(&wr_winget_target)},
