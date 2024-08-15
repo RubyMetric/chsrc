@@ -166,23 +166,23 @@ chsrc set -local pdm
 ## 编程语言开发
 
 ```bash
-chsrc set ruby    或 set gem
-chsrc set python  或 set pip / poetry / pdm # 同时换pip、poetry 和 pdm 这3个
-chsrc set node    或 set npm / nodejs / yarn / pnpm # 同时换这3个
-chsrc set perl    或 set cpan
-chsrc set php     或 set composer
-chsrc set lua     或 set luarocks
+chsrc set ruby    或 gem
+chsrc set python  或 pip / poetry / pdm # 同时换pip、poetry 和 pdm 这3个
+chsrc set node    或 npm / nodejs / yarn / pnpm # 同时换npm, yarn 和 pnpm 这3个
+chsrc set perl    或 cpan
+chsrc set php     或 composer
+chsrc set lua     或 luarocks
 
 chsrc set go
-chsrc set rust    或 set cargo / crate
-chsrc set java    或 set maven / mvn / gradle
-chsrc set clojure 或 set clojars
-chsrc set dart    或 set pub / flutter # 同时会为flutter换源
-chsrc set haskell 或 set hackage/cabal/stack
-chsrc set ocaml   或 set opam
+chsrc set rust    或 cargo / crate
+chsrc set java    或 maven / mvn / gradle
+chsrc set clojure 或 clojars
+chsrc set dart    或 pub / flutter # 同时会为flutter换源
+chsrc set haskell 或 hackage/cabal/stack
+chsrc set ocaml   或 opam
 
 # 同时会为 bioconductor 换源
-chsrc set r       或 set cran
+chsrc set r       或 cran
 chsrc set julia
 ```
 
@@ -195,30 +195,30 @@ sudo chsrc set ubuntu
 sudo chsrc set linuxmint 或 mint
 sudo chsrc set debian
 sudo chsrc set fedora
-sudo chsrc set suse  或 set opensuse
+sudo chsrc set suse  或 opensuse
 sudo chsrc set kali
 sudo chsrc set arch
 sudo chsrc set archlinuxcn
 sudo chsrc set manjaro
 sudo chsrc set gentoo
-sudo chsrc set rocky 或 set rockylinux
-sudo chsrc set alma  或 set almalinux
+sudo chsrc set rocky 或 rockylinux
+sudo chsrc set alma  或 almalinux
 sudo chsrc set alpine
-sudo chsrc set void  或 set voidlinux
+sudo chsrc set void  或 voidlinux
 sudo chsrc set solus
-sudo chsrc set ros   或 set ros2
+sudo chsrc set ros   或 ros2
 sudo chsrc set trisquel
-sudo chsrc set lite  或 set linuxlite
-sudo chsrc set raspi 或 set raspberrypi
+sudo chsrc set lite  或 linuxlite
+sudo chsrc set raspi 或 raspberrypi
 sudo chsrc set armbian
 sudo chsrc set openwrt
 
 sudo chsrc set openeuler
-sudo chsrc set openanolis
+sudo chsrc set openanolis 或 anolis
 sudo chsrc set openkylin
 sudo chsrc set deepin
 
-chsrc set msys2 或 set msys
+chsrc set msys2 或 msys
 
 # BSD
 sudo chsrc set freebsd
@@ -232,15 +232,15 @@ sudo chsrc set netbsd
 
 ```bash
 chsrc set winget
-chsrc set brew      或 set homebrew
-chsrc set cocoapods 或 set cocoa / pod
-chsrc set dockerhub 或 set docker
+chsrc set brew      或 homebrew
+chsrc set cocoapods 或 cocoa / pod
+chsrc set dockerhub 或 docker
 chsrc set flathub
 chsrc set nix
 chsrc set guix
-chsrc set emacs  或 set elpa
-chsrc set tex    或 set ctan / latex / texlive / miktex
-chsrc set conda  或 set anaconda
+chsrc set emacs  或 elpa
+chsrc set tex    或 ctan / latex / texlive / miktex
+chsrc set conda  或 anaconda
 ```
 
 <br>

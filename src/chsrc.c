@@ -98,6 +98,7 @@ pl_clojure_setsrc (char *option)
 #include "recipe/os/yum-family/AlmaLinux.c"
 #include "recipe/os/yum-family/Rocky-Linux.c"
 #include "recipe/os/yum-family/openEuler.c"
+#include "recipe/os/yum-family/Anolis-OS.c"
 
 /**
  * HELP: 未经测试
@@ -155,28 +156,6 @@ os_manjaro_setsrc (char *option)
 
 
 #include "recipe/os/openwrt.c"
-
-
-
-/**
- * 参考: https://mirrors.hust.edu.cn/docs/anolis
- */
-void
-os_anolis_setsrc (char *option)
-{
-  chsrc_ensure_root ();
-
-  SourceInfo source;
-  chsrc_yield_source (os_anolis);
-  chsrc_confirm_source (&source);
-
-  char *cmd = xy_strjoin (3, "sed -i.bak -E 's|https?://(mirrors\\.openanolis\\.cn/anolis)|", source.url, "|g' /etc/yum.repos.d/*.repo");
-  chsrc_run (cmd, RunOpt_Default);
-
-  chsrc_run ("dnf makecache", RunOpt_Default);
-  chsrc_run ("dnf update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
-}
 
 
 #include "recipe/os/freebsd.c"

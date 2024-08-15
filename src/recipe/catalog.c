@@ -39,7 +39,6 @@ static const char
 };
 
 
-def_target_noget(os_anolis);
 def_target_noget(os_msys2);
 TargetInfo os_manjaro_target = {NULL, os_manjaro_setsrc, NULL, NULL, 0};
 
@@ -70,7 +69,7 @@ static const char
 
 *os_openkylin  [] = {"openkylin",  NULL,            t(&os_openkylin_target)},
 *os_openeuler  [] = {"openeuler",  NULL,            t(&os_openeuler_target)},
-*os_anolis     [] = {"openanolis", NULL,            t(&os_anolis_target)},
+*os_anolis     [] = {"openanolis", "anolis", NULL,  t(&os_anolis_target)},
 *os_deepin     [] = {"deepin",               NULL,  t(&os_deepin_target)},
 
 *os_freebsd    [] = {"freebsd",              NULL,  t(&os_freebsd_target)},
