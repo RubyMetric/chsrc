@@ -92,7 +92,6 @@ static const char
 };
 
 
-def_target_full(wr_winget);
 def_target_noget (wr_cocoapods);
 def_target_noget (wr_flathub);
 def_target_noget (wr_nix);

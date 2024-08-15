@@ -154,20 +154,9 @@ pl_dotnet_sources[] = {
 
 
 /**
- * @time 2024-06-07 更新
- * @note 目前仅有一个源
- */
-static SourceInfo
-wr_winget_sources[] = {
-  {&Upstream,       "https://cdn.winget.microsoft.com/cache"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/winget-source"},
-},
-
-
-
-/**
  * @time 2024-06-08 更新
  */
+static SourceInfo
 wr_cocoapods_sources[] = {
   {&Upstream,       NULL},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git"},
@@ -248,8 +237,6 @@ wr_tex_sources[] = {
 def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);
 
-
-def_sources_n(wr_winget);
 def_sources_n(wr_cocoapods);
 
 def_sources_n(wr_flathub);
