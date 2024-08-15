@@ -814,35 +814,7 @@ os_manjaro_setsrc (char *option)
   chsrc_say_lastly (NULL, ChsrcTypeAuto);
 }
 
-
-
-void
-os_trisquel_getsrc (char *option)
-{
-  chsrc_view_file (ETC_APT_SOURCELIST);
-}
-
-/**
- * 参考: https://help.mirrors.cernet.edu.cn/trisquel/
- */
-void
-os_trisquel_setsrc (char *option)
-{
-  chsrc_ensure_root ();
-
-  SourceInfo source;
-  chsrc_yield_source (os_trisquel);
-  chsrc_confirm_source (&source);
-
-  chsrc_backup (ETC_APT_SOURCELIST);
-
-  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/trisquel/?@", source.url, "@g' /etc/apt/sources.list");
-
-  chsrc_run (cmd, RunOpt_Default);
-  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
-}
-
+#include "recipe/os/trisquel.c"
 
 
 void

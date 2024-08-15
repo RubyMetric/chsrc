@@ -371,17 +371,6 @@ os_linuxlite_sources[] = {
 },
 
 
-/**
- * @time 2023-09-29 更新
- */
-os_trisquel_sources[] = {
-  {&Upstream,       NULL},
-  {&Ali,            "https://mirrors.aliyun.com/trisquel/"},
-  {&MirrorZ,        "https://mirrors.cernet.edu.cn/trisquel/"},
-  {&Nju,            "https://mirror.nju.edu.cn/trisquel/"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/trisquel/"}
-},
-
 
 /**
  * @time 2023-09-29 更新
@@ -631,7 +620,7 @@ def_sources_n(os_arch);     def_sources_n(os_archlinuxcn);
 def_sources_n(os_msys2);    def_sources_n(os_gentoo);
 def_sources_n(os_rocky);     def_sources_n(os_alma);
 
-def_sources_n(os_trisquel); def_sources_n(os_linuxlite); def_sources_n(os_raspberrypi);
+def_sources_n(os_linuxlite); def_sources_n(os_raspberrypi);
 def_sources_n(os_armbian);
 
 def_sources_n(os_freebsd);  def_sources_n(os_netbsd);    def_sources_n(os_openbsd);
