@@ -40,7 +40,7 @@ static const char
 
 
 def_target(os_linuxlite);
-def_target(os_deepin); def_target(os_openkylin);
+def_target(os_openkylin);
 def_target_noget(os_rocky);
 def_target_noget(os_openeuler);
 def_target_noget(os_anolis);

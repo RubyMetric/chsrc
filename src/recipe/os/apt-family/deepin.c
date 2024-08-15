@@ -6,7 +6,7 @@
  * Created On    : <2023-09-26>
  * Last Modified : <2024-08-16>
  *
- * Kali Linux 基于 Debian Testing branch
+ * 名称为小写deepin，而非Deepin
  * ------------------------------------------------------------*/
 
 /**
@@ -55,3 +55,5 @@ os_deepin_setsrc (char *option)
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
+
+def_target(os_deepin);
