@@ -45,7 +45,6 @@ def_target(os_netbsd); def_target(os_openbsd);
 def_target(os_deepin); def_target(os_openkylin);
 def_target(os_raspberrypi);
 def_target(os_armbian);
-def_target(os_arch); def_target(os_archlinuxcn);
 def_target_noget(os_fedora);
 def_target_noget(os_opensuse);
 def_target_noget(os_rocky);
