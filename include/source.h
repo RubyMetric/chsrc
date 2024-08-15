@@ -362,16 +362,6 @@ os_alma_sources[] = {
 
 
 
-/**
- * @time 2023-09-24 更新
- */
-os_void_sources[] = {
-  {&Upstream,       NULL},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/voidlinux"},
-  {&Sjtug_Zhiyuan,  "https://mirror.sjtu.edu.cn/voidlinux"},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/voidlinux"}
-},
-
 
 /**
  * @time 2023-09-29 更新
@@ -652,7 +642,6 @@ def_sources_n(os_kali);     def_sources_n(os_opensuse);
 def_sources_n(os_arch);     def_sources_n(os_archlinuxcn);
 def_sources_n(os_msys2);    def_sources_n(os_gentoo);
 def_sources_n(os_rocky);     def_sources_n(os_alma);
-def_sources_n(os_void);
 def_sources_n(os_solus);
 
 def_sources_n(os_trisquel); def_sources_n(os_linuxlite); def_sources_n(os_raspberrypi);
