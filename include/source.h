@@ -153,38 +153,10 @@ pl_dotnet_sources[] = {
 
 
 
-
 /**
- * @time 2023-09-11 更新
- * @note 目前只有一个源
+ * @time 2023-09-10 更新
  */
 static SourceInfo
-wr_flathub_sources[] = {
-  {&Upstream,       NULL},
-  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/flathub"},
-},
-
-
-
-
-
-/**
- * @time 2023-09-10 更新
- * @note 这些链接将会在setsrc函数中补充完整
- */
-wr_anaconda_sources[] = {
-  {&Upstream,       NULL},
-  {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/anaconda/"},
-  {&Bfsu,            "https://mirrors.bfsu.edu.cn/anaconda/"},
-  {&Zju,             "https://mirrors.zju.edu.cn/anaconda/"},
-  {&Sjtug_Zhiyuan,   "https://mirror.sjtu.edu.cn/anaconda"}
-},
-
-
-
-/**
- * @time 2023-09-10 更新
- */
 wr_tex_sources[] = {
   {&Upstream,       NULL},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/ctan/systems/texlive/tlnet"},
@@ -203,6 +175,5 @@ wr_tex_sources[] = {
 def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);
 
-def_sources_n(wr_flathub);
 def_sources_n(wr_tex);
-def_sources_n(wr_anaconda);
+

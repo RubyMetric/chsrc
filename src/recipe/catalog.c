@@ -91,9 +91,6 @@ static const char
   os_freebsd,  os_netbsd,    os_openbsd,
 };
 
-
-def_target_noget (wr_flathub);
-def_target_noget (wr_anaconda);
 def_target(wr_tex);
 
 static const char

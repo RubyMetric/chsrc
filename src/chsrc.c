@@ -182,86 +182,9 @@ wr_tex_setsrc (char *option)
 #include "recipe/ware/CocoaPods.c"
 #include "recipe/ware/Nix.c"
 #include "recipe/ware/Guix.c"
-
-
-
+#include "recipe/ware/Flathub.c"
 #include "recipe/ware/docker.c"
-
-
-/**
- * 参考: https://mirrors.sjtug.sjtu.edu.cn/docs/flathub
- */
-void
-wr_flathub_setsrc (char *option)
-{
-  SourceInfo source;
-  chsrc_yield_source (wr_flathub);
-  chsrc_confirm_source (&source);
-
-  chsrc_note2 ("若出现问题，可先调用以下命令:");
-  char *note = xy_strjoin (3,
-    "wget ", source.url, "/flathub.gpg\n"
-    "flatpak remote-modify --gpg-import=flathub.gpg flathub"
-  );
-  puts (note);
-
-  char *cmd = xy_2strjoin ("flatpak remote-modify flathub --url=", source.url);
-  chsrc_run (cmd, RunOpt_Default);
-
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
-}
-
-
-
-void
-wr_anaconda_setsrc (char *option)
-{
-  SourceInfo source;
-  chsrc_yield_source (wr_anaconda);
-  chsrc_confirm_source (&source);
-
-  char *main  = xy_2strjoin (source.url, "pkgs/main");
-  char *r     = xy_2strjoin (source.url, "pkgs/r");
-  char *msys2 = xy_2strjoin (source.url, "pkgs/msys2");
-  char *cloud = xy_2strjoin (source.url, "cloud");
-
-  char *file = xy_strjoin (22,
-               "channels:\n  - defaults\n"
-               "show_channel_urls: true\ndefault_channels:"
-             "\n  - ", main,
-             "\n  - ", r,
-             "\n  - ", msys2,
-             "\ncustom_channels:\n"
-               "  conda-forge: ", cloud,
-             "\n  msys2: ",        cloud,
-             "\n  bioconda: ",     cloud,
-             "\n  menpo: ",        cloud,
-             "\n  pytorch: ",      cloud,
-             "\n  pytorch-lts: ",  cloud,
-             "\n  simpleitk: ",    cloud,
-             "\n  deepmodeling: ", cloud);
-
-
-  // TODO: 待确认 windows 上也是这里吗？
-  char *config = xy_2strjoin (xy_os_home, "/.condarc");
-
-  if (xy_on_windows)
-    {
-      bool exist = chsrc_check_program ("conda");
-      if (!exist)
-        {
-          chsrc_error ("未找到 conda 命令，请检查是否存在");
-          exit (Exit_UserCause);
-        }
-      chsrc_run ("conda config --set show_channel_urls yes", RunOpt_Default);
-    }
-
-  chsrc_note2 (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
-  puts (file);
-
-  chsrc_note2 ("然后运行 conda clean -i 清除索引缓存，保证用的是镜像站提供的索引");
-  chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
-}
+#include "recipe/ware/Anaconda.c"
 
 
 #include "recipe/catalog.c"
