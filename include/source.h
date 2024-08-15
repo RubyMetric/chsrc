@@ -153,22 +153,12 @@ pl_dotnet_sources[] = {
 
 
 
-/**
- * @time 2024-06-08 更新
- */
-static SourceInfo
-wr_cocoapods_sources[] = {
-  {&Upstream,       NULL},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/git/CocoaPods/Specs.git"}
-},
-
-
 
 /**
  * @time 2023-09-11 更新
  * @note 目前只有一个源
  */
+static SourceInfo
 wr_flathub_sources[] = {
   {&Upstream,       NULL},
   {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/flathub"},
@@ -236,8 +226,6 @@ wr_tex_sources[] = {
 
 def_sources_n(pl_clojure);
 def_sources_n(pl_dotnet);
-
-def_sources_n(wr_cocoapods);
 
 def_sources_n(wr_flathub);
 def_sources_n(wr_nix);      def_sources_n(wr_guix);
