@@ -154,7 +154,7 @@ chsrc set ruby https://gems.ruby-china.com/ # 使用自定义URL
 chsrc set ruby first     # 使用维护团队测试的最快镜像站
 ```
 
-对部分[支持局部换源](https://gitee.com/RubyMetric/chsrc/issues/I9V5I0)的，可以避免全局换源。
+对支持 **项目级** 换源的目标，可以避免全局（**系统级** 或 **用户级**）换源。
 
 ```bash
 chsrc set -local bundler
