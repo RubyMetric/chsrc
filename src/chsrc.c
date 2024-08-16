@@ -219,32 +219,33 @@ cli_print_target_features (FeatInfo f, const char *input_target_name)
   printf (to_boldpurple("\nFeatures:\n\n"));
 
   char *get_msg = xy_2strjoin (" Get: 查看当前源状态 | chsrc get ", input_target_name);
-  if (f.can_get) printf (" %s%s\n", to_boldgreen("✔"), to_purple(get_msg));
-  else printf (" %s%s\n", to_boldred("x"), get_msg);puts("");
+  if (f.can_get) printf (" %s%s\n", to_boldgreen(YesMark), to_purple(get_msg));
+  else printf (" %s%s\n", to_boldred(NoMark), get_msg);puts("");
 
   char *reset_msg = xy_2strjoin (" Reset: 重置回默认源 | chsrc reset ", input_target_name);
-  if (f.can_reset) printf (" %s%s\n", to_boldgreen("√"), to_purple(reset_msg));
-  else printf (" %s%s\n", to_boldred("x"), reset_msg);puts("");
+  if (f.can_reset) printf (" %s%s\n", to_boldgreen(YesMark), to_purple(reset_msg));
+  else printf (" %s%s\n", to_boldred(NoMark), reset_msg);puts("");
 
   char *user_define_msg = xy_strjoin (4, " UserDefine: 用户自定义换源URL | chsrc set ", input_target_name, " https://user-define-url.org/", input_target_name);
-  if (f.can_user_define) printf (" %s%s\n", to_boldgreen("✓"), to_purple(user_define_msg));
-  else printf (" %s%s\n", to_boldred("x"), user_define_msg);puts("");
+  if (f.can_user_define) printf (" %s%s\n", to_boldgreen(YesMark), to_purple(user_define_msg));
+  else printf (" %s%s\n", to_boldred(NoMark), user_define_msg);puts("");
 
 
   char *locally_msg = xy_2strjoin (" Locally: 仅对本项目换源 | chsrc set -local ", input_target_name);
 
-  switch (f.stcan_locally) {
-    case CanNotFully:
-      printf (" %s%s\n", to_boldred(NoMark), locally_msg);puts("");
-      break;
-    case CanFully:
-      printf (" %s%s\n", to_boldgreen(YesMark), to_purple(locally_msg));puts("");
-      break;
-    case CanSemi:
-      printf (" %s%s\n\n   %s\n", to_boldgreen(SemiYesMark), to_purple(locally_msg), f.locally);puts("");
-      break;
-    default:
-      xy_unreach;
+  switch (f.stcan_locally)
+  {
+  case CanNotFully:
+    printf (" %s%s\n", to_boldred(NoMark), locally_msg);puts("");
+    break;
+  case CanFully:
+    printf (" %s%s\n", to_boldgreen(YesMark), to_purple(locally_msg));puts("");
+    break;
+  case CanSemi:
+    printf (" %s%s\n\n   %s\n", to_boldgreen(SemiYesMark), to_purple(locally_msg), f.locally);puts("");
+    break;
+  default:
+    xy_unreach;
   }
 
   char *english_msg = xy_2strjoin (" English: 英文输出 | chsrc set -en ", input_target_name);

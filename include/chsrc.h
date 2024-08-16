@@ -8,7 +8,7 @@
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-08-16>
+ * Last modified : <2024-08-17>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -54,6 +54,9 @@ chsrc_note2 (const char* str)
   xy_log_brkt (to_yellow (App_Name), to_boldyellow ("提示"), to_yellow (str));
 }
 
+#define YesMark "✓"
+#define NoMark "x"
+#define SemiYesMark "⍻"
 
 void
 chsrc_log_check_result (const char *check_what, const char *check_type, bool exist)
@@ -61,12 +64,12 @@ chsrc_log_check_result (const char *check_what, const char *check_type, bool exi
   if (!exist)
     {
       xy_log_brkt (App_Name, to_boldred ("检查"), xy_strjoin (5,
-                   to_red ("x "), check_type, " ", to_red (check_what), " 不存在"));
+                   to_red (NoMark " "), check_type, " ", to_red (check_what), " 不存在"));
     }
   else
     {
       xy_log_brkt (App_Name, to_boldgreen ("检查"), xy_strjoin (5,
-                   to_green ("√ "), check_type, " ", to_green (check_what), " 存在"));
+                   to_green (YesMark " "), check_type, " ", to_green (check_what), " 存在"));
     }
 }
 
@@ -76,13 +79,13 @@ chsrc_log_cmd_result (bool result, int ret_code)
 {
   if (result)
     {
-      xy_log_brkt (to_green (App_Name), to_boldgreen ("运行"),  to_green ("√ 命令执行成功"));
+      xy_log_brkt (to_green (App_Name), to_boldgreen ("运行"), to_green (YesMark " 命令执行成功"));
     }
   else
     {
       char buf[8] = {0};
       sprintf (buf, "%d", ret_code);
-      char *log = xy_2strjoin (to_red ("x 命令执行失败，返回码 "), to_boldred (buf));
+      char *log = xy_2strjoin (to_red (NoMark " 命令执行失败，返回码 "), to_boldred (buf));
       xy_log_brkt (to_red (App_Name), to_boldred ("运行"), log);
     }
 }
