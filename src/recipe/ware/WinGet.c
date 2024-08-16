@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2024-06-07>
- * Last Modified : <2024-08-15>
+ * Last Modified : <2024-08-17>
  * ------------------------------------------------------------*/
 
 /**
@@ -46,4 +46,19 @@ wr_winget_resetsrc (char *option)
   chsrc_say_lastly (NULL, ChsrcTypeAuto);
 }
 
-def_target_gsr(wr_winget);
+
+FeatInfo
+wr_winget_feat (char *option)
+{
+  FeatInfo fi = {0};
+
+  fi.can_get = true;
+  fi.can_reset = true;
+
+  fi.can_english = false;
+  fi.can_user_define = true;
+
+  return fi;
+}
+
+def_target_gsrf(wr_winget);

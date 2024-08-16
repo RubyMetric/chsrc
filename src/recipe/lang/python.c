@@ -4,9 +4,8 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-03>
- * Last Modified : <2024-08-09>
+ * Last Modified : <2024-08-17>
  * ------------------------------------------------------------*/
-
 
 /**
  * 2024-05-24 更新
@@ -47,18 +46,13 @@ pl_python_check_cmd (char **prog, bool *poetry_exist, bool *pdm_exist)
   // 因此我们首先测试 python3
   py_exist = chsrc_check_program ("python3");
 
-  if (py_exist)
-    {
-      *prog = "python3";
-    }
+  if (py_exist) *prog = "python3";
   else
     {
       // 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store
       py_exist = chsrc_check_program ("python");
-      if (py_exist)
-        {
-          *prog = "python";
-        }
+
+      if (py_exist) *prog = "python";
       else
         {
           chsrc_error ("未找到 Python 相关命令，请检查是否存在");
@@ -149,4 +143,20 @@ pl_python_resetsrc (char *option)
   pl_python_setsrc (ChsrcTypeReset);
 }
 
-def_target_gsr(pl_python);
+
+FeatInfo
+pl_python_feat (char *option)
+{
+  FeatInfo fi = {0};
+
+  fi.can_get = true;
+  fi.can_reset = true;
+
+  fi.locally = "pip 不支持; pdm 支持 (From v0.1.6); poetry 默认使用项目级 (From v0.1.7.2)";
+  fi.can_english = false;
+  fi.can_user_define = true;
+
+  return fi;
+}
+
+def_target_gsrf(pl_python);

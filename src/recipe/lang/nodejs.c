@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-08-30>
- * Last Modified : <2024-08-09>
+ * Last Modified : <2024-08-17>
  * ------------------------------------------------------------*/
 
 static MirrorSite
@@ -114,4 +114,19 @@ pl_nodejs_setsrc (char *option)
 }
 
 
-def_target(pl_nodejs);
+FeatInfo
+pl_nodejs_feat (char *option)
+{
+  FeatInfo fi = {0};
+
+  fi.can_get = true;
+  fi.can_reset = false;
+
+  fi.locally = "npm 支持 (From v0.1.7); yarn 未知; pnpm 未知;";
+  fi.can_english = false;
+  fi.can_user_define = true;
+
+  return fi;
+}
+
+def_target_gsf (pl_nodejs);

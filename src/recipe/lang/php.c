@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-08-30>
- * Last Modified : <2024-08-09>
+ * Last Modified : <2024-08-17>
  * ------------------------------------------------------------*/
 
 /**
@@ -61,4 +61,20 @@ pl_php_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
 }
 
-def_target(pl_php);
+
+FeatInfo
+pl_php_feat (char *option)
+{
+  FeatInfo fi = {0};
+
+  fi.can_get = true;
+  fi.can_reset = false;
+
+  fi.locally = "composer 支持 (From v0.1.7)";
+  fi.can_english = false;
+  fi.can_user_define = true;
+
+  return fi;
+}
+
+def_target_gsf (pl_php);
