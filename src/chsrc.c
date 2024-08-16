@@ -249,8 +249,8 @@ cli_print_target_features (FeatInfo f, const char *input_target_name)
   }
 
   char *english_msg = xy_2strjoin (" English: 英文输出 | chsrc set -en ", input_target_name);
-  if (f.can_english) printf (" %s%s\n", to_boldgreen(YesMark), to_purple(english_msg));
-  else printf (" %s%s\n", to_boldred(NoMark), english_msg);
+  // if (f.can_english) printf (" %s%s\n", to_boldgreen(YesMark), to_purple(english_msg));
+  // else printf (" %s%s\n", to_boldred(NoMark), english_msg);
 
 
   if (f.note)
