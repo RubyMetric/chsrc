@@ -3,11 +3,11 @@
  * Copyright © 2023-2024 Aoran Zeng, Heng Guo
  * -------------------------------------------------------------
  * Project Authors : Aoran Zeng    <ccmywish@qq.com>
- *                 | Heng Guo      <2085471348@qq.com>
+ *                 |  Heng Guo     <2085471348@qq.com>
  * Contributors    : Aaron Ruan    <aaron212cn@outlook.com>
- *                 | Rui Chen      <rui@chenrui.dev>
+ *                 |  Rui Chen     <rui@chenrui.dev>
  *                 | Shengwei Chen <414685209@qq.com>
- *                 | BlockLune     <blocklune@gmail.com>
+ *                 |  BlockLune    <blocklune@gmail.com>
  *                 |
  * Created On      : <2023-08-28>
  * Last Modified   : <2024-08-16>
@@ -198,7 +198,7 @@ print_supported_wr ()
  * 用于 chsrc list <target>
  */
 void
-print_supported_sources_for_target (SourceInfo sources[], size_t size)
+cli_print_target_available_sources (SourceInfo sources[], size_t size)
 {
   for (int i=0;i<size;i++)
     {
@@ -210,6 +210,33 @@ print_supported_sources_for_target (SourceInfo sources[], size_t size)
         }
       printf ("%-14s%-18s%-50s ", mir->code, mir->abbr, src.url);
       puts (mir->name);
+    }
+}
+
+void
+cli_print_target_features (FeatInfo f)
+{
+  printf (to_boldpurple("\nFeatures:\n\n"));
+
+  if (f.can_get) printf (" %s%s\n", to_boldgreen("√"), to_purple(" Get: 查看当前源状态"));
+  else printf (" %s%s\n", to_boldred("x"), " Get: 查看当前源状态");puts("");
+
+  if (f.can_reset) printf (" %s%s\n", to_boldgreen("√"), to_purple(" Reset: 重置回默认源"));
+  else printf (" %s%s\n", to_boldred("x"), " Reset: 重置回默认源");puts("");
+
+  if (f.locally) printf (" %s%s\n", "- Locally(本项目): ", f.locally);
+  else printf (" %s%s\n", to_boldred("x"), " Locally: 仅对本项目换源");puts("");
+
+  if (f.can_user_define) printf (" %s%s\n", to_boldgreen("√"), to_purple(" UserDefine: 用户自定义换源URL"));
+  else printf (" %s%s\n", to_boldred("x"), " UserDefine: 用户自定义换源URL");puts("");
+
+  if (f.can_english) printf (" %s%s\n", to_boldgreen("√"), to_purple(" English: 英文输出"));
+  else printf (" %s%s\n", to_boldred("x"), " English: 英文输出");
+
+
+  if (f.note)
+    {
+      printf ("\n%s%s\n", to_boldyellow ("备注: "), to_boldyellow (f.note));
     }
 }
 
@@ -328,9 +355,7 @@ get_target (const char *input, TargetOp code, char *option)
   if (!matched) matched = iterate_targets(os_systems,   input, &target_tmp);
   if (!matched) matched = iterate_targets(wr_softwares, input, &target_tmp);
 
-  if (!matched) {
-    return false;
-  }
+  if (!matched) return false;
 
   TargetInfo *target = (TargetInfo*) *target_tmp;
 
@@ -343,7 +368,6 @@ get_target (const char *input, TargetOp code, char *option)
     {
       if (target->resetfn) target->resetfn(option);
       else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现reset功能，邀您帮助: chsrc issue"));
-      // puts ("将重置并恢复上游默认使用的源");
     }
   else if (TargetOp_Get_Source==code)
     {
@@ -352,11 +376,15 @@ get_target (const char *input, TargetOp code, char *option)
     }
   else if (TargetOp_List_Source==code)
     {
-      chsrc_info (xy_strjoin (3, "对 ", input, " 支持以下镜像站"));
       chsrc_info (xy_strjoin (3, "下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>\n"));
       printf (" %-14s%-35s%-43s ", "code", "镜像站简写", "换源URL"); puts ("镜像站名称");
       puts   ("---------    --------------    -----------------------------------------------    ---------------------");
-      print_supported_sources_for_target (target->sources, target->sources_n);
+      cli_print_target_available_sources (target->sources, target->sources_n);
+      if (target->featfn)
+        {
+          FeatInfo fi = target->featfn("");
+          cli_print_target_features (fi);
+        }
     }
   else if (TargetOp_Cesu_Source==code)
     {
@@ -372,7 +400,7 @@ main (int argc, char const *argv[])
 {
   xy_useutf8 (); argc -= 1;
 
-  if (argc==0)
+  if (0==argc)
     {
       cli_print_version ();
       cli_print_help ();
@@ -391,7 +419,7 @@ main (int argc, char const *argv[])
   // chsrc set -ipv6 target mirror
   //        1    2     3      4
   // argc = 4
-  for (int i=2; i<=argc ;i++)
+  for (int i=2; i<=argc; i++)
     {
       if (xy_str_start_with (argv[i], "-"))
         {
