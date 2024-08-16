@@ -376,7 +376,9 @@ get_target (const char *input, TargetOp code, char *option)
     }
   else if (TargetOp_List_Source==code)
     {
-      chsrc_info (xy_strjoin (3, "下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>\n"));
+      say (to_boldblue(xy_strjoin (3, "指定使用某源，请使用 chsrc set ", input, " <code>\n")));
+      say (to_boldgreen("Available Sources: \n"));
+      // chsrc_info (xy_strjoin (3, "下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>\n"));
       printf (" %-14s%-35s%-43s ", "code", "镜像站简写", "换源URL"); puts ("镜像站名称");
       puts   ("---------    --------------    -----------------------------------------------    ---------------------");
       cli_print_target_available_sources (target->sources, target->sources_n);

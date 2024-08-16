@@ -92,8 +92,8 @@ pl_ruby_setsrc (char *option)
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
   chsrc_say_lastly (&source, chsrc_type);
-  // puts ("");
-  // chsrc_note2 ("维护者提醒您: Ruby的镜像源目前仅有 腾讯软件源，RubyChina，华为开源镜像站 实现正确");
+
+  // chsrc_note2 ("Ruby的镜像源目前仅有 腾讯软件源，RubyChina 实现正确");
   // chsrc_note2 ("而其它如Tuna,Bfsu,Ali目前都实现的有问题，请勿使用");
 }
 
@@ -103,4 +103,22 @@ pl_ruby_resetsrc (char *option)
   pl_ruby_setsrc (ChsrcTypeReset);
 }
 
-def_target_full(pl_ruby);
+
+FeatInfo
+pl_ruby_feat (char *option)
+{
+  FeatInfo fi = {0};
+
+  fi.can_get = true;
+  fi.can_reset = true;
+
+  fi.locally = "gem 不支持; bundler 支持 (From v0.1.6)";
+  fi.can_english = false;
+  fi.can_user_define = true;
+
+  fi.note = "华为开源镜像站提供的源可能存在问题";
+  return fi;
+}
+
+
+def_target_gsrf(pl_ruby);
