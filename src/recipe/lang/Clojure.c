@@ -32,4 +32,4 @@ pl_clojure_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeManual);
 }
 
-def_target_noget (pl_clojure);
+def_target_s (pl_clojure);

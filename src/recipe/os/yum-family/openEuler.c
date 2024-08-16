@@ -48,4 +48,4 @@ os_openeuler_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
-def_target_noget(os_openeuler);
+def_target_s(os_openeuler);

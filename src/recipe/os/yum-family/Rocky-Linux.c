@@ -47,4 +47,4 @@ os_rockylinux_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
-def_target_noget(os_rockylinux);
+def_target_s(os_rockylinux);

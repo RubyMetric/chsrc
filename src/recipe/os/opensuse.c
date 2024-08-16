@@ -79,4 +79,4 @@ os_opensuse_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
-def_target_noget(os_opensuse);
+def_target_s(os_opensuse);

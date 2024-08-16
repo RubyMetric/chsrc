@@ -38,4 +38,4 @@ wr_guix_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeManual);
 }
 
-def_target_noget (wr_guix);
+def_target_s (wr_guix);

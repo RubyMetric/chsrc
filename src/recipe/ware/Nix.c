@@ -61,4 +61,4 @@ wr_nix_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
 }
 
-def_target_noget (wr_nix);
+def_target_s (wr_nix);

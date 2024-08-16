@@ -72,4 +72,4 @@ wr_anaconda_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
 }
 
-def_target_noget (wr_anaconda);
+def_target_s (wr_anaconda);

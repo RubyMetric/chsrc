@@ -41,4 +41,4 @@ os_almalinux_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
-def_target_noget(os_almalinux);
+def_target_s(os_almalinux);

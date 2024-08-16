@@ -46,4 +46,4 @@ wr_winget_resetsrc (char *option)
   chsrc_say_lastly (NULL, ChsrcTypeAuto);
 }
 
-def_target_full(wr_winget);
+def_target_gsr(wr_winget);

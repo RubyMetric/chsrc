@@ -100,6 +100,6 @@ void
 
 // 定义此 target，参考 "target.h"
 // 下列情形3选1
-def_target_full(<category>_<target>);
+def_target_gsr(<category>_<target>);
 def_target(<category>_<target>);
 def_target_no_get(<category>_<target>);

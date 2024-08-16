@@ -149,4 +149,4 @@ pl_python_resetsrc (char *option)
   pl_python_setsrc (ChsrcTypeReset);
 }
 
-def_target_full(pl_python);
+def_target_gsr(pl_python);

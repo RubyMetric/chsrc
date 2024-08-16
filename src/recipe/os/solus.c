@@ -37,4 +37,4 @@ os_solus_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
-def_target_noget(os_solus);
+def_target_s(os_solus);

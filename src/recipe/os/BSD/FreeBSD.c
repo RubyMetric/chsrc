@@ -131,4 +131,4 @@ os_freebsd_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
 }
 
-def_target_noget(os_freebsd);
+def_target_s(os_freebsd);

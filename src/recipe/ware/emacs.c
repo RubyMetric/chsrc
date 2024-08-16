@@ -40,4 +40,4 @@ wr_emacs_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeManual);
 }
 
-def_target_noget (wr_emacs);
+def_target_s (wr_emacs);

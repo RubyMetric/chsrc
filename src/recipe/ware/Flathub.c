@@ -42,4 +42,4 @@ wr_flathub_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
-def_target_noget (wr_flathub);
+def_target_s (wr_flathub);

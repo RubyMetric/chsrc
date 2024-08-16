@@ -50,4 +50,4 @@ os_gentoo_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
-def_target_noget(os_gentoo);
+def_target_s(os_gentoo);

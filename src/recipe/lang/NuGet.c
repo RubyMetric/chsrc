@@ -38,4 +38,4 @@ pl_nuget_setsrc (char *option)
 }
 
 
-def_target_noget (pl_nuget);
+def_target_s (pl_nuget);

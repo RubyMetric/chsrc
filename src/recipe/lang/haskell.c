@@ -67,4 +67,4 @@ pl_haskell_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeManual);
 }
 
-def_target_noget (pl_haskell);
+def_target_s (pl_haskell);

@@ -65,4 +65,4 @@ os_fedora_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeAuto);
 }
 
-def_target_noget(os_fedora);
+def_target_s(os_fedora);

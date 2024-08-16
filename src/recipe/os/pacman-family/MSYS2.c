@@ -52,4 +52,4 @@ os_msys2_setsrc (char *option)
   chsrc_say_lastly (&source, ChsrcTypeUntested);
 }
 
-def_target_noget(os_msys2);
+def_target_s(os_msys2);
