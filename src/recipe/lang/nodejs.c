@@ -122,7 +122,8 @@ pl_nodejs_feat (char *option)
   fi.can_get = true;
   fi.can_reset = false;
 
-  fi.locally = "npm 支持 (From v0.1.7); yarn 未知; pnpm 未知;";
+  fi.stcan_locally = CanSemi;
+  fi.locally = "npm 支持 (From v0.1.7); yarn 未知; pnpm 未知";
   fi.can_english = false;
   fi.can_user_define = true;
 

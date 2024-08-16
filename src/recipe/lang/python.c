@@ -152,6 +152,7 @@ pl_python_feat (char *option)
   fi.can_get = true;
   fi.can_reset = true;
 
+  fi.stcan_locally = CanSemi;
   fi.locally = "pip 不支持; pdm 支持 (From v0.1.6); poetry 默认使用项目级 (From v0.1.7.2)";
   fi.can_english = false;
   fi.can_user_define = true;
