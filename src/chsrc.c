@@ -284,18 +284,16 @@ cli_print_issues ()
   puts (
   "chsrc issues: Gitee和GitHub两边同时接受issue\n\n"
   "- https://gitee.com/RubyMetric/chsrc/issues\n"
-  "- https://github.com/RubyMetric/chsrc/issues\n\n"
-
-  "目前支持reset命令的源:  https://gitee.com/RubyMetric/chsrc/issues/I9V6EV\n"
-  "目前支持-local选项的源: https://gitee.com/RubyMetric/chsrc/issues/I9V5I0\n"
-  "已收录的镜像站:         https://gitee.com/RubyMetric/chsrc/wikis\n"
+  "- https://github.com/RubyMetric/chsrc/issues\n"
   );
 
+  /*
   if (chsrc_check_program ("gh"))
     {
       char *cmd = xy_str_to_quietcmd ("gh browse --repo RubyMetric/chsrc");
       system (cmd);
     }
+  */
 }
 
 
