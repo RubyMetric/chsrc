@@ -235,7 +235,7 @@ chsrc set winget
 chsrc set brew      或 homebrew
 chsrc set cocoapods 或 cocoa / pod
 chsrc set dockerhub 或 docker
-chsrc set flathub
+chsrc set flathub   或 flatpak
 chsrc set nix
 chsrc set guix
 chsrc set emacs  或 elpa
@@ -274,7 +274,7 @@ make clean
 ## ❤️ 致谢
 
 感谢各个镜像站提供的优质免费镜像服务
-1. [source.h](./src/source.h) 包含了通用的镜像站信息
+1. [source.h](./include/source.h) 包含了通用的镜像站信息
 2. 各个recipe内部定义的专用镜像站
 
 另外感谢以下项目:

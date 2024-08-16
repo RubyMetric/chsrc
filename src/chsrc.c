@@ -89,7 +89,7 @@
 #include "recipe/ware/Nix.c"
 #include "recipe/ware/Guix.c"
 #include "recipe/ware/Flathub.c"
-#include "recipe/ware/docker.c"
+#include "recipe/ware/Docker-Hub.c"
 #include "recipe/ware/Anaconda.c"
 
 

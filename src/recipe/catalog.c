@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-01>
- * Last Modified : <2024-08-15>
+ * Last Modified : <2024-08-16>
  * ------------------------------------------------------------*/
 
 /* Begin Target Matrix */
@@ -89,11 +89,11 @@ static const char
 
 
 static const char
-*wr_winget  [] = {"winget",  NULL,                t(&wr_winget_target)},
-*wr_homebrew[] = {"brew",    "homebrew",   NULL,  t(&wr_homebrew_target)},
-*wr_cocoapods[] = {"cocoa",   "cocoapods","pod", "cocoapod",  NULL,  t(&wr_cocoapods_target)},
+*wr_winget  [] = {"winget",  NULL,                   t(&wr_winget_target)},
+*wr_homebrew[] = {"brew",       "homebrew",   NULL,  t(&wr_homebrew_target)},
+*wr_cocoapods[] = {"cocoa",     "cocoapods","pod", "cocoapod",  NULL,  t(&wr_cocoapods_target)},
 *wr_dockerhub [] ={"dockerhub", "docker",  NULL,  t(&wr_dockerhub_target)},
-*wr_flathub [] = {"flathub", NULL,                t(&wr_flathub_target)},
+*wr_flathub [] = {"flathub",    "flatpak", NULL,  t(&wr_flathub_target)},
 *wr_nix     [] = {"nix",     NULL,                t(&wr_nix_target)},
 *wr_guix    [] = {"guix",    NULL,                t(&wr_guix_target)},
 *wr_emacs   [] = {"emacs", "elpa",         NULL,  t(&wr_emacs_target)},
