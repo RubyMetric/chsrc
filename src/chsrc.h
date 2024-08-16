@@ -2,13 +2,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright © 2023-2024 Aoran Zeng, Heng Guo
  * -------------------------------------------------------------
- * File          : chsrc.h
- * Authors       : Aoran Zeng <ccmywish@qq.com>
- *               | Heng Guo   <2085471348@qq.com>
- * Contributors  : Peng Gao   <gn3po4g@outlook.com>
+ * File Name     : chsrc.h
+ * File Authors  : Aoran Zeng <ccmywish@qq.com>
+ *               |  Heng Guo  <2085471348@qq.com>
+ * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-08-09>
+ * Last modified : <2024-08-16>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -352,11 +352,11 @@ get_max_ele_idx_in_dbl_ary (double *array, int size)
  */
 #define auto_select(s) auto_select_(s##_sources, s##_sources_n, (char*)#s+3)
 int
-auto_select_ (SourceInfo *sources, size_t size, const char *target)
+auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
 {
   if (0==size || 1==size)
     {
-      chsrc_error (xy_strjoin (3, "当前 ", target, " 无任何可用源，请联系维护者: chsrc issue"));
+      chsrc_error (xy_strjoin (3, "当前 ", target_name, " 无任何可用源，请联系维护者: chsrc issue"));
       exit (Exit_MatinerIssue);
     }
 
@@ -406,7 +406,7 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target)
   int fast_idx = get_max_ele_idx_in_dbl_ary (speeds, size);
 
   if (only_one)
-    chsrc_succ (xy_strjoin (4, sources[fast_idx].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
+    chsrc_succ (xy_strjoin (4, sources[fast_idx].mirror->name, " 是 ", target_name, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
   else
     puts (xy_2strjoin ("最快镜像站: ", to_green (sources[fast_idx].mirror->name)));
 
@@ -821,19 +821,3 @@ chsrc_get_cpuarch ()
     }
 }
 
-
-/* Target Info */
-typedef struct TargetInfo_t {
-  void (*getfn)   (char *option);
-  void (*setfn)   (char *option);
-  void (*resetfn) (char *option);
-  SourceInfo *sources;
-  size_t      sources_n;
-} TargetInfo;
-
-// 大部分target还不支持reset，所以暂时先默认设置为NULL来过渡
-#define def_target(t) TargetInfo t##_target = {t##_getsrc, t##_setsrc, NULL, t##_sources, t##_sources_n}
-
-#define def_target_full(t) TargetInfo t##_target = {t##_getsrc, t##_setsrc, t##_resetsrc, t##_sources, t##_sources_n}
-
-#define def_target_noget(t) TargetInfo t##_target = {NULL, t##_setsrc, NULL, t##_sources, t##_sources_n}

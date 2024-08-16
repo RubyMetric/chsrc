@@ -360,7 +360,7 @@ get_target (const char *input, TargetOp code, char *option)
     }
   else if (TargetOp_Cesu_Source==code)
     {
-      auto_select_ (target->sources, target->sources_n, input-3);
+      auto_select_ (target->sources, target->sources_n, input);
       return true;
     }
   return true;
