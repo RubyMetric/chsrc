@@ -61,7 +61,7 @@ os_freebsd_setsrc (char *option)
     xy_strjoin (3, "若要使用季度分支，请在", conf ,"中将latest改为quarterly"));
 
   chsrc_note2 ("若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将'http'改成'https'，最后使用'pkg update -f'刷新缓存即可\n");
-  puts ("");
+  br();
 
   chsrc_log2 ("2. 修改 freebsd-ports 源");
   // @ccmywish: [2023-09-27] 据 @ykla , NJU的freebsd-ports源没有设置 Git，

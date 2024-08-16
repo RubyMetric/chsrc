@@ -43,7 +43,7 @@ pl_haskell_setsrc (char *option)
     }
 
   chsrc_note2 (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
-  puts (file); puts ("");
+  puts (file); br();
 
   config = xy_uniform_path ("~/.stack/config.yaml");
   file = xy_strjoin (3, "package-indices:\n"

@@ -84,7 +84,7 @@ pl_java_setsrc (char *option)
 
   if (gradle_exist)
     {
-      if (maven_exist) puts ("");
+      if (maven_exist) br();
       const char* file = xy_strjoin (3,
       "allprojects {\n"
       "  repositories {\n"

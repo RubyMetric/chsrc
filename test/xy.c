@@ -1,11 +1,10 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: MIT
  * -------------------------------------------------------------
- * File          : xy.c
- * License       : MIT
- * Authors       : Aoran Zeng <ccmywish@qq.com>
- * Created on    : <2023-08-30>
- * Last modified : <2024-08-08>
+ * File Name     : xy.c
+ * File Authors  : Aoran Zeng <ccmywish@qq.com>
+ * Created On    : <2023-08-30>
+ * Last Modified : <2024-08-17>
  *
  * 测试 xy.h
  * ------------------------------------------------------------*/
@@ -39,7 +38,7 @@ main (int argc, char const *argv[])
   print (xy_str_to_magenta ("紫色"));
   print (xy_str_to_purple  ("紫色"));
   print (xy_str_to_cyan    ("青色"));
-  puts ("");
+  br();
 
   xy_log   ("普通", "输出普通内容");
   xy_succ  ("成功", "输出成功内容");

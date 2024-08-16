@@ -151,9 +151,9 @@ cli_print_supported_targets_ (const char ***array, size_t size)
           printf ("%s\t", alias);
           alias = target[k];
         }
-      puts ("");
+      br();
     }
-  puts ("");
+  br();
 }
 
 void
@@ -271,7 +271,7 @@ cli_print_version ()
 void
 cli_print_help ()
 {
-  puts ("");
+  br();
   for (int i=0; i<xy_arylen (Chsrc_Usage); i++)
     {
       puts (Chsrc_Usage[i]);
@@ -503,7 +503,7 @@ main (int argc, char const *argv[])
       if (argc < cli_arg_Target_pos)
         {
           cli_print_available_mirrors ();
-          puts ("");
+          br();
           cli_print_supported_targets ();
         }
       else

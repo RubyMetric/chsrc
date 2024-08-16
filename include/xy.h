@@ -2,13 +2,13 @@
  * SPDX-License-Identifier: MIT
  * Copyright © 2023-2024 Aoran Zeng, Heng Guo
  * -------------------------------------------------------------
- * File          : xy.h
- * Authors       : Aoran Zeng <ccmywish@qq.com>
- *               | Heng Guo   <2085471348@qq.com>
- * Contributors  : Null Nil   <null@nil.com>
+ * Lib Name      : xy.h
+ * Lib Authors   : Aoran Zeng <ccmywish@qq.com>
+ *               |  Heng Guo  <2085471348@qq.com>
+ * Contributors  :  Nil Null  <nil@null.org>
  *               |
- * Created on    : <2023-08-28>
- * Last modified : <2024-08-08>
+ * Created On    : <2023-08-28>
+ * Last Modified : <2024-08-17>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C utilities for CLI applications in Ruby flavor
@@ -17,7 +17,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version      "v0.1.4.0-2024/08/08"
+#define _XY_Version      "v0.1.4.1-2024/08/17"
 #define _XY_Maintain_URL "https://gitee.com/RubyMetric/chsrc/blob/main/include/xy.h"
 
 #include <assert.h>
@@ -75,6 +75,7 @@ void putb (bool n)           { if (n) puts ("true"); else puts ("false"); }
 void print (const char *s)   { printf ("%s", s);  }
 void println (const char *s) { printf ("%s\n", s);}
 void say (const char *s)     { printf ("%s\n", s);}
+void br ()                   { puts ("");}
 
 #define assert_str(a, b) assert (xy_streql ((a), (b)))
 

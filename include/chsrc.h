@@ -676,7 +676,7 @@ chsrc_run (const char *cmd, int run_option)
 
   if (! (RunOpt_No_Last_New_Line & run_option))
     {
-      puts ("");
+      br();
     }
 }
 
