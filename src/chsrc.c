@@ -10,7 +10,7 @@
  *                 |  BlockLune    <blocklune@gmail.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-08-16>
+ * Last Modified   : <2024-08-17>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
@@ -106,7 +106,7 @@ Chsrc_Usage[] = {
   "list (或 ls, 或 l)        列出可用镜像源，和可换源软件",
   "list mirror/target        列出可用镜像源，或可换源软件",
   "list os/lang/ware         列出可换源的操作系统/编程语言/软件",
-  "list <target>             查看该软件可以使用哪些源",
+  "list <target>             查看该软件的可用源与支持功能",
   "cesu <target>             对该软件所有源测速",
   "get  <target>             查看当前软件的源使用情况",
   "set  <target>             换源，自动测速后挑选最快源",
@@ -124,7 +124,7 @@ Chsrc_Usage[] = {
 
 
 void
-print_available_mirrors ()
+cli_print_available_mirrors ()
 {
   chsrc_info ("支持以下镜像站");
   chsrc_info ("下方 code 列，可用于指定使用某镜像站，请使用 chsrc set <target> <code>\n");
@@ -140,7 +140,7 @@ print_available_mirrors ()
 
 
 void
-print_supported_targets_ (const char ***array, size_t size)
+cli_print_supported_targets_ (const char ***array, size_t size)
 {
   for (int i=0; i<size; i++)
     {
@@ -157,39 +157,39 @@ print_supported_targets_ (const char ***array, size_t size)
 }
 
 void
-print_supported_targets ()
+cli_print_supported_targets ()
 {
   chsrc_info ("支持对以下目标换源 (同一行表示这几个命令兼容)"); puts("");
   puts (xy_str_to_blue ("编程语言开发"));
   puts ("-------------------------");
-  print_supported_targets_ (pl_packagers, xy_arylen(pl_packagers));
+  cli_print_supported_targets_ (pl_packagers, xy_arylen(pl_packagers));
   puts (xy_str_to_blue ("操作系统"));
   puts ("-------------------------");
-  print_supported_targets_ (os_systems,   xy_arylen(os_systems));
+  cli_print_supported_targets_ (os_systems,   xy_arylen(os_systems));
   puts (xy_str_to_blue ("软件"));
   puts ("-------------------------");
-  print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
+  cli_print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
 }
 
 void
-print_supported_pl ()
+cli_print_supported_pl ()
 {
   chsrc_info ("支持对以下编程语言生态换源 (同一行表示这几个命令兼容)");
-  print_supported_targets_ (pl_packagers,   xy_arylen(pl_packagers));
+  cli_print_supported_targets_ (pl_packagers,   xy_arylen(pl_packagers));
 }
 
 void
-print_supported_os ()
+cli_print_supported_os ()
 {
   chsrc_info ("支持对以下操作系统换源 (同一行表示这几个命令兼容)");
-  print_supported_targets_ (os_systems,   xy_arylen(os_systems));
+  cli_print_supported_targets_ (os_systems,   xy_arylen(os_systems));
 }
 
 void
-print_supported_wr ()
+cli_print_supported_wr ()
 {
   chsrc_info ("支持对以下软件换源 (同一行表示这几个命令兼容)");
-  print_supported_targets_ (wr_softwares,   xy_arylen(wr_softwares));
+  cli_print_supported_targets_ (wr_softwares,   xy_arylen(wr_softwares));
 }
 
 
@@ -214,24 +214,42 @@ cli_print_target_available_sources (SourceInfo sources[], size_t size)
 }
 
 void
-cli_print_target_features (FeatInfo f)
+cli_print_target_features (FeatInfo f, const char *input_target_name)
 {
   printf (to_boldpurple("\nFeatures:\n\n"));
 
-  if (f.can_get) printf (" %s%s\n", to_boldgreen("√"), to_purple(" Get: 查看当前源状态"));
-  else printf (" %s%s\n", to_boldred("x"), " Get: 查看当前源状态");puts("");
+  char *get_msg = xy_2strjoin (" Get: 查看当前源状态 | chsrc get ", input_target_name);
+  if (f.can_get) printf (" %s%s\n", to_boldgreen("✔"), to_purple(get_msg));
+  else printf (" %s%s\n", to_boldred("x"), get_msg);puts("");
 
-  if (f.can_reset) printf (" %s%s\n", to_boldgreen("√"), to_purple(" Reset: 重置回默认源"));
-  else printf (" %s%s\n", to_boldred("x"), " Reset: 重置回默认源");puts("");
+  char *reset_msg = xy_2strjoin (" Reset: 重置回默认源 | chsrc reset ", input_target_name);
+  if (f.can_reset) printf (" %s%s\n", to_boldgreen("√"), to_purple(reset_msg));
+  else printf (" %s%s\n", to_boldred("x"), reset_msg);puts("");
 
-  if (f.locally) printf (" %s%s\n", "- Locally(本项目): ", f.locally);
-  else printf (" %s%s\n", to_boldred("x"), " Locally: 仅对本项目换源");puts("");
+  char *user_define_msg = xy_strjoin (4, " UserDefine: 用户自定义换源URL | chsrc set ", input_target_name, " https://user-define-url.org/", input_target_name);
+  if (f.can_user_define) printf (" %s%s\n", to_boldgreen("✓"), to_purple(user_define_msg));
+  else printf (" %s%s\n", to_boldred("x"), user_define_msg);puts("");
 
-  if (f.can_user_define) printf (" %s%s\n", to_boldgreen("√"), to_purple(" UserDefine: 用户自定义换源URL"));
-  else printf (" %s%s\n", to_boldred("x"), " UserDefine: 用户自定义换源URL");puts("");
 
-  if (f.can_english) printf (" %s%s\n", to_boldgreen("√"), to_purple(" English: 英文输出"));
-  else printf (" %s%s\n", to_boldred("x"), " English: 英文输出");
+  char *locally_msg = xy_2strjoin (" Locally: 仅对本项目换源 | chsrc set -local ", input_target_name);
+
+  switch (f.stcan_locally) {
+    case CanNotFully:
+      printf (" %s%s\n", to_boldred(NoMark), locally_msg);puts("");
+      break;
+    case CanFully:
+      printf (" %s%s\n", to_boldgreen(YesMark), to_purple(locally_msg));puts("");
+      break;
+    case CanSemi:
+      printf (" %s%s\n\n   %s\n", to_boldgreen(SemiYesMark), to_purple(locally_msg), f.locally);puts("");
+      break;
+    default:
+      xy_unreach;
+  }
+
+  char *english_msg = xy_2strjoin (" English: 英文输出 | chsrc set -en ", input_target_name);
+  if (f.can_english) printf (" %s%s\n", to_boldgreen(YesMark), to_purple(english_msg));
+  else printf (" %s%s\n", to_boldred(NoMark), english_msg);
 
 
   if (f.note)
@@ -385,7 +403,7 @@ get_target (const char *input, TargetOp code, char *option)
       if (target->featfn)
         {
           FeatInfo fi = target->featfn("");
-          cli_print_target_features (fi);
+          cli_print_target_features (fi, input);
         }
     }
   else if (TargetOp_Cesu_Source==code)
@@ -483,32 +501,32 @@ main (int argc, char const *argv[])
     {
       if (argc < cli_arg_Target_pos)
         {
-          print_available_mirrors ();
+          cli_print_available_mirrors ();
           puts ("");
-          print_supported_targets ();
+          cli_print_supported_targets ();
         }
       else
         {
           target = argv[cli_arg_Target_pos];
           if (xy_streql (target, "mirrors") || xy_streql (target, "mirror"))
             {
-              print_available_mirrors (); return 0;
+              cli_print_available_mirrors (); return 0;
             }
           else if (xy_streql (target, "targets") || xy_streql (target, "target"))
             {
-              print_supported_targets (); return 0;
+              cli_print_supported_targets (); return 0;
             }
           else if (xy_streql (target, "os"))
             {
-              print_supported_os (); return 0;
+              cli_print_supported_os (); return 0;
             }
           else if (xy_streql (target, "lang") || xy_streql (target, "pl") || xy_streql (target, "language"))
             {
-              print_supported_pl(); return 0;
+              cli_print_supported_pl(); return 0;
             }
           else if (xy_streql (target, "ware") || xy_streql (target, "software"))
             {
-              print_supported_wr (); return 0;
+              cli_print_supported_wr (); return 0;
             }
 
           matched = get_target (target, TargetOp_List_Source, NULL);

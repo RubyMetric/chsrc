@@ -123,6 +123,11 @@ typedef struct SourceInfo_t {
 
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
+enum StatusCan {
+  CanNotFully,
+  CanFully,
+  CanSemi
+};
 
 /* Target Feature Info */
 typedef struct FeatInfo_t {
@@ -130,8 +135,11 @@ typedef struct FeatInfo_t {
   bool can_reset;       // 有的reset不是暂时没有实现，而是现在的实现根本就无法重置
 
   bool can_english;
-  char *locally;
+
   bool can_user_define; // 用户自定义换源URL
+
+  enum StatusCan stcan_locally;
+  char *locally;
 
   char *note;
 } FeatInfo;
