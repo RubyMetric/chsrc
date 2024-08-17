@@ -41,18 +41,19 @@
 
 
 #include "recipe/os/APT/common.h"
-#include "recipe/os/APT/debian.c"
-#include "recipe/os/APT/ubuntu.c"
 // Debian-based
-#include "recipe/os/APT/armbian.c"
-#include "recipe/os/APT/raspberrypi.c"
+#include "recipe/os/APT/Debian.c"
+#include "recipe/os/APT/Ubuntu.c"
 #include "recipe/os/APT/Kali-Linux.c"
+#include "recipe/os/APT/Raspberry-Pi-OS.c"
 // Ubuntu-based
 #include "recipe/os/APT/Linux-Mint.c"
-#include "recipe/os/APT/trisquel.c"
+#include "recipe/os/APT/Trisquel.c"
 #include "recipe/os/APT/Linux-Lite.c"
+// Debian-based and Ubuntu-based
+#include "recipe/os/APT/Armbian.c"
 // Independent
-#include "recipe/os/APT/ros.c"
+#include "recipe/os/APT/ROS.c"
 #include "recipe/os/APT/openKylin.c"
 #include "recipe/os/APT/deepin.c"
 
@@ -67,12 +68,12 @@
 #include "recipe/os/pacman/Manjaro-Linux.c"
 #include "recipe/os/pacman/MSYS2.c"
 
-#include "recipe/os/opensuse.c"
-#include "recipe/os/gentoo.c"
-#include "recipe/os/alpine.c"
-#include "recipe/os/void.c"
-#include "recipe/os/solus.c"
-#include "recipe/os/openwrt.c"
+#include "recipe/os/openSUSE.c"
+#include "recipe/os/Alpine-Linux.c"
+#include "recipe/os/Gentoo-Linux.c"
+#include "recipe/os/Void-Linux.c"
+#include "recipe/os/Solus.c"
+#include "recipe/os/OpenWrt.c"
 
 #include "recipe/os/BSD/FreeBSD.c"
 #include "recipe/os/BSD/NetBSD.c"
@@ -90,7 +91,6 @@
 #include "recipe/ware/Flathub.c"
 #include "recipe/ware/Docker-Hub.c"
 #include "recipe/ware/Anaconda.c"
-
 
 #include "recipe/catalog.c"
 
