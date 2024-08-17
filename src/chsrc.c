@@ -82,7 +82,7 @@
 
 
 #include "recipe/ware/TeX-Live.c"
-#include "recipe/ware/emacs.c"
+#include "recipe/ware/Emacs.c"
 #include "recipe/ware/WinGet.c"
 #include "recipe/ware/Homebrew.c"
 #include "recipe/ware/CocoaPods.c"
