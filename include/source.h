@@ -106,9 +106,6 @@ MirrorSite
   Sohu     = {"sohu",    "SOHU",     "搜狐开源镜像站",      "https://mirrors.sohu.com/",
               "https://mirrors.sohu.com/deepin-cd" Big_File_deepin};
 
-// 开源社区
-MirrorSite
-  NugetOrg   = {"nuget.org",   "NuGet Org",    "Nuget Organization", "https://www.nuget.org/",  NULL};
 
 MirrorSite
   Upstream = {"upstream",     "Upstream",     "上游默认源",     NULL,     NULL};

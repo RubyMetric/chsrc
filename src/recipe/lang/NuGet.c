@@ -7,6 +7,9 @@
  * Last Modified : <2024-08-09>
  * ------------------------------------------------------------*/
 
+static MirrorSite
+NugetOrg = {"nuget.org",   "NuGet Org",    "Nuget Organization", "https://www.nuget.org/",  NULL};
+
 /**
  * @time 2024-04-18 更新
  * @note {
