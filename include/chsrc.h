@@ -18,6 +18,29 @@
 
 #define App_Name "chsrc"
 
+/* 命令行选项 */
+bool CliOpt_IPv6 = false;
+bool CliOpt_Locally = false;
+bool CliOpt_InEnglish = false;
+bool CliOpt_DryRun = false;
+
+/**
+ * -local 的含义是启用 *项目级* 换源
+ *
+ * 每个 target 对 [-local] 的支持情况可使用 | chsrc ls <target> | 来查看
+ *
+ *
+ * 1. 默认不使用该选项时，含义是 *全局* 换源，
+ *
+ *    全局分为 (1)系统级 (2)用户级
+ *
+ *    大多数第三方配置软件往往默认进行的是 *用户级* 的配置。所以 chsrc 首先将尝试使用 *用户级* 配置
+ *
+ * 2. 若不存在 *用户级* 的配置，chsrc 将采用 *系统级* 的配置
+ *
+ * 3. 最终效果本质由第三方软件决定，如 poetry 默认实现的就是项目级的换源
+ */
+
 #define Exit_UserCause    1
 #define Exit_Unsupported  2
 #define Exit_MatinerIssue 3
@@ -58,61 +81,77 @@ chsrc_note2 (const char* str)
 #define NoMark "x"
 #define SemiYesMark "⍻"
 
+/**
+ * @translation Done
+ */
 void
 chsrc_log_check_result (const char *check_what, const char *check_type, bool exist)
 {
-  if (!exist)
+  char *chk_msg       = NULL;
+  char *not_exist_msg = NULL;
+  char *exist_msg     = NULL;
+
+  if (CliOpt_InEnglish)
     {
-      xy_log_brkt (App_Name, to_boldred ("检查"), xy_strjoin (5,
-                   to_red (NoMark " "), check_type, " ", to_red (check_what), " 不存在"));
+      chk_msg       = "CHECK";
+      not_exist_msg = " doesn't exist";
+      exist_msg     = " exists";
     }
   else
     {
-      xy_log_brkt (App_Name, to_boldgreen ("检查"), xy_strjoin (5,
-                   to_green (YesMark " "), check_type, " ", to_green (check_what), " 存在"));
+      chk_msg       = "检查";
+      not_exist_msg = " 不存在";
+      exist_msg     = " 存在";
+    }
+
+
+  if (!exist)
+    {
+      xy_log_brkt (App_Name, to_boldred (chk_msg), xy_strjoin (5,
+                   to_red (NoMark " "), check_type, " ", to_red (check_what), not_exist_msg));
+    }
+  else
+    {
+      xy_log_brkt (App_Name, to_boldgreen (chk_msg), xy_strjoin (5,
+                   to_green (YesMark " "), check_type, " ", to_green (check_what), exist_msg));
     }
 }
 
 
+/**
+ * @translation Done
+ */
 void
 chsrc_log_cmd_result (bool result, int ret_code)
 {
-  if (result)
+  char *run_msg  = NULL;
+  char *succ_msg = NULL;
+  char *fail_msg = NULL;
+
+  if (CliOpt_InEnglish)
     {
-      xy_log_brkt (to_green (App_Name), to_boldgreen ("运行"), to_green (YesMark " 命令执行成功"));
+      run_msg  = "RUN";
+      succ_msg = YesMark " executed successfully";
+      fail_msg = NoMark  " executed unsuccessfully, return code ";
     }
+  else
+    {
+      run_msg  = "运行";
+      succ_msg = YesMark " 命令执行成功";
+      fail_msg = NoMark  " 命令执行失败，返回码 ";
+    }
+
+  if (result)
+    xy_log_brkt (to_green (App_Name), to_boldgreen (run_msg), to_green (succ_msg));
   else
     {
       char buf[8] = {0};
       sprintf (buf, "%d", ret_code);
-      char *log = xy_2strjoin (to_red (NoMark " 命令执行失败，返回码 "), to_boldred (buf));
-      xy_log_brkt (to_red (App_Name), to_boldred ("运行"), log);
+      char *log = xy_2strjoin (to_red (fail_msg), to_boldred (buf));
+      xy_log_brkt (to_red (App_Name), to_boldred (run_msg), log);
     }
 }
 
-
-/* 命令行选项 */
-bool CliOpt_IPv6 = false;
-bool CliOpt_Locally = false;
-bool CliOpt_InEnglish = false;
-bool CliOpt_DryRun = false;
-
-/**
- * -local 的含义是启用 *项目级* 换源
- *
- * 每个 target 对 [-local] 的支持情况可使用 | chsrc ls <target> | 来查看
- *
- *
- * 1. 默认不使用该选项时，含义是 *全局* 换源，
- *
- *    全局分为 (1)系统级 (2)用户级
- *
- *    大多数第三方配置软件往往默认进行的是 *用户级* 的配置。所以 chsrc 首先将尝试使用 *用户级* 配置
- *
- * 2. 若不存在 *用户级* 的配置，chsrc 将采用 *系统级* 的配置
- *
- * 3. 最终效果本质由第三方软件决定，如 poetry 默认实现的就是项目级的换源
- */
 
 
 bool
@@ -130,6 +169,8 @@ is_url (const char *str)
  *                    会自动打开 Microsoft Store，需避免
  *
  * @param  prog_name   要检测的二进制程序名
+ *
+ * @translation Done
  */
 bool
 query_program_exist (char *check_cmd, char *prog_name)
@@ -140,15 +181,17 @@ query_program_exist (char *check_cmd, char *prog_name)
 
   // char buf[32] = {0}; sprintf(buf, "错误码: %d", ret);
 
+  char *msg = CliOpt_InEnglish ? "command" : "命令";
+
   if (0 != ret)
     {
       // xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
-      chsrc_log_check_result (prog_name, "命令", false);
+      chsrc_log_check_result (prog_name, msg, false);
       return false;
     }
   else
     {
-      chsrc_log_check_result (prog_name, "命令", true);
+      chsrc_log_check_result (prog_name, msg, true);
       return true;
     }
 }
@@ -371,6 +414,8 @@ get_max_ele_idx_in_dbl_ary (double *array, int size)
 
 /**
  * 自动测速选择镜像站和源
+ *
+ * @translation Done
  */
 #define auto_select(s) auto_select_(s##_sources, s##_sources_n, (char*)#s+3)
 int
@@ -378,7 +423,9 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
 {
   if (0==size || 1==size)
     {
-      chsrc_error (xy_strjoin (3, "当前 ", target_name, " 无任何可用源，请联系维护者: chsrc issue"));
+      char *msg1 = CliOpt_InEnglish ? "Currently " : "当前 ";
+      char *msg2 = CliOpt_InEnglish ? "No any source, please contact maintainers: chsrc issue" : " 无任何可用源，请联系维护者: chsrc issue";
+      chsrc_error (xy_strjoin (3, msg1, target_name, msg2));
       exit (Exit_MatinerIssue);
     }
 
@@ -394,7 +441,8 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
   bool  exist_curl = query_program_exist (check_curl, "curl");
   if (!exist_curl)
     {
-      chsrc_error ("没有curl命令，无法测速");
+      char *msg = CliOpt_InEnglish ? "No curl, unable to measure speed" : "没有curl命令，无法测速";
+      chsrc_error (msg);
       exit (Exit_UserCause);
     }
 
@@ -408,17 +456,21 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
         {
           if (xy_streql ("upstream", src.mirror->code))
             {
-              continue; // 上游默认源不测速
+              continue; /* 上游默认源不测速 */
             }
           else
             {
-              chsrc_warn (xy_strjoin (3, "开发者未提供 ",  src.mirror->code, " 镜像站测速链接，跳过该站点"));
+              char *msg1 = CliOpt_InEnglish ? "Dev team doesn't offer " : "开发者未提供 ";
+              char *msg2 = CliOpt_InEnglish ? " mirror site's speed measurement link,so skip it" : " 镜像站测速链接，跳过该站点";
+              chsrc_warn (xy_strjoin (3, msg1, src.mirror->code, msg2));
               speed = 0;
             }
         }
       else
         {
-          printf ("%s", xy_strjoin (3, "测速 ", src.mirror->site , " ... "));
+          char *test_msg = CliOpt_InEnglish ? "Measure Speed> " : "测速 ";
+          printf ("%s", xy_strjoin (3, test_msg, src.mirror->site , " ... "));
+
           fflush (stdout);
           speed = test_speed_url (url);
         }
@@ -428,9 +480,18 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
   int fast_idx = get_max_ele_idx_in_dbl_ary (speeds, size);
 
   if (only_one)
-    chsrc_succ (xy_strjoin (4, sources[fast_idx].mirror->name, " 是 ", target_name, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
+    {
+      char *is = CliOpt_InEnglish ? " is " : " 是 ";
+      char *only_msg = CliOpt_InEnglish ? "the ONLY mirror available currently, thanks for their generous support" : \
+                                          " 目前唯一可用镜像站，感谢他们的慷慨支持";
+      chsrc_succ (xy_strjoin (4, sources[fast_idx].mirror->name, is, target_name, only_msg));
+    }
   else
-    puts (xy_2strjoin ("最快镜像站: ", to_green (sources[fast_idx].mirror->name)));
+    {
+      char *fast_msg = CliOpt_InEnglish ? "FASTEST mirror site: " : "最快镜像站: ";
+      say (xy_2strjoin (fast_msg, to_green (sources[fast_idx].mirror->name)));
+    }
+
 
   return fast_idx;
 }
@@ -490,6 +551,8 @@ source_has_empty_url (SourceInfo *source)
  *
  * 1. 告知用户选择了什么源和镜像
  * 2. 对选择的源和镜像站进行一定的校验
+ *
+ * @translation Done
  */
 void
 chsrc_confirm_source (SourceInfo *source)
@@ -500,17 +563,21 @@ chsrc_confirm_source (SourceInfo *source)
   // 之所以禁用，是因为有的 reset 我们并没有实现，我们在这里阻止这些邪恶的用户
   if (source_is_upstream (source) && source_has_empty_url (source))
     {
-      chsrc_error ("暂未对该软件实现重置");
+      char *msg = CliOpt_InEnglish ? "Not implement RESET for the target yet" : "暂未对该目标实现重置";
+      chsrc_error (msg);
       exit (Exit_Unsupported);
     }
   else if (source_has_empty_url (source))
     {
-      chsrc_error ("该源URL不存在，请向开发团队提交bug");
+      char *msg = CliOpt_InEnglish ? "URL of the source doesn't exist, please report a bug to the dev team" : \
+                                     "该源URL不存在，请向开发团队提交bug";
+      chsrc_error (msg);
       exit (Exit_FatalBug);
     }
   else
     {
-      puts (xy_strjoin (5, "选中镜像站: ", to_green (source->mirror->abbr), " (", to_green (source->mirror->code), ")"));
+      char *msg = CliOpt_InEnglish ? "SELECT  mirror site: " : "选中镜像站: ";
+      say (xy_strjoin (5, msg, to_green (source->mirror->abbr), " (", to_green (source->mirror->code), ")"));
     }
 
   split_between_source_changing_process;
@@ -649,7 +716,10 @@ not_root:
 static void
 chsrc_run (const char *cmd, int run_option)
 {
-  xy_log_brkt (to_blue (App_Name), to_boldblue ("运行"), to_blue (cmd));
+  if (CliOpt_InEnglish)
+    xy_log_brkt (to_blue (App_Name), to_boldblue ("RUN"), to_blue (cmd));
+  else
+    xy_log_brkt (to_blue (App_Name), to_boldblue ("运行"), to_blue (cmd));
 
   if (CliOpt_DryRun)
     {
