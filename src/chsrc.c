@@ -40,32 +40,32 @@
 
 
 
-#include "recipe/os/apt-family/common.h"
-#include "recipe/os/apt-family/debian.c"
-#include "recipe/os/apt-family/ubuntu.c"
+#include "recipe/os/APT/common.h"
+#include "recipe/os/APT/debian.c"
+#include "recipe/os/APT/ubuntu.c"
 // Debian-based
-#include "recipe/os/apt-family/armbian.c"
-#include "recipe/os/apt-family/raspberrypi.c"
-#include "recipe/os/apt-family/Kali-Linux.c"
+#include "recipe/os/APT/armbian.c"
+#include "recipe/os/APT/raspberrypi.c"
+#include "recipe/os/APT/Kali-Linux.c"
 // Ubuntu-based
-#include "recipe/os/apt-family/Linux-Mint.c"
-#include "recipe/os/apt-family/trisquel.c"
-#include "recipe/os/apt-family/Linux-Lite.c"
+#include "recipe/os/APT/Linux-Mint.c"
+#include "recipe/os/APT/trisquel.c"
+#include "recipe/os/APT/Linux-Lite.c"
 // Independent
-#include "recipe/os/apt-family/ros.c"
-#include "recipe/os/apt-family/openKylin.c"
-#include "recipe/os/apt-family/deepin.c"
+#include "recipe/os/APT/ros.c"
+#include "recipe/os/APT/openKylin.c"
+#include "recipe/os/APT/deepin.c"
 
-#include "recipe/os/yum-family/common.h"
-#include "recipe/os/yum-family/Fedora-Linux.c"
-#include "recipe/os/yum-family/AlmaLinux.c"
-#include "recipe/os/yum-family/Rocky-Linux.c"
-#include "recipe/os/yum-family/openEuler.c"
-#include "recipe/os/yum-family/Anolis-OS.c"
+#include "recipe/os/YUM/common.h"
+#include "recipe/os/YUM/Fedora-Linux.c"
+#include "recipe/os/YUM/AlmaLinux.c"
+#include "recipe/os/YUM/Rocky-Linux.c"
+#include "recipe/os/YUM/openEuler.c"
+#include "recipe/os/YUM/Anolis-OS.c"
 
-#include "recipe/os/pacman-family/Arch-Linux.c"
-#include "recipe/os/pacman-family/Manjaro-Linux.c"
-#include "recipe/os/pacman-family/MSYS2.c"
+#include "recipe/os/pacman/Arch-Linux.c"
+#include "recipe/os/pacman/Manjaro-Linux.c"
+#include "recipe/os/pacman/MSYS2.c"
 
 #include "recipe/os/opensuse.c"
 #include "recipe/os/gentoo.c"
