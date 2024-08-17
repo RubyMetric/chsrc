@@ -21,21 +21,20 @@
 
 #include "chsrc.h"
 
-#include "recipe/lang/ruby.c"
-#include "recipe/lang/python.c"
-#include "recipe/lang/nodejs.c"
-#include "recipe/lang/perl.c"
-#include "recipe/lang/php.c"
-#include "recipe/lang/lua.c"
-#include "recipe/lang/go.c"
-#include "recipe/lang/java.c"
-#include "recipe/lang/rust.c"
-
-#include "recipe/lang/dart.c"
-#include "recipe/lang/haskell.c"
-#include "recipe/lang/ocaml.c"
-#include "recipe/lang/r.c"
-#include "recipe/lang/julia.c"
+#include "recipe/lang/Ruby.c"
+#include "recipe/lang/Python.c"
+#include "recipe/lang/Node.js.c"
+#include "recipe/lang/Perl.c"
+#include "recipe/lang/PHP.c"
+#include "recipe/lang/Lua.c"
+#include "recipe/lang/Go.c"
+#include "recipe/lang/Java.c"
+#include "recipe/lang/Rust.c"
+#include "recipe/lang/Dart.c"
+#include "recipe/lang/Haskell.c"
+#include "recipe/lang/OCaml.c"
+#include "recipe/lang/R.c"
+#include "recipe/lang/Julia.c"
 #include "recipe/lang/NuGet.c"
 #include "recipe/lang/Clojure.c"
 
@@ -216,7 +215,7 @@ cli_print_target_available_sources (SourceInfo sources[], size_t size)
 void
 cli_print_target_features (FeatInfo f, const char *input_target_name)
 {
-  printf (to_boldpurple("\nFeatures:\n\n"));
+  say (to_boldpurple("\nFeatures:\n"));
 
   char *get_msg = xy_2strjoin (" Get: 查看当前源状态 | chsrc get ", input_target_name);
   if (f.can_get) printf (" %s%s\n", to_boldgreen(YesMark), to_purple(get_msg));
@@ -255,7 +254,7 @@ cli_print_target_features (FeatInfo f, const char *input_target_name)
 
   if (f.note)
     {
-      printf ("\n%s%s\n", to_boldyellow ("备注: "), to_boldyellow (f.note));
+      printf ("%s%s\n", to_boldyellow ("备注: "), to_boldyellow (f.note));
     }
 }
 
