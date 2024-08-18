@@ -53,9 +53,7 @@ os_ubuntu_getsrc (char *option)
 void
 os_ubuntu_setsrc_for_deb822 (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (os_ubuntu);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_ubuntu);
 
   chsrc_backup (OS_Ubuntu_SourceList_DEB822);
 
@@ -72,7 +70,7 @@ os_ubuntu_setsrc_for_deb822 (char *option)
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 /**
@@ -92,9 +90,7 @@ os_ubuntu_setsrc (char *option)
 
   bool sourcelist_exist = ensure_apt_sourcelist (OS_Is_Ubuntu);
 
-  SourceInfo source;
-  chsrc_yield_source (os_ubuntu);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_ubuntu);
 
   // 不存在的时候，用的是我们生成的无效文件，不要备份
   if (sourcelist_exist)
@@ -115,7 +111,7 @@ os_ubuntu_setsrc (char *option)
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 def_target(os_ubuntu);

@@ -531,6 +531,7 @@ source_has_empty_url (SourceInfo *source)
  * @dependency 变量 source
  */
 #define chsrc_yield_source(for_what) \
+  SourceInfo source; \
   if (is_url (option)) \
     { \
       SourceInfo __tmp = { &UserDefine, option }; \
@@ -554,8 +555,9 @@ source_has_empty_url (SourceInfo *source)
  *
  * @translation Done
  */
+#define chsrc_confirm_source confirm_source(&source)
 void
-chsrc_confirm_source (SourceInfo *source)
+confirm_source (SourceInfo *source)
 {
   // 由于实现问题，我们把本应该独立出去的默认上游源，也放在了可以换源的数组中，而且放在第一个
   // chsrc 已经规避用户使用未实现的 `chsrc reset`
@@ -582,6 +584,8 @@ chsrc_confirm_source (SourceInfo *source)
 
   split_between_source_changing_process;
 }
+
+#define chsrc_yield_source_and_confirm(for_what) chsrc_yield_source(for_what);chsrc_confirm_source
 
 
 #define ChsrcTypeAuto     "auto"
@@ -617,7 +621,7 @@ chsrc_confirm_source (SourceInfo *source)
  * @translation Done
  */
 void
-chsrc_say_lastly (SourceInfo *source, const char *last_word)
+chsrc_conclude (SourceInfo *source, const char *last_word)
 {
   split_between_source_changing_process;
 

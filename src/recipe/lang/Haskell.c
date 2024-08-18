@@ -24,9 +24,7 @@ def_sources_n(pl_haskell);
 void
 pl_haskell_setsrc (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (pl_haskell);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (pl_haskell);
 
   char *file = xy_strjoin (3, "repository mirror\n"
                               "  url: ", source.url,
@@ -64,7 +62,7 @@ pl_haskell_setsrc (char *option)
 
   chsrc_note2 (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
   puts (file);
-  chsrc_say_lastly (&source, ChsrcTypeManual);
+  chsrc_conclude (&source, ChsrcTypeManual);
 }
 
 def_target_s (pl_haskell);

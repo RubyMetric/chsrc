@@ -33,11 +33,9 @@ os_void_getsrc (char *option)
 void
 os_void_setsrc (char *option)
 {
-  // chsrc_ensure_root(); // HELP: 不确定是否需要root
+  chsrc_ensure_root (); // HELP: 不确定是否需要root
 
-  SourceInfo source;
-  chsrc_yield_source (os_void);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_void);
 
   chsrc_ensure_dir ("/etc/xbps.d");
   char *cmd = "cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/";
@@ -53,8 +51,8 @@ os_void_setsrc (char *option)
             );
 
   chsrc_note2 ("若报错可尝试使用以下命令:");
-  puts (cmd);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
+  say (cmd);
+  chsrc_conclude (&source, ChsrcTypeUntested);
 }
 
 def_target(os_void);

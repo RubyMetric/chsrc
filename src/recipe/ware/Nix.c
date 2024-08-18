@@ -38,9 +38,7 @@ wr_nix_setsrc (char *option)
 {
   wr_nix_check_cmd ();
 
-  SourceInfo source;
-  chsrc_yield_source (wr_nix);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (wr_nix);
 
   char *cmd = xy_strjoin (3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
   chsrc_run (cmd, RunOpt_Default);
@@ -58,7 +56,7 @@ wr_nix_setsrc (char *option)
   chsrc_note2 ("若您使用的是NixOS，请额外添加下述内容至 configuration.nix 中");
   puts (cmd);
 
-  chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
+  chsrc_conclude (&source, ChsrcTypeSemiAuto);
 }
 
 def_target_s (wr_nix);

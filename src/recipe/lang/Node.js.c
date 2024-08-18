@@ -79,9 +79,7 @@ pl_nodejs_setsrc (char *option)
   bool npm_exist, yarn_exist, pnpm_exist;
   pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
-  SourceInfo source;
-  chsrc_yield_source (pl_nodejs);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (pl_nodejs);
 
   char *cmd = NULL;
 
@@ -110,7 +108,7 @@ pl_nodejs_setsrc (char *option)
       chsrc_run (cmd, RunOpt_Default);
     }
 
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 

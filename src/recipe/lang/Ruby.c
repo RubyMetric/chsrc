@@ -68,9 +68,7 @@ pl_ruby_setsrc (char *option)
 
   chsrc_ensure_program ("gem");
 
-  SourceInfo source;
-  chsrc_yield_source (pl_ruby);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (pl_ruby);
 
   char *cmd = NULL;
 
@@ -91,7 +89,7 @@ pl_ruby_setsrc (char *option)
   cmd = xy_strjoin (4, "bundle config", where, "'mirror.https://rubygems.org' ", source.url);
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
-  chsrc_say_lastly (&source, chsrc_type);
+  chsrc_conclude (&source, chsrc_type);
 
   // chsrc_note2 ("Ruby的镜像源目前仅有 腾讯软件源，RubyChina 实现正确");
   // chsrc_note2 ("而其它如Tuna,Bfsu,Ali目前都实现的有问题，请勿使用");

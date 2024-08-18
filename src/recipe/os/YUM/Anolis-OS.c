@@ -29,16 +29,14 @@ os_anolis_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  SourceInfo source;
-  chsrc_yield_source (os_anolis);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_anolis);
 
   char *cmd = xy_strjoin (3, "sed -i.bak -E 's|https?://(mirrors\\.openanolis\\.cn/anolis)|", source.url, "|g' /etc/yum.repos.d/*.repo");
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_run ("dnf makecache", RunOpt_Default);
   chsrc_run ("dnf update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, ChsrcTypeUntested);
 }
 
 def_target_s(os_anolis);

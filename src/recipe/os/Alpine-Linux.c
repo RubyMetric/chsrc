@@ -39,9 +39,7 @@ os_alpine_setsrc (char *option)
 {
   // chsrc_ensure_root(); // HELP: 不确定是否需要root
 
-  SourceInfo source;
-  chsrc_yield_source (os_alpine);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_alpine);
 
   char* cmd = xy_strjoin (3,
             "sed -i 's#https\\?://dl-cdn.alpinelinux.org/alpine#", source.url, "#g' /etc/apk/repositories"
@@ -49,7 +47,7 @@ os_alpine_setsrc (char *option)
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_run ("apk update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, ChsrcTypeUntested);
 }
 
 def_target(os_alpine);

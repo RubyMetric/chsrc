@@ -35,9 +35,7 @@ pl_rust_getsrc (char *option)
 void
 pl_rust_setsrc (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (pl_rust);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (pl_rust);
 
   const char* file = xy_strjoin (3,
     "[source.crates-io]\n"
@@ -48,7 +46,7 @@ pl_rust_setsrc (char *option)
 
   chsrc_note2 (xy_strjoin (3, "请您手动写入以下内容到 ", xy_uniform_path ("~/.cargo/config.toml"), " 文件中:"));
   puts (file);
-  chsrc_say_lastly (&source, ChsrcTypeManual);
+  chsrc_conclude (&source, ChsrcTypeManual);
 }
 
 def_target(pl_rust);

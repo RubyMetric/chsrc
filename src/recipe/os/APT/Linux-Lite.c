@@ -32,16 +32,14 @@ os_linuxlite_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  SourceInfo source;
-  chsrc_yield_source (os_linuxlite);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_linuxlite);
 
   chsrc_backup (OS_Apt_SourceList);
 
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/.*/?@", source.url, "@g' " OS_Apt_SourceList);
 
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 def_target(os_linuxlite);

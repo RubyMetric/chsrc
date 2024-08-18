@@ -61,9 +61,7 @@ wr_tex_setsrc (char *option)
   bool tlmgr_exist, mpm_exist;
   wr_tex_check_cmd (&tlmgr_exist, &mpm_exist);
 
-  SourceInfo source;
-  chsrc_yield_source (wr_tex);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (wr_tex);
 
   char *cmd = NULL;
 
@@ -80,7 +78,7 @@ wr_tex_setsrc (char *option)
       chsrc_run (cmd, RunOpt_Default);
     }
 
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, ChsrcTypeUntested);
 }
 
 def_target(wr_tex);

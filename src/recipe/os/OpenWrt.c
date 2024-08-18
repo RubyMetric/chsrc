@@ -42,16 +42,14 @@ os_openwrt_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  SourceInfo source;
-  chsrc_yield_source (os_openwrt);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_openwrt);
 
   chsrc_backup (OS_OpenWRT_SourceConfig);
 
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*downloads.openwrt.org@", source.url, "@g' " OS_OpenWRT_SourceConfig);
 
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 

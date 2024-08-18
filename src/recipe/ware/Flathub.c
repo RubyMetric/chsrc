@@ -25,9 +25,7 @@ def_sources_n(wr_flathub);
 void
 wr_flathub_setsrc (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (wr_flathub);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (wr_flathub);
 
   chsrc_note2 ("若出现问题，可先调用以下命令:");
   char *note = xy_strjoin (3,
@@ -39,7 +37,7 @@ wr_flathub_setsrc (char *option)
   char *cmd = xy_2strjoin ("flatpak remote-modify flathub --url=", source.url);
   chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 def_target_s (wr_flathub);

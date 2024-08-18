@@ -29,21 +29,19 @@ wr_winget_getsrc (char *option)
 void
 wr_winget_setsrc (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (wr_winget);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (wr_winget);
 
   chsrc_run ("winget source remove winget", RunOpt_Default);
   chsrc_run (xy_2strjoin ("winget source add winget ", source.url), RunOpt_Default);
 
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 void
 wr_winget_resetsrc (char *option)
 {
   chsrc_run ("winget source reset winget", RunOpt_Default);
-  chsrc_say_lastly (NULL, ChsrcTypeAuto);
+  chsrc_conclude (NULL, ChsrcTypeAuto);
 }
 
 

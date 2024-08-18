@@ -35,9 +35,7 @@ os_raspberrypi_setsrc (char *option)
 {
   chsrc_ensure_root(); // HELP: 不确定是否需要
 
-  SourceInfo source;
-  chsrc_yield_source (os_raspberrypi);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_raspberrypi);
 
   chsrc_backup (OS_RaspberryPi_SourceList);
 
@@ -46,7 +44,7 @@ os_raspberrypi_setsrc (char *option)
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, ChsrcTypeUntested);
 }
 
 def_target(os_raspberrypi);

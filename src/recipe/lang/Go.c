@@ -59,16 +59,14 @@ pl_go_setsrc (char *option)
 {
   pl_go_check_cmd ();
 
-  SourceInfo source;
-  chsrc_yield_source (pl_go);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (pl_go);
 
   char *cmd = "go env -w GO111MODULE=on";
   chsrc_run (cmd, RunOpt_Default);
 
   cmd = xy_strjoin (3, "go env -w GOPROXY=", source.url, ",direct");
   chsrc_run (cmd, RunOpt_Default);
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 def_target(pl_go);

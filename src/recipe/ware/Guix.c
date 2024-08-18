@@ -25,9 +25,7 @@ def_sources_n(wr_guix);
 void
 wr_guix_setsrc (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (wr_guix);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (wr_guix);
 
   char *file =  xy_strjoin (3, "(list (channel\n"
                                "       (inherit (car %default-channels))\n"
@@ -35,7 +33,7 @@ wr_guix_setsrc (char *option)
 
   chsrc_note2 ("为防止扰乱配置文件，请您手动写入以下内容到 ~/.config/guix/channels.scm 文件中");
   puts (file);
-  chsrc_say_lastly (&source, ChsrcTypeManual);
+  chsrc_conclude (&source, ChsrcTypeManual);
 }
 
 def_target_s (wr_guix);

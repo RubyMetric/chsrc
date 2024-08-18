@@ -31,9 +31,7 @@ def_sources_n(os_msys2);
 void
 os_msys2_setsrc (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (os_msys2);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_msys2);
 
   chsrc_backup ("/etc/pacman.d/mirrorlist.mingw32");
   chsrc_backup ("/etc/pacman.d/mirrorlist.mingw64");
@@ -49,7 +47,7 @@ os_msys2_setsrc (char *option)
                              "#g\" /etc/pacman.d/mirrorlist* ");
 
   chsrc_run (cmd, RunOpt_Default);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, ChsrcTypeUntested);
 }
 
 def_target_s(os_msys2);

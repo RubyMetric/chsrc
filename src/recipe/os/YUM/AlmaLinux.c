@@ -29,16 +29,14 @@ os_almalinux_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  SourceInfo source;
-  chsrc_yield_source (os_almalinux);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_almalinux);
 
   char *cmd = xy_strjoin (3,
     "sed -e 's|^mirrorlist=|#mirrorlist=|g' -e 's|^#\\s*baseurl=https://repo.almalinux.org/almalinux|baseurl=", source.url, "|g'  -i.bak  /etc/yum.repos.d/almalinux*.repo");
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 def_target_s(os_almalinux);

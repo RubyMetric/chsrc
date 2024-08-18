@@ -41,14 +41,12 @@ os_openbsd_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  SourceInfo source;
-  chsrc_yield_source (os_openbsd);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_openbsd);
 
   chsrc_backup ("/etc/installurl");
   chsrc_overwrite_file (source.url, "/etc/installurl");
 
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, ChsrcTypeUntested);
 }
 
 def_target(os_openbsd);

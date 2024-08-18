@@ -45,9 +45,7 @@ pl_php_setsrc (char *option)
 {
   pl_php_check_cmd ();
 
-  SourceInfo source;
-  chsrc_yield_source (pl_php);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (pl_php);
 
   char *where = " -g ";
   if (CliOpt_Locally==true)
@@ -58,7 +56,7 @@ pl_php_setsrc (char *option)
   char *cmd = xy_strjoin (4, "composer config", where, "repo.packagist composer ", source.url);
   chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
+  chsrc_conclude (&source, ChsrcTypeSemiAuto);
 }
 
 

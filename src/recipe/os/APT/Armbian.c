@@ -43,9 +43,7 @@ os_armbian_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  SourceInfo source;
-  chsrc_yield_source (os_armbian);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_armbian);
 
   chsrc_backup (OS_Armbian_SourceList);
 
@@ -54,7 +52,7 @@ os_armbian_setsrc (char *option)
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, ChsrcTypeAuto);
 }
 #undef OS_Armbian_SourceList
 

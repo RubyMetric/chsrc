@@ -23,13 +23,11 @@ def_sources_n(pl_clojure);
 void
 pl_clojure_setsrc (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (pl_clojure);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (pl_clojure);
 
   chsrc_note2 ("抱歉，Clojure换源较复杂，您可手动查阅并换源:");
   puts (source.url);
-  chsrc_say_lastly (&source, ChsrcTypeManual);
+  chsrc_conclude (&source, ChsrcTypeManual);
 }
 
 def_target_s (pl_clojure);

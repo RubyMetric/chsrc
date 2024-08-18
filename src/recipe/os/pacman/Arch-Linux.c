@@ -59,9 +59,7 @@ os_arch_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  SourceInfo source;
-  chsrc_yield_source (os_arch);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_arch);
 
   chsrc_backup (OS_Pacman_MirrorList);
 
@@ -91,7 +89,7 @@ os_arch_setsrc (char *option)
     {
       chsrc_run ("pacman -Syy", RunOpt_No_Last_New_Line);
     }
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, ChsrcTypeUntested);
 }
 
 
@@ -109,9 +107,7 @@ os_archlinuxcn_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  SourceInfo source;
-  chsrc_yield_source (os_archlinuxcn);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_archlinuxcn);
 
   chsrc_backup (OS_Pacman_MirrorList);
 
@@ -126,7 +122,7 @@ os_archlinuxcn_setsrc (char *option)
   chsrc_run ("pacman -Sy archlinuxcn-keyring", RunOpt_Default);
 
   chsrc_run ("pacman -Syy", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, ChsrcTypeUntested);
 }
 #undef OS_Pacman_MirrorList
 

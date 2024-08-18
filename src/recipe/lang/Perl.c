@@ -47,9 +47,7 @@ pl_perl_getsrc (char *option)
 void
 pl_perl_setsrc (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (pl_perl);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (pl_perl);
 
   char *cmd = xy_strjoin (3,
   "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('urllist', 'unshift', '", source.url, "'); CPAN::HandleConfig->commit()\"");
@@ -57,7 +55,7 @@ pl_perl_setsrc (char *option)
 
   chsrc_note2 ("请您使用 perl -v 以及 cpan -v，若 Perl >= v5.36 或 CPAN >= 2.29，请额外手动调用下面的命令");
   puts ("perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('pushy_https', 0);; CPAN::HandleConfig->commit()\"");
-  chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
+  chsrc_conclude (&source, ChsrcTypeSemiAuto);
 }
 
 def_target(pl_perl);

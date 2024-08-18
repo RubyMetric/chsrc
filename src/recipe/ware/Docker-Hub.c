@@ -66,9 +66,7 @@ wr_dockerhub_getsrc (char *option)
 void
 wr_dockerhub_setsrc (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (wr_dockerhub);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (wr_dockerhub);
 
   if (xy_on_linux || xy_on_bsd)
     {
@@ -93,7 +91,7 @@ wr_dockerhub_setsrc (char *option)
       chsrc_note2 ("选择“Docker Engine”选项卡，在该选项卡中找到“registry-mirrors”一栏，添加镜像地址:");
       puts (source.url);
     }
-  chsrc_say_lastly (&source, ChsrcTypeManual);
+  chsrc_conclude (&source, ChsrcTypeManual);
 }
 
 

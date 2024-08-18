@@ -33,9 +33,7 @@ os_rockylinux_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  SourceInfo source;
-  chsrc_yield_source (os_rockylinux);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_rockylinux);
 
   char *cmd = xy_strjoin (3,
             "sed -e 's|^mirrorlist=|#mirrorlist=|g' "
@@ -44,7 +42,7 @@ os_rockylinux_setsrc (char *option)
             );
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, ChsrcTypeUntested);
 }
 
 def_target_s(os_rockylinux);

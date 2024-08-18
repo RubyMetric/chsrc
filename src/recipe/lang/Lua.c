@@ -36,9 +36,7 @@ pl_lua_getsrc (char *option)
 void
 pl_lua_setsrc (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (pl_lua);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (pl_lua);
 
   char *config = xy_strjoin (3, "rocks_servers = {\n"
                                 "  \"", source.url, "\"\n"
@@ -53,7 +51,7 @@ pl_lua_setsrc (char *option)
   chsrc_note2 ("请手动修改 ~/.luarocks/upload_config.lua 文件 (用于上传):");
   puts (upload_config);
 
-  chsrc_say_lastly (&source, ChsrcTypeManual);
+  chsrc_conclude (&source, ChsrcTypeManual);
 }
 
 def_target(pl_lua);

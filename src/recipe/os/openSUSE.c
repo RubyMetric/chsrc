@@ -33,9 +33,7 @@ os_opensuse_setsrc (char *option)
 {
   chsrc_ensure_root (); // HELP: 不知道是否需要确保root权限
 
-  SourceInfo source;
-  chsrc_yield_source (os_opensuse);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_opensuse);
 
   char *source_nselect = "zypper mr -da";
   chsrc_run (source_nselect, RunOpt_Default);
@@ -76,7 +74,7 @@ os_opensuse_setsrc (char *option)
 
   chsrc_run (cmd5, RunOpt_Default);
   chsrc_run (cmd6, RunOpt_Default);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, ChsrcTypeUntested);
 }
 
 def_target_s(os_opensuse);

@@ -71,17 +71,13 @@ void
 {
   // chsrc set <target>
 
-  // 下面这3行是必须的
-  SourceInfo source;
-  chsrc_yield_source (pl_ruby);
-  chsrc_confirm_source (&source);
-
+  // 下面这行是必须的，注入source变量
+  chsrc_yield_source_and_confirm (<category>_<target>);
 
   /* 具体的换源步骤，如调用第三方命令... */
 
-
   // 最后总结输出
-  chsrc_say_lastly (&source, chsrc_type);
+  chsrc_conclude (&source, chsrc_type);
 }
 
 

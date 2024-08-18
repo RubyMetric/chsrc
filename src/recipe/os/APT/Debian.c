@@ -48,9 +48,7 @@ os_debian_getsrc (char *option)
 void
 os_debian_setsrc_for_deb822 (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (os_debian);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_debian);
 
   chsrc_note2 ("如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并需要您运行:");
   puts ("apt install apt-transport-https ca-certificates");
@@ -65,7 +63,7 @@ os_debian_setsrc_for_deb822 (char *option)
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 
@@ -89,9 +87,7 @@ os_debian_setsrc (char *option)
   // Docker环境下，Debian镜像可能不存在该文件
   bool sourcelist_exist = ensure_apt_sourcelist (OS_Is_Debian_Literally);
 
-  SourceInfo source;
-  chsrc_yield_source (os_debian);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_debian);
 
   chsrc_note2 ("如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并需要您运行:");
   puts ("apt install apt-transport-https ca-certificates");
@@ -106,7 +102,7 @@ os_debian_setsrc (char *option)
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 def_target(os_debian);

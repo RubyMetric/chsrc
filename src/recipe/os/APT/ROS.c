@@ -34,9 +34,7 @@ os_ros_setsrc (char *option)
 {
   chsrc_ensure_root (OS_ROS_SourceList);
 
-  SourceInfo source;
-  chsrc_yield_source (os_ros);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_ros);
 
   chsrc_backup (OS_ROS_SourceList);
 
@@ -48,7 +46,7 @@ os_ros_setsrc (char *option)
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, ChsrcTypeUntested);
 }
 
 def_target_s(os_ros);

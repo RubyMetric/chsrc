@@ -63,9 +63,7 @@ pl_java_setsrc (char *option)
   bool maven_exist, gradle_exist;
   pl_java_check_cmd (&maven_exist, &gradle_exist);
 
-  SourceInfo source;
-  chsrc_yield_source (pl_java);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (pl_java);
 
   if (maven_exist)
     {
@@ -97,7 +95,7 @@ pl_java_setsrc (char *option)
       chsrc_note2 ("请在您的 build.gradle 中添加:");
       puts (file);
     }
-  chsrc_say_lastly (&source, ChsrcTypeManual);
+  chsrc_conclude (&source, ChsrcTypeManual);
 }
 
 def_target(pl_java);

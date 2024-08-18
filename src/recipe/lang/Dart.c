@@ -48,9 +48,7 @@ pl_dart_getsrc (char *option)
 void
 pl_dart_setsrc (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (pl_dart);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (pl_dart);
 
   char *towrite = NULL;
 
@@ -85,7 +83,7 @@ pl_dart_setsrc (char *option)
       towrite = xy_strjoin (3, "export FLUTTER_STORAGE_BASE_URL=\"", flutter, "\"");
       chsrc_append_to_file (towrite, "~/.bashrc >> ~/.zshrc");
     }
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, ChsrcTypeUntested);
 }
 
 def_target(pl_dart);

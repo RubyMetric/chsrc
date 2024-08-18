@@ -46,9 +46,7 @@ os_netbsd_setsrc (char *option)
 {
   chsrc_ensure_root (); // HELP: 不知道是否需要确保root权限
 
-  SourceInfo source;
-  chsrc_yield_source (os_netbsd);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_netbsd);
 
   chsrc_backup ("/usr/pkg/etc/pkgin/repositories.conf");
 
@@ -59,7 +57,7 @@ os_netbsd_setsrc (char *option)
   char *url = xy_strjoin (5, source.url, arch, "/", version, "/All");
   chsrc_overwrite_file (url, "/usr/pkg/etc/pkgin/repositories.conf");
 
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, ChsrcTypeUntested);
 }
 
 def_target(os_netbsd);

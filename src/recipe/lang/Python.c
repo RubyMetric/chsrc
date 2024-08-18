@@ -107,9 +107,7 @@ pl_python_setsrc (char *option)
 
   pl_python_check_cmd (&prog, &poetry_exist, &pdm_exist);
 
-  SourceInfo source;
-  chsrc_yield_source (pl_python);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (pl_python);
 
   // 这里用的是 config --user，会写入用户目录（而不是项目目录）
   // GitHub#39
@@ -133,7 +131,7 @@ pl_python_setsrc (char *option)
       chsrc_run (cmd, RunOpt_Default);
     }
 
-  chsrc_say_lastly (&source, chsrc_type);
+  chsrc_conclude (&source, chsrc_type);
 }
 
 void

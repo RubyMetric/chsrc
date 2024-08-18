@@ -24,9 +24,7 @@ def_sources_n(wr_cocoapods);
 void
 wr_cocoapods_setsrc (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (wr_cocoapods);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (wr_cocoapods);
 
   chsrc_note2 ("请手动执行以下命令:");
 
@@ -40,7 +38,7 @@ wr_cocoapods_setsrc (char *option)
   char *source_str = xy_strjoin (3, "source '", source.url, "'");
   say (source_str);
 
-  chsrc_say_lastly (&source, ChsrcTypeManual);
+  chsrc_conclude (&source, ChsrcTypeManual);
 }
 
 def_target_s (wr_cocoapods);

@@ -25,9 +25,7 @@ def_sources_n(wr_anaconda);
 void
 wr_anaconda_setsrc (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (wr_anaconda);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (wr_anaconda);
 
   char *main  = xy_2strjoin (source.url, "pkgs/main");
   char *r     = xy_2strjoin (source.url, "pkgs/r");
@@ -69,7 +67,7 @@ wr_anaconda_setsrc (char *option)
   puts (file);
 
   chsrc_note2 ("然后运行 conda clean -i 清除索引缓存，保证用的是镜像站提供的索引");
-  chsrc_say_lastly (&source, ChsrcTypeSemiAuto);
+  chsrc_conclude (&source, ChsrcTypeSemiAuto);
 }
 
 def_target_s (wr_anaconda);

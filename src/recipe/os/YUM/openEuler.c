@@ -32,9 +32,7 @@ os_openeuler_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  SourceInfo source;
-  chsrc_yield_source (os_openeuler);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_openeuler);
 
   chsrc_backup (OS_openEuler_SourceList);
 
@@ -45,7 +43,7 @@ os_openeuler_setsrc (char *option)
   chsrc_overwrite_file (towrite, OS_openEuler_SourceList);
 
   chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 def_target_s(os_openeuler);

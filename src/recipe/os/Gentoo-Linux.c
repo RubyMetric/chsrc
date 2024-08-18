@@ -33,9 +33,7 @@ os_gentoo_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  SourceInfo source;
-  chsrc_yield_source (os_gentoo);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (os_gentoo);
 
   chsrc_backup ("/etc/portage/repos.conf/gentoo.conf");
 
@@ -47,7 +45,7 @@ os_gentoo_setsrc (char *option)
   char *towrite = xy_strjoin (3, "GENTOO_MIRRORS=\"https://", source.url, "gentoo\"");
 
   chsrc_append_to_file (towrite, "/etc/portage/make.conf");
-  chsrc_say_lastly (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, ChsrcTypeUntested);
 }
 
 def_target_s(os_gentoo);

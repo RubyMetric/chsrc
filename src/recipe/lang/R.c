@@ -52,9 +52,7 @@ pl_r_getsrc (char *option)
 void
 pl_r_setsrc (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (pl_r);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (pl_r);
 
   char *bioconductor_url = xy_str_delete_suffix (xy_str_delete_suffix (source.url, "cran/"), "CRAN/");
   bioconductor_url = xy_2strjoin(bioconductor_url, "bioconductor");
@@ -73,7 +71,7 @@ pl_r_setsrc (char *option)
       chsrc_append_to_file (towrite1, "~/.Rprofile");
       chsrc_append_to_file (towrite2, "~/.Rprofile");
     }
-  chsrc_say_lastly (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 def_target(pl_r);

@@ -30,14 +30,12 @@ def_sources_n(wr_emacs);
 void
 wr_emacs_setsrc (char *option)
 {
-  SourceInfo source;
-  chsrc_yield_source (wr_emacs);
-  chsrc_confirm_source (&source);
+  chsrc_yield_source_and_confirm (wr_emacs);
 
   chsrc_note2 ("Emacs换源涉及Elisp，需要手动查阅并换源:");
   puts (source.url);
 
-  chsrc_say_lastly (&source, ChsrcTypeManual);
+  chsrc_conclude (&source, ChsrcTypeManual);
 }
 
 def_target_s (wr_emacs);
