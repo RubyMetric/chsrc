@@ -8,7 +8,7 @@
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-08-17>
+ * Last modified : <2024-08-18>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -590,9 +590,31 @@ chsrc_confirm_source (SourceInfo *source)
 #define ChsrcTypeManual   "manual"
 #define ChsrcTypeUntested "untested"
 
+#define MSG_EN_PUBLIC_URL "If the URL you specify is a public service, you are invited to contribute: chsrc issue"
+#define MSG_CN_PUBLIC_URL "若您指定的URL为公有服务，邀您参与贡献: chsrc issue"
+
+#define MSG_EN_FULLY_AUTO "Fully-Auto changed source. "
+#define MSG_CN_FULLY_AUTO "全自动换源完成"
+
+#define MSG_EN_SEMI_AUTO  "Semi-Auto changed source. "
+#define MSG_CN_SEMI_AUTO  "半自动换源完成"
+
+#define MSG_EN_THANKS     "Thanks to the mirror site: "
+#define MSG_CN_THANKS     "感谢镜像提供方: "
+
+#define MSG_EN_BETTER     "If you have a better source changing method , please help: chsrc issue"
+#define MSG_CN_BETTER     "若您有更好的换源方案，邀您帮助: chsrc issue"
+
+#define MSG_EN_CONSTRAINT "Implementation constraints require manual operation according to the above prompts. "
+#define MSG_CN_CONSTRAINT "因实现约束需按上述提示手工操作"
+
+#define MSG_EN_STILL      "Still need to operate manually according to the above prompts. "
+#define MSG_CN_STILL      "仍需按上述提示手工操作"
+
 /**
  * @param source    可为NULL
  * @param last_word 5种选择：ChsrcTypeAuto | ChsrcTypeReset | ChsrcTypeSemiAuto | ChsrcTypeManual | ChsrcTypeUntested
+ * @translation Done
  */
 void
 chsrc_say_lastly (SourceInfo *source, const char *last_word)
@@ -605,22 +627,28 @@ chsrc_say_lastly (SourceInfo *source, const char *last_word)
         {
           if (source_is_userdefine (source))
             {
-              chsrc_log ("全自动换源完成; 邀您参与贡献，帮助其他人使用该URL换源: chsrc issue");
+              char *msg = CliOpt_InEnglish ? MSG_EN_FULLY_AUTO      MSG_EN_PUBLIC_URL \
+                                           : MSG_CN_FULLY_AUTO ", " MSG_CN_PUBLIC_URL;
+              chsrc_log (msg);
             }
           else
             {
-              chsrc_log (xy_2strjoin ("全自动换源完成，感谢镜像提供方: ", to_purple (source->mirror->name)));
+              char *msg = CliOpt_InEnglish ? MSG_EN_FULLY_AUTO      MSG_EN_THANKS \
+                                           : MSG_CN_FULLY_AUTO ", " MSG_CN_THANKS;
+              chsrc_log (xy_2strjoin (msg, to_purple (source->mirror->name)));
             }
         }
       else
         {
-          chsrc_log ("全自动换源完成");
+          char *msg = CliOpt_InEnglish ? MSG_EN_FULLY_AUTO : MSG_CN_FULLY_AUTO;
+          chsrc_log (msg);
         }
     }
   else if (xy_streql (ChsrcTypeReset, last_word))
     {
       // source_is_upstream (source)
-      chsrc_log (to_purple ("已重置为上游默认源"));
+      char *msg = CliOpt_InEnglish ? "Has been reset to the upstream default source" : "已重置为上游默认源";
+      chsrc_log (to_purple (msg));
     }
   else if (xy_streql (ChsrcTypeSemiAuto, last_word))
     {
@@ -628,18 +656,26 @@ chsrc_say_lastly (SourceInfo *source, const char *last_word)
         {
           if (source_is_userdefine (source))
             {
-              chsrc_log ("半自动换源完成，仍需按上述提示手工操作; 邀您参与贡献，帮助其他人使用该URL换源: chsrc issue");
+              char *msg = CliOpt_InEnglish ? MSG_EN_SEMI_AUTO      MSG_EN_STILL      MSG_EN_PUBLIC_URL \
+                                           : MSG_CN_SEMI_AUTO ", " MSG_CN_STILL "。" MSG_CN_PUBLIC_URL;
+              chsrc_log (msg);
             }
           else
             {
-              chsrc_log (xy_2strjoin ("半自动换源完成，仍需按上述提示手工操作，感谢镜像提供方: ", to_purple (source->mirror->name)));
+              char *msg = CliOpt_InEnglish ? MSG_EN_SEMI_AUTO      MSG_EN_STILL      MSG_EN_THANKS \
+                                           : MSG_CN_SEMI_AUTO ", " MSG_CN_STILL "。" MSG_CN_THANKS;
+              chsrc_log (xy_2strjoin (msg, to_purple (source->mirror->name)));
             }
         }
       else
         {
-          chsrc_log ("半自动换源完成，仍需按上述提示手工操作");
+          char *msg = CliOpt_InEnglish ? MSG_EN_SEMI_AUTO      MSG_EN_STILL \
+                                       : MSG_CN_SEMI_AUTO ", " MSG_CN_STILL;
+          chsrc_log (msg);
         }
-      chsrc_warn ("若您有更好的换源方案，邀您帮助: chsrc issue");
+
+      char *msg = CliOpt_InEnglish ? MSG_EN_BETTER : MSG_CN_BETTER;
+      chsrc_warn (msg);
     }
   else if (xy_streql (ChsrcTypeManual, last_word))
     {
@@ -647,18 +683,24 @@ chsrc_say_lastly (SourceInfo *source, const char *last_word)
         {
           if (source_is_userdefine (source))
             {
-              chsrc_log ("因实现约束需按上述提示手工操作; 邀您参与贡献，帮助其他人使用该URL换源: chsrc issue");
+              char *msg = CliOpt_InEnglish ? MSG_EN_CONSTRAINT      MSG_EN_PUBLIC_URL \
+                                           : MSG_CN_CONSTRAINT "; " MSG_CN_PUBLIC_URL;
+              chsrc_log (msg);
             }
           else
             {
-              chsrc_log (xy_2strjoin ("因实现约束需按上述提示手工操作，感谢镜像提供方: ", to_purple (source->mirror->name)));
+              char *msg = CliOpt_InEnglish ? MSG_EN_CONSTRAINT      MSG_EN_THANKS \
+                                           : MSG_CN_CONSTRAINT ", " MSG_CN_THANKS;
+              chsrc_log (xy_2strjoin (msg, to_purple (source->mirror->name)));
             }
         }
       else
         {
-          chsrc_log ("因实现约束需按上述提示手工操作");
+          char *msg = CliOpt_InEnglish ? MSG_EN_CONSTRAINT : MSG_CN_CONSTRAINT;
+          chsrc_log (msg);
         }
-      chsrc_warn ("若您有更好的换源方案，邀您帮助: chsrc issue");
+      char *msg = CliOpt_InEnglish ? MSG_EN_BETTER : MSG_CN_BETTER;
+      chsrc_warn (msg);
     }
   else if (xy_streql (ChsrcTypeUntested, last_word))
     {
@@ -666,22 +708,27 @@ chsrc_say_lastly (SourceInfo *source, const char *last_word)
         {
           if (source_is_userdefine (source))
             {
-              chsrc_log ("邀您参与贡献，帮助其他人使用该URL换源: chsrc issue");
+              char *msg = CliOpt_InEnglish ? MSG_EN_PUBLIC_URL : MSG_CN_PUBLIC_URL;
+              chsrc_log (msg);
             }
           else
             {
-              chsrc_log (xy_2strjoin ("感谢镜像提供方: ", to_purple (source->mirror->name)));
+              char *msg = CliOpt_InEnglish ? MSG_EN_THANKS : MSG_CN_THANKS;
+              chsrc_log (xy_2strjoin (msg, to_purple (source->mirror->name)));
             }
         }
       else
         {
-          chsrc_log ("自动换源完成");
+          char *msg = CliOpt_InEnglish ? "Auto changed source" : "自动换源完成";
+          chsrc_log (msg);
         }
-      chsrc_warn ("该换源步骤已实现但未经测试或存在任何反馈，请报告使用情况: chsrc issue");
+
+      char *msg = CliOpt_InEnglish ? "The method hasn't been tested or has any feedback, please report usage: chsrc issue" : "该换源步骤已实现但未经测试或存在任何反馈，请报告使用情况: chsrc issue";
+      chsrc_warn (msg);
     }
   else
     {
-      puts (last_word);
+      say (last_word);
     }
 }
 
