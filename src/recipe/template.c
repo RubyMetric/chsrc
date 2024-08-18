@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2024-08-09>
- * Last Modified : <2024-08-15>
+ * Last Modified : <2024-08-18>
  * -------------------------------------------------------------
  * 本文件作为一个通用模板：
  *
@@ -54,9 +54,11 @@ def_sources_n(<category>_<target>);
 
 /**
  * @required 非必需
+ *
+ * 用于 chsrc get <target>
  */
 void
-<category>_<target>_getsrc (char* option)
+<category>_<target>_getsrc (char *option)
 {
   // chsrc get <target>
 }
@@ -65,12 +67,12 @@ void
 /**
  * @required 必需
  * @ref      写明换源实现的参考地址
+ *
+ * 用于 chsrc set <target>
  */
 void
-<category>_<target>_setsrc (char* option)
+<category>_<target>_setsrc (char *option)
 {
-  // chsrc set <target>
-
   // 下面这行是必须的，注入source变量
   chsrc_yield_source_and_confirm (<category>_<target>);
 
@@ -83,19 +85,44 @@ void
 
 /**
  * @required 非必需
+ *
+ * 用于 chsrc reset <target>
  */
 void
-<category>_<target>_resetsrc (char* option)
+<category>_<target>_resetsrc (char *option)
 {
-  // chsrc reset <target>
-
   // 往往通过下述方式统一在 setsrc() 中实现
   // <category>_<name>_setsrc (ChsrcTypeReset);
 }
 
 
-// 定义此 target，参考 "target.h"
-// 下列情形3选1
-def_target_gsr(<category>_<target>);
+/**
+ * @required 非必需
+ *
+ * 用于 chsrc ls <target>
+ */
+FeatInfo
+<category>_<target>_feat (char *option)
+{
+  FeatInfo fi = {0};
+
+  fi.can_get = true;
+  fi.can_reset = false;
+
+  fi.stcan_locally = CanSemi;
+  fi.locally = "具体说明是否支持项目级换源...";;
+  fi.can_english = false;
+  fi.can_user_define = false;
+
+  fi.note = "备注说明...";
+  return fi;
+}
+
+
+// 定义此 target，参考 "source.h"
+// 下列情形多选1
 def_target(<category>_<target>);
-def_target_no_get(<category>_<target>);
+def_target_gsr(<category>_<target>);
+def_target_gsf(<category>_<target>);
+def_target_gsrf(<category>_<target>);
+def_target_s(<category>_<target>);
