@@ -468,7 +468,7 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
         }
       else
         {
-          char *test_msg = CliOpt_InEnglish ? "Measure Speed> " : "测速 ";
+          char *test_msg = CliOpt_InEnglish ? "Measure speed> " : "测速 ";
           printf ("%s", xy_strjoin (3, test_msg, src.mirror->site , " ... "));
 
           fflush (stdout);

@@ -10,7 +10,7 @@
  *                 |  BlockLune    <blocklune@gmail.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-08-17>
+ * Last Modified   : <2024-08-18>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
@@ -101,17 +101,21 @@ Chsrc_Usage[] = {
 
   "使用: chsrc <command> [options] [target] [mirror]",
   "help                      打印此帮助，或 h, -h, --help",
-  "issue                     查看相关issue",
-  "list (或 ls, 或 l)        列出可用镜像源，和可换源软件",
-  "list mirror/target        列出可用镜像源，或可换源软件",
-  "list os/lang/ware         列出可换源的操作系统/编程语言/软件",
-  "list <target>             查看该软件的可用源与支持功能",
-  "cesu <target>             对该软件所有源测速",
-  "get  <target>             查看当前软件的源使用情况",
+  "issue                     查看相关issue\n",
+  "list (或 ls, 或 l)        列出可用镜像源，和可换源目标",
+  "list mirror/target        列出可用镜像源，或可换源目标",
+  "list os/lang/ware         列出可换源的操作系统/编程语言/软件\n",
+
+  "measure <target>          对该目标所有源测速",
+  "cesu    <target>          \n",
+
+  "list <target>             查看该目标可用源与支持功能",
+  "get  <target>             查看该目标当前源的使用情况\n",
+
   "set  <target>             换源，自动测速后挑选最快源",
   "set  <target>  first      换源，使用维护团队测速第一的源",
-  "set  <target> <mirror>    换源，指定使用某镜像站 (通过list命令查看)",
-  "set  <target> https://abc 换源，用户自定义源URL",
+  "set  <target> <mirror>    换源，指定使用某镜像站 (通过list <target>查看)",
+  "set  <target> https://url 换源，用户自定义源URL",
   "reset <target>            重置，使用上游默认使用的源\n",
 
   "选项:",
@@ -349,8 +353,8 @@ typedef enum {
   TargetOp_Get_Source = 1,
   TargetOp_Set_Source,
   TargetOp_Reset_Source,
-  TargetOp_Cesu_Source,
-  TargetOp_List_Source
+  TargetOp_Measure_Source,
+  TargetOp_List_Config
 } TargetOp;
 
 /**
@@ -390,7 +394,7 @@ get_target (const char *input, TargetOp code, char *option)
       if (target->getfn) target->getfn("");
       else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现get功能，邀您帮助: chsrc issue"));
     }
-  else if (TargetOp_List_Source==code)
+  else if (TargetOp_List_Config==code)
     {
       say (to_boldblue(xy_strjoin (3, "指定使用某源，请使用 chsrc set ", input, " <code>\n")));
       say (to_boldgreen("Available Sources: \n"));
@@ -404,7 +408,7 @@ get_target (const char *input, TargetOp code, char *option)
           cli_print_target_features (fi, input);
         }
     }
-  else if (TargetOp_Cesu_Source==code)
+  else if (TargetOp_Measure_Source==code)
     {
       auto_select_ (target->sources, target->sources_n, input);
       return true;
@@ -527,15 +531,18 @@ main (int argc, char const *argv[])
               cli_print_supported_wr (); return 0;
             }
 
-          matched = get_target (target, TargetOp_List_Source, NULL);
+          matched = get_target (target, TargetOp_List_Config, NULL);
           if (!matched) goto not_matched;
         }
       return 0;
   }
 
 
-  /* chsrc cesu */
-  else if (xy_streql (command, "cesu") ||
+  /* chsrc measure */
+  else if (xy_streql (command, "measure") ||
+           xy_streql (command, "mea")  ||
+           xy_streql (command, "m")    ||
+           xy_streql (command, "cesu") ||
            xy_streql (command, "ce")   ||
            xy_streql (command, "c"))
     {
@@ -545,7 +552,7 @@ main (int argc, char const *argv[])
           return 1;
         }
       target = argv[cli_arg_Target_pos];
-      matched = get_target (target, TargetOp_Cesu_Source, NULL);
+      matched = get_target (target, TargetOp_Measure_Source, NULL);
       if (!matched) goto not_matched;
       return 0;
     }

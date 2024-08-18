@@ -121,18 +121,21 @@ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
 
 help                      # 打印此帮助，或 h, -h, --help
 issue                     # 查看相关issue
-list (或 ls, 或 l)        # 列出可用镜像源，和可换源软件
-list mirror/target        # 列出可用镜像源，或可换源软件
-list os/lang/ware         # 列出可换源的操作系统/编程语言/软件
-list <target>             # 查看该软件可以使用哪些源
 
-cesu <target>             # 对该软件所有源测速
-get  <target>             # 查看当前软件的源使用情况
+list (或 ls, 或 l)        # 列出可用镜像源，和可换源目标
+list mirror/target        # 列出可用镜像源，或可换源目标
+list os/lang/ware         # 列出可换源的操作系统/编程语言/软件
+
+measure <target>          # 对该目标所有源测速
+cesu    <target>
+
+list <target>             # 查看该目标可用源与支持功能
+get  <target>             # 查看该目标当前源的使用情况
 
 set  <target>             # 换源，自动测速后挑选最快源
 set  <target>  first      # 换源，使用维护团队测速第一的源
 set  <target> <mirror>    # 换源，指定使用某镜像站 (通过list命令查看)
-set  <target> https://abc # 换源，用户自定义源URL
+set  <target> https://url # 换源，用户自定义源URL
 reset <target>            # 重置，使用上游默认使用的源
 
 选项:
