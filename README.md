@@ -17,7 +17,8 @@
 
 立刻为一个新软件添加换源方法！[Write A Recipe Even If You Don't Know C](./doc/Write-A-Recipe-Even-If-You-Dont-Know-C.md)
 
-- 案例: [Armbian](../src/recipe/os/APT/Armbian.c)
+- 案例：[Armbian](../src/recipe/os/APT/Armbian.c)
+- 挑战：[CentOS (Stream) Recipe Challenge!](https://github.com/RubyMetric/chsrc/issues/48)
 
 ---
 
@@ -30,9 +31,10 @@
 > [!NOTE]
 > 想通过 `flatpak`, `yay`,`pacman`,`apt`,`dnf` 等系统包管理工具来安装和更新`chsrc`？若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
 
-- [x] `homebrew`
-- [x] `scoop`
-- [ ] 缺乏 `AUR` 维护者
+- [x] `Homebrew`
+- [x] `Scoop`
+- [ ] `Flatpak`
+- [ ] `AUR`
 - [ ] 缺乏其他平台/包维护者
 
 <br>
