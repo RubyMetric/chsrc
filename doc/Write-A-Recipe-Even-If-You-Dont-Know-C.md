@@ -8,7 +8,9 @@
  ! Last Modified   : <2024-08-19>
  ! ---------------------------------------------------------- -->
 
-# Write A Recipe Even If You Dont Know C
+# Write A Recipe Even If You Don't Know C
+
+# 你是主厨 Chef
 
 **`chsrc` 不仅是一个命令行工具，同时也是一个换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。**
 
@@ -52,10 +54,11 @@
 
 4. 在各大镜像站寻找可用源；可以额外补充镜像站
 
-5. 可以使用 `chsrc.h` 中暴露出的任何 `chsrc_` 开头的函数
+5. 可以使用 `chsrc.h` 中暴露出的任何 `chsrc_` 开头的函数或宏
 
 6. 构建并运行 `chsrc set <target>` 测试，若无问题可提交 Pull Request
 
 
+若有任何问题，可在 [GitHub discussions](https://github.com/RubyMetric/chsrc/discussions) 中询问和讨论
 
 [recipe template]: ../src/recipe/template.c
