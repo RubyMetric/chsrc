@@ -16,9 +16,11 @@
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version       "v0.1.7.3-2024/08/18"
-#define Chsrc_Maintain_URL  "https://github.com/RubyMetric/chsrc"
-#define Chsrc_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc"
+#define Chsrc_Version        "0.1.7.3"
+#define Chsrc_Release_Date   "2024/08/18"
+#define Chsrc_Banner_Version "v" Chsrc_Version "-" Chsrc_Release_Date
+#define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
+#define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
 #include "chsrc.h"
 
@@ -267,18 +269,25 @@ cli_print_target_features (FeatInfo f, const char *input_target_name)
 void
 cli_print_version ()
 {
-  puts (xy_strjoin (3, "chsrc: Change Source (GPL-3.0) ",
-                      xy_str_to_magenta (Chsrc_Version), " by RubyMetric"));
+  say ("chsrc " Chsrc_Version);
+  say ("Copyright (C) 2024 Aoran Zeng, Heng Guo");
+  say ("License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>");
+  say ("This is free software: you are free to change and redistribute it.");
+  say ("There is NO WARRANTY, to the extent permitted by law.");
+  br();
+  say ("Written by Aoran Zeng, Heng Guo and contributors. (See chsrc.c)");
 }
 
 
 void
 cli_print_help ()
 {
+  say (xy_strjoin (3, "chsrc: Change Source (GPLv3+) ",
+                   to_purple (Chsrc_Banner_Version), " by RubyMetric"));
   br();
   for (int i=0; i<xy_arylen (Chsrc_Usage); i++)
     {
-      puts (Chsrc_Usage[i]);
+      say (Chsrc_Usage[i]);
     }
 }
 
@@ -425,7 +434,6 @@ main (int argc, char const *argv[])
 
   if (0==argc)
     {
-      cli_print_version ();
       cli_print_help ();
       return 0;
     }
@@ -481,7 +489,6 @@ main (int argc, char const *argv[])
       xy_streql (command, "help") ||
       xy_streql (command, "--help"))
     {
-      cli_print_version ();
       cli_print_help ();
       return 0;
     }

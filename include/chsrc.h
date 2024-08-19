@@ -364,7 +364,7 @@ test_speed_url (const char *url)
   char *curl_cmd = xy_strjoin (7, "curl -qsL ", ipv6,
                                   " -o " xy_os_devnull,
                                   " -w \"%{http_code} %{speed_download}\" -m", time_sec,
-                                  " -A chsrc/" Chsrc_Version "  ", url);
+                                  " -A chsrc/" Chsrc_Banner_Version "  ", url);
 
   // chsrc_info (xy_2strjoin ("测速命令 ", curl_cmd));
 
