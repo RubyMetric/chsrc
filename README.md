@@ -17,7 +17,7 @@
 
 立刻为一个新软件添加换源方法！[Write A Recipe Even If You Don't Know C](./doc/Write-A-Recipe-Even-If-You-Dont-Know-C.md)
 
-- 案例：[Armbian](../src/recipe/os/APT/Armbian.c)
+- 案例：[Armbian](./src/recipe/os/APT/Armbian.c)
 - 挑战：[CentOS (Stream) Recipe Challenge!](https://github.com/RubyMetric/chsrc/issues/48)
 
 ---
