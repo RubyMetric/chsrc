@@ -134,13 +134,13 @@ cli_print_available_mirrors ()
 {
   chsrc_info ("支持以下镜像站");
   chsrc_info ("下方 code 列，可用于指定使用某镜像站，请使用 chsrc set <target> <code>\n");
-  printf (" %-13s%-35s%-38s", "code", "镜像站简写", "镜像站URL"); puts ("镜像站名称");
-  puts   ("-------      -----------       -------------------------------------     ---------------------");
-  // puts   ("-------------------------------------------------------------------------------------------------");
+  printf (" %-13s%-35s%-38s", "code", "镜像站简写", "镜像站URL"); say ("镜像站名称");
+  say   ("-------      -----------       -------------------------------------     ---------------------");
+  // say   ("-------------------------------------------------------------------------------------------------");
   for (int i = 0; i < xy_arylen (available_mirrors); i++)
     {
       MirrorSite* mir = available_mirrors[i];
-      printf ("%-14s%-18s%-41s ", mir->code, mir->abbr, mir->site); puts (mir->name);
+      printf ("%-14s%-18s%-41s ", mir->code, mir->abbr, mir->site); say (mir->name);
     }
 }
 
@@ -165,15 +165,15 @@ cli_print_supported_targets_ (const char ***array, size_t size)
 void
 cli_print_supported_targets ()
 {
-  chsrc_info ("支持对以下目标换源 (同一行表示这几个命令兼容)"); puts("");
-  puts (xy_str_to_blue ("编程语言开发"));
-  puts ("-------------------------");
+  chsrc_info ("支持对以下目标换源 (同一行表示这几个命令兼容)"); br();
+  say (to_blue ("编程语言开发"));
+  say ("-------------------------");
   cli_print_supported_targets_ (pl_packagers, xy_arylen(pl_packagers));
-  puts (xy_str_to_blue ("操作系统"));
-  puts ("-------------------------");
+  say (to_blue ("操作系统"));
+  say ("-------------------------");
   cli_print_supported_targets_ (os_systems,   xy_arylen(os_systems));
-  puts (xy_str_to_blue ("软件"));
-  puts ("-------------------------");
+  say (to_blue ("软件"));
+  say ("-------------------------");
   cli_print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
 }
 
@@ -188,14 +188,14 @@ void
 cli_print_supported_os ()
 {
   chsrc_info ("支持对以下操作系统换源 (同一行表示这几个命令兼容)");
-  cli_print_supported_targets_ (os_systems,   xy_arylen(os_systems));
+  cli_print_supported_targets_ (os_systems, xy_arylen(os_systems));
 }
 
 void
 cli_print_supported_wr ()
 {
   chsrc_info ("支持对以下软件换源 (同一行表示这几个命令兼容)");
-  cli_print_supported_targets_ (wr_softwares,   xy_arylen(wr_softwares));
+  cli_print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
 }
 
 
@@ -215,7 +215,7 @@ cli_print_target_available_sources (SourceInfo sources[], size_t size)
           src.url = "Please help to add the upstream url!";
         }
       printf ("%-14s%-18s%-50s ", mir->code, mir->abbr, src.url);
-      puts (mir->name);
+      say (mir->name);
     }
 }
 
@@ -226,15 +226,15 @@ cli_print_target_features (FeatInfo f, const char *input_target_name)
 
   char *get_msg = xy_2strjoin (" Get: 查看当前源状态 | chsrc get ", input_target_name);
   if (f.can_get) printf (" %s%s\n", to_boldgreen(YesMark), to_purple(get_msg));
-  else printf (" %s%s\n", to_boldred(NoMark), get_msg);puts("");
+  else printf (" %s%s\n", to_boldred(NoMark), get_msg);br();
 
   char *reset_msg = xy_2strjoin (" Reset: 重置回默认源 | chsrc reset ", input_target_name);
   if (f.can_reset) printf (" %s%s\n", to_boldgreen(YesMark), to_purple(reset_msg));
-  else printf (" %s%s\n", to_boldred(NoMark), reset_msg);puts("");
+  else printf (" %s%s\n", to_boldred(NoMark), reset_msg);br();
 
   char *user_define_msg = xy_strjoin (4, " UserDefine: 用户自定义换源URL | chsrc set ", input_target_name, " https://user-define-url.org/", input_target_name);
   if (f.can_user_define) printf (" %s%s\n", to_boldgreen(YesMark), to_purple(user_define_msg));
-  else printf (" %s%s\n", to_boldred(NoMark), user_define_msg);puts("");
+  else printf (" %s%s\n", to_boldred(NoMark), user_define_msg);br();
 
 
   char *locally_msg = xy_2strjoin (" Locally: 仅对本项目换源 | chsrc set -local ", input_target_name);
@@ -242,13 +242,13 @@ cli_print_target_features (FeatInfo f, const char *input_target_name)
   switch (f.stcan_locally)
   {
   case CanNotFully:
-    printf (" %s%s\n", to_boldred(NoMark), locally_msg);puts("");
+    printf (" %s%s\n", to_boldred(NoMark), locally_msg);br();
     break;
   case CanFully:
-    printf (" %s%s\n", to_boldgreen(YesMark), to_purple(locally_msg));puts("");
+    printf (" %s%s\n", to_boldgreen(YesMark), to_purple(locally_msg));br();
     break;
   case CanSemi:
-    printf (" %s%s\n\n   %s\n", to_boldgreen(SemiYesMark), to_purple(locally_msg), f.locally);puts("");
+    printf (" %s%s\n\n   %s\n", to_boldgreen(SemiYesMark), to_purple(locally_msg), f.locally);br();
     break;
   default:
     xy_unreach;
@@ -294,7 +294,7 @@ cli_print_help ()
 void
 cli_print_issues ()
 {
-  puts (
+  say (
   "chsrc issues: Gitee和GitHub两边同时接受issue\n\n"
   "- https://gitee.com/RubyMetric/chsrc/issues\n"
   "- https://github.com/RubyMetric/chsrc/issues\n"
@@ -409,8 +409,8 @@ get_target (const char *input, TargetOp code, char *option)
       say (to_boldblue(xy_strjoin (3, "指定使用某源，请使用 chsrc set ", input, " <code>\n")));
       say (to_boldgreen("Available Sources: \n"));
       // chsrc_info (xy_strjoin (3, "下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>\n"));
-      printf (" %-14s%-35s%-43s ", "code", "镜像站简写", "换源URL"); puts ("镜像站名称");
-      puts   ("---------    --------------    -----------------------------------------------    ---------------------");
+      printf (" %-14s%-35s%-43s ", "code", "镜像站简写", "换源URL"); say ("镜像站名称");
+      say   ("---------    --------------    -----------------------------------------------    ---------------------");
       cli_print_target_available_sources (target->sources, target->sources_n);
       if (target->featfn)
         {

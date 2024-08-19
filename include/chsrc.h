@@ -84,7 +84,7 @@ chsrc_note2 (const char* str)
  * @translation Done
  */
 void
-chsrc_log_check_result (const char *check_what, const char *check_type, bool exist)
+log_check_result (const char *check_what, const char *check_type, bool exist)
 {
   char *chk_msg       = NULL;
   char *not_exist_msg = NULL;
@@ -121,7 +121,7 @@ chsrc_log_check_result (const char *check_what, const char *check_type, bool exi
  * @translation Done
  */
 void
-chsrc_log_cmd_result (bool result, int ret_code)
+log_cmd_result (bool result, int ret_code)
 {
   char *run_msg  = NULL;
   char *succ_msg = NULL;
@@ -185,12 +185,12 @@ query_program_exist (char *check_cmd, char *prog_name)
   if (0 != ret)
     {
       // xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
-      chsrc_log_check_result (prog_name, msg, false);
+      log_check_result (prog_name, msg, false);
       return false;
     }
   else
     {
-      chsrc_log_check_result (prog_name, msg, true);
+      log_check_result (prog_name, msg, true);
       return true;
     }
 }
@@ -232,12 +232,12 @@ chsrc_check_file (char *path)
 {
   if (xy_file_exist (path))
     {
-      chsrc_log_check_result (path, "文件", true);
+      log_check_result (path, "文件", true);
       return true;
     }
   else
     {
-      chsrc_log_check_result (path, "文件", false);
+      log_check_result (path, "文件", false);
       return false;
     }
 }
@@ -340,7 +340,7 @@ to_human_readable_speed (double speed)
  * @return 返回测得的速度，若出错，返回-1
  */
 double
-test_speed_url (const char *url)
+measure_speed (const char *url)
 {
   char *time_sec = "6";
 
@@ -471,7 +471,7 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
           printf ("%s", xy_strjoin (3, test_msg, src.mirror->site , " ... "));
 
           fflush (stdout);
-          speed = test_speed_url (url);
+          speed = measure_speed (url);
         }
       speeds[i] = speed;
     }
@@ -781,12 +781,12 @@ chsrc_run (const char *cmd, int run_option)
     {
       if (! (RunOpt_Dont_Notify_On_Success & run_option))
         {
-          chsrc_log_cmd_result (true, status);
+          log_cmd_result (true, status);
         }
     }
   else
     {
-      chsrc_log_cmd_result (false, status);
+      log_cmd_result (false, status);
       if (! (run_option & RunOpt_Dont_Abort_On_Failure))
         {
           chsrc_error ("关键错误，强制结束");
