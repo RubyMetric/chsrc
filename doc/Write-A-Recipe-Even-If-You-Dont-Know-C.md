@@ -38,7 +38,7 @@
 
 2. `mirror`: 是 `mirror site` 的缩写，指镜像站，如清华大学开源软件镜像站
 3. `source`: 该 `target` 所能换的具体的源，由 `mirror` 提供服务
-4. `recipe`: 是为一个 `target` 定义的具体换源方法，请参考 `src` 目录中的 `recipe` 目录，根据 `target`
+4. `recipe`: 是为一个 `target` 定义的具体换源方法，请参考 `src` 目录中的 `recipe` 目录
 
 5. `feature`: 一个 `target` 可以支持的功能，比如能否重置回默认上游源等
 
