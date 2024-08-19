@@ -1,6 +1,5 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * Copyright © 2023-2024 Aoran Zeng, Heng Guo
  * -------------------------------------------------------------
  * File Name     : chsrc.h
  * File Authors  : Aoran Zeng <ccmywish@qq.com>

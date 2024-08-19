@@ -1,16 +1,17 @@
 /** ------------------------------------------------------------
- * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright © 2023-2024 Aoran Zeng, Heng Guo
+ * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * Project Authors : Aoran Zeng    <ccmywish@qq.com>
- *                 |  Heng Guo     <2085471348@qq.com>
- * Contributors    : Aaron Ruan    <aaron212cn@outlook.com>
- *                 |  Rui Chen     <rui@chenrui.dev>
+ * Project Name    :    chsrc
+ * Project Authors :  Aoran Zeng   <ccmywish@qq.com>
+ *                 |   Heng Guo    <2085471348@qq.com>
+ * Contributors    :  Aaron Ruan   <aaron212cn@outlook.com>
+ *                 |   Rui Chen    <rui@chenrui.dev>
  *                 | Shengwei Chen <414685209@qq.com>
- *                 |  BlockLune    <blocklune@gmail.com>
+ *                 |   BlockLune   <blocklune@gmail.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-08-18>
+ * Last Modified   : <2024-08-19>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/

@@ -1,6 +1,6 @@
 /** ------------------------------------------------------------
- * SPDX-License-Identifier: MIT
  * Copyright © 2023-2024 Aoran Zeng, Heng Guo
+ * SPDX-License-Identifier: MIT
  * -------------------------------------------------------------
  * Lib Name      : xy.h
  * Lib Authors   : Aoran Zeng <ccmywish@qq.com>
