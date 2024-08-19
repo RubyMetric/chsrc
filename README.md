@@ -2,11 +2,38 @@
   <img alt="chsrc logo" src="image/chsrc.png"/>
 </div>
 
-全平台命令行换源工具，**目标支持 Linux (包括麒麟、openEuler、deepin 等), Windows, macOS, BSD 等尽可能多的操作系统，龙芯、飞腾、RISC-V 等尽可能多的 CPU**。
+全平台命令行换源工具，**目标支持 Linux, Windows, macOS, BSD 等尽可能多的操作系统，龙芯、飞腾、RISC-V 等尽可能多的 CPU**。
 
 我们使用 **C99** 来完成上述目标。我们并不使用 Python 或 JS 等解释语言，因为一个简单的换源工具，不应该强行塞给用户一个庞大的解释器和数十、数百 MB 其他文件。
 
 本软件为**自由软件**，SDPX 软件许可证为 `GPL-3.0-or-later and MIT`
+
+<br>
+
+## 🤝 Contribute
+
+> [!TIP]
+> **`chsrc` 不仅是一个命令行工具，同时也是一个换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。**
+
+立刻为一个新软件添加换源方法！[Write A Recipe Even If You Don't Know C](./doc/Write-A-Recipe-Even-If-You-Dont-Know-C.md)
+
+- 案例: [Armbian](../src/recipe/os/APT/Armbian.c)
+
+---
+
+开发准则：
+1. Convention over Configuration
+2. [NO UFO 原则: 不要乱丢文件到$HOME等目录，尤其是使用各种隐晦的文件名](https://www.yuque.com/ccmywish/blog/no-ufo)
+
+---
+
+> [!NOTE]
+> 想通过 `flatpak`, `yay`,`pacman`,`apt`,`dnf` 等系统包管理工具来安装和更新`chsrc`？若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
+
+- [x] `homebrew`
+- [x] `scoop`
+- [ ] 缺乏 `AUR` 维护者
+- [ ] 缺乏其他平台/包维护者
 
 <br>
 
@@ -24,17 +51,7 @@
     <img src="https://repology.org/badge/vertical-allrepos/chsrc.svg" alt="Packaging status" align="right">
 </a>
 
-> [!NOTE]
-> 想通过 `yay`,`pacman`,`apt`,`dnf` 等系统包管理工具来安装和更新`chsrc`？若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
-
-- [x] `homebrew` 维护者
-- [x] `scoop` 维护者
-- [ ] 缺乏 `AUR` 维护者
-- [ ] 缺乏其他平台/包维护者
-
----
-
-> [!TIP]
+> [!IMPORTANT]
 > 若通过下述手动方式安装，则会下载到当前目录，可直接通过 `./chsrc` 运行
 
 <details>
