@@ -56,7 +56,9 @@
 
 5. 可以使用 `chsrc.h` 中暴露出的任何 `chsrc_` 开头的函数或宏
 
-6. 构建并运行 `chsrc set <target>` 测试，若无问题可提交 Pull Request
+6. 在 `catalog.c` 中添加用户可以使用的 `target` 别名
+
+7. 构建并运行 `chsrc set <target>` 测试，若无问题可提交 Pull Request
 
 
 若有任何问题，可在 [GitHub discussions](https://github.com/RubyMetric/chsrc/discussions) 中询问和讨论
