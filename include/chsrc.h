@@ -58,22 +58,22 @@ bool CliOpt_DryRun = false;
 #define chsrc_warn2(str)  xy_warn_brkt(App_Name,"警告",str)
 #define chsrc_error2(str) xy_error_brkt(App_Name,"错误",str)
 
-#define to_red(str)        xy_str_to_red(str)
-#define to_blue(str)       xy_str_to_blue(str)
-#define to_green(str)      xy_str_to_green(str)
-#define to_yellow(str)     xy_str_to_yellow(str)
-#define to_purple(str)     xy_str_to_purple(str)
-#define to_bold(str)       xy_str_to_bold(str)
-#define to_boldred(str)    xy_str_to_bold(xy_str_to_red(str))
-#define to_boldblue(str)   xy_str_to_bold(xy_str_to_blue(str))
-#define to_boldgreen(str)  xy_str_to_bold(xy_str_to_green(str))
-#define to_boldyellow(str) xy_str_to_bold(xy_str_to_yellow(str))
-#define to_boldpurple(str) xy_str_to_bold(xy_str_to_purple(str))
+#define red(str)     xy_str_to_red(str)
+#define blue(str)    xy_str_to_blue(str)
+#define green(str)   xy_str_to_green(str)
+#define yellow(str)  xy_str_to_yellow(str)
+#define purple(str)  xy_str_to_purple(str)
+#define bold(str)    xy_str_to_bold(str)
+#define bred(str)    xy_str_to_bold(xy_str_to_red(str))
+#define bblue(str)   xy_str_to_bold(xy_str_to_blue(str))
+#define bgreen(str)  xy_str_to_bold(xy_str_to_green(str))
+#define byellow(str) xy_str_to_bold(xy_str_to_yellow(str))
+#define bpurple(str) xy_str_to_bold(xy_str_to_purple(str))
 
 void
 chsrc_note2 (const char* str)
 {
-  xy_log_brkt (to_yellow (App_Name), to_boldyellow ("提示"), to_yellow (str));
+  xy_log_brkt (yellow (App_Name), byellow ("提示"), yellow (str));
 }
 
 #define YesMark "✓"
@@ -106,13 +106,13 @@ log_check_result (const char *check_what, const char *check_type, bool exist)
 
   if (!exist)
     {
-      xy_log_brkt (App_Name, to_boldred (chk_msg), xy_strjoin (5,
-                   to_red (NoMark " "), check_type, " ", to_red (check_what), not_exist_msg));
+      xy_log_brkt (App_Name, bred (chk_msg), xy_strjoin (5,
+                   red (NoMark " "), check_type, " ", red (check_what), not_exist_msg));
     }
   else
     {
-      xy_log_brkt (App_Name, to_boldgreen (chk_msg), xy_strjoin (5,
-                   to_green (YesMark " "), check_type, " ", to_green (check_what), exist_msg));
+      xy_log_brkt (App_Name, bgreen (chk_msg), xy_strjoin (5,
+                   green (YesMark " "), check_type, " ", green (check_what), exist_msg));
     }
 }
 
@@ -141,13 +141,13 @@ log_cmd_result (bool result, int ret_code)
     }
 
   if (result)
-    xy_log_brkt (to_green (App_Name), to_boldgreen (run_msg), to_green (succ_msg));
+    xy_log_brkt (green (App_Name), bgreen (run_msg), green (succ_msg));
   else
     {
       char buf[8] = {0};
       sprintf (buf, "%d", ret_code);
-      char *log = xy_2strjoin (to_red (fail_msg), to_boldred (buf));
-      xy_log_brkt (to_red (App_Name), to_boldred (run_msg), log);
+      char *log = xy_2strjoin (red (fail_msg), bred (buf));
+      xy_log_brkt (red (App_Name), bred (run_msg), log);
     }
 }
 
@@ -323,11 +323,11 @@ to_human_readable_speed (double speed)
   sprintf (buf, "%.2f %s", speed, scale[i]);
 
   char *new = NULL;
-  if (i <= 1 ) new = to_red (buf);
+  if (i <= 1 ) new = red (buf);
   else
     {
-      if (i == 2 && speed < 2.00) new = to_yellow (buf);
-      else new = to_green (buf);
+      if (i == 2 && speed < 2.00) new = yellow (buf);
+      else new = green (buf);
     }
   return new;
 }
@@ -383,7 +383,7 @@ measure_speed (const char *url)
 
   if (200!=http_code)
     {
-      char* httpcodestr = to_yellow (xy_2strjoin ("HTTP码 ", buf));
+      char* httpcodestr = yellow (xy_2strjoin ("HTTP码 ", buf));
       puts (xy_strjoin (3, speedstr, " | ",  httpcodestr));
     }
   else
@@ -488,7 +488,7 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
   else
     {
       char *fast_msg = CliOpt_InEnglish ? "FASTEST mirror site: " : "最快镜像站: ";
-      say (xy_2strjoin (fast_msg, to_green (sources[fast_idx].mirror->name)));
+      say (xy_2strjoin (fast_msg, green (sources[fast_idx].mirror->name)));
     }
 
 
@@ -578,7 +578,7 @@ confirm_source (SourceInfo *source)
   else
     {
       char *msg = CliOpt_InEnglish ? "SELECT  mirror site: " : "选中镜像站: ";
-      say (xy_strjoin (5, msg, to_green (source->mirror->abbr), " (", to_green (source->mirror->code), ")"));
+      say (xy_strjoin (5, msg, green (source->mirror->abbr), " (", green (source->mirror->code), ")"));
     }
 
   split_between_source_changing_process;
@@ -638,7 +638,7 @@ chsrc_conclude (SourceInfo *source, const char *last_word)
             {
               char *msg = CliOpt_InEnglish ? MSG_EN_FULLY_AUTO      MSG_EN_THANKS \
                                            : MSG_CN_FULLY_AUTO ", " MSG_CN_THANKS;
-              chsrc_log (xy_2strjoin (msg, to_purple (source->mirror->name)));
+              chsrc_log (xy_2strjoin (msg, purple (source->mirror->name)));
             }
         }
       else
@@ -651,7 +651,7 @@ chsrc_conclude (SourceInfo *source, const char *last_word)
     {
       // source_is_upstream (source)
       char *msg = CliOpt_InEnglish ? "Has been reset to the upstream default source" : "已重置为上游默认源";
-      chsrc_log (to_purple (msg));
+      chsrc_log (purple (msg));
     }
   else if (xy_streql (ChsrcTypeSemiAuto, last_word))
     {
@@ -667,7 +667,7 @@ chsrc_conclude (SourceInfo *source, const char *last_word)
             {
               char *msg = CliOpt_InEnglish ? MSG_EN_SEMI_AUTO      MSG_EN_STILL      MSG_EN_THANKS \
                                            : MSG_CN_SEMI_AUTO ", " MSG_CN_STILL "。" MSG_CN_THANKS;
-              chsrc_log (xy_2strjoin (msg, to_purple (source->mirror->name)));
+              chsrc_log (xy_2strjoin (msg, purple (source->mirror->name)));
             }
         }
       else
@@ -694,7 +694,7 @@ chsrc_conclude (SourceInfo *source, const char *last_word)
             {
               char *msg = CliOpt_InEnglish ? MSG_EN_CONSTRAINT      MSG_EN_THANKS \
                                            : MSG_CN_CONSTRAINT ", " MSG_CN_THANKS;
-              chsrc_log (xy_2strjoin (msg, to_purple (source->mirror->name)));
+              chsrc_log (xy_2strjoin (msg, purple (source->mirror->name)));
             }
         }
       else
@@ -717,7 +717,7 @@ chsrc_conclude (SourceInfo *source, const char *last_word)
           else
             {
               char *msg = CliOpt_InEnglish ? MSG_EN_THANKS : MSG_CN_THANKS;
-              chsrc_log (xy_2strjoin (msg, to_purple (source->mirror->name)));
+              chsrc_log (xy_2strjoin (msg, purple (source->mirror->name)));
             }
         }
       else
@@ -767,9 +767,9 @@ static void
 chsrc_run (const char *cmd, int run_option)
 {
   if (CliOpt_InEnglish)
-    xy_log_brkt (to_blue (App_Name), to_boldblue ("RUN"), to_blue (cmd));
+    xy_log_brkt (blue (App_Name), bblue ("RUN"), blue (cmd));
   else
-    xy_log_brkt (to_blue (App_Name), to_boldblue ("运行"), to_blue (cmd));
+    xy_log_brkt (blue (App_Name), bblue ("运行"), blue (cmd));
 
   if (CliOpt_DryRun)
     {
