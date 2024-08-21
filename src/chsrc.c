@@ -11,7 +11,7 @@
  *                 |   BlockLune   <blocklune@gmail.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-08-19>
+ * Last Modified   : <2024-08-22>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
@@ -95,7 +95,7 @@
 #include "recipe/ware/Docker-Hub.c"
 #include "recipe/ware/Anaconda.c"
 
-#include "recipe/catalog.c"
+#include "recipe/menu.c"
 
 
 static const char *

@@ -5,12 +5,12 @@
  ! Contributors    :  Nul None  <nul@none.org>
  !                 |
  ! Created On      : <2024-08-19>
- ! Last Modified   : <2024-08-19>
+ ! Last Modified   : <2024-08-22>
  ! ---------------------------------------------------------- -->
 
 # Write A Recipe Even If You Don't Know C
 
-# 你是主厨 Chef
+# 介绍
 
 **`chsrc` 不仅是一个命令行工具，同时也是一个换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。**
 
@@ -56,7 +56,7 @@
 
 5. 可以使用 `chsrc.h` 中暴露出的任何 `chsrc_` 开头的函数或宏
 
-6. 在 `catalog.c` 中添加用户可以使用的 `target` 别名
+6. 在 `menu.c` 中添加用户可以使用的 `target` 别名
 
 7. 构建并运行 `chsrc set <target>` 测试，若无问题可提交 Pull Request
 
