@@ -15,11 +15,75 @@
 chsrc - Change Source for every software on every platform from the command line
 
 .SH SYNOPSIS
-chsrc <command> [options] [target] [mirror]
+.SY chsrc
+<command> [options] [target] [mirror]
+.YS
+
 
 .SH DESCRIPTION
+.SS 基本命令
+.TP
+.B help
+打印此帮助，或 h, -h, --help
+.TP
+.B issue
+查看相关issue
 
-.SS "Exit status:"
+.TP
+\fBlist\fR (或 \fBls\fR, 或 \fBl\fR)
+列出可用镜像源，和可换源目标
+.TP
+.B list mirror/target
+列出可用镜像源，或可换源目标
+.B list os/lang/ware
+列出可换源的操作系统/编程语言/软件
+
+.SS 测速命令
+.TP
+.B measure/cesu \fI<target>\fI
+对该目标所有源测速
+
+.SS 查看配置命令
+.TP
+.B list \fI<target>\fR
+查看该目标可用源与支持功能
+.TP
+.B get \fI<target>\fR
+查看该目标当前源的使用情况
+
+.SS 换源命令
+.TP
+.B set \fI<target>\fR
+换源，自动测速后挑选最快源
+.TP
+.B set \fI<target>\fR first
+换源，使用维护团队测速第一的源
+.TP
+.B set \fI<target>\fR \fI<mirror>\fR
+换源，指定使用某镜像站 (通过list <target>查看)
+.TP
+.B set \fI<target>\fR \fU<https://url>\fR
+换源，用户自定义源URL
+.TP
+.B reset \fI<target>\fR
+重置，使用上游默认使用的源
+
+
+
+.SH OPTIONS
+.TP
+\fB-dry\fR
+Dry Run，模拟换源过程，命令仅打印并不运行
+.TP
+\fB-ipv6\fR
+使用IPv6测速
+.TP
+\fB-local\fR
+仅对本项目而非全局换源 (通过ls \fI<target>\fR查看支持情况)
+
+
+
+.SH "EXIT STATUS"
 .br
 .TP
 0
@@ -40,24 +104,33 @@ chsrc 暂未实现支持
 5
 致命未知错误，往往代表内部未知Bug
 
-.SH OPTIONS
-.TP
-\fB-dry\fR
-Dry Run，模拟换源过程，命令仅打印并不运行
 
-.TP
-\fB-ipv6\fR
-使用IPv6测速
 
-.TP
-\fB-local\fR
-仅对本项目而非全局换源 (通过ls \fI<target>\fR查看支持情况)
+.SH EXAMPLES
+.EX
+# 测速，寻找最快者，换源
+$ chsrc set ruby
+
+# 列出可用的镜像站
+# 使用 RubyChina 作为镜像站
+$ chsrc ls  ruby
+$ chsrc set ruby rubychina
+
+# 如果您有自己的镜像地址，使用自定义URL
+$ chsrc set ruby https://gems.ruby-china.com/
+
+# 使用维护团队测试的最快镜像站
+$ chsrc set ruby first
+.EE
+
 
 .SH FILES
 .B
 遵循 No UFO（Unidentified File Objects）原则：https://www.yuque.com/ccmywish/blog/no-ufo
 .PP
 因此不会有任何文件存放在你的计算机中！
+
+
 
 .\" .SH SEE ALSO
 
