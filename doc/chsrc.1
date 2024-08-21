@@ -1,0 +1,77 @@
+.\" --------------------------------------------------------------
+.\" SPDX-License-Identifier: GFDL-1.3-or-later
+.\" --------------------------------------------------------------
+.\" chsrc man page
+.\" Doc Authors   : Aoran Zeng <ccmywish@qq.com>
+.\" Contributors  :  Nul None  <nul@none.org>
+.\"               |
+.\" Created On    : <2024-08-21>
+.\" Last Modified : <2024-08-21>
+.\" --------------------------------------------------------------
+
+.TH  chsrc  1  "2024-08-21"  "v0.1.7.4"  "RubyMetric chsrc"
+
+.SH NAME
+chsrc - Change Source for every software on every platform from the command line
+
+.SH SYNOPSIS
+chsrc <command> [options] [target] [mirror]
+
+.SH DESCRIPTION
+
+.SS "Exit status:"
+.br
+.TP
+0
+正常执行，一般表示换源成功
+.TP
+1
+用户环境导致的错误，如命令缺失
+.TP
+2
+chsrc 暂未实现支持
+.TP
+3
+维护者导致的镜像站、源信息相关错误
+.TP
+4
+致命错误，由内部Bug导致
+.TP
+5
+致命未知错误，往往代表内部未知Bug
+
+.SH OPTIONS
+.TP
+\fB-dry\fR
+Dry Run，模拟换源过程，命令仅打印并不运行
+
+.TP
+\fB-ipv6\fR
+使用IPv6测速
+
+.TP
+\fB-local\fR
+仅对本项目而非全局换源 (通过ls \fI<target>\fR查看支持情况)
+
+.SH FILES
+.B
+遵循 No UFO（Unidentified File Objects）原则：https://www.yuque.com/ccmywish/blog/no-ufo
+.PP
+因此不会有任何文件存放在你的计算机中！
+
+.\" .SH SEE ALSO
+
+.SH AUTHOR
+Written by Aoran Zeng, Heng Guo and contributors. (See chsrc.c)
+
+.SH "REPORTING BUGS"
+On Gitee:  https://gitee.com/RubyMetric/chsrc/issues
+.br
+On GitHub: https://github.com/RubyMetric/chsrc/issues
+
+.SH COPYRIGHT
+Copyright (C) 2024 Aoran Zeng, Heng Guo.
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
+.br
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
