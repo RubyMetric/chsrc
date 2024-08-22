@@ -1,11 +1,12 @@
 <!-- -----------------------------------------------------------
  ! SPDX-License-Identifier: GFDL-1.3-or-later
  ! -------------------------------------------------------------
- ! Doc Authors     : Aoran Zeng <ccmywish@qq.com>
- ! Contributors    :  Nul None  <nul@none.org>
- !                 |
- ! Created On      : <2024-08-19>
- ! Last Modified   : <2024-08-22>
+ ! Doc Type      : Markdown
+ ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
+ ! Contributors  :  Nul None  <nul@none.org>
+ !               |
+ ! Created On    : <2024-08-19>
+ ! Last Modified : <2024-08-22>
  ! ---------------------------------------------------------- -->
 
 # Write A Recipe Even If You Don't Know C

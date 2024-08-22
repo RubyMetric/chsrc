@@ -1,3 +1,14 @@
+@c --------------------------------------------------------------
+@c SPDX-License-Identifier: GFDL-1.3-or-later
+@c --------------------------------------------------------------
+@c Doc Type      : Texinfo
+@c Doc Authors   : Aoran Zeng <ccmywish@qq.com>
+@c Contributors  :  Nul None  <nul@none.org>
+@c               |
+@c Created On    : <2024-08-22>
+@c Last Modified : <2024-08-22>
+@c --------------------------------------------------------------
+
 \input texinfo
 @setfilename chsrc.info
 @settitle chsrc
