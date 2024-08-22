@@ -7,7 +7,7 @@
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-08-18>
+ * Last modified : <2024-08-22>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -58,22 +58,22 @@ bool CliOpt_DryRun = false;
 #define chsrc_warn2(str)  xy_warn_brkt(App_Name,"警告",str)
 #define chsrc_error2(str) xy_error_brkt(App_Name,"错误",str)
 
-#define red(str)     xy_str_to_red(str)
-#define blue(str)    xy_str_to_blue(str)
-#define green(str)   xy_str_to_green(str)
-#define yellow(str)  xy_str_to_yellow(str)
-#define purple(str)  xy_str_to_purple(str)
-#define bold(str)    xy_str_to_bold(str)
-#define bred(str)    xy_str_to_bold(xy_str_to_red(str))
-#define bblue(str)   xy_str_to_bold(xy_str_to_blue(str))
-#define bgreen(str)  xy_str_to_bold(xy_str_to_green(str))
-#define byellow(str) xy_str_to_bold(xy_str_to_yellow(str))
-#define bpurple(str) xy_str_to_bold(xy_str_to_purple(str))
+#define red(str)      xy_str_to_red(str)
+#define blue(str)     xy_str_to_blue(str)
+#define green(str)    xy_str_to_green(str)
+#define yellow(str)   xy_str_to_yellow(str)
+#define purple(str)   xy_str_to_purple(str)
+#define bold(str)     xy_str_to_bold(str)
+#define bdred(str)    xy_str_to_bold(xy_str_to_red(str))
+#define bdblue(str)   xy_str_to_bold(xy_str_to_blue(str))
+#define bdgreen(str)  xy_str_to_bold(xy_str_to_green(str))
+#define bdyellow(str) xy_str_to_bold(xy_str_to_yellow(str))
+#define bdpurple(str) xy_str_to_bold(xy_str_to_purple(str))
 
 void
 chsrc_note2 (const char* str)
 {
-  xy_log_brkt (yellow (App_Name), byellow ("提示"), yellow (str));
+  xy_log_brkt (yellow (App_Name), bdyellow ("提示"), yellow (str));
 }
 
 #define YesMark "✓"
@@ -106,12 +106,12 @@ log_check_result (const char *check_what, const char *check_type, bool exist)
 
   if (!exist)
     {
-      xy_log_brkt (App_Name, bred (chk_msg), xy_strjoin (5,
+      xy_log_brkt (App_Name, bdred (chk_msg), xy_strjoin (5,
                    red (NoMark " "), check_type, " ", red (check_what), not_exist_msg));
     }
   else
     {
-      xy_log_brkt (App_Name, bgreen (chk_msg), xy_strjoin (5,
+      xy_log_brkt (App_Name, bdgreen (chk_msg), xy_strjoin (5,
                    green (YesMark " "), check_type, " ", green (check_what), exist_msg));
     }
 }
@@ -141,13 +141,13 @@ log_cmd_result (bool result, int ret_code)
     }
 
   if (result)
-    xy_log_brkt (green (App_Name), bgreen (run_msg), green (succ_msg));
+    xy_log_brkt (green (App_Name), bdgreen (run_msg), green (succ_msg));
   else
     {
       char buf[8] = {0};
       sprintf (buf, "%d", ret_code);
-      char *log = xy_2strjoin (red (fail_msg), bred (buf));
-      xy_log_brkt (red (App_Name), bred (run_msg), log);
+      char *log = xy_2strjoin (red (fail_msg), bdred (buf));
+      xy_log_brkt (red (App_Name), bdred (run_msg), log);
     }
 }
 
@@ -767,9 +767,9 @@ static void
 chsrc_run (const char *cmd, int run_option)
 {
   if (CliOpt_InEnglish)
-    xy_log_brkt (blue (App_Name), bblue ("RUN"), blue (cmd));
+    xy_log_brkt (blue (App_Name), bdblue ("RUN"), blue (cmd));
   else
-    xy_log_brkt (blue (App_Name), bblue ("运行"), blue (cmd));
+    xy_log_brkt (blue (App_Name), bdblue ("运行"), blue (cmd));
 
   if (CliOpt_DryRun)
     {

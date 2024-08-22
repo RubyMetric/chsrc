@@ -222,19 +222,19 @@ cli_print_target_available_sources (SourceInfo sources[], size_t size)
 void
 cli_print_target_features (FeatInfo f, const char *input_target_name)
 {
-  say (bpurple("\nFeatures:\n"));
+  say (bdpurple("\nFeatures:\n"));
 
   char *get_msg = xy_2strjoin (" Get: 查看当前源状态 | chsrc get ", input_target_name);
-  if (f.can_get) printf (" %s%s\n", bgreen(YesMark), purple(get_msg));
-  else printf (" %s%s\n", bred(NoMark), get_msg);br();
+  if (f.can_get) printf (" %s%s\n", bdgreen(YesMark), purple(get_msg));
+  else printf (" %s%s\n", bdred(NoMark), get_msg);br();
 
   char *reset_msg = xy_2strjoin (" Reset: 重置回默认源 | chsrc reset ", input_target_name);
-  if (f.can_reset) printf (" %s%s\n", bgreen(YesMark), purple(reset_msg));
-  else printf (" %s%s\n", bred(NoMark), reset_msg);br();
+  if (f.can_reset) printf (" %s%s\n", bdgreen(YesMark), purple(reset_msg));
+  else printf (" %s%s\n", bdred(NoMark), reset_msg);br();
 
   char *user_define_msg = xy_strjoin (4, " UserDefine: 用户自定义换源URL | chsrc set ", input_target_name, " https://user-define-url.org/", input_target_name);
-  if (f.can_user_define) printf (" %s%s\n", bgreen(YesMark), purple(user_define_msg));
-  else printf (" %s%s\n", bred(NoMark), user_define_msg);br();
+  if (f.can_user_define) printf (" %s%s\n", bdgreen(YesMark), purple(user_define_msg));
+  else printf (" %s%s\n", bdred(NoMark), user_define_msg);br();
 
 
   char *locally_msg = xy_2strjoin (" Locally: 仅对本项目换源 | chsrc set -local ", input_target_name);
@@ -242,26 +242,26 @@ cli_print_target_features (FeatInfo f, const char *input_target_name)
   switch (f.stcan_locally)
   {
   case CanNotFully:
-    printf (" %s%s\n", bred(NoMark), locally_msg);br();
+    printf (" %s%s\n", bdred(NoMark), locally_msg);br();
     break;
   case CanFully:
-    printf (" %s%s\n", bgreen(YesMark), purple(locally_msg));br();
+    printf (" %s%s\n", bdgreen(YesMark), purple(locally_msg));br();
     break;
   case CanSemi:
-    printf (" %s%s\n\n   %s\n", bgreen(SemiYesMark), purple(locally_msg), f.locally);br();
+    printf (" %s%s\n\n   %s\n", bdgreen(SemiYesMark), purple(locally_msg), f.locally);br();
     break;
   default:
     xy_unreach;
   }
 
   char *english_msg = xy_2strjoin (" English: 英文输出 | chsrc set -en ", input_target_name);
-  // if (f.can_english) printf (" %s%s\n", bgreen(YesMark), purple(english_msg));
-  // else printf (" %s%s\n", bred(NoMark), english_msg);
+  // if (f.can_english) printf (" %s%s\n", bdgreen(YesMark), purple(english_msg));
+  // else printf (" %s%s\n", bdred(NoMark), english_msg);
 
 
   if (f.note)
     {
-      printf ("%s%s\n", byellow ("备注: "), byellow (f.note));
+      printf ("%s%s\n", bdyellow ("备注: "), bdyellow (f.note));
     }
 }
 
@@ -406,8 +406,8 @@ get_target (const char *input, TargetOp code, char *option)
     }
   else if (TargetOp_List_Config==code)
     {
-      say (bblue(xy_strjoin (3, "指定使用某源，请使用 chsrc set ", input, " <code>\n")));
-      say (bgreen("Available Sources: \n"));
+      say (bdblue(xy_strjoin (3, "指定使用某源，请使用 chsrc set ", input, " <code>\n")));
+      say (bdgreen("Available Sources: \n"));
       // chsrc_info (xy_strjoin (3, "下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>\n"));
       printf (" %-14s%-35s%-43s ", "code", "镜像站简写", "换源URL"); say ("镜像站名称");
       say   ("---------    --------------    -----------------------------------------------    ---------------------");
@@ -469,7 +469,7 @@ main (int argc, char const *argv[])
           else if (xy_streql (argv[i], "-dry"))
             {
               CliOpt_DryRun = true;
-              chsrc_log (byellow ("**开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行**\n"));
+              chsrc_log (bdyellow ("**开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行**\n"));
             }
           else
             {
