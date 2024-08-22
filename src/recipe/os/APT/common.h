@@ -21,7 +21,7 @@
 #define OS_Ubuntu_SourceList_DEB822 "/etc/apt/sources.list.d/ubuntu.sources"
 
 
-#define ETC_os_release    "/etc/os-release"
+#define ETC_OS_RELEASE    "/etc/os-release"
 
 #define OS_Is_Debian_Literally  1
 #define OS_Is_Ubuntu            2
@@ -58,10 +58,10 @@ ensure_apt_sourcelist (int debian_type)
     }
 
   // 反向引用需要escape一下
-  char *codename = xy_run ("sed -nr 's/VERSION_CODENAME=(.*)/\\1/p' " ETC_os_release, 0, NULL);
+  char *codename = xy_run ("sed -nr 's/VERSION_CODENAME=(.*)/\\1/p' " ETC_OS_RELEASE, 0, NULL);
   codename = xy_str_delete_suffix (codename, "\n");
 
-  char *version_id = xy_run ("sed -nr 's/VERSION_ID=(.*)/\\1/p' " ETC_os_release, 0, NULL);
+  char *version_id = xy_run ("sed -nr 's/VERSION_ID=(.*)/\\1/p' " ETC_OS_RELEASE, 0, NULL);
   version_id = xy_str_delete_suffix (codename, "\n");
   double version = atof (version_id);
 
