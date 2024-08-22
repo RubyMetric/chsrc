@@ -100,11 +100,10 @@
 
 static const char *
 Chsrc_Usage[] = {
-  "维护: " Chsrc_Maintain_URL "\n",
-
   "使用: chsrc <command> [options] [target] [mirror]",
   "help                      打印此帮助，或 h, -h, --help",
   "issue                     查看相关issue\n",
+
   "list (或 ls, 或 l)        列出可用镜像源，和可换源目标",
   "list mirror/target        列出可用镜像源，或可换源目标",
   "list os/lang/ware         列出可换源的操作系统/编程语言/软件\n",
@@ -124,7 +123,41 @@ Chsrc_Usage[] = {
   "选项:",
   "-dry                      Dry Run，模拟换源过程，命令仅打印并不运行",
   "-ipv6                     使用IPv6测速",
-  "-local                    仅对本项目而非全局换源 (通过ls <target>查看支持情况)"
+  "-local                    仅对本项目而非全局换源 (通过ls <target>查看支持情况)",
+  "-en(glish)                使用英文输出\n",
+
+  "维护: <" Chsrc_Maintain_URL ">"
+};
+
+static const char *
+Chsrc_Usage_English[] = {
+  "Usage: chsrc <command> [options] [target] [mirror]",
+  "help                      Print this help, or h, -h, --help",
+  "issue                     See related issues\n",
+
+  "list (or ls, or l)        List available mirror sites and supported targets",
+  "list mirror/target        List available mirror sites or  supported targets",
+  "list os/lang/ware         List supported OS/Programming Language/Software\n",
+
+  "measure <target>          Measure velocity of all sources of <target>",
+  "cesu    <target>          \n",
+
+  "list <target>             View available sources and supporting features for <target>",
+  "get  <target>             View the current source usage for <target>\n",
+
+  "set  <target>             Change source, select the fastest source by automatic speed measurement",
+  "set  <target>  first      Change source, select the fastest source measured by the maintenance team",
+  "set  <target> <mirror>    Change source, specify a mirror site (Via list <target>)",
+  "set  <target> https://url Change source, using user-defined source URL",
+  "reset <target>            Reset  source to the upstream's default\n",
+
+  "Options:",
+  "-dry                      Dry Run. Simulate the source changing process, command only prints, not run",
+  "-ipv6                     Speed measurement using IPv6",
+  "-local                    Change source only for this project rather than globally (Via ls <target>)",
+  "-en(glish)                Output in English\n",
+
+  "Maintain: <" Chsrc_Maintain_URL ">"
 };
 
 
@@ -285,9 +318,16 @@ cli_print_help ()
   say (xy_strjoin (3, "chsrc: Change Source (GPLv3+) ",
                    purple (Chsrc_Banner_Version), " by RubyMetric"));
   br();
-  for (int i=0; i<xy_arylen (Chsrc_Usage); i++)
+
+  if (CliOpt_InEnglish)
     {
-      say (Chsrc_Usage[i]);
+      for (int i=0; i<xy_arylen (Chsrc_Usage_English); i++)
+        say (Chsrc_Usage_English[i]);
+    }
+  else
+    {
+      for (int i=0; i<xy_arylen (Chsrc_Usage); i++)
+        say (Chsrc_Usage[i]);
     }
 }
 
@@ -313,7 +353,7 @@ cli_print_issues ()
 /**
  * 遍历我们内置的targets列表，查询用户输入`input`是否与我们支持的某个target匹配
  *
- * @param[out]  target_info  如果匹配到，则返回内置targets列表中最后的target_info信息
+ * @param[out] target_info 如果匹配到，则返回内置targets列表中最后的target_info信息
  *
  * @return 匹配到则返回true，未匹配到则返回false
  */
@@ -332,7 +372,7 @@ iterate_targets_ (const char ***array, size_t size, const char *input, const cha
       alias = target[k];
       while (NULL!=alias)
         {
-          if (xy_streql(input, alias))
+          if (xy_streql (input, alias))
             {
               matched = 1; break;
             }
@@ -349,10 +389,13 @@ iterate_targets_ (const char ***array, size_t size, const char *input, const cha
       return false;
     }
 
-  do {
-    k++;
-    alias = target[k];
-  } while (NULL!=alias);
+  do
+    {
+      k++;
+      alias = target[k];
+    }
+  while (NULL!=alias);
+
   *target_info = target + k + 1;
   return true;
 }
@@ -446,11 +489,20 @@ main (int argc, char const *argv[])
   int cli_arg_Mirror_pos = cli_arg_Target_pos + 1;
   const char *target = NULL;
 
-
-  // chsrc set -ipv6 target mirror
-  //        1    2     3      4
-  // argc = 4
-  for (int i=2; i<=argc; i++)
+  /**
+   * (1)
+   * chsrc set -local -en target mirror
+   *        1    2     3     4      5
+   * argc = 5
+   *
+   * (2) 考虑到这种情况，i必须还是从1开始
+   * chsrc -en -h
+   *        1  2
+   *
+   * argc = 2
+   */
+  /* 从第一个参数遍历到最后一个参数 */
+  for (int i=1; i<=argc; i++)
     {
       if (xy_str_start_with (argv[i], "-"))
         {
@@ -471,6 +523,12 @@ main (int argc, char const *argv[])
               CliOpt_DryRun = true;
               chsrc_log (bdyellow ("**开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行**\n"));
             }
+          else if (xy_streql (argv[i], "-h")
+                    || xy_streql (argv[i], "-help")
+                    || xy_streql (argv[i], "--help"))
+            {
+              command = "help"; /* 交到下方处理 */
+            }
           else
             {
               chsrc_error (xy_2strjoin ("未识别的命令行选项 ", argv[i])); return 1;
@@ -484,30 +542,31 @@ main (int argc, char const *argv[])
   bool matched = false;
 
   /* chsrc help */
-  if (xy_streql (command, "h")  ||
-      xy_streql (command, "-h") ||
-      xy_streql (command, "help") ||
-      xy_streql (command, "--help"))
+  if (xy_streql (command, "h")
+      || xy_streql (command, "-h")
+      || xy_streql (command, "help")
+      || xy_streql (command, "-help")
+      || xy_streql (command, "--help"))
     {
       cli_print_help ();
       return 0;
     }
 
   /* chsrc -v */
-  else if (xy_streql (command, "-v")       ||
-           xy_streql (command, "-version") ||
-           xy_streql (command, "--version")||
-           xy_streql (command, "ver") ||
-           xy_streql (command, "version"))
+  else if (xy_streql (command, "-v")
+           || xy_streql (command, "-version")
+           || xy_streql (command, "--version")
+           || xy_streql (command, "ver")
+           || xy_streql (command, "version"))
     {
       cli_print_version ();
       return 0;
     }
 
   /* chsrc list */
-  else if (xy_streql (command, "list") ||
-           xy_streql (command, "l")    ||
-           xy_streql (command, "ls"))
+  else if (xy_streql (command, "list")
+           || xy_streql (command, "l")
+           || xy_streql (command, "ls"))
     {
       if (argc < cli_arg_Target_pos)
         {
@@ -547,12 +606,12 @@ main (int argc, char const *argv[])
 
 
   /* chsrc measure */
-  else if (xy_streql (command, "measure") ||
-           xy_streql (command, "mea")  ||
-           xy_streql (command, "m")    ||
-           xy_streql (command, "cesu") ||
-           xy_streql (command, "ce")   ||
-           xy_streql (command, "c"))
+  else if (xy_streql (command, "measure")
+           || xy_streql (command, "mea")
+           || xy_streql (command, "m")
+           || xy_streql (command, "cesu")
+           || xy_streql (command, "ce")
+           || xy_streql (command, "c"))
     {
       if (argc < cli_arg_Target_pos)
         {
@@ -567,8 +626,8 @@ main (int argc, char const *argv[])
 
 
   /* chsrc get */
-  else if (xy_streql (command, "get") ||
-           xy_streql (command, "g"))
+  else if (xy_streql (command, "get")
+           || xy_streql (command, "g"))
     {
       if (argc < cli_arg_Target_pos)
         {
@@ -582,8 +641,8 @@ main (int argc, char const *argv[])
     }
 
   /* chsrc set */
-  else if (xy_streql (command, "set") ||
-           xy_streql (command, "s"))
+  else if (xy_streql (command, "set")
+           || xy_streql (command, "s"))
     {
       if (argc < cli_arg_Target_pos)
         {
@@ -604,9 +663,9 @@ main (int argc, char const *argv[])
     }
 
   /* chsrc reset */
-  else if (xy_streql (command, "reset") ||
-           xy_streql (command, "rest") ||
-           xy_streql (command, "r"))
+  else if (xy_streql (command, "reset")
+           || xy_streql (command, "rest")
+           || xy_streql (command, "r"))
     {
       if (argc < cli_arg_Target_pos)
         {
@@ -621,10 +680,10 @@ main (int argc, char const *argv[])
     }
 
     /* chsrc issue */
-  else if (xy_streql (command, "issue") ||
-           xy_streql (command, "issues") ||
-           xy_streql (command, "isue") ||
-           xy_streql (command, "i"))
+  else if (xy_streql (command, "issue")
+           || xy_streql (command, "issues")
+           || xy_streql (command, "isue")
+           || xy_streql (command, "i"))
     {
       cli_print_issues ();
       return 0;
