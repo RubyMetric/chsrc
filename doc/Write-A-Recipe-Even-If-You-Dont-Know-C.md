@@ -28,6 +28,12 @@
 
 <br>
 
+# 贡献指导
+
+若有任何问题，可在 [GitHub discussions](https://github.com/RubyMetric/chsrc/discussions) 中询问和讨论
+
+<br>
+
 # 基本概念
 
 1. `target`: 所要换源的目标
@@ -61,7 +67,16 @@
 
 7. 构建并运行 `chsrc set <target>` 测试，若无问题可提交 Pull Request
 
+<br>
 
-若有任何问题，可在 [GitHub discussions](https://github.com/RubyMetric/chsrc/discussions) 中询问和讨论
+# 不要制造UFO
+
+开发准则：
+1. Convention over Configuration
+2. [NO UFO 原则: 不要乱丢文件到$HOME等目录，尤其是使用各种隐晦的文件名](https://www.yuque.com/ccmywish/blog/no-ufo)
+
+`chsrc` 主程序不提供配置文件，不提供数据文件，干净无污染。那么在实现 `recipe` 的时候，除了备份文件外，也不要污染用户环境。
+
+<br>
 
 [recipe template]: ../src/recipe/template.c

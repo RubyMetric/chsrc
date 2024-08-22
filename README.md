@@ -10,7 +10,7 @@
 
 <br>
 
-## 🤝 Contribute
+## 🤝 贡献
 
 > [!TIP]
 > **`chsrc` 不仅是一个命令行工具，同时也是一个换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。**
@@ -20,13 +20,7 @@
 - 案例：[Armbian](./src/recipe/os/APT/Armbian.c)
 - 挑战：[CentOS (Stream) Recipe Challenge!](https://github.com/RubyMetric/chsrc/issues/48)
 
----
-
-开发准则：
-1. Convention over Configuration
-2. [NO UFO 原则: 不要乱丢文件到$HOME等目录，尤其是使用各种隐晦的文件名](https://www.yuque.com/ccmywish/blog/no-ufo)
-
----
+<br>
 
 > [!NOTE]
 > 想通过 `flatpak`, `yay`,`pacman`,`apt`,`dnf` 等系统包管理工具来安装和更新`chsrc`？若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
