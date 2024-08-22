@@ -5,7 +5,7 @@
  *               |  Heng Guo  <2085471348@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-05>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2024-08-22>
  * ------------------------------------------------------------*/
 
 /**
@@ -126,5 +126,40 @@ os_archlinuxcn_setsrc (char *option)
 }
 #undef OS_Pacman_MirrorList
 
-def_target(os_arch);
-def_target(os_archlinuxcn);
+
+FeatInfo
+os_arch_feat (char *option)
+{
+  FeatInfo fi = {0};
+
+  fi.can_get = true;
+  fi.can_reset = false;
+
+  fi.stcan_locally = CanNot;
+  fi.can_english = true;
+  fi.can_user_define = true;
+
+  fi.note = "可额外使用 chsrc set archlinuxcn 来更换 Arch Linux CN Repository 源";
+  return fi;
+}
+
+
+FeatInfo
+os_archlinuxcn_feat (char *option)
+{
+  FeatInfo fi = {0};
+
+  fi.can_get = true;
+  fi.can_reset = false;
+
+  fi.stcan_locally = CanNot;
+  fi.can_english = true;
+  fi.can_user_define = true;
+
+  fi.note = "可额外使用 chsrc set arch 来更换 Arch Linux 源";
+  return fi;
+}
+
+
+def_target_gsf(os_arch);
+def_target_gsf(os_archlinuxcn);

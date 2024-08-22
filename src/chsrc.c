@@ -274,7 +274,7 @@ cli_print_target_features (FeatInfo f, const char *input_target_name)
 
   switch (f.stcan_locally)
   {
-  case CanNotFully:
+  case CanNot:
     printf (" %s%s\n", bdred(NoMark), locally_msg);br();
     break;
   case CanFully:

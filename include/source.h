@@ -120,7 +120,7 @@ typedef struct SourceInfo_t {
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
 enum StatusCan {
-  CanNotFully,
+  CanNot,
   CanFully,
   CanSemi
 };
