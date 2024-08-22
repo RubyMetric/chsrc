@@ -222,7 +222,9 @@ chsrc_ensure_program (char *prog_name)
     }
   else
     {
-      chsrc_error (xy_strjoin (3, "未找到 ", prog_name, " 命令，请检查是否存在"));
+      char *msg1 = CliOpt_InEnglish ? "not found " : "未找到 ";
+      char *msg2 = CliOpt_InEnglish ? " command, please check for existence" : " 命令，请检查是否存在";
+      chsrc_error (xy_strjoin (3, msg1, prog_name, msg2));
       exit (Exit_UserCause);
     }
 }
@@ -231,14 +233,15 @@ chsrc_ensure_program (char *prog_name)
 bool
 chsrc_check_file (char *path)
 {
+  char *msg = CliOpt_InEnglish ? "file" : "文件";
   if (xy_file_exist (path))
     {
-      log_check_result (path, "文件", true);
+      log_check_result (path, msg, true);
       return true;
     }
   else
     {
-      log_check_result (path, "文件", false);
+      log_check_result (path, msg, false);
       return false;
     }
 }
@@ -256,30 +259,37 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
 {
   if (is_url (input))
     {
-      chsrc_error ("暂不支持对该软件使用用户自定义源，请联系开发者询问原因或请求支持");
+      char *msg = CliOpt_InEnglish ? "Using user-defined sources for this software is not supported at this time, please contact the developer to ask why or request support" : "暂不支持对该软件使用用户自定义源，请联系开发者询问原因或请求支持";
+      chsrc_error (msg);
       exit (Exit_Unsupported);
     }
 
   if (0==size || 1==size)
     {
-      chsrc_error (xy_strjoin (3, "当前 ", target, " 无任何可用源，请联系维护者"));
+      char *msg1 = CliOpt_InEnglish ? "Currently " : "当前 ";
+      char *msg2 = CliOpt_InEnglish ? " doesn't have any source available, please contact the maintainer" : " 无任何可用源，请联系维护者";
+      chsrc_error (xy_strjoin (3, msg1, target, msg2));
       exit (Exit_MatinerIssue);
     }
 
   if (2==size)
     {
-      chsrc_succ (xy_strjoin (4, sources[1].mirror->name, " 是 ", target, " 目前唯一可用镜像站，感谢他们的慷慨支持"));
+      char *msg1 = CliOpt_InEnglish ? " is " : " 是 ";
+      char *msg2 = CliOpt_InEnglish ? " the only mirror site available currently, thanks for their generous support" : " 目前唯一可用镜像站，感谢他们的慷慨支持";
+      chsrc_succ (xy_strjoin (4, sources[1].mirror->name, msg1, target, msg2));
     }
 
   if (xy_streql ("reset", input))
     {
-      puts ("将重置为上游默认源");
+      char *msg = CliOpt_InEnglish ? "Will reset to the upstream's default source" : "将重置为上游默认源";
+      say (msg);
       return 0; // 返回第1个，因为第1个是上游默认源
     }
 
   if (xy_streql ("first", input))
     {
-      puts ("将使用维护团队测速第一的源");
+      char *msg = CliOpt_InEnglish ? "Will use the first speed source measured by maintainers" : "将使用维护团队测速第一的源";
+      say (msg);
       return 1; // 返回第2个，因为第1个是上游默认源
     }
 
@@ -299,8 +309,14 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
     }
   if (!exist)
     {
-      chsrc_error (xy_strjoin (3, "镜像站 ", input, " 不存在"));
-      chsrc_error (xy_2strjoin ("查看可使用源，请使用 chsrc list ", target));
+      {
+        char *msg1 = CliOpt_InEnglish ? "Mirror site "   : "镜像站 ";
+        char *msg2 = CliOpt_InEnglish ? " doesn't exist" : " 不存在";
+        chsrc_error (xy_strjoin (3, msg1, input, msg2));
+      }
+
+      char *msg = CliOpt_InEnglish ? "To see available sources, use chsrc list " : "查看可使用源，请使用 chsrc list ";
+      chsrc_error (xy_2strjoin (msg, target));
       exit (Exit_UserCause);
     }
   return idx;
@@ -468,8 +484,8 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
         }
       else
         {
-          char *test_msg = CliOpt_InEnglish ? "Measure speed> " : "测速 ";
-          printf ("%s", xy_strjoin (3, test_msg, src.mirror->site , " ... "));
+          char *msg = CliOpt_InEnglish ? "Measure speed> " : "测速 ";
+          printf ("%s", xy_strjoin (3, msg, src.mirror->site , " ... "));
 
           fflush (stdout);
           speed = measure_speed (url);
@@ -482,14 +498,14 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
   if (only_one)
     {
       char *is = CliOpt_InEnglish ? " is " : " 是 ";
-      char *only_msg = CliOpt_InEnglish ? "the ONLY mirror available currently, thanks for their generous support" : \
+      char *msg = CliOpt_InEnglish ? "the ONLY mirror available currently, thanks for their generous support" : \
                                           " 目前唯一可用镜像站，感谢他们的慷慨支持";
-      chsrc_succ (xy_strjoin (4, sources[fast_idx].mirror->name, is, target_name, only_msg));
+      chsrc_succ (xy_strjoin (4, sources[fast_idx].mirror->name, is, target_name, msg));
     }
   else
     {
-      char *fast_msg = CliOpt_InEnglish ? "FASTEST mirror site: " : "最快镜像站: ";
-      say (xy_2strjoin (fast_msg, green (sources[fast_idx].mirror->name)));
+      char *msg = CliOpt_InEnglish ? "FASTEST mirror site: " : "最快镜像站: ";
+      say (xy_2strjoin (msg, green (sources[fast_idx].mirror->name)));
     }
 
 
@@ -754,7 +770,8 @@ chsrc_ensure_root ()
       else return;
     }
 not_root:
-  chsrc_error ("请在命令前使用 sudo 或切换为root用户来保证必要的权限");
+  char *msg = CliOpt_InEnglish ? "Use sudo before the command or switch to root to ensure the necessary permissions" : "请在命令前使用 sudo 或切换为root用户来保证必要的权限";
+  chsrc_error (msg);
   exit (Exit_UserCause);
 }
 
@@ -790,7 +807,8 @@ chsrc_run (const char *cmd, int run_option)
       log_cmd_result (false, status);
       if (! (run_option & RunOpt_Dont_Abort_On_Failure))
         {
-          chsrc_error ("关键错误，强制结束");
+          char *msg = CliOpt_InEnglish ? "Fatal error, forced end" : "关键错误，强制结束";
+          chsrc_error (msg);
           exit (Exit_FatalUnkownError);
         }
     }
@@ -841,7 +859,8 @@ chsrc_ensure_dir (const char *dir)
   char *cmd = xy_2strjoin (mkdir_cmd, dir);
   cmd = xy_str_to_quietcmd (cmd);
   chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_Dont_Notify_On_Success);
-  chsrc_note2 (xy_2strjoin ("目录不存在，已自动创建 ", dir));
+  char *msg = CliOpt_InEnglish ? "Directory doesn't exist, created automatically " : "目录不存在，已自动创建 ";
+  chsrc_note2 (xy_2strjoin (msg, dir));
 }
 
 static void
@@ -909,7 +928,8 @@ chsrc_backup (const char *path)
 
   if (!exist)
     {
-      chsrc_note2 (xy_2strjoin ("文件不存在,跳过备份: ", path));
+      char *msg = CliOpt_InEnglish ? "File doesn't exist, skip backup: " : "文件不存在,跳过备份: ";
+      chsrc_note2 (xy_2strjoin (msg, path));
       return;
     }
 
@@ -929,7 +949,9 @@ chsrc_backup (const char *path)
     }
 
   chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_Dont_Notify_On_Success);
-  chsrc_note2 (xy_strjoin (3, "备份文件名为 ", path, ".bak"));
+  chsrc_note2 (xy_strjoin (3,
+                            CliOpt_InEnglish ? "Backup file name is " : "备份文件名为 ",
+                            path, ".bak"));
 }
 
 
@@ -959,7 +981,8 @@ chsrc_get_cpuarch ()
     }
   else
     {
-      chsrc_error ("无法检测到CPU类型");
+      char *msg = CliOpt_InEnglish ? "Unable to detect CPU type" : "无法检测到CPU类型";
+      chsrc_error (msg);
       exit (Exit_UserCause);
     }
 }
