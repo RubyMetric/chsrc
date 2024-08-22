@@ -55,3 +55,99 @@ Exit status:
 @end menu
 
 @insertcopying
+
+
+
+@node commands
+@chapter 命令
+
+@section 基本命令
+@table @samp
+@item help
+打印此帮助，或 h, -h, --help
+@item issue
+查看相关issue
+
+@item list (或 ls, 或 l)
+列出可用镜像源，和可换源目标
+
+@item list mirror/target
+列出可用镜像源，或可换源目标
+
+@item list os/lang/ware
+列出可换源的操作系统/编程语言/软件
+@end table
+
+
+@section 测速命令
+@table @samp
+@item measure <target>
+@itemx cesu   <target>
+对该目标所有源测速
+@end table
+
+@page
+@section 查看配置命令
+@table @samp
+@item list <target>
+查看该目标可用源与支持功能
+
+@item get <target>
+查看该目标当前源的使用情况
+@end table
+
+
+@section 换源命令
+@table @samp
+@item set <target>
+换源，自动测速后挑选最快源
+
+@item set <target> first
+换源，使用维护团队测速第一的源
+
+@item set <target> <mirror>
+换源，指定使用某镜像站 (通过list <target>查看)
+
+@item set <target> https://url
+换源，用户自定义源URL
+
+@item reset <target>
+重置，使用上游默认使用的源
+@end table
+
+
+
+@node options
+@chapter 选项
+@table @samp
+@item -dry
+Dry Run，模拟换源过程，命令仅打印并不运行
+
+@item -ipv6
+使用IPv6测速
+
+@item -local
+仅对本项目而非全局换源 (通过ls <target>查看支持情况)
+@end table
+
+
+
+@node examples
+@chapter 例子
+@example
+# 测速，寻找最快者，换源
+$ chsrc set ruby
+
+# 列出可用的镜像站
+# 使用 RubyChina 作为镜像站
+$ chsrc ls  ruby
+$ chsrc set ruby rubychina
+
+# 如果您有自己的镜像地址，使用自定义URL
+$ chsrc set ruby https://gems.ruby-china.com/
+
+# 使用维护团队测试的最快镜像站
+$ chsrc set ruby first
+@end example
+
+@bye
