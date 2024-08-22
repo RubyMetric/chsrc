@@ -1,0 +1,57 @@
+\input texinfo
+@setfilename chsrc.info
+@settitle chsrc
+
+@set Chsrc_Version v0.1.7.4
+@set Doc_Publish_Date 2024-08-22
+
+@copying
+@comment 这是软件copyright，不是文档copyright，因此不放在titlepage
+Copyright @copyright{} 2024 Aoran Zeng, Heng Guo
+@end copying
+
+@titlepage
+@title chsrc printed manual
+@subtitle Change Source everywhere for every software!
+@author Aoran Zeng
+@c @insertcopying
+For chsrc @value{Chsrc_Version}
+@page
+@end titlepage
+
+
+@contents
+
+@node Top
+@top chsrc on-terminal manual
+
+The tool and framework @command{chsrc} is a great helper to Change Source for every software on every platform from the command line. This texinfo documentation is published on @b{@value{Doc_Publish_Date}} for @command{chsrc} @b{@value{Chsrc_Version}}
+
+@exdent 使用: chsrc <command> [options] [target] [mirror]
+
+Exit status:
+
+@display
+0 正常执行，一般表示换源成功
+1 用户环境导致的错误，如命令缺失
+2 chsrc 暂未实现支持
+3 维护者导致的镜像站、源信息相关错误
+4 致命错误，由内部Bug导致
+5 致命未知错误，往往代表内部未知Bug
+@end display
+
+@noindent
+维护:
+@itemize
+@item On Gitee:  https://gitee.com/RubyMetric/chsrc/issues
+@item On GitHub: https://github.com/RubyMetric/chsrc/issues
+@end itemize
+
+
+@menu
+* commands:: 命令
+* options:: 选项
+* examples:: 例子
+@end menu
+
+@insertcopying
