@@ -139,6 +139,9 @@ Dry Run，模拟换源过程，命令仅打印并不运行
 
 @item -local
 仅对本项目而非全局换源 (通过ls <target>查看支持情况)
+
+@item -en(glish)
+使用英文输出
 @end table
 
 
