@@ -6,7 +6,7 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-08-17>
+ * Last modified : <2024-08-22>
  *
  * 镜像站与换源信息
  * ------------------------------------------------------------*/
@@ -163,6 +163,7 @@ typedef struct TargetInfo_t {
 
 // 大部分target还不支持reset，所以暂时先默认设置为NULL来过渡
 #define def_target(t)      TargetInfo t##_target = {def_target_inner_gs(t),def_target_sourcesn(t)}
+#define def_target_gs(t)   TargetInfo t##_target = {def_target_inner_gs(t),def_target_sourcesn(t)}
 #define def_target_gsr(t)  TargetInfo t##_target = {def_target_inner_gsr(t),def_target_sourcesn(t)}
 #define def_target_gsf(t)  TargetInfo t##_target = {def_target_inner_gsf(t),def_target_sourcesn(t)}
 #define def_target_gsrf(t) TargetInfo t##_target = {def_target_inner_gsrf(t),def_target_sourcesn(t)}
