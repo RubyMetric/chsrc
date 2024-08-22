@@ -52,12 +52,6 @@ bool CliOpt_DryRun = false;
 #define chsrc_warn(str)  xy_warn(App_Name,str)
 #define chsrc_error(str) xy_error(App_Name,str)
 
-// 2系列都是带有括号的
-#define chsrc_succ2(str)  xy_succ_brkt(App_Name,"成功",str)
-#define chsrc_log2(str)   xy_info_brkt(App_Name,"LOG",str)
-#define chsrc_warn2(str)  xy_warn_brkt(App_Name,"警告",str)
-#define chsrc_error2(str) xy_error_brkt(App_Name,"错误",str)
-
 #define red(str)      xy_str_to_red(str)
 #define blue(str)     xy_str_to_blue(str)
 #define green(str)    xy_str_to_green(str)
@@ -70,10 +64,17 @@ bool CliOpt_DryRun = false;
 #define bdyellow(str) xy_str_to_bold(xy_str_to_yellow(str))
 #define bdpurple(str) xy_str_to_bold(xy_str_to_purple(str))
 
+// 2系列都是带有括号的
+#define chsrc_succ2(str)  xy_succ_brkt(App_Name,CliOpt_InEnglish?"SUCCEED":"成功",str)
+#define chsrc_log2(str)   xy_info_brkt(App_Name,"LOG",str)
+#define chsrc_warn2(str)  xy_warn_brkt(App_Name,CliOpt_InEnglish?"WARN":"警告",str)
+#define chsrc_error2(str) xy_error_brkt(App_Name,CliOpt_InEnglish?"ERROR":"错误",str)
+
 void
 chsrc_note2 (const char* str)
 {
-  xy_log_brkt (yellow (App_Name), bdyellow ("提示"), yellow (str));
+  char *msg = CliOpt_InEnglish ? "NOTE" : "提示";
+  xy_log_brkt (yellow (App_Name), bdyellow (msg), yellow (str));
 }
 
 #define YesMark "✓"
