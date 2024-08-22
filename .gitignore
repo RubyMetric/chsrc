@@ -14,3 +14,10 @@ xy
 
 # Generated when testing
 nul
+
+# Texinfo
+chsrc.aux
+chsrc.log
+chsrc.toc
+*.info
+*.pdf
