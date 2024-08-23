@@ -4,7 +4,7 @@
  * File Authors  :  Heng Guo  <2085471348@qq.com>
  * Contributors  : Aoran Zeng <ccmywish@qq.com>
  * Created On    : <2023-09-03>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2024-08-23>
  * ------------------------------------------------------------*/
 
 /**
@@ -32,7 +32,7 @@ def_sources_n(os_ros);
 void
 os_ros_setsrc (char *option)
 {
-  chsrc_ensure_root (OS_ROS_SourceList);
+  chsrc_ensure_root ();
 
   chsrc_yield_source_and_confirm (os_ros);
 
