@@ -6,15 +6,15 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-08-22>
+ * Last modified : <2024-08-23>
  *
  * 镜像站与换源信息
  * ------------------------------------------------------------*/
 
 typedef struct MirrorSite_t {
   const char *code; // 用于用户指定镜像站
-  const char *abbr;
-  const char *name;
+  const char *abbr; // 需要使用镜像站的英文名时，用这个代替，因为大部分镜像站没有提供正式的英文名
+  const char *name; // 镜像站中文名
   const char *site;
   const char *__bigfile_url;  // 用于对该镜像站测速
 } MirrorSite;
@@ -32,7 +32,7 @@ typedef struct MirrorSite_t {
  * 我们目前根据 https://github.com/mirrorz-org/oh-my-mirrorz 挑选速度前10位
  */
 MirrorSite
-MirrorZ       = {"mirrorz", "MirrorZ",       "MirrorZ 校园网镜像站",       "https://mirrors.cernet.edu.cn/",  NULL},
+MirrorZ       = {"mirrorz", "MirrorZ",       "MirrorZ 校园网镜像站",     "https://mirrors.cernet.edu.cn/",  NULL},
 
 Tuna          = {"tuna",    "TUNA",          "清华大学开源软件镜像站",     "https://mirrors.tuna.tsinghua.edu.cn/",
                  "https://mirrors.tuna.tsinghua.edu.cn/speedtest/1000mb.bin"},

@@ -595,9 +595,6 @@ main (int argc, char const *argv[])
           else if (xy_streql (argv[i], "-dry"))
             {
               CliOpt_DryRun = true;
-              char *msg = CliOpt_InEnglish ? "** Enable [Dry Run] mode. Simulate the source changing process (skipping speed measurement). Commands only print but don't run **\n"
-                                           : "**开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行**\n";
-              chsrc_log (bdyellow(msg));
             }
           else if (xy_streql (argv[i], "-no-color") || xy_streql (argv[i], "-no-colour"))
             {
@@ -622,6 +619,10 @@ main (int argc, char const *argv[])
 
 
   bool matched = false;
+
+  char *dry_msg = CliOpt_InEnglish ? "** Enable [Dry Run] mode. Simulate the source changing process (skipping speed measurement). Commands only print but don't run **\n"
+                               : "**开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行**\n";
+  chsrc_log (bdyellow(dry_msg));
 
   /* chsrc help */
   if (xy_streql    (command, "h")

@@ -276,8 +276,11 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
   if (2==size)
     {
       char *msg1 = CliOpt_InEnglish ? " is " : " 是 ";
-      char *msg2 = CliOpt_InEnglish ? " the only mirror site available currently, thanks for their generous support" : " 目前唯一可用镜像站，感谢他们的慷慨支持";
-      chsrc_succ (xy_strjoin (4, sources[1].mirror->name, msg1, target, msg2));
+      char *msg2 = CliOpt_InEnglish ? " the only mirror site available currently, thanks for their generous support"
+                                    : " 目前唯一可用镜像站，感谢他们的慷慨支持";
+      const char *name = CliOpt_InEnglish ? sources[1].mirror->abbr
+                                          : sources[1].mirror->name;
+      chsrc_succ (xy_strjoin (4, name, msg1, target, msg2));
     }
 
   if (xy_streql ("reset", input))
@@ -498,15 +501,19 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
 
   if (only_one)
     {
-      char *is = CliOpt_InEnglish ? " is " : " 是 ";
-      char *msg = CliOpt_InEnglish ? "the ONLY mirror available currently, thanks for their generous support" : \
-                                          " 目前唯一可用镜像站，感谢他们的慷慨支持";
-      chsrc_succ (xy_strjoin (4, sources[fast_idx].mirror->name, is, target_name, msg));
+      char *is = CliOpt_InEnglish  ? " is " : " 是 ";
+      char *msg = CliOpt_InEnglish ? "the ONLY mirror available currently, thanks for their generous support"
+                                   : " 目前唯一可用镜像站，感谢他们的慷慨支持";
+      const char *name = CliOpt_InEnglish ? sources[fast_idx].mirror->abbr
+                                          : sources[fast_idx].mirror->name;
+      chsrc_succ (xy_strjoin (4, name, is, target_name, msg));
     }
   else
     {
       char *msg = CliOpt_InEnglish ? "FASTEST mirror site: " : "最快镜像站: ";
-      say (xy_2strjoin (msg, green (sources[fast_idx].mirror->name)));
+      const char *name = CliOpt_InEnglish ? sources[fast_idx].mirror->abbr
+                                          : sources[fast_idx].mirror->name;
+      say (xy_2strjoin (msg, green(name)));
     }
 
 
@@ -632,6 +639,8 @@ confirm_source (SourceInfo *source)
 #define MSG_EN_STILL      "Still need to operate manually according to the above prompts. "
 #define MSG_CN_STILL      "仍需按上述提示手工操作"
 
+#define thank_mirror(msg) chsrc_log(xy_2strjoin(msg,purple(CliOpt_InEnglish?source->mirror->abbr:source->mirror->name)))
+
 /**
  * @param source    可为NULL
  * @param last_word 5种选择：ChsrcTypeAuto | ChsrcTypeReset | ChsrcTypeSemiAuto | ChsrcTypeManual | ChsrcTypeUntested
@@ -656,7 +665,7 @@ chsrc_conclude (SourceInfo *source, const char *last_word)
             {
               char *msg = CliOpt_InEnglish ? MSG_EN_FULLY_AUTO      MSG_EN_THANKS \
                                            : MSG_CN_FULLY_AUTO ", " MSG_CN_THANKS;
-              chsrc_log (xy_2strjoin (msg, purple (source->mirror->name)));
+              thank_mirror (msg);
             }
         }
       else
@@ -685,7 +694,7 @@ chsrc_conclude (SourceInfo *source, const char *last_word)
             {
               char *msg = CliOpt_InEnglish ? MSG_EN_SEMI_AUTO      MSG_EN_STILL      MSG_EN_THANKS \
                                            : MSG_CN_SEMI_AUTO ", " MSG_CN_STILL "。" MSG_CN_THANKS;
-              chsrc_log (xy_2strjoin (msg, purple (source->mirror->name)));
+              thank_mirror (msg);
             }
         }
       else
@@ -712,7 +721,7 @@ chsrc_conclude (SourceInfo *source, const char *last_word)
             {
               char *msg = CliOpt_InEnglish ? MSG_EN_CONSTRAINT      MSG_EN_THANKS \
                                            : MSG_CN_CONSTRAINT ", " MSG_CN_THANKS;
-              chsrc_log (xy_2strjoin (msg, purple (source->mirror->name)));
+              thank_mirror (msg);
             }
         }
       else
@@ -735,7 +744,7 @@ chsrc_conclude (SourceInfo *source, const char *last_word)
           else
             {
               char *msg = CliOpt_InEnglish ? MSG_EN_THANKS : MSG_CN_THANKS;
-              chsrc_log (xy_2strjoin (msg, purple (source->mirror->name)));
+              thank_mirror (msg);
             }
         }
       else
