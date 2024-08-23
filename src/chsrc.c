@@ -167,11 +167,25 @@ Chsrc_Usage_English[] = {
 void
 cli_print_available_mirrors ()
 {
-  chsrc_info ("支持以下镜像站");
-  chsrc_info ("下方 code 列，可用于指定使用某镜像站，请使用 chsrc set <target> <code>\n");
-  printf (" %-13s%-35s%-38s", "code", "镜像站简写", "镜像站URL"); say ("镜像站名称");
-  say   ("-------      -----------       -------------------------------------     ---------------------");
-  // say   ("-------------------------------------------------------------------------------------------------");
+  {
+  char *msg = CliOpt_InEnglish ? "To specify a source, use chsrc set " : "指定使用某源，请使用 chsrc set ";
+  say (bdblue(xy_strjoin (3, msg, "<target>", " <code>\n")));
+  }
+
+  {
+  char *msg = CliOpt_InEnglish ? "Available Mirror Sites: \n" : "可用镜像站: \n";
+  say (bdgreen(msg));
+  }
+
+  {
+  char *msg1 = CliOpt_InEnglish ? "Mirror abbr" : "镜像站简写";
+  char *msg2 = CliOpt_InEnglish ? "Mirror URL"  : "镜像站URL";
+  char *msg3 = CliOpt_InEnglish ? "Mirror Name" : "镜像站";
+  char *format = CliOpt_InEnglish ? "  %-13s%-28s%-35s%s\n" : "  %-13s%-33s%-42s%s\n";
+  printf (format, "code", msg1, msg2, msg3);
+  say    ("---------    --------------    -------------------------------------     ---------------------");
+  }
+
   for (int i = 0; i < xy_arylen (available_mirrors); i++)
     {
       MirrorSite* mir = available_mirrors[i];
@@ -200,36 +214,59 @@ cli_print_supported_targets_ (const char ***array, size_t size)
 void
 cli_print_supported_targets ()
 {
-  chsrc_info ("支持对以下目标换源 (同一行表示这几个命令兼容)"); br();
-  say (blue ("编程语言开发"));
+  {
+  char *msg = CliOpt_InEnglish ? "Support following targets (same line indicates these targets are compatible)"
+                               : "支持对以下目标换源 (同一行表示这几个命令兼容)" ;
+  say (bdblue(msg)); br();
+  }
+
+  {
+  char *msg = CliOpt_InEnglish ? "Programming Languages" : "编程语言";
+  say (bdgreen(msg));
   say ("-------------------------");
   cli_print_supported_targets_ (pl_packagers, xy_arylen(pl_packagers));
-  say (blue ("操作系统"));
+  }
+
+  {
+  char *msg = CliOpt_InEnglish ? "Operating Systems" : "操作系统";
+  say (bdgreen(msg));
   say ("-------------------------");
   cli_print_supported_targets_ (os_systems,   xy_arylen(os_systems));
-  say (blue ("软件"));
+  }
+
+  {
+  char *msg = CliOpt_InEnglish ? "Softwares" : "软件";
+  say (bdgreen(msg));
   say ("-------------------------");
   cli_print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
+  }
 }
 
 void
 cli_print_supported_pl ()
 {
-  chsrc_info ("支持对以下编程语言生态换源 (同一行表示这几个命令兼容)");
+  char *msg = CliOpt_InEnglish ? "Support following Programming Languages (same line indicates these targets are compatible)\n"
+                               : "支持对以下编程语言生态换源 (同一行表示这几个目标兼容)\n";
+  say (bdgreen(msg));
+
   cli_print_supported_targets_ (pl_packagers,   xy_arylen(pl_packagers));
 }
 
 void
 cli_print_supported_os ()
 {
-  chsrc_info ("支持对以下操作系统换源 (同一行表示这几个命令兼容)");
+  char *msg = CliOpt_InEnglish ? "Support following Operating Systems (same line indicates these targets are compatible)\n"
+                               : "支持对以下操作系统换源 (同一行表示这几个目标兼容)\n";
+  say (bdgreen(msg));
   cli_print_supported_targets_ (os_systems, xy_arylen(os_systems));
 }
 
 void
 cli_print_supported_wr ()
 {
-  chsrc_info ("支持对以下软件换源 (同一行表示这几个命令兼容)");
+  char *msg = CliOpt_InEnglish ? "Support following Softwares (same line indicates these targets are compatible)\n"
+                               : "支持对以下软件换源 (同一行表示这几个目标兼容)\n";
+  say (bdgreen(msg));
   cli_print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
 }
 
@@ -484,7 +521,7 @@ get_target (const char *input, TargetOp code, char *option)
       {
       char *msg1 = CliOpt_InEnglish ? "Mirror abbr" : "镜像站简写";
       char *msg2 = CliOpt_InEnglish ? "Source URL"  : "换源URL";
-      char *msg3 = CliOpt_InEnglish ? "Mirror Site" : "镜像站";
+      char *msg3 = CliOpt_InEnglish ? "Mirror Name" : "镜像站";
       char *format = CliOpt_InEnglish ? "  %-13s%-33s%-38s%s\n" : "  %-13s%-36s%-46s%s\n";
       printf (format, "code", msg1, msg2, msg3);
       say    ("---------    --------------    -----------------------------------------------    ---------------------");
