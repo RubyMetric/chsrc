@@ -601,11 +601,17 @@ main (int argc, char const *argv[])
               CliOpt_NoColor = true;
               xy_enable_color = false;
             }
-          else if (xy_streql (argv[i], "-h")
+          else if (xy_streql     (argv[i], "-h")
                     || xy_streql (argv[i], "-help")
                     || xy_streql (argv[i], "--help"))
             {
               command = "help"; /* 交到下方处理 */
+            }
+          else if (xy_streql (argv[i], "-v")
+                    || xy_streql (command, "-version")
+                    || xy_streql (command, "--version"))
+            {
+              command = "version"; /* 交到下方处理 */
             }
           else
             {
