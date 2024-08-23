@@ -394,7 +394,7 @@ void
 cli_print_issues ()
 {
   say (
-  "chsrc issues: Gitee和GitHub两边同时接受issue\n\n"
+  "chsrc issues: Gitee and GitHub accept issues both sides\n\n"
   "- https://gitee.com/RubyMetric/chsrc/issues\n"
   "- https://github.com/RubyMetric/chsrc/issues\n"
   );
@@ -595,7 +595,9 @@ main (int argc, char const *argv[])
           else if (xy_streql (argv[i], "-dry"))
             {
               CliOpt_DryRun = true;
-              chsrc_log (bdyellow ("**开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行**\n"));
+              char *msg = CliOpt_InEnglish ? "** Enable [Dry Run] mode. Simulate the source changing process (skipping speed measurement). Commands only print but don't run **\n"
+                                           : "**开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行**\n";
+              chsrc_log (bdyellow(msg));
             }
           else if (xy_streql (argv[i], "-no-color") || xy_streql (argv[i], "-no-colour"))
             {
@@ -610,7 +612,8 @@ main (int argc, char const *argv[])
             }
           else
             {
-              chsrc_error (xy_2strjoin ("未识别的命令行选项 ", argv[i])); return 1;
+              char *msg = CliOpt_InEnglish ? "Unknown option: " : "未识别的命令行选项 ";
+              chsrc_error (xy_2strjoin (msg, argv[i])); return 1;
             }
           cli_arg_Target_pos++;
           cli_arg_Mirror_pos++;
@@ -621,7 +624,7 @@ main (int argc, char const *argv[])
   bool matched = false;
 
   /* chsrc help */
-  if (xy_streql (command, "h")
+  if (xy_streql    (command, "h")
       || xy_streql (command, "-h")
       || xy_streql (command, "help")
       || xy_streql (command, "-help")
@@ -632,7 +635,7 @@ main (int argc, char const *argv[])
     }
 
   /* chsrc -v */
-  else if (xy_streql (command, "-v")
+  else if (xy_streql    (command, "-v")
            || xy_streql (command, "-version")
            || xy_streql (command, "--version")
            || xy_streql (command, "ver")
@@ -643,7 +646,7 @@ main (int argc, char const *argv[])
     }
 
   /* chsrc list */
-  else if (xy_streql (command, "list")
+  else if (xy_streql    (command, "list")
            || xy_streql (command, "l")
            || xy_streql (command, "ls"))
     {
@@ -683,9 +686,11 @@ main (int argc, char const *argv[])
       return 0;
   }
 
+#define MSG_EN_USE_LIST_TARGETS "Use `chsrc list targets` to see all supported targets"
+#define MSG_CN_USE_LIST_TARGETS "使用 chsrc list targets 查看所有支持的目标"
 
   /* chsrc measure */
-  else if (xy_streql (command, "measure")
+  else if (xy_streql    (command, "measure")
            || xy_streql (command, "mea")
            || xy_streql (command, "m")
            || xy_streql (command, "cesu")
@@ -694,7 +699,9 @@ main (int argc, char const *argv[])
     {
       if (argc < cli_arg_Target_pos)
         {
-          chsrc_error ("请您提供想要测速源的软件名; 使用 chsrc list targets 查看所有支持的软件");
+          char *msg = CliOpt_InEnglish ? "Please provide the target name you want to measure. " MSG_EN_USE_LIST_TARGETS
+                                       : "请您提供想要测速源的目标名。" MSG_CN_USE_LIST_TARGETS;
+          chsrc_error (msg);
           return 1;
         }
       target = argv[cli_arg_Target_pos];
@@ -705,12 +712,14 @@ main (int argc, char const *argv[])
 
 
   /* chsrc get */
-  else if (xy_streql (command, "get")
+  else if (xy_streql    (command, "get")
            || xy_streql (command, "g"))
     {
       if (argc < cli_arg_Target_pos)
         {
-          chsrc_error ("请您提供想要查看源的软件名; 使用 chsrc list targets 查看所有支持的软件");
+          char *msg = CliOpt_InEnglish ? "Please provide the target name you want to view the source. " MSG_EN_USE_LIST_TARGETS
+                                       : "请您提供想要查看源的目标名。" MSG_CN_USE_LIST_TARGETS;
+          chsrc_error (msg);
           return 1;
         }
       target = argv[cli_arg_Target_pos];
@@ -720,12 +729,14 @@ main (int argc, char const *argv[])
     }
 
   /* chsrc set */
-  else if (xy_streql (command, "set")
+  else if (xy_streql    (command, "set")
            || xy_streql (command, "s"))
     {
       if (argc < cli_arg_Target_pos)
         {
-          chsrc_error ("请您提供想要设置源的软件名; 使用 chsrc list targets 查看所有支持的软件");
+          char *msg = CliOpt_InEnglish ? "Please provide the target name you want to set the source. " MSG_EN_USE_LIST_TARGETS
+                                       : "请您提供想要设置源的目标名。" MSG_CN_USE_LIST_TARGETS;
+          chsrc_error (msg);
           return 1;
         }
 
@@ -742,13 +753,15 @@ main (int argc, char const *argv[])
     }
 
   /* chsrc reset */
-  else if (xy_streql (command, "reset")
+  else if (xy_streql    (command, "reset")
            || xy_streql (command, "rest")
            || xy_streql (command, "r"))
     {
       if (argc < cli_arg_Target_pos)
         {
-          chsrc_error ("请您提供想要重置源的软件名; 使用 chsrc list targets 查看所有支持的软件");
+          char *msg = CliOpt_InEnglish ? "Please provide the target name you want to reset the source. " MSG_EN_USE_LIST_TARGETS
+                                       : "请您提供想要重置源的目标名。" MSG_CN_USE_LIST_TARGETS;
+          chsrc_error (msg);
           return 1;
         }
 
@@ -759,7 +772,7 @@ main (int argc, char const *argv[])
     }
 
     /* chsrc issue */
-  else if (xy_streql (command, "issue")
+  else if (xy_streql    (command, "issue")
            || xy_streql (command, "issues")
            || xy_streql (command, "isue")
            || xy_streql (command, "i"))
@@ -771,14 +784,18 @@ main (int argc, char const *argv[])
   /* 不支持的命令 */
   else
     {
-      chsrc_error (xy_strjoin (3, "不支持的命令 ", command, ". 请使用 chsrc help 查看使用方式"));
+      char *msg1 = CliOpt_InEnglish ? "Unsupported command `" : "不支持的命令 ";
+      char *msg2 = CliOpt_InEnglish ? "`. Use `chsrc help` to view usage" : ". 请使用 chsrc help 查看使用方式";
+      chsrc_error (xy_strjoin (3, msg1, command, msg2));
       return 1;
     }
 
 not_matched:
   if (!matched)
     {
-      chsrc_error ("暂不支持的换源目标，请使用 chsrc list targets 查看可换源软件");
+      char *msg = CliOpt_InEnglish ? "Unsupported target. " MSG_EN_USE_LIST_TARGETS
+                                   : "暂不支持的换源目标。"    MSG_CN_USE_LIST_TARGETS;
+      chsrc_error (msg);
       return 1;
     }
 }
