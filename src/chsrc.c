@@ -620,9 +620,14 @@ main (int argc, char const *argv[])
 
   bool matched = false;
 
-  char *dry_msg = CliOpt_InEnglish ? "** Enable [Dry Run] mode. Simulate the source changing process (skipping speed measurement). Commands only print but don't run **\n"
-                               : "**开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行**\n";
-  chsrc_log (bdyellow(dry_msg));
+  if (CliOpt_DryRun)
+    {
+      char *dry_msg = CliOpt_InEnglish ? "** Enable [Dry Run] mode. " \
+                                         "Simulate the source changing process (skipping speed measurement). " \
+                                         "Commands only print but don't run **\n"
+                                       : "**开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行**\n";
+      chsrc_log (bdyellow(dry_msg));
+    }
 
   /* chsrc help */
   if (xy_streql    (command, "h")
