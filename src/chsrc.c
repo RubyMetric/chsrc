@@ -147,15 +147,15 @@ Chsrc_Usage_English[] = {
   "get  <target>             View the current source state for <target>\n",
 
   "set  <target>             Change source, select the fastest source by automatic speed measurement",
-  "set  <target>  first      Change source, select the fastest source measured by the maintenance team",
-  "set  <target> <mirror>    Change source, specify a mirror site (Via list <target>)",
+  "set  <target>  first      Change source, select the fastest source measured by the maintainers team",
+  "set  <target> <mirror>    Change source, specify a mirror site (Via `list <target>`)",
   "set  <target> https://url Change source, using user-defined source URL",
   "reset <target>            Reset  source to the upstream's default\n",
 
   "Options:",
   "-dry                      Dry Run. Simulate the source changing process, command only prints, not run",
   "-ipv6                     Speed measurement using IPv6",
-  "-local                    Change source only for this project rather than globally (Via ls <target>)",
+  "-local                    Change source only for this project rather than globally (Via `ls <target>`)",
   "-en(glish)                Output in English",
   "-no-color                 Output without color\n",
 
