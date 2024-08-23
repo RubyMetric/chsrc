@@ -36,7 +36,9 @@
 ## 📌 示例
 
 <div align="center">
-  <img alt="chsrc logo" src="image/example.png"/>
+  <img alt="chsrc set node" src="image/example-node.png"/>
+  <br>
+  <img alt="chsrc ls -en ruby" src="image/example-ls-ruby.png"/>
 </div>
 
 <br>
