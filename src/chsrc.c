@@ -144,7 +144,7 @@ Chsrc_Usage_English[] = {
   "cesu    <target>          \n",
 
   "list <target>             View available sources and supporting features for <target>",
-  "get  <target>             View the current source usage for <target>\n",
+  "get  <target>             View the current source state for <target>\n",
 
   "set  <target>             Change source, select the fastest source by automatic speed measurement",
   "set  <target>  first      Change source, select the fastest source measured by the maintenance team",
@@ -257,46 +257,66 @@ cli_print_target_available_sources (SourceInfo sources[], size_t size)
 void
 cli_print_target_features (FeatInfo f, const char *input_target_name)
 {
-  say (bdpurple("\nFeatures:\n"));
-
-  char *get_msg = xy_2strjoin (" Get: 查看当前源状态 | chsrc get ", input_target_name);
-  if (f.can_get) printf (" %s%s\n", bdgreen(YesMark), purple(get_msg));
-  else printf (" %s%s\n", bdred(NoMark), get_msg);br();
-
-  char *reset_msg = xy_2strjoin (" Reset: 重置回默认源 | chsrc reset ", input_target_name);
-  if (f.can_reset) printf (" %s%s\n", bdgreen(YesMark), purple(reset_msg));
-  else printf (" %s%s\n", bdred(NoMark), reset_msg);br();
-
-  char *user_define_msg = xy_strjoin (4, " UserDefine: 用户自定义换源URL | chsrc set ", input_target_name, " https://user-define-url.org/", input_target_name);
-  if (f.can_user_define) printf (" %s%s\n", bdgreen(YesMark), purple(user_define_msg));
-  else printf (" %s%s\n", bdred(NoMark), user_define_msg);br();
-
-
-  char *locally_msg = xy_2strjoin (" Locally: 仅对本项目换源 | chsrc set -local ", input_target_name);
-
-  switch (f.stcan_locally)
   {
-  case CanNot:
-    printf (" %s%s\n", bdred(NoMark), locally_msg);br();
-    break;
-  case CanFully:
-    printf (" %s%s\n", bdgreen(YesMark), purple(locally_msg));br();
-    break;
-  case CanSemi:
-    printf (" %s%s\n\n   %s\n", bdgreen(SemiYesMark), purple(locally_msg), f.locally);br();
-    break;
-  default:
-    xy_unreach;
+  char *msg = CliOpt_InEnglish ? "\nAvailable Features:\n" : "\n可用功能:\n";
+  say (bdgreen(msg));
   }
 
-  char *english_msg = xy_2strjoin (" English: 英文输出 | chsrc set -en ", input_target_name);
-  // if (f.can_english) printf (" %s%s\n", bdgreen(YesMark), purple(english_msg));
-  // else printf (" %s%s\n", bdred(NoMark), english_msg);
+  {
+  char *msg = CliOpt_InEnglish ? " Get: View the current source state " : " Get: 查看当前源状态 ";
+  char *get_msg = xy_strjoin (3, msg, "| chsrc get ", input_target_name);
+  if (f.can_get) printf (" %s%s\n", bdgreen(YesMark), purple(get_msg));
+  else printf (" %s%s\n", bdred(NoMark), get_msg);br();
+  }
 
+  {
+  char *msg = CliOpt_InEnglish ? " Reset: Reset to the default source " : " Reset: 重置回默认源 ";
+  char *reset_msg = xy_strjoin (3, msg, "| chsrc reset ", input_target_name);
+  if (f.can_reset) printf (" %s%s\n", bdgreen(YesMark), purple(reset_msg));
+  else printf (" %s%s\n", bdred(NoMark), reset_msg);br();
+  }
+
+
+  {
+  char *msg = CliOpt_InEnglish ? " UserDefine: using user-defined source URL " : " UserDefine: 用户自定义换源URL ";
+  char *user_define_msg = xy_strjoin (5, msg, "| chsrc set ", input_target_name, " https://user-define-url.org/", input_target_name);
+  if (f.can_user_define) printf (" %s%s\n", bdgreen(YesMark), purple(user_define_msg));
+  else printf (" %s%s\n", bdred(NoMark), user_define_msg);br();
+  }
+
+
+  {
+  char *msg = CliOpt_InEnglish ? " Locally: Change source only for this project " : " Locally: 仅对本项目换源 ";
+  char *locally_msg = xy_strjoin (3, msg, "| chsrc set -local ", input_target_name);
+
+  switch (f.stcan_locally)
+    {
+    case CanNot:
+      printf (" %s%s\n", bdred(NoMark), locally_msg);br();
+      break;
+    case CanFully:
+      printf (" %s%s\n", bdgreen(YesMark), purple(locally_msg));br();
+      break;
+    case CanSemi:
+      printf (" %s%s\n\n   %s\n", bdgreen(SemiYesMark), purple(locally_msg), f.locally);br();
+      break;
+    default:
+      xy_unreach;
+    }
+  }
+
+
+  {
+  char *msg = CliOpt_InEnglish ? " English: Output in English " : " English: 英文输出 ";
+  char *english_msg = xy_strjoin (3, msg, "| chsrc set -en ", input_target_name);
+  if (f.can_english) printf (" %s%s\n", bdgreen(YesMark), purple(english_msg));
+  else printf (" %s%s\n", bdred(NoMark), english_msg);br();
+  }
 
   if (f.note)
     {
-      printf ("%s%s\n", bdyellow ("备注: "), bdyellow (f.note));
+      char *msg = CliOpt_InEnglish ? "NOTE: " : "备注: ";
+      printf ("%s%s\n", bdyellow (msg), bdyellow (f.note));
     }
 }
 
@@ -451,12 +471,27 @@ get_target (const char *input, TargetOp code, char *option)
     }
   else if (TargetOp_List_Config==code)
     {
-      say (bdblue(xy_strjoin (3, "指定使用某源，请使用 chsrc set ", input, " <code>\n")));
-      say (bdgreen("Available Sources: \n"));
-      // chsrc_info (xy_strjoin (3, "下方 code 列，可用于指定使用某源，请使用 chsrc set ", input, " <code>\n"));
-      printf (" %-14s%-35s%-43s ", "code", "镜像站简写", "换源URL"); say ("镜像站名称");
-      say   ("---------    --------------    -----------------------------------------------    ---------------------");
+      {
+      char *msg = CliOpt_InEnglish ? "To specify a source, use chsrc set " : "指定使用某源，请使用 chsrc set ";
+      say (bdblue(xy_strjoin (3, msg, input, " <code>\n")));
+      }
+
+      {
+      char *msg = CliOpt_InEnglish ? "Available Sources: \n" : "可用源: \n";
+      say (bdgreen(msg));
+      }
+
+      {
+      char *msg1 = CliOpt_InEnglish ? "Mirror abbr" : "镜像站简写";
+      char *msg2 = CliOpt_InEnglish ? "Source URL"  : "换源URL";
+      char *msg3 = CliOpt_InEnglish ? "Mirror Site" : "镜像站";
+      char *format = CliOpt_InEnglish ? "  %-13s%-33s%-38s%s\n" : "  %-13s%-36s%-46s%s\n";
+      printf (format, "code", msg1, msg2, msg3);
+      say    ("---------    --------------    -----------------------------------------------    ---------------------");
+      }
+
       cli_print_target_available_sources (target->sources, target->sources_n);
+
       if (target->featfn)
         {
           FeatInfo fi = target->featfn("");
