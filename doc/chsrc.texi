@@ -6,7 +6,7 @@
 @c Contributors  :  Nul None  <nul@none.org>
 @c               |
 @c Created On    : <2024-08-22>
-@c Last Modified : <2024-08-22>
+@c Last Modified : <2024-08-23>
 @c --------------------------------------------------------------
 
 \input texinfo
@@ -14,7 +14,7 @@
 @settitle chsrc
 
 @set Chsrc_Version v0.1.7.4
-@set Doc_Publish_Date 2024-08-22
+@set Doc_Publish_Date 2024-08-23
 
 @copying
 @comment 这是软件copyright，不是文档copyright，因此不放在titlepage
@@ -142,6 +142,9 @@ Dry Run，模拟换源过程，命令仅打印并不运行
 
 @item -en(glish)
 使用英文输出
+
+@item -no-color
+无颜色输出
 @end table
 
 
