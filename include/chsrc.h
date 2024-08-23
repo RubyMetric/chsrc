@@ -779,8 +779,11 @@ chsrc_ensure_root ()
       if (0!=atoi(euid)) goto not_root;
       else return;
     }
+
+  char *msg = NULL;
 not_root:
-  char *msg = CliOpt_InEnglish ? "Use sudo before the command or switch to root to ensure the necessary permissions" : "请在命令前使用 sudo 或切换为root用户来保证必要的权限";
+  msg = CliOpt_InEnglish ? "Use sudo before the command or switch to root to ensure the necessary permissions"
+                         : "请在命令前使用 sudo 或切换为root用户来保证必要的权限";
   chsrc_error (msg);
   exit (Exit_UserCause);
 }

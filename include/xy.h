@@ -300,9 +300,11 @@ _xy_str_to_terminal_style (int style, const char *str)
       color_fmt_str = "\e[9m%s\e[0m"; break;
     }
 
+
+  size_t len = 0;
 new_str:
   // -2 把中间%s减掉
-  size_t len = strlen (color_fmt_str) - 2;
+  len = strlen (color_fmt_str) - 2;
   char *buf = malloc (strlen (str) + len + 1);
   sprintf (buf, color_fmt_str, str);
   return buf;
