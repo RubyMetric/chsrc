@@ -8,7 +8,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2024-08-17>
+ * Last Modified : <2024-08-23>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C utilities for CLI applications in Ruby flavor
@@ -17,7 +17,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version      "v0.1.4.1-2024/08/17"
+#define _XY_Version      "v0.1.4.2-2024/08/23"
 #define _XY_Maintain_URL "https://gitee.com/RubyMetric/chsrc/blob/main/include/xy.h"
 
 #include <assert.h>
@@ -28,6 +28,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+/* Global */
+bool xy_enable_color = true;
 
 // #define NDEBUG
 
@@ -263,6 +266,12 @@ _xy_str_to_terminal_style (int style, const char *str)
 {
   char *color_fmt_str = NULL;
 
+  if (!xy_enable_color)
+    {
+      color_fmt_str = "%s";
+      goto new_str;
+    }
+
   switch (style)
     {
     case _XY_Str_Red:
@@ -291,6 +300,7 @@ _xy_str_to_terminal_style (int style, const char *str)
       color_fmt_str = "\e[9m%s\e[0m"; break;
     }
 
+new_str:
   // -2 把中间%s减掉
   size_t len = strlen (color_fmt_str) - 2;
   char *buf = malloc (strlen (str) + len + 1);

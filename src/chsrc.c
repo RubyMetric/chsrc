@@ -11,7 +11,7 @@
  *                 |   BlockLune   <blocklune@gmail.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-08-22>
+ * Last Modified   : <2024-08-23>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
@@ -124,7 +124,8 @@ Chsrc_Usage[] = {
   "-dry                      Dry Run，模拟换源过程，命令仅打印并不运行",
   "-ipv6                     使用IPv6测速",
   "-local                    仅对本项目而非全局换源 (通过ls <target>查看支持情况)",
-  "-en(glish)                使用英文输出\n",
+  "-en(glish)                使用英文输出",
+  "-no-color                 无颜色输出\n",
 
   "维护: <" Chsrc_Maintain_URL ">"
 };
@@ -155,7 +156,8 @@ Chsrc_Usage_English[] = {
   "-dry                      Dry Run. Simulate the source changing process, command only prints, not run",
   "-ipv6                     Speed measurement using IPv6",
   "-local                    Change source only for this project rather than globally (Via ls <target>)",
-  "-en(glish)                Output in English\n",
+  "-en(glish)                Output in English",
+  "-no-color                 Output without color\n",
 
   "Maintain: <" Chsrc_Maintain_URL ">"
 };
@@ -522,6 +524,11 @@ main (int argc, char const *argv[])
             {
               CliOpt_DryRun = true;
               chsrc_log (bdyellow ("**开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行**\n"));
+            }
+          else if (xy_streql (argv[i], "-no-color") || xy_streql (argv[i], "-no-colour"))
+            {
+              CliOpt_NoColor = true;
+              xy_enable_color = false;
             }
           else if (xy_streql (argv[i], "-h")
                     || xy_streql (argv[i], "-help")

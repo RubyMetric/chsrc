@@ -7,7 +7,7 @@
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-08-22>
+ * Last modified : <2024-08-23>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -18,10 +18,11 @@
 #define App_Name "chsrc"
 
 /* 命令行选项 */
-bool CliOpt_IPv6 = false;
-bool CliOpt_Locally = false;
+bool CliOpt_IPv6      = false;
+bool CliOpt_Locally   = false;
 bool CliOpt_InEnglish = false;
-bool CliOpt_DryRun = false;
+bool CliOpt_DryRun    = false;
+bool CliOpt_NoColor   = false;
 
 /**
  * -local 的含义是启用 *项目级* 换源
