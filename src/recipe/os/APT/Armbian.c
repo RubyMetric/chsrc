@@ -4,7 +4,7 @@
  * File Authors  : Shengwei Chen <414685209@qq.com>
  * Contributors  :  Aoran Zeng   <ccmywish@qq.com>
  * Created On    : <2024-06-14>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2024-08-27>
  * ------------------------------------------------------------*/
 
 /**
@@ -32,7 +32,9 @@ os_armbian_getsrc (char *option)
       return;
     }
 
-  chsrc_error2 ("缺少源配置文件！路径：" OS_Armbian_SourceList);
+  char *msg = CliOpt_InEnglish ? "Source list config file missing! Path: " OS_Armbian_SourceList
+                               : "缺少源配置文件！路径：" OS_Armbian_SourceList;
+  chsrc_error2 (msg);
 }
 
 /**
@@ -54,6 +56,21 @@ os_armbian_setsrc (char *option)
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
   chsrc_conclude (&source, ChsrcTypeAuto);
 }
-#undef OS_Armbian_SourceList
 
-def_target(os_armbian);
+
+FeatInfo
+os_armbian_feat (char *option)
+{
+  FeatInfo fi = {0};
+
+  fi.can_get = true;
+  fi.can_reset = false;
+
+  fi.stcan_locally = CanNot;
+  fi.can_english = true;
+  fi.can_user_define = true;
+
+  return fi;
+}
+
+def_target_gsf(os_armbian);
