@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-08-30>
- * Last Modified : <2024-08-17>
+ * Last Modified : <2024-08-28>
  * ------------------------------------------------------------*/
 
 static MirrorSite
@@ -50,6 +50,15 @@ pl_nodejs_check_cmd (bool *npm_exist, bool *yarn_exist, bool *pnpm_exist)
 }
 
 
+double
+get_yarn_version ()
+{
+  char *ver = xy_run ("yarn --version", 0, NULL);
+  double version = atof (ver);
+  return version;
+}
+
+
 void
 pl_nodejs_getsrc (char *option)
 {
@@ -62,7 +71,13 @@ pl_nodejs_getsrc (char *option)
     }
   if (yarn_exist)
     {
-      chsrc_run ("yarn config get registry", RunOpt_Default);
+      // 最后一个版本应该是 v1.22.22
+      if (get_yarn_version () >= 2)
+        // https://github.com/RubyMetric/chsrc/issues/53
+        // 从 Yarn V2 开始，使用新的配置名
+        chsrc_run ("yarn config get npmRegistryServer", RunOpt_Default);
+      else
+        chsrc_run ("yarn config get registry", RunOpt_Default);
     }
   if (pnpm_exist)
     {
@@ -97,9 +112,22 @@ pl_nodejs_setsrc (char *option)
 
   if (yarn_exist)
     {
-      // 不再阻止换源命令输出到终端，即不再调用 xy_str_to_quietcmd()
-      cmd = xy_2strjoin ("yarn config set registry ", source.url);
-      chsrc_run (cmd, RunOpt_Default);
+      // 从 Yarn V2 开始，使用新的配置名
+      if (get_yarn_version () >= 2)
+        {
+          if (CliOpt_Locally==true) // 默认基于本项目换源
+            cmd = xy_2strjoin ("yarn config set npmRegistryServer ", source.url);
+          else
+            cmd = xy_2strjoin ("yarn config set npmRegistryServer --home ", source.url);
+
+          chsrc_run (cmd, RunOpt_Default);
+        }
+      else
+        {
+          // 不再阻止换源命令输出到终端，即不再调用 xy_str_to_quietcmd()
+          cmd = xy_2strjoin ("yarn config set registry ", source.url);
+          chsrc_run (cmd, RunOpt_Default);
+        }
     }
 
   if (pnpm_exist)
@@ -121,7 +149,7 @@ pl_nodejs_feat (char *option)
   fi.can_reset = false;
 
   fi.stcan_locally = CanSemi;
-  fi.locally = "npm 支持 (From v0.1.7); yarn 未知; pnpm 未知";
+  fi.locally = "支持 npm (From v0.1.7); 支持 yarn v2 (From v0.1.8.1); pnpm 未知";
   fi.can_english = false;
   fi.can_user_define = true;
 
