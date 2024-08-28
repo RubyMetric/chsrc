@@ -4,7 +4,8 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-10>
- * Last Modified : <2024-08-15>
+ * Last Modified : <2024-08-28>
+ * Revision      :      3
  * ------------------------------------------------------------*/
 
 /**
@@ -76,4 +77,25 @@ wr_homebrew_setsrc (char *option)
   chsrc_note2 ("请您重启终端使Homebrew环境变量生效");
 }
 
-def_target(wr_homebrew);
+
+FeatInfo
+wr_homebrew_feat (char *option)
+{
+  FeatInfo fi = {0};
+
+  fi.can_get = true;
+  fi.can_reset = false;
+
+  fi.stcan_locally = CanNot;
+  fi.locally = NULL;
+  fi.can_english = true;
+
+  /* 该换源方案中，URL存在拼凑，因此不能让用户手动使用某URL来换源 */
+  fi.can_user_define = false;
+
+  fi.note = "该换源通过写入环境变量实现，若多次换源，请手动清理profile文件";
+  return fi;
+}
+
+
+def_target_gsf(wr_homebrew);
