@@ -9,9 +9,10 @@
  *                 |   Rui Chen    <rui@chenrui.dev>
  *                 | Shengwei Chen <414685209@qq.com>
  *                 |   BlockLune   <blocklune@gmail.com>
+ *                 |   Mr. Will    <mr.will.com@outlook.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-08-28>
+ * Last Modified   : <2024-08-29>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
