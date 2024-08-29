@@ -13,7 +13,6 @@ jobs:
     steps:
     - name: Get the release tag
       id: get_tag
-      # run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
       run: |
         echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
     - name: Validate version tag
