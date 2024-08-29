@@ -28,7 +28,7 @@
 - [x] `Homebrew`
 - [x] `Scoop`
 - [ ] `Flatpak`
-- [ ] `AUR`
+- [x] `AUR`
 - [ ] 缺乏其他平台/包维护者
 
 <br>
@@ -75,6 +75,16 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windo
 <details>
 <summary>Linux</summary>
 
+- 通过包管理器安装，支持持续更新。目前支持 `AUR`，其他平台欢迎[贡献](#-贡献)
+
+```bash
+# AUR
+yay -S chsrc # binary from release
+yay -S chsrc-git # build from source, the latest version, maybe unstable
+```
+
+- 手动下载二进制文件安装
+
 ```bash
 # x64
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-linux -o chsrc; chmod +x ./chsrc
@@ -88,6 +98,7 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-riscv64-l
 # armv7
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-armv7-linux -o chsrc; chmod +x ./chsrc
 ```
+
 </details>
 
 <details>
