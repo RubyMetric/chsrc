@@ -42,6 +42,5 @@ jobs:
         test: true # Check that PKGBUILD could be built, and update pkgver
         commit_username: ${{ secrets.AUR_USERNAME }}
         commit_email: ${{ secrets.AUR_EMAIL }}
-        # ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
-        ssh_private_key: placeholder
+        ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
         commit_message: github-action-auto-publish
