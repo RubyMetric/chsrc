@@ -23,12 +23,13 @@
 <br>
 
 > [!NOTE]
-> 想通过 `flatpak`, `yay`,`pacman`,`apt`,`dnf` 等系统包管理工具来安装和更新`chsrc`？若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
+> 想通过 `flatpak`,`snap`,`pacman`,`apt`,`dnf` 等系统包管理工具来安装和更新`chsrc`？若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
 
 - [x] `Homebrew`
 - [x] `Scoop`
-- [ ] `Flatpak`
 - [x] `AUR`
+- [ ] `Flatpak`
+- [ ] `snap`
 - [ ] 缺乏其他平台/包维护者
 
 <br>
@@ -75,12 +76,12 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windo
 <details>
 <summary>Linux</summary>
 
-- 通过包管理器安装，支持持续更新。目前支持 `AUR`，其他平台欢迎[贡献](#-贡献)
+- 支持 `AUR`，可通过 `yay` 安装，感谢 [@Jerry-Terrasse](https://github.com/Jerry-Terrasse)
 
 ```bash
 # AUR
-yay -S chsrc # binary from release
-yay -S chsrc-git # build from source, the latest version, maybe unstable
+yay -S chsrc     # Binary from GitHub Release
+yay -S chsrc-git # Build  from the latest main branch (stable)
 ```
 
 - 手动下载二进制文件安装

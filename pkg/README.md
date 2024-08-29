@@ -6,6 +6,7 @@ https://github.com/RubyMetric/chsrc/issues/16
 - [x] `Scoop`
 - [x] `AUR`
 - [ ] `Flatpak`
+- [ ] `snap`
 - [ ] ...
 
 ```bash
@@ -22,7 +23,6 @@ $ yay -S chsrc-git # build from source
 # Homebrew
 
 https://github.com/Homebrew/homebrew-core/blob/master/Formula/c/chsrc.rb
-
 
 # Scoop
 
