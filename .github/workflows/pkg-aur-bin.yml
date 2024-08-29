@@ -27,9 +27,11 @@ jobs:
           echo "valid=1" >> $GITHUB_ENV
         fi
     - name: Fetch PKGBUILD
+      if: env.valid == '1'
       run: |
         wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD\?h\=chsrc -O ./PKGBUILD
     - name: Update PKGBUILD
+      if: env.valid == '1'
       run: |
         sed -i "s/pkgver=.*/pkgver=$version/" PKGBUILD
     - name: Publish to AUR
