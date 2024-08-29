@@ -1,0 +1,42 @@
+# This workflow will publish the `chsrc` package to the AUR
+#   when there is a new `released` event.
+name: Publish AUR Package (chsrc)
+on:
+  release:
+    types: [ released ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get the release tag
+      id: get_tag
+      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+    - name: Validate version tag
+      run: |
+        if [[ ! ${{ steps.get_tag.outputs.tag }} =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo "Abnormal version tag: ${{ steps.get_tag.outputs.tag }}"
+          echo "valid=false" >> $GITHUB_ENV
+        else
+          echo "version=${{ steps.get_tag.outputs.tag:1 }}" >> $GITHUB_ENV
+          echo "valid=true" >> $GITHUB_ENV
+        fi
+    - name: Fetch PKGBUILD
+      run: |
+        wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD\?h\=chsrc -O ./PKGBUILD
+    - name: Update PKGBUILD
+      run: |
+        sed -i "s/pkgver=.*/pkgver=${{ env.version }}/" PKGBUILD
+    - name: Publish to AUR
+      uses: KSXGitHub/github-actions-deploy-aur@v3.0.1
+      with:
+        pkgname: chsrc
+        pkgbuild: ./PKGBUILD
+        updpkgsums: true
+        test: true # Check that PKGBUILD could be built, and update pkgver
+        commit_username: ${{ secrets.AUR_USERNAME }}
+        commit_email: ${{ secrets.AUR_EMAIL }}
+        # ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+        ssh_private_key: placeholder
+        commit_message: github-action-auto-publish
