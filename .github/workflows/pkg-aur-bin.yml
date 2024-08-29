@@ -1,5 +1,6 @@
 # This workflow will publish the `chsrc` package to the AUR
 #   when there is a new `released` event.
+# Note: only normal version tags like `v1.2.3` will be published.
 name: Publish AUR Package (chsrc)
 on:
   release:
@@ -38,6 +39,5 @@ jobs:
         test: true # Check that PKGBUILD could be built, and update pkgver
         commit_username: ${{ secrets.AUR_USERNAME }}
         commit_email: ${{ secrets.AUR_EMAIL }}
-        # ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
-        ssh_private_key: placeholder
+        ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
         commit_message: github-action-auto-publish
