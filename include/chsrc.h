@@ -7,7 +7,7 @@
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-08-23>
+ * Last modified : <2024-08-30>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -123,7 +123,7 @@ log_check_result (const char *check_what, const char *check_type, bool exist)
  * @translation Done
  */
 void
-log_cmd_result (bool result, int ret_code)
+log_cmd_result (bool result, int exit_status)
 {
   char *run_msg  = NULL;
   char *succ_msg = NULL;
@@ -133,13 +133,13 @@ log_cmd_result (bool result, int ret_code)
     {
       run_msg  = "RUN";
       succ_msg = YesMark " executed successfully";
-      fail_msg = NoMark  " executed unsuccessfully, return code ";
+      fail_msg = NoMark  " executed unsuccessfully, exit status: ";
     }
   else
     {
       run_msg  = "运行";
       succ_msg = YesMark " 命令执行成功";
-      fail_msg = NoMark  " 命令执行失败，返回码 ";
+      fail_msg = NoMark  " 命令执行失败，退出状态: ";
     }
 
   if (result)
@@ -147,7 +147,7 @@ log_cmd_result (bool result, int ret_code)
   else
     {
       char buf[8] = {0};
-      sprintf (buf, "%d", ret_code);
+      sprintf (buf, "%d", exit_status);
       char *log = xy_2strjoin (red (fail_msg), bdred (buf));
       xy_log_brkt (red (App_Name), bdred (run_msg), log);
     }
