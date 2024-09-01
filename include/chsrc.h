@@ -7,13 +7,14 @@
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-08-30>
+ * Last modified : <2024-09-01>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
 
 #include "xy.h"
 #include "source.h"
+#include <pthread.h>
 
 #define App_Name "chsrc"
 
@@ -359,9 +360,11 @@ to_human_readable_speed (double speed)
  * 功劳和版权属于原作者，由 @ccmywish 修改为C语言，并做了额外调整
  *
  * @return 返回测得的速度，若出错，返回-1
+ *
+ * 该函数实际原型为 double * (*)(const char*)
  */
-double
-measure_speed (const char *url)
+void *
+measure_speed (void *url)
 {
   char *time_sec = "6";
 
@@ -404,14 +407,18 @@ measure_speed (const char *url)
 
   if (200!=http_code)
     {
-      char* httpcodestr = yellow (xy_2strjoin ("HTTP码 ", buf));
+      char *httpcodestr = yellow (xy_2strjoin ("HTTP码 ", buf));
       puts (xy_strjoin (3, speedstr, " | ",  httpcodestr));
     }
   else
     {
       puts (speedstr);
     }
-  return speed;
+
+  double *speed_exported = xy_malloc0 (sizeof(double));
+  *speed_exported = speed;
+
+  return speed_exported;
 }
 
 
@@ -467,15 +474,20 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
     }
 
   double speeds[size];
+    bool measured[size]; // 是否测速了
   double speed = 0.0;
+
+  pthread_t *threads = xy_malloc0 (sizeof(pthread_t) * size);
+
   for (int i=0; i<size; i++)
     {
       SourceInfo src = sources[i];
-      const char* url = src.mirror->__bigfile_url;
+      const char *url = src.mirror->__bigfile_url;
       if (NULL==url)
         {
           if (xy_streql ("upstream", src.mirror->code))
             {
+              speed = 0;
               continue; /* 上游默认源不测速 */
             }
           else
@@ -485,6 +497,8 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
               chsrc_warn (xy_strjoin (3, msg1, src.mirror->code, msg2));
               speed = 0;
             }
+          speeds[i] = speed;
+          measured[i] = false;
         }
       else
         {
@@ -492,9 +506,32 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
           printf ("%s", xy_strjoin (3, msg, src.mirror->site , " ... "));
 
           fflush (stdout);
-          speed = measure_speed (url);
+
+          char *url_ = xy_strdup (url);
+          int ret = pthread_create (&threads[i], NULL, measure_speed, url_);
+          if (ret!=0)
+            {
+              chsrc_error ("Unable to measure speed\n");
+              exit (Exit_UserCause);
+            }
+          else
+            {
+              measured[i] = true;
+            }
+          // speed = measure_speed (url);
         }
-      speeds[i] = speed;
+    }
+
+  /* 汇总 */
+  for (int i=0; i<size; i++)
+    {
+      double *spd;
+
+      if (measured[i]==true)
+        {
+          pthread_join (threads[i], (void *)&spd);
+          speeds[i] = *spd;
+        }
     }
 
   int fast_idx = get_max_ele_idx_in_dbl_ary (speeds, size);
