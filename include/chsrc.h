@@ -1089,12 +1089,30 @@ static char *
 chsrc_get_cpuarch ()
 {
   char *ret;
-  bool exist;
 
-  if (xy_on_windows)
+#if XY_On_Windows
+  SYSTEM_INFO info;
+  GetSystemInfo (&info);
+  WORD num = info.wProcessorArchitecture
+  switch (num)
     {
-      xy_unimplement;
+      case PROCESSOR_ARCHITECTURE_AMD64:
+        ret = "x86_64"; break;
+      case PROCESSOR_ARCHITECTURE_ARM:
+        ret = "arm";    break;
+      case PROCESSOR_ARCHITECTURE_INTEL:
+        ret = "x86";    break;
+      case PROCESSOR_ARCHITECTURE_IA64:
+        ret = "IA-64";  break;
+      case PROCESSOR_ARCHITECTURE_UNKNOWN:
+      case default:
+        char *msg = CliOpt_InEnglish ? "Unable to detect CPU type" : "无法检测到CPU类型";
+        chsrc_error (msg);
+        exit (Exit_UserCause);
     }
+#else
+
+  bool exist;
 
   exist = chsrc_check_program_quietly ("arch");
   if (exist)
@@ -1115,6 +1133,7 @@ chsrc_get_cpuarch ()
       chsrc_error (msg);
       exit (Exit_UserCause);
     }
+#endif
 }
 
 
