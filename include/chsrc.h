@@ -7,7 +7,7 @@
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-09-03>
+ * Last modified : <2024-09-04>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -17,6 +17,9 @@
 #include <pthread.h>
 
 #define App_Name "chsrc"
+
+static int chsrc_get_cpucore ();
+
 
 /* 命令行选项 */
 bool CliOpt_IPv6      = false;
@@ -486,6 +489,95 @@ get_max_ele_idx_in_dbl_ary (double *array, int size)
   return maxidx;
 }
 
+
+/**
+ * @param  size                分组大小
+ * @param  whole_sources       被分组的整体
+ * @param  whole_speeds        被分组的整体的速度值记录
+ * @param  grp_cursor_in_whole 分组在整体的下标中所处的位置
+ */
+void
+measure_speed_in_group (int size, SourceInfo whole_sources[], double whole_speeds[], int grp_cursor_in_whole)
+{
+    bool get_measured[size]; /* 是否测速了 */
+     int get_measured_n = 0; /* 测速了几个 */
+   char *measure_msgs[size];
+
+  double speed = 0.0;
+
+  pthread_t *threads = xy_malloc0 (sizeof(pthread_t) * size);
+
+  for (int i=0; i<size; i++)
+    {
+      SourceInfo src = whole_sources[i+grp_cursor_in_whole];
+      const char *url = src.mirror->__bigfile_url;
+      if (NULL==url)
+        {
+          if (xy_streql ("upstream", src.mirror->code))
+            {
+              speed = 0;  // 上游源不测速，直接置0
+            }
+          else
+            {
+              char *msg1 = CliOpt_InEnglish ? "Dev team doesn't offer " : "开发者未提供 ";
+              char *msg2 = CliOpt_InEnglish ? " mirror site's speed measurement link,so skip it" : " 镜像站测速链接，跳过该站点";
+              chsrc_warn (xy_strjoin (3, msg1, src.mirror->code, msg2));
+              speed = 0;
+            }
+          whole_speeds[i+grp_cursor_in_whole] = speed;
+          get_measured[i] = false;
+          measure_msgs[i] = NULL;
+        }
+      else
+        {
+          const char *msg = CliOpt_InEnglish ? src.mirror->abbr : src.mirror->name;
+          measure_msgs[i] = xy_strjoin (3, "  - ", msg, " ... ");
+          printf ("%s", measure_msgs[i]);
+          say ("");
+          // fflush (stdout);
+
+          char *url_ = xy_strdup (url);
+          // say (url);
+          int ret = pthread_create (&threads[i], NULL, measure_speed, url_);
+          if (ret!=0)
+            {
+              chsrc_error ("Unable to measure speed\n");
+              exit (Exit_UserCause);
+            }
+          else
+            {
+              get_measured[i] = true;
+              get_measured_n += 1;
+            }
+        }
+    }
+
+
+  /* 一组汇总 */
+  char **curl_results = xy_malloc0 (sizeof(char *) * size);
+  for (int i=0; i<size; i++)
+    {
+      if (get_measured[i]==true)
+        pthread_join (threads[i], (void *)&curl_results[i]);
+    }
+
+  for (int i=0; i<get_measured_n; i++)
+    printf("\033[A\033[2K");
+
+  for (int i=0; i<size; i++)
+    {
+      if (get_measured[i]==true)
+        {
+          printf ("%s", measure_msgs[i]);
+          double speed = parse_and_say_curl_result (curl_results[i]);
+          whole_speeds[i+grp_cursor_in_whole] = speed;
+        }
+    }
+  /* 汇总结束 */
+}
+
+
+
 /**
  * 自动测速选择镜像站和源
  *
@@ -527,91 +619,33 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
     }
   /** --------------------------------------------- */
 
-  double speeds[size];
-    bool get_measured[size]; /* 是否测速了 */
-     int get_measured_n = 0; /* 测速了几个 */
-   char *measure_msgs[size];
+  /* 总测速记录值 */
+  double speed_records[size];
 
-  double speed = 0.0;
+  // 跳过 upstream
+  int cpu_cores = chsrc_get_cpucore () ;
+  int group_size = (size-1) > cpu_cores ? cpu_cores : (size-1);
+  int ngroup = (size-1) / group_size;
+  int  rest  = (size-1) % group_size;
 
-  pthread_t *threads = xy_malloc0 (sizeof(pthread_t) * size);
+  // 跳过 upstream
+  speed_records[0] = 0.0;
+  int grp_cursor = 1;
 
-  for (int i=0; i<size; i++)
-    {
-      SourceInfo src = sources[i];
-      const char *url = src.mirror->__bigfile_url;
-      if (NULL==url)
-        {
-          if (xy_streql ("upstream", src.mirror->code))
-            {
-              speed = 0;  // 上游源不测速，直接置0
-            }
-          else
-            {
-              char *msg1 = CliOpt_InEnglish ? "Dev team doesn't offer " : "开发者未提供 ";
-              char *msg2 = CliOpt_InEnglish ? " mirror site's speed measurement link,so skip it" : " 镜像站测速链接，跳过该站点";
-              chsrc_warn (xy_strjoin (3, msg1, src.mirror->code, msg2));
-              speed = 0;
-            }
-          speeds[i] = speed;
-          get_measured[i] = false;
-          measure_msgs[i] = NULL;
-        }
-      else
-        {
-          const char *msg = CliOpt_InEnglish ? src.mirror->abbr : src.mirror->name;
-          measure_msgs[i] = xy_strjoin (3, "  - ", msg, " ... ");
-          printf ("%s", measure_msgs[i]);
-          say ("");
-          // fflush (stdout);
+  for (int i=0; i<ngroup; i++, grp_cursor+=group_size)
+    measure_speed_in_group (group_size, sources, speed_records, grp_cursor);
+  if (rest > 0)
+    measure_speed_in_group (rest, sources, speed_records, grp_cursor);
 
-          char *url_ = xy_strdup (url);
-          int ret = pthread_create (&threads[i], NULL, measure_speed, url_);
-          if (ret!=0)
-            {
-              chsrc_error ("Unable to measure speed\n");
-              exit (Exit_UserCause);
-            }
-          else
-            {
-              get_measured[i] = true;
-              get_measured_n += 1;
-            }
-        }
-    }
-
-
-  /* 汇总 */
-  char **curl_results = xy_malloc0 (sizeof(char *) * size);
-  for (int i=0; i<size; i++)
-    {
-      if (get_measured[i]==true)
-        pthread_join (threads[i], (void *)&curl_results[i]);
-    }
-
-  for (int i=0; i<get_measured_n; i++)
-    printf("\033[A\033[2K");
-
-  for (int i=0; i<size; i++)
-    {
-      if (get_measured[i]==true)
-        {
-          printf ("%s", measure_msgs[i]);
-          double speed = parse_and_say_curl_result (curl_results[i]);
-          // puts("");
-          speeds[i] = speed;
-        }
-    }
-  /* 汇总结束 */
   say ("");
 
   /* DEBUG */
   // for (int i=0; i<size; i++)
   // {
-  //  printf ("speeds[%d] = %f\n", i, speeds[i]);
+  //  printf ("speed_records[%d] = %f\n", i, speed_records[i]);
   // }
 
-  int fast_idx = get_max_ele_idx_in_dbl_ary (speeds, size);
+  int fast_idx = get_max_ele_idx_in_dbl_ary (speed_records, size);
 
   if (only_one)
     {
