@@ -454,6 +454,11 @@ get_max_ele_idx_in_dbl_ary (double *array, int size)
 int
 auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
 {
+  {
+  char *msg = CliOpt_InEnglish ? "Auto speed measuring..." : "自动测速中...";
+  xy_log_brkt (App_Name, bdblue (CliOpt_InEnglish ? "MEASURE" : "测速"), msg);
+  }
+
   if (0==size || 1==size)
     {
       char *msg1 = CliOpt_InEnglish ? "Currently " : "当前 ";
@@ -511,8 +516,8 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
         }
       else
         {
-          char *msg = CliOpt_InEnglish ? "Measure speed> " : "测速 ";
-          measure_msgs[i] = xy_strjoin (3, msg, src.mirror->site , " ... ");
+          const char *msg = CliOpt_InEnglish ? src.mirror->abbr : src.mirror->name;
+          measure_msgs[i] = xy_strjoin (3, "  - ", msg, " ... ");
           printf ("%s", measure_msgs[i]);
           say ("");
           // fflush (stdout);
