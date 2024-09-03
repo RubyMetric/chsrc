@@ -27,6 +27,7 @@ bool CliOpt_Locally   = false;
 bool CliOpt_InEnglish = false;
 bool CliOpt_DryRun    = false;
 bool CliOpt_NoColor   = false;
+bool CliOpt_Parallel  = false;
 
 /**
  * -local 的含义是启用 *项目级* 换源
@@ -408,9 +409,14 @@ to_human_readable_speed (double speed)
  * 该函数实际原型为 char * (*)(const char*)
  */
 void *
-measure_speed (void *url)
+measure_speed_for_url (void *url)
 {
-  char *time_sec = "9";
+  char *time_sec = NULL;
+
+  if (CliOpt_Parallel)
+    time_sec = "9";
+  else
+    time_sec = "6";
 
   /* 现在我们切换至跳转后的链接来测速，不再使用下述判断
   if (xy_str_start_with(url, "https://registry.npmmirror"))
@@ -533,47 +539,62 @@ measure_speed_in_group (int size, SourceInfo whole_sources[], double whole_speed
           const char *msg = CliOpt_InEnglish ? src.mirror->abbr : src.mirror->name;
           measure_msgs[i] = xy_strjoin (3, "  - ", msg, " ... ");
           printf ("%s", measure_msgs[i]);
-          say ("");
-          // fflush (stdout);
+
+          if (CliOpt_Parallel)
+            say (""); /* 并行时直接显示下一测速状态行 */
+          else
+            fflush (stdout);
 
           char *url_ = xy_strdup (url);
-          // say (url);
-          int ret = pthread_create (&threads[i], NULL, measure_speed, url_);
-          if (ret!=0)
+
+          if (CliOpt_Parallel)
             {
-              chsrc_error ("Unable to measure speed\n");
-              exit (Exit_UserCause);
+              int ret = pthread_create (&threads[i], NULL, measure_speed_for_url, url_);
+              if (ret!=0)
+                {
+                  chsrc_error ("Unable to measure speed\n");
+                  exit (Exit_UserCause);
+                }
+              else
+                {
+                  get_measured[i] = true;
+                  get_measured_n += 1;
+                }
             }
           else
             {
-              get_measured[i] = true;
-              get_measured_n += 1;
+              char *curl_result = measure_speed_for_url (url_);
+              double speed = parse_and_say_curl_result (curl_result);
+              whole_speeds[i+grp_cursor_in_whole] = speed;
             }
         }
     }
 
 
-  /* 一组汇总 */
-  char **curl_results = xy_malloc0 (sizeof(char *) * size);
-  for (int i=0; i<size; i++)
+  if (CliOpt_Parallel)
     {
-      if (get_measured[i]==true)
-        pthread_join (threads[i], (void *)&curl_results[i]);
-    }
-
-  for (int i=0; i<get_measured_n; i++)
-    printf("\033[A\033[2K");
-
-  for (int i=0; i<size; i++)
-    {
-      if (get_measured[i]==true)
+      /* 一组汇总 */
+      char **curl_results = xy_malloc0 (sizeof(char *) * size);
+      for (int i=0; i<size; i++)
         {
-          printf ("%s", measure_msgs[i]);
-          double speed = parse_and_say_curl_result (curl_results[i]);
-          whole_speeds[i+grp_cursor_in_whole] = speed;
+          if (get_measured[i]==true)
+            pthread_join (threads[i], (void *)&curl_results[i]);
         }
-    }
-  /* 汇总结束 */
+
+      for (int i=0; i<get_measured_n; i++)
+        printf("\033[A\033[2K");
+
+      for (int i=0; i<size; i++)
+        {
+          if (get_measured[i]==true)
+            {
+              printf ("%s", measure_msgs[i]);
+              double speed = parse_and_say_curl_result (curl_results[i]);
+              whole_speeds[i+grp_cursor_in_whole] = speed;
+            }
+        }
+      /* 汇总结束 */
+    } /* End of if Parallel*/
 }
 
 
@@ -588,7 +609,14 @@ int
 auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
 {
   {
-  char *msg = CliOpt_InEnglish ? "Auto speed measuring" : "自动测速中";
+  char *msg = NULL;
+
+  if (CliOpt_Parallel)
+    msg = CliOpt_InEnglish ? "Measuring speed in parallel. It is recommended to use the default sequential measurement for more referential results"
+                           : "即将并行测速，建议使用默认的顺序测速以获得更具参考意义的结果";
+  else
+    msg = CliOpt_InEnglish ? "Measuring speed in sequence" : "顺序测速中";
+
   xy_log_brkt (App_Name, bdpurple (CliOpt_InEnglish ? "MEASURE" : "测速"), msg);
   say ("");
   }
@@ -623,19 +651,26 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
   double speed_records[size];
 
   // 跳过 upstream
-  int cpu_cores = chsrc_get_cpucore () ;
-  int group_size = (size-1) > cpu_cores ? cpu_cores : (size-1);
-  int ngroup = (size-1) / group_size;
-  int  rest  = (size-1) % group_size;
-
-  // 跳过 upstream
   speed_records[0] = 0.0;
   int grp_cursor = 1;
 
-  for (int i=0; i<ngroup; i++, grp_cursor+=group_size)
-    measure_speed_in_group (group_size, sources, speed_records, grp_cursor);
-  if (rest > 0)
-    measure_speed_in_group (rest, sources, speed_records, grp_cursor);
+  if (CliOpt_Parallel)
+    {
+      // 跳过 upstream
+      int cpu_cores = chsrc_get_cpucore () ;
+      int group_size = (size-1) > cpu_cores ? cpu_cores : (size-1);
+      int ngroup = (size-1) / group_size;
+      int  rest  = (size-1) % group_size;
+
+      for (int i=0; i<ngroup; i++, grp_cursor+=group_size)
+        measure_speed_in_group (group_size, sources, speed_records, grp_cursor);
+      if (rest > 0)
+        measure_speed_in_group (rest, sources, speed_records, grp_cursor);
+    }
+  else
+    {
+      measure_speed_in_group (size-1, sources, speed_records, grp_cursor);
+    }
 
   say ("");
 

@@ -13,7 +13,7 @@
  *                 |   Terrasse    <terrasse@qq.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-08-29>
+ * Last Modified   : <2024-09-04>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
@@ -124,8 +124,9 @@ Chsrc_Usage[] = {
 
   "选项:",
   "-dry                      Dry Run，模拟换源过程，命令仅打印并不运行",
-  "-ipv6                     使用IPv6测速",
+  "-para(llel)               并行测速 (默认的顺序测速更有参考意义)",
   "-local                    仅对本项目而非全局换源 (通过ls <target>查看支持情况)",
+  "-ipv6                     使用IPv6测速",
   "-en(glish)                使用英文输出",
   "-no-color                 无颜色输出\n",
 
@@ -156,8 +157,9 @@ Chsrc_Usage_English[] = {
 
   "Options:",
   "-dry                      Dry Run. Simulate the source changing process, command only prints, not run",
-  "-ipv6                     Speed measurement using IPv6",
+  "-para(llel)               Measure velocity in parallel",
   "-local                    Change source only for this project rather than globally (Via `ls <target>`)",
+  "-ipv6                     Speed measurement using IPv6",
   "-en(glish)                Output in English",
   "-no-color                 Output without color\n",
 
@@ -597,6 +599,12 @@ main (int argc, char const *argv[])
           else if (xy_streql (argv[i], "-dry"))
             {
               CliOpt_DryRun = true;
+            }
+          else if (xy_streql (argv[i], "-para")
+                    || xy_streql (argv[i], "-parallel")
+                    || xy_streql (argv[i], "-paralel"))
+            {
+              CliOpt_Parallel = true;
             }
           else if (xy_streql (argv[i], "-no-color") || xy_streql (argv[i], "-no-colour"))
             {
