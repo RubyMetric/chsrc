@@ -1162,7 +1162,7 @@ chsrc_get_cpuarch ()
 #if XY_On_Windows
   SYSTEM_INFO info;
   GetSystemInfo (&info);
-  WORD num = info.wProcessorArchitecture
+  WORD num = info.wProcessorArchitecture;
   switch (num)
     {
       case PROCESSOR_ARCHITECTURE_AMD64:
@@ -1174,7 +1174,7 @@ chsrc_get_cpuarch ()
       case PROCESSOR_ARCHITECTURE_IA64:
         ret = "IA-64";  break;
       case PROCESSOR_ARCHITECTURE_UNKNOWN:
-      case default:
+      default:
         char *msg = CliOpt_InEnglish ? "Unable to detect CPU type" : "无法检测到CPU类型";
         chsrc_error (msg);
         exit (Exit_UserCause);
@@ -1214,7 +1214,7 @@ chsrc_get_cpucore ()
 #if XY_On_Windows
   SYSTEM_INFO info;
   GetSystemInfo (&info);
-  DWORD num = sysinfo.dwNumberOfProcessors
+  DWORD num = info.dwNumberOfProcessors;
   cores = (int)num;
 #else
   long num = sysconf(_SC_NPROCESSORS_ONLN);
