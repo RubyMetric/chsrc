@@ -163,6 +163,12 @@ is_url (const char *str)
 }
 
 
+
+#define Quiet_When_Exist    0x00
+#define Noisy_When_Exist    0x01
+#define Quiet_When_NonExist 0x00
+#define Noisy_When_NonExist 0x10
+
 /**
  * 检测二进制程序是否存在
  *
@@ -175,49 +181,84 @@ is_url (const char *str)
  * @translation Done
  */
 bool
-query_program_exist (char *check_cmd, char *prog_name)
+query_program_exist (char *check_cmd, char *prog_name, int mode)
 {
   char *which = check_cmd;
 
-  int ret = system(which);
+  int status = system (which);
 
-  // char buf[32] = {0}; sprintf(buf, "错误码: %d", ret);
+  // char buf[32] = {0}; sprintf(buf, "错误码: %d", status);
 
   char *msg = CliOpt_InEnglish ? "command" : "命令";
 
-  if (0 != ret)
+  if (0 != status)
     {
-      // xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
-      log_check_result (prog_name, msg, false);
-      return false;
+      if (mode & Noisy_When_NonExist)
+        {
+          // xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
+          log_check_result (prog_name, msg, false);
+          return false;
+        }
     }
   else
     {
-      log_check_result (prog_name, msg, true);
+      if (mode & Noisy_When_Exist)
+        log_check_result (prog_name, msg, true);
       return true;
     }
 }
 
 
 /**
- * @note 此函数只能对接受 --version 选项的程序有效
+ * @note
+ *  1. 一般只在 Recipe 中使用，显式检测每一个需要用到的 program
+ *  2. 无论存在与否，**均输出**
+ *
  */
 bool
 chsrc_check_program (char *prog_name)
 {
   char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (prog_name, " --version"));
-  return query_program_exist (quiet_cmd, prog_name);
+  return query_program_exist (quiet_cmd, prog_name, Noisy_When_Exist|Noisy_When_NonExist);
+}
+
+/**
+ * @note
+ *  1. 此函数没有强制性，只返回检查结果
+ *  2. 无论存在与否，**均不输出**
+ *  3. 此函数只能对接受 --version 选项的命令行程序有效
+ *
+ */
+bool
+chsrc_check_program_quietly (char *prog_name)
+{
+  char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (prog_name, " --version"));
+  return query_program_exist (quiet_cmd, prog_name, Quiet_When_Exist|Quiet_When_NonExist);
+}
+
+/**
+ * @note 存在时不输出，不存在时才输出
+ *
+ */
+bool
+chsrc_check_program_quietly_when_exist (char *prog_name)
+{
+  char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (prog_name, " --version"));
+  return query_program_exist (quiet_cmd, prog_name, Quiet_When_Exist|Noisy_When_NonExist);
 }
 
 
 /**
- * @note 此函数具有强制性，检测不到就直接退出
+ * @note
+ *  1. 此函数具有强制性，检测不到就直接退出
+ *  2. 检查到存在时不输出，检查到不存在时输出
+ *
  */
 void
 chsrc_ensure_program (char *prog_name)
 {
   char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (prog_name, " --version"));
-  bool exist = query_program_exist (quiet_cmd, prog_name);
+  bool exist = query_program_exist (quiet_cmd, prog_name, Quiet_When_Exist|Noisy_When_NonExist);
   if (exist)
     {
       // OK, nothing should be done
@@ -455,8 +496,9 @@ int
 auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
 {
   {
-  char *msg = CliOpt_InEnglish ? "Auto speed measuring..." : "自动测速中...";
-  xy_log_brkt (App_Name, bdblue (CliOpt_InEnglish ? "MEASURE" : "测速"), msg);
+  char *msg = CliOpt_InEnglish ? "Auto speed measuring" : "自动测速中";
+  xy_log_brkt (App_Name, bdpurple (CliOpt_InEnglish ? "MEASURE" : "测速"), msg);
+  say ("");
   }
 
   if (0==size || 1==size)
@@ -475,14 +517,15 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
   bool only_one = false;
   if (2==size) only_one = true;
 
-  char *check_curl = xy_str_to_quietcmd ("curl --version");
-  bool  exist_curl = query_program_exist (check_curl, "curl");
+  /** --------------------------------------------- */
+  bool exist_curl = chsrc_check_program_quietly_when_exist ("curl");
   if (!exist_curl)
     {
       char *msg = CliOpt_InEnglish ? "No curl, unable to measure speed" : "没有curl命令，无法测速";
       chsrc_error (msg);
       exit (Exit_UserCause);
     }
+  /** --------------------------------------------- */
 
   double speeds[size];
     bool get_measured[size]; /* 是否测速了 */
@@ -560,6 +603,7 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
         }
     }
   /* 汇总结束 */
+  say ("");
 
   /* DEBUG */
   // for (int i=0; i<size; i++)
@@ -1038,6 +1082,9 @@ chsrc_backup (const char *path)
 }
 
 
+/**
+ * 检查过程中全程保持安静
+ */
 static char *
 chsrc_get_cpuarch ()
 {
@@ -1049,14 +1096,14 @@ chsrc_get_cpuarch ()
       xy_unimplement;
     }
 
-  exist = chsrc_check_program ("arch");
+  exist = chsrc_check_program_quietly ("arch");
   if (exist)
     {
       ret = xy_run ("arch", 0, NULL);
       return ret;
     }
 
-  exist = chsrc_check_program ("uname");
+  exist = chsrc_check_program_quietly ("uname");
   if (exist)
     {
       ret = xy_run ("uname -m", 0, NULL);
