@@ -7,7 +7,7 @@
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-09-01>
+ * Last modified : <2024-09-03>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -361,12 +361,12 @@ to_human_readable_speed (double speed)
  *
  * @return 返回测得的速度，若出错，返回-1
  *
- * 该函数实际原型为 double * (*)(const char*)
+ * 该函数实际原型为 char * (*)(const char*)
  */
 void *
 measure_speed (void *url)
 {
-  char *time_sec = "6";
+  char *time_sec = "9";
 
   /* 现在我们切换至跳转后的链接来测速，不再使用下述判断
   if (xy_str_start_with(url, "https://registry.npmmirror"))
@@ -392,33 +392,39 @@ measure_speed (void *url)
 
   // chsrc_info (xy_2strjoin ("测速命令 ", curl_cmd));
 
-  char *buf = xy_run (curl_cmd, 0, NULL);
+  char *curl_buf = xy_run (curl_cmd, 0, NULL);
   // 如果尾部有换行，删除
-  buf = xy_str_strip (buf);
+  curl_buf = xy_str_strip (curl_buf);
 
+  return curl_buf;
+}
+
+
+/**
+ * @return 返回速度speed
+ */
+double
+parse_and_say_curl_result (char *curl_buf)
+{
   // 分隔两部分数据
-  char *split = strchr (buf, ' ');
+  char *split = strchr (curl_buf, ' ');
   if (split) *split = '\0';
 
-  // puts(buf); puts(split+1);
-  int http_code = atoi (buf);
-  double speed  = atof (split+1);
-  char *speedstr = to_human_readable_speed (speed);
+  // say(curl_buf); say(split+1);
+     int http_code = atoi (curl_buf);
+  double     speed = atof (split+1);
+    char *speedstr = to_human_readable_speed (speed);
 
   if (200!=http_code)
     {
-      char *httpcodestr = yellow (xy_2strjoin ("HTTP码 ", buf));
-      puts (xy_strjoin (3, speedstr, " | ",  httpcodestr));
+      char *http_code_str = yellow (xy_2strjoin ("HTTP码 ", curl_buf));
+      say (xy_strjoin (3, speedstr, " | ",  http_code_str));
     }
   else
     {
-      puts (speedstr);
+      say (speedstr);
     }
-
-  double *speed_exported = xy_malloc0 (sizeof(double));
-  *speed_exported = speed;
-
-  return speed_exported;
+  return speed;
 }
 
 
@@ -474,7 +480,10 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
     }
 
   double speeds[size];
-    bool measured[size]; // 是否测速了
+    bool get_measured[size]; /* 是否测速了 */
+     int get_measured_n = 0; /* 测速了几个 */
+   char *measure_msgs[size];
+
   double speed = 0.0;
 
   pthread_t *threads = xy_malloc0 (sizeof(pthread_t) * size);
@@ -487,8 +496,7 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
         {
           if (xy_streql ("upstream", src.mirror->code))
             {
-              speed = 0;
-              continue; /* 上游默认源不测速 */
+              speed = 0;  // 上游源不测速，直接置0
             }
           else
             {
@@ -498,14 +506,16 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
               speed = 0;
             }
           speeds[i] = speed;
-          measured[i] = false;
+          get_measured[i] = false;
+          measure_msgs[i] = NULL;
         }
       else
         {
           char *msg = CliOpt_InEnglish ? "Measure speed> " : "测速 ";
-          printf ("%s", xy_strjoin (3, msg, src.mirror->site , " ... "));
-
-          fflush (stdout);
+          measure_msgs[i] = xy_strjoin (3, msg, src.mirror->site , " ... ");
+          printf ("%s", measure_msgs[i]);
+          say ("");
+          // fflush (stdout);
 
           char *url_ = xy_strdup (url);
           int ret = pthread_create (&threads[i], NULL, measure_speed, url_);
@@ -516,23 +526,41 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
             }
           else
             {
-              measured[i] = true;
+              get_measured[i] = true;
+              get_measured_n += 1;
             }
-          // speed = measure_speed (url);
         }
     }
+
 
   /* 汇总 */
+  char **curl_results = xy_malloc0 (sizeof(char *) * size);
   for (int i=0; i<size; i++)
     {
-      double *spd;
+      if (get_measured[i]==true)
+        pthread_join (threads[i], (void *)&curl_results[i]);
+    }
 
-      if (measured[i]==true)
+  for (int i=0; i<get_measured_n; i++)
+    printf("\033[A\033[2K");
+
+  for (int i=0; i<size; i++)
+    {
+      if (get_measured[i]==true)
         {
-          pthread_join (threads[i], (void *)&spd);
-          speeds[i] = *spd;
+          printf ("%s", measure_msgs[i]);
+          double speed = parse_and_say_curl_result (curl_results[i]);
+          // puts("");
+          speeds[i] = speed;
         }
     }
+  /* 汇总结束 */
+
+  /* DEBUG */
+  // for (int i=0; i<size; i++)
+  // {
+  //  printf ("speeds[%d] = %f\n", i, speeds[i]);
+  // }
 
   int fast_idx = get_max_ele_idx_in_dbl_ary (speeds, size);
 
