@@ -1117,3 +1117,21 @@ chsrc_get_cpuarch ()
     }
 }
 
+
+static int
+chsrc_get_cpucore ()
+{
+  int cores = 2;
+
+#if XY_On_Windows
+  SYSTEM_INFO info;
+  GetSystemInfo (&info);
+  DWORD num = sysinfo.dwNumberOfProcessors
+  cores = (int)num;
+#else
+  long num = sysconf(_SC_NPROCESSORS_ONLN);
+  cores = (int)num;
+#endif
+
+  return cores;
+}
