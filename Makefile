@@ -1,10 +1,10 @@
 # ------------------------------------------------------------
 # SPDX-License-Identifier: GPL-3.0-or-later
 # -------------------------------------------------------------
-# File          : Makefile
-# Authors       : Aoran Zeng <ccmywish@qq.com>
-# Created on    : <2023-08-28>
-# Last modified : <2024-06-05>
+# Build File    : Makefile
+# File Authors  : Aoran Zeng <ccmywish@qq.com>
+# Created On    : <2023-08-28>
+# Last Modified : <2024-09-04>
 # ---------------------------------------------------------------
 
 CFLAGS = -Iinclude # -Wall
@@ -34,6 +34,9 @@ CI: all
 
 test: $(Target)
 	@perl ./test/cli.pl
+
+fastcheck: $(Target)
+	@perl ./test/cli.pl fastcheck
 
 test-xy:
 	@$(CC) test/xy.c $(CFLAGS) -o xy

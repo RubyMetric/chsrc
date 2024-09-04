@@ -41,6 +41,13 @@ like `./chsrc get -no-color 2>&1`,  $get_null,    'chsrc get -no-color';
 my $fake_target_name = qr/暂不支持的换源目标/;
 like `./chsrc get fake_target_name 2>&1`,  $fake_target_name, 'chsrc get fake_target_name';
 
+
+if ($ARGV[0] eq 'fastcheck') {
+  say "Fast checking, done testing.";
+  done_testing;
+  exit 0;
+}
+
 my $has_ruby = system 'ruby1 -v';
 if ($has_ruby == 0) {
   say "Ruby exists. Go on testing.";
