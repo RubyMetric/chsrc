@@ -23,6 +23,10 @@
 4. 易于将`shell`脚本转换为等价的`recipe`
 5. 已有大量`recipe`可提供参考
 6. 提供了 [recipe template] 供直接使用
+7. 提供持续关注镜像站可用性的协作平台:
+
+    1. https://github.com/RubyMetric/chsrc/wiki
+    2. https://github.com/RubyMetric/chsrc/discussions
 
 成功案例: [Armbian](../src/recipe/os/APT/Armbian.c)
 
@@ -61,7 +65,12 @@
 
 4. 在各大镜像站寻找可用源；可以额外补充镜像站
 
-5. 可以使用 `chsrc.h` 中暴露出的任何 `chsrc_` 开头的函数或宏
+    并创建或更新对应 `target` 的镜像站可用状态Wiki页: https://github.com/RubyMetric/chsrc/wiki
+
+5. 可以使用这些函数:
+
+    1. `chsrc.h` 中暴露出的任何 `chsrc_` 开头的函数或宏
+    2. `xy.h` 中以 `xy_` 开头的所有函数或宏
 
 6. 在 `menu.c` 中添加用户可以使用的 `target` 别名
 

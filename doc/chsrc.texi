@@ -6,15 +6,15 @@
 @c Contributors  :  Nul None  <nul@none.org>
 @c               |
 @c Created On    : <2024-08-22>
-@c Last Modified : <2024-08-23>
+@c Last Modified : <2024-09-04>
 @c --------------------------------------------------------------
 
 \input texinfo
 @setfilename chsrc.info
 @settitle chsrc
 
-@set Chsrc_Version v0.1.7.4
-@set Doc_Publish_Date 2024-08-23
+@set Chsrc_Version v0.1.8.1dev2
+@set Doc_Publish_Date 2024-09-04
 
 @copying
 @comment 这是软件copyright，不是文档copyright，因此不放在titlepage
@@ -133,6 +133,9 @@ Exit status:
 @table @samp
 @item -dry
 Dry Run，模拟换源过程，命令仅打印并不运行
+
+@item -para(llel)
+并行测速 (默认的顺序测速更有参考意义)
 
 @item -ipv6
 使用IPv6测速

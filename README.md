@@ -22,6 +22,13 @@
 
 <br>
 
+📝 持续关注镜像站可用性的协作:
+
+1. https://github.com/RubyMetric/chsrc/wiki
+2. https://github.com/RubyMetric/chsrc/discussions
+
+<br>
+
 > [!NOTE]
 > 想通过 `flatpak`,`snap`,`pacman`,`apt`,`dnf` 等系统包管理工具来安装和更新`chsrc`？若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
 
@@ -167,8 +174,9 @@ reset <target>            # 重置，使用上游默认使用的源
 
 选项:
 -dry                      # Dry Run，模拟换源过程，命令仅打印并不运行
--ipv6                     # 使用IPv6测速
+-para(llel)               # 并行测速 (默认的顺序测速更有参考意义)
 -local                    # 仅对某项目而非全局换源 (仅部分软件如bundler,pdm支持)
+-ipv6                     # 使用IPv6测速
 -en(glish)                # 使用英文输出
 -no-color                 # 无颜色输出
 ```
