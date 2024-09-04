@@ -523,12 +523,13 @@ measure_speed_for_every_source (SourceInfo sources[], int size, double speed_rec
         {
           if (xy_streql ("upstream", src.mirror->code))
             {
-              speed = 0;  // 上游源不测速，直接置0
+              // 上游源不测速，但不置0，因为要避免这种情况: 可能其他镜像站测速都为0，最后反而选择了该 upstream
+              speed = -999;
             }
           else
             {
               char *msg1 = CliOpt_InEnglish ? "Dev team doesn't offer " : "开发者未提供 ";
-              char *msg2 = CliOpt_InEnglish ? " mirror site's speed measurement link,so skip it" : " 镜像站测速链接，跳过该站点";
+              char *msg2 = CliOpt_InEnglish ? " mirror site's speed measure link, so skip it" : " 镜像站测速链接，跳过该站点";
               chsrc_warn (xy_strjoin (3, msg1, src.mirror->code, msg2));
               speed = 0;
             }
@@ -614,7 +615,7 @@ select_mirror_autoly (SourceInfo *sources, size_t size, const char *target_name)
   char *msg = NULL;
 
   if (CliOpt_Parallel)
-    msg = CliOpt_InEnglish ? "Measuring speed in parallel. It is recommended to use the default sequential measurement for more referential results"
+    msg = CliOpt_InEnglish ? "Measuring speed in parallel. We recommend you use the default sequential measure for more referential results"
                            : "即将并行测速，建议使用默认的顺序测速以获得更具参考意义的结果";
   else
     msg = CliOpt_InEnglish ? "Measuring speed in sequence" : "顺序测速中";
