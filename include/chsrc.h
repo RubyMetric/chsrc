@@ -20,6 +20,8 @@
 
 static int chsrc_get_cpucore ();
 
+bool ProgMode_CMD_Measure = false;
+
 
 /* 命令行选项 */
 bool CliOpt_IPv6      = false;
@@ -322,7 +324,7 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
   if (2==size)
     {
       char *msg1 = CliOpt_InEnglish ? " is " : " 是 ";
-      char *msg2 = CliOpt_InEnglish ? " the only mirror site available currently, thanks for their generous support"
+      char *msg2 = CliOpt_InEnglish ? "'s ONLY mirror available currently, thanks for their generous support"
                                     : " 目前唯一可用镜像站，感谢他们的慷慨支持";
       const char *name = CliOpt_InEnglish ? sources[1].mirror->abbr
                                           : sources[1].mirror->name;
@@ -663,12 +665,13 @@ select_mirror_autoly (SourceInfo *sources, size_t size, const char *target_name)
 
   if (only_one)
     {
-      char *is = CliOpt_InEnglish  ? " is " : " 是 ";
-      char *msg = CliOpt_InEnglish ? "the ONLY mirror available currently, thanks for their generous support"
-                                   : " 目前唯一可用镜像站，感谢他们的慷慨支持";
+      char *msg1 = CliOpt_InEnglish ? "NOTICE  mirror site: " : "镜像站提示: ";
+      char   *is = CliOpt_InEnglish ? " is " : " 是 ";
+      char *msg2 = CliOpt_InEnglish ? "'s ONLY mirror available currently, thanks for their generous support"
+                                    : " 目前唯一可用镜像站，感谢他们的慷慨支持";
       const char *name = CliOpt_InEnglish ? sources[fast_idx].mirror->abbr
                                           : sources[fast_idx].mirror->name;
-      chsrc_succ (xy_strjoin (4, name, is, target_name, msg));
+      say (xy_strjoin (5, msg1, bdgreen(name), green(is), green(target_name), green(msg2)));
     }
   else
     {
@@ -678,6 +681,12 @@ select_mirror_autoly (SourceInfo *sources, size_t size, const char *target_name)
       say (xy_2strjoin (msg, green(name)));
     }
 
+  // https://github.com/RubyMetric/chsrc/pull/71
+  if (ProgMode_CMD_Measure)
+    {
+      char *msg = CliOpt_InEnglish ? "URL of above source: " : "镜像源地址: ";
+      say (xy_2strjoin (msg, green(sources[fast_idx].url)));
+    }
 
   return fast_idx;
 }

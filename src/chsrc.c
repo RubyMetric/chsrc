@@ -731,6 +731,7 @@ main (int argc, char const *argv[])
           chsrc_error (msg);
           return 1;
         }
+      ProgMode_CMD_Measure = true;
       target = argv[cli_arg_Target_pos];
       matched = get_target (target, TargetOp_Measure_Source, NULL);
       if (!matched) goto not_matched;
