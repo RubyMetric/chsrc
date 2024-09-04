@@ -3,7 +3,7 @@
 # Test File     : cli.pl
 # Test Authors  : Aoran Zeng <ccmywish@qq.com>
 # Created On    : <2024-06-05>
-# Last Modified : <2024-09-04>
+# Last Modified : <2024-09-05>
 #
 #   测试 chsrc 可执行文件
 # ---------------------------------------------------------------
@@ -48,7 +48,7 @@ if ($ARGV[0] eq 'fastcheck') {
   exit 0;
 }
 
-my $has_ruby = system 'ruby1 -v';
+my $has_ruby = system 'ruby -v';
 if ($has_ruby == 0) {
   say "Ruby exists. Go on testing.";
 } else {
