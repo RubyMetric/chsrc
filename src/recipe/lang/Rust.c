@@ -4,11 +4,14 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-08-30>
- * Last Modified : <2024-08-09>
+ * Last Modified : <2024-09-04>
  * ------------------------------------------------------------*/
 
+static MirrorSite
+RsProxyCN = {"rsproxycn", "RsProxy.cn", "字节跳动基础架构Dev Infra", "https://rsproxy.cn/", NULL};
+
 /**
- * @time 2024-05-24 更新
+ * @time 2024-09-04 更新
  * @note 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`
  */
 static SourceInfo
@@ -18,6 +21,7 @@ pl_rust_sources[] = {
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/"},
   {&Ustc,          "https://mirrors.ustc.edu.cn/crates.io-index/"},
+  {&RsProxyCN,     "https://rsproxy.cn/index/"},
   {&Hust,          "https://mirrors.hust.edu.cn/crates.io-index/"}
 };
 def_sources_n(pl_rust);
