@@ -1,9 +1,9 @@
 #!/usr/bin/env perl
 # ---------------------------------------------------------------
-# File          : cli.pl
-# Authors       : Aoran Zeng <ccmywish@qq.com>
-# Created on    : <2024-06-05>
-# Last modified : <2024-06-08>
+# Test File     : cli.pl
+# Test Authors  : Aoran Zeng <ccmywish@qq.com>
+# Created On    : <2024-06-05>
+# Last Modified : <2024-09-04>
 #
 #   测试 chsrc 可执行文件
 # ---------------------------------------------------------------
@@ -11,41 +11,47 @@
 use v5.38;
 use Test::More;
 
-my $version_str = "chsrc: Change Source \\(GPLv3\\)";
-like `./chsrc -v`,        qr/$version_str/,  'chsrc -v';
-like `./chsrc version`,   qr/$version_str/,  'chsrc version';
-like `./chsrc --version`, qr/$version_str/,  'chsrc --version';
+my $version_str = qr|Written by Aoran Zeng, Heng Guo and contributors|;
+like `./chsrc -v`,         $version_str,  'chsrc -v';
+like `./chsrc --version`,  $version_str,  'chsrc --version';
+like `./chsrc version`,    $version_str,  'chsrc version';
 
-my $help_str = "^(help|list|get|set)";
-like `./chsrc`,       qr/$help_str/m,    'chsrc';
-like `./chsrc -h`,    qr/$help_str/m,    'chsrc -h';
-like `./chsrc help`,  qr/$help_str/m,    'chsrc help';
-
+my $help_str = qr/^(help|list|get|set)/m;
+like `./chsrc -h`,     $help_str,    'chsrc -h';
+like `./chsrc --help`, $help_str,    'chsrc --help';
+like `./chsrc help`,   $help_str,    'chsrc help';
+like `./chsrc`,        $help_str,    'chsrc';
 
 =begin
 测试 chsrc list
 =cut
-my $list_str = "^mirrorz\\s*MirrorZ.*MirrorZ 校园网镜像站";
-like `./chsrc list`,  qr/$list_str/m,    'chsrc list';
-like `./chsrc ls`,    qr/$list_str/m,    'chsrc ls';
+my $list_str = qr/mirrorz\s*MirrorZ\s*.*/;
+like `./chsrc ls`,            $list_str,    'chsrc ls';
+like `./chsrc list mirrors`,  $list_str,    'chsrc list mirrors';
+like `./chsrc list os`,    qr/debian\s*ubuntu/,   'chsrc list os';
+like `./chsrc list ware`,  qr/brew\s*homebrew/,   'chsrc list ware';
 
 
 =begin
 测试 chsrc get
 =cut
-# my $get_null = "请您提供想要测速源的软件名";
-# like `./chsrc get 2>1`,      qr/$get_null/,    'chsrc get';
-# my $get_abcd = "暂不支持的换源目标";
-my $get_python = "命令.*python.*存在";
-# like `./chsrc get abcd`, qr/$get_abcd/,    'chsrc get abcd';
-like `./chsrc get py`,   qr/$get_python/,  'chsrc get py';
+my $get_null = qr/chsrc: 请您提供想要查看源的目标名/;
+like `./chsrc get -no-color 2>&1`,  $get_null,    'chsrc get -no-color';
+
+my $fake_target_name = qr/暂不支持的换源目标/;
+like `./chsrc get fake_target_name 2>&1`,  $fake_target_name, 'chsrc get fake_target_name';
+
+my $get_ruby = qr/gem sources/;
+like `./chsrc get ruby`,   $get_ruby,  'chsrc get ruby';
+
 
 
 =begin
-测试 chsrc cesu
+测试 chsrc measure
 =cut
-my $cesu_ruby = "测速 https://mirrors\\.tencent\\.com/";
-like `./chsrc cesu ruby`,  qr/$cesu_ruby/,      'chsrc cesu ruby';
+my $measure_ruby = qr/  - Ruby China/;
+like `./chsrc measure ruby`,  $measure_ruby,  'chsrc measure ruby';
+
 
 
 =begin
@@ -65,5 +71,6 @@ like `./chsrc set ruby first`,   qr/$set_ruby_first/,   'chsrc set ruby first';
 like `./chsrc reset ruby`,       qr/$reset_ruby/s,      'chsrc reset ruby';
 like `./chsrc set ruby tencent`, qr/$set_ruby_tencent/, 'chsrc set ruby tencent';
 like `./chsrc set -local ruby tencent`,  qr/$set_ruby_locally/, 'chsrc set -local ruby tencent';
+
 
 done_testing;
