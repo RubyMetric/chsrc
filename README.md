@@ -8,6 +8,8 @@
 
 本软件为**自由软件**，SDPX 软件许可证为 `GPL-3.0-or-later and MIT`
 
+<a href="https://hellogithub.com/repository/7666ba91e01e4a59be5809b02d9e8ff6" target="_blank"><img src="https://abroad.hellogithub.com/v1/widgets/recommend.svg?rid=7666ba91e01e4a59be5809b02d9e8ff6&claim_uid=H6YVMUy7ulev8R4&theme=dark" alt="Featured｜HelloGitHub" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+
 <br>
 
 ## 🤝 贡献
@@ -317,10 +319,12 @@ make clean
 1. [source.h](./include/source.h) 包含了通用的镜像站信息
 2. 各个recipe内部定义的专用镜像站
 
-另外感谢以下项目:
+另外特别感谢以下组织或项目:
 
 1. [MirrorZ 教育网镜像站](https://help.mirrors.cernet.edu.cn/)
 2. [清华大学 Tuna](https://mirrors.tuna.tsinghua.edu.cn/)
-3. [Thanks Mirror 项目](https://github.com/eryajf/Thanks-Mirror) by [@eryajf](https://github.com/eryajf)
+3. [上海交通大学软件源镜像服务](https://mirrors.sjtug.sjtu.edu.cn/)
+4. [中国科学技术大学 Linux 用户协会](https://github.com/ustclug)
+5. [Thanks Mirror 项目](https://github.com/eryajf/Thanks-Mirror) by [@eryajf](https://github.com/eryajf)
 
 <br>
