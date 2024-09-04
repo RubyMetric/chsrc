@@ -541,7 +541,7 @@ get_target (const char *input, TargetOp code, char *option)
     }
   else if (TargetOp_Measure_Source==code)
     {
-      auto_select_ (target->sources, target->sources_n, input);
+      select_mirror_autoly (target->sources, target->sources_n, input);
       return true;
     }
   return true;

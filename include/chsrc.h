@@ -497,13 +497,12 @@ get_max_ele_idx_in_dbl_ary (double *array, int size)
 
 
 /**
- * @param  size                分组大小
- * @param  whole_sources       被分组的整体
- * @param  whole_speeds        被分组的整体的速度值记录
- * @param  grp_cursor_in_whole 分组在整体的下标中所处的位置
+ * @param      sources        所有待测源
+ * @param      size           待测源的数量
+ * @param[out] speed_records  速度值记录
  */
 void
-measure_speed_in_group (int size, SourceInfo whole_sources[], double whole_speeds[], int grp_cursor_in_whole)
+measure_speed_for_every_source (SourceInfo sources[], int size, double speed_records[])
 {
     bool get_measured[size]; /* 是否测速了 */
      int get_measured_n = 0; /* 测速了几个 */
@@ -515,7 +514,7 @@ measure_speed_in_group (int size, SourceInfo whole_sources[], double whole_speed
 
   for (int i=0; i<size; i++)
     {
-      SourceInfo src = whole_sources[i+grp_cursor_in_whole];
+      SourceInfo src = sources[i];
       const char *url = src.mirror->__bigfile_url;
       if (NULL==url)
         {
@@ -530,7 +529,7 @@ measure_speed_in_group (int size, SourceInfo whole_sources[], double whole_speed
               chsrc_warn (xy_strjoin (3, msg1, src.mirror->code, msg2));
               speed = 0;
             }
-          whole_speeds[i+grp_cursor_in_whole] = speed;
+          speed_records[i] = speed;
           get_measured[i] = false;
           measure_msgs[i] = NULL;
         }
@@ -565,7 +564,7 @@ measure_speed_in_group (int size, SourceInfo whole_sources[], double whole_speed
             {
               char *curl_result = measure_speed_for_url (url_);
               double speed = parse_and_say_curl_result (curl_result);
-              whole_speeds[i+grp_cursor_in_whole] = speed;
+              speed_records[i] = speed;
             }
         }
     }
@@ -573,7 +572,7 @@ measure_speed_in_group (int size, SourceInfo whole_sources[], double whole_speed
 
   if (CliOpt_Parallel)
     {
-      /* 一组汇总 */
+      /* 汇总 */
       char **curl_results = xy_malloc0 (sizeof(char *) * size);
       for (int i=0; i<size; i++)
         {
@@ -590,7 +589,7 @@ measure_speed_in_group (int size, SourceInfo whole_sources[], double whole_speed
             {
               printf ("%s", measure_msgs[i]);
               double speed = parse_and_say_curl_result (curl_results[i]);
-              whole_speeds[i+grp_cursor_in_whole] = speed;
+              speed_records[i] = speed;
             }
         }
       /* 汇总结束 */
@@ -604,9 +603,9 @@ measure_speed_in_group (int size, SourceInfo whole_sources[], double whole_speed
  *
  * @translation Done
  */
-#define auto_select(s) auto_select_(s##_sources, s##_sources_n, (char*)#s+3)
+#define auto_select_mirror(s) select_mirror_autoly(s##_sources, s##_sources_n, (char*)#s+3)
 int
-auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
+select_mirror_autoly (SourceInfo *sources, size_t size, const char *target_name)
 {
   {
   char *msg = NULL;
@@ -649,36 +648,16 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
 
   /* 总测速记录值 */
   double speed_records[size];
-
-  // 跳过 upstream
-  speed_records[0] = 0.0;
-  int grp_cursor = 1;
-
-  if (CliOpt_Parallel)
-    {
-      // 跳过 upstream
-      int cpu_cores = chsrc_get_cpucore () ;
-      int group_size = (size-1) > cpu_cores ? cpu_cores : (size-1);
-      int ngroup = (size-1) / group_size;
-      int  rest  = (size-1) % group_size;
-
-      for (int i=0; i<ngroup; i++, grp_cursor+=group_size)
-        measure_speed_in_group (group_size, sources, speed_records, grp_cursor);
-      if (rest > 0)
-        measure_speed_in_group (rest, sources, speed_records, grp_cursor);
-    }
-  else
-    {
-      measure_speed_in_group (size-1, sources, speed_records, grp_cursor);
-    }
-
+  measure_speed_for_every_source (sources, size, speed_records);
   say ("");
 
   /* DEBUG */
-  // for (int i=0; i<size; i++)
-  // {
-  //  printf ("speed_records[%d] = %f\n", i, speed_records[i]);
-  // }
+  /*
+  for (int i=0; i<size; i++)
+    {
+      printf ("speed_records[%d] = %f\n", i, speed_records[i]);
+    }
+  */
 
   int fast_idx = get_max_ele_idx_in_dbl_ary (speed_records, size);
 
@@ -705,7 +684,7 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
 
 
 #define use_specific_mirror_or_auto_select(input, s) \
-  (NULL!=(input)) ? find_mirror(s, input) : auto_select(s)
+  (NULL!=(input)) ? find_mirror(s, input) : auto_select_mirror(s)
 
 
 
