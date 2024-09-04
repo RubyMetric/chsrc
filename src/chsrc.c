@@ -18,8 +18,8 @@
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.1.8.1"
-#define Chsrc_Release_Date   "2024/08/28"
+#define Chsrc_Version        "0.1.8.1dev2"
+#define Chsrc_Release_Date   "2024/09/04"
 #define Chsrc_Banner_Version "v" Chsrc_Version "-" Chsrc_Release_Date
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
@@ -130,6 +130,7 @@ Chsrc_Usage[] = {
   "-en(glish)                使用英文输出",
   "-no-color                 无颜色输出\n",
 
+  "镜像站状态: <https://github.com/RubyMetric/chsrc/wiki>",
   "维护: <" Chsrc_Maintain_URL ">"
 };
 
@@ -163,7 +164,8 @@ Chsrc_Usage_English[] = {
   "-en(glish)                Output in English",
   "-no-color                 Output without color\n",
 
-  "Maintain: <" Chsrc_Maintain_URL ">"
+  "Mirror status: <https://github.com/RubyMetric/chsrc/wiki>",
+  "Maintain:      <" Chsrc_Maintain_URL ">"
 };
 
 
@@ -398,10 +400,13 @@ void
 cli_print_issues ()
 {
   say (
-  "chsrc issues: Gitee and GitHub accept issues both sides\n\n"
+  "We accept issues both sides on Gitee and Github\n\n"
   "- https://gitee.com/RubyMetric/chsrc/issues\n"
   "- https://github.com/RubyMetric/chsrc/issues\n"
   );
+
+  say ("Latest Mirror site status wiki:\n\n"
+       "- https://github.com/RubyMetric/chsrc/wiki\n");
 
   /*
   if (chsrc_check_program ("gh"))
