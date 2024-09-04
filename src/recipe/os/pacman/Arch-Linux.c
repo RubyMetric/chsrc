@@ -89,7 +89,7 @@ os_arch_setsrc (char *option)
     {
       chsrc_run ("pacman -Syy", RunOpt_No_Last_New_Line);
     }
-  chsrc_conclude (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 

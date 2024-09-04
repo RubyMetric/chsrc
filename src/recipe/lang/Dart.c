@@ -92,7 +92,7 @@ pl_dart_setsrc (char *option)
           chsrc_append_to_file (towrite2, bashrc);
         }
     }
-  chsrc_conclude (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 
