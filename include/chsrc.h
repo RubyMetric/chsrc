@@ -668,7 +668,7 @@ select_mirror_autoly (SourceInfo *sources, size_t size, const char *target_name)
                                    : " 目前唯一可用镜像站，感谢他们的慷慨支持";
       const char *name = CliOpt_InEnglish ? sources[fast_idx].mirror->abbr
                                           : sources[fast_idx].mirror->name;
-      chsrc_succ (xy_strjoin (4, name, is, target_name, msg, " - ", sources[fast_idx].mirror->site));
+      chsrc_succ (xy_strjoin (5, name, is, target_name, msg, " - ", sources[fast_idx].mirror->site));
     }
   else
     {
