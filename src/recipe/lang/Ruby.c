@@ -85,9 +85,6 @@ pl_ruby_setsrc (char *option)
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
   chsrc_conclude (&source, chsrc_type);
-
-  // chsrc_note2 ("Ruby的镜像源目前仅有 腾讯软件源，RubyChina 实现正确");
-  // chsrc_note2 ("而其它如Tuna,Bfsu,Ali目前都实现的有问题，请勿使用");
 }
 
 void

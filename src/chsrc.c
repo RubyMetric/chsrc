@@ -793,6 +793,7 @@ main (int argc, char const *argv[])
           return 1;
         }
 
+      ProgMode_CMD_Reset = true;
       target = argv[cli_arg_Target_pos];
       matched = get_target (target, TargetOp_Reset_Source, NULL);
       if (!matched) goto not_matched;

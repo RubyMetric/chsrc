@@ -21,6 +21,7 @@
 static int chsrc_get_cpucore ();
 
 bool ProgMode_CMD_Measure = false;
+bool ProgMode_CMD_Reset   = false;
 
 
 /* 命令行选项 */
