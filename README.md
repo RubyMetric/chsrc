@@ -8,6 +8,8 @@
 
 本软件为**自由软件**，SDPX 软件许可证为 `GPL-3.0-or-later and MIT`
 
+<a href="https://hellogithub.com/repository/7666ba91e01e4a59be5809b02d9e8ff6" target="_blank"><img src="https://abroad.hellogithub.com/v1/widgets/recommend.svg?rid=7666ba91e01e4a59be5809b02d9e8ff6&claim_uid=H6YVMUy7ulev8R4&theme=dark" alt="Featured｜HelloGitHub" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+
 <br>
 
 ## 🤝 贡献
@@ -22,13 +24,21 @@
 
 <br>
 
+📝 持续关注镜像站可用性的协作:
+
+1. https://github.com/RubyMetric/chsrc/wiki
+2. https://github.com/RubyMetric/chsrc/discussions
+
+<br>
+
 > [!NOTE]
-> 想通过 `flatpak`, `yay`,`pacman`,`apt`,`dnf` 等系统包管理工具来安装和更新`chsrc`？若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
+> 想通过 `flatpak`,`snap`,`pacman`,`apt`,`dnf` 等系统包管理工具来安装和更新`chsrc`？若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
 
 - [x] `Homebrew`
 - [x] `Scoop`
+- [x] `AUR`
 - [ ] `Flatpak`
-- [ ] `AUR`
+- [ ] `snap`
 - [ ] 缺乏其他平台/包维护者
 
 <br>
@@ -75,6 +85,16 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windo
 <details>
 <summary>Linux</summary>
 
+- 支持 `AUR`，可通过 `yay` 安装，感谢 [@Jerry-Terrasse](https://github.com/Jerry-Terrasse)
+
+```bash
+# AUR
+yay -S chsrc     # Binary from GitHub Release
+yay -S chsrc-git # Build  from the latest main branch (stable)
+```
+
+- 手动下载二进制文件安装
+
 ```bash
 # x64
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-linux -o chsrc; chmod +x ./chsrc
@@ -88,6 +108,7 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-riscv64-l
 # armv7
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-armv7-linux -o chsrc; chmod +x ./chsrc
 ```
+
 </details>
 
 <details>
@@ -155,8 +176,9 @@ reset <target>            # 重置，使用上游默认使用的源
 
 选项:
 -dry                      # Dry Run，模拟换源过程，命令仅打印并不运行
--ipv6                     # 使用IPv6测速
+-para(llel)               # 并行测速 (默认的顺序测速更有参考意义)
 -local                    # 仅对某项目而非全局换源 (仅部分软件如bundler,pdm支持)
+-ipv6                     # 使用IPv6测速
 -en(glish)                # 使用英文输出
 -no-color                 # 无颜色输出
 ```
@@ -297,10 +319,12 @@ make clean
 1. [source.h](./include/source.h) 包含了通用的镜像站信息
 2. 各个recipe内部定义的专用镜像站
 
-另外感谢以下项目:
+另外特别感谢以下组织或项目:
 
 1. [MirrorZ 教育网镜像站](https://help.mirrors.cernet.edu.cn/)
 2. [清华大学 Tuna](https://mirrors.tuna.tsinghua.edu.cn/)
-3. [Thanks Mirror 项目](https://github.com/eryajf/Thanks-Mirror) by [@eryajf](https://github.com/eryajf)
+3. [上海交通大学软件源镜像服务](https://mirrors.sjtug.sjtu.edu.cn/)
+4. [中国科学技术大学 Linux 用户协会](https://github.com/ustclug)
+5. [Thanks Mirror 项目](https://github.com/eryajf/Thanks-Mirror) by [@eryajf](https://github.com/eryajf)
 
 <br>

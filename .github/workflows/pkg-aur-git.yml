@@ -1,0 +1,26 @@
+# This workflow will publish the `chsrc-git` package to the AUR
+#   when the main branch is updated.
+name: Publish AUR Package (chsrc-git)
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ] # chsrc-git syncs with main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Fetch PKGBUILD
+      run: |
+        wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD\?h\=chsrc-git -O ./PKGBUILD
+    - name: Publish to AUR
+      uses: KSXGitHub/github-actions-deploy-aur@v3.0.1
+      with:
+        pkgname: chsrc-git
+        pkgbuild: ./PKGBUILD
+        test: true # Check that PKGBUILD could be built, and update pkgver
+        commit_username: ${{ secrets.AUR_USERNAME }}
+        commit_email: ${{ secrets.AUR_EMAIL }}
+        ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+        commit_message: github-action-auto-publish

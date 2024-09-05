@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-08-29>
- * Last Modified : <2024-08-17>
+ * Last Modified : <2024-09-04>
  * ------------------------------------------------------------*/
 
 static MirrorSite
@@ -12,29 +12,24 @@ RubyChina = {"rubychina",    "RubyChina",    "Ruby China 社区",    "https://ge
              "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"}; // 9.9 MB
 
 /**
- * @time 2024-05-25 更新
- * @note {
- *   下面的源，并非都实现正确，
- *   BFSU 和 Tuna 以及 阿里的镜像都有问题，会循环遍历一个gem的所有版本，导致安装时间相当长
+ * @time 2024-09-04 同步
+ * @sync https://github.com/RubyMetric/chsrc/discussions/62
+ * @sync https://github.com/RubyMetric/chsrc/wiki/Ruby-MirrorSite
  *
- *   若实现正确:
- *     1. 目前北外最快最稳定
- *     2. 腾讯挺快，个别时候不稳定，但稳定时能达到4.5MB甚至以上
- *     3. tuna 有时快有时慢，不稳定，一般在3MB以下
- *     4. rubychina 有时快有时慢，快时一般在 2MB以下，慢时一般在1MB以下
- *     5. 阿里云最不稳定，经常最慢
- * }
+ * @note 曾经的问题 https://ruby-china.org/topics/43331
  */
 static SourceInfo
 pl_ruby_sources[] = {
   {&Upstream,  "https://rubygems.org"},
-  {&Huawei,    "https://mirrors.huaweicloud.com/repository/rubygems/"},
-  {&Tencent,   "https://mirrors.tencent.com/rubygems/"},
-  {&RubyChina, "https://gems.ruby-china.com/"}
+  {&RubyChina, "https://gems.ruby-china.com/"},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/rubygems/"}
 
-  // {&Bfsu,      "https://mirrors.bfsu.edu.cn/rubygems/"},
   // {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/"},
+  // {&Bfsu,      "https://mirrors.bfsu.edu.cn/rubygems/"},
+
+  // {&Tencent,   "https://mirrors.tencent.com/rubygems/"},
   // {&Ali,       "https://mirrors.aliyun.com/rubygems/"},
+  // {&Huawei,    "https://mirrors.huaweicloud.com/repository/rubygems/"},
 };
 def_sources_n(pl_ruby);
 
@@ -90,9 +85,6 @@ pl_ruby_setsrc (char *option)
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
   chsrc_conclude (&source, chsrc_type);
-
-  // chsrc_note2 ("Ruby的镜像源目前仅有 腾讯软件源，RubyChina 实现正确");
-  // chsrc_note2 ("而其它如Tuna,Bfsu,Ali目前都实现的有问题，请勿使用");
 }
 
 void
@@ -115,7 +107,7 @@ pl_ruby_feat (char *option)
   fi.can_english = false;
   fi.can_user_define = true;
 
-  fi.note = "华为开源镜像站提供的源可能存在问题";
+  fi.note = NULL;
   return fi;
 }
 

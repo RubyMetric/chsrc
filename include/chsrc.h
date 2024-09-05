@@ -7,15 +7,22 @@
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-08-23>
+ * Last modified : <2024-09-04>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
 
 #include "xy.h"
 #include "source.h"
+#include <pthread.h>
 
 #define App_Name "chsrc"
+
+static int chsrc_get_cpucore ();
+
+bool ProgMode_CMD_Measure = false;
+bool ProgMode_CMD_Reset   = false;
+
 
 /* 命令行选项 */
 bool CliOpt_IPv6      = false;
@@ -23,6 +30,7 @@ bool CliOpt_Locally   = false;
 bool CliOpt_InEnglish = false;
 bool CliOpt_DryRun    = false;
 bool CliOpt_NoColor   = false;
+bool CliOpt_Parallel  = false;
 
 /**
  * -local 的含义是启用 *项目级* 换源
@@ -123,7 +131,7 @@ log_check_result (const char *check_what, const char *check_type, bool exist)
  * @translation Done
  */
 void
-log_cmd_result (bool result, int ret_code)
+log_cmd_result (bool result, int exit_status)
 {
   char *run_msg  = NULL;
   char *succ_msg = NULL;
@@ -133,13 +141,13 @@ log_cmd_result (bool result, int ret_code)
     {
       run_msg  = "RUN";
       succ_msg = YesMark " executed successfully";
-      fail_msg = NoMark  " executed unsuccessfully, return code ";
+      fail_msg = NoMark  " executed unsuccessfully, exit status: ";
     }
   else
     {
       run_msg  = "运行";
       succ_msg = YesMark " 命令执行成功";
-      fail_msg = NoMark  " 命令执行失败，返回码 ";
+      fail_msg = NoMark  " 命令执行失败，退出状态: ";
     }
 
   if (result)
@@ -147,7 +155,7 @@ log_cmd_result (bool result, int ret_code)
   else
     {
       char buf[8] = {0};
-      sprintf (buf, "%d", ret_code);
+      sprintf (buf, "%d", exit_status);
       char *log = xy_2strjoin (red (fail_msg), bdred (buf));
       xy_log_brkt (red (App_Name), bdred (run_msg), log);
     }
@@ -162,6 +170,12 @@ is_url (const char *str)
 }
 
 
+
+#define Quiet_When_Exist    0x00
+#define Noisy_When_Exist    0x01
+#define Quiet_When_NonExist 0x00
+#define Noisy_When_NonExist 0x10
+
 /**
  * 检测二进制程序是否存在
  *
@@ -174,49 +188,84 @@ is_url (const char *str)
  * @translation Done
  */
 bool
-query_program_exist (char *check_cmd, char *prog_name)
+query_program_exist (char *check_cmd, char *prog_name, int mode)
 {
   char *which = check_cmd;
 
-  int ret = system(which);
+  int status = system (which);
 
-  // char buf[32] = {0}; sprintf(buf, "错误码: %d", ret);
+  // char buf[32] = {0}; sprintf(buf, "错误码: %d", status);
 
   char *msg = CliOpt_InEnglish ? "command" : "命令";
 
-  if (0 != ret)
+  if (0 != status)
     {
-      // xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
-      log_check_result (prog_name, msg, false);
-      return false;
+      if (mode & Noisy_When_NonExist)
+        {
+          // xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
+          log_check_result (prog_name, msg, false);
+          return false;
+        }
     }
   else
     {
-      log_check_result (prog_name, msg, true);
+      if (mode & Noisy_When_Exist)
+        log_check_result (prog_name, msg, true);
       return true;
     }
 }
 
 
 /**
- * @note 此函数只能对接受 --version 选项的程序有效
+ * @note
+ *  1. 一般只在 Recipe 中使用，显式检测每一个需要用到的 program
+ *  2. 无论存在与否，**均输出**
+ *
  */
 bool
 chsrc_check_program (char *prog_name)
 {
   char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (prog_name, " --version"));
-  return query_program_exist (quiet_cmd, prog_name);
+  return query_program_exist (quiet_cmd, prog_name, Noisy_When_Exist|Noisy_When_NonExist);
+}
+
+/**
+ * @note
+ *  1. 此函数没有强制性，只返回检查结果
+ *  2. 无论存在与否，**均不输出**
+ *  3. 此函数只能对接受 --version 选项的命令行程序有效
+ *
+ */
+bool
+chsrc_check_program_quietly (char *prog_name)
+{
+  char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (prog_name, " --version"));
+  return query_program_exist (quiet_cmd, prog_name, Quiet_When_Exist|Quiet_When_NonExist);
+}
+
+/**
+ * @note 存在时不输出，不存在时才输出
+ *
+ */
+bool
+chsrc_check_program_quietly_when_exist (char *prog_name)
+{
+  char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (prog_name, " --version"));
+  return query_program_exist (quiet_cmd, prog_name, Quiet_When_Exist|Noisy_When_NonExist);
 }
 
 
 /**
- * @note 此函数具有强制性，检测不到就直接退出
+ * @note
+ *  1. 此函数具有强制性，检测不到就直接退出
+ *  2. 检查到存在时不输出，检查到不存在时输出
+ *
  */
 void
 chsrc_ensure_program (char *prog_name)
 {
   char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (prog_name, " --version"));
-  bool exist = query_program_exist (quiet_cmd, prog_name);
+  bool exist = query_program_exist (quiet_cmd, prog_name, Quiet_When_Exist|Noisy_When_NonExist);
   if (exist)
     {
       // OK, nothing should be done
@@ -276,7 +325,7 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
   if (2==size)
     {
       char *msg1 = CliOpt_InEnglish ? " is " : " 是 ";
-      char *msg2 = CliOpt_InEnglish ? " the only mirror site available currently, thanks for their generous support"
+      char *msg2 = CliOpt_InEnglish ? "'s ONLY mirror available currently, thanks for their generous support"
                                     : " 目前唯一可用镜像站，感谢他们的慷慨支持";
       const char *name = CliOpt_InEnglish ? sources[1].mirror->abbr
                                           : sources[1].mirror->name;
@@ -359,11 +408,18 @@ to_human_readable_speed (double speed)
  * 功劳和版权属于原作者，由 @ccmywish 修改为C语言，并做了额外调整
  *
  * @return 返回测得的速度，若出错，返回-1
+ *
+ * 该函数实际原型为 char * (*)(const char*)
  */
-double
-measure_speed (const char *url)
+void *
+measure_speed_for_url (void *url)
 {
-  char *time_sec = "6";
+  char *time_sec = NULL;
+
+  if (CliOpt_Parallel)
+    time_sec = "9";
+  else
+    time_sec = "6";
 
   /* 现在我们切换至跳转后的链接来测速，不再使用下述判断
   if (xy_str_start_with(url, "https://registry.npmmirror"))
@@ -389,27 +445,37 @@ measure_speed (const char *url)
 
   // chsrc_info (xy_2strjoin ("测速命令 ", curl_cmd));
 
-  char *buf = xy_run (curl_cmd, 0, NULL);
+  char *curl_buf = xy_run (curl_cmd, 0, NULL);
   // 如果尾部有换行，删除
-  buf = xy_str_strip (buf);
+  curl_buf = xy_str_strip (curl_buf);
 
+  return curl_buf;
+}
+
+
+/**
+ * @return 返回速度speed
+ */
+double
+parse_and_say_curl_result (char *curl_buf)
+{
   // 分隔两部分数据
-  char *split = strchr (buf, ' ');
+  char *split = strchr (curl_buf, ' ');
   if (split) *split = '\0';
 
-  // puts(buf); puts(split+1);
-  int http_code = atoi (buf);
-  double speed  = atof (split+1);
-  char *speedstr = to_human_readable_speed (speed);
+  // say(curl_buf); say(split+1);
+     int http_code = atoi (curl_buf);
+  double     speed = atof (split+1);
+    char *speedstr = to_human_readable_speed (speed);
 
   if (200!=http_code)
     {
-      char* httpcodestr = yellow (xy_2strjoin ("HTTP码 ", buf));
-      puts (xy_strjoin (3, speedstr, " | ",  httpcodestr));
+      char *http_code_str = yellow (xy_2strjoin ("HTTP码 ", curl_buf));
+      say (xy_strjoin (3, speedstr, " | ",  http_code_str));
     }
   else
     {
-      puts (speedstr);
+      say (speedstr);
     }
   return speed;
 }
@@ -432,15 +498,132 @@ get_max_ele_idx_in_dbl_ary (double *array, int size)
   return maxidx;
 }
 
+
+/**
+ * @param      sources        所有待测源
+ * @param      size           待测源的数量
+ * @param[out] speed_records  速度值记录
+ */
+void
+measure_speed_for_every_source (SourceInfo sources[], int size, double speed_records[])
+{
+    bool get_measured[size]; /* 是否测速了 */
+     int get_measured_n = 0; /* 测速了几个 */
+   char *measure_msgs[size];
+
+  double speed = 0.0;
+
+  pthread_t *threads = xy_malloc0 (sizeof(pthread_t) * size);
+
+  for (int i=0; i<size; i++)
+    {
+      SourceInfo src = sources[i];
+      const char *url = src.mirror->__bigfile_url;
+      if (NULL==url)
+        {
+          if (xy_streql ("upstream", src.mirror->code))
+            {
+              // 上游源不测速，但不置0，因为要避免这种情况: 可能其他镜像站测速都为0，最后反而选择了该 upstream
+              speed = -999;
+            }
+          else
+            {
+              char *msg1 = CliOpt_InEnglish ? "Dev team doesn't offer " : "开发者未提供 ";
+              char *msg2 = CliOpt_InEnglish ? " mirror site's speed measure link, so skip it" : " 镜像站测速链接，跳过该站点";
+              chsrc_warn (xy_strjoin (3, msg1, src.mirror->code, msg2));
+              speed = 0;
+            }
+          speed_records[i] = speed;
+          get_measured[i] = false;
+          measure_msgs[i] = NULL;
+        }
+      else
+        {
+          const char *msg = CliOpt_InEnglish ? src.mirror->abbr : src.mirror->name;
+          measure_msgs[i] = xy_strjoin (3, "  - ", msg, " ... ");
+          printf ("%s", measure_msgs[i]);
+
+          if (CliOpt_Parallel)
+            say (""); /* 并行时直接显示下一测速状态行 */
+          else
+            fflush (stdout);
+
+          char *url_ = xy_strdup (url);
+
+          if (CliOpt_Parallel)
+            {
+              int ret = pthread_create (&threads[i], NULL, measure_speed_for_url, url_);
+              if (ret!=0)
+                {
+                  chsrc_error ("Unable to measure speed\n");
+                  exit (Exit_UserCause);
+                }
+              else
+                {
+                  get_measured[i] = true;
+                  get_measured_n += 1;
+                }
+            }
+          else
+            {
+              char *curl_result = measure_speed_for_url (url_);
+              double speed = parse_and_say_curl_result (curl_result);
+              speed_records[i] = speed;
+            }
+        }
+    }
+
+
+  if (CliOpt_Parallel)
+    {
+      /* 汇总 */
+      char **curl_results = xy_malloc0 (sizeof(char *) * size);
+      for (int i=0; i<size; i++)
+        {
+          if (get_measured[i]==true)
+            pthread_join (threads[i], (void *)&curl_results[i]);
+        }
+
+      for (int i=0; i<get_measured_n; i++)
+        printf("\033[A\033[2K");
+
+      for (int i=0; i<size; i++)
+        {
+          if (get_measured[i]==true)
+            {
+              printf ("%s", measure_msgs[i]);
+              double speed = parse_and_say_curl_result (curl_results[i]);
+              speed_records[i] = speed;
+            }
+        }
+      /* 汇总结束 */
+    } /* End of if Parallel*/
+}
+
+
+
 /**
  * 自动测速选择镜像站和源
  *
  * @translation Done
  */
-#define auto_select(s) auto_select_(s##_sources, s##_sources_n, (char*)#s+3)
+#define auto_select_mirror(s) select_mirror_autoly(s##_sources, s##_sources_n, (char*)#s+3)
 int
-auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
+select_mirror_autoly (SourceInfo *sources, size_t size, const char *target_name)
 {
+  {
+  char *msg = NULL;
+
+  if (CliOpt_Parallel)
+    msg = CliOpt_InEnglish ? "Measuring speed in parallel. We recommend you use the default sequential measure for more referential results"
+                           : "即将并行测速，建议使用默认的顺序测速以获得更具参考意义的结果";
+  else
+    msg = CliOpt_InEnglish ? "Measuring speed in sequence" : "顺序测速中";
+
+  xy_log_brkt (App_Name, bdpurple (CliOpt_InEnglish ? "MEASURE" : "测速"), msg);
+  say ("");
+  }
+
   if (0==size || 1==size)
     {
       char *msg1 = CliOpt_InEnglish ? "Currently " : "当前 ";
@@ -457,56 +640,40 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
   bool only_one = false;
   if (2==size) only_one = true;
 
-  char *check_curl = xy_str_to_quietcmd ("curl --version");
-  bool  exist_curl = query_program_exist (check_curl, "curl");
+  /** --------------------------------------------- */
+  bool exist_curl = chsrc_check_program_quietly_when_exist ("curl");
   if (!exist_curl)
     {
       char *msg = CliOpt_InEnglish ? "No curl, unable to measure speed" : "没有curl命令，无法测速";
       chsrc_error (msg);
       exit (Exit_UserCause);
     }
+  /** --------------------------------------------- */
 
-  double speeds[size];
-  double speed = 0.0;
+  /* 总测速记录值 */
+  double speed_records[size];
+  measure_speed_for_every_source (sources, size, speed_records);
+  say ("");
+
+  /* DEBUG */
+  /*
   for (int i=0; i<size; i++)
     {
-      SourceInfo src = sources[i];
-      const char* url = src.mirror->__bigfile_url;
-      if (NULL==url)
-        {
-          if (xy_streql ("upstream", src.mirror->code))
-            {
-              continue; /* 上游默认源不测速 */
-            }
-          else
-            {
-              char *msg1 = CliOpt_InEnglish ? "Dev team doesn't offer " : "开发者未提供 ";
-              char *msg2 = CliOpt_InEnglish ? " mirror site's speed measurement link,so skip it" : " 镜像站测速链接，跳过该站点";
-              chsrc_warn (xy_strjoin (3, msg1, src.mirror->code, msg2));
-              speed = 0;
-            }
-        }
-      else
-        {
-          char *msg = CliOpt_InEnglish ? "Measure speed> " : "测速 ";
-          printf ("%s", xy_strjoin (3, msg, src.mirror->site , " ... "));
-
-          fflush (stdout);
-          speed = measure_speed (url);
-        }
-      speeds[i] = speed;
+      printf ("speed_records[%d] = %f\n", i, speed_records[i]);
     }
+  */
 
-  int fast_idx = get_max_ele_idx_in_dbl_ary (speeds, size);
+  int fast_idx = get_max_ele_idx_in_dbl_ary (speed_records, size);
 
   if (only_one)
     {
-      char *is = CliOpt_InEnglish  ? " is " : " 是 ";
-      char *msg = CliOpt_InEnglish ? "the ONLY mirror available currently, thanks for their generous support"
-                                   : " 目前唯一可用镜像站，感谢他们的慷慨支持";
+      char *msg1 = CliOpt_InEnglish ? "NOTICE  mirror site: " : "镜像站提示: ";
+      char   *is = CliOpt_InEnglish ? " is " : " 是 ";
+      char *msg2 = CliOpt_InEnglish ? "'s ONLY mirror available currently, thanks for their generous support"
+                                    : " 目前唯一可用镜像站，感谢他们的慷慨支持";
       const char *name = CliOpt_InEnglish ? sources[fast_idx].mirror->abbr
                                           : sources[fast_idx].mirror->name;
-      chsrc_succ (xy_strjoin (4, name, is, target_name, msg));
+      say (xy_strjoin (5, msg1, bdgreen(name), green(is), green(target_name), green(msg2)));
     }
   else
     {
@@ -516,13 +683,19 @@ auto_select_ (SourceInfo *sources, size_t size, const char *target_name)
       say (xy_2strjoin (msg, green(name)));
     }
 
+  // https://github.com/RubyMetric/chsrc/pull/71
+  if (ProgMode_CMD_Measure)
+    {
+      char *msg = CliOpt_InEnglish ? "URL of above source: " : "镜像源地址: ";
+      say (xy_2strjoin (msg, green(sources[fast_idx].url)));
+    }
 
   return fast_idx;
 }
 
 
 #define use_specific_mirror_or_auto_select(input, s) \
-  (NULL!=(input)) ? find_mirror(s, input) : auto_select(s)
+  (NULL!=(input)) ? find_mirror(s, input) : auto_select_mirror(s)
 
 
 
@@ -968,25 +1141,46 @@ chsrc_backup (const char *path)
 }
 
 
+/**
+ * 检查过程中全程保持安静
+ */
 static char *
 chsrc_get_cpuarch ()
 {
   char *ret;
+
+#if XY_On_Windows
+  SYSTEM_INFO info;
+  GetSystemInfo (&info);
+  WORD num = info.wProcessorArchitecture;
+  switch (num)
+    {
+      case PROCESSOR_ARCHITECTURE_AMD64:
+        ret = "x86_64"; break;
+      case PROCESSOR_ARCHITECTURE_ARM:
+        ret = "arm";    break;
+      case PROCESSOR_ARCHITECTURE_INTEL:
+        ret = "x86";    break;
+      case PROCESSOR_ARCHITECTURE_IA64:
+        ret = "IA-64";  break;
+      case PROCESSOR_ARCHITECTURE_UNKNOWN:
+      default:
+        char *msg = CliOpt_InEnglish ? "Unable to detect CPU type" : "无法检测到CPU类型";
+        chsrc_error (msg);
+        exit (Exit_UserCause);
+    }
+#else
+
   bool exist;
 
-  if (xy_on_windows)
-    {
-      xy_unimplement;
-    }
-
-  exist = chsrc_check_program ("arch");
+  exist = chsrc_check_program_quietly ("arch");
   if (exist)
     {
       ret = xy_run ("arch", 0, NULL);
       return ret;
     }
 
-  exist = chsrc_check_program ("uname");
+  exist = chsrc_check_program_quietly ("uname");
   if (exist)
     {
       ret = xy_run ("uname -m", 0, NULL);
@@ -998,5 +1192,24 @@ chsrc_get_cpuarch ()
       chsrc_error (msg);
       exit (Exit_UserCause);
     }
+#endif
 }
 
+
+static int
+chsrc_get_cpucore ()
+{
+  int cores = 2;
+
+#if XY_On_Windows
+  SYSTEM_INFO info;
+  GetSystemInfo (&info);
+  DWORD num = info.dwNumberOfProcessors;
+  cores = (int)num;
+#else
+  long num = sysconf(_SC_NPROCESSORS_ONLN);
+  cores = (int)num;
+#endif
+
+  return cores;
+}

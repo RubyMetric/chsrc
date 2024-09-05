@@ -6,10 +6,10 @@
 .\" Contributors  :  Nul None  <nul@none.org>
 .\"               |
 .\" Created On    : <2024-08-21>
-.\" Last Modified : <2024-08-23>
+.\" Last Modified : <2024-09-04>
 .\" --------------------------------------------------------------
 
-.TH  chsrc  1  "2024-08-23"  "v0.1.7.4"  "RubyMetric chsrc"
+.TH  chsrc  1  "2024-09-04"  "v0.1.8.1dev2"  "RubyMetric chsrc"
 
 .SH NAME
 chsrc - Change Source for every software on every platform from the command line
@@ -75,11 +75,14 @@ chsrc - Change Source for every software on every platform from the command line
 \fB-dry\fR
 Dry Run，模拟换源过程，命令仅打印并不运行
 .TP
-\fB-ipv6\fR
-使用IPv6测速
+\fB-para(llel)\fR
+并行测速 (默认的顺序测速更有参考意义)
 .TP
 \fB-local\fR
 仅对本项目而非全局换源 (通过ls \fI<target>\fR查看支持情况)
+.TP
+\fB-ipv6\fR
+使用IPv6测速
 .TP
 \fB-en(glish)\fR
 使用英文输出

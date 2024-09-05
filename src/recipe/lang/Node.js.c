@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
+ * Contributors  :  Mr. Will  <mr.will.com@outlook.com>
  * Created On    : <2023-08-30>
  * Last Modified : <2024-08-28>
  * ------------------------------------------------------------*/
@@ -33,14 +33,9 @@ def_sources_n(pl_nodejs);
 void
 pl_nodejs_check_cmd (bool *npm_exist, bool *yarn_exist, bool *pnpm_exist)
 {
-  char *check_cmd = xy_str_to_quietcmd ("npm -v");
-  *npm_exist = query_program_exist (check_cmd, "npm");
-
-  check_cmd = xy_str_to_quietcmd ("yarn -v");
-  *yarn_exist = query_program_exist (check_cmd, "yarn");
-
-  check_cmd = xy_str_to_quietcmd ("pnpm -v");
-  *pnpm_exist = query_program_exist (check_cmd, "pnpm");
+  *npm_exist  = chsrc_check_program ("npm");
+  *yarn_exist = chsrc_check_program ("yarn");
+  *pnpm_exist = chsrc_check_program ("yarn");
 
   if (!*npm_exist && !*yarn_exist && !*pnpm_exist)
     {

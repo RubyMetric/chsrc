@@ -9,15 +9,17 @@
  *                 |   Rui Chen    <rui@chenrui.dev>
  *                 | Shengwei Chen <414685209@qq.com>
  *                 |   BlockLune   <blocklune@gmail.com>
+ *                 |   Mr. Will    <mr.will.com@outlook.com>
+ *                 |   Terrasse    <terrasse@qq.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-08-28>
+ * Last Modified   : <2024-09-04>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.1.8.1"
-#define Chsrc_Release_Date   "2024/08/28"
+#define Chsrc_Version        "0.1.8.1dev2"
+#define Chsrc_Release_Date   "2024/09/04"
 #define Chsrc_Banner_Version "v" Chsrc_Version "-" Chsrc_Release_Date
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
@@ -122,11 +124,13 @@ Chsrc_Usage[] = {
 
   "选项:",
   "-dry                      Dry Run，模拟换源过程，命令仅打印并不运行",
-  "-ipv6                     使用IPv6测速",
+  "-para(llel)               并行测速 (默认的顺序测速更有参考意义)",
   "-local                    仅对本项目而非全局换源 (通过ls <target>查看支持情况)",
+  "-ipv6                     使用IPv6测速",
   "-en(glish)                使用英文输出",
   "-no-color                 无颜色输出\n",
 
+  "镜像站状态: <https://github.com/RubyMetric/chsrc/wiki>",
   "维护: <" Chsrc_Maintain_URL ">"
 };
 
@@ -154,12 +158,14 @@ Chsrc_Usage_English[] = {
 
   "Options:",
   "-dry                      Dry Run. Simulate the source changing process, command only prints, not run",
-  "-ipv6                     Speed measurement using IPv6",
+  "-para(llel)               Measure velocity in parallel",
   "-local                    Change source only for this project rather than globally (Via `ls <target>`)",
+  "-ipv6                     Speed measurement using IPv6",
   "-en(glish)                Output in English",
   "-no-color                 Output without color\n",
 
-  "Maintain: <" Chsrc_Maintain_URL ">"
+  "Mirror status: <https://github.com/RubyMetric/chsrc/wiki>",
+  "Maintain:      <" Chsrc_Maintain_URL ">"
 };
 
 
@@ -394,10 +400,13 @@ void
 cli_print_issues ()
 {
   say (
-  "chsrc issues: Gitee and GitHub accept issues both sides\n\n"
+  "We accept issues both sides on Gitee and Github\n\n"
   "- https://gitee.com/RubyMetric/chsrc/issues\n"
   "- https://github.com/RubyMetric/chsrc/issues\n"
   );
+
+  say ("Latest Mirror site status wiki:\n\n"
+       "- https://github.com/RubyMetric/chsrc/wiki\n");
 
   /*
   if (chsrc_check_program ("gh"))
@@ -537,7 +546,7 @@ get_target (const char *input, TargetOp code, char *option)
     }
   else if (TargetOp_Measure_Source==code)
     {
-      auto_select_ (target->sources, target->sources_n, input);
+      select_mirror_autoly (target->sources, target->sources_n, input);
       return true;
     }
   return true;
@@ -595,6 +604,12 @@ main (int argc, char const *argv[])
           else if (xy_streql (argv[i], "-dry"))
             {
               CliOpt_DryRun = true;
+            }
+          else if (xy_streql (argv[i], "-para")
+                    || xy_streql (argv[i], "-parallel")
+                    || xy_streql (argv[i], "-paralel"))
+            {
+              CliOpt_Parallel = true;
             }
           else if (xy_streql (argv[i], "-no-color") || xy_streql (argv[i], "-no-colour"))
             {
@@ -716,6 +731,7 @@ main (int argc, char const *argv[])
           chsrc_error (msg);
           return 1;
         }
+      ProgMode_CMD_Measure = true;
       target = argv[cli_arg_Target_pos];
       matched = get_target (target, TargetOp_Measure_Source, NULL);
       if (!matched) goto not_matched;
@@ -777,6 +793,7 @@ main (int argc, char const *argv[])
           return 1;
         }
 
+      ProgMode_CMD_Reset = true;
       target = argv[cli_arg_Target_pos];
       matched = get_target (target, TargetOp_Reset_Source, NULL);
       if (!matched) goto not_matched;
