@@ -65,7 +65,7 @@ wr_homebrew_setsrc (char *option)
   char *bashrc = "~/.bashrc";
   if (xy_file_exist (bashrc))
     {
-      chsrc_backup ("~/.bashrc");
+      chsrc_backup (bashrc);
       chsrc_append_to_file (splitter,        bashrc);
       chsrc_append_to_file (api_domain,      bashrc);
       chsrc_append_to_file (bottle_domain,   bashrc);
@@ -73,7 +73,23 @@ wr_homebrew_setsrc (char *option)
       chsrc_append_to_file (core_git_remote, bashrc);
     }
 
-  chsrc_conclude (&source, ChsrcTypeAuto);
+  char *fishrc = "~/.config/fish/config.fish";
+  if (xy_file_exist (fishrc))
+    {
+      char *api_domain_fish = xy_strjoin(3, "set -x HOMEBREW_API_DOMAIN \"",           xy_2strjoin(source.url, "homebrew-bottles/api"), "\"");
+      char *bottle_domain_fish = xy_strjoin(3, "set -x HOMEBREW_BOTTLE_DOMAIN \"",     xy_2strjoin(source.url, "homebrew-bottles"), "\"");
+      char *brew_git_remote_fish = xy_strjoin(3, "set -x HOMEBREW_BREW_GIT_REMOTE \"", xy_2strjoin(source.url, "git/homebrew/brew.git"), "\"");
+      char *core_git_remote_fish = xy_strjoin(3, "set -x HOMEBREW_CORE_GIT_REMOTE \"", xy_2strjoin(source.url, "git/homebrew/homebrew-core.git"), "\"");
+
+      chsrc_backup (fishrc);
+      chsrc_append_to_file (splitter,             fishrc);
+      chsrc_append_to_file (api_domain_fish,      fishrc);
+      chsrc_append_to_file (bottle_domain_fish,   fishrc);
+      chsrc_append_to_file (brew_git_remote_fish, fishrc);
+      chsrc_append_to_file (core_git_remote_fish, fishrc);
+    }
+
+  chsrc_conclude(&source, ChsrcTypeAuto);
   chsrc_note2 ("请您重启终端使Homebrew环境变量生效");
 }
 
