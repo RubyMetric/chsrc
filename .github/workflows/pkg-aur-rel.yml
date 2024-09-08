@@ -1,7 +1,7 @@
-# This workflow will publish the `chsrc` package to the AUR
+# This workflow will publish the `chsrc` and the `chsrc-bin` packages to the AUR
 #   when there is a new `released` event.
 # Note: only normal version tags like `v1.2.3` will be published.
-name: Publish AUR Package (chsrc)
+name: Publish AUR Package (chsrc, chsrc-bin)
 on:
   release:
     types: [ released ]
@@ -27,11 +27,29 @@ jobs:
         fi
     - name: Fetch PKGBUILD
       run: |
+        wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD\?h\=chsrc-bin -O ./PKGBUILD_bin
+    - name: Update PKGBUILD
+      run: |
+        sed -i "s/pkgver=.*/pkgver=$version/" PKGBUILD_bin
+    - name: Publish chsrc-bin to AUR
+      if: env.valid == '1'
+      uses: KSXGitHub/github-actions-deploy-aur@v3.0.1
+      with:
+        pkgname: chsrc-bin
+        pkgbuild: ./PKGBUILD_bin
+        updpkgsums: true
+        test: true # Check that PKGBUILD could be built, and update pkgver
+        commit_username: ${{ secrets.AUR_USERNAME }}
+        commit_email: ${{ secrets.AUR_EMAIL }}
+        ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY__ }}
+        commit_message: github-action-auto-publish
+    - name: Fetch PKGBUILD
+      run: |
         wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD\?h\=chsrc -O ./PKGBUILD
     - name: Update PKGBUILD
       run: |
         sed -i "s/pkgver=.*/pkgver=$version/" PKGBUILD
-    - name: Publish to AUR
+    - name: Publish chsrc to AUR
       if: env.valid == '1'
       uses: KSXGitHub/github-actions-deploy-aur@v3.0.1
       with:
@@ -41,5 +59,5 @@ jobs:
         test: true # Check that PKGBUILD could be built, and update pkgver
         commit_username: ${{ secrets.AUR_USERNAME }}
         commit_email: ${{ secrets.AUR_EMAIL }}
-        ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+        ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY__ }}
         commit_message: github-action-auto-publish
