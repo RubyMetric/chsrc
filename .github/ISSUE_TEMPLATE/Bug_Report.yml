@@ -13,7 +13,7 @@ body:
     id: what-did-you-do
     attributes:
       label: 你操作了什么？
-      description: 告诉我们，在问题出现之前你使用 chsrc 做了什么?
+      # description: 告诉我们，在问题出现之前你使用 chsrc 做了什么?
       placeholder: 我运行了 chsrc set <target>...
     validations:
       required: true
@@ -22,7 +22,7 @@ body:
     id: what-happened
     attributes:
       label: 发生了什么？
-      description: 告诉我们，发生了什么你认为不该出现的事？屏幕截图或视频记录都很有帮助
+      # description: 告诉我们，发生了什么你认为不该出现的事？屏幕截图或视频记录都很有帮助
       placeholder: 换源没有成功...
     validations:
       required: true
@@ -31,16 +31,16 @@ body:
     id: what-should-happen
     attributes:
       label: 本应该怎么样？
-      description: 告诉我们，正常的或你期望看到的 运行结果和状态
+      # description: 告诉我们，正常的或你期望看到的 运行结果和状态
       placeholder: 我希望 chsrc 成功帮我换源...
     validations:
       required: true
 
-  - type: textarea
+  - type: input
     id: version
     attributes:
-      label: chsrc version
-      description: 你正在使用 chsrc 哪个版本？
+      label: chsrc 版本
+      # description: 你正在使用 chsrc 哪个版本？
       placeholder: 请使用 chsrc -h 查看第一行*带有日期*的精确版本
     validations:
       required: true
@@ -65,8 +65,8 @@ body:
     id: os-version
     attributes:
       label: OS 版本 / OS 发行版
-      description: "请告诉我们具体的OS版本或发行版"
-      placeholder: "Windows 11, macOS, Ubuntu Linux 24.04, Arch Linux... 等等"
+      # description: ""
+      placeholder: "请告诉我们具体的OS版本或发行版，如 Windows 11, Ubuntu Linux 24.04... 等等"
     validations:
       required: false
 
