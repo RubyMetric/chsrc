@@ -1,0 +1,21 @@
+name: 🎉隔壁新开了个镜像站！
+description: 告诉我们哪里开了个新镜像站！
+title: "[New Mirror] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你的分享！这将使你与更广大的用户得到更多可选的服务！同时也让镜像站开发维护人员更加有使命感！
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 描述新的镜像站
+      description: |
+        1. 请告诉我们该镜像站的主体URL
+        2. 你是否已经测试过该镜像站的可用性？
+        3. 它大概提供哪些源？
+        4. 你想要我们为你添加该镜像站的具体哪个源？
+    validations:
+      required: true
