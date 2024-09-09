@@ -1,0 +1,32 @@
+name: 新的换源目标(target) 请求与建议
+description: 想要对尚未支持的的软件进行换源？
+title: "[New Target]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请先回答这些问题。
+  - type: textarea
+    id: description
+    attributes:
+      label: 描述新的换源目标
+      placeholder: 它是编程语言、操作系统还是一个普通软件？
+    validations:
+      required: true
+
+  - type: textarea
+    id: reference-solution
+    attributes:
+      label: 请尽可能提供可参考的换源方法
+      placeholder: 往往提供该源的镜像站会附带换源方法，可以提供给我们参考
+    validations:
+      required: true
+
+  - type: textarea
+    id: mirrors
+    attributes:
+      label: 请尽可能提供已有镜像站
+      placeholder: 当你提出该请求的时候，你可能已有心仪的镜像站，请告诉我们以避免重复查找劳动
+    validations:
+      required: true
