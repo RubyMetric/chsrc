@@ -1,0 +1,19 @@
+name: 新的镜像站或换源URL
+description: 告诉我们哪里开了个新镜像站！为大家分享可用的源！
+title: "[New Source]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你的分享！这将使你与更广大的用户得到更多可选的服务！同时也让镜像站开发维护人员更加有使命感！
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 描述新的镜像站或源
+      placeholder: |
+        1. 如果是新镜像站; 请告诉我们镜像站的主体URL，以及它大概提供什么源？
+        2. 如果是新源; 请告诉我们镜像站的主体URL
+    validations:
+      required: true
