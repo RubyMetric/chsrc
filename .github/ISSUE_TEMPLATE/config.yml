@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: ❤️ 感谢 chsrc
+    url: https://github.com/RubyMetric/chsrc/discussions/categories/%E6%84%9F%E8%B0%A2-chsrc
+    about: chsrc 是否帮助到了你？
+  - name: 🚀 赞赏支持 chsrc
+    url: https://github.com/ccmywish/support-my-oss-work
+    about: 通过经济支持帮助作者更好的开发和维护 chsrc
