@@ -1,12 +1,13 @@
-name: 新的换源目标(target) 请求与建议
-description: 想要对尚未支持的的软件进行换源？
-title: "[New Target]: "
+name: 我想要对 target 换源!
+description: 想要对尚未支持的 target 进行换源？
+title: "[New Target] "
 labels: []
 body:
   - type: markdown
     attributes:
       value: |
-        请先回答这些问题。
+        请先回答这些问题
+
   - type: textarea
     id: description
     attributes:

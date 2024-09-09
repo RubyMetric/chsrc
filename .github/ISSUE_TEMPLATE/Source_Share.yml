@@ -1,6 +1,6 @@
-name: 新的镜像站或换源URL
+name: 隔壁新开了个镜像站！ or 我找到了新的可用源！
 description: 告诉我们哪里开了个新镜像站！为大家分享可用的源！
-title: "[New Source]: "
+title: "[New Source] "
 labels: []
 body:
   - type: markdown
