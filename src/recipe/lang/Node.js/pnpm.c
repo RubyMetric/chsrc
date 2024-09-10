@@ -27,7 +27,7 @@ def_sources_n(pl_nodejs_pnpm);
 void
 pl_nodejs_pnpm_getsrc (char *option)
 {
-  chsrc_run ("pnpm config get registry", RunOpt_Default);
+  chsrc_run ("pnpm config get registry", RunOpt_No_Last_New_Line);
 }
 
 
@@ -49,7 +49,7 @@ pl_nodejs_pnpm_setsrc (char *option)
   else
     cmd = xy_2strjoin ("pnpm config -g set registry ", source.url);
 
-  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
   chsrc_conclude (&source, ChsrcTypeAuto);
 }

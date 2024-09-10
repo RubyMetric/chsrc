@@ -40,9 +40,9 @@ pl_nodejs_yarn_getsrc (char *option)
   if (pl_nodejs_yarn_get_yarn_version () >= 2)
     // https://github.com/RubyMetric/chsrc/issues/53
     // 从 Yarn V2 开始，使用新的配置名
-    chsrc_run ("yarn config get npmRegistryServer", RunOpt_Default);
+    chsrc_run ("yarn config get npmRegistryServer", RunOpt_No_Last_New_Line);
   else
-    chsrc_run ("yarn config get registry", RunOpt_Default);
+    chsrc_run ("yarn config get registry", RunOpt_No_Last_New_Line);
 }
 
 
@@ -65,13 +65,13 @@ pl_nodejs_yarn_setsrc (char *option)
       else
         cmd = xy_2strjoin ("yarn config set npmRegistryServer --home ", source.url);
 
-      chsrc_run (cmd, RunOpt_Default);
+      chsrc_run (cmd, RunOpt_No_Last_New_Line);
     }
   else
     {
       // 不再阻止换源命令输出到终端，即不再调用 xy_str_to_quietcmd()
       cmd = xy_2strjoin ("yarn config set registry ", source.url);
-      chsrc_run (cmd, RunOpt_Default);
+      chsrc_run (cmd, RunOpt_No_Last_New_Line);
     }
 
   chsrc_conclude (&source, ChsrcTypeAuto);

@@ -27,7 +27,7 @@ def_sources_n(pl_nodejs_npm);
 void
 pl_nodejs_npm_getsrc (char *option)
 {
-  chsrc_run ("npm config get registry", RunOpt_Default);
+  chsrc_run ("npm config get registry", RunOpt_No_Last_New_Line);
 }
 
 
@@ -48,7 +48,7 @@ pl_nodejs_npm_setsrc (char *option)
   else
     cmd = xy_2strjoin ("npm config set registry ", source.url);
 
-  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
   chsrc_conclude (&source, ChsrcTypeAuto);
 }

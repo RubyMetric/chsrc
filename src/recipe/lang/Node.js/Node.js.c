@@ -51,14 +51,25 @@ pl_nodejs_getsrc (char *option)
   bool npm_exist, yarn_exist, pnpm_exist;
   pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
+  split_between_source_changing_process;
+
   if (npm_exist)
-    pl_nodejs_npm_getsrc (option);
+    {
+      pl_nodejs_npm_getsrc (option);
+      say ("");
+    }
 
   if (yarn_exist)
-    pl_nodejs_yarn_getsrc (option);
+    {
+      pl_nodejs_yarn_getsrc (option);
+      say ("");
+    }
 
   if (pnpm_exist)
-    pl_nodejs_pnpm_getsrc (option);
+    {
+      pl_nodejs_pnpm_getsrc (option);
+      say ("");
+    }
 }
 
 
@@ -72,15 +83,25 @@ pl_nodejs_setsrc (char *option)
   pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
   // chsrc_yield_source_and_confirm (pl_nodejs);
+  split_between_source_changing_process;
 
   if (npm_exist)
-    pl_nodejs_npm_setsrc (option);
+    {
+      pl_nodejs_npm_setsrc (option);
+      say ("");
+    }
 
   if (yarn_exist)
-    pl_nodejs_yarn_setsrc (option);
+    {
+      pl_nodejs_yarn_setsrc (option);
+      say ("");
+    }
 
   if (pnpm_exist)
-    pl_nodejs_pnpm_setsrc (option);
+    {
+      pl_nodejs_pnpm_setsrc (option);
+      say ("");
+    }
 
   // chsrc_conclude (&source, ChsrcTypeAuto);
 }
@@ -107,7 +128,7 @@ pl_nodejs_feat (char *option)
   fi.can_get = true;
   fi.can_reset = true;
 
-  fi.stcan_locally = CanSemi;
+  fi.stcan_locally = CanFully;
   fi.locally = "Support npm (chsrc v0.1.7)\nSupport yarn v2 (chsrc v0.1.8.1)\nSupport pnpm (chsrc v0.1.8.2)";
   fi.can_english = true;
   fi.can_user_define = true;
