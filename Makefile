@@ -4,7 +4,7 @@
 # Build File    : Makefile
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
 # Created On    : <2023-08-28>
-# Last Modified : <2024-09-04>
+# Last Modified : <2024-09-10>
 # ---------------------------------------------------------------
 
 CFLAGS = -Iinclude # -Wall
@@ -26,7 +26,7 @@ CI_Build_Name = chsrc
 #=======================
 
 all:
-	@$(CC) src/chsrc.c $(CFLAGS) -o $(Target)
+	@$(CC) src/chsrc-main.c $(CFLAGS) -o $(Target)
 	@echo; echo Compile done using \'$(CC)\' $(CFLAGS)
 
 CI: all

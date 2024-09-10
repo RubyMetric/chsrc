@@ -24,7 +24,7 @@
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
-#include "chsrc.h"
+#include "chsrc-framework.h"
 
 #include "recipe/lang/Ruby.c"
 #include "recipe/lang/Python.c"
