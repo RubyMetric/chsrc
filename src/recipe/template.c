@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2024-08-09>
- * Last Modified : <2024-08-18>
+ * Last Modified : <2024-09-10>
  * -------------------------------------------------------------
  * 本文件作为一个通用模板：
  *
@@ -15,6 +15,8 @@
  * <category> 为该换源目标的类别，仅有3类: pl,   os, wr
  *            分别对应3个子目录:         lang, os, ware
  * ------------------------------------------------------------*/
+
+
 
 /* 模版文件从下行正式开始 */
 /** ------------------------------------------------------------
@@ -38,8 +40,8 @@ RubyMetric = {"rbmt",                   // chsrc set <target> rbmt
               "https://rubymetirc.com/target/aws/aws-sdk-go/@v/v1.45.2.zip"};
 
 /**
- * @time 2024-08-09 更新
- * @note 该target的各个源地址，该例数据为虚拟填充
+ * @update 2024-08-09
+ * @note   该target的各个源地址，该例数据为虚拟填充
  */
 static SourceInfo
 <category>_<target>_sources[] = {
@@ -66,7 +68,7 @@ void
 
 /**
  * @required 必需
- * @ref      写明换源实现的参考地址
+ * @consult  写明换源实现的参考地址
  *
  * 用于 chsrc set <target>
  */
@@ -92,7 +94,7 @@ void
 <category>_<target>_resetsrc (char *option)
 {
   // 往往通过下述方式统一在 setsrc() 中实现
-  // <category>_<name>_setsrc (ChsrcTypeReset);
+  // <category>_<target>_setsrc (ChsrcTypeReset);
 }
 
 
