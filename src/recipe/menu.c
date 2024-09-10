@@ -13,7 +13,8 @@
 static const char
 *pl_ruby  [] = {"gem",   "ruby",    "rubygem", "rb", "rubygems", "bundler",  NULL, t(&pl_ruby_target)},
 *pl_python[] = {"pip",   "python",  "pypi",    "py", "poetry",   "pdm",      NULL, t(&pl_python_target)},
-*pl_nodejs[] = {"npm",   "node",    "nodejs",  "js", "yarn",                 NULL, t(&pl_nodejs_target)},
+*pl_nodejs[] = {"npm",   "node",    "nodejs",  "js",                         NULL, t(&pl_nodejs_target)},
+*pl_nodejs_yarn[] = {"yarn", NULL, t(&pl_nodejs_yarn_target)},
 *pl_nodejs_pnpm[] = {"pnpm", NULL, t(&pl_nodejs_pnpm_target)},
 *pl_perl  [] = {"perl",  "cpan",                         NULL,  t(&pl_perl_target)},
 *pl_php   [] = {"php",   "composer",                     NULL,  t(&pl_php_target)},
@@ -31,7 +32,7 @@ static const char
 **pl_packagers[] =
 {
   pl_ruby,    pl_python,
-  pl_nodejs,  pl_nodejs_pnpm,
+  pl_nodejs,  pl_nodejs_pnpm, pl_nodejs_yarn,
   pl_perl,    pl_php,      pl_lua,
   pl_rust,    pl_go,       /*pl_nuget,*/    pl_java,    pl_clojure,  pl_dart,
   pl_haskell, pl_ocaml,
