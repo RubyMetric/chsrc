@@ -8,12 +8,6 @@
  * Last Modified  : <2024-09-10>
  * ------------------------------------------------------------*/
 
-static MirrorSite
-NpmMirror = {"npmmirror",    "npmmirror",    "npmmirror (阿里云赞助)",    "https://npmmirror.com/",
-              // 注意，这个是跳转后的地址，不确定未来会不会改变
-              "https://cdn.npmmirror.com/packages/%40tensorflow/tfjs/4.10.0/tfjs-4.10.0.tgz"}; // 29MB
-
-
 /**
  * @time 2024-04-18 更新
  * @note {
@@ -40,13 +34,17 @@ pl_nodejs_check_cmd (bool *npm_exist, bool *yarn_exist, bool *pnpm_exist)
 
   if (!*npm_exist && !*yarn_exist && !*pnpm_exist)
     {
-      chsrc_error ("未找到 npm 或 yarn 或 pnpm 命令，请检查是否存在其一");
+      char *msg = CliOpt_InEnglish ? "No npm, yarn or pnpm command found, check if at least one is present"
+                                   : "未找到 npm 或 yarn 或 pnpm 命令，请检查是否存在其一";
+      chsrc_error (msg);
       exit (Exit_UserCause);
     }
 }
 
 
-
+/**
+ * chsrc get nodejs
+ */
 void
 pl_nodejs_getsrc (char *option)
 {
@@ -54,18 +52,15 @@ pl_nodejs_getsrc (char *option)
   pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
   if (npm_exist)
-    {
-      // TODO
-    }
+    pl_nodejs_npm_getsrc (option);
+
   if (yarn_exist)
-    {
-      // TODO
-    }
+    pl_nodejs_yarn_getsrc (option);
+
   if (pnpm_exist)
-    {
-      // TODO
-    }
+    pl_nodejs_pnpm_getsrc (option);
 }
+
 
 /**
  * chsrc set nodejs
@@ -76,27 +71,34 @@ pl_nodejs_setsrc (char *option)
   bool npm_exist, yarn_exist, pnpm_exist;
   pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
-  chsrc_yield_source_and_confirm (pl_nodejs);
+  // chsrc_yield_source_and_confirm (pl_nodejs);
 
   if (npm_exist)
-    {
-      // TODO
-    }
+    pl_nodejs_npm_setsrc (option);
 
   if (yarn_exist)
-    {
-      // TODO
-    }
+    pl_nodejs_yarn_setsrc (option);
 
   if (pnpm_exist)
-    {
-      // TODO
-    }
+    pl_nodejs_pnpm_setsrc (option);
 
-  chsrc_conclude (&source, ChsrcTypeAuto);
+  // chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 
+/**
+ * chsrc reset nodejs
+ */
+void
+pl_nodejs_resetsrc (char *option)
+{
+  pl_nodejs_setsrc (ChsrcTypeReset);
+}
+
+
+/**
+ * chsrc ls nodejs
+ */
 FeatInfo
 pl_nodejs_feat (char *option)
 {
@@ -105,12 +107,12 @@ pl_nodejs_feat (char *option)
   fi.can_get = true;
   fi.can_reset = true;
 
-  fi.stcan_locally = CanFully;
-  fi.locally = "支持 npm (From v0.1.7); 支持 yarn v2 (chsrc v0.1.8.1); 支持 pnpm (chsrc v0.1.8.2)";
-  fi.can_english = false;
+  fi.stcan_locally = CanSemi;
+  fi.locally = "Support npm (chsrc v0.1.7)\nSupport yarn v2 (chsrc v0.1.8.1)\nSupport pnpm (chsrc v0.1.8.2)";
+  fi.can_english = true;
   fi.can_user_define = true;
 
   return fi;
 }
 
-def_target_gsf (pl_nodejs);
+def_target_gsrf (pl_nodejs);

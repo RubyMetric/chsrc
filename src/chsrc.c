@@ -28,10 +28,13 @@
 
 #include "recipe/lang/Ruby.c"
 #include "recipe/lang/Python.c"
-#include "recipe/lang/Node.js/Node.js.c"
+
+#include "recipe/lang/Node.js/common.h"
   #include "recipe/lang/Node.js/npm.c"
   #include "recipe/lang/Node.js/pnpm.c"
   #include "recipe/lang/Node.js/Yarn.c"
+#include "recipe/lang/Node.js/Node.js.c"
+
 #include "recipe/lang/Perl.c"
 #include "recipe/lang/PHP.c"
 #include "recipe/lang/Lua.c"

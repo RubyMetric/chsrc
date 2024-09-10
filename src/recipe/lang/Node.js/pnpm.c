@@ -3,8 +3,8 @@
  * -------------------------------------------------------------
  * File Authors   : Aoran Zeng <ccmywish@qq.com>
  * Contributors   :  Nul None  <nul@none.org>
- * Created On     : <2024-09-10>
- * Major Revision :      1
+ * Created On     : <2024-04-18>
+ * Major Revision :      2
  * Last Modified  : <2024-09-10>
  * ------------------------------------------------------------*/
 
@@ -86,5 +86,4 @@ pl_nodejs_pnpm_feat (char *option)
 }
 
 
-// 下列情形多选1
 def_target_gsrf(pl_nodejs_pnpm);
