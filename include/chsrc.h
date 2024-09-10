@@ -7,7 +7,7 @@
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-09-05>
+ * Last Modified : <2024-09-10>
  *
  * chsrc 头文件
  * ------------------------------------------------------------*/
@@ -443,7 +443,7 @@ measure_speed_for_url (void *url)
   // https://github.com/RubyMetric/chsrc/issues/65
   // curl (仅)在 Cygwin 上 -o nul 会把 nul 当做普通文件
   // 为了践行 chsrc everywhere 的承诺，我们也考虑支持 Cygwin
-  if (0==system ("cygcheck --version>nul"))
+  if (0==system ("cygcheck --version >nul 2>nul"))
     {
       on_cygwin = true;
       os_devnull = "/tmp/chsrc-measure-downloaded";
