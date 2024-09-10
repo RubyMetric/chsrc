@@ -14,8 +14,9 @@ $ brew install chsrc
 
 $ scoop install chsrc
 
-$ yay -S chsrc # binary from release
-$ yay -S chsrc-git # build from source
+yay -S chsrc-bin # Binary from GitHub Release
+yay -S chsrc     # Build  from GitHub Release
+yay -S chsrc-git # Build  from the latest main branch (stable)
 ```
 
 <br>
@@ -30,6 +31,8 @@ https://github.com/ScoopInstaller/Main/blob/master/bucket/chsrc.json
 
 # AUR
 
-[chsrc](https://aur.archlinux.org/packages/chsrc-git)：从release打包的稳定发布版本
+[chsrc-bin](https://aur.archlinux.org/packages/chsrc-bin): 从GitHub Release直接下载的二进制文件
 
-[chsrc-git](https://aur.archlinux.org/packages/chsrc-git)：从最新源码构建的版本，可能不稳定
+[chsrc](https://aur.archlinux.org/packages/chsrc)：从GitHub Release的代码构建
+
+[chsrc-git](https://aur.archlinux.org/packages/chsrc-git)：从最新源码构建的版本，偶尔可能不稳定

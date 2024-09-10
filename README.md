@@ -89,7 +89,8 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windo
 
 ```bash
 # AUR
-yay -S chsrc     # Binary from GitHub Release
+yay -S chsrc-bin # Binary from GitHub Release
+yay -S chsrc     # Build  from GitHub Release
 yay -S chsrc-git # Build  from the latest main branch (stable)
 ```
 
