@@ -31,8 +31,7 @@
 
 <br>
 
-> [!NOTE]
-> 想通过 `flatpak`,`snap`,`pacman`,`apt`,`dnf` 等系统包管理工具来安装和更新`chsrc`？若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
+想通过 `flatpak`,`snap`,`pacman`,`apt`,`dnf` 等系统包管理工具来安装和更新`chsrc`？若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
 
 - [x] `Homebrew`
 - [x] `Scoop`
@@ -89,9 +88,9 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windo
 
 ```bash
 # AUR
-yay -S chsrc-bin # Binary from GitHub Release
-yay -S chsrc     # Build  from GitHub Release
-yay -S chsrc-git # Build  from the latest main branch (stable)
+$ yay -S chsrc-bin # Binary from GitHub Release
+$ yay -S chsrc     # Build  from GitHub Release
+$ yay -S chsrc-git # Build  from the latest main branch (stable)
 ```
 
 - 手动下载二进制文件安装
@@ -136,8 +135,8 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-macos
 <summary>BSD</summary>
 
 ```bash
-git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc
-clang -Iinclude src/chsrc.c -o chsrc
+$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc
+$ clang -Iinclude src/chsrc-main.c -o chsrc
 ```
 </details>
 
@@ -145,7 +144,7 @@ clang -Iinclude src/chsrc.c -o chsrc
 <summary>其他平台</summary>
 
 ```bash
-git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
+$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; gmake
 ```
 </details>
 
@@ -211,7 +210,12 @@ chsrc set -local pdm
 ```bash
 chsrc set ruby    或 gem
 chsrc set python  或 pip / poetry / pdm # 同时换pip、poetry 和 pdm 这3个
-chsrc set node    或 npm / nodejs / yarn / pnpm # 同时换npm, yarn 和 pnpm 这3个
+
+chsrc set node|nodejs # 可同时换 npm, yarn 和 pnpm 3个，也可以3个独立换源
+  chsrc set npm
+  chsrc set yarn
+  chsrc set pnpm
+
 chsrc set perl    或 cpan
 chsrc set php     或 composer
 chsrc set lua     或 luarocks

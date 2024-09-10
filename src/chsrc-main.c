@@ -379,7 +379,7 @@ cli_print_version ()
   say ("This is free software: you are free to change and redistribute it.");
   say ("There is NO WARRANTY, to the extent permitted by law.");
   br();
-  say ("Written by Aoran Zeng, Heng Guo and contributors. (See chsrc.c)");
+  say ("Written by Aoran Zeng, Heng Guo and contributors. (See chsrc-main.c)");
 }
 
 
