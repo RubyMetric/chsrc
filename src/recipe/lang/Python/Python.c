@@ -34,53 +34,14 @@ def_sources_n(pl_python);
 void
 pl_python_getsrc (char *option)
 {
-  char *prog_name = NULL;
-  pl_python_get_py_program_name (&prog_name);
-
   bool pdm_exist    = false,
        poetry_exist = false;
 
   pl_python_check_unofficial_pkger (&poetry_exist, &pdm_exist);
 
-  if (prog_name)
-    {
-      pl_python_pip_setsrc (option);
-      say ("");
-    }
-
-  if (poetry_exist)
-    {
-      pl_python_poetry_setsrc (option);
-      say ("");
-    }
-
-  if (pdm_exist)
-    {
-      pl_python_pdm_setsrc (option);
-    }
-}
-
-
-void
-pl_python_setsrc (char *option)
-{
-  char *chsrc_type = xy_streql (option, ChsrcTypeReset) ? ChsrcTypeReset : ChsrcTypeAuto;
-
-  char *prog_name = NULL;
-  pl_python_get_py_program_name (&prog_name);
-
-  bool pdm_exist    = false,
-       poetry_exist = false;
-
-  pl_python_check_unofficial_pkger (&poetry_exist, &pdm_exist);
-
-  // chsrc_yield_source_and_confirm (pl_python);
-
-  if (prog_name)
-    {
-      pl_python_pip_getsrc (option);
-      say ("");
-    }
+  // 交给后面检查命令的存在性
+  pl_python_pip_getsrc (option);
+  say ("");
 
   if (poetry_exist)
     {
@@ -91,6 +52,35 @@ pl_python_setsrc (char *option)
   if (pdm_exist)
     {
       pl_python_pdm_getsrc (option);
+    }
+}
+
+
+void
+pl_python_setsrc (char *option)
+{
+  char *chsrc_type = xy_streql (option, ChsrcTypeReset) ? ChsrcTypeReset : ChsrcTypeAuto;
+
+  bool pdm_exist    = false,
+       poetry_exist = false;
+
+  pl_python_check_unofficial_pkger (&poetry_exist, &pdm_exist);
+
+  // chsrc_yield_source_and_confirm (pl_python);
+
+  // 交给后面检查命令的存在性
+  pl_python_pip_setsrc (option);
+  say ("");
+
+  if (poetry_exist)
+    {
+      pl_python_poetry_setsrc (option);
+      say ("");
+    }
+
+  if (pdm_exist)
+    {
+      pl_python_pdm_setsrc (option);
     }
 
   // chsrc_conclude (&source, chsrc_type);

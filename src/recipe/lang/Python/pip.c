@@ -50,6 +50,15 @@ pl_python_pip_getsrc (char *option)
 void
 pl_python_pip_setsrc (char *option)
 {
+  // 对于不支持的情况，尽早结束
+  if (CliOpt_Locally)
+    {
+      char *msg = CliOpt_InEnglish ? "pip doesn't support `-local`. SKIP changing source!" : "pip 不支持 -local，跳过换源";
+      chsrc_error (msg);
+      // 不能直接退出，因为 Leader target 不能就此结束
+      return;
+    }
+
   chsrc_yield_source_and_confirm (pl_python_pip);
 
   char *py_prog_name = NULL;

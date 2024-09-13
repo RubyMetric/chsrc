@@ -341,7 +341,7 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
 
   if (xy_streql ("first", input))
     {
-      char *msg = CliOpt_InEnglish ? "Will use the first speed source measured by maintainers" : "将使用维护团队测速第一的源";
+      char *msg = CliOpt_InEnglish ? "Will use the first speedy source measured by maintainers" : "将使用维护团队测速第一的源";
       say (msg);
       return 1; // 返回第2个，因为第1个是上游默认源
     }
