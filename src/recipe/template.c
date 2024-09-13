@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2024-08-09>
- * Last Modified : <2024-09-10>
+ * Last Modified : <2024-09-13>
  * -------------------------------------------------------------
  * 本文件作为一个通用模板：
  *
@@ -112,7 +112,7 @@ FeatInfo
   fi.can_reset = false;
 
   fi.stcan_locally = CanSemi;
-  fi.locally = "具体说明是否支持项目级换源...";;
+  fi.locally = "具体说明是否支持项目级换源...";
   fi.can_english = false;
   fi.can_user_define = false;
 
