@@ -5,7 +5,7 @@
  * Contributors   :  Mr. Will  <mr.will.com@outlook.com>
  * Created On     : <2023-09-09>
  * Major Reviison :      3
- * Last Modified  : <2024-09-10>
+ * Last Modified  : <2024-09-13>
  * ------------------------------------------------------------*/
 
 /**
@@ -69,6 +69,13 @@ pl_nodejs_yarn_setsrc (char *option)
     }
   else
     {
+      if (CliOpt_Locally)
+        {
+          char *msg = CliOpt_InEnglish ? "Yarn v1 doesn't support `-local`. SKIP changing source!" : "Yarn v1 不支持 -local，跳过换源";
+          chsrc_error (msg);
+          // 不能直接退出，因为 Leader target 不能就此结束
+          return;
+        }
       // 不再阻止换源命令输出到终端，即不再调用 xy_str_to_quietcmd()
       cmd = xy_2strjoin ("yarn config set registry ", source.url);
       chsrc_run (cmd, RunOpt_No_Last_New_Line);
