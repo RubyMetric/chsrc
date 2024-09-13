@@ -5,11 +5,11 @@
  * Contributors   :  Nul None  <nul@none.org>
  * Created On     : <2023-09-03>
  * Major Revision :      1
- * Last Modified  : <2024-09-13>
+ * Last Modified  : <2024-09-14>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-05-24
+ * @update 2024-09-14
  * @note 不要添加Zju，浙大的pypi在校外访问会自动转向Tuna
  */
 static SourceInfo
@@ -22,6 +22,7 @@ pl_python_sources[] = {
   {&Tuna,          "https://pypi.tuna.tsinghua.edu.cn/simple"},
   {&Ali,           "https://mirrors.aliyun.com/pypi/simple/"},
   {&Tencent,       "https://mirrors.cloud.tencent.com/pypi/simple"},
+  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/pypi/simple"},
   {&Huawei,        "https://mirrors.huaweicloud.com/repository/pypi/simple"},
   {&Hust,          "https://mirrors.hust.edu.cn/pypi/web/simple"}
   // {&Netease,    "https://mirrors.163.com/.help/pypi.html"} // 不用，24小时更新一次

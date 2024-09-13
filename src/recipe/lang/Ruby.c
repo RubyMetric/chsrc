@@ -20,14 +20,15 @@ RubyChina = {"rubychina",    "RubyChina",    "Ruby China 社区",    "https://ge
  */
 static SourceInfo
 pl_ruby_sources[] = {
-  {&Upstream,  "https://rubygems.org"},
-  {&RubyChina, "https://gems.ruby-china.com/"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/rubygems/"}
+  {&Upstream,     "https://rubygems.org"},
+  {&RubyChina,    "https://gems.ruby-china.com/"},
+  {&Ustc,         "https://mirrors.ustc.edu.cn/rubygems/"}
 
   // {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/"},
   // {&Bfsu,      "https://mirrors.bfsu.edu.cn/rubygems/"},
 
   // {&Tencent,   "https://mirrors.tencent.com/rubygems/"},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/rubygems/"},
   // {&Ali,       "https://mirrors.aliyun.com/rubygems/"},
   // {&Huawei,    "https://mirrors.huaweicloud.com/repository/rubygems/"},
 };

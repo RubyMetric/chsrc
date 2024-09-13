@@ -85,32 +85,64 @@ Nju           = {"nju",     "NJU",           "南京大学开源镜像站",     
  * 商业公司提供的源
  */
 MirrorSite
-  Ali      = {"ali",     "Ali OPSX", "阿里巴巴开源镜像站",  "https://developer.aliyun.com/mirror/",
-              "https://mirrors.aliyun.com/deepin-cd" Big_File_deepin},
+Ali = {
+  "ali", "Ali OPSX Public", "阿里巴巴开源镜像站(公网)",
+  "https://developer.aliyun.com/mirror/",
+  "https://mirrors.aliyun.com/deepin-cd" Big_File_deepin},
 
-  Tencent = {"tencent", "Tencent",  "腾讯软件源(公网)",    "https://mirrors.tencent.com/",
-              "https://mirrors.cloud.tencent.com/debian" Big_File_debian},
+/*
+// https://mirrors.cloud.aliyuncs.com/
+Ali_ECS_VPC = {
+  "ali-ECS-VPC", "Ali OPSX ECS VPC", "阿里巴巴开源镜像站(ECS VPC网络)",
+  "https://developer.aliyun.com/mirror/",
+  "https://mirrors.cloud.aliyuncs.com/deepin-cd" Big_File_deepin},
 
-  Tencent_Intra = {"tencent-intra", "Tencent Intranet",  "腾讯软件源(内网)", "https://mirrors.tencentyun.com/",
-              "https://mirrors.cloud.tencentyun.com/debian" Big_File_debian},
+// https://mirrors.aliyuncs.com/
+Ali_ECS_classic = {
+  "ali-ECS", "Ali OPSX ECS", "阿里巴巴开源镜像站(ECS 经典网络)",
+  "https://developer.aliyun.com/mirror/",
+  "https://mirrors.aliyuncs.com/deepin-cd" Big_File_deepin},
+*/
 
-  Huawei   = {"huawei",  "Huawei Cloud", "华为开源镜像站",  "https://mirrors.huaweicloud.com/",
-              "https://mirrors.huaweicloud.com/debian" Big_File_debian },
+Tencent = {
+  "tencent", "Tencent Public",  "腾讯软件源(公网)",  "https://mirrors.tencent.com/",
+  "https://mirrors.cloud.tencent.com/debian" Big_File_debian},
 
-  Volcengine = {"volc",  "Volcengine",   "火山引擎开源软件镜像站", "https://developer.volcengine.com/mirror/",
-              "https://mirrors.volces.com/debian" Big_File_debian },
+/*
+Tencent_Intra = {
+  "tencent-intra", "Tencent Intranet",  "腾讯软件源(内网)", "https://mirrors.tencent.com/",
+  "https://mirrors.cloud.tencentyun.com/debian" Big_File_debian},
+*/
 
-  Netease  = {"netease", "Netease",  "网易开源镜像站",      "https://mirrors.163.com/",
-              "https://mirrors.163.com/deepin-cd" Big_File_deepin},
+Huawei = {"huawei",  "Huawei Cloud", "华为开源镜像站",  "https://mirrors.huaweicloud.com/",
+          "https://mirrors.huaweicloud.com/debian" Big_File_debian },
 
-  Sohu     = {"sohu",    "SOHU",     "搜狐开源镜像站",      "https://mirrors.sohu.com/",
-              "https://mirrors.sohu.com/deepin-cd" Big_File_deepin};
+Volcengine = {
+  "volc",  "Volcengine", "火山引擎开源软件镜像站(公网)",
+  "https://developer.volcengine.com/mirror/",
+  "https://mirrors.volces.com/debian" Big_File_debian },
+/*
+Volceengine_Intra = {
+  "volc-intra",  "Volcengine Intranet", "火山引擎开源软件镜像站(内网)",
+  "https://developer.volcengine.com/mirror/",
+  "https://mirrors.ivolces.com/debian" Big_File_debian },
+*/
+
+Netease  = {
+  "netease", "Netease", "网易开源镜像站",
+  "https://mirrors.163.com/",
+  "https://mirrors.163.com/deepin-cd" Big_File_deepin},
+
+Sohu = {
+  "sohu", "SOHU", "搜狐开源镜像站",
+  "https://mirrors.sohu.com/",
+  "https://mirrors.sohu.com/deepin-cd" Big_File_deepin};
 
 
 MirrorSite
-  Upstream = {"upstream",     "Upstream",     "上游默认源",     NULL,     NULL};
+  Upstream = {"upstream", "Upstream",  "上游默认源",  NULL,  NULL};
 MirrorSite
-  UserDefine = {"user",       "用户自定义",     "用户自定义",     NULL,     NULL};
+  UserDefine = {"user",   "用户自定义",  "用户自定义",  NULL,  NULL};
 
 
 typedef struct SourceInfo_t {

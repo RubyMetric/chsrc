@@ -4,11 +4,11 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-08-30>
- * Last Modified : <2024-08-17>
+ * Last Modified : <2024-09-14>
  * ------------------------------------------------------------*/
 
 /**
- * @time 2024-04-18 更新
+ * @update 2024-09-14
  * @note 缺少教育网或开源社区软件源
  */
 static SourceInfo
@@ -16,6 +16,7 @@ pl_php_sources[] = {
   {&Upstream,       NULL},
   {&Ali,           "https://mirrors.aliyun.com/composer/"},
   {&Tencent,       "https://mirrors.tencent.com/composer/"},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/composer/"},
   {&Huawei,        "https://mirrors.huaweicloud.com/repository/php/"}
 };
 def_sources_n(pl_php);

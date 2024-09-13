@@ -2,13 +2,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors  : Heng Guo <2085471348@qq.com>
- * Contributors  : Nil Null  <nil@null.org>
+ * Contributors  : Aoran Zeng <ccmywish@qq.com>
  * Created On    : <2023-09-17>
  * Last Modified : <2024-08-16>
  * ------------------------------------------------------------*/
 
 /**
- * @time 2024-06-12 更新
+ * @update 2024-08-16
  */
 static SourceInfo
 os_opensuse_sources[] = {
@@ -19,6 +19,7 @@ os_opensuse_sources[] = {
   {&Ustc,           "https://mirrors.ustc.edu.cn/opensuse"},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/opensuse"},
   {&Tencent,        "https://mirrors.tencent.com/opensuse"},
+  // {&Tencent_Intra,  "https://mirrors.tencentyun.com/opensuse"},
   {&Netease,        "https://mirrors.163.com/opensuse"},
   {&Sohu,           "https://mirrors.sohu.com/opensuse"}
 };

@@ -8,7 +8,7 @@
  * ------------------------------------------------------------*/
 
 /**
- * 2024-08-08 更新
+ * @update 2024-08-08
  */
 static SourceInfo
 os_openwrt_sources[] = {
@@ -16,6 +16,7 @@ os_openwrt_sources[] = {
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/openwrt"},
   {&Ali,            "https://mirrors.aliyun.com/openwrt"},
   {&Tencent,        "https://mirrors.cloud.tencent.com/openwrt"},
+  // {&Tencent_Intra,  "https://mirrors.cloud.tencentyun.com/openwrt"},
   {&Tuna,           "https://mirror.tuna.tsinghua.edu.cn/openwrt"},
   {&Sjtug_Zhiyuan,  "https://mirror.sjtu.edu.cn/openwrt"},
   {&Ustc,           "https://mirrors.ustc.edu.cn/openwrt"},

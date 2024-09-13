@@ -9,7 +9,7 @@
  * ------------------------------------------------------------*/
 
 /**
- * @time 2024-06-12 更新
+ * @update 2024-06-12
  */
 static SourceInfo
 os_debian_sources[] = {
@@ -20,6 +20,7 @@ os_debian_sources[] = {
   {&Ustc,          "https://mirrors.ustc.edu.cn/debian"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/debian"},
   {&Tencent,       "https://mirrors.tencent.com/debian"},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/debian"},
   {&Netease,       "https://mirrors.163.com/debian"},
   {&Sohu,          "https://mirrors.sohu.com/debian"}
 };

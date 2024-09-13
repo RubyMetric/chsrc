@@ -9,7 +9,7 @@
  * ------------------------------------------------------------*/
 
 /**
- * @time 2024-06-12 更新
+ * @update 2024-06-12
  */
 static SourceInfo
 os_ubuntu_sources[] = {
@@ -20,6 +20,7 @@ os_ubuntu_sources[] = {
   {&Ustc,          "https://mirrors.ustc.edu.cn/ubuntu"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/ubuntu"},
   {&Tencent,       "https://mirrors.tencent.com/ubuntu"},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/ubuntu"},
   {&Huawei,        "https://mirrors.huaweicloud.com/ubuntu"},
   {&Netease,       "https://mirrors.163.com/ubuntu"},
   {&Sohu,          "https://mirrors.sohu.com/ubuntu"}

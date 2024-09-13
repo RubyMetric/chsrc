@@ -8,8 +8,7 @@
  * ------------------------------------------------------------*/
 
 /**
- * @time 2024-04-18 更新
- * @note 未经测试是否有效
+ * @update 2024-04-18
  */
 static SourceInfo
 os_ros_sources[] = {
@@ -19,6 +18,7 @@ os_ros_sources[] = {
   {&Ustc,           "https://mirrors.ustc.edu.cn"},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn"},
   {&Tencent,        "https://mirrors.tencent.com"},
+  // {&Tencent_Intra,  "https://mirrors.tencentyun.com"},
   {&Huawei,         "https://mirrors.huaweicloud.com"},
   {&Netease,        "https://mirrors.163.com"},
   {&Sohu,           "https://mirrors.sohu.com"}

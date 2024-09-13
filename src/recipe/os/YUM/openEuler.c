@@ -2,14 +2,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors  :  Heng Guo  <2085471348@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
+ * Contributors  : Aoran Zeng <ccmywish@qq.com>
  * Created On    : <2023-09-06>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2024-09-14>
  * ------------------------------------------------------------*/
 
 /**
- * @time 2023-09-06 更新
- * @note 源并不完整，且未经测试是否有效
+ * @update 2024-09-14
  */
 static SourceInfo
 os_openeuler_sources[] = {
@@ -19,6 +18,7 @@ os_openeuler_sources[] = {
   {&Ustc,           "https://mirrors.ustc.edu.cn/openeuler/"},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/openeuler/"},
   {&Tencent,        "https://mirrors.tencent.com/openeuler/"},
+  // {&Tencent_Intra,  "https://mirrors.tencentyun.com/openeuler/"},
   {&Netease,        "https://mirrors.163.com/openeuler/"},
   {&Sohu,           "https://mirrors.sohu.com/openeuler/"}
 };

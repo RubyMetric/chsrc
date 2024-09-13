@@ -123,11 +123,12 @@ static const char
 #undef t
 
 
-
 static MirrorSite*
 available_mirrors[] = {
   &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Hust, &Nju, // &Cqu,
-  &Ali,  &Tencent, &Tencent_Intra, &Huawei, &Volcengine,  &Netease, &Sohu, &Api7, &Fit2Cloud,
+  &Ali, // &Ali_ECS_VPC, &Ali_ECS_classic,
+  &Tencent, // &Tencent_Intra,
+  &Huawei, &Volcengine,  &Netease, &Sohu, &Api7, &Fit2Cloud,
   &RubyChina, &EmacsChina, &NpmMirror, &GoProxyCN, &GoProxyIO,
   // 暂不支持 &NugetOrg
   // 不要列出 &Upstream 和 &UserDdefine

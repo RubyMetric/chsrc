@@ -10,7 +10,7 @@
  * ------------------------------------------------------------*/
 
 /**
- * @time 2024-06-12 更新
+ * @update 2024-06-12
  */
 static SourceInfo
 os_kali_sources[] = {
@@ -21,6 +21,7 @@ os_kali_sources[] = {
   {&Ustc,          "https://mirrors.ustc.edu.cn/kali"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/kali"},
   {&Tencent,       "https://mirrors.tencent.com/kali"},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/kali"},
   {&Huawei,        "https://mirrors.huaweicloud.com/kali"},
   {&Netease,       "https://mirrors.163.com/kali"},
   {&Sohu,          "https://mirrors.sohu.com/kali"}

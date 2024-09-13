@@ -4,11 +4,11 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-24>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2024-09-14>
  * ------------------------------------------------------------*/
 
 /**
- * @time 2024-04-18 更新
+ * @update 2024-09-14
  */
 static SourceInfo
 os_alpine_sources[] = {
@@ -20,6 +20,7 @@ os_alpine_sources[] = {
   {&Lzuoss,         "https://mirror.lzu.edu.cn/alpine"},
   {&Ali,            "https://mirrors.aliyun.com/alpine"},
   {&Tencent,        "https://mirrors.cloud.tencent.com/alpine"},
+  // {&Tencent_Intra,  "https://mirrors.cloud.tencentyun.com/alpine"},
   {&Huawei,         "https://mirrors.huaweicloud.com/alpine"}
 };
 def_sources_n(os_alpine);

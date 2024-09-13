@@ -1,15 +1,15 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- * Created On    : <2023-09-10>
- * Last Modified : <2024-08-28>
- * Revision      :      2
+ * File Authors   : Aoran Zeng <ccmywish@qq.com>
+ * Contributors   :  Nil Null  <nil@null.org>
+ * Created On     : <2023-09-10>
+ * Major Revision :      2
+ * Last Modified  : <2024-09-14>
  * ------------------------------------------------------------*/
 
 /**
- * @time 2023-09-10 更新
+ * @update 2024-09-14
  * @note {
  *   我们这里挑选的必须也支持 Flutter
  *   我们将会在setsrc函数中生成
@@ -20,9 +20,10 @@
 static SourceInfo
 pl_dart_sources[] = {
   {&Upstream,       NULL},
-  // {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/"}, // 不确定SJTUG的flutter镜像给的对不对
+  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/"}, // 不确定SJTUG的flutter镜像给的对不对
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/"},
   {&Tencent,       "https://mirrors.cloud.tencent.com/"},
+  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/"},
   {&Nju,           "https://mirror.nju.edu.cn/"}
 };
 def_sources_n(pl_dart);

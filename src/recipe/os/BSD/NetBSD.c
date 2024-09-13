@@ -5,22 +5,23 @@
  *               |  Heng Guo  <2085471348@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-05>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2024-09-14>
  * ------------------------------------------------------------*/
 
 /**
- * @time 2023-09-05 更新
+ * @update 2024-09-14
  */
 static SourceInfo
 os_netbsd_sources[] = {
   {&Upstream,       NULL},
-  {&Ali,       "https://mirrors.aliyun.com/pkgsrc/packages/NetBSD/"},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/pkgsrc/packages/NetBSD/"},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/pkgsrc/packages/NetBSD/"},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/pkgsrc/packages/NetBSD/"},
-  {&Tencent,   "https://mirrors.tencent.com/pkgsrc/packages/NetBSD/"},
-  {&Netease,   "https://mirrors.163.com/pkgsrc/packages/NetBSD/"},
-  {&Sohu,      "https://mirrors.sohu.com/pkgsrc/packages/NetBSD/"}
+  {&Ali,            "https://mirrors.aliyun.com/pkgsrc/packages/NetBSD/"},
+  {&Bfsu,           "https://mirrors.bfsu.edu.cn/pkgsrc/packages/NetBSD/"},
+  {&Ustc,           "https://mirrors.ustc.edu.cn/pkgsrc/packages/NetBSD/"},
+  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/pkgsrc/packages/NetBSD/"},
+  {&Tencent,        "https://mirrors.tencent.com/pkgsrc/packages/NetBSD/"},
+  // {&Tencent_Intra,  "https://mirrors.tencentyun.com/pkgsrc/packages/NetBSD/"},
+  {&Netease,        "https://mirrors.163.com/pkgsrc/packages/NetBSD/"},
+  {&Sohu,           "https://mirrors.sohu.com/pkgsrc/packages/NetBSD/"}
 };
 def_sources_n(os_netbsd);
 
