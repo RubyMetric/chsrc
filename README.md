@@ -208,28 +208,32 @@ chsrc set -local pdm
 ## 编程语言开发
 
 ```bash
-chsrc set ruby    或 gem
-chsrc set python  或 pip / poetry / pdm # 同时换pip、poetry 和 pdm 这3个
+chsrc set ruby|rb|gem|bundler|rubygems
 
-chsrc set node|nodejs # 可同时换 npm, yarn 和 pnpm 3个，也可以3个独立换源
+chsrc set python|py|pypi # 同时换 pip、poetry 和 pdm 这3个包管理器，也可以3个独立换源
+  chsrc set pip
+  chsrc set poetry
+  chsrc set pdm
+
+chsrc set node|nodejs # 同时换 npm, yarn 和 pnpm 3个，也可以3个独立换源
   chsrc set npm
   chsrc set yarn
   chsrc set pnpm
 
-chsrc set perl    或 cpan
-chsrc set php     或 composer
-chsrc set lua     或 luarocks
+chsrc set perl | cpan
+chsrc set php  | composer
+chsrc set lua  | luarocks
 
 chsrc set go
-chsrc set rust    或 cargo / crate
-chsrc set java    或 maven / mvn / gradle
-chsrc set clojure 或 clojars
-chsrc set dart    或 pub / flutter # 同时会为flutter换源
-chsrc set haskell 或 hackage/cabal/stack
-chsrc set ocaml   或 opam
+chsrc set rust    | cargo | crate
+chsrc set java    | maven | mvn | gradle
+chsrc set clojure | clojars
+chsrc set dart    | pub | flutter # 同时会为flutter换源
+chsrc set haskell | hackage/cabal/stack
+chsrc set ocaml   | opam
 
 # 同时会为 bioconductor 换源
-chsrc set r       或 cran
+chsrc set r | cran
 chsrc set julia
 ```
 
@@ -239,33 +243,33 @@ chsrc set julia
 
 ```bash
 sudo chsrc set ubuntu
-sudo chsrc set linuxmint 或 mint
+sudo chsrc set linuxmint | mint
 sudo chsrc set debian
 sudo chsrc set fedora
-sudo chsrc set suse  或 opensuse
+sudo chsrc set suse  | opensuse
 sudo chsrc set kali
 sudo chsrc set arch
 sudo chsrc set archlinuxcn
 sudo chsrc set manjaro
 sudo chsrc set gentoo
-sudo chsrc set rocky 或 rockylinux
-sudo chsrc set alma  或 almalinux
+sudo chsrc set rocky | rockylinux
+sudo chsrc set alma  | almalinux
 sudo chsrc set alpine
-sudo chsrc set void  或 voidlinux
+sudo chsrc set void  | voidlinux
 sudo chsrc set solus
-sudo chsrc set ros   或 ros2
+sudo chsrc set ros   | ros2
 sudo chsrc set trisquel
-sudo chsrc set lite  或 linuxlite
-sudo chsrc set raspi 或 raspberrypi
+sudo chsrc set lite  | linuxlite
+sudo chsrc set raspi | raspberrypi
 sudo chsrc set armbian
 sudo chsrc set openwrt
 
 sudo chsrc set openeuler
-sudo chsrc set openanolis 或 anolis
+sudo chsrc set openanolis | anolis
 sudo chsrc set openkylin
 sudo chsrc set deepin
 
-chsrc set msys2 或 msys
+chsrc set msys2 | msys
 
 # BSD
 sudo chsrc set freebsd
@@ -279,15 +283,15 @@ sudo chsrc set netbsd
 
 ```bash
 chsrc set winget
-chsrc set brew      或 homebrew
-chsrc set cocoapods 或 cocoa / pod
-chsrc set dockerhub 或 docker
-chsrc set flathub   或 flatpak
+chsrc set brew      | homebrew
+chsrc set cocoapods | cocoa | pod
+chsrc set dockerhub | docker
+chsrc set flathub   | flatpak
 chsrc set nix
 chsrc set guix
-chsrc set emacs  或 elpa
-chsrc set tex    或 ctan / latex / texlive / miktex
-chsrc set conda  或 anaconda
+chsrc set emacs  | elpa
+chsrc set tex    | ctan | latex | texlive | miktex
+chsrc set conda  | anaconda
 ```
 
 <br>
