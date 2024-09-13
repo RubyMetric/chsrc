@@ -11,6 +11,7 @@ xy
 
 # 'chsrc set -local' generated
 .bundle
+.npmrc
 
 # Generated when testing
 nul
