@@ -5,14 +5,17 @@
  * Contributors   :  Nil Null  <nil@null.org>
  * Created On     : <2023-09-01>
  * Major Revision :      1
- * Last Modified  : <2024-09-10>
+ * Last Modified  : <2024-09-13>
  * ------------------------------------------------------------*/
 
 /* Begin Target Matrix */
 #define t(a) (const char*)(a)
 static const char
-*pl_ruby  [] = {"gem",   "ruby",    "rubygem", "rb", "rubygems", "bundler",  NULL, t(&pl_ruby_target)},
-*pl_python[] = {"pip",   "python",  "pypi",    "py", "poetry",   "pdm",      NULL, t(&pl_python_target)},
+*pl_ruby  [] = {"gem",    "ruby",  "rb", "rubygem",  "rubygems", "bundler",  NULL, t(&pl_ruby_target)},
+*pl_python[] = {"python", "pypi",  "py",                                     NULL, t(&pl_python_target)},
+  *pl_python_pip[]    = {"pip",     NULL, t(&pl_python_pip_target)},
+  *pl_python_poetry[] = {"poetry",  NULL, t(&pl_python_poetry_target)},
+  *pl_python_pdm[]    = {"pdm",     NULL, t(&pl_python_pdm_target)},
 
 *pl_nodejs[] = {"node", "nodejs", NULL, t(&pl_nodejs_target)},
   *pl_nodejs_npm[]  = {"npm",  NULL, t(&pl_nodejs_npm_target)},
@@ -34,12 +37,18 @@ static const char
 *pl_julia [] = {"julia",                                 NULL,  t(&pl_julia_target)},
 **pl_packagers[] =
 {
-  pl_ruby,    pl_python,
-  pl_nodejs,  pl_nodejs_npm, pl_nodejs_pnpm, pl_nodejs_yarn,
-  pl_perl,    pl_php,      pl_lua,
-  pl_rust,    pl_go,       /*pl_nuget,*/    pl_java,    pl_clojure,  pl_dart,
-  pl_haskell, pl_ocaml,
-  pl_r,       pl_julia
+  pl_ruby,
+  pl_python,  pl_python_pip, pl_python_poetry, pl_python_pdm,
+  pl_nodejs,  pl_nodejs_npm, pl_nodejs_pnpm,   pl_nodejs_yarn,
+  pl_perl,    pl_php,
+  pl_lua,
+  pl_rust,    pl_go,
+  /*pl_nuget,*/
+  pl_java,    pl_clojure,
+  pl_dart,
+  pl_ocaml,
+  pl_r,       pl_julia,
+  pl_haskell,
 };
 
 

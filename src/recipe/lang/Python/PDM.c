@@ -58,7 +58,7 @@ pl_python_pdm_setsrc (char *option)
   else
     cmd = xy_2strjoin ("pdm config --global pypi.url ", source.url);
 
-  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
   chsrc_conclude (&source, ChsrcTypeAuto);
 }

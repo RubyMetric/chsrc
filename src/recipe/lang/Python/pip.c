@@ -59,7 +59,7 @@ pl_python_pip_setsrc (char *option)
   // https://github.com/RubyMetric/chsrc/issues/39
   // 经测试，Windows上调用换源命令，会写入 C:\Users\RubyMetric\AppData\Roaming\pip\pip.ini
   char *cmd = xy_2strjoin (py_prog_name, xy_2strjoin (" -m pip config --user set global.index-url ", source.url));
-  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
   chsrc_conclude (&source, ChsrcTypeAuto);
 }
