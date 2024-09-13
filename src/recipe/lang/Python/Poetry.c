@@ -40,7 +40,8 @@ pl_python_poetry_setsrc (char *option)
   cmd = xy_2strjoin ("poetry source add my_mirror ", source.url);
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
-  chsrc_conclude (&source, ChsrcTypeAuto);
+  if (ProgMode_Target_Group!=true)
+    chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 

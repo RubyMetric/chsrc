@@ -42,7 +42,8 @@ pl_python_pdm_setsrc (char *option)
 
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
-  chsrc_conclude (&source, ChsrcTypeAuto);
+  if (ProgMode_Target_Group!=true)
+    chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 

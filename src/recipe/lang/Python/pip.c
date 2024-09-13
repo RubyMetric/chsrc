@@ -52,7 +52,8 @@ pl_python_pip_setsrc (char *option)
   char *cmd = xy_2strjoin (py_prog_name, xy_2strjoin (" -m pip config --user set global.index-url ", source.url));
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
-  chsrc_conclude (&source, ChsrcTypeAuto);
+  if (ProgMode_Target_Group!=true)
+    chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 

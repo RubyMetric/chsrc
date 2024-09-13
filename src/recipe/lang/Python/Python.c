@@ -38,11 +38,11 @@ void
 pl_python_setsrc (char *option)
 {
   {
-    char *msg = CliOpt_InEnglish ? "**Three package managers will be replaced for you at the same time: " \
+    char *msg = CliOpt_InEnglish ? "Three package managers will be replaced for you at the same time: " \
                                          "pip, Poetry, PDM. If you need to change the source independently, " \
-                                         "please run independently `chsrc set <pkg-manager>`**\n"
-                                       : "**将同时为您更换3个包管理器 pip, Poetry, PDM 的源，若需要独立换源，请独立运行 chsrc set <pkg-manager>**\n";
-    chsrc_log (bdyellow(msg));
+                                         "please run independently `chsrc set <pkg-manager>`"
+                                       : "将同时为您更换3个包管理器 pip, Poetry, PDM 的源，若需要独立换源，请独立运行 chsrc set <pkg-manager>";
+    chsrc_note2 (msg);
   }
 
   char *chsrc_type = xy_streql (option, ChsrcTypeReset) ? ChsrcTypeReset : ChsrcTypeAuto;
@@ -71,7 +71,7 @@ pl_python_setsrc (char *option)
       pl_python_pdm_setsrc (option);
     }
 
-  // chsrc_conclude (&source, chsrc_type);
+  chsrc_conclude (&source, chsrc_type);
 }
 
 void
