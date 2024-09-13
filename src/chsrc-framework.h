@@ -7,9 +7,9 @@
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-09-10>
+ * Last Modified : <2024-09-13>
  *
- * chsrc 头文件
+ * chsrc 框架
  * ------------------------------------------------------------*/
 
 #include "xy.h"
@@ -22,6 +22,9 @@ static int chsrc_get_cpucore ();
 
 bool ProgMode_CMD_Measure = false;
 bool ProgMode_CMD_Reset   = false;
+
+bool ProgMode_Target_Group = false;
+int  ProgMode_Leader_Selected_Index = -1;
 
 
 /* 命令行选项 */
@@ -748,19 +751,31 @@ source_has_empty_url (SourceInfo *source)
   return source->url == NULL;
 }
 
+
+
 /**
- * 用户*只可能*通过下面三种方式来换源，无论哪一种都会返回一个 SourceInfo 出来
- *
- * 1. 用户指定 MirrorCode
- * 2. 用户什么都没指定 (将测速选择最快镜像)
- * 3. 用户给了一个 URL
+ * 用户*只可能*通过下面5种方式来换源，无论哪一种都会返回一个 SourceInfo 出来
+ * option:
+ *  1. 用户指定某个 MirrorCode
+ *  2. NULL: 用户什么都没指定 (将测速选择最快镜像)
+ *  3. 用户给了一个 URL
+ *  4. ChsrcTypeReset
+ * 选用了Leader target
+ *  5. ProgMode_Leader_Selected_Index 将给出所选索引
  *
  * @dependency 变量 option
- * @dependency 变量 source
  */
-#define chsrc_yield_source(for_what) \
-  SourceInfo source; \
-  if (is_url (option)) \
+#define chsrc_yield_the_source(for_what) \
+  if (ProgMode_Target_Group==true && ProgMode_Leader_Selected_Index==-1) \
+    { \
+      ProgMode_Leader_Selected_Index = use_specific_mirror_or_auto_select (option, for_what); \
+      source = for_what##_sources[ProgMode_Leader_Selected_Index]; \
+    } \
+  else if (ProgMode_Target_Group==true && ProgMode_Leader_Selected_Index!=-1) \
+    { \
+      source = for_what##_sources[ProgMode_Leader_Selected_Index]; \
+    } \
+  else if (is_url (option)) \
     { \
       SourceInfo __tmp = { &UserDefine, option }; \
       source = __tmp; \
@@ -770,6 +785,11 @@ source_has_empty_url (SourceInfo *source)
       int __index = use_specific_mirror_or_auto_select (option, for_what); \
       source = for_what##_sources[__index]; \
     }
+
+#define chsrc_yield_source(for_what) \
+  SourceInfo source; \
+  chsrc_yield_the_source(for_what)
+
 
 
 
@@ -793,7 +813,7 @@ confirm_source (SourceInfo *source)
   // 之所以禁用，是因为有的 reset 我们并没有实现，我们在这里阻止这些邪恶的用户
   if (source_is_upstream (source) && source_has_empty_url (source))
     {
-      char *msg = CliOpt_InEnglish ? "Not implement RESET for the target yet" : "暂未对该目标实现重置";
+      char *msg = CliOpt_InEnglish ? "Not implement `reset` for the target yet" : "暂未对该目标实现重置";
       chsrc_error (msg);
       exit (Exit_Unsupported);
     }

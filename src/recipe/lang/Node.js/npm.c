@@ -5,21 +5,8 @@
  * Contributors   :  Mr. Will  <mr.will.com@outlook.com>
  * Created On     : <2023-08-30>
  * Major Revision :      2
- * Last Modified  : <2024-09-10>
+ * Last Modified  : <2024-09-13>
  * ------------------------------------------------------------*/
-
-/**
- * @update 2024-04-08
- */
-static SourceInfo
-pl_nodejs_npm_sources[] = {
-  {&Upstream,      "https://registry.npmjs.org/"}, // @note 根据 pnpm 官网，有最后的斜线
-  {&NpmMirror,     "https://registry.npmmirror.com"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/repository/npm/"},
-  {&Zju,           "https://mirrors.zju.edu.cn/npm"}
-};
-def_sources_n(pl_nodejs_npm);
-
 
 /**
  * chsrc get npm
@@ -39,7 +26,10 @@ pl_nodejs_npm_getsrc (char *option)
 void
 pl_nodejs_npm_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (pl_nodejs_npm);
+  SourceInfo source;
+  chsrc_yield_the_source (pl_nodejs);
+  if (ProgMode_Target_Group!=true)
+    chsrc_confirm_source;
 
   char *cmd = NULL;
 
@@ -84,4 +74,5 @@ pl_nodejs_npm_feat (char *option)
   return fi;
 }
 
-def_target_gsrf(pl_nodejs_npm);
+// def_target_gsrf(pl_nodejs_npm);
+TargetInfo pl_nodejs_npm_target = {def_target_inner_gsrf(pl_nodejs_npm),def_target_sourcesn(pl_nodejs)};

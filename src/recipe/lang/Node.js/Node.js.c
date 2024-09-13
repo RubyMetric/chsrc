@@ -5,25 +5,8 @@
  * Contributors   :  Mr. Will  <mr.will.com@outlook.com>
  * Created On     : <2023-08-30>
  * Major Revision :      2
- * Last Modified  : <2024-09-10>
+ * Last Modified  : <2024-09-13>
  * ------------------------------------------------------------*/
-
-/**
- * @time 2024-04-18 更新
- * @note {
- *   Sjtug, Tuna, Lzuoss, Jlu, Bfsu, 网易，搜狐 都没有
- *   腾讯软件源的npm源一直未证实是否可用
- * }
- */
-static SourceInfo
-pl_nodejs_sources[] = {
-  {&Upstream,      "https://registry.npmjs.org/"},
-  {&NpmMirror,     "https://registry.npmmirror.com"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/repository/npm/"},
-  {&Zju,           "https://mirrors.zju.edu.cn/npm"}
-};
-def_sources_n(pl_nodejs);
-
 
 void
 pl_nodejs_check_cmd (bool *npm_exist, bool *yarn_exist, bool *pnpm_exist)
@@ -79,11 +62,19 @@ pl_nodejs_getsrc (char *option)
 void
 pl_nodejs_setsrc (char *option)
 {
+  {
+    char *msg = CliOpt_InEnglish ? "** Three package managers will be replaced for you at the same time: " \
+                                         "npm, pnpm, yarn. If you need to change the source independently, " \
+                                         "please run independently `chsrc set <pkg-manager>` **\n"
+                                       : "** 将同时为您更换3个包管理器 npm, pnpm, Yarn 的源，若需要独立换源，请独立运行 chsrc set <pkg-manager> **\n";
+    chsrc_log (bdyellow(msg));
+  }
+
   bool npm_exist, yarn_exist, pnpm_exist;
   pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
-  // chsrc_yield_source_and_confirm (pl_nodejs);
-  split_between_source_changing_process;
+  ProgMode_Target_Group = true;
+  chsrc_yield_source_and_confirm (pl_nodejs);
 
   if (npm_exist)
     {
@@ -100,10 +91,7 @@ pl_nodejs_setsrc (char *option)
   if (pnpm_exist)
     {
       pl_nodejs_pnpm_setsrc (option);
-      say ("");
     }
-
-  // chsrc_conclude (&source, ChsrcTypeAuto);
 }
 
 
