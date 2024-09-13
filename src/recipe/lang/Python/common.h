@@ -8,6 +8,26 @@
  * Last Modified  : <2024-09-13>
  * ------------------------------------------------------------*/
 
+/**
+ * @update 2024-05-24
+ * @note 不要添加Zju，浙大的pypi在校外访问会自动转向Tuna
+ */
+static SourceInfo
+pl_python_sources[] = {
+  {&Upstream,      "https://pypi.org/simple"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/pypi/web/simple"},
+  {&Lzuoss,        "https://mirror.lzu.edu.cn/pypi/web/simple"},
+  {&Jlu,           "https://mirrors.jlu.edu.cn/pypi/web/simple"},
+  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/pypi/web/simple"},
+  {&Tuna,          "https://pypi.tuna.tsinghua.edu.cn/simple"},
+  {&Ali,           "https://mirrors.aliyun.com/pypi/simple/"},
+  {&Tencent,       "https://mirrors.cloud.tencent.com/pypi/simple"},
+  {&Huawei,        "https://mirrors.huaweicloud.com/repository/pypi/simple"},
+  {&Hust,          "https://mirrors.hust.edu.cn/pypi/web/simple"}
+  // {&Netease,    "https://mirrors.163.com/.help/pypi.html"} // 不用，24小时更新一次
+};
+def_sources_n(pl_python);
+
 void
 pl_python_check_unofficial_pkger (bool *poetry_exist, bool *pdm_exist)
 {
