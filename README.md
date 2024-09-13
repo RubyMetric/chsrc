@@ -8,7 +8,18 @@
 
 本软件为**自由软件**，SDPX 软件许可证为 `GPL-3.0-or-later and MIT`
 
-<a href="https://hellogithub.com/repository/7666ba91e01e4a59be5809b02d9e8ff6" target="_blank"><img src="https://abroad.hellogithub.com/v1/widgets/recommend.svg?rid=7666ba91e01e4a59be5809b02d9e8ff6&claim_uid=H6YVMUy7ulev8R4&theme=dark" alt="Featured｜HelloGitHub" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+<br>
+
+<table align="center">
+  <tr>
+  <td>
+    <a href="https://trendshift.io/repositories/10744" target="_blank"><img src="https://trendshift.io/api/badge/repositories/10744" alt="RubyMetric%2Fchsrc | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+  </td>
+  <td>
+    <a href="https://hellogithub.com/repository/7666ba91e01e4a59be5809b02d9e8ff6" target="_blank"><img src="https://abroad.hellogithub.com/v1/widgets/recommend.svg?rid=7666ba91e01e4a59be5809b02d9e8ff6&claim_uid=H6YVMUy7ulev8R4&theme=dark" alt="Featured｜HelloGitHub" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+  </td>
+  </tr>
+</table>
 
 <br>
 
@@ -45,9 +56,7 @@
 ## 📌 示例
 
 <div align="center">
-  <img alt="chsrc set node" src="image/example-node.png"/>
-  <br>
-  <img alt="chsrc ls -en ruby" src="image/example-ls-ruby.png"/>
+  <img alt="chsrc set node" src="image/example-set-nodejs.png"/>
 </div>
 
 <br>
@@ -210,12 +219,12 @@ chsrc set -local pdm
 ```bash
 chsrc set ruby|rb|gem|bundler|rubygems
 
-chsrc set python|py|pypi # 同时换 pip、poetry 和 pdm 这3个包管理器，也可以3个独立换源
+chsrc set python | py | pypi # 同时换 pip、poetry 和 pdm 这3个包管理器，也可以3个独立换源
   chsrc set pip
   chsrc set poetry
   chsrc set pdm
 
-chsrc set node|nodejs # 同时换 npm, yarn 和 pnpm 3个，也可以3个独立换源
+chsrc set node | nodejs # 同时换 npm, yarn 和 pnpm 3个，也可以3个独立换源
   chsrc set npm
   chsrc set yarn
   chsrc set pnpm
@@ -228,7 +237,8 @@ chsrc set go
 chsrc set rust    | cargo | crate
 chsrc set java    | maven | mvn | gradle
 chsrc set clojure | clojars
-chsrc set dart    | pub | flutter # 同时会为flutter换源
+chsrc set dart    | pub
+chsrc set flutter
 chsrc set haskell | hackage/cabal/stack
 chsrc set ocaml   | opam
 
