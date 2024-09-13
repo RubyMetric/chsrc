@@ -29,7 +29,10 @@ static const char
 *pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  t(&pl_rust_target)},
 *pl_java  [] = {"java",  "maven",   "mvn",    "gradle",  NULL,  t(&pl_java_target)},
 *pl_clojure[]= {"clojure","clojars","cloj",   "lein",   "leiningen",  NULL, t(&pl_clojure_target)},
-*pl_dart  [] = {"dart",  "pub",     "flutter",           NULL,  t(&pl_dart_target)},
+
+*pl_dart  [] = {"dart", "pub",   NULL, t(&pl_dart_target)},
+*pl_dart_flutter [] = {"flutter",NULL, t(&pl_dart_flutter_target)},
+
 *pl_nuget[]  = {"nuget", "net",     ".net",   "dotnet",  NULL,  t(&pl_nuget_target)},
 *pl_haskell[]= {"haskell", "cabal", "stack",  "hackage", NULL,  t(&pl_haskell_target)},
 *pl_ocaml[]  = {"ocaml", "opam",                         NULL,  t(&pl_ocaml_target)},
@@ -45,7 +48,7 @@ static const char
   pl_rust,    pl_go,
   /*pl_nuget,*/
   pl_java,    pl_clojure,
-  pl_dart,
+  pl_dart,    pl_dart_flutter,
   pl_ocaml,
   pl_r,       pl_julia,
   pl_haskell,
