@@ -347,3 +347,11 @@ make clean
 5. [Thanks Mirror 项目](https://github.com/eryajf/Thanks-Mirror) by [@eryajf](https://github.com/eryajf)
 
 <br>
+
+# 🚀 赞赏支持
+
+你是否因为使用 `chsrc` 而节省了时间和精力 or whatever?
+
+<img src="https://raw.githubusercontent.com/ccmywish/support-my-oss-work/main/wechat.png" alt="wechat" style="width:300px;"/>
+
+<br>
