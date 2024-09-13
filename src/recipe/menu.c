@@ -5,7 +5,7 @@
  * Contributors   :  Nil Null  <nil@null.org>
  * Created On     : <2023-09-01>
  * Major Revision :      1
- * Last Modified  : <2024-09-13>
+ * Last Modified  : <2024-09-14>
  * ------------------------------------------------------------*/
 
 /* Begin Target Matrix */
@@ -127,7 +127,7 @@ static const char
 static MirrorSite*
 available_mirrors[] = {
   &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Hust, &Nju, // &Cqu,
-  &Ali,  &Tencent, &Huawei, &Volcengine,  &Netease, &Sohu, &Api7, &Fit2Cloud,
+  &Ali,  &Tencent, &Tencent_Intra, &Huawei, &Volcengine,  &Netease, &Sohu, &Api7, &Fit2Cloud,
   &RubyChina, &EmacsChina, &NpmMirror, &GoProxyCN, &GoProxyIO,
   // 暂不支持 &NugetOrg
   // 不要列出 &Upstream 和 &UserDdefine

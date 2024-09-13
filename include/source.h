@@ -6,7 +6,7 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created on    : <2023-08-29>
- * Last modified : <2024-08-23>
+ * Last modified : <2024-09-14>
  *
  * 镜像站与换源信息
  * ------------------------------------------------------------*/
@@ -83,15 +83,16 @@ Nju           = {"nju",     "NJU",           "南京大学开源镜像站",     
 
 /**
  * 商业公司提供的源
- *
- * @warning 腾讯软件源中，有很多链接都已失效，请仔细检查
  */
 MirrorSite
   Ali      = {"ali",     "Ali OPSX", "阿里巴巴开源镜像站",  "https://developer.aliyun.com/mirror/",
               "https://mirrors.aliyun.com/deepin-cd" Big_File_deepin},
 
-  Tencent  = {"tencent", "Tencent",  "腾讯软件源",         "https://mirrors.tencent.com/",
+  Tencent = {"tencent", "Tencent",  "腾讯软件源(公网)",    "https://mirrors.tencent.com/",
               "https://mirrors.cloud.tencent.com/debian" Big_File_debian},
+
+  Tencent_Intra = {"tencent-intra", "Tencent Intranet",  "腾讯软件源(内网)", "https://mirrors.tencentyun.com/",
+              "https://mirrors.cloud.tencentyun.com/debian" Big_File_debian},
 
   Huawei   = {"huawei",  "Huawei Cloud", "华为开源镜像站",  "https://mirrors.huaweicloud.com/",
               "https://mirrors.huaweicloud.com/debian" Big_File_debian },
