@@ -1,0 +1,19 @@
+name: ⛓️‍💥 镜像源已失效
+description: 该镜像站已关停/该源已不再被支持
+title: "[Deprecate Mirror/Source] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你的一手消息！让用户不再疑惑是哪里出了错！
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 什么被弃用了？
+      description: |
+        1. 请告诉我们是镜像站还是某个源失效
+        2. 如果可能，你可以开启该issue后参与维护！在代码中删除掉该源并不复杂！
+    validations:
+      required: true
