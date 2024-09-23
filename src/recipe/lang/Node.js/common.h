@@ -5,7 +5,7 @@
  * Contributors   :  Nul None  <nul@none.org>
  * Created On     : <2023-09-09>
  * Major Revision :      1
- * Last Modified  : <2024-09-13>
+ * Last Modified  : <2024-09-23>
  * ------------------------------------------------------------*/
 
 static MirrorSite
@@ -15,17 +15,21 @@ NpmMirror = {"npmmirror",    "npmmirror",    "npmmirror (阿里云赞助)",    "
 
 
 /**
- * @time 2024-04-18 更新
+ * @update 2024-09-23
+ * @sync https://github.com/RubyMetric/chsrc/wiki/Node.js-MirrorSite
+ * @sync https://github.com/RubyMetric/chsrc/discussions/85
+ *
  * @note {
  *   Sjtug, Tuna, Lzuoss, Jlu, Bfsu, 网易，搜狐 都没有
- *   腾讯软件源的npm源一直未证实是否可用
  * }
+ *
  */
 static SourceInfo
 pl_nodejs_sources[] = {
   {&Upstream,      "https://registry.npmjs.org/"}, // @note 根据 pnpm 官网，有最后的斜线
   {&NpmMirror,     "https://registry.npmmirror.com"},
   {&Huawei,        "https://mirrors.huaweicloud.com/repository/npm/"},
+  {&Tencent,       "https://mirrors.cloud.tencent.com/npm/"},
   {&Zju,           "https://mirrors.zju.edu.cn/npm"}
 };
 def_sources_n(pl_nodejs);
