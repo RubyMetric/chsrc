@@ -1,5 +1,8 @@
 blank_issues_enabled: true
 contact_links:
+  - name: ✏️ 协作更新镜像源可用状态
+    url: https://github.com/RubyMetric/chsrc/wiki
+    about: 作为该语言的资深用户、该软件的专家、镜像站维护人员等，你总是对镜像站和源的可用状态拥有一手信息
   - name: ❤️ 感谢 chsrc
     url: https://github.com/RubyMetric/chsrc/discussions/categories/%E6%84%9F%E8%B0%A2-chsrc
     about: chsrc 是否帮助到了你？
