@@ -30,6 +30,5 @@ pl_nodejs_sources[] = {
   {&NpmMirror,     "https://registry.npmmirror.com"},
   {&Huawei,        "https://mirrors.huaweicloud.com/repository/npm/"},
   {&Tencent,       "https://mirrors.cloud.tencent.com/npm/"},
-  {&Zju,           "https://mirrors.zju.edu.cn/npm"}
 };
 def_sources_n(pl_nodejs);
