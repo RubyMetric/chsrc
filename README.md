@@ -2,7 +2,7 @@
   <img alt="chsrc logo" src="image/chsrc.png"/>
 </div>
 
-全平台命令行换源工具，**目标支持 Linux, Windows (MSYS2, Cygwin), macOS, BSD 等尽可能多的操作系统环境，龙芯、飞腾、RISC-V 等尽可能多的 CPU**。
+全平台通用换源工具与框架 `chsrc`，**目标支持 Linux, Windows (MSYS2, Cygwin), macOS, BSD 等尽可能多的操作系统环境，龙芯、飞腾、RISC-V 等尽可能多的 CPU**。
 
 我们使用 **C99** 来完成上述目标。我们并不使用 Python 或 JS 等解释语言，因为一个简单的换源工具，不应该强行塞给用户一个庞大的解释器和数十、数百 MB 其他文件。
 
@@ -98,8 +98,8 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windo
 ```bash
 # AUR
 $ yay -S chsrc-bin # Binary from GitHub Release
-$ yay -S chsrc     # Build  from GitHub Release
 $ yay -S chsrc-git # Build  from the latest main branch (stable)
+$ yay -S chsrc     # Build  from GitHub Release
 ```
 
 - 手动下载二进制文件安装
@@ -219,15 +219,17 @@ chsrc set -local pdm
 ```bash
 chsrc set ruby|rb|gem|bundler|rubygems
 
-chsrc set python | py | pypi # 同时换 pip、poetry 和 pdm 这3个包管理器，也可以3个独立换源
+chsrc set python | py | pypi # 同时换 pip, poetry 和 pdm 这3个包管理器，也可以3个独立换源
   chsrc set pip
   chsrc set poetry
   chsrc set pdm
 
-chsrc set node | nodejs # 同时换 npm, yarn 和 pnpm 3个，也可以3个独立换源
+chsrc set node | nodejs # 同时换 npm, yarn 和 pnpm 这3个包管理器，也可以3个独立换源
   chsrc set npm
   chsrc set yarn
   chsrc set pnpm
+
+chsrc set nvm
 
 chsrc set perl | cpan
 chsrc set php  | composer
@@ -239,7 +241,7 @@ chsrc set java    | maven | mvn | gradle
 chsrc set clojure | clojars
 chsrc set dart    | pub
 chsrc set flutter
-chsrc set haskell | hackage/cabal/stack
+chsrc set haskell | hackage | cabal | stack
 chsrc set ocaml   | opam
 
 # 同时会为 bioconductor 换源
