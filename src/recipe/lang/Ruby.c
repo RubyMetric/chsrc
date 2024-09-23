@@ -12,9 +12,9 @@ RubyChina = {"rubychina",    "RubyChina",    "Ruby China 社区",    "https://ge
              "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"}; // 9.9 MB
 
 /**
- * @time 2024-09-04 同步
- * @sync https://github.com/RubyMetric/chsrc/discussions/62
+ * @update 2024-09-04
  * @sync https://github.com/RubyMetric/chsrc/wiki/Ruby-MirrorSite
+ * @sync https://github.com/RubyMetric/chsrc/discussions/62
  *
  * @note 曾经的问题 https://ruby-china.org/topics/43331
  */

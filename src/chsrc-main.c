@@ -13,13 +13,13 @@
  *                 |   Terrasse    <terrasse@qq.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-09-14>
+ * Last Modified   : <2024-09-23>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.1.9.Beta1"
-#define Chsrc_Release_Date   "2024/09/14"
+#define Chsrc_Version        "0.1.9.Beta1Dev2"
+#define Chsrc_Release_Date   "2024/09/23"
 #define Chsrc_Banner_Version "v" Chsrc_Version "-" Chsrc_Release_Date
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
@@ -39,6 +39,7 @@
   #include "recipe/lang/Node.js/pnpm.c"
   #include "recipe/lang/Node.js/Yarn.c"
 #include "recipe/lang/Node.js/Node.js.c"
+#include "recipe/lang/Node.js/nvm.c"
 
 #include "recipe/lang/Perl.c"
 #include "recipe/lang/PHP.c"

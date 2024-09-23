@@ -5,7 +5,7 @@
  * Contributors   :  Nil Null  <nil@null.org>
  * Created On     : <2023-09-01>
  * Major Revision :      1
- * Last Modified  : <2024-09-14>
+ * Last Modified  : <2024-09-23>
  * ------------------------------------------------------------*/
 
 /* Begin Target Matrix */
@@ -21,6 +21,7 @@ static const char
   *pl_nodejs_npm[]  = {"npm",  NULL, t(&pl_nodejs_npm_target)},
   *pl_nodejs_yarn[] = {"yarn", NULL, t(&pl_nodejs_yarn_target)},
   *pl_nodejs_pnpm[] = {"pnpm", NULL, t(&pl_nodejs_pnpm_target)},
+*pl_nodejs_nvm[] = {"nvm", NULL, t(&pl_nodejs_nvm_target)},
 
 *pl_perl  [] = {"perl",  "cpan",                         NULL,  t(&pl_perl_target)},
 *pl_php   [] = {"php",   "composer",                     NULL,  t(&pl_php_target)},
@@ -43,6 +44,7 @@ static const char
   pl_ruby,
   pl_python,  pl_python_pip, pl_python_poetry, pl_python_pdm,
   pl_nodejs,  pl_nodejs_npm, pl_nodejs_pnpm,   pl_nodejs_yarn,
+              pl_nodejs_nvm,
   pl_perl,    pl_php,
   pl_lua,
   pl_rust,    pl_go,
