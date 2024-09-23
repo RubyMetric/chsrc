@@ -32,3 +32,24 @@ pl_nodejs_sources[] = {
   {&Tencent,       "https://mirrors.cloud.tencent.com/npm/"},
 };
 def_sources_n(pl_nodejs);
+
+
+
+/**
+ * @update 2024-09-23
+ * @sync https://github.com/RubyMetric/chsrc/wiki/Node.js-BinaryRelease-MirrorSite
+ * @sync https://github.com/RubyMetric/chsrc/discussions/85
+ *
+ */
+static SourceInfo
+pl_nodejs_binary_release_sources[] = {
+  {&Upstream,      "https://nodejs.org/dist/"},
+  {&NpmMirror,     "https://npmmirror.com/mirrors"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/nodejs-release/"},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/node/"},
+
+  {&Huawei,        "https://mirrors.huaweicloud.com/nodejs/"},
+  {&Tencent,       "https://mirrors.cloud.tencent.com/nodejs-release/"},
+};
+def_sources_n(pl_nodejs_binary_release);
