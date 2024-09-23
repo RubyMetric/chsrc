@@ -6,7 +6,7 @@
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2024-08-19>
- ! Last Modified : <2024-09-10>
+ ! Last Modified : <2024-09-24>
  ! ---------------------------------------------------------- -->
 
 # Write A Recipe Even If You Don't Know C
@@ -51,11 +51,13 @@
     1. 在目录中，三者分别为 `lang`, `os`, `ware`
     2. 在代码中，三者前缀分别为 `pl`, `os`, `wr`
 
-2. `mirror`: 是 `mirror site` 的简写，指镜像站，如清华大学开源软件镜像站
-3. `source`: 该 `target` 所能换的具体的源，由 `mirror` 提供服务
-4. `recipe`: 是为一个 `target` 定义的具体换源方法，请参考 `src` 目录中的 `recipe` 目录
+3. `mirror`: 是 `mirror site` 的简写，指镜像站，如清华大学开源软件镜像站
+4. `source`: 该 `target` 所能换的具体的源，由 `mirror` 提供服务，往往一个 `mirror` 会提供许多 `source`
+5. `recipe`: 是为一个 `target` 定义的具体换源方法，请参考 `src` 目录中的 `recipe` 目录
 
-5. `feature`: 一个 `target` 可以支持的功能，比如能否重置回默认上游源等
+6. `feature`: 一个 `target` 可以支持的功能，比如能否重置回默认上游源等
+
+7. **镜像源**: 为了方便，**偶尔**我们将直接称`mirror`和/或`source`为**镜像源**，这只是一种方便性的称呼，可以统称二者，也可以根据上下文指代二者之一
 
 <br>
 
