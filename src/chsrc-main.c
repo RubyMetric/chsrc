@@ -620,7 +620,7 @@ main (int argc, char const *argv[])
             {
               CliOpt_DryRun = true;
             }
-          else if (xy_streql (argv[i], "-para")
+          else if (    xy_streql (argv[i], "-para")
                     || xy_streql (argv[i], "-parallel")
                     || xy_streql (argv[i], "-paralel"))
             {
@@ -631,13 +631,13 @@ main (int argc, char const *argv[])
               CliOpt_NoColor = true;
               xy_enable_color = false;
             }
-          else if (xy_streql     (argv[i], "-h")
+          else if (    xy_streql (argv[i], "-h")
                     || xy_streql (argv[i], "-help")
                     || xy_streql (argv[i], "--help"))
             {
               command = "help"; /* 交到下方处理 */
             }
-          else if (xy_streql (argv[i], "-v")
+          else if (    xy_streql (argv[i], "-v")
                     || xy_streql (command, "-version")
                     || xy_streql (command, "--version"))
             {
@@ -666,7 +666,7 @@ main (int argc, char const *argv[])
     }
 
   /* chsrc help */
-  if (xy_streql    (command, "h")
+  if (   xy_streql (command, "h")
       || xy_streql (command, "-h")
       || xy_streql (command, "help")
       || xy_streql (command, "-help")
@@ -677,7 +677,7 @@ main (int argc, char const *argv[])
     }
 
   /* chsrc -v */
-  else if (xy_streql    (command, "-v")
+  else if (   xy_streql (command, "-v")
            || xy_streql (command, "-version")
            || xy_streql (command, "--version")
            || xy_streql (command, "ver")
@@ -688,7 +688,7 @@ main (int argc, char const *argv[])
     }
 
   /* chsrc list */
-  else if (xy_streql    (command, "list")
+  else if (   xy_streql (command, "list")
            || xy_streql (command, "l")
            || xy_streql (command, "ls"))
     {
@@ -732,7 +732,7 @@ main (int argc, char const *argv[])
 #define MSG_CN_USE_LIST_TARGETS "使用 chsrc list targets 查看所有支持的目标"
 
   /* chsrc measure */
-  else if (xy_streql    (command, "measure")
+  else if (   xy_streql (command, "measure")
            || xy_streql (command, "mea")
            || xy_streql (command, "m")
            || xy_streql (command, "cesu")
@@ -755,7 +755,7 @@ main (int argc, char const *argv[])
 
 
   /* chsrc get */
-  else if (xy_streql    (command, "get")
+  else if (   xy_streql (command, "get")
            || xy_streql (command, "g"))
     {
       if (argc < cli_arg_Target_pos)
@@ -772,7 +772,7 @@ main (int argc, char const *argv[])
     }
 
   /* chsrc set */
-  else if (xy_streql    (command, "set")
+  else if (   xy_streql (command, "set")
            || xy_streql (command, "s"))
     {
       if (argc < cli_arg_Target_pos)
@@ -796,7 +796,7 @@ main (int argc, char const *argv[])
     }
 
   /* chsrc reset */
-  else if (xy_streql    (command, "reset")
+  else if (   xy_streql (command, "reset")
            || xy_streql (command, "rest")
            || xy_streql (command, "r"))
     {
@@ -816,7 +816,7 @@ main (int argc, char const *argv[])
     }
 
     /* chsrc issue */
-  else if (xy_streql    (command, "issue")
+  else if (   xy_streql (command, "issue")
            || xy_streql (command, "issues")
            || xy_streql (command, "isue")
            || xy_streql (command, "i"))

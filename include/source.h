@@ -5,8 +5,8 @@
  *               | Heng Guo      <2085471348@qq.com>
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
- * Created on    : <2023-08-29>
- * Last modified : <2024-09-14>
+ * Created On    : <2023-08-29>
+ * Last Modified : <2024-09-14>
  *
  * 镜像站与换源信息
  * ------------------------------------------------------------*/
@@ -21,9 +21,9 @@ typedef struct MirrorSite_t {
 
 // #define Big_File_ubuntu  "/indices/md5sums.gz"  这个是错的
 #define Big_File_ctan       "/systems/texlive/Images/texlive.iso"           // 4.8GB
-#define Big_File_debian     "/ls-lR.gz"                                     // 13.9 MB
+#define Big_File_debian     "/ls-lR.gz"                                     // 13.9MB
 #define Big_File_archlinux  "/iso/latest/archlinux-x86_64.iso"              // 800MB 左右
-#define Big_File_deepin     "/20.9/deepin-desktop-community-20.9-amd64.iso" // 4GB左右
+#define Big_File_deepin     "/20.9/deepin-desktop-community-20.9-amd64.iso" // 4GB 左右
 
 
 /**
