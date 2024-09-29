@@ -81,7 +81,7 @@ void
   /* 具体的换源步骤，如调用第三方命令... */
 
   // 最后总结输出
-  chsrc_conclude (&source, chsrc_type);
+  chsrc_conclude (&source, setsrc_type);
 }
 
 

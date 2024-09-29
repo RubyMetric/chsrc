@@ -60,7 +60,7 @@ pl_ruby_remove_gem_source (const char *source)
 void
 pl_ruby_setsrc (char *option)
 {
-  char *chsrc_type = xy_streql (option, SetsrcType_Reset) ? SetsrcType_Reset : SetsrcType_Auto;
+  char *setsrc_type = xy_streql (option, SetsrcType_Reset) ? SetsrcType_Reset : SetsrcType_Auto;
 
   chsrc_ensure_program ("gem");
 
@@ -85,7 +85,7 @@ pl_ruby_setsrc (char *option)
   cmd = xy_strjoin (4, "bundle config", where, "'mirror.https://rubygems.org' ", source.url);
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
-  chsrc_conclude (&source, chsrc_type);
+  chsrc_conclude (&source, setsrc_type);
 }
 
 void

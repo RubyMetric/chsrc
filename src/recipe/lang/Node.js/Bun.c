@@ -26,7 +26,7 @@ pl_nodejs_bun_getsrc (char *option)
 void
 pl_nodejs_bun_setsrc (char *option)
 {
-  char *chsrc_type = xy_streql (option, SetsrcType_Reset) ? SetsrcType_Reset : SetsrcType_Manual;
+  char *setsrc_type = xy_streql (option, SetsrcType_Reset) ? SetsrcType_Reset : SetsrcType_Manual;
   chsrc_yield_source (pl_nodejs);
 
   char *file = xy_strjoin(3, "[install]\n"
@@ -35,7 +35,7 @@ pl_nodejs_bun_setsrc (char *option)
   chsrc_note2 (xy_strjoin (3, "请您手动写入以下内容到 ", xy_uniform_path ("~/.bun/bunfig.toml"), " 文件中:"));
   puts (file);
 
-  chsrc_conclude (&source, chsrc_type);
+  chsrc_conclude (&source, setsrc_type);
 }
 
 
