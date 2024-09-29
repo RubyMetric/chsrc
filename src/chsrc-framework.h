@@ -14,7 +14,7 @@
 
 #include "xy.h"
 #include "source.h"
-#include <pthread.h>
+// #include <pthread.h>
 
 #define App_Name "chsrc"
 
@@ -547,8 +547,6 @@ measure_speed_for_every_source (SourceInfo sources[], int size, double speed_rec
 
   double speed = 0.0;
 
-  pthread_t *threads = xy_malloc0 (sizeof(pthread_t) * size);
-
   for (int i=0; i<size; i++)
     {
       SourceInfo src = sources[i];
@@ -584,54 +582,11 @@ measure_speed_for_every_source (SourceInfo sources[], int size, double speed_rec
 
           char *url_ = xy_strdup (url);
 
-          if (CliOpt_Parallel)
-            {
-              int ret = pthread_create (&threads[i], NULL, measure_speed_for_url, url_);
-              if (ret!=0)
-                {
-                  chsrc_error ("Unable to measure speed\n");
-                  exit (Exit_UserCause);
-                }
-              else
-                {
-                  get_measured[i] = true;
-                  get_measured_n += 1;
-                }
-            }
-          else
-            {
-              char *curl_result = measure_speed_for_url (url_);
-              double speed = parse_and_say_curl_result (curl_result);
-              speed_records[i] = speed;
-            }
+          char *curl_result = measure_speed_for_url (url_);
+          double speed = parse_and_say_curl_result (curl_result);
+          speed_records[i] = speed;
         }
     }
-
-
-  if (CliOpt_Parallel)
-    {
-      /* 汇总 */
-      char **curl_results = xy_malloc0 (sizeof(char *) * size);
-      for (int i=0; i<size; i++)
-        {
-          if (get_measured[i]==true)
-            pthread_join (threads[i], (void *)&curl_results[i]);
-        }
-
-      for (int i=0; i<get_measured_n; i++)
-        printf("\033[A\033[2K");
-
-      for (int i=0; i<size; i++)
-        {
-          if (get_measured[i]==true)
-            {
-              printf ("%s", measure_msgs[i]);
-              double speed = parse_and_say_curl_result (curl_results[i]);
-              speed_records[i] = speed;
-            }
-        }
-      /* 汇总结束 */
-    } /* End of if Parallel*/
 }
 
 
