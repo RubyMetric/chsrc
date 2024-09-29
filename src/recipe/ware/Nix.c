@@ -56,7 +56,7 @@ wr_nix_setsrc (char *option)
   chsrc_note2 ("若您使用的是NixOS，请额外添加下述内容至 configuration.nix 中");
   puts (cmd);
 
-  chsrc_conclude (&source, ChsrcTypeSemiAuto);
+  chsrc_conclude (&source, SetsrcType_SemiAuto);
 }
 
 def_target_s (wr_nix);

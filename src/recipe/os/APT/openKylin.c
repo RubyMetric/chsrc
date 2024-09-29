@@ -39,7 +39,7 @@ os_openkylin_setsrc (char *option)
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/openkylin/?@", source.url, "@g'" OS_Apt_SourceList);
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_conclude (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, SetsrcType_Untested);
 }
 
 def_target(os_openkylin);

@@ -27,7 +27,7 @@ pl_clojure_setsrc (char *option)
 
   chsrc_note2 ("抱歉，Clojure换源较复杂，您可手动查阅并换源:");
   puts (source.url);
-  chsrc_conclude (&source, ChsrcTypeManual);
+  chsrc_conclude (&source, SetsrcType_Manual);
 }
 
 def_target_s (pl_clojure);

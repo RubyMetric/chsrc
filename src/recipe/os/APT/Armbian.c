@@ -54,7 +54,7 @@ os_armbian_setsrc (char *option)
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_conclude (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, SetsrcType_Auto);
 }
 
 

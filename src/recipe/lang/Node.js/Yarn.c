@@ -41,7 +41,7 @@ void
 pl_nodejs_yarn_setsrc (char *option)
 {
   SourceInfo source;
-  chsrc_yield_the_source (pl_nodejs);
+  chsrc_yield_for_the_source (pl_nodejs);
   if (ProgMode_Target_Group!=true)
     chsrc_confirm_source;
 
@@ -72,7 +72,7 @@ pl_nodejs_yarn_setsrc (char *option)
     }
 
   if (ProgMode_Target_Group!=true)
-    chsrc_conclude (&source, ChsrcTypeAuto);
+    chsrc_conclude (&source, SetsrcType_Auto);
 }
 
 
@@ -82,7 +82,7 @@ pl_nodejs_yarn_setsrc (char *option)
 void
 pl_nodejs_yarn_resetsrc (char *option)
 {
-  pl_nodejs_yarn_setsrc (ChsrcTypeReset);
+  pl_nodejs_yarn_setsrc (SetsrcType_Reset);
 }
 
 

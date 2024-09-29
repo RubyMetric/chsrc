@@ -47,7 +47,7 @@ pl_julia_setsrc (char *option)
   const char *towrite = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
 
   chsrc_append_to_file (towrite, "~/.julia/config/startup.jl");
-  chsrc_conclude (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, SetsrcType_Untested);
 }
 
 def_target(pl_julia);

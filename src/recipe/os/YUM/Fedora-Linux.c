@@ -60,7 +60,7 @@ os_fedora_setsrc (char *option)
   chsrc_log2 ("已新增文件 /etc/yum.repos.d/fedora-updates-modular.repo");
 
   chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
-  chsrc_conclude (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, SetsrcType_Auto);
 }
 
 def_target_s(os_fedora);

@@ -44,7 +44,7 @@ os_linuxmint_setsrc (char *option)
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_conclude (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, SetsrcType_Auto);
   chsrc_warn2 ("完成后请不要再使用 mintsources（自带的图形化软件源设置工具）进行任何操作，因为在操作后，无论是否有按“确定”，mintsources 均会覆写我们刚才换源的内容");
 }
 

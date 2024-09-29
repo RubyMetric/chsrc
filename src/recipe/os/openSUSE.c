@@ -75,7 +75,7 @@ os_opensuse_setsrc (char *option)
 
   chsrc_run (cmd5, RunOpt_Default);
   chsrc_run (cmd6, RunOpt_Default);
-  chsrc_conclude (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, SetsrcType_Untested);
 }
 
 def_target_s(os_opensuse);

@@ -82,7 +82,7 @@ pl_dart_flutter_setsrc (char *option)
           chsrc_append_to_file (towrite, bashrc);
         }
     }
-  chsrc_conclude (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, SetsrcType_Auto);
 }
 
 

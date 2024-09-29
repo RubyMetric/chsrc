@@ -71,7 +71,7 @@ pl_r_setsrc (char *option)
       chsrc_append_to_file (towrite1, "~/.Rprofile");
       chsrc_append_to_file (towrite2, "~/.Rprofile");
     }
-  chsrc_conclude (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, SetsrcType_Auto);
 }
 
 def_target(pl_r);

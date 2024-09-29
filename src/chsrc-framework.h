@@ -701,13 +701,13 @@ source_has_empty_url (SourceInfo *source)
  *  1. 用户指定某个 MirrorCode
  *  2. NULL: 用户什么都没指定 (将测速选择最快镜像)
  *  3. 用户给了一个 URL
- *  4. ChsrcTypeReset
+ *  4. SetsrcType_Reset
  * 选用了Leader target
  *  5. ProgMode_Leader_Selected_Index 将给出所选索引
  *
  * @dependency 变量 option
  */
-#define chsrc_yield_the_source(for_what) \
+#define chsrc_yield_for_the_source(for_what) \
   if (ProgMode_Target_Group==true && ProgMode_Leader_Selected_Index==-1) \
     { \
       ProgMode_Leader_Selected_Index = use_specific_mirror_or_auto_select (option, for_what); \
@@ -730,7 +730,7 @@ source_has_empty_url (SourceInfo *source)
 
 #define chsrc_yield_source(for_what) \
   SourceInfo source; \
-  chsrc_yield_the_source(for_what)
+  chsrc_yield_for_the_source(for_what)
 
 
 
@@ -778,11 +778,11 @@ confirm_source (SourceInfo *source)
 #define chsrc_yield_source_and_confirm(for_what) chsrc_yield_source(for_what);chsrc_confirm_source
 
 
-#define ChsrcTypeAuto     "auto"
-#define ChsrcTypeReset    "reset"
-#define ChsrcTypeSemiAuto "semiauto"
-#define ChsrcTypeManual   "manual"
-#define ChsrcTypeUntested "untested"
+#define SetsrcType_Auto     "auto"
+#define SetsrcType_Reset    "reset"
+#define SetsrcType_SemiAuto "semiauto"
+#define SetsrcType_Manual   "manual"
+#define SetsrcType_Untested "untested"
 
 #define MSG_EN_PUBLIC_URL "If the URL you specify is a public service, you are invited to contribute: chsrc issue"
 #define MSG_CN_PUBLIC_URL "若您指定的URL为公有服务，邀您参与贡献: chsrc issue"
@@ -809,7 +809,7 @@ confirm_source (SourceInfo *source)
 
 /**
  * @param source    可为NULL
- * @param last_word 5种选择：ChsrcTypeAuto | ChsrcTypeReset | ChsrcTypeSemiAuto | ChsrcTypeManual | ChsrcTypeUntested
+ * @param last_word 5种选择：SetsrcType_Auto | SetsrcType_Reset | SetsrcType_SemiAuto | SetsrcType_Manual | SetsrcType_Untested
  * @translation Done
  */
 void
@@ -817,7 +817,7 @@ chsrc_conclude (SourceInfo *source, const char *last_word)
 {
   split_between_source_changing_process;
 
-  if (xy_streql (ChsrcTypeAuto, last_word))
+  if (xy_streql (SetsrcType_Auto, last_word))
     {
       if (source)
         {
@@ -840,13 +840,13 @@ chsrc_conclude (SourceInfo *source, const char *last_word)
           chsrc_log (msg);
         }
     }
-  else if (xy_streql (ChsrcTypeReset, last_word))
+  else if (xy_streql (SetsrcType_Reset, last_word))
     {
       // source_is_upstream (source)
       char *msg = CliOpt_InEnglish ? "Has been reset to the upstream default source" : "已重置为上游默认源";
       chsrc_log (purple (msg));
     }
-  else if (xy_streql (ChsrcTypeSemiAuto, last_word))
+  else if (xy_streql (SetsrcType_SemiAuto, last_word))
     {
       if (source)
         {
@@ -873,7 +873,7 @@ chsrc_conclude (SourceInfo *source, const char *last_word)
       char *msg = CliOpt_InEnglish ? MSG_EN_BETTER : MSG_CN_BETTER;
       chsrc_warn (msg);
     }
-  else if (xy_streql (ChsrcTypeManual, last_word))
+  else if (xy_streql (SetsrcType_Manual, last_word))
     {
       if (source)
         {
@@ -898,7 +898,7 @@ chsrc_conclude (SourceInfo *source, const char *last_word)
       char *msg = CliOpt_InEnglish ? MSG_EN_BETTER : MSG_CN_BETTER;
       chsrc_warn (msg);
     }
-  else if (xy_streql (ChsrcTypeUntested, last_word))
+  else if (xy_streql (SetsrcType_Untested, last_word))
     {
       if (source)
         {

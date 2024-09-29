@@ -34,14 +34,14 @@ wr_winget_setsrc (char *option)
   chsrc_run ("winget source remove winget", RunOpt_Default);
   chsrc_run (xy_2strjoin ("winget source add winget ", source.url), RunOpt_Default);
 
-  chsrc_conclude (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, SetsrcType_Auto);
 }
 
 void
 wr_winget_resetsrc (char *option)
 {
   chsrc_run ("winget source reset winget", RunOpt_Default);
-  chsrc_conclude (NULL, ChsrcTypeAuto);
+  chsrc_conclude (NULL, SetsrcType_Auto);
 }
 
 

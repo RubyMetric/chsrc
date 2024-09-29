@@ -67,7 +67,7 @@ wr_anaconda_setsrc (char *option)
   puts (file);
 
   chsrc_note2 ("然后运行 conda clean -i 清除索引缓存，保证用的是镜像站提供的索引");
-  chsrc_conclude (&source, ChsrcTypeSemiAuto);
+  chsrc_conclude (&source, SetsrcType_SemiAuto);
 }
 
 def_target_s (wr_anaconda);

@@ -47,7 +47,7 @@ os_msys2_setsrc (char *option)
                              "#g\" /etc/pacman.d/mirrorlist* ");
 
   chsrc_run (cmd, RunOpt_Default);
-  chsrc_conclude (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, SetsrcType_Untested);
 }
 
 def_target_s(os_msys2);

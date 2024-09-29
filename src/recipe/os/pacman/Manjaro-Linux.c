@@ -20,7 +20,7 @@ os_manjaro_setsrc (char *option)
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_run ("pacman -Syy", RunOpt_No_Last_New_Line);
-  chsrc_conclude (NULL, ChsrcTypeAuto);
+  chsrc_conclude (NULL, SetsrcType_Auto);
 }
 
 TargetInfo os_manjaro_target = {NULL, os_manjaro_setsrc, NULL, NULL, 0};

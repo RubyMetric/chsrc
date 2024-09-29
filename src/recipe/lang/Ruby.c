@@ -60,7 +60,7 @@ pl_ruby_remove_gem_source (const char *source)
 void
 pl_ruby_setsrc (char *option)
 {
-  char *chsrc_type = xy_streql (option, ChsrcTypeReset) ? ChsrcTypeReset : ChsrcTypeAuto;
+  char *chsrc_type = xy_streql (option, SetsrcType_Reset) ? SetsrcType_Reset : SetsrcType_Auto;
 
   chsrc_ensure_program ("gem");
 
@@ -91,7 +91,7 @@ pl_ruby_setsrc (char *option)
 void
 pl_ruby_resetsrc (char *option)
 {
-  pl_ruby_setsrc (ChsrcTypeReset);
+  pl_ruby_setsrc (SetsrcType_Reset);
 }
 
 

@@ -55,7 +55,7 @@ pl_perl_setsrc (char *option)
 
   chsrc_note2 ("请您使用 perl -v 以及 cpan -v，若 Perl >= v5.36 或 CPAN >= 2.29，请额外手动调用下面的命令");
   puts ("perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('pushy_https', 0);; CPAN::HandleConfig->commit()\"");
-  chsrc_conclude (&source, ChsrcTypeSemiAuto);
+  chsrc_conclude (&source, SetsrcType_SemiAuto);
 }
 
 def_target(pl_perl);

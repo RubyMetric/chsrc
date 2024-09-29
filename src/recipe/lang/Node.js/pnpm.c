@@ -28,7 +28,7 @@ void
 pl_nodejs_pnpm_setsrc (char *option)
 {
   SourceInfo source;
-  chsrc_yield_the_source (pl_nodejs);
+  chsrc_yield_for_the_source (pl_nodejs);
   if (ProgMode_Target_Group!=true)
     chsrc_confirm_source;
 
@@ -42,7 +42,7 @@ pl_nodejs_pnpm_setsrc (char *option)
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
   if (ProgMode_Target_Group!=true)
-    chsrc_conclude (&source, ChsrcTypeAuto);
+    chsrc_conclude (&source, SetsrcType_Auto);
 }
 
 
@@ -52,7 +52,7 @@ pl_nodejs_pnpm_setsrc (char *option)
 void
 pl_nodejs_pnpm_resetsrc (char *option)
 {
-  pl_nodejs_pnpm_setsrc (ChsrcTypeReset);
+  pl_nodejs_pnpm_setsrc (SetsrcType_Reset);
 }
 
 

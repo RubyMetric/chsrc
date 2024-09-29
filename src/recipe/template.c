@@ -94,7 +94,7 @@ void
 <category>_<target>_resetsrc (char *option)
 {
   // 往往通过下述方式统一在 setsrc() 中实现
-  // <category>_<target>_setsrc (ChsrcTypeReset);
+  // <category>_<target>_setsrc (SetsrcType_Reset);
 }
 
 

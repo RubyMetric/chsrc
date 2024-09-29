@@ -89,7 +89,7 @@ wr_homebrew_setsrc (char *option)
       chsrc_append_to_file (core_git_remote_fish, fishrc);
     }
 
-  chsrc_conclude(&source, ChsrcTypeAuto);
+  chsrc_conclude(&source, SetsrcType_Auto);
   chsrc_note2 ("请您重启终端使Homebrew环境变量生效");
 }
 

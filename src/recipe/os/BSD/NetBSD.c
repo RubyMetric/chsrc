@@ -58,7 +58,7 @@ os_netbsd_setsrc (char *option)
   char *url = xy_strjoin (5, source.url, arch, "/", version, "/All");
   chsrc_overwrite_file (url, "/usr/pkg/etc/pkgin/repositories.conf");
 
-  chsrc_conclude (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, SetsrcType_Untested);
 }
 
 def_target(os_netbsd);

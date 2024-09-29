@@ -91,7 +91,7 @@ os_arch_setsrc (char *option)
     {
       chsrc_run ("pacman -Syy", RunOpt_No_Last_New_Line);
     }
-  chsrc_conclude (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, SetsrcType_Auto);
 }
 
 
@@ -124,7 +124,7 @@ os_archlinuxcn_setsrc (char *option)
   chsrc_run ("pacman -Sy archlinuxcn-keyring", RunOpt_Default);
 
   chsrc_run ("pacman -Syy", RunOpt_No_Last_New_Line);
-  chsrc_conclude (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, SetsrcType_Untested);
 }
 #undef OS_Pacman_MirrorList
 

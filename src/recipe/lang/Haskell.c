@@ -62,7 +62,7 @@ pl_haskell_setsrc (char *option)
 
   chsrc_note2 (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
   puts (file);
-  chsrc_conclude (&source, ChsrcTypeManual);
+  chsrc_conclude (&source, SetsrcType_Manual);
 }
 
 def_target_s (pl_haskell);

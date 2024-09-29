@@ -93,7 +93,7 @@ pl_nodejs_setsrc (char *option)
       pl_nodejs_pnpm_setsrc (option);
     }
 
-  chsrc_conclude (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, SetsrcType_Auto);
 }
 
 
@@ -103,7 +103,7 @@ pl_nodejs_setsrc (char *option)
 void
 pl_nodejs_resetsrc (char *option)
 {
-  pl_nodejs_setsrc (ChsrcTypeReset);
+  pl_nodejs_setsrc (SetsrcType_Reset);
 }
 
 

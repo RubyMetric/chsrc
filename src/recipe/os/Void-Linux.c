@@ -52,7 +52,7 @@ os_void_setsrc (char *option)
 
   chsrc_note2 ("若报错可尝试使用以下命令:");
   say (cmd);
-  chsrc_conclude (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, SetsrcType_Untested);
 }
 
 def_target(os_void);

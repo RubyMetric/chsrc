@@ -38,7 +38,7 @@ wr_cocoapods_setsrc (char *option)
   char *source_str = xy_strjoin (3, "source '", source.url, "'");
   say (source_str);
 
-  chsrc_conclude (&source, ChsrcTypeManual);
+  chsrc_conclude (&source, SetsrcType_Manual);
 }
 
 def_target_s (wr_cocoapods);

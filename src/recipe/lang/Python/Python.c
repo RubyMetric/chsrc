@@ -45,7 +45,7 @@ pl_python_setsrc (char *option)
     chsrc_note2 (msg);
   }
 
-  char *chsrc_type = xy_streql (option, ChsrcTypeReset) ? ChsrcTypeReset : ChsrcTypeAuto;
+  char *chsrc_type = xy_streql (option, SetsrcType_Reset) ? SetsrcType_Reset : SetsrcType_Auto;
 
   bool pdm_exist    = false,
        poetry_exist = false;
@@ -77,7 +77,7 @@ pl_python_setsrc (char *option)
 void
 pl_python_resetsrc (char *option)
 {
-  pl_python_setsrc (ChsrcTypeReset);
+  pl_python_setsrc (SetsrcType_Reset);
 }
 
 

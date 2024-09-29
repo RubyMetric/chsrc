@@ -95,7 +95,7 @@ pl_java_setsrc (char *option)
       chsrc_note2 ("请在您的 build.gradle 中添加:");
       puts (file);
     }
-  chsrc_conclude (&source, ChsrcTypeManual);
+  chsrc_conclude (&source, SetsrcType_Manual);
 }
 
 def_target(pl_java);

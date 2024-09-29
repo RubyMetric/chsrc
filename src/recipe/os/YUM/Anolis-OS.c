@@ -36,7 +36,7 @@ os_anolis_setsrc (char *option)
 
   chsrc_run ("dnf makecache", RunOpt_Default);
   chsrc_run ("dnf update", RunOpt_No_Last_New_Line);
-  chsrc_conclude (&source, ChsrcTypeUntested);
+  chsrc_conclude (&source, SetsrcType_Untested);
 }
 
 def_target_s(os_anolis);

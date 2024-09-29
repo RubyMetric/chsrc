@@ -26,7 +26,7 @@ pl_nodejs_bun_getsrc (char *option)
 void
 pl_nodejs_bun_setsrc (char *option)
 {
-  char *chsrc_type = xy_streql (option, ChsrcTypeReset) ? ChsrcTypeReset : ChsrcTypeManual;
+  char *chsrc_type = xy_streql (option, SetsrcType_Reset) ? SetsrcType_Reset : SetsrcType_Manual;
   chsrc_yield_source (pl_nodejs);
 
   char *file = xy_strjoin(3, "[install]\n"
@@ -45,7 +45,7 @@ pl_nodejs_bun_setsrc (char *option)
 void
 pl_nodejs_bun_resetsrc (char *option)
 {
-  pl_nodejs_bun_setsrc (ChsrcTypeReset);
+  pl_nodejs_bun_setsrc (SetsrcType_Reset);
 }
 
 

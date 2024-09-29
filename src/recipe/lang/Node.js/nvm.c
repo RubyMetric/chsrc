@@ -42,7 +42,7 @@ pl_nodejs_nvm_setsrc (char *option)
   if (xy_file_exist (zshrc))
     chsrc_append_to_file (env, zshrc);
 
-  chsrc_conclude (&source, ChsrcTypeAuto);
+  chsrc_conclude (&source, SetsrcType_Auto);
 }
 
 
@@ -52,7 +52,7 @@ pl_nodejs_nvm_setsrc (char *option)
 void
 pl_nodejs_nvm_resetsrc (char *option)
 {
-  // pl_nodejs_nvm_setsrc (ChsrcTypeReset);
+  // pl_nodejs_nvm_setsrc (SetsrcType_Reset);
   chsrc_error ("暂不支持对 nvm 重置");
   exit (Exit_Unsupported);
 }
