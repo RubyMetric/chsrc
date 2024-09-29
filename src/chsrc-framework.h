@@ -7,7 +7,7 @@
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-09-13>
+ * Last Modified : <2024-09-29>
  *
  * chsrc 框架
  * ------------------------------------------------------------*/
@@ -33,7 +33,6 @@ bool CliOpt_Locally   = false;
 bool CliOpt_InEnglish = false;
 bool CliOpt_DryRun    = false;
 bool CliOpt_NoColor   = false;
-bool CliOpt_Parallel  = false;
 
 /**
  * -local 的含义是启用 *项目级* 换源
@@ -419,10 +418,7 @@ measure_speed_for_url (void *url)
 {
   char *time_sec = NULL;
 
-  if (CliOpt_Parallel)
-    time_sec = "9";
-  else
-    time_sec = "6";
+  time_sec = "8";
 
   /* 现在我们切换至跳转后的链接来测速，不再使用下述判断
   if (xy_str_start_with(url, "https://registry.npmmirror"))
@@ -575,10 +571,7 @@ measure_speed_for_every_source (SourceInfo sources[], int size, double speed_rec
           measure_msgs[i] = xy_strjoin (3, "  - ", msg, " ... ");
           printf ("%s", measure_msgs[i]);
 
-          if (CliOpt_Parallel)
-            say (""); /* 并行时直接显示下一测速状态行 */
-          else
-            fflush (stdout);
+          fflush (stdout);
 
           char *url_ = xy_strdup (url);
 
@@ -601,13 +594,7 @@ int
 select_mirror_autoly (SourceInfo *sources, size_t size, const char *target_name)
 {
   {
-  char *msg = NULL;
-
-  if (CliOpt_Parallel)
-    msg = CliOpt_InEnglish ? "Measuring speed in parallel. We recommend you use the default sequential measure for more referential results"
-                           : "即将并行测速，建议使用默认的顺序测速以获得更具参考意义的结果";
-  else
-    msg = CliOpt_InEnglish ? "Measuring speed in sequence" : "顺序测速中";
+  char *msg = CliOpt_InEnglish ? "Measuring speed in sequence" : "测速中";
 
   xy_log_brkt (App_Name, bdpurple (CliOpt_InEnglish ? "MEASURE" : "测速"), msg);
   say ("");
