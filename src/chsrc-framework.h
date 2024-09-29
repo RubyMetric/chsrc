@@ -546,7 +546,7 @@ measure_speed_for_every_source (SourceInfo sources[], int size, double speed_rec
   for (int i=0; i<size; i++)
     {
       SourceInfo src = sources[i];
-      const char *url = src.mirror->__bigfile_url;
+      const char *url = src.mirror->bigfile_url;
       if (NULL==url)
         {
           if (xy_streql ("upstream", src.mirror->code))

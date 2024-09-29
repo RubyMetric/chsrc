@@ -16,10 +16,10 @@ typedef struct MirrorSite_t {
   const char *abbr; // 需要使用镜像站的英文名时，用这个代替，因为大部分镜像站没有提供正式的英文名
   const char *name; // 镜像站中文名
   const char *site;
-  const char *__bigfile_url;  // 用于对该镜像站测速
+  const char *bigfile_url; // 用于对该镜像站测速
 } MirrorSite;
 
-// #define Big_File_ubuntu  "/indices/md5sums.gz"  这个是错的
+#define Big_File_ubuntu     "/indices/md5sums.gz"  这个是错的
 #define Big_File_ctan       "/systems/texlive/Images/texlive.iso"           // 4.8GB
 #define Big_File_debian     "/ls-lR.gz"                                     // 13.9MB
 #define Big_File_archlinux  "/iso/latest/archlinux-x86_64.iso"              // 800MB 左右
