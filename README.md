@@ -185,7 +185,6 @@ reset <target>            # 重置，使用上游默认使用的源
 
 选项:
 -dry                      # Dry Run，模拟换源过程，命令仅打印并不运行
--para(llel)               # 并行测速 (默认的顺序测速更有参考意义)
 -local                    # 仅对某项目而非全局换源 (仅部分软件如bundler,pdm支持)
 -ipv6                     # 使用IPv6测速
 -en(glish)                # 使用英文输出
