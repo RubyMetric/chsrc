@@ -228,6 +228,7 @@ chsrc set node | nodejs # 同时换 npm, yarn 和 pnpm 这3个包管理器，也
   chsrc set yarn
   chsrc set pnpm
 
+chsrc set bun
 chsrc set nvm
 
 chsrc set perl | cpan

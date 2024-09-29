@@ -18,7 +18,7 @@
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.1.9.Beta1Dev2"
+#define Chsrc_Version        "0.1.9.Beta2"
 #define Chsrc_Release_Date   "2024/09/29"
 #define Chsrc_Banner_Version "v" Chsrc_Version "-" Chsrc_Release_Date
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
