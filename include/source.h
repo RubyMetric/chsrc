@@ -6,7 +6,7 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-09-14>
+ * Last Modified : <2024-09-29>
  *
  * 镜像站与换源信息
  * ------------------------------------------------------------*/
@@ -19,17 +19,18 @@ typedef struct MirrorSite_t {
   const char *bigfile_url; // 用于对该镜像站测速
 } MirrorSite;
 
-#define Big_File_ubuntu     "/indices/md5sums.gz"  这个是错的
-#define Big_File_ctan       "/systems/texlive/Images/texlive.iso"           // 4.8GB
-#define Big_File_debian     "/ls-lR.gz"                                     // 13.9MB
-#define Big_File_archlinux  "/iso/latest/archlinux-x86_64.iso"              // 800MB 左右
-#define Big_File_deepin     "/20.9/deepin-desktop-community-20.9-amd64.iso" // 4GB 左右
+#define Big_File_ubuntu     "/24.04/ubuntu-24.04.1-desktop-amd64.iso"       // 5.8 GB
+#define Big_File_ctan       "/systems/texlive/Images/texlive.iso"           // 4.8 GB
+#define Big_File_archlinux  "/iso/latest/archlinux-x86_64.iso"              // 800 MB
+#define Big_File_deepin     "/20.9/deepin-desktop-community-20.9-amd64.iso" // 4 GB
 
 
 /**
  * 教育网镜像
  *
- * 我们目前根据 https://github.com/mirrorz-org/oh-my-mirrorz 挑选速度前10位
+ * @sync https://github.com/RubyMetric/chsrc/wiki
+ *
+ * Wiki中的排序是根据 https://github.com/mirrorz-org/oh-my-mirrorz 挑选速度前10位
  */
 MirrorSite
 MirrorZ       = {"mirrorz", "MirrorZ",       "MirrorZ 校园网镜像站",     "https://mirrors.cernet.edu.cn/",  NULL},
@@ -41,7 +42,7 @@ Sjtug_Zhiyuan = {"sjtu",    "SJTUG-zhiyuan", "上海交通大学致远镜像站"
                  "https://mirrors.sjtug.sjtu.edu.cn/ctan" Big_File_ctan},
 
 Zju           = {"zju",     "ZJU",           "浙江大学开源软件镜像站",     "https://mirrors.zju.edu.cn/",
-                 "https://mirrors.zju.edu.cn/debian" Big_File_debian},
+                 "https://mirrors.zju.edu.cn/ubuntu-releases"  Big_File_ubuntu},
 
 Lzuoss        = {"lzu",     "LZUOSS",        "兰州大学开源社区镜像站",     "https://mirror.lzu.edu.cn/",
                  "https://mirror.lzu.edu.cn/CTAN" Big_File_ctan},
@@ -53,7 +54,7 @@ Bfsu          = {"bfsu",    "BFSU",          "北京外国语大学开源软件�
                  "https://mirrors.bfsu.edu.cn/speedtest/1000mb.bin"},
 
 Pku           = {"pku",     "PKU",           "北京大学开源镜像站",         "https://mirrors.pku.edu.cn/",
-                 "https://mirrors.pku.edu.cn/debian" Big_File_debian},
+                 "https://mirrors.pku.edu.cn/ubuntu-releases" Big_File_ubuntu},
 
 Bjtu          = {"bjtu",    "BJTU",          "北京交通大学自由与开源软件镜像站", "https://mirror.bjtu.edu.cn/",
                  "https://mirror.bjtu.edu.cn/archlinux" Big_File_archlinux},
@@ -62,18 +63,18 @@ Sustech       = {"sustech", "SUSTech",       "南方科技大学开源软件镜�
                  "https://mirrors.sustech.edu.cn/site/speedtest/1000mb.bin"},
 
 Ustc          = {"ustc",    "USTC",          "中国科学技术大学开源镜像站",  "https://mirrors.ustc.edu.cn/",
-                 "https://mirrors.ustc.edu.cn/CTAN" Big_File_ctan},
+                 "https://mirrors.ustc.edu.cn/ubuntu-releases" Big_File_ubuntu},
 
 Hust          = {"hust",    "HUST",          "华中科技大学开源镜像站",     "https://mirrors.hust.edu.cn/",
-                 "https://mirrors.hust.edu.cn/debian" Big_File_debian},
+                 "https://mirrors.hust.edu.cn/ubuntu-releases" Big_File_ubuntu},
 
 // 速度暂时处于10位以后，但是目前可用的源
 Nju           = {"nju",     "NJU",           "南京大学开源镜像站",         "https://mirrors.nju.edu.cn/",
                  "https://mirrors.nju.edu.cn/archlinux" Big_File_archlinux};
 
 /**
- * @note by:ccmywish {
- *   [2023-09-05] 我只使用了不到5次，重庆大学镜像站就把我的ip封杀了，对用户来说封杀策略过严，暂时不可靠，暂时不用
+ * @note {
+ *   [ccmywish:2023-09-05] 我只使用了不到5次，重庆大学镜像站就把我的ip封杀了，对用户来说封杀策略过严，暂时不可靠，暂时不用
  * }
  */
 //  Cqu       = {"cqu",     "CQU",           "重庆大学开源软件镜像站",     "https://mirrors.cqu.edu.cn/",
@@ -106,26 +107,26 @@ Ali_ECS_classic = {
 
 Tencent = {
   "tencent", "Tencent Public",  "腾讯软件源(公网)",  "https://mirrors.tencent.com/",
-  "https://mirrors.cloud.tencent.com/debian" Big_File_debian},
+  "https://mirrors.cloud.tencent.com/ubuntu-releases" Big_File_ubuntu},
 
 /*
 Tencent_Intra = {
   "tencent-intra", "Tencent Intranet",  "腾讯软件源(内网)", "https://mirrors.tencent.com/",
-  "https://mirrors.cloud.tencentyun.com/debian" Big_File_debian},
+  "https://mirrors.cloud.tencentyun.com/ubuntu-releases" Big_File_ubuntu},
 */
 
 Huawei = {"huawei",  "Huawei Cloud", "华为开源镜像站",  "https://mirrors.huaweicloud.com/",
-          "https://mirrors.huaweicloud.com/debian" Big_File_debian },
+          "https://mirrors.huaweicloud.com/ubuntu-releases" Big_File_ubuntu },
 
 Volcengine = {
   "volc",  "Volcengine", "火山引擎开源软件镜像站(公网)",
   "https://developer.volcengine.com/mirror/",
-  "https://mirrors.volces.com/debian" Big_File_debian },
+  "https://mirrors.volces.com/ubuntu-releases" Big_File_ubuntu },
 /*
 Volceengine_Intra = {
   "volc-intra",  "Volcengine Intranet", "火山引擎开源软件镜像站(内网)",
   "https://developer.volcengine.com/mirror/",
-  "https://mirrors.ivolces.com/debian" Big_File_debian },
+  "https://mirrors.ivolces.com/ubuntu-releases" Big_File_ubuntu },
 */
 
 Netease  = {
