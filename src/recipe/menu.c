@@ -5,45 +5,48 @@
  * Contributors   :  Nil Null  <nil@null.org>
  * Created On     : <2023-09-01>
  * Major Revision :      1
- * Last Modified  : <2024-09-23>
+ * Last Modified  : <2024-09-29>
  * ------------------------------------------------------------*/
 
 /* Begin Target Matrix */
 #define t(a) (const char*)(a)
 static const char
 *pl_ruby  [] = {"gem",    "ruby",  "rb", "rubygem",  "rubygems", "bundler",  NULL, t(&pl_ruby_target)},
-*pl_python[] = {"python", "pypi",  "py",                                     NULL, t(&pl_python_target)},
-  *pl_python_pip[]    = {"pip",     NULL, t(&pl_python_pip_target)},
-  *pl_python_poetry[] = {"poetry",  NULL, t(&pl_python_poetry_target)},
-  *pl_python_pdm[]    = {"pdm",     NULL, t(&pl_python_pdm_target)},
 
-*pl_nodejs[] = {"node", "nodejs", NULL, t(&pl_nodejs_target)},
-  *pl_nodejs_npm[]  = {"npm",  NULL, t(&pl_nodejs_npm_target)},
-  *pl_nodejs_yarn[] = {"yarn", NULL, t(&pl_nodejs_yarn_target)},
-  *pl_nodejs_pnpm[] = {"pnpm", NULL, t(&pl_nodejs_pnpm_target)},
-*pl_nodejs_nvm[] = {"nvm", NULL, t(&pl_nodejs_nvm_target)},
+*pl_python[]          = {"python", "pypi",  "py",  NULL, t(&pl_python_target)},
+  *pl_python_pip[]    = {"pip",                    NULL, t(&pl_python_pip_target)},
+  *pl_python_poetry[] = {"poetry",                 NULL, t(&pl_python_poetry_target)},
+  *pl_python_pdm[]    = {"pdm",                    NULL, t(&pl_python_pdm_target)},
 
-*pl_perl  [] = {"perl",  "cpan",                         NULL,  t(&pl_perl_target)},
-*pl_php   [] = {"php",   "composer",                     NULL,  t(&pl_php_target)},
-*pl_lua   [] = {"lua",   "luarocks",                     NULL,  t(&pl_lua_target)},
-*pl_go    [] = {"go",    "golang",  "goproxy",           NULL,  t(&pl_go_target)} ,
-*pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL,  t(&pl_rust_target)},
-*pl_java  [] = {"java",  "maven",   "mvn",    "gradle",  NULL,  t(&pl_java_target)},
-*pl_clojure[]= {"clojure","clojars","cloj",   "lein",   "leiningen",  NULL, t(&pl_clojure_target)},
+*pl_nodejs[]        = {"node", "nodejs", NULL, t(&pl_nodejs_target)},
+*pl_nodejs_bun[]    = {"bun",            NULL, t(&pl_nodejs_bun_target)},
+  *pl_nodejs_npm[]  = {"npm",            NULL, t(&pl_nodejs_npm_target)},
+  *pl_nodejs_yarn[] = {"yarn",           NULL, t(&pl_nodejs_yarn_target)},
+  *pl_nodejs_pnpm[] = {"pnpm",           NULL, t(&pl_nodejs_pnpm_target)},
+*pl_nodejs_nvm[]    = {"nvm",            NULL, t(&pl_nodejs_nvm_target)},
 
-*pl_dart  [] = {"dart", "pub",   NULL, t(&pl_dart_target)},
-*pl_dart_flutter [] = {"flutter",NULL, t(&pl_dart_flutter_target)},
+*pl_perl  [] = {"perl",  "cpan",                         NULL, t(&pl_perl_target)},
+*pl_php   [] = {"php",   "composer",                     NULL, t(&pl_php_target)},
+*pl_lua   [] = {"lua",   "luarocks",                     NULL, t(&pl_lua_target)},
+*pl_go    [] = {"go",    "golang",  "goproxy",           NULL, t(&pl_go_target)} ,
+*pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL, t(&pl_rust_target)},
+*pl_java  [] = {"java",  "maven",   "mvn",    "gradle",  NULL, t(&pl_java_target)},
+*pl_clojure[]= {"clojure","clojars","cloj",   "lein",    NULL, t(&pl_clojure_target)},
 
-*pl_nuget[]  = {"nuget", "net",     ".net",   "dotnet",  NULL,  t(&pl_nuget_target)},
-*pl_haskell[]= {"haskell", "cabal", "stack",  "hackage", NULL,  t(&pl_haskell_target)},
-*pl_ocaml[]  = {"ocaml", "opam",                         NULL,  t(&pl_ocaml_target)},
-*pl_r     [] = {"cran",  "r",                            NULL,  t(&pl_r_target)},
-*pl_julia [] = {"julia",                                 NULL,  t(&pl_julia_target)},
+*pl_dart  [] =        {"dart", "pub",                    NULL, t(&pl_dart_target)},
+*pl_dart_flutter [] = {"flutter",                        NULL, t(&pl_dart_flutter_target)},
+
+*pl_nuget[]  = {"nuget", "net",     ".net",   "dotnet",  NULL, t(&pl_nuget_target)},
+*pl_haskell[]= {"haskell", "cabal", "stack",  "hackage", NULL, t(&pl_haskell_target)},
+*pl_ocaml[]  = {"ocaml", "opam",                         NULL, t(&pl_ocaml_target)},
+*pl_r     [] = {"cran",  "r",                            NULL, t(&pl_r_target)},
+*pl_julia [] = {"julia",                                 NULL, t(&pl_julia_target)},
 **pl_packagers[] =
 {
   pl_ruby,
   pl_python,  pl_python_pip, pl_python_poetry, pl_python_pdm,
-  pl_nodejs,  pl_nodejs_npm, pl_nodejs_pnpm,   pl_nodejs_yarn,
+  pl_nodejs,  pl_nodejs_bun,
+              pl_nodejs_npm, pl_nodejs_pnpm,   pl_nodejs_yarn,
               pl_nodejs_nvm,
   pl_perl,    pl_php,
   pl_lua,

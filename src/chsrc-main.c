@@ -39,6 +39,7 @@
   #include "recipe/lang/Node.js/pnpm.c"
   #include "recipe/lang/Node.js/Yarn.c"
 #include "recipe/lang/Node.js/Node.js.c"
+#include "recipe/lang/Node.js/Bun.c"
 #include "recipe/lang/Node.js/nvm.c"
 
 #include "recipe/lang/Perl.c"
