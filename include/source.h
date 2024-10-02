@@ -6,7 +6,7 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-09-29>
+ * Last Modified : <2024-10-02>
  *
  * 镜像站与换源信息
  * ------------------------------------------------------------*/
@@ -69,6 +69,12 @@ Hust          = {"hust",    "HUST",          "华中科技大学开源镜像站"
                  "https://mirrors.hust.edu.cn/ubuntu-releases" Big_File_ubuntu},
 
 // 速度暂时处于10位以后，但是目前可用的源
+Iscas         = {"iscas",   "ISCAS",         "中科院软件所智能软件研究中心开源镜像站", "https://mirror.iscas.ac.cn/",
+                 "https://mirror.iscas.ac.cn/ubuntu-releases" Big_File_ubuntu},
+
+Scau          = {"scau",    "SCAU",          "华南农业大学开源软件镜像站",  "https://mirrors.scau.edu.cn/",
+                 "https://mirrors.scau.edu.cn/ubuntu-releases" Big_File_ubuntu},
+
 Nju           = {"nju",     "NJU",           "南京大学开源镜像站",         "https://mirrors.nju.edu.cn/",
                  "https://mirrors.nju.edu.cn/archlinux" Big_File_archlinux};
 
