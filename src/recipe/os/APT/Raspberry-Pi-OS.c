@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-29>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2024-10-02>
  *
  * Raspberry Pi OS 树莓派操作系统，以前称为 Raspbian
  * ------------------------------------------------------------*/
@@ -15,7 +15,7 @@
 static SourceInfo
 os_raspberrypi_sources[] = {
   {&Upstream,       NULL},
-  {&MirrorZ,        "https://help.mirrors.cernet.edu.cn/raspberrypi/"},
+  {&MirrorZ,        "https://mirrors.cernet.edu.cn/raspberrypi/"},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/raspberrypi/"},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/raspberrypi/"},
   {&Ustc,           "https://mirrors.ustc.edu.cn/raspberrypi/"},
