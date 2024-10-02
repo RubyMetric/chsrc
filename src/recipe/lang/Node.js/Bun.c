@@ -13,12 +13,12 @@
 void
 pl_nodejs_bun_getsrc (char *option)
 {
-  chsrc_view_file ("~/.bun/bunfig.toml");
+  chsrc_view_file ("~/.bunfig.toml");
 }
 
 
 /**
- * @consult https://bun.sh/guides/install/custom-registry
+ * @consult https://bun.sh/docs/runtime/bunfig#global-vs-local
  * @consult https://github.com/RubyMetric/chsrc/issues/83
  *
  * chsrc set bun
@@ -32,7 +32,7 @@ pl_nodejs_bun_setsrc (char *option)
   char *file = xy_strjoin(3, "[install]\n"
                              "registry = \"", source.url, "\"");
 
-  chsrc_note2 (xy_strjoin (3, "请您手动写入以下内容到 ", xy_uniform_path ("~/.bun/bunfig.toml"), " 文件中:"));
+  chsrc_note2 (xy_strjoin (3, "(全局配置)请您手动写入以下内容到 ", xy_uniform_path ("~/.bunfig.toml"), " 文件中（如果只是配置项目级，则写入到项目根目录的 bunfig.toml 文件中。）:"));
   puts (file);
 
   chsrc_conclude (&source, setsrc_type);
