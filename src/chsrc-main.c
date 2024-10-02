@@ -11,15 +11,16 @@
  *                 |   BlockLune   <blocklune@gmail.com>
  *                 |   Mr. Will    <mr.will.com@outlook.com>
  *                 |   Terrasse    <terrasse@qq.com>
+ *                 |   Lontten     <lontten@163.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-10-02>
+ * Last Modified   : <2024-10-03>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.1.9.Beta3"
-#define Chsrc_Release_Date   "2024/10/02"
+#define Chsrc_Version        "0.1.9.Beta4"
+#define Chsrc_Release_Date   "2024/10/03"
 #define Chsrc_Banner_Version "v" Chsrc_Version "-" Chsrc_Release_Date
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
