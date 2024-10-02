@@ -7,16 +7,13 @@
  * Last Modified : <2024-10-02>
  * ------------------------------------------------------------*/
 
-static MirrorSite
-RsProxyCN = {"rsproxycn", "RsProxy.cn", "字节跳动基础架构Dev Infra", "https://rsproxy.cn/", NULL};
-
 /**
  * @update 2024-10-02
  * @note 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`
  * @note 链接末尾的 `/` 不能缺少
  */
 static SourceInfo
-pl_rust_sources[] = {
+pl_rust_cargo_sources[] = {
   {&Upstream,      "https://index.crates.io/"}, // @help 是这个吗？
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/crates.io-index/"},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/"},
@@ -26,14 +23,14 @@ pl_rust_sources[] = {
   {&RsProxyCN,     "https://rsproxy.cn/index/"},
   {&Hust,          "https://mirrors.hust.edu.cn/crates.io-index/"}
 };
-def_sources_n(pl_rust);
+def_sources_n(pl_rust_cargo);
 
 
 /**
- * chsrc get rust
+ * chsrc get cargo
  */
 void
-pl_rust_getsrc (char *option)
+pl_rust_cargo_getsrc (char *option)
 {
   chsrc_view_file ("~/.cargo/config.toml");
 }
@@ -43,12 +40,12 @@ pl_rust_getsrc (char *option)
  * @consult https://mirrors.tuna.tsinghua.edu.cn/help/crates.io-index/
  * @consult https://help.mirrors.cernet.edu.cn/crates.io-index
  *
- * chsrc set rust
+ * chsrc set cargo
  */
 void
-pl_rust_setsrc (char *option)
+pl_rust_cargo_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (pl_rust);
+  chsrc_yield_source_and_confirm (pl_rust_cargo);
 
   const char* file = xy_strjoin (3,
     "[source.crates-io]\n"
@@ -64,17 +61,17 @@ pl_rust_setsrc (char *option)
 
 
 /**
- * chsrc reset rust
+ * chsrc reset cargo
  */
 void
-pl_rust_resetsrc (char *option)
+pl_rust_cargo_resetsrc (char *option)
 {
-  pl_rust_setsrc (SetsrcType_Reset);
+  pl_rust_cargo_setsrc (SetsrcType_Reset);
 }
 
 
 FeatInfo
-pl_rust_feat (char *option)
+pl_rust_cargo_feat (char *option)
 {
   FeatInfo fi = {0};
 
@@ -91,4 +88,4 @@ pl_rust_feat (char *option)
 }
 
 
-def_target_gsrf(pl_rust);
+def_target_gsrf(pl_rust_cargo);

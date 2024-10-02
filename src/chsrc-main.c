@@ -47,7 +47,10 @@
 #include "recipe/lang/Lua.c"
 #include "recipe/lang/Go.c"
 #include "recipe/lang/Java.c"
-#include "recipe/lang/Rust.c"
+
+#include "recipe/lang/Rust/common.h"
+  #include "recipe/lang/Rust/rustup.c"
+  #include "recipe/lang/Rust/Cargo.c"
 
 #include "recipe/lang/Dart/Pub.c"
 #include "recipe/lang/Dart/Flutter.c"

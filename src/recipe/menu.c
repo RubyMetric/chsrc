@@ -5,7 +5,7 @@
  * Contributors   :  Nil Null  <nil@null.org>
  * Created On     : <2023-09-01>
  * Major Revision :      1
- * Last Modified  : <2024-09-29>
+ * Last Modified  : <2024-10-02>
  * ------------------------------------------------------------*/
 
 /* Begin Target Matrix */
@@ -29,7 +29,10 @@ static const char
 *pl_php   [] = {"php",   "composer",                     NULL, t(&pl_php_target)},
 *pl_lua   [] = {"lua",   "luarocks",                     NULL, t(&pl_lua_target)},
 *pl_go    [] = {"go",    "golang",  "goproxy",           NULL, t(&pl_go_target)} ,
-*pl_rust  [] = {"rust",  "cargo",   "crate",  "crates",  NULL, t(&pl_rust_target)},
+
+*pl_rust_cargo[] = {"rust",  "cargo",   "crate",  "crates", NULL, t(&pl_rust_cargo_target)},
+*pl_rust_rustup[]= {"rustup",                               NULL, t(&pl_rust_rustup_target)},
+
 *pl_java  [] = {"java",  "maven",   "mvn",    "gradle",  NULL, t(&pl_java_target)},
 *pl_clojure[]= {"clojure","clojars","cloj",   "lein",    NULL, t(&pl_clojure_target)},
 
@@ -50,7 +53,8 @@ static const char
               pl_nodejs_nvm,
   pl_perl,    pl_php,
   pl_lua,
-  pl_rust,    pl_go,
+  pl_rust_cargo, pl_rust_rustup,
+  pl_go,
   /*pl_nuget,*/
   pl_java,    pl_clojure,
   pl_dart,    pl_dart_flutter,
