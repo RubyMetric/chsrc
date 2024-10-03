@@ -6,9 +6,10 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
+ * Last Modified : <2024-10-04>
  * Last Modified : <2024-10-09>
  *
- * 镜像站与换源信息
+ * 通用镜像站与换源信息
  * ------------------------------------------------------------*/
 
 typedef struct MirrorSite_t {
@@ -159,10 +160,10 @@ typedef struct SourceInfo_t {
 
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
-enum StatusCan {
+enum Capability {
   CanNot,
-  CanFully,
-  CanSemi
+  FullyCan,
+  PartiallyCan
 };
 
 /* Target Feature Info */
@@ -174,7 +175,7 @@ typedef struct FeatInfo_t {
 
   bool can_user_define; // 用户自定义换源URL
 
-  enum StatusCan stcan_locally;
+  enum Capability cap_locally;
   char *locally;
 
   char *note;

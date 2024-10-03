@@ -111,7 +111,7 @@ FeatInfo
   fi.can_get = true;
   fi.can_reset = false;
 
-  fi.stcan_locally = CanSemi;
+  fi.cap_locally = PartiallyCan;
   fi.locally = "具体说明是否支持项目级换源...";
   fi.can_english = false;
   fi.can_user_define = false;

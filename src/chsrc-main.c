@@ -351,15 +351,15 @@ cli_print_target_features (FeatInfo f, const char *input_target_name)
   char *msg = CliOpt_InEnglish ? " Locally: Change source only for this project " : " Locally: 仅对本项目换源 ";
   char *locally_msg = xy_strjoin (3, msg, "| chsrc set -local ", input_target_name);
 
-  switch (f.stcan_locally)
+  switch (f.cap_locally)
     {
     case CanNot:
       printf (" %s%s\n", bdred(NoMark), locally_msg);br();
       break;
-    case CanFully:
+    case FullyCan:
       printf (" %s%s\n", bdgreen(YesMark), purple(locally_msg));br();
       break;
-    case CanSemi:
+    case PartiallyCan:
       printf (" %s%s\n\n   %s\n", bdgreen(SemiYesMark), purple(locally_msg), f.locally);br();
       break;
     default:

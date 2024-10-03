@@ -89,7 +89,7 @@ pl_python_feat (char *option)
   fi.can_get = true;
   fi.can_reset = true;
 
-  fi.stcan_locally = CanSemi;
+  fi.cap_locally = PartiallyCan;
   fi.locally = "pip 不支持，其他支持";
   fi.can_english = false;
   fi.can_user_define = true;

@@ -103,7 +103,7 @@ pl_ruby_feat (char *option)
   fi.can_get = true;
   fi.can_reset = true;
 
-  fi.stcan_locally = CanSemi;
+  fi.cap_locally = PartiallyCan;
   fi.locally = "gem 不支持; bundler 支持 (From v0.1.6)";
   fi.can_english = false;
   fi.can_user_define = true;

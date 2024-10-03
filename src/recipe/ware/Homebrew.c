@@ -102,7 +102,7 @@ wr_homebrew_feat (char *option)
   fi.can_get = true;
   fi.can_reset = false;
 
-  fi.stcan_locally = CanNot;
+  fi.cap_locally = CanNot;
   fi.locally = NULL;
   fi.can_english = true;
 

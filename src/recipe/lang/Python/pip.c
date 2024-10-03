@@ -79,7 +79,7 @@ pl_python_pip_feat (char *option)
   fi.can_reset = true;
 
   // pip 不支持项目级换源
-  fi.stcan_locally = CanNot;
+  fi.cap_locally = CanNot;
   fi.locally = NULL;
   fi.can_english = true;
   fi.can_user_define = true;

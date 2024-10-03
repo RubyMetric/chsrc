@@ -105,7 +105,7 @@ pl_rust_rustup_feat (char *option)
   fi.can_get = true;
   fi.can_reset = false;
 
-  fi.stcan_locally = CanNot;
+  fi.cap_locally = CanNot;
   fi.locally = "";
   fi.can_english = false;
   fi.can_user_define = true;

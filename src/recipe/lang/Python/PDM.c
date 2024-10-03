@@ -69,7 +69,7 @@ pl_python_pdm_feat (char *option)
   fi.can_reset = true;
 
   // PDM 完全支持项目级换源
-  fi.stcan_locally = CanFully;
+  fi.cap_locally = FullyCan;
   fi.locally = NULL;
 
   fi.can_english = true;

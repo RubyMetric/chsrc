@@ -118,7 +118,7 @@ pl_nodejs_feat (char *option)
   fi.can_get = true;
   fi.can_reset = true;
 
-  fi.stcan_locally = CanFully;
+  fi.cap_locally = FullyCan;
   fi.locally = "Support npm (chsrc v0.1.7)\nSupport yarn v2 (chsrc v0.1.8.1)\nSupport pnpm (chsrc v0.1.8.2)";
   fi.can_english = true;
   fi.can_user_define = true;

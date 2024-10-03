@@ -97,7 +97,7 @@ pl_nodejs_yarn_feat (char *option)
   fi.can_get = true;
   fi.can_reset = true;
 
-  fi.stcan_locally = CanFully;
+  fi.cap_locally = FullyCan;
   fi.locally = NULL;
   fi.can_english = true;
   fi.can_user_define = true;

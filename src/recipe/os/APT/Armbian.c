@@ -66,7 +66,7 @@ os_armbian_feat (char *option)
   fi.can_get = true;
   fi.can_reset = false;
 
-  fi.stcan_locally = CanNot;
+  fi.cap_locally = CanNot;
   fi.can_english = true;
   fi.can_user_define = true;
 
