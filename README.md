@@ -191,34 +191,30 @@ reset <target>            # 重置，使用上游默认使用的源
 -no-color                 # 无颜色输出
 ```
 
-当你**不想自动测速的时候**，你可以直接指定某镜像站，源URL，以及指定维护团队已测试的最快镜像站。
+<br>
 
 ```bash
-
-测速，寻找最快者，换源
+自动测速，寻找最快者，换源
 
     $ chsrc set ruby
 
-使用维护团队测试的最快镜像站
+不想自动测速的时候，可使用维护团队测试的最快镜像站
 
     $ chsrc set ruby first
 
-先列出可用的镜像站，选择使用 RubyChina 作为镜像站
+先列出可用的镜像站，然后选择其一，如使用 RubyChina 作为镜像站
 
     $ chsrc ls  ruby
     $ chsrc set ruby rubychina
 
-或者您有自己的镜像地址，使用自定义URL
+若您有自己的镜像地址，使用自定义URL
 
     $ chsrc set ruby https://gems.ruby-china.com/
 
-```
+对支持 *项目级* 换源的目标，可以避免全局（*系统级* 或 *用户级*）换源
 
-对支持 **项目级** 换源的目标，可以避免全局（**系统级** 或 **用户级**）换源。
-
-```bash
-chsrc set -local bundler
-chsrc set -local pdm
+    $ chsrc set -local bundler
+    $ chsrc set -local pdm
 ```
 
 <br>
