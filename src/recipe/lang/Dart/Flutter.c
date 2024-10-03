@@ -92,19 +92,19 @@ pl_dart_flutter_setsrc (char *option)
 FeatInfo
 pl_dart_flutter_feat (char *option)
 {
-  FeatInfo fi = {0};
+  FeatInfo f = {0};
 
-  fi.can_get = true;
-  fi.can_reset = false;
+  f.can_get = true;
+  f.can_reset = false;
 
-  fi.cap_locally = CanNot;
-  fi.locally = NULL;
-  fi.can_english = true;
+  f.cap_locally = CanNot;
+  f.locally = NULL;
+  f.can_english = true;
 
-  fi.can_user_define = true;
+  f.can_user_define = true;
 
-  fi.note = "该换源通过写入环境变量实现，若多次换源，请手动清理profile文件";
-  return fi;
+  f.note = "该换源通过写入环境变量实现，若多次换源，请手动清理profile文件";
+  return f;
 }
 
 def_target_gsf(pl_dart_flutter);

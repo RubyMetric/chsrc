@@ -63,20 +63,20 @@ pl_python_pdm_resetsrc (char *option)
 FeatInfo
 pl_python_pdm_feat (char *option)
 {
-  FeatInfo fi = {0};
+  FeatInfo f = {0};
 
-  fi.can_get = true;
-  fi.can_reset = true;
+  f.can_get = true;
+  f.can_reset = true;
 
   // PDM 完全支持项目级换源
-  fi.cap_locally = FullyCan;
-  fi.locally = NULL;
+  f.cap_locally = FullyCan;
+  f.locally = NULL;
 
-  fi.can_english = true;
-  fi.can_user_define = true;
+  f.can_english = true;
+  f.can_user_define = true;
 
-  fi.note = NULL;
-  return fi;
+  f.note = NULL;
+  return f;
 }
 
 // def_target_gsrf(pl_python_pdm);

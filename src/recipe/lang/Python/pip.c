@@ -73,19 +73,19 @@ pl_python_pip_resetsrc (char *option)
 FeatInfo
 pl_python_pip_feat (char *option)
 {
-  FeatInfo fi = {0};
+  FeatInfo f = {0};
 
-  fi.can_get = true;
-  fi.can_reset = true;
+  f.can_get = true;
+  f.can_reset = true;
 
   // pip 不支持项目级换源
-  fi.cap_locally = CanNot;
-  fi.locally = NULL;
-  fi.can_english = true;
-  fi.can_user_define = true;
+  f.cap_locally = CanNot;
+  f.locally = NULL;
+  f.can_english = true;
+  f.can_user_define = true;
 
-  fi.note = NULL;
-  return fi;
+  f.note = NULL;
+  return f;
 }
 
 // def_target_gsrf(pl_python_pip);

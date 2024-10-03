@@ -559,8 +559,8 @@ get_target (const char *input, TargetOp code, char *option)
 
       if (target->featfn)
         {
-          FeatInfo fi = target->featfn("");
-          cli_print_target_features (fi, input);
+          FeatInfo f = target->featfn("");
+          cli_print_target_features (f, input);
         }
     }
   else if (TargetOp_Measure_Source==code)

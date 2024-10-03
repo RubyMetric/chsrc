@@ -97,20 +97,20 @@ wr_homebrew_setsrc (char *option)
 FeatInfo
 wr_homebrew_feat (char *option)
 {
-  FeatInfo fi = {0};
+  FeatInfo f = {0};
 
-  fi.can_get = true;
-  fi.can_reset = false;
+  f.can_get = true;
+  f.can_reset = false;
 
-  fi.cap_locally = CanNot;
-  fi.locally = NULL;
-  fi.can_english = true;
+  f.cap_locally = CanNot;
+  f.locally = NULL;
+  f.can_english = true;
 
   /* 该换源方案中，URL存在拼凑，因此不能让用户手动使用某URL来换源 */
-  fi.can_user_define = false;
+  f.can_user_define = false;
 
-  fi.note = "该换源通过写入环境变量实现，若多次换源，请手动清理profile文件";
-  return fi;
+  f.note = "该换源通过写入环境变量实现，若多次换源，请手动清理profile文件";
+  return f;
 }
 
 

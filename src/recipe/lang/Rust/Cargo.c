@@ -73,18 +73,18 @@ pl_rust_cargo_resetsrc (char *option)
 FeatInfo
 pl_rust_cargo_feat (char *option)
 {
-  FeatInfo fi = {0};
+  FeatInfo f = {0};
 
-  fi.can_get = true;
-  fi.can_reset = true;
+  f.can_get = true;
+  f.can_reset = true;
 
-  fi.cap_locally = PartiallyCan;
-  fi.locally = "可以基于本项目换源吗？请帮助确认";
-  fi.can_english = false;
-  fi.can_user_define = true;
+  f.cap_locally = PartiallyCan;
+  f.locally = "可以基于本项目换源吗？请帮助确认";
+  f.can_english = false;
+  f.can_user_define = true;
 
-  fi.note = NULL;
-  return fi;
+  f.note = NULL;
+  return f;
 }
 
 

@@ -100,18 +100,18 @@ pl_rust_rustup_resetsrc (char *option)
 FeatInfo
 pl_rust_rustup_feat (char *option)
 {
-  FeatInfo fi = {0};
+  FeatInfo f = {0};
 
-  fi.can_get = true;
-  fi.can_reset = false;
+  f.can_get = true;
+  f.can_reset = false;
 
-  fi.cap_locally = CanNot;
-  fi.locally = "";
-  fi.can_english = false;
-  fi.can_user_define = true;
+  f.cap_locally = CanNot;
+  f.locally = "";
+  f.can_english = false;
+  f.can_user_define = true;
 
-  fi.note = NULL;
-  return fi;
+  f.note = NULL;
+  return f;
 }
 
 

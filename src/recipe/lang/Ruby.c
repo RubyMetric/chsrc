@@ -98,18 +98,18 @@ pl_ruby_resetsrc (char *option)
 FeatInfo
 pl_ruby_feat (char *option)
 {
-  FeatInfo fi = {0};
+  FeatInfo f = {0};
 
-  fi.can_get = true;
-  fi.can_reset = true;
+  f.can_get = true;
+  f.can_reset = true;
 
-  fi.cap_locally = PartiallyCan;
-  fi.locally = "gem 不支持; bundler 支持 (From v0.1.6)";
-  fi.can_english = false;
-  fi.can_user_define = true;
+  f.cap_locally = PartiallyCan;
+  f.locally = "gem 不支持; bundler 支持 (From v0.1.6)";
+  f.can_english = false;
+  f.can_user_define = true;
 
-  fi.note = NULL;
-  return fi;
+  f.note = NULL;
+  return f;
 }
 
 

@@ -64,17 +64,17 @@ pl_php_setsrc (char *option)
 FeatInfo
 pl_php_feat (char *option)
 {
-  FeatInfo fi = {0};
+  FeatInfo f = {0};
 
-  fi.can_get = true;
-  fi.can_reset = false;
+  f.can_get = true;
+  f.can_reset = false;
 
-  fi.cap_locally = FullyCan;
-  fi.locally = "composer 支持 (From v0.1.7)";
-  fi.can_english = false;
-  fi.can_user_define = true;
+  f.cap_locally = FullyCan;
+  f.locally = "composer 支持 (From v0.1.7)";
+  f.can_english = false;
+  f.can_user_define = true;
 
-  return fi;
+  return f;
 }
 
 def_target_gsf (pl_php);

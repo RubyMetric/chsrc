@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2024-08-09>
- * Last Modified : <2024-09-13>
+ * Last Modified : <2024-10-04>
  * -------------------------------------------------------------
  * 本文件作为一个通用模板：
  *
@@ -24,8 +24,8 @@
  * -------------------------------------------------------------
  * File Authors  : Nil Null <nil@null.org> 尼尔闹先生
  * Contributors  : Nul None <nul@none.org> 怒了馕女士
- * Created On    : <202x-01-01> https://www.yuque.com/ccmywish/blog/nil-null-and-nul-none
- * Last Modified : <202x-01-01> 请更新文件标头
+ * Created On    : <2024-01-01> https://www.yuque.com/ccmywish/blog/nil-null-and-nul-none
+ * Last Modified : <2024-01-01> 请更新文件标头
  * ------------------------------------------------------------*/
 
 /**
@@ -106,18 +106,19 @@ void
 FeatInfo
 <category>_<target>_feat (char *option)
 {
-  FeatInfo fi = {0};
+  FeatInfo f = {0};
 
-  fi.can_get = true;
-  fi.can_reset = false;
+  f.can_get = true;
+  f.can_reset = false;
 
-  fi.cap_locally = PartiallyCan;
-  fi.locally = "具体说明是否支持项目级换源...";
-  fi.can_english = false;
-  fi.can_user_define = false;
+  f.cap_locally = PartiallyCan;
+  f.locally = "具体说明是否支持项目级换源...";
 
-  fi.note = "备注说明...";
-  return fi;
+  f.can_english = false;
+  f.can_user_define = false;
+
+  f.note = "备注说明...";
+  return f;
 }
 
 

@@ -132,34 +132,34 @@ os_archlinuxcn_setsrc (char *option)
 FeatInfo
 os_arch_feat (char *option)
 {
-  FeatInfo fi = {0};
+  FeatInfo f = {0};
 
-  fi.can_get = true;
-  fi.can_reset = false;
+  f.can_get = true;
+  f.can_reset = false;
 
-  fi.cap_locally = CanNot;
-  fi.can_english = true;
-  fi.can_user_define = true;
+  f.cap_locally = CanNot;
+  f.can_english = true;
+  f.can_user_define = true;
 
-  fi.note = "可额外使用 chsrc set archlinuxcn 来更换 Arch Linux CN Repository 源";
-  return fi;
+  f.note = "可额外使用 chsrc set archlinuxcn 来更换 Arch Linux CN Repository 源";
+  return f;
 }
 
 
 FeatInfo
 os_archlinuxcn_feat (char *option)
 {
-  FeatInfo fi = {0};
+  FeatInfo f = {0};
 
-  fi.can_get = true;
-  fi.can_reset = false;
+  f.can_get = true;
+  f.can_reset = false;
 
-  fi.cap_locally = CanNot;
-  fi.can_english = true;
-  fi.can_user_define = true;
+  f.cap_locally = CanNot;
+  f.can_english = true;
+  f.can_user_define = true;
 
-  fi.note = "可额外使用 chsrc set arch 来更换 Arch Linux 源";
-  return fi;
+  f.note = "可额外使用 chsrc set arch 来更换 Arch Linux 源";
+  return f;
 }
 
 

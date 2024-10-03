@@ -84,17 +84,17 @@ pl_python_resetsrc (char *option)
 FeatInfo
 pl_python_feat (char *option)
 {
-  FeatInfo fi = {0};
+  FeatInfo f = {0};
 
-  fi.can_get = true;
-  fi.can_reset = true;
+  f.can_get = true;
+  f.can_reset = true;
 
-  fi.cap_locally = PartiallyCan;
-  fi.locally = "pip 不支持，其他支持";
-  fi.can_english = false;
-  fi.can_user_define = true;
+  f.cap_locally = PartiallyCan;
+  f.locally = "pip 不支持，其他支持";
+  f.can_english = false;
+  f.can_user_define = true;
 
-  return fi;
+  return f;
 }
 
 def_target_gsrf(pl_python);

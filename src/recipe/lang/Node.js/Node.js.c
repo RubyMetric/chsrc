@@ -113,17 +113,17 @@ pl_nodejs_resetsrc (char *option)
 FeatInfo
 pl_nodejs_feat (char *option)
 {
-  FeatInfo fi = {0};
+  FeatInfo f = {0};
 
-  fi.can_get = true;
-  fi.can_reset = true;
+  f.can_get = true;
+  f.can_reset = true;
 
-  fi.cap_locally = FullyCan;
-  fi.locally = "Support npm (chsrc v0.1.7)\nSupport yarn v2 (chsrc v0.1.8.1)\nSupport pnpm (chsrc v0.1.8.2)";
-  fi.can_english = true;
-  fi.can_user_define = true;
+  f.cap_locally = FullyCan;
+  f.locally = "Support npm (chsrc v0.1.7)\nSupport yarn v2 (chsrc v0.1.8.1)\nSupport pnpm (chsrc v0.1.8.2)";
+  f.can_english = true;
+  f.can_user_define = true;
 
-  return fi;
+  return f;
 }
 
 def_target_gsrf (pl_nodejs);

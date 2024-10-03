@@ -61,16 +61,16 @@ os_armbian_setsrc (char *option)
 FeatInfo
 os_armbian_feat (char *option)
 {
-  FeatInfo fi = {0};
+  FeatInfo f = {0};
 
-  fi.can_get = true;
-  fi.can_reset = false;
+  f.can_get = true;
+  f.can_reset = false;
 
-  fi.cap_locally = CanNot;
-  fi.can_english = true;
-  fi.can_user_define = true;
+  f.cap_locally = CanNot;
+  f.can_english = true;
+  f.can_user_define = true;
 
-  return fi;
+  return f;
 }
 
 def_target_gsf(os_armbian);

@@ -61,18 +61,18 @@ pl_python_poetry_resetsrc (char *option)
 FeatInfo
 pl_python_poetry_feat (char *option)
 {
-  FeatInfo fi = {0};
+  FeatInfo f = {0};
 
-  fi.can_get = true;
-  fi.can_reset = true;
+  f.can_get = true;
+  f.can_reset = true;
 
-  fi.cap_locally = FullyCan;
-  fi.locally = NULL;
-  fi.can_english = false;
-  fi.can_user_define = true;
+  f.cap_locally = FullyCan;
+  f.locally = NULL;
+  f.can_english = false;
+  f.can_user_define = true;
 
-  fi.note = NULL;
-  return fi;
+  f.note = NULL;
+  return f;
 }
 
 // def_target_gsrf(pl_python_poetry);

@@ -48,15 +48,15 @@ wr_winget_resetsrc (char *option)
 FeatInfo
 wr_winget_feat (char *option)
 {
-  FeatInfo fi = {0};
+  FeatInfo f = {0};
 
-  fi.can_get = true;
-  fi.can_reset = true;
+  f.can_get = true;
+  f.can_reset = true;
 
-  fi.can_english = false;
-  fi.can_user_define = true;
+  f.can_english = false;
+  f.can_user_define = true;
 
-  return fi;
+  return f;
 }
 
 def_target_gsrf(wr_winget);
