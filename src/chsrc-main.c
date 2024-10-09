@@ -12,10 +12,10 @@
  *                 |   Mr. Will    <mr.will.com@outlook.com>
  *                 |   Terrasse    <terrasse@qq.com>
  *                 |   Lontten     <lontten@163.com>
- *                 | happy game    <happygame1024@gmail.com>
+ *                 |  happy game   <happygame1024@gmail.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-10-04>
+ * Last Modified   : <2024-10-09>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
