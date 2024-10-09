@@ -25,7 +25,8 @@
 
 ## 🤝 协作与贡献
 
-**`chsrc` 可换源 60+ 目标。每个人仅仅贡献和维护自己熟悉的部分，回报是得到其他所有领域专家的帮助**。欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献, 欢迎任何编程初学者参与贡献，作者 [@ccmywish](https://github.com/ccmywish) 可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)
+> [!NOTE]
+> **`chsrc` 可换源 60+ 目标。每个人仅仅贡献和维护自己熟悉的部分，回报是得到其他所有领域专家的帮助**。欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献, 欢迎任何编程初学者参与贡献，作者 [@ccmywish](https://github.com/ccmywish) 可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)
 
 > [!TIP]
 > **`chsrc` 不仅是一个命令行工具，同时也是一个换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。**
