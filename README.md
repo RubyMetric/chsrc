@@ -40,16 +40,16 @@
 <details>
 <summary>新手优先</summary>
 
-`chsrc` 不是只有高手才能窥得堂奥的密室，而是人人可深度参与的大集市。**`chsrc` 作为一个开源新手的试验场，欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献**。**欢迎任何编程初学者参与贡献**。[作者 @ccmywish](https://github.com/ccmywish) 可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)
+**`chsrc` 旨在作为一个开源新手的试验场，欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献**。**欢迎任何编程初学者参与贡献**。[作者 @ccmywish](https://github.com/ccmywish) 可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)
 
 </details>
 
 <details>
 <summary>服务你自己</summary>
 
-`chsrc` 不是别人的软件，而是服务你自己的软件。**一旦参与贡献，你可自豪地称`chsrc`是你自己的软件**。
+`chsrc` 不是别人的软件，而是服务你自己的软件
 
-朋友，将自己临时的一次性换源脚本转换为永久的 `chsrc recipe` 来吧，你将立刻获得跨平台、易安装、多反馈的特质！
+将临时的一次性换源脚本转换为永久的 `chsrc recipe` 来吧，你将立刻获得跨平台、易安装、多反馈的特点
 
 </details>
 
@@ -62,8 +62,6 @@
 
 <details>
 <summary>镜像站可用性</summary>
-
-📝 持续关注镜像站可用性的协作:
 
 1. https://github.com/RubyMetric/chsrc/wiki
 2. https://github.com/RubyMetric/chsrc/discussions
