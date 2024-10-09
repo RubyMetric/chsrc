@@ -25,16 +25,12 @@
 
 ## 🤝 协作与贡献
 
-### 良好易扩展的架构
-
 > [!TIP]
 > **`chsrc` 不仅是一个命令行工具，同时也是一个换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。**
 
 立刻为一个新软件添加换源方法！[Write A Recipe Even If You Don't Know C](./doc/Write-A-Recipe-Even-If-You-Dont-Know-C.md)
 
-成功案例：[Armbian](./src/recipe/os/APT/Armbian.c)
-
-Challenge 挑战清单：
+挑战清单：
 
 1. [[Challenge] 编写统一安装的 shell 和 PowerShell 脚本](https://github.com/RubyMetric/chsrc/issues/98)
 2. [[Challenge] CentOS (Stream) Recipe](https://github.com/RubyMetric/chsrc/issues/48)
