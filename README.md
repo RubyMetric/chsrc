@@ -23,17 +23,44 @@
 
 <br>
 
-## 🤝 贡献
+## 🤝 协作与贡献
+
+### 良好易扩展的架构
 
 > [!TIP]
 > **`chsrc` 不仅是一个命令行工具，同时也是一个换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。**
 
 立刻为一个新软件添加换源方法！[Write A Recipe Even If You Don't Know C](./doc/Write-A-Recipe-Even-If-You-Dont-Know-C.md)
 
-- 案例：[Armbian](./src/recipe/os/APT/Armbian.c)
-- 挑战：[CentOS (Stream) Recipe Challenge!](https://github.com/RubyMetric/chsrc/issues/48)
+成功案例：[Armbian](./src/recipe/os/APT/Armbian.c)
 
 <br>
+
+### 高度开放的协作
+
+#### 新手优先
+
+`chsrc` 不是只有高手才能窥得堂奥的密室，而是人人可深度参与的大集市。**`chsrc` 作为一个开源新手的试验场，欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献**。**欢迎任何编程初学者参与贡献**。[作者 @ccmywish](https://github.com/ccmywish) 可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)
+
+#### 服务你自己
+
+`chsrc` 不是别人的软件，而是服务你自己的软件。**一旦参与贡献，你可自豪地称`chsrc`是你自己的软件**。
+
+朋友，将自己临时的一次性换源脚本转换为永久的 `chsrc recipe` 来吧，你将立刻获得跨平台、易安装、多反馈的特质！
+
+#### 协作带来群体利益
+
+`chsrc` 保持高度的开放，作为某编程语言的资深用户、某软件的专家，你对换源方法以及细节有着清晰的认识，作为镜像站维护人员，你总是对镜像站和源的可用状态拥有一手信息。**每个人仅仅贡献和维护自己熟悉的部分，换来的是享受到其他所有领域专家的帮助 —— `chsrc` 可换源超 **60多个** 目标**
+
+#### Challenge 挑战清单
+
+1. [[Challenge] 编写统一安装的 shell 和 PowerShell 脚本](https://github.com/RubyMetric/chsrc/issues/98)
+2. [[Challenge] CentOS (Stream) Recipe](https://github.com/RubyMetric/chsrc/issues/48)
+
+
+<br>
+
+### 镜像站可用性
 
 📝 持续关注镜像站可用性的协作:
 
@@ -41,6 +68,8 @@
 2. https://github.com/RubyMetric/chsrc/discussions
 
 <br>
+
+### 打包
 
 想通过 `flatpak`,`snap`,`pacman`,`apt`,`dnf` 等系统包管理工具来安装和更新`chsrc`？若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
 
