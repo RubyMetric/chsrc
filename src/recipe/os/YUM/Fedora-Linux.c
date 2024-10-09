@@ -73,7 +73,7 @@ os_fedora_feat (char *option)
   f.can_get = false;
   f.can_reset = false;
 
-  f.stcan_locally = CanNot;
+  f.cap_locally = CanNot;
   f.can_english = true;
   f.can_user_define = true;
 
