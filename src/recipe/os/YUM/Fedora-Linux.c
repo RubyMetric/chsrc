@@ -63,4 +63,22 @@ os_fedora_setsrc (char *option)
   chsrc_conclude (&source, SetsrcType_Auto);
 }
 
-def_target_s(os_fedora);
+
+
+FeatInfo
+os_fedora_feat (char *option)
+{
+  FeatInfo f = {0};
+
+  f.can_get = false;
+  f.can_reset = false;
+
+  f.stcan_locally = CanNot;
+  f.can_english = true;
+  f.can_user_define = true;
+
+  return f;
+}
+
+def_target_sf(os_fedora);
+
