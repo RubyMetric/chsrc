@@ -25,6 +25,10 @@
 
 ## 🤝 协作与贡献
 
+**每个人仅仅贡献和维护自己熟悉的部分，回报是得到其他所有领域专家的帮助 —— `chsrc` 可换源 60+ 目标**
+
+**`chsrc` 作为一个开源新手的试验场，欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献**。**欢迎任何编程初学者参与贡献**。[作者 @ccmywish](https://github.com/ccmywish) 可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)
+
 > [!TIP]
 > **`chsrc` 不仅是一个命令行工具，同时也是一个换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。**
 
@@ -36,29 +40,6 @@
 2. [[Challenge] CentOS (Stream) Recipe](https://github.com/RubyMetric/chsrc/issues/48)
 
 <br>
-
-<details>
-<summary>新手优先</summary>
-
-**`chsrc` 旨在作为一个开源新手的试验场，欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献**。**欢迎任何编程初学者参与贡献**。[作者 @ccmywish](https://github.com/ccmywish) 可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)
-
-</details>
-
-<details>
-<summary>服务你自己</summary>
-
-`chsrc` 不是别人的软件，而是服务你自己的软件
-
-将临时的一次性换源脚本转换为永久的 `chsrc recipe` 来吧，你将立刻获得跨平台、易安装、多反馈的特点
-
-</details>
-
-<details>
-<summary>群体利益</summary>
-
-`chsrc` 保持高度的开放，作为某编程语言的资深用户、某软件的专家，你对换源方法以及细节有着清晰的认识，作为镜像站维护人员，你总是对镜像站和源的可用状态拥有一手信息。**每个人仅仅贡献和维护自己熟悉的部分，换来的是享受到其他所有领域专家的帮助 —— `chsrc` 可换源超 **60多个** 目标**
-
-</details>
 
 <details>
 <summary>镜像站可用性</summary>
