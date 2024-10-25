@@ -23,7 +23,7 @@ noroot_default_install_path="$HOME/.local/bin"
 binary_name="chsrc"
 temp_install_dir=""  # 用于存储临时安装目录
 helpflag=0
-lan="zh"
+lang="zh"
 
 # 输出相关信息
 info() {
@@ -38,7 +38,7 @@ error() {
 
 # 显示 chsrc 安装程序的帮助信息，包括使用说明和可用选项
 help() {
-  if [ "$lan" = "zh" ]; then
+  if [ "$lang" = "zh" ]; then
     echo "chsrc-installer: 在任何类Unix操作系统上安装 chsrc"
     echo
     echo "使用: install.sh [选项]"
@@ -61,7 +61,7 @@ help() {
   fi
 }
 
-# 确定下载路径
+
 set_install_path() {
   if [ -n "$install_dir" ]; then
     # 扩展 ~ 符号
@@ -70,14 +70,14 @@ set_install_path() {
     # 检查路径是否存在，如果不存在则创建该路径
     if [ ! -d "$install_dir" ]; then
       # 多种语言输出
-      if [ "$lan" = "zh" ]; then
+      if [ "$lang" = "zh" ]; then
         echo "目录 $install_dir 不存在，正在创建..."
       else
         echo "Directory $install_dir does not exist. Creating..."
       fi
       # 多语言输出
       if ! mkdir -p "$install_dir"; then
-        if [ "$lan" = "zh" ]; then
+        if [ "$lang" = "zh" ]; then
           echo "创建目录失败，请重试"
         else
           echo "Failed to create directory, please try again"
@@ -102,6 +102,7 @@ set_install_path() {
     if [ -d "$default_install_path" ] && [ -w "$default_install_path" ]; then
       install_dir="$default_install_path"
     elif [ -d "$noroot_default_install_path" ] && [ -w "$noroot_default_install_path" ]; then
+    elif [ -d "$noroot_default_install_path" ] && [ -w "$noroot_default_install_path" ]; then
       install_dir="$noroot_default_install_path"
     else
       if [ "$lan" = "zh" ]; then
@@ -109,12 +110,11 @@ set_install_path() {
       else
         error "Default download path /usr/local/bin is not writable. Please run the script with sudo; or specify another path using the -d option."
       fi
-
     fi
   fi
 }
 
-# 从Gitee仓库安装 指定架构，操作系统，版本 的chsrc二进制文件 
+
 install() {
   arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
@@ -123,8 +123,8 @@ install() {
     aarch64|arm64) arch="aarch64" ;;
     riscv64) arch="riscv64" ;;
     armv7*)  arch="armv7" ;;
-    *)       
-      if [ "$lan" = "zh" ]; then
+    *)
+      if [ "$lang" = "zh" ]; then
         error "不支持的架构: ${arch}"
       else
         error "Unsupported architecture: ${arch}"
@@ -137,9 +137,9 @@ install() {
   case "$platform" in
     linux)  platform="linux" ;;
     darwin) platform="macos" ;;
-    *)       
-      if [ "$lan" = "zh" ]; then
-        error "不支持的平台: ${platform}" 
+    *)
+      if [ "$lang" = "zh" ]; then
+        error "不支持的平台: ${platform}"
       else
         error "Unsupported platform: ${platform}"
       fi
@@ -148,7 +148,7 @@ install() {
 
   if [[ ! "$version" =~ ^(pre|0\.1\.([4-9]))$ ]]; then
       # version 不符合条件，报错
-      if [ "$lan" = "zh" ]; then
+      if [ "$lang" = "zh" ]; then
         error "不支持的版本: ${version}，版本号必须在 0.1.4 到 0.1.9 之间或为 'pre'"
       else
         error "Unsupported version: ${version}. Version number must be between 0.1.4 and 0.1.9 or 'pre'"
@@ -158,8 +158,8 @@ install() {
   url="https://gitee.com/RubyMetric/chsrc/releases/download/${version}/${binary_name}-${arch}-${platform}"
 
   path_to_executable="${install_dir}/${binary_name}"
-  
-  if [ "$lan" = "zh" ]; then
+
+  if [ "$lang" = "zh" ]; then
     info "下载 ${binary_name} (${arch} 架构, ${platform} 平台， ${version}版本) 到 ${path_to_executable}"
   else
     info "Downloading ${binary_name} (${arch} architecture, ${platform} platform, version ${version}) to ${path_to_executable}"
@@ -168,14 +168,14 @@ install() {
   if curl -sL "$url" -o "$path_to_executable"; then
     chmod +x "$path_to_executable"
 
-    if [ "$lan" = "zh" ]; then
+    if [ "$lang" = "zh" ]; then
       info "🎉 安装完成，版本： $version，路径: $path_to_executable"
     else
       info "🎉 Installation completed, path: $path_to_executable"
     fi
 
   else
-    if [ "$lan" = "zh" ]; then
+    if [ "$lang" = "zh" ]; then
       error "下载失败，请检查您的网络连接和代理设置: ${url}"
     else
       error "Download failed, please check your network connection and proxy settings: ${url}"
@@ -188,7 +188,7 @@ install() {
 cleanup() {
   if [ -n "$temp_install_dir" ] && [ -d "$temp_install_dir" ]; then
 
-    if [ "$lan" = "zh" ]; then
+    if [ "$lang" = "zh" ]; then
       echo "清理创建的目录: $temp_install_dir"
     else
       echo "Cleaning up created directory: $temp_install_dir"
@@ -199,6 +199,7 @@ cleanup() {
 
 # 设置 trap 以捕获退出信号
 trap cleanup EXIT
+
 
 # 从命令行读取 安装路径与版本号
 while getopts ":hd:v:l:" option; do
@@ -213,7 +214,7 @@ while getopts ":hd:v:l:" option; do
     version=${OPTARG}
     ;;
   l)
-    lan=${OPTARG}
+    lang=${OPTARG}
     ;;
   \?)
     echo "无效的命令行选项，请使用 -h 查看帮助"
@@ -223,8 +224,8 @@ while getopts ":hd:v:l:" option; do
 done
 
 # 判断语言的类型，不符合直接退出
-if [[ "$lan" != "zh" && "$lan" != "en" ]]; then
-  error "无效的语言选项: $lan。支持的选项是 zh 和 en"
+if [[ "$lang" != "zh" && "$lang" != "en" ]]; then
+  error "无效的语言选项: $lang，支持的选项为 zh 和 en"
 fi
 
 if [ "$helpflag" -eq 1 ]; then
