@@ -8,7 +8,7 @@
 # Last Modified : <2024-10-25>
 #
 #
-#         chsrc Installer for Linux & macOS
+#         chsrc installer for Linux & macOS
 #
 # ---------------------------------------------------------------
 
@@ -28,12 +28,13 @@ error() {
 }
 
 help() {
-  echo "chsrc Installer"
+  echo "chsrc-installer: Install chsrc on any Unix-like OS and any architect "
   echo
-  echo "使用: install.sh [-h] [-d <安装目录>]"
+  echo "使用: install.sh [options]"
   echo "选项:"
-  echo "-h     打印此帮助信息"
-  echo "-d     指定安装目录，默认为 /usr/local/bin；如果已安装，则覆盖旧版本"
+  echo "-h               打印此帮助信息"
+  echo "-d <destination> 指定安装目录，默认为 /usr/local/bin；若已安装，则覆盖旧版本"
+  echo "-v <version>     指定chsrc版本"
   echo
 }
 
@@ -81,7 +82,7 @@ install() {
     url="https://gitee.com/RubyMetric/chsrc/releases/download/pre/${binary_name}-${arch}-${platform}"
     version="latest"
   fi
-  
+
   path_to_executable="${install_dir}/${binary_name}"
 
   info "下载 ${binary_name} (${arch} 架构, ${platform} 平台) 到 ${path_to_executable}"
@@ -110,7 +111,7 @@ while getopts ":hd:v:" option; do
     version=${OPTARG}
     ;;
   \?)
-    echo "无效的命令行选项。使用 -h 查看帮助"
+    echo "无效的命令行选项，请使用 -h 查看帮助"
     exit 1
     ;;
   esac
