@@ -19,15 +19,18 @@ default_install_path="/usr/local/bin"
 binary_name="chsrc"
 temp_install_dir=""  # 用于存储临时安装目录
 
+# 输出相关信息
 info() {
   echo "[INFO] $*"
 }
 
+# 输出错误到stdout和stderr
 error() {
   echo -e "[ERROR] $*" >&2
   exit 1
 }
 
+# 显示 chsrc 安装程序的帮助信息，包括使用说明和可用选项
 help() {
   echo "chsrc Installer"
   echo
@@ -39,6 +42,7 @@ help() {
   echo
 }
 
+# 确定下载路径
 set_install_path() {
   if [ -n "$install_dir" ]; then
     # 扩展 ~ 符号
@@ -63,6 +67,7 @@ set_install_path() {
   fi
 }
 
+# 从Gitee仓库安装 指定架构，操作系统，版本 的chsrc二进制文件 
 install() {
   arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
@@ -112,7 +117,7 @@ cleanup() {
 # 设置 trap 以捕获退出信号
 trap cleanup EXIT
 
-# main
+# 从命令行读取 安装路径与版本号
 while getopts ":hd:v:" option; do
   case $option in
   h)
