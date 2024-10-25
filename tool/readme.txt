@@ -13,8 +13,7 @@
 2. 文件
 ********
 
-install.sh          Bash 安装工具（中文版）。
-install-en.sh       Bash 安装工具（英文版）。
+install.sh          Bash 安装工具
 install.ps1         Powershell 安装工具。
 reademe.txt         此文件
 
@@ -24,7 +23,7 @@ reademe.txt         此文件
 
 步骤1：输入“sudo chmod u+x ./install.sh”以使脚本可执行。
 
-步骤2：输入“./install.sh [-h] [-d <install_directory>] [-v <version>]”指定安装路径和发布版本。
+步骤2：输入“./install.sh [-h] [-d <install_directory>] [-v <version>] [-l <language>]”指定安装路径，发布版本和脚本语言。
 
 步骤3：如果出现错误，请检查您的网络连接并确保您可以访问Gitee。
 
@@ -47,9 +46,7 @@ you can use the tools to specify directory path and release version.
 2. Files
 ********
 
-install.sh                  Bash install tool(Chinese Version).
-install-en.sh               Bash install tool(English Version).
-install.ps1                 Powershell install tool.
+install.sh                  Bash install tool.
 reademe.txt                 This file
 
 *******************
@@ -58,6 +55,6 @@ reademe.txt                 This file
 
 Step 1: Type "sudo chmod u+x ./install.sh" to make scrpit executable.
 
-Step 2: Type "./install.sh [-h] [-d <install_directory>] [-v <version>]" to specify install path and release version.
+Step 2: Type "./install.sh [-h] [-d <install_directory>] [-v <version>] [-l <language>]" to specify install path and release version also language.
 
 Step 3: If an error occurs, please check your internet connection and ensure that you can access Gitee.
