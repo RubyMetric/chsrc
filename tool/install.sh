@@ -7,13 +7,8 @@
 # Created On    : <2024-10-25>
 # Last Modified : <2024-10-25>
 #
+#
 #         chsrc Installer for Linux & macOS
-#
-# 使用:
-#
-#   $ curl https://gitee.com/RubyMetric/chsrc/blob/dev/tool/install.sh | bash -s -- -d ./
-#
-#   $ curl https://gitee.com/RubyMetric/chsrc/blob/dev/tool/install.sh | sudo bash
 #
 # ---------------------------------------------------------------
 
