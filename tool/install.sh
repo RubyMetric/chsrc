@@ -99,6 +99,11 @@ while getopts ":hd:" option; do
     ;;
   d)
     install_dir=${OPTARG}
+    # 检查路径是否存在，如果不存在则创建该路径
+    if [ ! -d "$install_dir" ]; then
+      echo "目录 $install_dir 不存在，正在创建..."
+      mkdir -p "$install_dir" || { echo "创建目录失败，请重试"; exit 1; }
+    fi
     ;;
   \?)
     echo "无效的命令行选项。使用 -h 查看帮助"
