@@ -16,6 +16,7 @@ install_dir=""
 path_to_executable=""
 default_install_path="/usr/local/bin"
 binary_name="chsrc"
+version=""
 
 info() {
   echo "[INFO] $*"
@@ -74,8 +75,13 @@ install() {
     *)      error "不支持的平台: ${platform}" ;;
   esac
 
-  url="https://gitee.com/RubyMetric/chsrc/releases/download/pre/${binary_name}-${arch}-${platform}"
-
+  if [ -n "$version" ]; then
+    url="https://gitee.com/RubyMetric/chsrc/releases/download/v${version}/${binary_name}-${arch}-${platform}"
+  else
+    url="https://gitee.com/RubyMetric/chsrc/releases/download/pre/${binary_name}-${arch}-${platform}"
+    version="latest"
+  fi
+  
   path_to_executable="${install_dir}/${binary_name}"
 
   info "下载 ${binary_name} (${arch} 架构, ${platform} 平台) 到 ${path_to_executable}"
@@ -83,7 +89,7 @@ install() {
   # 下载文件并设置权限
   if curl -sL "$url" -o "$path_to_executable"; then
     chmod +x "$path_to_executable"
-    info "🎉 安装完成，路径: $path_to_executable"
+    info "🎉 安装完成，版本: $version，路径: $path_to_executable"
   else
     error "下载失败，请检查您的网络连接和代理设置: ${url}"
   fi
@@ -91,7 +97,7 @@ install() {
 
 
 # main
-while getopts ":hd:" option; do
+while getopts ":hd:v:" option; do
   case $option in
   h)
     help
