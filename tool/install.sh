@@ -67,7 +67,7 @@ install() {
 
   case "$arch" in
     x86_64)  arch="x64" ;;
-    aarch64) arch="aarch64" ;;
+    aarch64|arm64) arch="aarch64" ;;
     riscv64) arch="riscv64" ;;
     armv7*)  arch="armv7" ;;
     *)       error "不支持的架构: ${arch}" ;;
