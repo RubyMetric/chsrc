@@ -8,7 +8,7 @@
 # Last Modified : <2024-10-25>
 #
 #
-#         chsrc Installer for Linux & macOS
+#         chsrc installer for Linux & macOS
 #
 # ---------------------------------------------------------------
 
@@ -213,7 +213,7 @@ while getopts ":hd:v:l:" option; do
     lan=${OPTARG}
     ;;
   \?)
-    echo "无效的命令行选项。使用 -h 查看帮助"
+    echo "无效的命令行选项，请使用 -h 查看帮助"
     exit 1
     ;;
   esac
