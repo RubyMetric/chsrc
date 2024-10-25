@@ -1,15 +1,13 @@
 # ---------------------------------------------------------------
-# File          : download-release.ps1
-# Authors       : Aoran Zeng <ccmywish@qq.com>
-# Created on    : <2023-09-21>
-# Last modified : <2024-06-11>
+# File Name     : download-pre-onGitHub.ps1
+# File Authors  : Aoran Zeng <ccmywish@qq.com>
+# Created On    : <2023-09-21>
+# Last Modified : <2024-10-25>
 #
-# download:
-#
-#   Download from GitHub Releases
+# Download all files from the `pre` release on GitHub
 # ---------------------------------------------------------------
 
-$destination = "~\Desktop\chsrc-GitHub-release"
+$destination = "~\Desktop\chsrc-pre-onGitHub"
 
 Write-Output "=> Mkdir $destination"
 mkdir -Force $destination | Out-Null

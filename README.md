@@ -26,7 +26,7 @@
 ## 🤝 协作与贡献
 
 > [!NOTE]
-> **`chsrc` 可换源 60+ 目标。每个人仅仅贡献和维护自己熟悉的部分，回报是得到其他所有领域专家的帮助**。欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献, 欢迎任何编程初学者参与贡献，作者 [@ccmywish](https://github.com/ccmywish) 可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)
+> **`chsrc` 可换源 60+ 目标。每个人仅仅贡献和维护自己熟悉的部分，回报是得到其他所有领域专家的帮助**。欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献, 欢迎任何编程初学者参与贡献，作者 [@ccmywish] 可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)
 
 > [!TIP]
 > **`chsrc` 不仅是一个命令行工具，同时也是一个换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。**
@@ -38,6 +38,10 @@
 挑战清单：
 
 1. [[Challenge] 编写统一安装的 shell 和 PowerShell 脚本](https://github.com/RubyMetric/chsrc/issues/98)
+
+    - [x] `shell` 脚本已完成，感谢 [@Efterklang]
+    - [ ] `PowerShell` 脚本
+
 2. [[Challenge] CentOS (Stream) Recipe](https://github.com/RubyMetric/chsrc/issues/48)
 
 <br>
@@ -87,7 +91,7 @@
 <details>
 <summary>Windows</summary>
 
-- 可通过 `scoop` 安装，感谢 [@Gn3po4g](https://github.com/Gn3po4g) 与 [@niheaven](https://github.com/niheaven)
+- 可通过 `scoop` 安装，感谢 [@Gn3po4g] 与 [@niheaven]
 
 ```bash
 $ scoop install chsrc
@@ -107,7 +111,7 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windo
 <details>
 <summary>Linux</summary>
 
-- 支持 `AUR`，可通过 `yay` 安装，感谢 [@Jerry-Terrasse](https://github.com/Jerry-Terrasse)
+- 支持 `AUR`，可通过 `yay` 安装，感谢 [@Jerry-Terrasse]
 
 ```bash
 # AUR
@@ -116,7 +120,21 @@ $ yay -S chsrc-git # Build  from the latest main branch (stable)
 $ yay -S chsrc     # Build  from GitHub Release
 ```
 
-- 手动下载二进制文件安装
+<br>
+
+- 可通过 `shell` 脚本安装，感谢 [@Efterklang]（待不同架构用户测试，可在 [issue#98 on GitHub] 反馈）
+
+```bash
+# 默认安装至 /usr/local/bin
+$ curl https://gitee.com/RubyMetric/chsrc/raw/main/tool/install.sh | sudo bash
+
+# 使用 -d 指定目录安装
+$ curl https://gitee.com/RubyMetric/chsrc/raw/main/tool/install.sh | bash -s -- -d ./
+```
+
+<br>
+
+- 可手动下载二进制文件安装
 
 ```bash
 # x64
@@ -137,11 +155,25 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-armv7-lin
 <details>
 <summary>macOS</summary>
 
-- 可通过 `homebrew` 安装，感谢 [@Aaron-212](https://github.com/Aaron-212) 与 [@chenrui333](https://github.com/chenrui333)
+- 可通过 `homebrew` 安装，感谢 [@Aaron-212] 与 [@chenrui333]
 
 ```bash
 $ brew install chsrc
 ```
+
+<br>
+
+- 可通过 `shell` 脚本安装，感谢 [@Efterklang]（待macOS用户测试，可在 [issue#98 on GitHub] 反馈）
+
+```bash
+# 默认安装至 /usr/local/bin
+$ curl https://gitee.com/RubyMetric/chsrc/raw/main/tool/install.sh | sudo bash
+
+# 使用 -d 指定目录安装
+$ curl https://gitee.com/RubyMetric/chsrc/raw/main/tool/install.sh | bash -s -- -d ./
+```
+
+<br>
 
 - 或手动下载二进制文件，这是最新版，往往比 `homebrew` 提供的更新，适用于修复 Bug、添加新功能后及时使用
 
@@ -379,3 +411,15 @@ make clean
 <img src="https://raw.githubusercontent.com/ccmywish/support-my-oss-work/main/wechat.png" alt="wechat" style="width:300px;"/>
 
 <br>
+
+
+
+[@Aaron-212]:  https://github.com/Aaron-212
+[@chenrui333]: https://github.com/chenrui333
+[@niheaven]:       https://github.com/niheaven
+[@Gn3po4g]:        https://github.com/Gn3po4g
+[@Jerry-Terrasse]: https://github.com/Jerry-Terrasse
+[@ccmywish]:       https://github.com/ccmywish
+[@Efterklang]: https://github.com/Efterklang
+
+[issue#98 on GitHub]: https://github.com/RubyMetric/chsrc/issues/98
