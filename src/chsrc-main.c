@@ -3,19 +3,22 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * Project Name    :    chsrc
- * Project Authors :  Aoran Zeng   <ccmywish@qq.com>
- *                 |   Heng Guo    <2085471348@qq.com>
- * Contributors    :  Aaron Ruan   <aaron212cn@outlook.com>
- *                 |   Rui Chen    <rui@chenrui.dev>
- *                 | Shengwei Chen <414685209@qq.com>
- *                 |   BlockLune   <blocklune@gmail.com>
- *                 |   Mr. Will    <mr.will.com@outlook.com>
- *                 |   Terrasse    <terrasse@qq.com>
- *                 |   Lontten     <lontten@163.com>
- *                 |  happy game   <happygame1024@gmail.com>
+ * Project Authors :  Aoran Zeng        <ccmywish@qq.com>
+ *                 |   Heng Guo         <2085471348@qq.com>
+ * Contributors    :  Aaron Ruan        <aaron212cn@outlook.com>
+ *                 |   Rui Chen         <rui@chenrui.dev>
+ *                 | Shengwei Chen      <414685209@qq.com>
+ *                 |   BlockLune        <blocklune@gmail.com>
+ *                 |   Mr. Will         <mr.will.com@outlook.com>
+ *                 |   Terrasse         <terrasse@qq.com>
+ *                 |   Lontten          <lontten@163.com>
+ *                 |  happy game        <happygame1024@gmail.com>
+ *                 |     xuan           <wick.dynex@qq.com>
+ *                 |   GnixAij          <gaojiaxing0220@gmail.com>
+ *                 | ChatGPT 4o mini    <https://chatgpt.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-10-09>
+ * Last Modified   : <2024-10-26>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/

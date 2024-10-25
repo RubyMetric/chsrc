@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 # ---------------------------------------------------------------
 # File Name     : install.sh
-# File Authors  :  GnixAij   <gaojiaxing0220@gmail.com>
+# File Authors  :  GnixAij          <gaojiaxing0220@gmail.com>
+#               |   xuan            <wick.dynex@qq.com>
+#               | ChatGPT 4o mini   <https://chatgpt.com>
+#               |
 # Contributors  : Aoran Zeng <ccmywish@qq.com>
 #               |
 # Created On    : <2024-10-25>
-# Last Modified : <2024-10-25>
+# Last Modified : <2024-10-26>
 #
 #
 #         chsrc installer for Linux & macOS
