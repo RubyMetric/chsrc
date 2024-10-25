@@ -31,10 +31,11 @@ error() {
 help() {
   echo "chsrc Installer"
   echo
-  echo "使用: install.sh [-h] [-d <安装目录>]"
+  echo "使用: install.sh [-h] [-d <安装目录>] [-v <版本号>]"
   echo "选项:"
   echo "-h     打印此帮助信息"
   echo "-d     指定安装目录，默认为 /usr/local/bin；如果已安装，则覆盖旧版本"
+  echo "-v     指定版本号，范围是 0.1.4 到 0.1.9 或 'pre'"
   echo
 }
 
