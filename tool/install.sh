@@ -16,6 +16,7 @@ install_dir=""
 version="pre"
 path_to_executable=""
 default_install_path="/usr/local/bin"
+noroot_default_install_path="$HOME/.local/bin"
 binary_name="chsrc"
 temp_install_dir=""  # 用于存储临时安装目录
 helpflag=0
@@ -97,8 +98,9 @@ set_install_path() {
     # 检查默认路径
     if [ -d "$default_install_path" ] && [ -w "$default_install_path" ]; then
       install_dir="$default_install_path"
+    else if [ -d "$noroot_default_install_path" ] && [ -w "$noroot_default_install_path" ]; then
+      install_dir="$noroot_default_install_path"
     else
-
       if [ "$lan" = "zh"]; then
         error "默认下载路径 /usr/local/bin 不可写，请使用 sudo 命令运行脚本；或通过 -d 参数指定其它路径安装"
       else
