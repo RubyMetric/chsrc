@@ -13,6 +13,7 @@
 # ---------------------------------------------------------------
 
 install_dir=""
+version="pre"
 path_to_executable=""
 default_install_path="/usr/local/bin"
 binary_name="chsrc"
@@ -41,6 +42,12 @@ set_install_path() {
   if [ -n "$install_dir" ]; then
     # 扩展 ~ 符号
     install_dir="${install_dir/#\~/$HOME}"
+
+    # 检查路径是否存在，如果不存在则创建该路径
+    if [ ! -d "$install_dir" ]; then
+      echo "目录 $install_dir 不存在，正在创建..."
+      mkdir -p "$install_dir" || { echo "创建目录失败，请重试"; exit 1; }
+    fi
   elif existing_path=$(command -v "$binary_name" 2>/dev/null); then
     info "$binary_name 已安装，更新路径: ${existing_path}"
     install_dir=$(dirname "$existing_path")
@@ -74,11 +81,16 @@ install() {
     *)      error "不支持的平台: ${platform}" ;;
   esac
 
-  url="https://gitee.com/RubyMetric/chsrc/releases/download/pre/${binary_name}-${arch}-${platform}"
+  if [[ ! "$version" =~ ^(pre|0\.1\.([4-9]))$ ]]; then
+      # version 不符合条件，报错
+      error "不支持的版本: ${version}，版本号必须在 0.1.4 到 0.1.9 之间或为 'pre'"
+  fi
+
+  url="https://gitee.com/RubyMetric/chsrc/releases/download/${version}/${binary_name}-${arch}-${platform}"
 
   path_to_executable="${install_dir}/${binary_name}"
 
-  info "下载 ${binary_name} (${arch} 架构, ${platform} 平台) 到 ${path_to_executable}"
+  info "下载 ${binary_name} (${arch} 架构, ${platform} 平台， ${version}版本) 到 ${path_to_executable}"
 
   # 下载文件并设置权限
   if curl -sL "$url" -o "$path_to_executable"; then
@@ -91,7 +103,7 @@ install() {
 
 
 # main
-while getopts ":hd:" option; do
+while getopts ":hd:v:" option; do
   case $option in
   h)
     help
@@ -99,11 +111,9 @@ while getopts ":hd:" option; do
     ;;
   d)
     install_dir=${OPTARG}
-    # 检查路径是否存在，如果不存在则创建该路径
-    if [ ! -d "$install_dir" ]; then
-      echo "目录 $install_dir 不存在，正在创建..."
-      mkdir -p "$install_dir" || { echo "创建目录失败，请重试"; exit 1; }
-    fi
+    ;;
+  v)
+    version=${OPTARG}
     ;;
   \?)
     echo "无效的命令行选项。使用 -h 查看帮助"
