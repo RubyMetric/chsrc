@@ -17,6 +17,7 @@ version="pre"
 path_to_executable=""
 default_install_path="/usr/local/bin"
 binary_name="chsrc"
+temp_install_dir=""  # 用于存储临时安装目录
 
 info() {
   echo "[INFO] $*"
@@ -37,7 +38,6 @@ help() {
   echo
 }
 
-
 set_install_path() {
   if [ -n "$install_dir" ]; then
     # 扩展 ~ 符号
@@ -47,6 +47,7 @@ set_install_path() {
     if [ ! -d "$install_dir" ]; then
       echo "目录 $install_dir 不存在，正在创建..."
       mkdir -p "$install_dir" || { echo "创建目录失败，请重试"; exit 1; }
+      temp_install_dir="$install_dir"  # 记录临时安装目录
     fi
   elif existing_path=$(command -v "$binary_name" 2>/dev/null); then
     info "$binary_name 已安装，更新路径: ${existing_path}"
@@ -60,7 +61,6 @@ set_install_path() {
     fi
   fi
 }
-
 
 install() {
   arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
@@ -92,7 +92,6 @@ install() {
 
   info "下载 ${binary_name} (${arch} 架构, ${platform} 平台， ${version}版本) 到 ${path_to_executable}"
 
-  # 下载文件并设置权限
   if curl -sL "$url" -o "$path_to_executable"; then
     chmod +x "$path_to_executable"
     info "🎉 安装完成，路径: $path_to_executable"
@@ -101,6 +100,16 @@ install() {
   fi
 }
 
+# 清理函数
+cleanup() {
+  if [ -n "$temp_install_dir" ] && [ -d "$temp_install_dir" ]; then
+    echo "清理创建的目录: $temp_install_dir"
+    rm -rf "$temp_install_dir"
+  fi
+}
+
+# 设置 trap 以捕获退出信号
+trap cleanup EXIT
 
 # main
 while getopts ":hd:v:" option; do
