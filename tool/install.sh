@@ -87,7 +87,7 @@ set_install_path() {
 
   elif existing_path=$(command -v "$binary_name" 2>/dev/null); then
 
-    if [ "$lan" = "zh"]; then
+    if [ "$lan" = "zh" ]; then
       info "$binary_name 已安装，更新路径: ${existing_path}"
     else
       info "$binary_name is already installed, updating path: ${existing_path}"
@@ -98,10 +98,10 @@ set_install_path() {
     # 检查默认路径
     if [ -d "$default_install_path" ] && [ -w "$default_install_path" ]; then
       install_dir="$default_install_path"
-    else if [ -d "$noroot_default_install_path" ] && [ -w "$noroot_default_install_path" ]; then
+    elif [ -d "$noroot_default_install_path" ] && [ -w "$noroot_default_install_path" ]; then
       install_dir="$noroot_default_install_path"
     else
-      if [ "$lan" = "zh"]; then
+      if [ "$lan" = "zh" ]; then
         error "默认下载路径 /usr/local/bin 不可写，请使用 sudo 命令运行脚本；或通过 -d 参数指定其它路径安装"
       else
         error "Default download path /usr/local/bin is not writable. Please run the script with sudo; or specify another path using the -d option."
