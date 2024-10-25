@@ -100,9 +100,6 @@ while getopts ":hd:" option; do
   d)
     install_dir=${OPTARG}
     ;;
-  v)
-    version=${OPTARG}
-    ;;
   \?)
     echo "无效的命令行选项。使用 -h 查看帮助"
     exit 1
