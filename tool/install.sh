@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # ---------------------------------------------------------------
 # File Name     : install.sh
 # File Authors  :  GnixAij   <gaojiaxing0220@gmail.com>
@@ -6,9 +7,14 @@
 # Created On    : <2024-10-25>
 # Last Modified : <2024-10-25>
 #
-# install:
+#         chsrc Installer for Linux & macOS
 #
-#   chsrc installer for Linux & macOS
+# 使用:
+#
+#   $ curl https://gitee.com/RubyMetric/chsrc/blob/dev/tool/install.sh | bash -s -- -d ./
+#
+#   $ curl https://gitee.com/RubyMetric/chsrc/blob/dev/tool/install.sh | sudo bash
+#
 # ---------------------------------------------------------------
 
 install_dir=""
@@ -48,7 +54,7 @@ set_install_path() {
     if [ -d "$default_install_path" ] && [ -w "$default_install_path" ]; then
       install_dir="$default_install_path"
     else
-      error "默认下载路径/usr/local/bin 不可写，请使用 sudo 命令运行脚本；或通过-v参数指定其它路径安装"
+      error "默认下载路径 /usr/local/bin 不可写，请使用 sudo 命令运行脚本；或通过 -d 参数指定其它路径安装"
     fi
   fi
 }
