@@ -97,6 +97,16 @@
 $ scoop install chsrc
 ```
 
+<br>
+
+- 可通过 `PowerShell` 脚本一键下载最新版二进制文件
+
+```PowerShell
+$ iwr -useb "https://chsrc.run/windows" | iex
+```
+
+<br>
+
 - 或手动下载二进制文件，这是最新版，往往比 `scoop` 提供的更新，适用于修复 Bug、添加新功能后及时使用，以及未安装 `scoop` 时
 
 ```bash
@@ -122,14 +132,20 @@ $ yay -S chsrc     # Build  from GitHub Release
 
 <br>
 
-- 可通过 `shell` 脚本安装，感谢 [@Efterklang]（待不同架构用户测试，可在 [issue#98 on GitHub] 反馈）
+- 可通过 `shell` 脚本一键安装最新版，感谢 [@Efterklang] 与 [@xuan]（待用户测试，可在 [issue#98 on GitHub] 反馈）
 
 ```bash
-# 默认安装至 /usr/local/bin
-$ curl https://gitee.com/RubyMetric/chsrc/raw/main/tool/install.sh | sudo bash
+# 非root用户默认安装至 ~/.local/bin
+$ curl https:/chsrc.run/posix | bash
+
+# root用户默认安装至 /usr/local/bin
+$ curl https:/chsrc.run/posix | sudo bash
 
 # 使用 -d 指定目录安装
-$ curl https://gitee.com/RubyMetric/chsrc/raw/main/tool/install.sh | bash -s -- -d ./
+$ curl https:/chsrc.run/posix | bash -s -- -d ./
+
+# 使用 -l en 输出英文
+$ curl https:/chsrc.run/posix | bash -s -- -l en
 ```
 
 <br>
@@ -163,14 +179,20 @@ $ brew install chsrc
 
 <br>
 
-- 可通过 `shell` 脚本安装，感谢 [@Efterklang]（待macOS用户测试，可在 [issue#98 on GitHub] 反馈）
+- 可通过 `shell` 脚本安装最新版，感谢 [@Efterklang] 与 [@xuan]（待macOS用户测试，可在 [issue#98 on GitHub] 反馈）
 
 ```bash
-# 默认安装至 /usr/local/bin
-$ curl https://gitee.com/RubyMetric/chsrc/raw/main/tool/install.sh | sudo bash
+# 非root用户默认安装至 ~/.local/bin
+$ curl https:/chsrc.run/posix | bash
+
+# root用户默认安装至 /usr/local/bin
+$ curl https:/chsrc.run/posix | sudo bash
 
 # 使用 -d 指定目录安装
-$ curl https://gitee.com/RubyMetric/chsrc/raw/main/tool/install.sh | bash -s -- -d ./
+$ curl https:/chsrc.run/posix | bash -s -- -d ./
+
+# 使用 -l en 输出英文
+$ curl https:/chsrc.run/posix | bash -s -- -l en
 ```
 
 <br>
@@ -178,7 +200,7 @@ $ curl https://gitee.com/RubyMetric/chsrc/raw/main/tool/install.sh | bash -s -- 
 - 或手动下载二进制文件，这是最新版，往往比 `homebrew` 提供的更新，适用于修复 Bug、添加新功能后及时使用
 
 ```bash
-# arm/aarch64
+# arm64/aarch64
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-aarch64-macos -o chsrc; chmod +x ./chsrc
 
 # x64
@@ -199,7 +221,7 @@ $ clang -Iinclude src/chsrc-main.c -o chsrc
 <summary>其他平台</summary>
 
 ```bash
-$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; gmake
+$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
 ```
 </details>
 
@@ -414,12 +436,14 @@ make clean
 
 
 
-[@Aaron-212]:  https://github.com/Aaron-212
-[@chenrui333]: https://github.com/chenrui333
+[@Aaron-212]:      https://github.com/Aaron-212
+[@chenrui333]:     https://github.com/chenrui333
 [@niheaven]:       https://github.com/niheaven
 [@Gn3po4g]:        https://github.com/Gn3po4g
 [@Jerry-Terrasse]: https://github.com/Jerry-Terrasse
 [@ccmywish]:       https://github.com/ccmywish
-[@Efterklang]: https://github.com/Efterklang
+[@Efterklang]:     https://github.com/Efterklang
+<!-- GitHub用户名为数字，改用其名 -->
+[@xuan]:           https://github.com/1328032567
 
 [issue#98 on GitHub]: https://github.com/RubyMetric/chsrc/issues/98
