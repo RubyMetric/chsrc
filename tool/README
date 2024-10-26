@@ -1,21 +1,32 @@
+# ---------------------------------------------------------------
+# Doc Type      :   Text
+# Doc Authors   :   xuan     <wick.dynex@qq.com>
+#               |  ChatGPT   <https://chatgpt.com>
+# Contributors  : Aoran Zeng <ccmywish@qq.com>
+#               |
+# Created On    : <2024-10-25>
+# Last Modified : <2024-10-26>
+#
+# tool目录文档
+# ---------------------------------------------------------------
+
 ###########################################################################
-# Chsrc 相关工具
-# 脚本工具
+# chsrc 相关工具
 ###########################################################################
 
 ************
 1. 概述
 ************
 
-此文件夹包含许多与安装 Chsrc 二进制文件相关的脚本工具，您可以使用这些工具指定目录路径和发布版本。
+此文件夹包含许多与安装 chsrc 二进制文件相关的脚本工具，您可以使用这些工具指定目录路径和发布版本。
 
 ********
 2. 文件
 ********
 
-install.sh          Bash 安装工具
-install.ps1         Powershell 安装工具。
-reademe.txt         此文件
+install.sh          Bash 编写的一键安装工具
+install.ps1         Powershell 编写的一键安装工具
+README.txt          此文件
 
 *******************
 3. 安装
@@ -30,8 +41,7 @@ reademe.txt         此文件
 
 
 #####################################################################
-# Chsrc realated tools
-# Scripts Tools
+# chsrc realated tools
 # English Version
 #####################################################################
 
@@ -39,15 +49,16 @@ reademe.txt         此文件
 1. Overview
 ************
 
-This folder contains many script tools realated to install Chsrc binary file, 
+This folder contains many script tools realated to install chsrc binary file,
 you can use the tools to specify directory path and release version.
 
 ********
 2. Files
 ********
 
-install.sh                  Bash install tool.
-reademe.txt                 This file
+install.sh                  One-key install tool in Bash
+install.ps1                 One-key install tool in PowerShell
+README.txt                  This file
 
 *******************
 3. Install
