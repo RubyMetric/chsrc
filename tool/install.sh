@@ -104,7 +104,7 @@ set_install_path() {
     elif [ -d "$noroot_default_install_path" ] && [ -w "$noroot_default_install_path" ]; then
       install_dir="$noroot_default_install_path"
     else
-      if [ "$lang" = "zh"]; then
+      if [ "$lang" = "zh" ]; then
         error "默认下载路径 /usr/local/bin 不可写，请使用 sudo 命令运行脚本；或通过 -d 参数指定其它路径安装"
       else
         error "Default download path /usr/local/bin is not writable. Please run the script with sudo; or specify another path using the -d option."
