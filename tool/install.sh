@@ -160,20 +160,20 @@ install() {
   if [[ ! "$userOpt_version" =~ ^(pre|0\.1\.([4-9]))$ ]]; then
       # version 不符合条件，报错
       if [ "$userOpt_lang" = "zh" ]; then
-        error "不支持的版本: ${version}，版本号必须在 0.1.4 到 0.1.9 之间或为 'pre'"
+        error "不支持的版本: ${userOpt_version}，版本号必须在 0.1.4 到 0.1.9 之间或为 'pre'"
       else
-        error "Unsupported version: ${version}. Version number must be between 0.1.4 and 0.1.9 or 'pre'"
+        error "Unsupported version: ${userOpt_version}. Version number must be between 0.1.4 and 0.1.9 or 'pre'"
       fi
   fi
 
-  url="https://gitee.com/RubyMetric/chsrc/releases/download/${version}/${binary_name}-${arch}-${platform}"
+  url="https://gitee.com/RubyMetric/chsrc/releases/download/${userOpt_version}/${binary_name}-${arch}-${platform}"
 
   path_to_executable="${userOpt_install_dir}/${binary_name}"
 
   if [ "$userOpt_lang" = "zh" ]; then
-    info "下载 ${binary_name} (${arch} 架构, ${platform} 平台， ${version}版本) 到 ${path_to_executable}"
+    info "下载 ${binary_name} (${arch} 架构, ${platform} 平台， ${userOpt_version}版本) 到 ${path_to_executable}"
   else
-    info "Downloading ${binary_name} (${arch} architecture, ${platform} platform, version ${version}) to ${path_to_executable}"
+    info "Downloading ${binary_name} (${arch} architecture, ${platform} platform, version ${userOpt_version}) to ${path_to_executable}"
   fi
 
   if curl -sL "$url" -o "$path_to_executable"; then
