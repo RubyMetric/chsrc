@@ -39,7 +39,7 @@
 
 1. [[Challenge] 编写统一安装的 shell 和 PowerShell 脚本](https://github.com/RubyMetric/chsrc/issues/98)
 
-    - [x] `shell` 脚本已完成，感谢 [@Efterklang]
+    - [x] `shell` 脚本已完成，感谢 [@Efterklang] 与 [@xuan]
     - [ ] `PowerShell` 脚本
 
 2. [[Challenge] CentOS (Stream) Recipe](https://github.com/RubyMetric/chsrc/issues/48)
