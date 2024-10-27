@@ -3,7 +3,7 @@
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
 #               |   ChatGPT  <https://chatgpt.com/>
 # Created On    : <2024-10-26>
-# Last Modified : <2024-10-26>
+# Last Modified : <2024-10-27>
 #
 #
 #         chsrc installer for Windows
@@ -26,6 +26,7 @@ $global:arch = ""
 $global:version = ""                         
 $global:url = ""                             
 $global:flag = 0
+
 # 安装说明的多行字符串
 $installInstructions = @"
 Hey friend
@@ -155,9 +156,6 @@ function DownLoad {
     # 执行下载
     try {
         Invoke-WebRequest -OutFile ($global:path + $fileName) -Uri $global:url -ErrorAction Stop
-
-        # curl.exe -Lo $global:path $global:url
-
         Write-Host "Downloading $binary_name ($global:arch architecture, $platform platform, version $global:version) to $global:path"
         Write-Host "🎉 Installation completed, path: $global:path"
     } catch {
