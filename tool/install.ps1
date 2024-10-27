@@ -48,7 +48,7 @@ https://github.com/RubyMetric/chsrc
 function Help {
     Write-Host 
 @"
-chsrc-installer: Install chsrc on any Unix-like OS
+chsrc-installer: Install chsrc on ${platform}.
 
 Usage: install.sh [options]
 Options:
