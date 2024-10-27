@@ -13,11 +13,11 @@
 param(
     [switch]
     $h,
-    $d = "${Home}\.chsrc\bin", 
+    $d = "${HOME}\Downloads", 
     $v = "pre"
 )
 $fileName = "\chsrc.exe"
-$default_path = "${Home}\.chsrc\bin"  
+$default_path = "${HOME}\Downloads"  
 $binary_name = "chsrc"
 $platform = "Windows"
 
