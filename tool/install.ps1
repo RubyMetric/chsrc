@@ -128,8 +128,14 @@ function Get_Url {
     Write-Host "CPU Architecture: $global:arch"
 
     # Set URL
-    $global:url =  "https://gitee.com/RubyMetric/chsrc/releases/download/" + `
-                "v" + "${global:version}/chsrc-${global:arch}-windows.exe"
+    if ($version -eq "pre") {
+        $global:url =  "https://gitee.com/RubyMetric/chsrc/releases/download/" + `
+                            "${global:version}/chsrc-${global:arch}-windows.exe"
+    }
+    else {
+        $global:url =  "https://gitee.com/RubyMetric/chsrc/releases/download/" + `
+                            "v" + "${global:version}/chsrc-${global:arch}-windows.exe"
+    }
 
     Write-Host "DownLoad URL: $global:url."
 }
