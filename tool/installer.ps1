@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------
-# File Name     : install.ps1
+# File Name     : installer.ps1
 # File Authors  :    xuan    <wick.dynex@qq.com>
 #               |  ChatGPT   <https://chatgpt.com/>
 # Contributors  : Aoran Zeng <ccmywish@qq.com>

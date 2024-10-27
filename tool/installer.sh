@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ---------------------------------------------------------------
-# File Name     : install.sh
+# File Name     : installer.sh
 # File Authors  :  GnixAij   <gaojiaxing0220@gmail.com>
 #               |    xuan    <wick.dynex@qq.com>
 #               |  ChatGPT   <https://chatgpt.com>

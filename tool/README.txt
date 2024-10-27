@@ -24,8 +24,8 @@
 2. 文件
 ********
 
-install.sh          Bash 编写的一键安装工具
-install.ps1         Powershell 编写的一键安装工具
+installer.sh          Bash 编写的一键安装工具
+installer.ps1         Powershell 编写的一键安装工具
 README.txt          此文件
 
 *******************
@@ -56,8 +56,8 @@ you can use the tools to specify directory path and release version.
 2. Files
 ********
 
-install.sh                  One-key install tool in Bash
-install.ps1                 One-key install tool in PowerShell
+installer.sh                  One-key install tool in Bash
+installer.ps1                 One-key install tool in PowerShell
 README.txt                  This file
 
 *******************
