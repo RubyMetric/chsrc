@@ -13,17 +13,17 @@
 # 定义参数
 param(
     [switch]
-    $h,
-    $d = "${HOME}\Downloads",
-    $v = "pre"
+    $Help,
+    $Directory = "${HOME}\Downloads",
+    $Version = "pre"
 )
 
-$fileName = "\chsrc.exe"
-$default_path = "${HOME}\Downloads"
+
 $binary_name = "chsrc"
+$default_install_dir = "${HOME}\Downloads"
 $platform = "Windows"
 
-$global:path = ""
+$global:install_dir = ""
 $global:arch = ""
 $global:version = ""
 $global:url = ""
@@ -48,23 +48,23 @@ https://github.com/RubyMetric/chsrc
     exit
 }
 
-function Help {
+function help {
     Write-Host
 @"
 chsrc-installer: Install chsrc on ${platform}.
 
-Usage: install.sh [options]
+Usage: install.ps1 [options]
 Options:
 -h            Print this help information
--d <dir>      Specify installation directory, default is $default_path
+-d <dir>      Specify installation directory, default is $default_install_dir
 -v <version>  Specify chsrc version
 
 "@
 }
 
 # 执行帮助函数
-if ($h) {
-    Help
+if ($Help) {
+    help
     exit
 }
 
@@ -80,30 +80,30 @@ function output_error () {
 
 function Set_Install_Dir {
     # 检查目录是否存在
-    if (-not (Test-Path -Path $d -PathType Container)) {
+    if (-not (Test-Path -Path $Directory -PathType Container)) {
         # 如果目录不存在，执行下面的代码块
         try {
-            New-Item -Path $d -ItemType Directory -Force | Out-Null
-            output_info "Directory created: $d"
+            New-Item -Path $Directory -ItemType Directory -Force | Out-Null
+            output_info "Directory created: $Directory"
             $global:flag = 1
         } catch {
             output_error "Failed to create directory: $_"
         }
     }
-    $global:path=$d
+    $global:install_dir=$Directory
     # 输出最终路径
-    output_info "Set install dir to: $global:path"
+    output_info "Set install dir to: $global:install_dir"
 }
 
 function Set_Version {
     $pattern = '^(0\.1\.[4-9]|pre)$'
 
-    if ($v -notmatch $pattern) {
-        output_error "Invalid version '$v'. Please provide a valid version (0.1.4 - 0.1.9 or 'pre')."
+    if ($Version -notmatch $pattern) {
+        output_error "Invalid version '$Version'. Please provide a valid version (0.1.4 - 0.1.9 or 'pre')."
     }
 
     # 设置版本号
-    $global:version=$v
+    $global:version=$Version
     output_info "Set chsrc version: $global:version"
 }
 
@@ -160,9 +160,9 @@ function Install {
     }
 
     try {
-        output_info "Downloading $binary_name ($global:arch architecture, $platform platform, version $global:version) to $global:path ..."
-        Invoke-WebRequest -OutFile ($global:path + $fileName) -Uri $global:url -ErrorAction Stop
-        output_info "🎉 Installation completed, path: $global:path"
+        output_info "Downloading $binary_name ($global:arch architecture, $platform platform, version $global:version) to $global:install_dir ..."
+        Invoke-WebRequest -OutFile ($global:install_dir + "\$binary_name") -Uri $global:url -ErrorAction Stop
+        output_info "🎉 Installation completed, destination dir: $global:install_dir"
     } catch {
         output_error "Unable to download $binary_name. Error: $_"
     }
@@ -171,9 +171,9 @@ function Install {
 
 function cleanup {
     if ($flag -eq 1) {
-        if (Test-Path -Path $path) {
-            Remove-Item -Path $path -Recurse -Force  # 删除路径及其内容
-            output_info "Deleted the path: $path"
+        if (Test-Path -Path $global:install_dir) {
+            Remove-Item -Path $global:install_dir -Recurse -Force  # 删除路径及其内容
+            output_info "Deleted the directory: $global:install_dir"
         }
     }
 }
