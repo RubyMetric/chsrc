@@ -128,7 +128,7 @@ function Get_Url {
 
     # Set URL
     $global:url =  "https://gitee.com/RubyMetric/chsrc/releases/download/" + `
-                "${global:version}/chsrc-${global:arch}-windows.exe"
+                "v" + "${global:version}/chsrc-${global:arch}-windows.exe"
 
     Write-Host "DownLoad URL: $global:url."
 }
