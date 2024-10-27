@@ -166,23 +166,6 @@ function DownLoad {
     }
 }
 
-# function DownLoad {
-
-#     try {
-#         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-#         Invoke-WebRequest -Uri $url -Method Head | `
-#             Where-Object -FilterScript { $_.StatusCode -ne 200 }  # 检查状态码是否为 200
-#     }
-#     catch {
-#         Write-Host "Unable to download ${binary_name}. Please check your internet connection."
-#         exit 1  # 下载失败，输出错误信息并退出
-    
-#     }
-#     Invoke-WebRequest -OutFile $path $url
-#     Write-Host "Downloading $binary_name ($arch architecture, $platform platform, version $version) to $path"
-#     Write-Host "🎉 Installation completed, path: $path_to_executable"
-# }
-
 # 定义清理函数
 function Cleanup {
     if ($flag -eq 1) {
@@ -194,7 +177,7 @@ function Cleanup {
 }
 
 # 注册退出事件
-Register-EngineEvent PowerShell.Exiting -Action { Cleanup }
+$null = Register-EngineEvent PowerShell.Exiting -Action { Cleanup }
 
 # 下载chsrc
 
