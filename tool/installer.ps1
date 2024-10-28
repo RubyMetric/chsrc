@@ -160,9 +160,10 @@ function Install {
     }
 
     try {
+        $outfile = "\${binary_name}.exe"
         output_info "Downloading $binary_name ($global:arch architecture, $platform platform, version $global:version) to $global:install_dir ..."
-        Invoke-WebRequest -OutFile ($global:install_dir + "\$binary_name") -Uri $global:url -ErrorAction Stop
-        output_info "🎉 Installation completed, destination dir: $global:install_dir"
+        Invoke-WebRequest -OutFile ($global:install_dir + $outfile) -Uri $global:url -ErrorAction Stop
+        output_info "🎉 Installation completed, destination: " ($global:install_dir + $outfile)
     } catch {
         output_error "Unable to download $binary_name. Error: $_"
     }
