@@ -3,8 +3,9 @@
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
+ *               |  happy game <happygame1024@gmail.com>
  * Created On    : <2024-06-08>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2024-10-28>
  * ------------------------------------------------------------*/
 
 static MirrorSite
@@ -43,13 +44,14 @@ wr_dockerhub_sources[] = {
 
 def_sources_n(wr_dockerhub);
 
+#define WARE_DockerHub_SourceConfig "/etc/docker/daemon.json"
 
 void
 wr_dockerhub_getsrc (char *option)
 {
   if (xy_on_linux || xy_on_bsd)
     {
-      chsrc_view_file ("/etc/docker/daemon.json");
+      chsrc_view_file (WARE_DockerHub_SourceConfig);
     }
   else
     {
@@ -66,6 +68,7 @@ wr_dockerhub_getsrc (char *option)
 void
 wr_dockerhub_setsrc (char *option)
 {
+  chsrc_ensure_root ();
   chsrc_yield_source_and_confirm (wr_dockerhub);
 
   if (xy_on_linux || xy_on_bsd)
@@ -73,12 +76,60 @@ wr_dockerhub_setsrc (char *option)
       char *to_add = xy_strjoin (3, "{\n"
                                     "  \"registry-mirrors\": [\"", source.url, "\"]\n"
                                     "}");
-      chsrc_note2 ("请向 /etc/docker/daemon.json 中添加下述内容:");
-      puts (to_add);
+      if (chsrc_check_file (WARE_DockerHub_SourceConfig))
+        {
+          chsrc_note2 ("已找到 配置文件，将自动换源");
+          chsrc_backup (WARE_DockerHub_SourceConfig);
+          if (chsrc_check_program_quietly ("jq"))
+            {
+              // 检查是否已经存在 source.url
+              char *cmd = xy_strjoin (4, "jq '.[\"registry-mirrors\"] | index(\"",
+                                         source.url,
+                                         "\")' ",
+                                         WARE_DockerHub_SourceConfig);
+              char *ret = xy_run(cmd, 0, NULL);
+              if (ret && strcmp(ret, "null\n") != 0)
+                {
+                  chsrc_note2 ("已存在源，无需重复添加");
+                }
+              else
+                {
+                  cmd = xy_strjoin (6, "jq '.[\"registry-mirrors\"] |= [\"",
+                                       source.url,
+                                       "\"] + .' ",
+                                       xy_2strjoin(WARE_DockerHub_SourceConfig, ".bak"),
+                                       " > ",
+                                       WARE_DockerHub_SourceConfig);
+                  chsrc_run (cmd, RunOpt_Default);
+                  chsrc_note2 ("源已添加");
+                }
+            }
+          else
+            {
+              chsrc_note2("未找到 jq 命令, 将使用 sed 换源");
+              char *cmd = xy_strjoin (5, "sed ",
+                                       "-z -i 's|\"registry-mirrors\":[^]]*]|\"registry-mirrors\":[\"",
+                                       source.url,
+                                       "\"]|' ",
+                                       WARE_DockerHub_SourceConfig);
+              chsrc_run (cmd, RunOpt_Default);
+            }
+        }
+      else
+        {
+          // 不存在 /etc/docker/daemon.jsons时可以直接写入文件
+          chsrc_note2 ("未找到 配置文件, 将自动创建");
+          chsrc_ensure_dir ("/etc/docker");
+          chsrc_run ( xy_2strjoin("touch ", WARE_DockerHub_SourceConfig), RunOpt_Default);
+
+          chsrc_append_to_file (to_add, WARE_DockerHub_SourceConfig);
+        }
+      // chsrc_note2 ("请向 /etc/docker/daemon.json 中添加下述内容:");
+      // puts (to_add);
       if (xy_on_linux)
         {
-          chsrc_note2 ("然后请运行:");
-          puts ("sudo systemctl restart docker");
+          chsrc_note2 ("请自行运行: sudo systemctl restart docker");
+          // puts ("sudo systemctl restart docker");
         }
       else
         {
