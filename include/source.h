@@ -1,12 +1,11 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  : Aoran Zeng    <ccmywish@qq.com>
- *               | Heng Guo      <2085471348@qq.com>
+ * File Authors  :  Aoran Zeng   <ccmywish@qq.com>
+ *               |   Heng Guo    <2085471348@qq.com>
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-10-04>
  * Last Modified : <2024-10-09>
  *
  * 通用镜像站与换源信息
@@ -80,9 +79,7 @@ Nju           = {"nju",     "NJU",           "南京大学开源镜像站",     
                  "https://mirrors.nju.edu.cn/archlinux" Big_File_archlinux};
 
 /**
- * @note {
- *   [ccmywish:2023-09-05] 我只使用了不到5次，重庆大学镜像站就把我的ip封杀了，对用户来说封杀策略过严，暂时不可靠，暂时不用
- * }
+ * @note [ccmywish:2023-09-05] 我只使用了不到5次，重庆大学镜像站就把我的ip封杀了，对用户来说封杀策略过严，暂时不可靠，暂时不用
  */
 //  Cqu       = {"cqu",     "CQU",           "重庆大学开源软件镜像站",     "https://mirrors.cqu.edu.cn/",
 //               "https://mirrors.cqu.edu.cn/speedtest/1000mb.bin"};
