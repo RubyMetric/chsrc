@@ -1,8 +1,10 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  : happy game <happygame1024@gmail.com>
+ * File Authors  : happy game <happygame1024@gmail.com>
+ *               | Aoran Zeng <ccmywish@qq.com>
+ * Contributors  : Nil Null <nil@null.org>
+ *               |
  * Created On    : <2024-06-08>
  * Last Modified : <2024-10-28>
  * ------------------------------------------------------------*/
@@ -19,12 +21,12 @@ Huecker = {"huecker",  "(Russia) Huecker", "俄罗斯 Huecker.io",   "https://hu
            "https://huecker.io/en/use.html"};
 
 /**
- * 2024-07-24 更新
+ * @update 2024-07-24
  *
  * @note USTC 与 SJTUG 于 2024-06-06 停止支持 DockerHub
  * @note NJU 于 2024-06-07 停止支持 DockerHub
  *
- * 参考：https://gist.github.com/y0ngb1n/7e8f16af3242c7815e7ca2f0833d3ea6
+ * @consult https://gist.github.com/y0ngb1n/7e8f16af3242c7815e7ca2f0833d3ea6
  */
 
 static SourceInfo
@@ -60,7 +62,7 @@ wr_dockerhub_getsrc (char *option)
 }
 
 /**
- * 参考：
+ * @consult
  *  1. https://mirrors.ustc.edu.cn/help/dockerhub.html
  *  2. https://www.cnblogs.com/yuzhihui/p/17461781.html
  */
@@ -77,7 +79,7 @@ wr_dockerhub_setsrc (char *option)
                                     "}");
       if (chsrc_check_file (WARE_DockerHub_SourceConfig))
         {
-          chsrc_note2 ("已找到 配置文件，将自动换源");
+          chsrc_note2 ("已找到Docker配置文件，将自动换源");
           chsrc_backup (WARE_DockerHub_SourceConfig);
           if (chsrc_check_program_quietly ("jq"))
             {
@@ -116,8 +118,8 @@ wr_dockerhub_setsrc (char *option)
         }
       else
         {
-          // 不存在 /etc/docker/daemon.jsons时可以直接写入文件
-          chsrc_note2 ("未找到 配置文件, 将自动创建");
+          // 不存在 /etc/docker/daemon.json 时可以直接写入文件
+          chsrc_note2 ("未找到Docker配置文件, 将自动创建");
           chsrc_ensure_dir ("/etc/docker");
           chsrc_run ( xy_2strjoin("touch ", WARE_DockerHub_SourceConfig), RunOpt_Default);
 
@@ -130,7 +132,6 @@ wr_dockerhub_setsrc (char *option)
           // 由于 systemctl restart docker 会导致所有容器停止，所以不自动重启
           chsrc_note2 ("请自行运行: sudo systemctl restart docker");
           chsrc_note2 ("该命令会重启所有容器, 请在合适的时机执行");
-          // puts ("sudo systemctl restart docker");
         }
       else
         {
@@ -147,4 +148,23 @@ wr_dockerhub_setsrc (char *option)
 }
 
 
-def_target(wr_dockerhub);
+FeatInfo
+wr_dockerhub_feat (char *option)
+{
+  FeatInfo f = {0};
+
+  f.can_get = true;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.locally = NULL;
+  f.can_english = false;
+
+  f.can_user_define = true;
+
+  f.note = NULL;
+  return f;
+}
+
+
+def_target_gsf(wr_dockerhub);
