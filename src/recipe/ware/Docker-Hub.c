@@ -2,8 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- *               |  happy game <happygame1024@gmail.com>
+ * Contributors  : happy game <happygame1024@gmail.com>
  * Created On    : <2024-06-08>
  * Last Modified : <2024-10-28>
  * ------------------------------------------------------------*/
@@ -88,7 +87,7 @@ wr_dockerhub_setsrc (char *option)
                                          "\")' ",
                                          WARE_DockerHub_SourceConfig);
               char *ret = xy_run(cmd, 0, NULL);
-              if (ret && strcmp(ret, "null\n") != 0)
+              if (ret && !xy_streql(ret, "null\n"))
                 {
                   chsrc_note2 ("已存在源，无需重复添加");
                 }
@@ -128,7 +127,9 @@ wr_dockerhub_setsrc (char *option)
       // puts (to_add);
       if (xy_on_linux)
         {
+          // 由于 systemctl restart docker 会导致所有容器停止，所以不自动重启
           chsrc_note2 ("请自行运行: sudo systemctl restart docker");
+          chsrc_note2 ("该命令会重启所有容器, 请在合适的时机执行");
           // puts ("sudo systemctl restart docker");
         }
       else
