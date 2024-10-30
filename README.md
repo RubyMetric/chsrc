@@ -37,11 +37,11 @@
 
 挑战清单：
 
-1. [[Challenge] 编写统一安装的 shell 和 PowerShell 脚本](https://github.com/RubyMetric/chsrc/issues/98)
+1. [[HELP] 提供默认源地址，如Ubuntu,Debian,Go等的默认源URL，帮助我们进行 `chsrc reset`](https://github.com/RubyMetric/chsrc/issues/111)
 
-    已由 [@Efterklang] 与 [@xuan] 完成
+2. [[Challenge] 编写统一安装的 shell 和 PowerShell 脚本](https://github.com/RubyMetric/chsrc/issues/98) : 已由 [@Efterklang] 与 [@xuan] 完成
 
-2. [[Challenge] CentOS (Stream) Recipe](https://github.com/RubyMetric/chsrc/issues/48)
+3. [[Challenge] CentOS (Stream) Recipe](https://github.com/RubyMetric/chsrc/issues/48)
 
 <br>
 
