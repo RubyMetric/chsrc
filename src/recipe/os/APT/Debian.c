@@ -5,7 +5,7 @@
  *               |  Heng Guo  <2085471348@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-02>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2024-10-31>
  * ------------------------------------------------------------*/
 
 /**
@@ -106,4 +106,23 @@ os_debian_setsrc (char *option)
   chsrc_conclude (&source, SetsrcType_Auto);
 }
 
-def_target(os_debian);
+
+FeatInfo
+os_debian_feat (char *option)
+{
+  FeatInfo f = {0};
+
+  f.can_get = true;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.locally = NULL;
+  f.can_english = false;
+  f.can_user_define = true;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_gsf(os_debian);
+
