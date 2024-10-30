@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2024-06-14>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2024-10-31>
  * ------------------------------------------------------------*/
 
 #define OS_Apt_SourceList   "/etc/apt/sources.list"
@@ -63,6 +63,11 @@ ensure_apt_sourcelist (int debian_type)
 
   char *version_id = xy_run ("sed -nr 's/VERSION_ID=(.*)/\\1/p' " ETC_OS_RELEASE, 0, NULL);
   version_id = xy_str_delete_suffix (codename, "\n");
+
+  // 得到的结果是带双引号的，需要去掉，如 "12"
+  version_id = xy_str_delete_prefix (version_id, "\"");
+  version_id = xy_str_delete_suffix (version_id, "\"");
+
   double version = atof (version_id);
 
   char *makeup = NULL;
