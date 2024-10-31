@@ -83,13 +83,20 @@ pl_dart_setsrc (char *option)
 }
 
 
+void
+pl_dart_resetsrc (char *option)
+{
+  pl_dart_setsrc (SetsrcType_Reset);
+}
+
+
 FeatInfo
 pl_dart_feat (char *option)
 {
   FeatInfo f = {0};
 
   f.can_get = true;
-  f.can_reset = false;
+  f.can_reset = true;
 
   f.cap_locally = CanNot;
   f.locally = NULL;
@@ -101,4 +108,4 @@ pl_dart_feat (char *option)
   return f;
 }
 
-def_target_gsf(pl_dart);
+def_target_gsrf(pl_dart);

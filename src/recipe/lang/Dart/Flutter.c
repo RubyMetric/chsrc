@@ -87,6 +87,13 @@ pl_dart_flutter_setsrc (char *option)
 }
 
 
+void
+pl_dart_flutter_resetsrc (char *option)
+{
+  pl_dart_flutter_setsrc (SetsrcType_Reset);
+}
+
+
 /**
  * chsrc ls flutter
  */
@@ -96,7 +103,7 @@ pl_dart_flutter_feat (char *option)
   FeatInfo f = {0};
 
   f.can_get = true;
-  f.can_reset = false;
+  f.can_reset = true;
 
   f.cap_locally = CanNot;
   f.locally = NULL;
@@ -108,4 +115,4 @@ pl_dart_flutter_feat (char *option)
   return f;
 }
 
-def_target_gsf(pl_dart_flutter);
+def_target_gsrf(pl_dart_flutter);

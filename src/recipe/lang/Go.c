@@ -75,4 +75,33 @@ pl_go_setsrc (char *option)
   chsrc_conclude (&source, SetsrcType_Auto);
 }
 
-def_target(pl_go);
+
+void
+pl_go_resetsrc (char *option)
+{
+  pl_go_setsrc (SetsrcType_Reset);
+}
+
+
+/**
+ * chsrc ls go
+ */
+FeatInfo
+pl_go_feat (char *option)
+{
+  FeatInfo f = {0};
+
+  f.can_get = true;
+  f.can_reset = true;
+
+  f.cap_locally = CanNot;
+  f.locally = NULL;
+  f.can_english = false;
+
+  f.can_user_define = true;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_gsrf(pl_go);

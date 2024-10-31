@@ -55,7 +55,7 @@ pl_ruby_remove_gem_source (const char *source)
 }
 
 /**
- * Ruby换源，参考：https://gitee.com/RubyMetric/rbenv-cn
+ * @consult https://gitee.com/RubyMetric/rbenv-cn
  */
 void
 pl_ruby_setsrc (char *option)
