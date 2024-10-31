@@ -3,12 +3,14 @@
  * -------------------------------------------------------------
  * File Authors   : Aoran Zeng <ccmywish@qq.com>
  * Contributors   :  Nil Null  <nil@null.org>
+ *                | czyt <czyt.go@gmail.com>
  * Created On     : <2023-09-10>
- * Major Revision :      2
- * Last Modified  : <2024-09-14>
+ * Major Revision :      3
+ * Last Modified  : <2024-10-31>
  *
  * 2024-09-14: 不得不将Dart和Flutter拆分为两个Target，
  *             因为3家教育网镜像站给出的 Dart 和 Flutter 换源URL模式都不一样
+ * 2024-10-31: 补充FLUTTER_STORAGE_BASE_URL的默认源地址
  * ------------------------------------------------------------*/
 
 /**
@@ -16,7 +18,7 @@
  */
 static SourceInfo
 pl_dart_flutter_sources[] = {
-  {&Upstream,       "https://storage.googleapis.com"},
+  {&Upstream,      "https://storage.googleapis.com"},
   {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn"}, // 没有后缀，怀疑是否存在问题
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/git/flutter"}, // URL 带 git
   {&Nju,           "https://mirror.nju.edu.cn/flutter"}

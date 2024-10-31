@@ -3,8 +3,12 @@
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
+ *                | czyt <czyt.go@gmail.com>
  * Created On    : <2023-08-30>
- * Last Modified : <2024-08-09>
+ * Major Revision :      1
+ * Last Modified : <2024-10-31>
+ *
+ *  2024-10-31: 补充Go语言的默认GOPROXY地址
  * ------------------------------------------------------------*/
 
 static MirrorSite
@@ -21,7 +25,7 @@ GoProxyIO = {"goproxy.io",   "GOPROXY.IO",   "GOPROXY.IO",         "https://gopr
  */
 static SourceInfo
 pl_go_sources[] = {
-  {&Upstream,       "https://proxy.golang.org,direct"},
+  {&Upstream,      "https://proxy.golang.org,direct"},
   {&GoProxyCN,     "https://goproxy.cn"},
   {&Ali,           "https://mirrors.aliyun.com/goproxy/"},
   {&Huawei,        "https://mirrors.huaweicloud.com/goproxy/"},

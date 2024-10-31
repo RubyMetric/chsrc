@@ -3,9 +3,12 @@
  * -------------------------------------------------------------
  * File Authors   : Aoran Zeng <ccmywish@qq.com>
  * Contributors   :  Nil Null  <nil@null.org>
+ *                | czyt <czyt.go@gmail.com>
  * Created On     : <2023-09-10>
- * Major Revision :      3
- * Last Modified  : <2024-09-14>
+ * Major Revision :      4
+ * Last Modified  : <2024-10-31>
+ *
+ *  2024-10-31: 补充PUB_HOSTED_URL的默认源地址
  *
  * Dart Pub 软件仓库
  * ------------------------------------------------------------*/
@@ -15,7 +18,7 @@
  */
 static SourceInfo
 pl_dart_sources[] = {
-  {&Upstream,       "https://pub.dev"},
+  {&Upstream,      "https://pub.dev"},
   {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/dart-pub"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"},
   {&Nju,           "https://mirror.nju.edu.cn/dart-pub"}
