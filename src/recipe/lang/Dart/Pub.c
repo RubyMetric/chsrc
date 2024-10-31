@@ -2,19 +2,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors   : Aoran Zeng <ccmywish@qq.com>
- * Contributors   :  Nil Null  <nil@null.org>
- *                | czyt <czyt.go@gmail.com>
+ * Contributors   :    czyt    <czyt.go@gmail.com>
+ *                |
  * Created On     : <2023-09-10>
- * Major Revision :      4
+ * Major Revision :      3
  * Last Modified  : <2024-10-31>
- *
- *  2024-10-31: 补充PUB_HOSTED_URL的默认源地址
  *
  * Dart Pub 软件仓库
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-09-14
+ * @update 2024-10-31
  */
 static SourceInfo
 pl_dart_sources[] = {

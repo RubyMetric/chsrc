@@ -1,14 +1,12 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- *                | czyt <czyt.go@gmail.com>
- * Created On    : <2023-08-30>
+ * File Authors   : Aoran Zeng <ccmywish@qq.com>
+ * Contributors   :    czyt    <czyt.go@gmail.com>
+ *                |
+ * Created On     : <2023-08-30>
  * Major Revision :      1
- * Last Modified : <2024-10-31>
- *
- *  2024-10-31: 补充Go语言的默认GOPROXY地址
+ * Last Modified  : <2024-10-31>
  * ------------------------------------------------------------*/
 
 static MirrorSite
@@ -20,12 +18,12 @@ GoProxyIO = {"goproxy.io",   "GOPROXY.IO",   "GOPROXY.IO",         "https://gopr
 
 
 /**
- * @time 2024-04-18 更新
+ * @update 2024-10-31
  * @note 缺少教育网软件源
  */
 static SourceInfo
 pl_go_sources[] = {
-  {&Upstream,      "https://proxy.golang.org,direct"},
+  {&Upstream,      "https://proxy.golang.org"},
   {&GoProxyCN,     "https://goproxy.cn"},
   {&Ali,           "https://mirrors.aliyun.com/goproxy/"},
   {&Huawei,        "https://mirrors.huaweicloud.com/goproxy/"},
@@ -48,6 +46,7 @@ pl_go_check_cmd ()
     }
 }
 
+
 void
 pl_go_getsrc (char *option)
 {
@@ -55,8 +54,11 @@ pl_go_getsrc (char *option)
   chsrc_run ("go env GOPROXY", RunOpt_Default);
 }
 
+
 /**
- * Go换源，参考：https://goproxy.cn/
+ * chsrc set go
+ *
+ * @consult https://goproxy.cn/
  */
 void
 pl_go_setsrc (char *option)

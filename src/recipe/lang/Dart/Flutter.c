@@ -2,19 +2,18 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors   : Aoran Zeng <ccmywish@qq.com>
- * Contributors   :  Nil Null  <nil@null.org>
- *                | czyt <czyt.go@gmail.com>
+ * Contributors   :    czyt    <czyt.go@gmail.com>
+ *                |
  * Created On     : <2023-09-10>
- * Major Revision :      3
+ * Major Revision :      2
  * Last Modified  : <2024-10-31>
  *
  * 2024-09-14: 不得不将Dart和Flutter拆分为两个Target，
  *             因为3家教育网镜像站给出的 Dart 和 Flutter 换源URL模式都不一样
- * 2024-10-31: 补充FLUTTER_STORAGE_BASE_URL的默认源地址
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-09-14
+ * @update 2024-10-31
  */
 static SourceInfo
 pl_dart_flutter_sources[] = {
