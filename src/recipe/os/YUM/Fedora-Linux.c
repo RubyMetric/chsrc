@@ -5,7 +5,7 @@
  * Contributors  : Aoran Zeng <ccmywish@qq.com>
  *               | happy game <happygame1024@gmail.com>
  * Created On    : <2023-09-26>
- * Last Modified : <2024-10-09>
+ * Last Modified : <2024-11-04>
  *
  * 名称为 Fedora Linux
  * ------------------------------------------------------------*/
@@ -45,14 +45,23 @@ os_fedora_setsrc (char *option)
   chsrc_backup ("/etc/yum.repos.d/fedora.repo");
   chsrc_backup ("/etc/yum.repos.d/fedora-updates.repo");
 
-  char* cmd = xy_strjoin (7, "sed ",
-         "-e 's|^#baseurl=http://download.example/pub/fedora/linux/|baseurl=",
-         source.url,
+  // 取消注释 baseurl
+  char* cmd = xy_strjoin (5, "sed ",
+         "-i 's|^#baseurl=|baseurl=",
          "|g' ",
-         "-i.bak ",
          "/etc/yum.repos.d/fedora.repo ",
          "/etc/yum.repos.d/fedora-updates.repo");
+  chsrc_run (cmd, RunOpt_Default);
 
+  // fedora的换源涉及 /etc/yum.repos.d/fedora.repo和 /etc/yum.repos.d/fedora-updates.repo
+  // 需要替换 baseurl=source.url/releases/... 和 baseurl=source.url/releases/...
+  cmd = xy_strjoin (7, "sed ",
+         "-i -E 's!^baseurl=.*?/(releases|updates)/!baseurl=",
+         source.url,
+         "/\\1/",
+         "!g' ",
+         "/etc/yum.repos.d/fedora.repo ",
+         "/etc/yum.repos.d/fedora-updates.repo");
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_note2 ("已为您更换baseurl, 但fedora默认会优先使用metalink来匹配最快的源, 如您在获取metadata时速度较慢可自行将其注释:");
