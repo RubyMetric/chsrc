@@ -2,8 +2,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors  :  Heng Guo  <2085471348@qq.com>
- * Contributors  : Aoran Zeng <ccmywish@qq.com>
  *               | happy game <happygame1024@gmail.com>
+ * Contributors  : Aoran Zeng <ccmywish@qq.com>
+ *               |
  * Created On    : <2023-09-26>
  * Last Modified : <2024-11-04>
  *
@@ -15,7 +16,7 @@
  */
 static SourceInfo
 os_fedora_sources[] = {
-  {&Upstream,       "http://download.example/pub/fedora/linux"},
+  {&Upstream,      "http://download.example/pub/fedora/linux"},
   {&Ali,           "https://mirrors.aliyun.com/fedora"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/fedora"},
   {&Ustc,          "https://mirrors.ustc.edu.cn/fedora"},
@@ -36,6 +37,8 @@ def_sources_n(os_fedora);
 void
 os_fedora_setsrc (char *option)
 {
+  char *setsrc_type = xy_streql (option, SetsrcType_Reset) ? SetsrcType_Reset : SetsrcType_Auto;
+
   chsrc_ensure_root ();
 
   chsrc_yield_source_and_confirm (os_fedora);
@@ -45,7 +48,7 @@ os_fedora_setsrc (char *option)
   chsrc_backup ("/etc/yum.repos.d/fedora.repo");
   chsrc_backup ("/etc/yum.repos.d/fedora-updates.repo");
 
-  // 取消注释 baseurl
+  // 取消对 baseurl 的注释
   char* cmd = xy_strjoin (5, "sed ",
          "-i 's|^#baseurl=|baseurl=",
          "|g' ",
@@ -53,8 +56,9 @@ os_fedora_setsrc (char *option)
          "/etc/yum.repos.d/fedora-updates.repo");
   chsrc_run (cmd, RunOpt_Default);
 
-  // fedora的换源涉及 /etc/yum.repos.d/fedora.repo和 /etc/yum.repos.d/fedora-updates.repo
-  // 需要替换 baseurl=source.url/releases/... 和 baseurl=source.url/releases/...
+  // 替换
+  // (1) baseurl=<<URL>>/releases/...
+  // (2) baseurl=<<URL>>/updates/...
   cmd = xy_strjoin (7, "sed ",
          "-i -E 's!^baseurl=.*?/(releases|updates)/!baseurl=",
          source.url,
@@ -69,9 +73,16 @@ os_fedora_setsrc (char *option)
   chsrc_log2 ("(2) /etc/yum.repos.d/fedora-updates.repo");
 
   chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
-  chsrc_conclude (&source, SetsrcType_Auto);
+
+  chsrc_conclude (&source, setsrc_type);
 }
 
+
+void
+os_fedora_resetsrc (char *option)
+{
+  os_fedora_setsrc (SetsrcType_Reset);
+}
 
 
 FeatInfo
@@ -80,14 +91,13 @@ os_fedora_feat (char *option)
   FeatInfo f = {0};
 
   f.can_get = false;
-  f.can_reset = false;
+  f.can_reset = true;
 
   f.cap_locally = CanNot;
-  f.can_english = true;
+  f.can_english = false;
   f.can_user_define = true;
 
   return f;
 }
 
 def_target_sf(os_fedora);
-

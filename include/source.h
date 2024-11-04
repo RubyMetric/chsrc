@@ -6,7 +6,7 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-10-09>
+ * Last Modified : <2024-11-04>
  *
  * 通用镜像站与换源信息
  * ------------------------------------------------------------*/
@@ -192,8 +192,10 @@ typedef struct TargetInfo_t {
 
 
 #define def_target_inner_s(t)    NULL,       t##_setsrc, NULL,         NULL
-#define def_target_inner_gs(t)   t##_getsrc, t##_setsrc, NULL,         NULL
+#define def_target_inner_sr(t)   NULL,       t##_setsrc, t##_resetsrc, NULL
 #define def_target_inner_sf(t)   NULL,       t##_setsrc, NULL,         t##_feat
+#define def_target_inner_srf(t)  NULL,       t##_setsrc, t##_resetsrc, t##_feat
+#define def_target_inner_gs(t)   t##_getsrc, t##_setsrc, NULL,         NULL
 #define def_target_inner_gsr(t)  t##_getsrc, t##_setsrc, t##_resetsrc, NULL
 #define def_target_inner_gsf(t)  t##_getsrc, t##_setsrc, NULL,         t##_feat
 #define def_target_inner_gsrf(t) t##_getsrc, t##_setsrc, t##_resetsrc, t##_feat
@@ -202,9 +204,11 @@ typedef struct TargetInfo_t {
 
 // 大部分target还不支持reset，所以暂时先默认设置为NULL来过渡
 #define def_target(t)      TargetInfo t##_target = {def_target_inner_gs(t),def_target_sourcesn(t)}
-#define def_target_gs(t)   TargetInfo t##_target = {def_target_inner_gs(t),def_target_sourcesn(t)}
+#define def_target_s(t)    TargetInfo t##_target = {def_target_inner_s(t),def_target_sourcesn(t)}
+#define def_target_sr(t)   TargetInfo t##_target = {def_target_inner_sr(t),def_target_sourcesn(t)}
 #define def_target_sf(t)   TargetInfo t##_target = {def_target_inner_sf(t),def_target_sourcesn(t)}
+#define def_target_srf(t)  TargetInfo t##_target = {def_target_inner_srf(t),def_target_sourcesn(t)}
+#define def_target_gs(t)   TargetInfo t##_target = {def_target_inner_gs(t),def_target_sourcesn(t)}
 #define def_target_gsr(t)  TargetInfo t##_target = {def_target_inner_gsr(t),def_target_sourcesn(t)}
 #define def_target_gsf(t)  TargetInfo t##_target = {def_target_inner_gsf(t),def_target_sourcesn(t)}
 #define def_target_gsrf(t) TargetInfo t##_target = {def_target_inner_gsrf(t),def_target_sourcesn(t)}
-#define def_target_s(t)    TargetInfo t##_target = {def_target_inner_s(t),def_target_sourcesn(t)}
