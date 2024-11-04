@@ -11,11 +11,11 @@
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-10-09
+ * @update 2024-11-04
  */
 static SourceInfo
 os_fedora_sources[] = {
-  {&Upstream,       NULL},
+  {&Upstream,       "http://download.example/pub/fedora/linux"},
   {&Ali,           "https://mirrors.aliyun.com/fedora"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/fedora"},
   {&Ustc,          "https://mirrors.ustc.edu.cn/fedora"},
