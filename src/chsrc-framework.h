@@ -5,9 +5,9 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  *               |  Heng Guo  <2085471348@qq.com>
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
- *               |
+ *               |  Happy Game <happygame10124@gmail.com>
  * Created On    : <2023-08-29>
- * Last Modified : <2024-09-29>
+ * Last Modified : <2024-11-04>
  *
  * chsrc 框架
  * ------------------------------------------------------------*/
@@ -442,11 +442,14 @@ measure_speed_for_url (void *url)
   // https://github.com/RubyMetric/chsrc/issues/65
   // curl (仅)在 Cygwin 上 -o nul 会把 nul 当做普通文件
   // 为了践行 chsrc everywhere 的承诺，我们也考虑支持 Cygwin
+  // 确保只在windows上运行 cygcheck，否则会生产nul文件
+#if  XY_On_Windows
   if (0==system ("cygcheck --version >nul 2>nul"))
     {
       on_cygwin = true;
       os_devnull = "/tmp/chsrc-measure-downloaded";
     }
+#endif
 
   // 我们用 —L，因为Ruby China源会跳转到其他地方
   // npmmirror 也会跳转
