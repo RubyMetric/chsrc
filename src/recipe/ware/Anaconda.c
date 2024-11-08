@@ -13,7 +13,7 @@
  */
 static SourceInfo
 wr_anaconda_sources[] = {
-  {&Upstream,       NULL},
+  {&Upstream,        "https://repo.anaconda.com/"},
   {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/anaconda/"},
   {&Bfsu,            "https://mirrors.bfsu.edu.cn/anaconda/"},
   {&Zju,             "https://mirrors.zju.edu.cn/anaconda/"},

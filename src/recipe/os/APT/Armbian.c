@@ -12,7 +12,7 @@
  */
 static SourceInfo
 os_armbian_sources[] = {
-    {&Upstream,       NULL},
+    {&Upstream,      "http://apt.armbian.com"},
     {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/armbian"},
     {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/armbian"},
     {&Bfsu,          "https://mirrors.bfsu.edu.cn/armbian"},

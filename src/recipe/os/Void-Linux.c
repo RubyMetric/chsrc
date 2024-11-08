@@ -12,7 +12,7 @@
  */
 static SourceInfo
 os_void_sources[] = {
-  {&Upstream,       NULL},
+  {&Upstream,       "https://repo-default.voidlinux.org"},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/voidlinux"},
   {&Sjtug_Zhiyuan,  "https://mirror.sjtu.edu.cn/voidlinux"},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/voidlinux"}
