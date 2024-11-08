@@ -3,8 +3,9 @@
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
+ *               |
  * Created On    : <2024-06-14>
- * Last Modified : <2024-10-31>
+ * Last Modified : <2024-11-08>
  * ------------------------------------------------------------*/
 
 #define OS_Apt_SourceList   "/etc/apt/sources.list"
@@ -54,7 +55,9 @@ ensure_apt_sourcelist (int debian_type)
     }
   else
     {
-      chsrc_note2 ("将生成新的源配置文件");
+      char *msg = CliOpt_InEnglish ? "Will generate a new source config file"
+                                   : "将生成新的源配置文件";
+      chsrc_note2 (msg);
     }
 
   // 反向引用需要escape一下
@@ -117,7 +120,9 @@ ensure_apt_sourcelist (int debian_type)
         }
       else
         {
-          chsrc_error ("您的Debian版本过低(<10)，暂不支持换源");
+          char *msg = CliOpt_InEnglish ? "Your Debian version is too low (<10) for chsrc to support"
+                                       : "您的 Debian 版本过低 (<10)，暂不支持换源";
+          chsrc_error (msg);
           exit (Exit_Unsupported);
         }
     }

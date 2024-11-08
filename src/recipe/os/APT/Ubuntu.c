@@ -4,12 +4,13 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  *               |  Heng Guo  <2085471348@qq.com>
  * Contributors  :  Zhao  <1792582687@qq.com>
+ *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2024-11-05>
+ * Last Modified : <2024-11-08>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-06-12
+ * @update 2024-11-05
  */
 static SourceInfo
 os_ubuntu_sources[] = {
@@ -43,7 +44,9 @@ os_ubuntu_getsrc (char *option)
       return;
     }
 
-  chsrc_error2 ("缺少源配置文件！但仍可直接通过 chsrc set ubuntu 来添加使用新的源");
+  char *msg = CliOpt_InEnglish ? "Source config file missing! However, you can still run `chsrc set ubuntu` to add and use new sources"
+                               : "缺少源配置文件！但仍可直接通过 chsrc set ubuntu 来添加使用新的源";
+  chsrc_error2 (msg);
   return;
 }
 
@@ -84,7 +87,9 @@ os_ubuntu_setsrc (char *option)
 
   if (chsrc_check_file (OS_Ubuntu_SourceList_DEB822))
     {
-      chsrc_note2 ("将基于新格式换源");
+      char *msg = CliOpt_InEnglish ? "Will change source based on new format"
+                                   : "将基于新格式换源";
+      chsrc_note2 (msg);
       os_ubuntu_setsrc_for_deb822 (option);
       return;
     }
@@ -133,7 +138,7 @@ os_ubuntu_feat (char *option)
 
   f.cap_locally = CanNot;
   f.locally = NULL;
-  f.can_english = false;
+  f.can_english = true;
   f.can_user_define = true;
 
   f.note = NULL;
