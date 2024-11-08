@@ -6,7 +6,7 @@
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2024-08-19>
- ! Last Modified : <2024-09-24>
+ ! Last Modified : <2024-11-08>
  ! ---------------------------------------------------------- -->
 
 # Write A Recipe Even If You Don't Know C
@@ -96,4 +96,4 @@
 
 <br>
 
-[recipe template]: ../src/recipe/template.c
+[recipe template]: ../src/recipe/recipe-template.c
