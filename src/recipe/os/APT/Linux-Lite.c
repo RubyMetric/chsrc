@@ -12,7 +12,7 @@
  */
 static SourceInfo
 os_linuxlite_sources[] = {
-  {&Upstream,       NULL},
+  {&Upstream,       "http://repo.linuxliteos.com/linuxlite/"},
   {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/linuxliteos/"}
 };
 def_sources_n(os_linuxlite);

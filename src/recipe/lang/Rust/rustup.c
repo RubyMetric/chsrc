@@ -12,7 +12,7 @@
  */
 static SourceInfo
 pl_rust_rustup_sources[] = {
-  {&Upstream,      NULL},
+  {&Upstream,      "https://static.rust-lang.org"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/rustup"},
   {&Ustc,          "https://mirrors.ustc.edu.cn/rust-static"},
   {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/rust-static"},

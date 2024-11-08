@@ -14,7 +14,7 @@
  */
 static SourceInfo
 os_raspberrypi_sources[] = {
-  {&Upstream,       NULL},
+  {&Upstream,       "https://archive.raspberrypi.com/"}, // https://archive.raspberrypi.org/ until Debian "bullseye" release
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/raspberrypi/"},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/raspberrypi/"},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/raspberrypi/"},
