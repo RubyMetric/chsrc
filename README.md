@@ -108,7 +108,7 @@ $ scoop install chsrc
 
 - 可通过 `PowerShell` 脚本一键下载最新版二进制文件，感谢 [@xuan]
 
-若下方链接无法访问，可使用 https://gitee.com/RubyMetric/chsrc/raw/main/tool/installer.ps1 替代
+    若下方链接无法访问，可使用 `https://gitee.com/RubyMetric/chsrc/raw/main/tool/installer.ps1` 替代
 
 ```PowerShell
 $ iwr -useb "https://chsrc.run/windows" | iex
@@ -143,7 +143,7 @@ $ yay -S chsrc     # Build  from GitHub Release
 
 - 可通过 `shell` 脚本一键安装最新版，感谢 [@Efterklang] 与 [@xuan]
 
-若下方链接无法访问，可使用 https://gitee.com/RubyMetric/chsrc/raw/main/tool/installer.sh 替代
+    若下方链接无法访问，可使用 `https://gitee.com/RubyMetric/chsrc/raw/main/tool/installer.sh` 替代
 
 ```bash
 # 非root用户默认安装至 ~/.local/bin
@@ -192,7 +192,7 @@ $ brew install chsrc
 
 - 可通过 `shell` 脚本安装最新版，感谢 [@Efterklang] 与 [@xuan]
 
-若下方链接无法访问，可使用 https://gitee.com/RubyMetric/chsrc/raw/main/tool/installer.sh 替代
+    若下方链接无法访问，可使用 `https://gitee.com/RubyMetric/chsrc/raw/main/tool/installer.sh` 替代
 
 ```bash
 # 非root用户默认安装至 ~/.local/bin
