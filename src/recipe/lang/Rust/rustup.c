@@ -106,7 +106,7 @@ pl_rust_rustup_feat (char *option)
   f.can_reset = false;
 
   f.cap_locally = CanNot;
-  f.locally = "";
+  f.cap_locally_explain = "";
   f.can_english = false;
   f.can_user_define = true;
 

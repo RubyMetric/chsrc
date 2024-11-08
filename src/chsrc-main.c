@@ -364,7 +364,7 @@ cli_print_target_features (FeatInfo f, const char *input_target_name)
       printf (" %s%s\n", bdgreen(YesMark), purple(locally_msg));br();
       break;
     case PartiallyCan:
-      printf (" %s%s\n\n   %s\n", bdgreen(SemiYesMark), purple(locally_msg), f.locally);br();
+      printf (" %s%s\n\n   %s\n", bdgreen(SemiYesMark), purple(locally_msg), f.cap_locally_explain);br();
       break;
     default:
       xy_unreach;

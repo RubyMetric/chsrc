@@ -79,7 +79,7 @@ pl_rust_cargo_feat (char *option)
   f.can_reset = true;
 
   f.cap_locally = PartiallyCan;
-  f.locally = "可以基于本项目换源吗？请帮助确认";
+  f.cap_locally_explain = "可以基于本项目换源吗？请帮助确认";
   f.can_english = false;
   f.can_user_define = true;
 

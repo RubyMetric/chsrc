@@ -67,7 +67,7 @@ pl_python_poetry_feat (char *option)
   f.can_reset = true;
 
   f.cap_locally = FullyCan;
-  f.locally = NULL;
+  f.cap_locally_explain = NULL;
   f.can_english = false;
   f.can_user_define = true;
 

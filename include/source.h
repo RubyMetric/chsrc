@@ -6,7 +6,7 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-11-04>
+ * Last Modified : <2024-11-08>
  *
  * 通用镜像站与换源信息
  * ------------------------------------------------------------*/
@@ -173,7 +173,7 @@ typedef struct FeatInfo_t {
   bool can_user_define; // 用户自定义换源URL
 
   enum Capability cap_locally;
-  char *locally;
+  char *cap_locally_explain;
 
   char *note;
 } FeatInfo;

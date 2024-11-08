@@ -112,7 +112,7 @@ FeatInfo
   f.can_reset = false;
 
   f.cap_locally = PartiallyCan;
-  f.locally = "具体说明是否支持项目级换源...";
+  f.cap_locally_explain = "具体说明是否支持项目级换源...";
 
   f.can_english = false;
   f.can_user_define = false;

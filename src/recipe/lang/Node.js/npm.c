@@ -67,7 +67,7 @@ pl_nodejs_npm_feat (char *option)
   f.can_reset = true;
 
   f.cap_locally = FullyCan;
-  f.locally = NULL;
+  f.cap_locally_explain = NULL;
   f.can_english = true;
   f.can_user_define = true;
 

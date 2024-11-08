@@ -80,7 +80,7 @@ pl_python_pip_feat (char *option)
 
   // pip 不支持项目级换源
   f.cap_locally = CanNot;
-  f.locally = NULL;
+  f.cap_locally_explain = NULL;
   f.can_english = true;
   f.can_user_define = true;
 

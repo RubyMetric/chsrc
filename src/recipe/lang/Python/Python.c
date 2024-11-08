@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-03>
- * Last Modified : <2024-09-13>
+ * Last Modified : <2024-11-08>
  *
  * 2024-08-08: uv 似乎暂时没有实现换源
  * ------------------------------------------------------------*/
@@ -90,7 +90,7 @@ pl_python_feat (char *option)
   f.can_reset = true;
 
   f.cap_locally = PartiallyCan;
-  f.locally = "pip 不支持，其他支持";
+  f.cap_locally_explain = "Support `Poetry` & `PDM`. No support for `pip`";
   f.can_english = false;
   f.can_user_define = true;
 

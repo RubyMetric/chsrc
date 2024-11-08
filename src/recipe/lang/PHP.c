@@ -70,7 +70,7 @@ pl_php_feat (char *option)
   f.can_reset = false;
 
   f.cap_locally = FullyCan;
-  f.locally = "composer 支持 (From v0.1.7)";
+  f.cap_locally_explain = "Support `composer`";
   f.can_english = false;
   f.can_user_define = true;
 

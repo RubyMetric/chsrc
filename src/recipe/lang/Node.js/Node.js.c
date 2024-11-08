@@ -3,9 +3,10 @@
  * -------------------------------------------------------------
  * File Authors   : Aoran Zeng <ccmywish@qq.com>
  * Contributors   :  Mr. Will  <mr.will.com@outlook.com>
+ *                |
  * Created On     : <2023-08-30>
  * Major Revision :      2
- * Last Modified  : <2024-09-13>
+ * Last Modified  : <2024-11-08>
  * ------------------------------------------------------------*/
 
 void
@@ -64,9 +65,9 @@ pl_nodejs_setsrc (char *option)
 {
   {
     char *msg = CliOpt_InEnglish ? "Three package managers will be replaced for you at the same time: " \
-                                         "npm, pnpm, yarn. If you need to change the source independently, " \
-                                         "please run independently `chsrc set <pkg-manager>`"
-                                       : "将同时为您更换3个包管理器 npm, pnpm, Yarn 的源，若需要独立换源，请独立运行 chsrc set <pkg-manager>";
+                                   "npm, pnpm, yarn. If you need to change the source independently, " \
+                                   "please run independently `chsrc set <pkg-manager>`"
+                                 : "将同时为您更换3个包管理器 npm, pnpm, Yarn 的源，若需要独立换源，请独立运行 chsrc set <pkg-manager>";
     chsrc_note2 (msg);
   }
 
@@ -119,7 +120,7 @@ pl_nodejs_feat (char *option)
   f.can_reset = true;
 
   f.cap_locally = FullyCan;
-  f.locally = "Support npm (chsrc v0.1.7)\nSupport yarn v2 (chsrc v0.1.8.1)\nSupport pnpm (chsrc v0.1.8.2)";
+  f.cap_locally_explain = "Support `npm` & `yarn v2` & `pnpm`. No support for `yarn v1`";
   f.can_english = true;
   f.can_user_define = true;
 

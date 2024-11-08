@@ -106,7 +106,7 @@ pl_dart_flutter_feat (char *option)
   f.can_reset = true;
 
   f.cap_locally = CanNot;
-  f.locally = NULL;
+  f.cap_locally_explain = NULL;
   f.can_english = true;
 
   f.can_user_define = true;

@@ -157,7 +157,7 @@ wr_dockerhub_feat (char *option)
   f.can_reset = false;
 
   f.cap_locally = CanNot;
-  f.locally = NULL;
+  f.cap_locally_explain = NULL;
   f.can_english = false;
 
   f.can_user_define = true;

@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-08-29>
- * Last Modified : <2024-09-04>
+ * Last Modified : <2024-11-08>
  * ------------------------------------------------------------*/
 
 static MirrorSite
@@ -104,8 +104,8 @@ pl_ruby_feat (char *option)
   f.can_reset = true;
 
   f.cap_locally = PartiallyCan;
-  f.locally = "gem 不支持; bundler 支持 (From v0.1.6)";
-  f.can_english = false;
+  f.cap_locally_explain = "Support `bundler`. No support for `gem`";
+  f.can_english = true;
   f.can_user_define = true;
 
   f.note = NULL;

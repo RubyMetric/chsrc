@@ -103,7 +103,7 @@ wr_homebrew_feat (char *option)
   f.can_reset = false;
 
   f.cap_locally = CanNot;
-  f.locally = NULL;
+  f.cap_locally_explain = NULL;
   f.can_english = true;
 
   /* 该换源方案中，URL存在拼凑，因此不能让用户手动使用某URL来换源 */
