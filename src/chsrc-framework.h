@@ -5,11 +5,12 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  *               |  Heng Guo  <2085471348@qq.com>
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
- *               |  Happy Game <happygame10124@gmail.com>
+ *               | Happy Game <happygame10124@gmail.com>
+ *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-11-04>
+ * Last Modified : <2024-11-08>
  *
- * chsrc 框架
+ * chsrc framework
  * ------------------------------------------------------------*/
 
 #include "xy.h"
@@ -820,7 +821,13 @@ chsrc_conclude (SourceInfo *source, const char *last_word)
 {
   split_between_source_changing_process;
 
-  if (xy_streql (SetsrcType_Auto, last_word))
+  if ((ProgMode_CMD_Reset == true) || xy_streql (SetsrcType_Reset, last_word))
+    {
+      // source_is_upstream (source)
+      char *msg = CliOpt_InEnglish ? "Has been reset to the upstream default source" : "已重置为上游默认源";
+      chsrc_log (purple (msg));
+    }
+  else if (xy_streql (SetsrcType_Auto, last_word))
     {
       if (source)
         {
@@ -842,12 +849,6 @@ chsrc_conclude (SourceInfo *source, const char *last_word)
           char *msg = CliOpt_InEnglish ? MSG_EN_FULLY_AUTO : MSG_CN_FULLY_AUTO;
           chsrc_log (msg);
         }
-    }
-  else if (xy_streql (SetsrcType_Reset, last_word))
-    {
-      // source_is_upstream (source)
-      char *msg = CliOpt_InEnglish ? "Has been reset to the upstream default source" : "已重置为上游默认源";
-      chsrc_log (purple (msg));
     }
   else if (xy_streql (SetsrcType_SemiAuto, last_word))
     {
