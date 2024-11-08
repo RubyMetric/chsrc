@@ -116,13 +116,20 @@ os_ubuntu_setsrc (char *option)
 }
 
 
+void
+os_ubuntu_resetsrc (char *option)
+{
+  os_ubuntu_setsrc (option);
+}
+
+
 FeatInfo
 os_ubuntu_feat (char *option)
 {
   FeatInfo f = {0};
 
   f.can_get = true;
-  f.can_reset = false;
+  f.can_reset = true;
 
   f.cap_locally = CanNot;
   f.locally = NULL;
@@ -133,4 +140,4 @@ os_ubuntu_feat (char *option)
   return f;
 }
 
-def_target_gsf(os_ubuntu);
+def_target_gsrf(os_ubuntu);
