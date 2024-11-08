@@ -26,7 +26,7 @@
 ## 🤝 协作与贡献
 
 > [!NOTE]
-> **`chsrc` 可换源 60+ 目标。每个人仅仅贡献和维护自己熟悉的部分，回报是得到其他所有领域专家的帮助**。欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献, 欢迎任何编程初学者参与贡献，作者 [@ccmywish] 可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)
+> **`chsrc` 可换源 60+ 目标。每个人仅仅贡献和维护自己熟悉的部分，回报是得到其他所有领域专家的帮助**。欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献, 欢迎任何编程初学者参与贡献，作者可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)
 
 > [!TIP]
 > **`chsrc` 不仅是一个命令行工具，同时也是一个换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。**
@@ -35,15 +35,23 @@
 
 <br>
 
-挑战清单：
+可参与的任务与挑战：
 
-1. [[HELP] 提供默认源地址，如Ubuntu,Debian,Go等的默认源URL，帮助我们进行 `chsrc reset`](https://github.com/RubyMetric/chsrc/issues/111)
+1. [[HELP] 提供默认源地址，如Debian,Maven,PHP composer等的默认源URL，帮助我们进行 `chsrc reset`](https://github.com/RubyMetric/chsrc/issues/111)
 
-2. [[Challenge] 编写统一安装的 shell 和 PowerShell 脚本](https://github.com/RubyMetric/chsrc/issues/98) : 已由 [@Efterklang] 与 [@xuan] 完成
-
-3. [[Challenge] CentOS (Stream) Recipe](https://github.com/RubyMetric/chsrc/issues/48)
+2. [[Challenge] CentOS (Stream) Recipe](https://github.com/RubyMetric/chsrc/issues/48)
 
 <br>
+
+<details>
+<summary>已由贡献者完成的挑战</summary>
+
+1. [[Challenge] 编写统一安装的 shell 和 PowerShell 脚本](https://github.com/RubyMetric/chsrc/issues/98)
+
+    已由 [@Efterklang] 与 [@xuan] 完成
+
+</details>
+
 
 <details>
 <summary>镜像站可用性</summary>
@@ -81,7 +89,7 @@
 ## 🚀 安装
 
 <a href="https://repology.org/project/chsrc/versions">
-    <img src="https://repology.org/badge/vertical-allrepos/chsrc.svg" alt="Packaging status" align="right">
+  <img src="https://repology.org/badge/vertical-allrepos/chsrc.svg" alt="Packaging status" align="right">
 </a>
 
 > [!IMPORTANT]
@@ -98,7 +106,9 @@ $ scoop install chsrc
 
 <br>
 
-- 可通过 `PowerShell` 脚本一键下载最新版二进制文件
+- 可通过 `PowerShell` 脚本一键下载最新版二进制文件，感谢 [@xuan]
+
+若下方链接无法访问，可使用 https://gitee.com/RubyMetric/chsrc/raw/main/tool/installer.ps1 替代
 
 ```PowerShell
 $ iwr -useb "https://chsrc.run/windows" | iex
@@ -131,7 +141,9 @@ $ yay -S chsrc     # Build  from GitHub Release
 
 <br>
 
-- 可通过 `shell` 脚本一键安装最新版，感谢 [@Efterklang] 与 [@xuan]（待用户测试，可在 [issue#98 on GitHub] 反馈）
+- 可通过 `shell` 脚本一键安装最新版，感谢 [@Efterklang] 与 [@xuan]
+
+若下方链接无法访问，可使用 https://gitee.com/RubyMetric/chsrc/raw/main/tool/installer.sh 替代
 
 ```bash
 # 非root用户默认安装至 ~/.local/bin
@@ -178,7 +190,9 @@ $ brew install chsrc
 
 <br>
 
-- 可通过 `shell` 脚本安装最新版，感谢 [@Efterklang] 与 [@xuan]（待macOS用户测试，可在 [issue#98 on GitHub] 反馈）
+- 可通过 `shell` 脚本安装最新版，感谢 [@Efterklang] 与 [@xuan]
+
+若下方链接无法访问，可使用 https://gitee.com/RubyMetric/chsrc/raw/main/tool/installer.sh 替代
 
 ```bash
 # 非root用户默认安装至 ~/.local/bin
