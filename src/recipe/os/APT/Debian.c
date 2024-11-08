@@ -3,7 +3,7 @@
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  *               |  Heng Guo  <2085471348@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
+ * Contributors  : Yangmoooo <yangmoooo@outlook.com>
  * Created On    : <2023-09-02>
  * Last Modified : <2024-10-31>
  * ------------------------------------------------------------*/
