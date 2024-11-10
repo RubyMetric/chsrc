@@ -147,16 +147,16 @@ $ yay -S chsrc     # Build  from GitHub Release
 
 ```bash
 # 非root用户默认安装至 ~/.local/bin
-$ curl https:/chsrc.run/posix | bash
+$ curl https://chsrc.run/posix | bash
 
 # root用户默认安装至 /usr/local/bin
-$ curl https:/chsrc.run/posix | sudo bash
+$ curl https://chsrc.run/posix | sudo bash
 
 # 使用 -d 指定目录安装
-$ curl https:/chsrc.run/posix | bash -s -- -d ./
+$ curl https://chsrc.run/posix | bash -s -- -d ./
 
 # 使用 -l en 输出英文
-$ curl https:/chsrc.run/posix | bash -s -- -l en
+$ curl https://chsrc.run/posix | bash -s -- -l en
 ```
 
 <br>
@@ -196,16 +196,16 @@ $ brew install chsrc
 
 ```bash
 # 非root用户默认安装至 ~/.local/bin
-$ curl https:/chsrc.run/posix | bash
+$ curl https://chsrc.run/posix | bash
 
 # root用户默认安装至 /usr/local/bin
-$ curl https:/chsrc.run/posix | sudo bash
+$ curl https://chsrc.run/posix | sudo bash
 
 # 使用 -d 指定目录安装
-$ curl https:/chsrc.run/posix | bash -s -- -d ./
+$ curl https://chsrc.run/posix | bash -s -- -d ./
 
 # 使用 -l en 输出英文
-$ curl https:/chsrc.run/posix | bash -s -- -l en
+$ curl https://chsrc.run/posix | bash -s -- -l en
 ```
 
 <br>
