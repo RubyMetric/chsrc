@@ -1092,6 +1092,11 @@ chsrc_ensure_dir (const char *dir)
 static void
 chsrc_append_to_file (const char *str, const char *filename)
 {
+  if (CliOpt_DryRun)
+    {
+      return;
+    }
+
   char *file = xy_normalize_path (filename);
   char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
@@ -1135,6 +1140,11 @@ chsrc_append_to_file (const char *str, const char *filename)
 static void
 chsrc_prepend_to_file (const char *str, const char *file)
 {
+  if (CliOpt_DryRun)
+    {
+      return;
+    }
+
   file = xy_normalize_path (file);
   char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
@@ -1154,6 +1164,11 @@ chsrc_prepend_to_file (const char *str, const char *file)
 static void
 chsrc_overwrite_file (const char *str, const char *file)
 {
+  if (CliOpt_DryRun)
+    {
+      return;
+    }
+
   file = xy_normalize_path (file);
   char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
@@ -1173,6 +1188,11 @@ chsrc_overwrite_file (const char *str, const char *file)
 static void
 chsrc_backup (const char *path)
 {
+  if (CliOpt_DryRun)
+    {
+      return;
+    }
+
   char *cmd = NULL;
   bool exist = xy_file_exist (path);
 
