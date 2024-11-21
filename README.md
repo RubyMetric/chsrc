@@ -426,7 +426,7 @@ make clean
 ## ❤️ 致谢
 
 感谢各个镜像站提供的优质免费镜像服务
-1. [source.h](./include/source.h) 包含了通用的镜像站信息
+1. [mirror.c](./src/framework/mirror.c) 包含了通用的镜像站信息
 2. 各个recipe内部定义的专用镜像站
 
 另外特别感谢以下组织或项目:

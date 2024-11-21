@@ -1,7 +1,7 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Name     : chsrc-framework.h
+ * File Name     : core.h
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  *               |  Heng Guo  <2085471348@qq.com>
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
@@ -14,8 +14,8 @@
  * ------------------------------------------------------------*/
 
 #include "xy.h"
-#include "source.h"
-// #include <pthread.h>
+#include "struct.h"
+#include "mirror.c"
 
 #define App_Name "chsrc"
 
