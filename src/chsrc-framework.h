@@ -52,11 +52,13 @@ bool CliOpt_NoColor   = false;
  * 3. 最终效果本质由第三方软件决定，如 poetry 默认实现的就是项目级的换源
  */
 
-#define Exit_UserCause    1
-#define Exit_Unsupported  2
-#define Exit_MatinerIssue 3
-#define Exit_FatalBug     4
-#define Exit_FatalUnkownError  5
+#define Exit_OK               0
+#define Exit_Fatal            1
+#define Exit_Unknown          2
+#define Exit_Unsupported      3
+#define Exit_UserCause        4
+#define Exit_MaintainerCause  5
+#define Exit_ExternalError    6
 
 #define chsrc_log(str)   xy_log(App_Name,str)
 #define chsrc_succ(str)  xy_succ(App_Name,str)
@@ -322,7 +324,7 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
       char *msg1 = CliOpt_InEnglish ? "Currently " : "当前 ";
       char *msg2 = CliOpt_InEnglish ? " doesn't have any source available, please contact the maintainer" : " 无任何可用源，请联系维护者";
       chsrc_error (xy_strjoin (3, msg1, target, msg2));
-      exit (Exit_MatinerIssue);
+      exit (Exit_MaintainerCause);
     }
 
   if (2==size)
@@ -609,7 +611,7 @@ select_mirror_autoly (SourceInfo *sources, size_t size, const char *target_name)
       char *msg1 = CliOpt_InEnglish ? "Currently " : "当前 ";
       char *msg2 = CliOpt_InEnglish ? "No any source, please contact maintainers: chsrc issue" : " 无任何可用源，请联系维护者: chsrc issue";
       chsrc_error (xy_strjoin (3, msg1, target_name, msg2));
-      exit (Exit_MatinerIssue);
+      exit (Exit_MaintainerCause);
     }
 
   if (CliOpt_DryRun)
@@ -766,9 +768,9 @@ confirm_source (SourceInfo *source)
   else if (source_has_empty_url (source))
     {
       char *msg = CliOpt_InEnglish ? "URL of the source doesn't exist, please report a bug to the dev team" : \
-                                     "该源URL不存在，请向开发团队提交bug";
+                                     "该源URL不存在，请向维护团队提交bug";
       chsrc_error (msg);
-      exit (Exit_FatalBug);
+      exit (Exit_MaintainerCause);
     }
   else
     {
@@ -992,7 +994,7 @@ chsrc_run (const char *cmd, int run_option)
         {
           char *msg = CliOpt_InEnglish ? "Fatal error, forced end" : "关键错误，强制结束";
           chsrc_error (msg);
-          exit (Exit_FatalUnkownError);
+          exit (Exit_ExternalError);
         }
     }
 

@@ -584,7 +584,7 @@ main (int argc, char const *argv[])
   if (0==argc)
     {
       cli_print_help ();
-      return 0;
+      return Exit_OK;
     }
 
   const char *command = argv[1];
@@ -648,7 +648,7 @@ main (int argc, char const *argv[])
           else
             {
               char *msg = CliOpt_InEnglish ? "Unknown option: " : "未识别的命令行选项 ";
-              chsrc_error (xy_2strjoin (msg, argv[i])); return 1;
+              chsrc_error (xy_2strjoin (msg, argv[i])); return Exit_Unknown;
             }
           cli_arg_Target_pos++;
           cli_arg_Mirror_pos++;
@@ -675,7 +675,7 @@ main (int argc, char const *argv[])
       || xy_streql (command, "--help"))
     {
       cli_print_help ();
-      return 0;
+      return Exit_OK;
     }
 
   /* chsrc -v */
@@ -686,7 +686,7 @@ main (int argc, char const *argv[])
            || xy_streql (command, "version"))
     {
       cli_print_version ();
-      return 0;
+      return Exit_OK;
     }
 
   /* chsrc list */
@@ -705,29 +705,29 @@ main (int argc, char const *argv[])
           target = argv[cli_arg_Target_pos];
           if (xy_streql (target, "mirrors") || xy_streql (target, "mirror"))
             {
-              cli_print_available_mirrors (); return 0;
+              cli_print_available_mirrors (); return Exit_OK;
             }
           else if (xy_streql (target, "targets") || xy_streql (target, "target"))
             {
-              cli_print_supported_targets (); return 0;
+              cli_print_supported_targets (); return Exit_OK;
             }
           else if (xy_streql (target, "os"))
             {
-              cli_print_supported_os (); return 0;
+              cli_print_supported_os (); return Exit_OK;
             }
           else if (xy_streql (target, "lang") || xy_streql (target, "pl") || xy_streql (target, "language"))
             {
-              cli_print_supported_pl(); return 0;
+              cli_print_supported_pl(); return Exit_OK;
             }
           else if (xy_streql (target, "ware") || xy_streql (target, "software"))
             {
-              cli_print_supported_wr (); return 0;
+              cli_print_supported_wr (); return Exit_OK;
             }
 
           matched = get_target (target, TargetOp_List_Config, NULL);
           if (!matched) goto not_matched;
         }
-      return 0;
+      return Exit_OK;
   }
 
 #define MSG_EN_USE_LIST_TARGETS "Use `chsrc list targets` to see all supported targets"
@@ -746,13 +746,13 @@ main (int argc, char const *argv[])
           char *msg = CliOpt_InEnglish ? "Please provide the target name you want to measure. " MSG_EN_USE_LIST_TARGETS
                                        : "请您提供想要测速源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
-          return 1;
+          return Exit_Unknown;
         }
       ProgMode_CMD_Measure = true;
       target = argv[cli_arg_Target_pos];
       matched = get_target (target, TargetOp_Measure_Source, NULL);
       if (!matched) goto not_matched;
-      return 0;
+      return Exit_OK;
     }
 
 
@@ -765,12 +765,12 @@ main (int argc, char const *argv[])
           char *msg = CliOpt_InEnglish ? "Please provide the target name you want to view the source. " MSG_EN_USE_LIST_TARGETS
                                        : "请您提供想要查看源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
-          return 1;
+          return Exit_Unknown;
         }
       target = argv[cli_arg_Target_pos];
       matched = get_target (target, TargetOp_Get_Source, NULL);
       if (!matched) goto not_matched;
-      return 0;
+      return Exit_OK;
     }
 
   /* chsrc set */
@@ -782,7 +782,7 @@ main (int argc, char const *argv[])
           char *msg = CliOpt_InEnglish ? "Please provide the target name you want to set the source. " MSG_EN_USE_LIST_TARGETS
                                        : "请您提供想要设置源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
-          return 1;
+          return Exit_Unknown
         }
 
       target = argv[cli_arg_Target_pos];
@@ -794,7 +794,7 @@ main (int argc, char const *argv[])
 
       matched = get_target (target, TargetOp_Set_Source, mirrorCode_or_url);
       if (!matched) goto not_matched;
-      return 0;
+      return Exit_OK;
     }
 
   /* chsrc reset */
@@ -807,14 +807,14 @@ main (int argc, char const *argv[])
           char *msg = CliOpt_InEnglish ? "Please provide the target name you want to reset the source. " MSG_EN_USE_LIST_TARGETS
                                        : "请您提供想要重置源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
-          return 1;
+          return Exit_Unknown;
         }
 
       ProgMode_CMD_Reset = true;
       target = argv[cli_arg_Target_pos];
       matched = get_target (target, TargetOp_Reset_Source, NULL);
       if (!matched) goto not_matched;
-      return 0;
+      return Exit_OK;
     }
 
   /* chsrc issue */
@@ -824,7 +824,7 @@ main (int argc, char const *argv[])
            || xy_streql (command, "i"))
     {
       cli_print_issues ();
-      return 0;
+      return Exit_OK;
     }
 
   else
@@ -832,7 +832,7 @@ main (int argc, char const *argv[])
       char *msg1 = CliOpt_InEnglish ? "Unknown command `" : "不支持的命令 ";
       char *msg2 = CliOpt_InEnglish ? "`. Use `chsrc help` to view usage" : ". 请使用 chsrc help 查看使用方式";
       chsrc_error (xy_strjoin (3, msg1, command, msg2));
-      return 1;
+      return Exit_Unknown;
     }
 
 not_matched:
@@ -841,6 +841,6 @@ not_matched:
       char *msg = CliOpt_InEnglish ? "Unknown target. "  MSG_EN_USE_LIST_TARGETS
                                    : "暂不支持的换源目标。" MSG_CN_USE_LIST_TARGETS;
       chsrc_error (msg);
-      return 1;
+      return Exit_Unknown;
     }
 }
