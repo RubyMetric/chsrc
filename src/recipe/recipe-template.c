@@ -5,7 +5,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2024-08-09>
- * Last Modified : <2024-11-08>
+ * Last Modified : <2024-11-22>
  * -------------------------------------------------------------
  * 本文件作为一个通用模板：
  *
@@ -95,8 +95,8 @@ void
 void
 <category>_<target>_resetsrc (char *option)
 {
-  // 往往通过下述方式统一在 setsrc() 中实现
-  // <category>_<target>_setsrc (SetsrcType_Reset);
+  /* 往往统一在 _setsrc() 中实现，直接调用即可 */
+  // <category>_<target>_setsrc (option);
 }
 
 

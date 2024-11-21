@@ -325,26 +325,44 @@ chsrc_check_file (char *path)
 /**
  * 用于 _setsrc 函数，检测用户输入的镜像站code，是否存在于该target可用源中
  *
+ * @note 一个源Source必定来自于一个Provider，所以该函数名叫 query_provider_exist
+ *
  * @param  target  目标名
  * @param  input   如果用户输入 default 或者 def，则选择第一个源
  */
-#define find_mirror(s, input) query_mirror_exist(s##_sources, s##_sources_n, (char*)#s+3, input)
+#define find_mirror(s, input) query_provider_exist(s##_sources, s##_sources_n, (char*)#s+3, input)
 int
-query_mirror_exist (Source_t *sources, size_t size, char *target, char *input)
+query_provider_exist (Source_t *sources, size_t size, char *target, char *input)
 {
   if (is_url (input))
     {
-      char *msg = CliOpt_InEnglish ? "Using user-defined sources for this software is not supported at this time, please contact the developer to ask why or request support" : "暂不支持对该软件使用用户自定义源，请联系开发者询问原因或请求支持";
+      char *msg = CliOpt_InEnglish ? "Using user-defined sources for this software is not supported at this time, please contact the developers to ask why or request support" : "暂不支持对该软件使用用户自定义源，请联系开发者询问原因或请求支持";
       chsrc_error (msg);
       exit (Exit_Unsupported);
     }
 
-  if (0==size || 1==size)
+  if (0==size)
     {
       char *msg1 = CliOpt_InEnglish ? "Currently " : "当前 ";
-      char *msg2 = CliOpt_InEnglish ? " doesn't have any source available, please contact the maintainer" : " 无任何可用源，请联系维护者";
+      char *msg2 = CliOpt_InEnglish ? " doesn't have any source available. Please contact the maintainers" : " 无任何可用源，请联系维护者";
       chsrc_error (xy_strjoin (3, msg1, target, msg2));
       exit (Exit_MaintainerCause);
+    }
+
+  if (1==size)
+    {
+      char *msg1 = CliOpt_InEnglish ? "Currently " : "当前 ";
+      char *msg2 = CliOpt_InEnglish ? " only the upstream source exists. Please contact the maintainers" : " 仅存在上游默认源，请联系维护者";
+      chsrc_error (xy_strjoin (3, msg1, target, msg2));
+      exit (Exit_MaintainerCause);
+    }
+
+  /* if (xy_streql ("reset", input)) 不再使用这种方式 */
+  if (ProgMode_CMD_Reset)
+    {
+      char *msg = CliOpt_InEnglish ? "Will reset to the upstream's default source" : "将重置为上游默认源";
+      say (msg);
+      return 0; /* 返回第1个，因为第1个是上游默认源 */
     }
 
   if (2==size)
@@ -357,18 +375,11 @@ query_mirror_exist (Source_t *sources, size_t size, char *target, char *input)
       chsrc_succ (xy_strjoin (4, name, msg1, target, msg2));
     }
 
-  if (xy_streql ("reset", input))
-    {
-      char *msg = CliOpt_InEnglish ? "Will reset to the upstream's default source" : "将重置为上游默认源";
-      say (msg);
-      return 0; // 返回第1个，因为第1个是上游默认源
-    }
-
   if (xy_streql ("first", input))
     {
       char *msg = CliOpt_InEnglish ? "Will use the first speedy source measured by maintainers" : "将使用维护团队测速第一的源";
       say (msg);
-      return 1; // 返回第2个，因为第1个是上游默认源
+      return 1; /* 返回第2个，因为第1个是上游默认源 */
     }
 
   int idx = 0;
@@ -755,7 +766,7 @@ source_has_empty_url (Source_t *source)
 /**
  * 用户*只可能*通过下面5种方式来换源，无论哪一种都会返回一个 Source_t 出来
  * option:
- *  1. 用户指定某个 MirrorCode
+ *  1. 用户指定某个 Mirror Code
  *  2. NULL: 用户什么都没指定 (将测速选择最快镜像)
  *  3. 用户给了一个 URL
  *  4. SetsrcType_Reset

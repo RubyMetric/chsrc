@@ -79,11 +79,13 @@ pl_go_setsrc (char *option)
   chsrc_conclude (&source, SetsrcType_Auto);
 }
 
-
+/**
+ * chsrc reset go
+ */
 void
 pl_go_resetsrc (char *option)
 {
-  pl_go_setsrc (SetsrcType_Reset);
+  pl_go_setsrc (option);
 }
 
 
