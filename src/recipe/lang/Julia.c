@@ -45,10 +45,9 @@ pl_julia_setsrc (char *option)
 {
   chsrc_yield_source_and_confirm (pl_julia);
 
-  const char *towrite = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
+  char *w = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
 
-  chsrc_append_to_file (towrite, PL_Julia_Config);
-  chsrc_log_write (PL_Julia_Config);
+  chsrc_append_to_file (w, PL_Julia_Config);
 
   chsrc_conclude (&source, SetsrcType_Untested);
 }

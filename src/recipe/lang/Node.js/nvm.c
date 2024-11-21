@@ -32,15 +32,15 @@ pl_nodejs_nvm_setsrc (char *option)
 {
   chsrc_yield_source_and_confirm (pl_nodejs_binary_release);
 
-  char *env = xy_2strjoin ("export NVM_NODEJS_ORG_MIRROR=", source.url);
+  char *w = xy_2strjoin ("export NVM_NODEJS_ORG_MIRROR=", source.url);
 
   char *zshrc  = "~/.zshrc";
   char *bashrc = "~/.bashrc";
 
-  chsrc_append_to_file (env, bashrc);
+  chsrc_append_to_file (w, bashrc);
 
   if (xy_file_exist (zshrc))
-    chsrc_append_to_file (env, zshrc);
+    chsrc_append_to_file (w, zshrc);
 
   chsrc_conclude (&source, SetsrcType_Auto);
 }

@@ -60,16 +60,16 @@ pl_r_setsrc (char *option)
   char *bioconductor_url = xy_str_delete_suffix (xy_str_delete_suffix (source.url, "cran/"), "CRAN/");
   bioconductor_url = xy_2strjoin(bioconductor_url, "bioconductor");
 
-  const char *towrite1 = xy_strjoin (3, "options(\"repos\" = c(CRAN=\"", source.url, "\"))" );
-  const char *towrite2 = xy_strjoin (3, "options(BioC_mirror=\"", bioconductor_url, "\")" );
+  const char *w1 = xy_strjoin (3, "options(\"repos\" = c(CRAN=\"", source.url, "\"))" );
+  const char *w2 = xy_strjoin (3, "options(BioC_mirror=\"", bioconductor_url, "\")" );
+
+  char *w = xy_2strjoin (w1, w2);
 
   // 或者我们调用 r.exe --slave -e 上面的内容
 
   char *config = xy_on_windows ? PL_R_Config_Windows : PL_R_Config_POSIX;
 
-  chsrc_append_to_file (towrite1, config);
-  chsrc_append_to_file (towrite2, config);
-  chsrc_log_write (config);
+  chsrc_append_to_file (w, config);
 
   chsrc_conclude (&source, SetsrcType_Auto);
 }

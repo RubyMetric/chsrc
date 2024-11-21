@@ -43,18 +43,18 @@ wr_nix_setsrc (char *option)
   char *cmd = xy_strjoin (3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
   chsrc_run (cmd, RunOpt_Default);
 
-  char *towrite = xy_strjoin (3, "substituters = ", source.url, "store https://cache.nixos.org/");
-  chsrc_append_to_file (towrite , "~/.config/nix/nix.conf");
+  char *w = xy_strjoin (3, "substituters = ", source.url, "store https://cache.nixos.org/");
+  chsrc_append_to_file (w, "~/.config/nix/nix.conf");
 
   chsrc_run ("nix-channel --update", RunOpt_Default);
 
   chsrc_note2 ("若您使用的是NixOS，请确认您的系统版本<version>（如22.11），并手动运行:");
   cmd = xy_strjoin (3, "nix-channel --add ", source.url, "nixpkgs-<version> nixpkgs");
-  puts (cmd);
+  say (cmd);
 
   cmd = xy_strjoin (3, "nix.settings.substituters = [ \"", source.url, "store\" ];");
   chsrc_note2 ("若您使用的是NixOS，请额外添加下述内容至 configuration.nix 中");
-  puts (cmd);
+  say (cmd);
 
   chsrc_conclude (&source, SetsrcType_SemiAuto);
 }

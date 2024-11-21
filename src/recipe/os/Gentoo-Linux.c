@@ -4,7 +4,7 @@
  * File Authors  : Heng Guo <2085471348@qq.com>
  * Contributors  : Aoran Zeng <ccmywish@qq.com>
  * Created On    : <2023-09-05>
- * Last Modified : <2024-09-14>
+ * Last Modified : <2024-11-22>
  * ------------------------------------------------------------*/
 
 /**
@@ -42,9 +42,9 @@ os_gentoo_setsrc (char *option)
                             "gentoo-portage#g");
   chsrc_run (cmd, RunOpt_Default);
 
-  char *towrite = xy_strjoin (3, "GENTOO_MIRRORS=\"https://", source.url, "gentoo\"");
+  char *w = xy_strjoin (3, "GENTOO_MIRRORS=\"https://", source.url, "gentoo\"\n");
 
-  chsrc_append_to_file (towrite, "/etc/portage/make.conf");
+  chsrc_append_to_file (w, "/etc/portage/make.conf");
   chsrc_conclude (&source, SetsrcType_Untested);
 }
 
