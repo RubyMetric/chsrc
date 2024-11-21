@@ -4,11 +4,11 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-29>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2024-11-21>
  * ------------------------------------------------------------*/
 
 /**
- * @time 2023-09-29 更新
+ * @update 2024-11-21 更新
  * @note 实际上镜像站里的内容和Ubuntu的不太一样
  */
 static SourceInfo
@@ -16,6 +16,16 @@ os_linuxmint_sources[] = {
   {&Upstream,       NULL},
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/linuxmint/"},
   {&Ali,           "http://mirrors.aliyun.com/linuxmint-packages/"},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/linuxmint/"},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/linuxmint/"},
+  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/linuxmint/"},
+  {&Jlu,           "https://mirrors.jlu.edu.cn/linuxmint/"},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/linuxmint/"},
+  {&Bjtu,          "https://mirror.bjtu.edu.cn/linuxmint/"},
+  {&Zju,           "https://mirrors.zju.edu.cn/linuxmint/"},
+  {&Sustech,       "https://mirrors.sustech.edu.cn/linuxmint/"},
+  {&Iscas,         "https://mirror.iscas.ac.cn/linuxmint/"},
+  {&Scau,          "https://mirrors.scau.edu.cn/linuxmint/"},
   {&Netease,       "https://mirrors.163.com/linuxmint/packages/"},
 };
 def_sources_n(os_linuxmint);

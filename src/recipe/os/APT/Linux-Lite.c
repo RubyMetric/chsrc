@@ -3,17 +3,20 @@
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  : Yangmoooo <yangmoooo@outlook.com>
+ *               |
  * Created On    : <2023-09-29>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2024-11-21>
  * ------------------------------------------------------------*/
 
 /**
- * @time 2023-09-29 更新
+ * @update 2024-11-21
  */
 static SourceInfo
 os_linuxlite_sources[] = {
   {&Upstream,       "http://repo.linuxliteos.com/linuxlite/"},
-  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/linuxliteos/"}
+  {&MirrorZ,        "https://mirrors.cernet.edu.cn/linuxliteos/"},
+  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/linuxliteos/"},
+  {&Nju,            "https://mirror.nju.edu.cn/linuxliteos/"}
 };
 def_sources_n(os_linuxlite);
 

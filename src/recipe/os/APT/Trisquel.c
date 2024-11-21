@@ -4,21 +4,22 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-29>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2024-11-21>
  *
  * Trisquel基于Ubuntu开发，不含任何专有软件及专有固件，内核使用 Linux-libre
  * ------------------------------------------------------------*/
 
 /**
- * @time 2023-09-29 更新
+ * @time 2024-11-21 更新
  */
 static SourceInfo
 os_trisquel_sources[] = {
   {&Upstream,       NULL},
-  {&Ali,            "https://mirrors.aliyun.com/trisquel/"},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/trisquel/"},
+  {&Ali,            "https://mirrors.aliyun.com/trisquel/"},
   {&Nju,            "https://mirror.nju.edu.cn/trisquel/"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/trisquel/"}
+  {&Ustc,           "https://mirrors.ustc.edu.cn/trisquel/"},
+  {&Iscas,          "https://mirror.iscas.ac.cn/trisquel/"}
 };
 def_sources_n(os_trisquel);
 

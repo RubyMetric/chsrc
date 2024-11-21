@@ -4,17 +4,18 @@
  * File Authors  :  Heng Guo  <2085471348@qq.com>
  * Contributors  :  Yangmoooo <yangmoooo@outlook.com>
  * Created On    : <2023-09-29>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2024-11-21>
  *
  * Kali Linux 基于 Debian Testing branch
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-06-12
+ * @update 2024-11-21
  */
 static SourceInfo
 os_kali_sources[] = {
   {&Upstream,      "http://http.kali.org/kali"},
+  {&MirrorZ,       "https://mirrors.cernet.edu.cn/kali"},
   {&Ali,           "https://mirrors.aliyun.com/kali"},
   {&Volcengine,    "https://mirrors.volces.com/kali"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/kali"},

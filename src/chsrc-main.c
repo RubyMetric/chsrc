@@ -782,7 +782,7 @@ main (int argc, char const *argv[])
           char *msg = CliOpt_InEnglish ? "Please provide the target name you want to set the source. " MSG_EN_USE_LIST_TARGETS
                                        : "请您提供想要设置源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
-          return Exit_Unknown
+          return Exit_Unknown;
         }
 
       target = argv[cli_arg_Target_pos];

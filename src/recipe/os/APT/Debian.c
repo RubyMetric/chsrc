@@ -4,16 +4,18 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  *               |  Heng Guo  <2085471348@qq.com>
  * Contributors  : Yangmoooo <yangmoooo@outlook.com>
+ *               |
  * Created On    : <2023-09-02>
- * Last Modified : <2024-10-31>
+ * Last Modified : <2024-11-21>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-06-12
+ * @update 2024-11-21
  */
 static SourceInfo
 os_debian_sources[] = {
   {&Upstream,      "http://deb.debian.org/debian"},
+  {&MirrorZ,       "https://mirrors.cernet.edu.cn/debian/"},
   {&Ali,           "https://mirrors.aliyun.com/debian"},
   {&Volcengine,    "https://mirrors.volces.com/debian"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/debian"},

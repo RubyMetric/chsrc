@@ -603,7 +603,7 @@ select_mirror_autoly (SourceInfo *sources, size_t size, const char *target_name)
   char *msg = CliOpt_InEnglish ? "Measuring speed in sequence" : "测速中";
 
   xy_log_brkt (App_Name, bdpurple (CliOpt_InEnglish ? "MEASURE" : "测速"), msg);
-  say ("");
+  br();
   }
 
   if (0==size || 1==size)
@@ -635,7 +635,7 @@ select_mirror_autoly (SourceInfo *sources, size_t size, const char *target_name)
   /* 总测速记录值 */
   double speed_records[size];
   measure_speed_for_every_source (sources, size, speed_records);
-  say ("");
+  br();
 
   /* DEBUG */
   /*

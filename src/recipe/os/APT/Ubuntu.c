@@ -6,15 +6,16 @@
  * Contributors  :  Zhao  <1792582687@qq.com>
  *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2024-11-08>
+ * Last Modified : <2024-11-21>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-11-05
+ * @update 2024-11-21
  */
 static SourceInfo
 os_ubuntu_sources[] = {
   {&Upstream,      "http://archive.ubuntu.com/ubuntu/"}, //不支持https
+  {&MirrorZ,       "https://mirrors.cernet.edu.cn/ubuntu/"},
   {&Ali,           "https://mirrors.aliyun.com/ubuntu"},
   {&Volcengine,    "https://mirrors.volces.com/ubuntu"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/ubuntu"},
