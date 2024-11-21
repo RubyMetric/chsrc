@@ -60,10 +60,10 @@ pl_python_pdm_resetsrc (char *option)
 /**
  * chsrc ls pdm
  */
-FeatInfo
+Feature_t
 pl_python_pdm_feat (char *option)
 {
-  FeatInfo f = {0};
+  Feature_t f = {0};
 
   f.can_get = true;
   f.can_reset = true;
@@ -80,4 +80,4 @@ pl_python_pdm_feat (char *option)
 }
 
 // def_target_gsrf(pl_python_pdm);
-TargetInfo pl_python_pdm_target = {def_target_inner_gsrf(pl_python_pdm),def_target_sourcesn(pl_python)};
+Target_t pl_python_pdm_target = {def_target_inner_gsrf(pl_python_pdm),def_target_sourcesn(pl_python)};

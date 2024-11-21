@@ -61,10 +61,10 @@ pl_nodejs_nvm_resetsrc (char *option)
 /**
  * chsrc ls nvm
  */
-FeatInfo
+Feature_t
 pl_nodejs_nvm_feat (char *option)
 {
-  FeatInfo f = {0};
+  Feature_t f = {0};
 
   f.can_get = true;
   f.can_reset = false;
@@ -79,4 +79,4 @@ pl_nodejs_nvm_feat (char *option)
 }
 
 // def_target_gsrf(pl_nodejs_nvm);
-TargetInfo pl_nodejs_nvm_target = {def_target_inner_gsrf(pl_nodejs_nvm),def_target_sourcesn(pl_nodejs_binary_release)};
+Target_t pl_nodejs_nvm_target = {def_target_inner_gsrf(pl_nodejs_nvm),def_target_sourcesn(pl_nodejs_binary_release)};

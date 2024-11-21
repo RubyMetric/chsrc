@@ -90,10 +90,10 @@ pl_go_resetsrc (char *option)
 /**
  * chsrc ls go
  */
-FeatInfo
+Feature_t
 pl_go_feat (char *option)
 {
-  FeatInfo f = {0};
+  Feature_t f = {0};
 
   f.can_get = true;
   f.can_reset = true;

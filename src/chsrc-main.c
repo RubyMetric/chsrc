@@ -321,7 +321,7 @@ cli_print_target_available_sources (Source_t sources[], size_t size)
 }
 
 void
-cli_print_target_features (FeatInfo f, const char *input_target_name)
+cli_print_target_features (Feature_t f, const char *input_target_name)
 {
   {
   char *msg = CliOpt_InEnglish ? "\nAvailable Features:\n" : "\n可用功能:\n";
@@ -521,7 +521,7 @@ get_target (const char *input, TargetOp code, char *option)
 
   if (!matched) return false;
 
-  TargetInfo *target = (TargetInfo*) *target_tmp;
+  Target_t *target = (Target_t*) *target_tmp;
 
   if (TargetOp_Set_Source==code)
     {
@@ -563,7 +563,7 @@ get_target (const char *input, TargetOp code, char *option)
 
       if (target->featfn)
         {
-          FeatInfo f = target->featfn("");
+          Feature_t f = target->featfn("");
           cli_print_target_features (f, input);
         }
     }

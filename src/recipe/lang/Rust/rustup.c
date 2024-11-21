@@ -98,10 +98,10 @@ pl_rust_rustup_resetsrc (char *option)
 /**
  * chsrc ls rustup
  */
-FeatInfo
+Feature_t
 pl_rust_rustup_feat (char *option)
 {
-  FeatInfo f = {0};
+  Feature_t f = {0};
 
   f.can_get = true;
   f.can_reset = false;

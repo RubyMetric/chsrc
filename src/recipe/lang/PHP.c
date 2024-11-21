@@ -61,10 +61,10 @@ pl_php_setsrc (char *option)
 }
 
 
-FeatInfo
+Feature_t
 pl_php_feat (char *option)
 {
-  FeatInfo f = {0};
+  Feature_t f = {0};
 
   f.can_get = true;
   f.can_reset = false;

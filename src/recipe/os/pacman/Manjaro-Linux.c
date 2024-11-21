@@ -23,4 +23,4 @@ os_manjaro_setsrc (char *option)
   chsrc_conclude (NULL, SetsrcType_Auto);
 }
 
-TargetInfo os_manjaro_target = {NULL, os_manjaro_setsrc, NULL, NULL, 0};
+Target_t os_manjaro_target = {NULL, os_manjaro_setsrc, NULL, NULL, 0};

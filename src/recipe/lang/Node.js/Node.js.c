@@ -111,10 +111,10 @@ pl_nodejs_resetsrc (char *option)
 /**
  * chsrc ls nodejs
  */
-FeatInfo
+Feature_t
 pl_nodejs_feat (char *option)
 {
-  FeatInfo f = {0};
+  Feature_t f = {0};
 
   f.can_get = true;
   f.can_reset = true;

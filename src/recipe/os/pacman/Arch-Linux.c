@@ -129,10 +129,10 @@ os_archlinuxcn_setsrc (char *option)
 #undef OS_Pacman_MirrorList
 
 
-FeatInfo
+Feature_t
 os_arch_feat (char *option)
 {
-  FeatInfo f = {0};
+  Feature_t f = {0};
 
   f.can_get = true;
   f.can_reset = false;
@@ -146,10 +146,10 @@ os_arch_feat (char *option)
 }
 
 
-FeatInfo
+Feature_t
 os_archlinuxcn_feat (char *option)
 {
-  FeatInfo f = {0};
+  Feature_t f = {0};
 
   f.can_get = true;
   f.can_reset = false;

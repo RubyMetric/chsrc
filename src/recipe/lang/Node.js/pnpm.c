@@ -59,10 +59,10 @@ pl_nodejs_pnpm_resetsrc (char *option)
 /**
  * chsrc ls pnpm
  */
-FeatInfo
+Feature_t
 pl_nodejs_pnpm_feat (char *option)
 {
-  FeatInfo f = {0};
+  Feature_t f = {0};
 
   f.can_get = true;
   f.can_reset = true;
@@ -78,4 +78,4 @@ pl_nodejs_pnpm_feat (char *option)
 
 
 // def_target_gsrf(pl_nodejs_pnpm);
-TargetInfo pl_nodejs_pnpm_target = {def_target_inner_gsrf(pl_nodejs_pnpm),def_target_sourcesn(pl_nodejs)};
+Target_t pl_nodejs_pnpm_target = {def_target_inner_gsrf(pl_nodejs_pnpm),def_target_sourcesn(pl_nodejs)};

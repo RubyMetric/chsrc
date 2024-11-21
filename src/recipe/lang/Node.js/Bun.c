@@ -62,10 +62,10 @@ pl_nodejs_bun_resetsrc (char *option)
 /**
  * chsrc ls bun
  */
-FeatInfo
+Feature_t
 pl_nodejs_bun_feat (char *option)
 {
-  FeatInfo f = {0};
+  Feature_t f = {0};
 
   f.can_get = true;
   f.can_reset = true;
@@ -80,4 +80,4 @@ pl_nodejs_bun_feat (char *option)
 }
 
 // def_target_gsrf(pl_nodejs_bun);
-TargetInfo pl_nodejs_bun_target = {def_target_inner_gsrf(pl_nodejs_bun),def_target_sourcesn(pl_nodejs)};
+Target_t pl_nodejs_bun_target = {def_target_inner_gsrf(pl_nodejs_bun),def_target_sourcesn(pl_nodejs)};

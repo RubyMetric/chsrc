@@ -60,6 +60,7 @@ Source_t;
 
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
+
 enum Capability_t
 {
   CanNot,
@@ -68,8 +69,8 @@ enum Capability_t
 };
 
 
-/* Target Feature Info */
-typedef struct FeatInfo_t
+/* Target Feature */
+typedef struct Feature_t
 {
   bool can_get;
   bool can_reset;       /* 有的reset不是暂时没有实现，而是现在的实现根本就无法重置 */
@@ -83,22 +84,21 @@ typedef struct FeatInfo_t
 
   char *note;
 }
-FeatInfo;
+Feature_t;
 
 
-/* Target Info */
-typedef struct TargetInfo_t
+typedef struct Target_t
 {
   void (*getfn)   (char *option);
   void (*setfn)   (char *option);
   void (*resetfn) (char *option);
 
-  FeatInfo (*featfn)  (char *option);
+  Feature_t (*featfn) (char *option);
 
   Source_t *sources;
-  size_t      sources_n;
+  size_t    sources_n;
 }
-TargetInfo;
+Target_t;
 
 
 #define def_target_inner_s(t)    NULL,       t##_setsrc, NULL,         NULL
@@ -113,12 +113,12 @@ TargetInfo;
 #define def_target_sourcesn(t)   t##_sources, t##_sources_n
 
 // 大部分target还不支持reset，所以暂时先默认设置为NULL来过渡
-#define def_target(t)      TargetInfo t##_target = {def_target_inner_gs(t),def_target_sourcesn(t)}
-#define def_target_s(t)    TargetInfo t##_target = {def_target_inner_s(t),def_target_sourcesn(t)}
-#define def_target_sr(t)   TargetInfo t##_target = {def_target_inner_sr(t),def_target_sourcesn(t)}
-#define def_target_sf(t)   TargetInfo t##_target = {def_target_inner_sf(t),def_target_sourcesn(t)}
-#define def_target_srf(t)  TargetInfo t##_target = {def_target_inner_srf(t),def_target_sourcesn(t)}
-#define def_target_gs(t)   TargetInfo t##_target = {def_target_inner_gs(t),def_target_sourcesn(t)}
-#define def_target_gsr(t)  TargetInfo t##_target = {def_target_inner_gsr(t),def_target_sourcesn(t)}
-#define def_target_gsf(t)  TargetInfo t##_target = {def_target_inner_gsf(t),def_target_sourcesn(t)}
-#define def_target_gsrf(t) TargetInfo t##_target = {def_target_inner_gsrf(t),def_target_sourcesn(t)}
+#define def_target(t)      Target_t t##_target = {def_target_inner_gs(t),def_target_sourcesn(t)}
+#define def_target_s(t)    Target_t t##_target = {def_target_inner_s(t),def_target_sourcesn(t)}
+#define def_target_sr(t)   Target_t t##_target = {def_target_inner_sr(t),def_target_sourcesn(t)}
+#define def_target_sf(t)   Target_t t##_target = {def_target_inner_sf(t),def_target_sourcesn(t)}
+#define def_target_srf(t)  Target_t t##_target = {def_target_inner_srf(t),def_target_sourcesn(t)}
+#define def_target_gs(t)   Target_t t##_target = {def_target_inner_gs(t),def_target_sourcesn(t)}
+#define def_target_gsr(t)  Target_t t##_target = {def_target_inner_gsr(t),def_target_sourcesn(t)}
+#define def_target_gsf(t)  Target_t t##_target = {def_target_inner_gsf(t),def_target_sourcesn(t)}
+#define def_target_gsrf(t) Target_t t##_target = {def_target_inner_gsrf(t),def_target_sourcesn(t)}
