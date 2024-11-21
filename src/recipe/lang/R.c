@@ -50,7 +50,7 @@ pl_r_getsrc (char *option)
 }
 
 /**
- * R 换源，参考：https://help.mirrors.cernet.edu.cn/CRAN/
+ * @consult https://help.mirrors.cernet.edu.cn/CRAN/
  */
 void
 pl_r_setsrc (char *option)
@@ -60,8 +60,8 @@ pl_r_setsrc (char *option)
   char *bioconductor_url = xy_str_delete_suffix (xy_str_delete_suffix (source.url, "cran/"), "CRAN/");
   bioconductor_url = xy_2strjoin(bioconductor_url, "bioconductor");
 
-  const char *w1 = xy_strjoin (3, "options(\"repos\" = c(CRAN=\"", source.url, "\"))" );
-  const char *w2 = xy_strjoin (3, "options(BioC_mirror=\"", bioconductor_url, "\")" );
+  const char *w1 = xy_strjoin (3, "options(\"repos\" = c(CRAN=\"", source.url, "\"))\n" );
+  const char *w2 = xy_strjoin (3, "options(BioC_mirror=\"", bioconductor_url, "\")\n" );
 
   char *w = xy_2strjoin (w1, w2);
 

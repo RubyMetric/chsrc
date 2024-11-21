@@ -51,17 +51,17 @@ pl_dart_setsrc (char *option)
 {
   chsrc_yield_source_and_confirm (pl_dart);
 
-  char *towrite = NULL;
+  char *w = NULL;
 
   if (xy_on_windows)
     {
-      towrite = xy_strjoin (3, "$env:PUB_HOSTED_URL = \"", source.url, "\"");
+      w = xy_strjoin (3, "$env:PUB_HOSTED_URL = \"", source.url, "\"\n");
 
       if (xy_file_exist (xy_win_powershell_profile))
-        chsrc_append_to_file (towrite, xy_win_powershell_profile);
+        chsrc_append_to_file (w, xy_win_powershell_profile);
 
       if (xy_file_exist (xy_win_powershellv5_profile))
-        chsrc_append_to_file (towrite, xy_win_powershellv5_profile);
+        chsrc_append_to_file (w, xy_win_powershellv5_profile);
     }
   else
     {
@@ -69,14 +69,14 @@ pl_dart_setsrc (char *option)
       char *bashrc = "~/.bashrc";
 
       chsrc_backup (zshrc);
-      towrite = xy_strjoin (3, "export PUB_HOSTED_URL=\"", source.url, "\"");
+      w = xy_strjoin (3, "export PUB_HOSTED_URL=\"", source.url, "\"\n");
 
-      chsrc_append_to_file (towrite, zshrc);
+      chsrc_append_to_file (w, zshrc);
 
       if (xy_file_exist (bashrc))
         {
           chsrc_backup (bashrc);
-          chsrc_append_to_file (towrite, bashrc);
+          chsrc_append_to_file (w, bashrc);
         }
     }
   chsrc_conclude (&source, SetsrcType_Auto);

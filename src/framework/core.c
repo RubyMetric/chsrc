@@ -92,11 +92,11 @@ chsrc_note2 (const char* str)
 }
 
 void
-chsrc_log_write (const char *file)
+chsrc_log_write (const char *filename)
 {
   char *msg = CliOpt_InEnglish ? "WRITE" : "写入";
 
-  xy_log_brkt (blue(App_Name), bdblue(msg), blue(file));
+  xy_log_brkt (blue(App_Name), bdblue(msg), blue(filename));
 }
 
 #define YesMark "✓"
@@ -1094,7 +1094,7 @@ chsrc_append_to_file (const char *str, const char *filename)
 {
   if (CliOpt_DryRun)
     {
-      return;
+      goto log_anyway;
     }
 
   char *file = xy_normalize_path (filename);
@@ -1104,7 +1104,8 @@ chsrc_append_to_file (const char *str, const char *filename)
   FILE *f = fopen (file, "a");
   if (NULL==f)
     {
-      char *msg = xy_2strjoin ("Unable to open file to write: ", file);
+      char *msg = CliOpt_InEnglish ? xy_2strjoin ("Unable to open file to write: ", file)
+                                   : xy_2strjoin ("无法打开文件以写入: ", file);
       chsrc_error2 (msg);
       exit (Exit_UserCause);
     }
@@ -1116,12 +1117,17 @@ chsrc_append_to_file (const char *str, const char *filename)
   size_t ret = fwrite (newstr, len, 1, f);
   if (ret != 1)
     {
-      char *msg = xy_2strjoin ("Write failed to ", file);
+      char *msg = CliOpt_InEnglish ? xy_2strjoin ("Write failed to ", file)
+                                   : xy_2strjoin ("写入文件失败: ", file);
       chsrc_error2 (msg);
       exit (Exit_UserCause);
     }
 
   fclose (f);
+
+log_anyway:
+  /* 输出recipe指定的文件名 */
+  chsrc_log_write (filename);
 
   /*
   char *cmd = NULL;
@@ -1138,14 +1144,14 @@ chsrc_append_to_file (const char *str, const char *filename)
 }
 
 static void
-chsrc_prepend_to_file (const char *str, const char *file)
+chsrc_prepend_to_file (const char *str, const char *filename)
 {
   if (CliOpt_DryRun)
     {
-      return;
+      goto log_anyway;
     }
 
-  file = xy_normalize_path (file);
+  char *file = xy_normalize_path (filename);
   char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
 
@@ -1159,17 +1165,21 @@ chsrc_prepend_to_file (const char *str, const char *file)
       cmd = xy_strjoin (4, "sed -i '1i ", str, "' ", file);
     }
   chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_Dont_Notify_On_Success);
+
+log_anyway:
+  /* 输出recipe指定的文件名 */
+  chsrc_log_write (filename);
 }
 
 static void
-chsrc_overwrite_file (const char *str, const char *file)
+chsrc_overwrite_file (const char *str, const char *filename)
 {
   if (CliOpt_DryRun)
     {
-      return;
+      goto log_anyway;
     }
 
-  file = xy_normalize_path (file);
+  char *file = xy_normalize_path (filename);
   char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
 
@@ -1183,6 +1193,10 @@ chsrc_overwrite_file (const char *str, const char *file)
       cmd = xy_strjoin (4, "echo '", str, "' > ", file);
     }
   chsrc_run (cmd, RunOpt_Default);
+
+log_anyway:
+  /* 输出recipe指定的文件名 */
+  chsrc_log_write (filename);
 }
 
 static void

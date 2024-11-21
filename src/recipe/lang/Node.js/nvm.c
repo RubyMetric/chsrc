@@ -32,7 +32,7 @@ pl_nodejs_nvm_setsrc (char *option)
 {
   chsrc_yield_source_and_confirm (pl_nodejs_binary_release);
 
-  char *w = xy_2strjoin ("export NVM_NODEJS_ORG_MIRROR=", source.url);
+  char *w = xy_strjoin (3, "export NVM_NODEJS_ORG_MIRROR=", source.url, "\n");
 
   char *zshrc  = "~/.zshrc";
   char *bashrc = "~/.bashrc";

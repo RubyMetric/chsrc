@@ -52,7 +52,7 @@ pl_rust_rustup_setsrc (char *option)
   char *w1 = xy_strjoin (3, "export RUSTUP_DIST_SERVER=\"", source.url, "\"\n");
   char *w2 = xy_strjoin (3, "export RUSTUP_UPDATE_ROOT=\"", source.url, "/rustup\"\n");
 
-  char *w = xy_2strjoin (w1, w2)
+  char *w = xy_2strjoin (w1, w2);
 
   char *bashrc = "~/.bashrc";
   if (xy_file_exist (bashrc))
@@ -74,7 +74,7 @@ pl_rust_rustup_setsrc (char *option)
       char *w1 = xy_strjoin (3, "set -x RUSTUP_DIST_SERVER ", source.url, "\n");
       char *w2 = xy_strjoin (3, "set -x RUSTUP_UPDATE_ROOT ", source.url, "/rustup\n");
 
-      char *w = xy_2strjoin (w1, w2)
+      char *w = xy_2strjoin (w1, w2);
 
       chsrc_backup (fishrc);
       chsrc_append_to_file (w, fishrc);
