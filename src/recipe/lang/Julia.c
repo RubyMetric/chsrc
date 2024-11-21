@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-08-31>
- * Last Modified : <2024-08-15>
+ * Last Modified : <2024-11-22>
  * ------------------------------------------------------------*/
 
 /**
@@ -20,6 +20,7 @@ pl_julia_sources[] = {
 };
 def_sources_n(pl_julia);
 
+#define PL_Julia_Config "~/.julia/config/startup.jl"
 
 /**
  * Julia的换源可以通过两种方式
@@ -31,13 +32,13 @@ def_sources_n(pl_julia);
 void
 pl_julia_getsrc (char *option)
 {
-  chsrc_view_file ("~/.julia/config/startup.jl");
+  chsrc_view_file (PL_Julia_Config);
 }
 
 /**
- * Julia 换源，参考：
- * 1. https://help.mirrors.cernet.edu.cn/julia/
- * 2. https://docs.julialang.org/en/v1/manual/command-line-interface/#Startup-file
+ * @consult
+ *  1. https://help.mirrors.cernet.edu.cn/julia/
+ *  2. https://docs.julialang.org/en/v1/manual/command-line-interface/#Startup-file
  */
 void
 pl_julia_setsrc (char *option)
@@ -46,8 +47,30 @@ pl_julia_setsrc (char *option)
 
   const char *towrite = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
 
-  chsrc_append_to_file (towrite, "~/.julia/config/startup.jl");
+  chsrc_append_to_file (towrite, PL_Julia_Config);
+  if (CliOpt_InEnglish)
+    chsrc_note2 ("Written to " PL_Julia_Config);
+  else
+    chsrc_note2 ("已写入 " PL_Julia_Config);
   chsrc_conclude (&source, SetsrcType_Untested);
 }
 
-def_target(pl_julia);
+
+FeatInfo
+pl_julia_feat (char *option)
+{
+  FeatInfo f = {0};
+
+  f.can_get = true;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NA;
+  f.can_english = true;
+  f.can_user_define = true;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_gsf(pl_julia);
