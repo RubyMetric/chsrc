@@ -53,7 +53,10 @@ UserDefinedProvider = {
 
 typedef struct Source_t
 {
-  const MirrorSite_t *mirror;
+  union {
+    const SourceProvider_t *provider;
+    const MirrorSite_t     *mirror;
+  };
   const char *url;
 }
 Source_t;
@@ -112,7 +115,7 @@ Target_t;
 
 #define def_target_sourcesn(t)   t##_sources, t##_sources_n
 
-// 大部分target还不支持reset，所以暂时先默认设置为NULL来过渡
+/* 大部分target还不支持reset，所以暂时先默认设置为NULL来过渡 */
 #define def_target(t)      Target_t t##_target = {def_target_inner_gs(t),def_target_sourcesn(t)}
 #define def_target_s(t)    Target_t t##_target = {def_target_inner_s(t),def_target_sourcesn(t)}
 #define def_target_sr(t)   Target_t t##_target = {def_target_inner_sr(t),def_target_sourcesn(t)}

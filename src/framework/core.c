@@ -372,13 +372,13 @@ query_mirror_exist (Source_t *sources, size_t size, char *target, char *input)
     }
 
   int idx = 0;
-  Source_t source = sources[0];
+  Source_t src = sources[0];
 
   bool exist = false;
   for (int i=0; i<size; i++)
     {
-      source = sources[i];
-      if (xy_streql (source.mirror->code, input))
+      src = sources[i];
+      if (xy_streql (src.mirror->code, input))
         {
           idx = i;
           exist = true;
@@ -575,7 +575,8 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
     {
       Source_t src = sources[i];
 
-      const SpeedMeasureInfo_t smi = src.mirror->smi;
+      const SourceProvider_t *provider = src.provider;
+      const SpeedMeasureInfo_t smi = provider->smi;
 
       bool skip = smi.skip;
 
@@ -586,7 +587,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
         {
           char *msg1 = CliOpt_InEnglish ? "Maintainers don't offer " : "维护者未提供 ";
           char *msg2 = CliOpt_InEnglish ? " mirror site's speed measure link, so skip it" : " 镜像站测速链接，跳过该站点";
-          chsrc_warn (xy_strjoin (3, msg1, src.mirror->code, msg2));
+          chsrc_warn (xy_strjoin (3, msg1, provider->code, msg2));
           speed = 0;
 
           speed_records[i] = speed;
@@ -596,12 +597,12 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
 
       if (skip)
         {
-          if (xy_streql ("upstream", src.mirror->code))
+          if (xy_streql ("upstream", provider->code))
             {
               // 上游源不测速，但不置0，因为要避免这种情况: 可能其他镜像站测速都为0，最后反而选择了该 upstream
               speed = -1024*1024*1024;
             }
-          else if (xy_streql ("user", src.mirror->code))
+          else if (xy_streql ("user", provider->code))
             {
               // 代码不会执行至此
               speed = 1024*1024*1024;
@@ -614,7 +615,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
           get_measured[i] = false;
           speed_records[i] = speed;
 
-          const char *msg = CliOpt_InEnglish ? src.mirror->abbr : src.mirror->name;
+          const char *msg = CliOpt_InEnglish ? provider->abbr : provider->name;
           const char *skip_reason = CliOpt_InEnglish ? smi.skip_reason_EN : smi.skip_reason_CN;
           if (NULL==skip_reason)
             {
@@ -625,7 +626,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
         }
       else
         {
-          const char *msg = CliOpt_InEnglish ? src.mirror->abbr : src.mirror->name;
+          const char *msg = CliOpt_InEnglish ? provider->abbr : provider->name;
           measure_msgs[i] = xy_strjoin (3, "  - ", msg, " ... ");
           printf ("%s", measure_msgs[i]);
           fflush (stdout);
