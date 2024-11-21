@@ -88,7 +88,15 @@ void
 chsrc_note2 (const char* str)
 {
   char *msg = CliOpt_InEnglish ? "NOTE" : "提示";
-  xy_log_brkt (yellow (App_Name), bdyellow (msg), yellow (str));
+  xy_log_brkt (yellow(App_Name), bdyellow(msg), yellow(str));
+}
+
+void
+chsrc_log_write (const char *file)
+{
+  char *msg = CliOpt_InEnglish ? "WRITE" : "写入";
+
+  xy_log_brkt (blue(App_Name), bdblue(msg), blue(file));
 }
 
 #define YesMark "✓"

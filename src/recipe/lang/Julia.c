@@ -48,10 +48,8 @@ pl_julia_setsrc (char *option)
   const char *towrite = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
 
   chsrc_append_to_file (towrite, PL_Julia_Config);
-  if (CliOpt_InEnglish)
-    chsrc_note2 ("Written to " PL_Julia_Config);
-  else
-    chsrc_note2 ("已写入 " PL_Julia_Config);
+  chsrc_log_write (PL_Julia_Config);
+
   chsrc_conclude (&source, SetsrcType_Untested);
 }
 

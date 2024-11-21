@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-21>
- * Last Modified : <2024-08-15>
+ * Last Modified : <2024-11-22>
  * ------------------------------------------------------------*/
 
 /**
@@ -27,6 +27,9 @@ pl_r_sources[] = {
 def_sources_n(pl_r);
 
 
+#define PL_R_Config_Windows "~/Documents/.Rprofile"
+#define PL_R_Config_POSIX   "~/.Rprofile"
+
 void
 pl_r_getsrc (char *option)
 {
@@ -38,11 +41,11 @@ pl_r_getsrc (char *option)
    */
   if (xy_on_windows)
     {
-      chsrc_view_file ("~/Documents/.Rprofile");
+      chsrc_view_file (PL_R_Config_Windows);
     }
   else
     {
-      chsrc_view_file ("~/.Rprofile");
+      chsrc_view_file (PL_R_Config_POSIX);
     }
 }
 
@@ -61,16 +64,13 @@ pl_r_setsrc (char *option)
   const char *towrite2 = xy_strjoin (3, "options(BioC_mirror=\"", bioconductor_url, "\")" );
 
   // 或者我们调用 r.exe --slave -e 上面的内容
-  if (xy_on_windows)
-    {
-      chsrc_append_to_file (towrite1, "~/Documents/.Rprofile");
-      chsrc_append_to_file (towrite2, "~/Documents/.Rprofile");
-    }
-  else
-    {
-      chsrc_append_to_file (towrite1, "~/.Rprofile");
-      chsrc_append_to_file (towrite2, "~/.Rprofile");
-    }
+
+  char *config = xy_on_windows ? PL_R_Config_Windows : PL_R_Config_POSIX;
+
+  chsrc_append_to_file (towrite1, config);
+  chsrc_append_to_file (towrite2, config);
+  chsrc_log_write (config);
+
   chsrc_conclude (&source, SetsrcType_Auto);
 }
 
