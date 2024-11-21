@@ -8,7 +8,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2024-11-21>
+ * Last Modified : <2024-11-22>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C utilities for CLI applications in Ruby flavor
@@ -17,7 +17,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version      "v0.1.4.3-2024/11/21"
+#define _XY_Version      "v0.1.4.3-2024/11/22"
 #define _XY_Maintain_URL "https://gitee.com/RubyMetric/chsrc/blob/main/include/xy.h"
 
 #include <assert.h>
@@ -730,14 +730,14 @@ xy_dir_exist (const char *path)
 }
 
 /**
- * 该函数即使在非Windows下也可调用，作用是删除路径左右两边多出来的空白符
+ * 1. 删除路径左右两边多出来的空白符
+ * 2. 将 ~/ 转换为绝对路径
  */
 static char *
 xy_normalize_path (const char *path)
 {
   char *new = xy_str_strip (path); // 防止开发者多写了空白符
 
-  // 这个函数仅在Windows上才进行替换
   if (xy_on_windows)
     {
       if (xy_str_start_with (new, "~/"))
@@ -747,6 +747,14 @@ xy_normalize_path (const char *path)
                             xy_str_delete_prefix (new, "~/"));
         }
       new = xy_str_gsub (new, "/", "\\");
+    }
+  else
+    {
+      if (xy_str_start_with (new, "~/"))
+        {
+          new = xy_strjoin (3, xy_os_home, "/",
+                            xy_str_delete_prefix (new, "~/"));
+        }
     }
 
   return new;
