@@ -8,7 +8,7 @@
  *               | Happy Game <happygame10124@gmail.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-11-21>
+ * Last Modified : <2024-11-22>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -1078,13 +1078,39 @@ chsrc_ensure_dir (const char *dir)
   chsrc_note2 (xy_2strjoin (msg, dir));
 }
 
+/**
+ * @note 为了方便维护，该函数还会额外给要写入的字符串添加一个换行符
+ */
 static void
-chsrc_append_to_file (const char *str, const char *file)
+chsrc_append_to_file (const char *str, const char *filename)
 {
-  file = xy_normalize_path (file);
+  char *file = xy_normalize_path (filename);
   char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
 
+  FILE *f = fopen (file, "a");
+  if (NULL==f)
+    {
+      char *msg = xy_2strjoin ("Unable to open file to write: ", file);
+      chsrc_error2 (msg);
+      exit (Exit_UserCause);
+    }
+
+  char *newstr = xy_2strjoin (str, "\n");
+
+  size_t len = strlen (newstr);
+
+  size_t ret = fwrite (newstr, len, 1, f);
+  if (ret != 1)
+    {
+      char *msg = xy_2strjoin ("Write failed to ", file);
+      chsrc_error2 (msg);
+      exit (Exit_UserCause);
+    }
+
+  fclose (f);
+
+  /*
   char *cmd = NULL;
   if (xy_on_windows)
     {
@@ -1095,6 +1121,7 @@ chsrc_append_to_file (const char *str, const char *file)
       cmd = xy_strjoin (4, "echo '", str, "' >> ", file);
     }
   chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_Dont_Notify_On_Success);
+  */
 }
 
 static void
