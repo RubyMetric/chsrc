@@ -27,6 +27,9 @@ bool ProgMode_CMD_Reset   = false;
 bool ProgMode_Target_Group = false;
 int  ProgMode_Leader_Selected_Index = -1;
 
+/* 此时 chsrc_run() 不再是recipe中指定要运行的一个外部命令，而是作为一个功能实现的支撑 */
+bool ProgMode_Run_as_a_Service = false;
+
 
 /* 命令行选项 */
 bool CliOpt_IPv6      = false;
@@ -85,7 +88,7 @@ bool CliOpt_NoColor   = false;
 #define chsrc_error2(str) xy_error_brkt(App_Name,CliOpt_InEnglish?"ERROR":"错误",str)
 
 void
-chsrc_note2 (const char* str)
+chsrc_note2 (const char *str)
 {
   char *msg = CliOpt_InEnglish ? "NOTE" : "提示";
   xy_log_brkt (yellow(App_Name), bdyellow(msg), yellow(str));
@@ -97,6 +100,15 @@ chsrc_log_write (const char *filename)
   char *msg = CliOpt_InEnglish ? "WRITE" : "写入";
 
   xy_log_brkt (blue(App_Name), bdblue(msg), blue(filename));
+}
+
+void
+chsrc_log_backup (const char *filename)
+{
+  char *msg = CliOpt_InEnglish ? "BACKUP" : "备份";
+
+  char *bak = xy_2strjoin (filename, ".bak");
+  xy_log_brkt (blue(App_Name), bdblue(msg), xy_strjoin (3, bdyellow(filename), " -> ", bdgreen(bak)));
 }
 
 #define YesMark "✓"
@@ -1007,10 +1019,17 @@ not_root:
 static void
 chsrc_run (const char *cmd, int run_option)
 {
-  if (CliOpt_InEnglish)
-    xy_log_brkt (blue (App_Name), bdblue ("RUN"), blue (cmd));
+  if (ProgMode_Run_as_a_Service)
+    {
+      run_option |= RunOpt_Dont_Notify_On_Success|RunOpt_No_Last_New_Line;
+    }
   else
-    xy_log_brkt (blue (App_Name), bdblue ("运行"), blue (cmd));
+    {
+      if (CliOpt_InEnglish)
+        xy_log_brkt (blue (App_Name), bdblue ("RUN"), blue (cmd));
+      else
+        xy_log_brkt (blue (App_Name), bdblue ("运行"), blue (cmd));
+    }
 
   if (CliOpt_DryRun)
     {
@@ -1044,6 +1063,16 @@ chsrc_run (const char *cmd, int run_option)
 
 
 static void
+chsrc_run_as_a_service (const char *cmd)
+{
+  int run_option = RunOpt_Default;
+  ProgMode_Run_as_a_Service = true;
+    run_option |= RunOpt_Dont_Notify_On_Success|RunOpt_No_Last_New_Line;
+    chsrc_run (cmd, run_option);
+  ProgMode_Run_as_a_Service = false;
+}
+
+static void
 chsrc_view_file (const char *path)
 {
   char *cmd = NULL;
@@ -1056,7 +1085,8 @@ chsrc_view_file (const char *path)
     {
       cmd = xy_2strjoin ("cat ", path);
     }
-  chsrc_run (cmd, RunOpt_Dont_Notify_On_Success|RunOpt_No_Last_New_Line);
+
+  chsrc_run_as_a_service (cmd);
 }
 
 static void
@@ -1081,7 +1111,9 @@ chsrc_ensure_dir (const char *dir)
     }
   char *cmd = xy_2strjoin (mkdir_cmd, dir);
   cmd = xy_str_to_quietcmd (cmd);
-  chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_Dont_Notify_On_Success);
+
+  chsrc_run_as_a_service (cmd);
+
   char *msg = CliOpt_InEnglish ? "Directory doesn't exist, created automatically " : "目录不存在，已自动创建 ";
   chsrc_note2 (xy_2strjoin (msg, dir));
 }
@@ -1139,7 +1171,7 @@ log_anyway:
     {
       cmd = xy_strjoin (4, "echo '", str, "' >> ", file);
     }
-  chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_Dont_Notify_On_Success);
+  chsrc_run_a_service (cmd);
   */
 }
 
@@ -1164,7 +1196,7 @@ chsrc_prepend_to_file (const char *str, const char *filename)
     {
       cmd = xy_strjoin (4, "sed -i '1i ", str, "' ", file);
     }
-  chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_Dont_Notify_On_Success);
+  chsrc_run_as_a_service (cmd);
 
 log_anyway:
   /* 输出recipe指定的文件名 */
@@ -1192,7 +1224,7 @@ chsrc_overwrite_file (const char *str, const char *filename)
     {
       cmd = xy_strjoin (4, "echo '", str, "' > ", file);
     }
-  chsrc_run (cmd, RunOpt_Default);
+  chsrc_run_as_a_service (cmd);
 
 log_anyway:
   /* 输出recipe指定的文件名 */
@@ -1204,7 +1236,7 @@ chsrc_backup (const char *path)
 {
   if (CliOpt_DryRun)
     {
-      return;
+      goto log_anyway;
     }
 
   char *cmd = NULL;
@@ -1232,10 +1264,10 @@ chsrc_backup (const char *path)
       cmd = xy_strjoin (5, "cp ", path, " ", path, ".bak --backup='t'");
     }
 
-  chsrc_run (cmd, RunOpt_No_Last_New_Line|RunOpt_Dont_Notify_On_Success);
-  chsrc_note2 (xy_strjoin (3,
-                            CliOpt_InEnglish ? "Backup file name is " : "备份文件名为 ",
-                            path, ".bak"));
+  chsrc_run_as_a_service (cmd);
+
+log_anyway:
+  chsrc_log_backup (path);
 }
 
 
