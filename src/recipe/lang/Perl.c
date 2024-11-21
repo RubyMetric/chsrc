@@ -8,8 +8,7 @@
  * ------------------------------------------------------------*/
 
 /**
- * @time 2024-05-24 更新
- * @ref https://help.mirrors.cernet.edu.cn/CPAN/
+ * @update 2024-05-24
  */
 static SourceInfo
 pl_perl_sources[] = {
@@ -41,8 +40,9 @@ pl_perl_getsrc (char *option)
   chsrc_run (cmd, RunOpt_Default);
 }
 
+
 /**
- * Perl换源，参考：https://help.mirrors.cernet.edu.cn/CPAN/
+ * @consult https://help.mirrors.cernet.edu.cn/CPAN/
  */
 void
 pl_perl_setsrc (char *option)

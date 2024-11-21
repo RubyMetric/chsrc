@@ -8,10 +8,12 @@
  * ------------------------------------------------------------*/
 
 static MirrorSite
-NugetOrg = {"nuget.org",   "NuGet Org",    "Nuget Organization", "https://www.nuget.org/",  NULL};
+NugetOrg = {"nuget.org", "NuGet Org", "Nuget Organization", "https://www.nuget.org/",
+  {SKIP, ToFill, ToFill, NULL}
+};
 
 /**
- * @time 2024-04-18 更新
+ * @update 2024-04-18
  * @note {
  *   暂时未实现该换源功能，可参照
  *   https://mirrors.huaweicloud.com/mirrorDetail/5ebf85de07b41baf6d0882ab?mirrorName=nuget&catalog=language

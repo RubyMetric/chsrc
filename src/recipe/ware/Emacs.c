@@ -4,14 +4,17 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-10-10>
- * Last Modified : <2024-08-09>
+ * Last Modified : <2024-11-21>
  * ------------------------------------------------------------*/
 
 static MirrorSite
-EmacsChina = {"emacschina",  "EmacsChina",   "Emacs China 社区",    "https://elpamirror.emacs-china.org/", NULL};
+EmacsChina = {
+  "emacschina", "EmacsChina", "Emacs China 社区", "https://elpamirror.emacs-china.org/",
+  {SKIP, ToFill, ToFill, NULL}
+};
 
 /**
- * @time 2023-09-10 更新
+ * @update 2023-09-10
  * @note Emacs用户往往只需要一次性换源，只会极少次调用 chsrc，我们只给用户提供文档
  */
 SourceInfo

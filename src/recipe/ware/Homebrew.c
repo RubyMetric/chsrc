@@ -1,15 +1,15 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- * Created On    : <2023-09-10>
- * Last Modified : <2024-08-28>
- * Revision      :      3
+ * File Authors   : Aoran Zeng <ccmywish@qq.com>
+ * Contributors   :  Nil Null  <nil@null.org>
+ * Created On     : <2023-09-10>
+ * Major Revision :      3
+ * Last Modified  : <2024-08-28>
  * ------------------------------------------------------------*/
 
 /**
- * @time 2023-09-10 更新
+ * @update 2023-09-10
  * @note {
  *   1. 这些链接将会在setsrc函数中补充完整
  *   2. 不确定 Sustech 能否工作

@@ -8,7 +8,10 @@
  * ------------------------------------------------------------*/
 
 static MirrorSite
-Api7 = {"api7",  "api7.ai",  "深圳支流科技有限公司", "https://www.apiseven.com/", NULL};
+Api7 = {
+  "api7", "api7.ai", "深圳支流科技有限公司", "https://www.apiseven.com/",
+  {SKIP, ToFill, ToFill, NULL}
+};
 
 
 /**

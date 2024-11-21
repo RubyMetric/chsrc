@@ -6,25 +6,25 @@
  * Contributors  : Nil Null <nil@null.org>
  *               |
  * Created On    : <2024-06-08>
- * Last Modified : <2024-10-28>
+ * Last Modified : <2024-11-21>
  * ------------------------------------------------------------*/
 
 static MirrorSite
 DaoCloud = {
   "daocloud", "DaoCloud","上海道客网络科技有限公司", "https://www.daocloud.io/",
   // 没有找到 DaoCloud 合适的下载链接，先随便给一个，以规避 chsrc 自动测速时所有 dockerhub 镜像站都没有测速链接带来的 bug
-  {false, NULL, NULL, "https://qiniu-download-public.daocloud.io/DaoCloud_Enterprise/dce5/offline-community-v0.18.0-amd64.tar"}
+  {NotSkip, NA, NA, "https://qiniu-download-public.daocloud.io/DaoCloud_Enterprise/dce5/offline-community-v0.18.0-amd64.tar"}
 },
 
 Fit2Cloud = {
   "fit2cloud", "FIT2CLOUD", "杭州飞致云信息科技有限公司", "https://www.fit2cloud.com/",
-  {true, NULL, NULL, NULL}
+  {SKIP, ToFill, ToFill, NULL}
 },
 
 Huecker = {
   "huecker",  "(Russia) Huecker", "俄罗斯 Huecker.io",   "https://huecker.io/",
   // 同 DaoCloud，没有合适的下载链接，先随便给一个，以避免 bug
-  {false, NULL, NULL, "https://huecker.io/en/use.html"}
+  {NotSkip, NA, NA, "https://huecker.io/en/use.html"}
 };
 
 /**

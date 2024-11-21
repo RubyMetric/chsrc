@@ -10,7 +10,7 @@
 static MirrorSite
 RubyChina = {
   "rubychina", "RubyChina", "Ruby China 社区", "https://gems.ruby-china.com/",
-  {false, NULL, NULL, "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"} // 9.9 MB
+  {NotSkip, NA, NA, "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"} // 9.9 MB
 };
 
 /**
