@@ -10,7 +10,7 @@
 /**
  * @time 2024-06-12 更新
  */
-static SourceInfo
+static Source_t
 os_rockylinux_sources[] = {
   {&UpstreamProvider,        NULL},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/rocky"},

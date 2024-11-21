@@ -1,7 +1,7 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Name     :   struct.h
+ * File Name     :  struct.h
  * File Authors  :  Aoran Zeng   <ccmywish@qq.com>
  *               |   Heng Guo    <2085471348@qq.com>
  * Contributors  : Shengwei Chen <414685209@qq.com>
@@ -19,7 +19,7 @@ typedef struct SpeedMeasureInfo_t
   const char *skip_reason_EN; /* 跳过的原因（英文）*/
   const char *url;            /* 测速链接 */
 }
-SpeedMeasureInfo;
+SpeedMeasureInfo_t;
 
 #define SKIP    true
 #define NotSkip false
@@ -32,35 +32,35 @@ typedef struct SourceProvider_t
   const char *abbr; /* 需要使用 Provider 的英文名时，用这个代替，因为大部分 Provider 没有提供正式的英文名 */
   const char *name; /* Provider 中文名 */
   const char *site; /* Provider 首页   */
-  SpeedMeasureInfo smi;
+  SpeedMeasureInfo_t smi;
 }
-SourceProvider;
+SourceProvider_t;
 
-typedef SourceProvider MirrorSite;
+typedef SourceProvider_t MirrorSite_t;
 
-SourceProvider
+SourceProvider_t
 UpstreamProvider = {
   "upstream", "Upstream", "上游默认源", NULL,
   {SKIP, "上游默认源不测速", "SKIP for upstream source", NULL}
 };
 
-SourceProvider
+SourceProvider_t
 UserDefinedProvider = {
   "user", "用户自定义", "用户自定义", NULL,
   {SKIP, "用户自定义源不测速", "SKIP for user-defined source", NULL}
 };
 
 
-typedef struct SourceInfo_t
+typedef struct Source_t
 {
-  const MirrorSite *mirror;
+  const MirrorSite_t *mirror;
   const char *url;
 }
-SourceInfo;
+Source_t;
 
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
-enum Capability
+enum Capability_t
 {
   CanNot,
   FullyCan,
@@ -78,7 +78,7 @@ typedef struct FeatInfo_t
 
   bool can_user_define; /* 用户自定义换源URL */
 
-  enum Capability cap_locally;
+  enum Capability_t cap_locally;
   char *cap_locally_explain;
 
   char *note;
@@ -95,7 +95,7 @@ typedef struct TargetInfo_t
 
   FeatInfo (*featfn)  (char *option);
 
-  SourceInfo *sources;
+  Source_t *sources;
   size_t      sources_n;
 }
 TargetInfo;

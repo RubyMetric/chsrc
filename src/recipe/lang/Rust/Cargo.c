@@ -12,7 +12,7 @@
  * @note 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`
  * @note 链接末尾的 `/` 不能缺少
  */
-static SourceInfo
+static Source_t
 pl_rust_cargo_sources[] = {
   {&UpstreamProvider,      "https://index.crates.io/"}, // @help 是这个吗？
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/crates.io-index/"},

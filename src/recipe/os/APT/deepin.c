@@ -12,7 +12,7 @@
 /**
  * @update 2024-09-14
  */
-static SourceInfo
+static Source_t
 os_deepin_sources[] = {
   {&UpstreamProvider,      "https://community-packages.deepin.com/deepin"},
   {&Ali,           "https://mirrors.aliyun.com/deepin"},

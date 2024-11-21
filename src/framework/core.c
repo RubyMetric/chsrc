@@ -1,7 +1,7 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Name     : core.h
+ * File Name     : core.c
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  *               |  Heng Guo  <2085471348@qq.com>
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
@@ -330,7 +330,7 @@ chsrc_check_file (char *path)
  */
 #define find_mirror(s, input) query_mirror_exist(s##_sources, s##_sources_n, (char*)#s+3, input)
 int
-query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
+query_mirror_exist (Source_t *sources, size_t size, char *target, char *input)
 {
   if (is_url (input))
     {
@@ -372,7 +372,7 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
     }
 
   int idx = 0;
-  SourceInfo source = sources[0];
+  Source_t source = sources[0];
 
   bool exist = false;
   for (int i=0; i<size; i++)
@@ -563,7 +563,7 @@ get_max_ele_idx_in_dbl_ary (double *array, int size)
  * @param[out] speed_records  速度值记录，单位为Byte/s
  */
 void
-measure_speed_for_every_source (SourceInfo sources[], int size, double speed_records[])
+measure_speed_for_every_source (Source_t sources[], int size, double speed_records[])
 {
     bool get_measured[size]; /* 是否真正执行了测速 */
      int get_measured_n = 0; /* 测速了几个        */
@@ -573,9 +573,9 @@ measure_speed_for_every_source (SourceInfo sources[], int size, double speed_rec
 
   for (int i=0; i<size; i++)
     {
-      SourceInfo src = sources[i];
+      Source_t src = sources[i];
 
-      const SpeedMeasureInfo smi = src.mirror->smi;
+      const SpeedMeasureInfo_t smi = src.mirror->smi;
 
       bool skip = smi.skip;
 
@@ -647,7 +647,7 @@ measure_speed_for_every_source (SourceInfo sources[], int size, double speed_rec
  */
 #define auto_select_mirror(s) select_mirror_autoly(s##_sources, s##_sources_n, (char*)#s+3)
 int
-select_mirror_autoly (SourceInfo *sources, size_t size, const char *target_name)
+select_mirror_autoly (Source_t *sources, size_t size, const char *target_name)
 {
   {
   char *msg = CliOpt_InEnglish ? "Measuring speed in sequence" : "测速中";
@@ -732,19 +732,19 @@ select_mirror_autoly (SourceInfo *sources, size_t size, const char *target_name)
 
 
 bool
-source_is_upstream (SourceInfo *source)
+source_is_upstream (Source_t *source)
 {
   return xy_streql (source->mirror->code, "upstream");
 }
 
 bool
-source_is_userdefine (SourceInfo *source)
+source_is_userdefine (Source_t *source)
 {
   return xy_streql (source->mirror->code, "user");
 }
 
 bool
-source_has_empty_url (SourceInfo *source)
+source_has_empty_url (Source_t *source)
 {
   return source->url == NULL;
 }
@@ -752,7 +752,7 @@ source_has_empty_url (SourceInfo *source)
 
 
 /**
- * 用户*只可能*通过下面5种方式来换源，无论哪一种都会返回一个 SourceInfo 出来
+ * 用户*只可能*通过下面5种方式来换源，无论哪一种都会返回一个 Source_t 出来
  * option:
  *  1. 用户指定某个 MirrorCode
  *  2. NULL: 用户什么都没指定 (将测速选择最快镜像)
@@ -775,7 +775,7 @@ source_has_empty_url (SourceInfo *source)
     } \
   else if (is_url (option)) \
     { \
-      SourceInfo __tmp = { &UserDefinedProvider, option }; \
+      Source_t __tmp = { &UserDefinedProvider, option }; \
       source = __tmp; \
     } \
   else \
@@ -785,7 +785,7 @@ source_has_empty_url (SourceInfo *source)
     }
 
 #define chsrc_yield_source(for_what) \
-  SourceInfo source; \
+  Source_t source; \
   chsrc_yield_for_the_source(for_what)
 
 
@@ -803,7 +803,7 @@ source_has_empty_url (SourceInfo *source)
  */
 #define chsrc_confirm_source confirm_source(&source)
 void
-confirm_source (SourceInfo *source)
+confirm_source (Source_t *source)
 {
   // 由于实现问题，我们把本应该独立出去的默认上游源，也放在了可以换源的数组中，而且放在第一个
   // chsrc 已经规避用户使用未实现的 `chsrc reset`
@@ -869,7 +869,7 @@ confirm_source (SourceInfo *source)
  * @translation Done
  */
 void
-chsrc_conclude (SourceInfo *source, const char *last_word)
+chsrc_conclude (Source_t *source, const char *last_word)
 {
   split_between_source_changing_process;
 

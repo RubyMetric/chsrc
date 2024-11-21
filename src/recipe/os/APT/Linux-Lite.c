@@ -11,7 +11,7 @@
 /**
  * @update 2024-11-21
  */
-static SourceInfo
+static Source_t
 os_linuxlite_sources[] = {
   {&UpstreamProvider,       "http://repo.linuxliteos.com/linuxlite/"},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/linuxliteos/"},

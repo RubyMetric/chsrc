@@ -10,7 +10,7 @@
 /**
  * @update 2024-04-18
  */
-static SourceInfo
+static Source_t
 os_ros_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Ali,            "https://mirrors.aliyun.com"},

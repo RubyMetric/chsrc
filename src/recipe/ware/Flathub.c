@@ -11,7 +11,7 @@
  * @update 2023-09-11
  * @note 目前只有一个源
  */
-static SourceInfo
+static Source_t
 wr_flathub_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/flathub"},

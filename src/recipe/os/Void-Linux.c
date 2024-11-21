@@ -10,7 +10,7 @@
 /**
  * @time 2023-09-24 更新
  */
-static SourceInfo
+static Source_t
 os_void_sources[] = {
   {&UpstreamProvider,       "https://repo-default.voidlinux.org"},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/voidlinux"},

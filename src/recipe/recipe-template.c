@@ -33,7 +33,7 @@
 /**
  * 定义专服务于该target的镜像站，该例数据为虚拟填充
  */
-static MirrorSite
+static MirrorSite_t
 RubyMetric = {"rbmt",                   // chsrc set <target> rbmt
               "RubyMetric",             // 该镜像站的缩写
               "RubyMetric.com",         // 该镜像站的全名
@@ -45,7 +45,7 @@ RubyMetric = {"rbmt",                   // chsrc set <target> rbmt
  * @update 2024-08-09
  * @note   该target的各个源地址，该例数据为虚拟填充
  */
-static SourceInfo
+static Source_t
 <category>_<target>_sources[] = {
   {&UpstreamProvider,      "上游地址，若维护者暂时未知，可填NULL，这个主要用于reset"},
   {&RubyMetric,    "https://rubymetirc.com/target"},

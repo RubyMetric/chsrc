@@ -12,7 +12,7 @@
 /**
  * @update 2024-11-21
  */
-static SourceInfo
+static Source_t
 os_debian_sources[] = {
   {&UpstreamProvider,      "http://deb.debian.org/debian"},
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/debian/"},

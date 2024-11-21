@@ -11,7 +11,7 @@
  * @time 2023-09-10 更新
  * @note 不太好换，且用户可能不多，我们暂时只给用户提供文档
  */
-static SourceInfo
+static Source_t
 pl_clojure_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/help/clojars/"},

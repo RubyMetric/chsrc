@@ -10,7 +10,7 @@
 /**
  * @update 2024-08-08
  */
-static SourceInfo
+static Source_t
 os_openwrt_sources[] = {
   {&UpstreamProvider,       "http://downloads.openwrt.org"},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/openwrt"},

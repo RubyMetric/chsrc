@@ -1,7 +1,7 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Name     :   mirror.c
+ * File Name     :  mirror.c
  * File Authors  :  Aoran Zeng   <ccmywish@qq.com>
  *               |   Heng Guo    <2085471348@qq.com>
  * Contributors  : Shengwei Chen <414685209@qq.com>
@@ -24,7 +24,7 @@
  *
  * Wiki中的排序是根据 https://github.com/mirrorz-org/oh-my-mirrorz 挑选速度前10位
  */
-MirrorSite
+MirrorSite_t
 MirrorZ = {
   "mirrorz", "MirrorZ",  "MirrorZ 校园网镜像站", "https://mirrors.cernet.edu.cn/",
   {SKIP, "功能特殊无法测速，跳过", "SKIP because of its special function"}
@@ -116,7 +116,7 @@ Nju = {
 /**
  * 商业公司提供的源
  */
-MirrorSite
+MirrorSite_t
 Ali = {
   "ali", "Ali OPSX Public", "阿里巴巴开源镜像站(公网)", "https://developer.aliyun.com/mirror/",
   {NotSkip, NA, NA, "https://mirrors.aliyun.com/deepin-cd" Big_File_deepin}

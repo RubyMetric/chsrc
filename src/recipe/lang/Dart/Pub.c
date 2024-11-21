@@ -14,7 +14,7 @@
 /**
  * @update 2024-10-31
  */
-static SourceInfo
+static Source_t
 pl_dart_sources[] = {
   {&UpstreamProvider,      "https://pub.dev"},
   {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/dart-pub"},

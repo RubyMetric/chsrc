@@ -15,7 +15,7 @@
  *   2. 不确定 Sustech 能否工作
  * }
  */
-static SourceInfo
+static Source_t
 wr_homebrew_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/"},

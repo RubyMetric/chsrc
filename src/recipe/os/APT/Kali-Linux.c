@@ -12,7 +12,7 @@
 /**
  * @update 2024-11-21
  */
-static SourceInfo
+static Source_t
 os_kali_sources[] = {
   {&UpstreamProvider,      "http://http.kali.org/kali"},
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/kali"},

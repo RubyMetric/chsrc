@@ -13,7 +13,7 @@
 /**
  * @time 2023-09-29 更新
  */
-static SourceInfo
+static Source_t
 os_openkylin_sources[] = {
   {&UpstreamProvider,  "https://archive.openkylin.top/openkylin/"},
   {&Ali,       "https://mirrors.aliyun.com/openkylin/"},

@@ -11,7 +11,7 @@
  * @time 2023-09-10 更新
  * @note 这些链接将会在setsrc函数中补充完整
  */
-static SourceInfo
+static Source_t
 wr_anaconda_sources[] = {
   {&UpstreamProvider,        "https://repo.anaconda.com/"},
   {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/anaconda/"},

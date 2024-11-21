@@ -12,7 +12,7 @@
 /**
  * @time 2023-09-29 更新
  */
-static SourceInfo
+static Source_t
 os_raspberrypi_sources[] = {
   {&UpstreamProvider,       "https://archive.raspberrypi.com/"}, // https://archive.raspberrypi.org/ until Debian "bullseye" release
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/raspberrypi/"},

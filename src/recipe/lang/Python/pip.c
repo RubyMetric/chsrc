@@ -38,7 +38,7 @@ pl_python_pip_setsrc (char *option)
       return;
     }
 
-  SourceInfo source;
+  Source_t source;
   chsrc_yield_for_the_source (pl_python);
   if (ProgMode_Target_Group!=true)
     chsrc_confirm_source;

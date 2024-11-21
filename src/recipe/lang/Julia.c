@@ -11,7 +11,7 @@
  * @time 2023-09-05 更新
  * @note 缺少商业公司或开源社区软件源
  */
-static SourceInfo
+static Source_t
 pl_julia_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/julia"},

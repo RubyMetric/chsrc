@@ -10,7 +10,7 @@
 /**
  * @time 2024-06-08 更新
  */
-static SourceInfo
+static Source_t
 wr_cocoapods_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git"},

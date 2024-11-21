@@ -15,7 +15,7 @@
 /**
  * @update 2024-10-31
  */
-static SourceInfo
+static Source_t
 pl_dart_flutter_sources[] = {
   {&UpstreamProvider,      "https://storage.googleapis.com"},
   {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn"}, // 没有后缀，怀疑是否存在问题

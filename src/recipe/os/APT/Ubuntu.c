@@ -12,7 +12,7 @@
 /**
  * @update 2024-11-21
  */
-static SourceInfo
+static Source_t
 os_ubuntu_sources[] = {
   {&UpstreamProvider,      "http://archive.ubuntu.com/ubuntu/"}, //不支持https
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/ubuntu/"},

@@ -7,7 +7,7 @@
  * Last Modified : <2024-11-21>
  * ------------------------------------------------------------*/
 
-static MirrorSite
+static MirrorSite_t
 RubyChina = {
   "rubychina", "RubyChina", "Ruby China 社区", "https://gems.ruby-china.com/",
   {NotSkip, NA, NA, "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"} // 9.9 MB
@@ -20,7 +20,7 @@ RubyChina = {
  *
  * @note 曾经的问题 https://ruby-china.org/topics/43331
  */
-static SourceInfo
+static Source_t
 pl_ruby_sources[] = {
   {&UpstreamProvider,     "https://rubygems.org"},
   {&RubyChina,    "https://gems.ruby-china.com/"},

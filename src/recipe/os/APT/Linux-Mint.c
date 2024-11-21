@@ -11,7 +11,7 @@
  * @update 2024-11-21 更新
  * @note 实际上镜像站里的内容和Ubuntu的不太一样
  */
-static SourceInfo
+static Source_t
 os_linuxmint_sources[] = {
   {&UpstreamProvider,       NULL},
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/linuxmint/"},

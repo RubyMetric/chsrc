@@ -10,7 +10,7 @@
 /**
  * @update 2024-08-16
  */
-static SourceInfo
+static Source_t
 os_opensuse_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Ali,            "https://mirrors.aliyun.com/opensuse"},

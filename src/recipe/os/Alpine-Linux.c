@@ -10,7 +10,7 @@
 /**
  * @update 2024-09-14
  */
-static SourceInfo
+static Source_t
 os_alpine_sources[] = {
   {&UpstreamProvider,       "http://dl-cdn.alpinelinux.org/alpine"},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/alpine"},

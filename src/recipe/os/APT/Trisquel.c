@@ -12,7 +12,7 @@
 /**
  * @time 2024-11-21 更新
  */
-static SourceInfo
+static Source_t
 os_trisquel_sources[] = {
   {&UpstreamProvider,       NULL},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/trisquel/"},

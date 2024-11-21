@@ -217,7 +217,7 @@ cli_print_available_mirrors ()
 
   for (int i = 0; i < xy_arylen (available_mirrors); i++)
     {
-      MirrorSite* mir = available_mirrors[i];
+      MirrorSite_t *mir = available_mirrors[i];
       printf ("%-14s%-18s%-41s ", mir->code, mir->abbr, mir->site); say (mir->name);
     }
 }
@@ -305,12 +305,12 @@ cli_print_supported_wr ()
  * 用于 chsrc list <target>
  */
 void
-cli_print_target_available_sources (SourceInfo sources[], size_t size)
+cli_print_target_available_sources (Source_t sources[], size_t size)
 {
   for (int i=0;i<size;i++)
     {
-      SourceInfo src = sources[i];
-      const MirrorSite *mir = src.mirror;
+      Source_t src = sources[i];
+      const MirrorSite_t *mir = src.mirror;
       if (NULL == src.url)
         {
           src.url = "Please help to add the upstream url!";

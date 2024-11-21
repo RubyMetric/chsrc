@@ -12,7 +12,7 @@
  * @update 2024-09-14
  * @note 不要添加Zju，浙大的pypi在校外访问会自动转向Tuna
  */
-static SourceInfo
+static Source_t
 pl_python_sources[] = {
   {&UpstreamProvider,      "https://pypi.org/simple"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/pypi/web/simple"},

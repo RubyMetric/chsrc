@@ -10,7 +10,7 @@
 /**
  * @update 2024-05-24
  */
-static SourceInfo
+static Source_t
 pl_perl_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/CPAN/"},

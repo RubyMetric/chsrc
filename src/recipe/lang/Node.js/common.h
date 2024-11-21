@@ -8,7 +8,7 @@
  * Last Modified  : <2024-09-23>
  * ------------------------------------------------------------*/
 
-static MirrorSite
+static MirrorSite_t
 NpmMirror = {
   "npmmirror", "npmmirror", "npmmirror (阿里云赞助)", "https://npmmirror.com/",
   // 注意，下面这个是跳转后的地址，不确定未来会不会改变
@@ -26,7 +26,7 @@ NpmMirror = {
  * }
  *
  */
-static SourceInfo
+static Source_t
 pl_nodejs_sources[] = {
   {&UpstreamProvider,      "https://registry.npmjs.org/"}, // @note 根据 pnpm 官网，有最后的斜线
   {&NpmMirror,     "https://registry.npmmirror.com"},
@@ -43,7 +43,7 @@ def_sources_n(pl_nodejs);
  * @sync https://github.com/RubyMetric/chsrc/discussions/85
  *
  */
-static SourceInfo
+static Source_t
 pl_nodejs_binary_release_sources[] = {
   {&UpstreamProvider,      "https://nodejs.org/dist/"},
   {&NpmMirror,     "https://npmmirror.com/mirrors"},

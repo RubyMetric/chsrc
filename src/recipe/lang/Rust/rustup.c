@@ -11,7 +11,7 @@
 /**
  * @update 2024-10-02
  */
-static SourceInfo
+static Source_t
 pl_rust_rustup_sources[] = {
   {&UpstreamProvider,      "https://static.rust-lang.org"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/rustup"},

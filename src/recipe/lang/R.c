@@ -14,7 +14,7 @@
  *   我们在换cran的同时，也直接帮助用户换bioconductor
  * }
  */
-static SourceInfo
+static Source_t
 pl_r_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/cran/"},

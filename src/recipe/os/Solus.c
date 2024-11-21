@@ -10,7 +10,7 @@
 /**
  * @time 2023-09-29 更新
  */
-static SourceInfo
+static Source_t
 os_solus_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"},

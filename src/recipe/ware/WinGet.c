@@ -11,7 +11,7 @@
  * @update 2024-06-07
  * @note 目前仅有一个源
  */
-static SourceInfo
+static Source_t
 wr_winget_sources[] = {
   {&UpstreamProvider,       "https://cdn.winget.microsoft.com/cache"},
   {&Ustc,           "https://mirrors.ustc.edu.cn/winget-source"},

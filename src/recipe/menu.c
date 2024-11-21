@@ -138,7 +138,7 @@ static const char
 /**
  * @sync https://github.com/RubyMetric/chsrc/wiki
  */
-static MirrorSite*
+static MirrorSite_t*
 available_mirrors[] = {
 
   /* 教育网 */

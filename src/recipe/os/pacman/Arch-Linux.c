@@ -12,7 +12,7 @@
  * @update 2024-07-03
  * @note 不要给后面加 / ，因为ARM情况下，还要额外加一个 arm 后缀
  */
-static SourceInfo
+static Source_t
 os_arch_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Ali,           "https://mirrors.aliyun.com/archlinux"},

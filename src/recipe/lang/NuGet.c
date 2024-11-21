@@ -7,7 +7,7 @@
  * Last Modified : <2024-08-09>
  * ------------------------------------------------------------*/
 
-static MirrorSite
+static MirrorSite_t
 NugetOrg = {"nuget.org", "NuGet Org", "Nuget Organization", "https://www.nuget.org/",
   {SKIP, ToFill, ToFill, NULL}
 };
@@ -19,7 +19,7 @@ NugetOrg = {"nuget.org", "NuGet Org", "Nuget Organization", "https://www.nuget.o
  *   https://mirrors.huaweicloud.com/mirrorDetail/5ebf85de07b41baf6d0882ab?mirrorName=nuget&catalog=language
  * }
  */
-static SourceInfo
+static Source_t
 pl_nuget_sources[] = {
   {&UpstreamProvider,       NULL},
   {&NugetOrg,      "https://www.nuget.org/api/v2/"},

@@ -11,7 +11,7 @@
  * @update 2024-09-14
  * @note 缺少教育网或开源社区软件源
  */
-static SourceInfo
+static Source_t
 pl_php_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Ali,           "https://mirrors.aliyun.com/composer/"},

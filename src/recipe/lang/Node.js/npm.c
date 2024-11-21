@@ -26,7 +26,7 @@ pl_nodejs_npm_getsrc (char *option)
 void
 pl_nodejs_npm_setsrc (char *option)
 {
-  SourceInfo source;
+  Source_t source;
   chsrc_yield_for_the_source (pl_nodejs);
   if (ProgMode_Target_Group!=true)
     chsrc_confirm_source;

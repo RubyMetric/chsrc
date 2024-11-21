@@ -10,7 +10,7 @@
 /**
  * @update 2023-09-10
  */
-static SourceInfo
+static Source_t
 wr_tex_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/ctan/systems/texlive/tlnet"},

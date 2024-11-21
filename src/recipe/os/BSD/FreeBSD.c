@@ -16,7 +16,7 @@
  *   [2023-09-27] 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数
  * }
  */
-static SourceInfo
+static Source_t
 os_freebsd_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Ustc,           "mirrors.ustc.edu.cn"},
@@ -41,7 +41,7 @@ os_freebsd_setsrc (char *option)
 
   int index = use_specific_mirror_or_auto_select (option, os_freebsd);
 
-  SourceInfo source = os_freebsd_sources[index];
+  Source_t source = os_freebsd_sources[index];
   chsrc_confirm_source;
 
   chsrc_log2 ("1. 添加 freebsd-pkg 源 (二进制安装包)");

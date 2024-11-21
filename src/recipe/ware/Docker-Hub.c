@@ -9,7 +9,7 @@
  * Last Modified : <2024-11-22>
  * ------------------------------------------------------------*/
 
-static MirrorSite
+static MirrorSite_t
 DaoCloud = {
   "daocloud", "DaoCloud","上海道客网络科技有限公司", "https://www.daocloud.io/",
   // 没有找到 DaoCloud 合适的下载链接，先随便给一个，以规避 chsrc 自动测速时所有 dockerhub 镜像站都没有测速链接带来的 bug
@@ -36,7 +36,7 @@ Huecker = {
  * @consult https://gist.github.com/y0ngb1n/7e8f16af3242c7815e7ca2f0833d3ea6
  */
 
-static SourceInfo
+static Source_t
 wr_dockerhub_sources[] = {
   {&UpstreamProvider,       NULL},
   // {&Ustc,       "https://docker.mirrors.ustc.edu.cn/"},

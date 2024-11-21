@@ -10,7 +10,7 @@
 /**
  * @time 2024-06-12 更新
  */
-static SourceInfo
+static Source_t
 os_almalinux_sources[] = {
   {&UpstreamProvider,      "http://repo.almalinux.org/almalinux"},
   {&Ali,           "https://mirrors.aliyun.com/almalinux"},

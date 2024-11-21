@@ -10,7 +10,7 @@
 /**
  * @time 2023-09-10 更新
  */
-static SourceInfo
+static Source_t
 pl_haskell_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/hackage"},

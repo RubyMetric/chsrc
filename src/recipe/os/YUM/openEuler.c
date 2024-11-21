@@ -11,7 +11,7 @@
 /**
  * @update 2024-09-14
  */
-static SourceInfo
+static Source_t
 os_openeuler_sources[] = {
   {&UpstreamProvider,       "https://repo.openeuler.org/"},
   {&Ali,            "https://mirrors.aliyun.com/openeuler/"},

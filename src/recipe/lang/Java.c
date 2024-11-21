@@ -11,7 +11,7 @@
  * @time 2024-04-18 更新
  * @note 缺少教育网或开源社区软件源
  */
-static SourceInfo
+static Source_t
 pl_java_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Ali,           "https://maven.aliyun.com/repository/public/"},

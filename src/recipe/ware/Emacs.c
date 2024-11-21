@@ -7,7 +7,7 @@
  * Last Modified : <2024-11-21>
  * ------------------------------------------------------------*/
 
-static MirrorSite
+static MirrorSite_t
 EmacsChina = {
   "emacschina", "EmacsChina", "Emacs China 社区", "https://elpamirror.emacs-china.org/",
   {SKIP, ToFill, ToFill, NULL}
@@ -17,7 +17,7 @@ EmacsChina = {
  * @update 2023-09-10
  * @note Emacs用户往往只需要一次性换源，只会极少次调用 chsrc，我们只给用户提供文档
  */
-SourceInfo
+Source_t
 wr_emacs_sources[] = {
   {&UpstreamProvider,       NULL},
   {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/docs/emacs-elpa"},

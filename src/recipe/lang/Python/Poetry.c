@@ -27,7 +27,7 @@ pl_python_poetry_getsrc (char *option)
 void
 pl_python_poetry_setsrc (char *option)
 {
-  SourceInfo source;
+  Source_t source;
   chsrc_yield_for_the_source (pl_python);
   if (ProgMode_Target_Group!=true)
     chsrc_confirm_source;
