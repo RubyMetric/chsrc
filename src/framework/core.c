@@ -1118,9 +1118,7 @@ chsrc_ensure_dir (const char *dir)
   chsrc_note2 (xy_2strjoin (msg, dir));
 }
 
-/**
- * @note 为了方便维护，该函数还会额外给要写入的字符串添加一个换行符
- */
+
 static void
 chsrc_append_to_file (const char *str, const char *filename)
 {
@@ -1142,11 +1140,9 @@ chsrc_append_to_file (const char *str, const char *filename)
       exit (Exit_UserCause);
     }
 
-  char *newstr = xy_2strjoin (str, "\n");
+  size_t len = strlen (str);
 
-  size_t len = strlen (newstr);
-
-  size_t ret = fwrite (newstr, len, 1, f);
+  size_t ret = fwrite (str, len, 1, f);
   if (ret != 1)
     {
       char *msg = CliOpt_InEnglish ? xy_2strjoin ("Write failed to ", file)
