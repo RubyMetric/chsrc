@@ -19,12 +19,12 @@
  *                 |    czyt       <czyt.go@gmail.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-11-04>
+ * Last Modified   : <2024-11-21>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.1.9.3"
+#define Chsrc_Version        "0.1.9.3-dev"
 #define Chsrc_Release_Date   "2024/11/04"
 #define Chsrc_Banner_Version "v" Chsrc_Version "-" Chsrc_Release_Date
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
@@ -364,7 +364,7 @@ cli_print_target_features (FeatInfo f, const char *input_target_name)
       printf (" %s%s\n", bdgreen(YesMark), purple(locally_msg));br();
       break;
     case PartiallyCan:
-      printf (" %s%s\n\n   %s\n", bdgreen(SemiYesMark), purple(locally_msg), f.cap_locally_explain);br();
+      printf (" %s%s\n\n   %s\n", bdgreen(HalfYesMark), purple(locally_msg), f.cap_locally_explain);br();
       break;
     default:
       xy_unreach;
@@ -817,7 +817,7 @@ main (int argc, char const *argv[])
       return 0;
     }
 
-    /* chsrc issue */
+  /* chsrc issue */
   else if (   xy_streql (command, "issue")
            || xy_streql (command, "issues")
            || xy_streql (command, "isue")
@@ -827,10 +827,9 @@ main (int argc, char const *argv[])
       return 0;
     }
 
-  /* 不支持的命令 */
   else
     {
-      char *msg1 = CliOpt_InEnglish ? "Unsupported command `" : "不支持的命令 ";
+      char *msg1 = CliOpt_InEnglish ? "Unknown command `" : "不支持的命令 ";
       char *msg2 = CliOpt_InEnglish ? "`. Use `chsrc help` to view usage" : ". 请使用 chsrc help 查看使用方式";
       chsrc_error (xy_strjoin (3, msg1, command, msg2));
       return 1;
@@ -839,8 +838,8 @@ main (int argc, char const *argv[])
 not_matched:
   if (!matched)
     {
-      char *msg = CliOpt_InEnglish ? "Unsupported target. " MSG_EN_USE_LIST_TARGETS
-                                   : "暂不支持的换源目标。"    MSG_CN_USE_LIST_TARGETS;
+      char *msg = CliOpt_InEnglish ? "Unknown target. "  MSG_EN_USE_LIST_TARGETS
+                                   : "暂不支持的换源目标。" MSG_CN_USE_LIST_TARGETS;
       chsrc_error (msg);
       return 1;
     }

@@ -8,7 +8,7 @@
  *               | Happy Game <happygame10124@gmail.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-11-08>
+ * Last Modified : <2024-11-21>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -91,7 +91,7 @@ chsrc_note2 (const char* str)
 
 #define YesMark "✓"
 #define NoMark "x"
-#define SemiYesMark "⍻"
+#define HalfYesMark "⍻"
 
 /**
  * @translation Done
