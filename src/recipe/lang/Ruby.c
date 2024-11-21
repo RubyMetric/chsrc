@@ -4,12 +4,14 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-08-29>
- * Last Modified : <2024-11-08>
+ * Last Modified : <2024-11-21>
  * ------------------------------------------------------------*/
 
 static MirrorSite
-RubyChina = {"rubychina",    "RubyChina",    "Ruby China 社区",    "https://gems.ruby-china.com/",
-             "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"}; // 9.9 MB
+RubyChina = {
+  "rubychina", "RubyChina", "Ruby China 社区", "https://gems.ruby-china.com/",
+  {false, NULL, NULL, "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"} // 9.9 MB
+};
 
 /**
  * @update 2024-09-04

@@ -383,6 +383,8 @@ query_mirror_exist (SourceInfo *sources, size_t size, char *target, char *input)
 
 /**
  * 该函数来自 oh-my-mirrorz.py，由 @ccmywish 翻译为C语言，但功劳和版权属于原作者
+ *
+ * @param speed 单位为Byte/s
  */
 char *
 to_human_readable_speed (double speed)
@@ -490,7 +492,7 @@ measure_speed_for_url (void *url)
 
 
 /**
- * @return 返回速度speed
+ * @return 返回速度speed，单位为 Byte/s
  */
 double
 parse_and_say_curl_result (char *curl_buf)
@@ -538,13 +540,13 @@ get_max_ele_idx_in_dbl_ary (double *array, int size)
 /**
  * @param      sources        所有待测源
  * @param      size           待测源的数量
- * @param[out] speed_records  速度值记录
+ * @param[out] speed_records  速度值记录，单位为Byte/s
  */
 void
 measure_speed_for_every_source (SourceInfo sources[], int size, double speed_records[])
 {
-    bool get_measured[size]; /* 是否测速了 */
-     int get_measured_n = 0; /* 测速了几个 */
+    bool get_measured[size]; /* 是否真正执行了测速 */
+     int get_measured_n = 0; /* 测速了几个        */
    char *measure_msgs[size];
 
   double speed = 0.0;
@@ -552,35 +554,63 @@ measure_speed_for_every_source (SourceInfo sources[], int size, double speed_rec
   for (int i=0; i<size; i++)
     {
       SourceInfo src = sources[i];
-      const char *url = src.mirror->bigfile_url;
-      if (NULL==url)
+
+      const SpeedMeasureInfo smi = src.mirror->smi;
+
+      bool skip = smi.skip;
+
+      const char *url = smi.url;
+
+      if (!skip && NULL==url)
+        // 这种情况应当被视为bug，但是我们目前还是软处理
+        {
+          char *msg1 = CliOpt_InEnglish ? "Maintainers don't offer " : "维护者未提供 ";
+          char *msg2 = CliOpt_InEnglish ? " mirror site's speed measure link, so skip it" : " 镜像站测速链接，跳过该站点";
+          chsrc_warn (xy_strjoin (3, msg1, src.mirror->code, msg2));
+          speed = 0;
+
+          speed_records[i] = speed;
+          get_measured[i] = false;
+          measure_msgs[i] = NULL;
+        }
+
+      if (skip)
         {
           if (xy_streql ("upstream", src.mirror->code))
             {
               // 上游源不测速，但不置0，因为要避免这种情况: 可能其他镜像站测速都为0，最后反而选择了该 upstream
-              speed = -999;
+              speed = -1024*1024*1024;
+            }
+          else if (xy_streql ("user", src.mirror->code))
+            {
+              // 代码不会执行至此
+              speed = 1024*1024*1024;
             }
           else
             {
-              char *msg1 = CliOpt_InEnglish ? "Dev team doesn't offer " : "开发者未提供 ";
-              char *msg2 = CliOpt_InEnglish ? " mirror site's speed measure link, so skip it" : " 镜像站测速链接，跳过该站点";
-              chsrc_warn (xy_strjoin (3, msg1, src.mirror->code, msg2));
-              speed = 0;
+              // 什么情况?
+              speed = -1;
             }
-          speed_records[i] = speed;
           get_measured[i] = false;
-          measure_msgs[i] = NULL;
+          speed_records[i] = speed;
+
+          const char *msg = CliOpt_InEnglish ? src.mirror->abbr : src.mirror->name;
+          const char *skip_reason = CliOpt_InEnglish ? smi.skip_reason_EN : smi.skip_reason_CN;
+          if (NULL==skip_reason)
+            {
+              skip_reason = CliOpt_InEnglish ? "SKIP for no reason" : "无理由跳过";
+            }
+          measure_msgs[i] = xy_strjoin (4, "  x ", msg, " ", yellow(skip_reason));
+          printf ("%s\n", measure_msgs[i]);
         }
       else
         {
           const char *msg = CliOpt_InEnglish ? src.mirror->abbr : src.mirror->name;
           measure_msgs[i] = xy_strjoin (3, "  - ", msg, " ... ");
           printf ("%s", measure_msgs[i]);
-
           fflush (stdout);
 
           char *url_ = xy_strdup (url);
-
           char *curl_result = measure_speed_for_url (url_);
           double speed = parse_and_say_curl_result (curl_result);
           speed_records[i] = speed;

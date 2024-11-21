@@ -10,11 +10,15 @@
  * ------------------------------------------------------------*/
 
 static MirrorSite
-GoProxyCN = {"goproxy.cn",   "Goproxy.cn",   "Goproxy.cn (七牛云)",   "https://goproxy.cn/",
-             "https://goproxy.cn/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"},  // 30 MB
+GoProxyCN = {
+  "goproxy.cn", "Goproxy.cn", "Goproxy.cn (七牛云)", "https://goproxy.cn/",
+  {false, NULL, NULL, "https://goproxy.cn/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"} // 30 MB
+},
 
-GoProxyIO = {"goproxy.io",   "GOPROXY.IO",   "GOPROXY.IO",         "https://goproxy.io/",
-             "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"};   // 30 MB
+GoProxyIO = {
+  "goproxy.io", "GOPROXY.IO", "GOPROXY.IO", "https://goproxy.io/",
+  {false, NULL, NULL, "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"} // 30 MB
+};
 
 
 /**

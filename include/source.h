@@ -6,18 +6,30 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-11-08>
+ * Last Modified : <2024-11-21>
  *
  * 通用镜像站与换源信息
  * ------------------------------------------------------------*/
 
-typedef struct MirrorSite_t {
-  const char *code; // 用于用户指定镜像站
-  const char *abbr; // 需要使用镜像站的英文名时，用这个代替，因为大部分镜像站没有提供正式的英文名
-  const char *name; // 镜像站中文名
-  const char *site;
-  const char *bigfile_url; // 用于对该镜像站测速
-} MirrorSite;
+typedef struct SpeedMeasureInfo_t
+{
+  bool skip;                  /* 是否默认跳过 */
+  const char *skip_reason_CN; /* 跳过的原因（中文）*/
+  const char *skip_reason_EN; /* 跳过的原因（英文）*/
+  const char *url;            /* 测速链接 */
+}
+SpeedMeasureInfo;
+
+
+typedef struct MirrorSite_t
+{
+  const char *code; /* 用于用户指定镜像站 */
+  const char *abbr; /* 需要使用镜像站的英文名时，用这个代替，因为大部分镜像站没有提供正式的英文名 */
+  const char *name; /* 镜像站中文名 */
+  const char *site; /* 镜像站首页   */
+  SpeedMeasureInfo smi;
+}
+MirrorSite;
 
 #define Big_File_ubuntu     "/24.04/ubuntu-24.04.1-desktop-amd64.iso"       // 5.8 GB
 #define Big_File_ctan       "/systems/texlive/Images/texlive.iso"           // 4.8 GB
@@ -33,56 +45,91 @@ typedef struct MirrorSite_t {
  * Wiki中的排序是根据 https://github.com/mirrorz-org/oh-my-mirrorz 挑选速度前10位
  */
 MirrorSite
-MirrorZ       = {"mirrorz", "MirrorZ",       "MirrorZ 校园网镜像站",     "https://mirrors.cernet.edu.cn/",  NULL},
+MirrorZ = {
+  "mirrorz", "MirrorZ",  "MirrorZ 校园网镜像站", "https://mirrors.cernet.edu.cn/",
+  {true, "功能特殊无法测速，跳过", "SKIP because of its special function"}
+},
 
-Tuna          = {"tuna",    "TUNA",          "清华大学开源软件镜像站",     "https://mirrors.tuna.tsinghua.edu.cn/",
-                 "https://mirrors.tuna.tsinghua.edu.cn/speedtest/1000mb.bin"},
+Tuna = {
+  "tuna", "TUNA", "清华大学开源软件镜像站", "https://mirrors.tuna.tsinghua.edu.cn/",
+  {false, NULL, NULL, "https://mirrors.tuna.tsinghua.edu.cn/speedtest/1000mb.bin"}
+},
 
-Sjtug_Zhiyuan = {"sjtu",    "SJTUG-zhiyuan", "上海交通大学致远镜像站",     "https://mirrors.sjtug.sjtu.edu.cn/",
-                 "https://mirrors.sjtug.sjtu.edu.cn/ctan" Big_File_ctan},
+Sjtug_Zhiyuan = {
+  "sjtu", "SJTUG-zhiyuan", "上海交通大学致远镜像站", "https://mirrors.sjtug.sjtu.edu.cn/",
+  {false, NULL, NULL, "https://mirrors.sjtug.sjtu.edu.cn/ctan" Big_File_ctan}
+},
 
-Zju           = {"zju",     "ZJU",           "浙江大学开源软件镜像站",     "https://mirrors.zju.edu.cn/",
-                 "https://mirrors.zju.edu.cn/ubuntu-releases"  Big_File_ubuntu},
+Zju = {
+  "zju", "ZJU", "浙江大学开源软件镜像站", "https://mirrors.zju.edu.cn/",
+  {false, NULL, NULL, "https://mirrors.zju.edu.cn/ubuntu-releases" Big_File_ubuntu}
+},
 
-Lzuoss        = {"lzu",     "LZUOSS",        "兰州大学开源社区镜像站",     "https://mirror.lzu.edu.cn/",
-                 "https://mirror.lzu.edu.cn/CTAN" Big_File_ctan},
+Lzuoss = {
+  "lzu", "LZUOSS", "兰州大学开源社区镜像站", "https://mirror.lzu.edu.cn/",
+  {false, NULL, NULL, "https://mirror.lzu.edu.cn/CTAN" Big_File_ctan}
+},
 
-Jlu           = {"jlu",     "JLU",           "吉林大学开源镜像站",         "https://mirrors.jlu.edu.cn/",
-                 "https://mirrors.jlu.edu.cn/_static/speedtest.bin"},
+Jlu = {
+  "jlu", "JLU", "吉林大学开源镜像站", "https://mirrors.jlu.edu.cn/",
+  {false, NULL, NULL, "https://mirrors.jlu.edu.cn/_static/speedtest.bin"}
+},
 
-Bfsu          = {"bfsu",    "BFSU",          "北京外国语大学开源软件镜像站","https://mirrors.bfsu.edu.cn/",
-                 "https://mirrors.bfsu.edu.cn/speedtest/1000mb.bin"},
+Bfsu = {
+  "bfsu", "BFSU", "北京外国语大学开源软件镜像站", "https://mirrors.bfsu.edu.cn/",
+  {false, NULL, NULL, "https://mirrors.bfsu.edu.cn/speedtest/1000mb.bin"}
+},
 
-Pku           = {"pku",     "PKU",           "北京大学开源镜像站",         "https://mirrors.pku.edu.cn/",
-                 "https://mirrors.pku.edu.cn/ubuntu-releases" Big_File_ubuntu},
+Pku = {
+  "pku", "PKU", "北京大学开源镜像站", "https://mirrors.pku.edu.cn/",
+  {false, NULL, NULL, "https://mirrors.pku.edu.cn/ubuntu-releases" Big_File_ubuntu}
+},
 
-Bjtu          = {"bjtu",    "BJTU",          "北京交通大学自由与开源软件镜像站", "https://mirror.bjtu.edu.cn/",
-                 "https://mirror.bjtu.edu.cn/archlinux" Big_File_archlinux},
+Bjtu = {
+  "bjtu", "BJTU", "北京交通大学自由与开源软件镜像站", "https://mirror.bjtu.edu.cn/",
+  {false, NULL, NULL, "https://mirror.bjtu.edu.cn/archlinux" Big_File_archlinux}
+},
 
-Sustech       = {"sustech", "SUSTech",       "南方科技大学开源软件镜像站",  "https://mirrors.sustech.edu.cn/",
-                 "https://mirrors.sustech.edu.cn/site/speedtest/1000mb.bin"},
+Sustech = {
+  "sustech", "SUSTech", "南方科技大学开源软件镜像站", "https://mirrors.sustech.edu.cn/",
+  {false, NULL, NULL, "https://mirrors.sustech.edu.cn/site/speedtest/1000mb.bin"}
+},
 
-Ustc          = {"ustc",    "USTC",          "中国科学技术大学开源镜像站",  "https://mirrors.ustc.edu.cn/",
-                 "https://mirrors.ustc.edu.cn/ubuntu-releases" Big_File_ubuntu},
+Ustc = {
+  "ustc", "USTC", "中国科学技术大学开源镜像站", "https://mirrors.ustc.edu.cn/",
+  {false, NULL, NULL, "https://mirrors.ustc.edu.cn/ubuntu-releases" Big_File_ubuntu}
+},
 
-Hust          = {"hust",    "HUST",          "华中科技大学开源镜像站",     "https://mirrors.hust.edu.cn/",
-                 "https://mirrors.hust.edu.cn/ubuntu-releases" Big_File_ubuntu},
+Hust = {
+  "hust", "HUST", "华中科技大学开源镜像站", "https://mirrors.hust.edu.cn/",
+  {false, NULL, NULL, "https://mirrors.hust.edu.cn/ubuntu-releases" Big_File_ubuntu}
+},
 
 // 速度暂时处于10位以后，但是目前可用的源
-Iscas         = {"iscas",   "ISCAS",         "中科院软件所智能软件研究中心开源镜像站", "https://mirror.iscas.ac.cn/",
-                 "https://mirror.iscas.ac.cn/ubuntu-releases" Big_File_ubuntu},
+Iscas = {
+  "iscas", "ISCAS", "中科院软件所智能软件研究中心开源镜像站", "https://mirror.iscas.ac.cn/",
+  {false, NULL, NULL, "https://mirror.iscas.ac.cn/ubuntu-releases" Big_File_ubuntu}
+},
 
-Scau          = {"scau",    "SCAU",          "华南农业大学开源软件镜像站",  "https://mirrors.scau.edu.cn/",
-                 "https://mirrors.scau.edu.cn/ubuntu-releases" Big_File_ubuntu},
+Scau = {
+  "scau", "SCAU", "华南农业大学开源软件镜像站", "https://mirrors.scau.edu.cn/",
+  {false, NULL, NULL, "https://mirrors.scau.edu.cn/ubuntu-releases" Big_File_ubuntu}
+},
 
-Nju           = {"nju",     "NJU",           "南京大学开源镜像站",         "https://mirrors.nju.edu.cn/",
-                 "https://mirrors.nju.edu.cn/archlinux" Big_File_archlinux};
+Nju = {
+  "nju", "NJU", "南京大学开源镜像站", "https://mirrors.nju.edu.cn/",
+  {false, NULL, NULL, "https://mirrors.nju.edu.cn/archlinux" Big_File_archlinux}
+};
 
 /**
- * @note [ccmywish:2023-09-05] 我只使用了不到5次，重庆大学镜像站就把我的ip封杀了，对用户来说封杀策略过严，暂时不可靠，暂时不用
+ * @note 2023-09-05 只使用了不到5次，重庆大学镜像站就把我的ip封杀了，对用户来说封杀策略过严，暂时不可靠，暂时不用
+ *
+ * Cqu = {
+ *   "cqu", "CQU", "重庆大学开源软件镜像站", "https://mirrors.cqu.edu.cn/",
+ *   {false, NULL, NULL, "https://mirrors.cqu.edu.cn/speedtest/1000mb.bin"}
+ * };
+ *
  */
-//  Cqu       = {"cqu",     "CQU",           "重庆大学开源软件镜像站",     "https://mirrors.cqu.edu.cn/",
-//               "https://mirrors.cqu.edu.cn/speedtest/1000mb.bin"};
 
 
 
@@ -91,41 +138,43 @@ Nju           = {"nju",     "NJU",           "南京大学开源镜像站",     
  */
 MirrorSite
 Ali = {
-  "ali", "Ali OPSX Public", "阿里巴巴开源镜像站(公网)",
-  "https://developer.aliyun.com/mirror/",
-  "https://mirrors.aliyun.com/deepin-cd" Big_File_deepin},
-
+  "ali", "Ali OPSX Public", "阿里巴巴开源镜像站(公网)", "https://developer.aliyun.com/mirror/",
+  {false, NULL, NULL, "https://mirrors.aliyun.com/deepin-cd" Big_File_deepin}
+},
 /*
 // https://mirrors.cloud.aliyuncs.com/
 Ali_ECS_VPC = {
-  "ali-ECS-VPC", "Ali OPSX ECS VPC", "阿里巴巴开源镜像站(ECS VPC网络)",
-  "https://developer.aliyun.com/mirror/",
-  "https://mirrors.cloud.aliyuncs.com/deepin-cd" Big_File_deepin},
+  "ali-ECS-VPC", "Ali OPSX ECS VPC", "阿里巴巴开源镜像站(ECS VPC网络)", "https://developer.aliyun.com/mirror/",
+  {false, NULL, NULL, "https://mirrors.cloud.aliyuncs.com/deepin-cd" Big_File_deepin}
+},
 
 // https://mirrors.aliyuncs.com/
 Ali_ECS_classic = {
-  "ali-ECS", "Ali OPSX ECS", "阿里巴巴开源镜像站(ECS 经典网络)",
-  "https://developer.aliyun.com/mirror/",
-  "https://mirrors.aliyuncs.com/deepin-cd" Big_File_deepin},
+  "ali-ECS", "Ali OPSX ECS", "阿里巴巴开源镜像站(ECS 经典网络)", "https://developer.aliyun.com/mirror/",
+  {false, NULL, NULL, "https://mirrors.aliyuncs.com/deepin-cd" Big_File_deepin}
+},
 */
 
 Tencent = {
-  "tencent", "Tencent Public",  "腾讯软件源(公网)",  "https://mirrors.tencent.com/",
-  "https://mirrors.cloud.tencent.com/ubuntu-releases" Big_File_ubuntu},
-
+  "tencent", "Tencent Public", "腾讯软件源(公网)", "https://mirrors.tencent.com/",
+  {false, NULL, NULL, "https://mirrors.cloud.tencent.com/ubuntu-releases" Big_File_ubuntu}
+},
 /*
 Tencent_Intra = {
   "tencent-intra", "Tencent Intranet",  "腾讯软件源(内网)", "https://mirrors.tencent.com/",
-  "https://mirrors.cloud.tencentyun.com/ubuntu-releases" Big_File_ubuntu},
+  {false, NULL, NULL, "https://mirrors.cloud.tencentyun.com/ubuntu-releases" Big_File_ubuntu}
+},
 */
 
-Huawei = {"huawei",  "Huawei Cloud", "华为开源镜像站",  "https://mirrors.huaweicloud.com/",
-          "https://mirrors.huaweicloud.com/ubuntu-releases" Big_File_ubuntu },
+Huawei = {
+  "huawei",  "Huawei Cloud", "华为开源镜像站",  "https://mirrors.huaweicloud.com/",
+  {false, NULL, NULL, "https://mirrors.huaweicloud.com/ubuntu-releases" Big_File_ubuntu}
+},
 
 Volcengine = {
-  "volc",  "Volcengine", "火山引擎开源软件镜像站(公网)",
-  "https://developer.volcengine.com/mirror/",
-  "https://mirrors.volces.com/ubuntu-releases" Big_File_ubuntu },
+  "volc", "Volcengine", "火山引擎开源软件镜像站(公网)", "https://developer.volcengine.com/mirror/",
+  {false, NULL, NULL, "https://mirrors.volces.com/ubuntu-releases" Big_File_ubuntu}
+},
 /*
 Volceengine_Intra = {
   "volc-intra",  "Volcengine Intranet", "火山引擎开源软件镜像站(内网)",
@@ -133,53 +182,68 @@ Volceengine_Intra = {
   "https://mirrors.ivolces.com/ubuntu-releases" Big_File_ubuntu },
 */
 
-Netease  = {
-  "netease", "Netease", "网易开源镜像站",
-  "https://mirrors.163.com/",
-  "https://mirrors.163.com/deepin-cd" Big_File_deepin},
+Netease = {
+  "netease", "Netease", "网易开源镜像站", "https://mirrors.163.com/",
+  {false, NULL, NULL, "https://mirrors.163.com/deepin-cd" Big_File_deepin}
+},
 
 Sohu = {
-  "sohu", "SOHU", "搜狐开源镜像站",
-  "https://mirrors.sohu.com/",
-  "https://mirrors.sohu.com/deepin-cd" Big_File_deepin};
+  "sohu", "SOHU", "搜狐开源镜像站", "https://mirrors.sohu.com/",
+  {false, NULL, NULL, "https://mirrors.sohu.com/deepin-cd" Big_File_deepin}
+};
 
 
 MirrorSite
-  Upstream = {"upstream", "Upstream",  "上游默认源",  NULL,  NULL};
+Upstream = {
+  "upstream", "Upstream", "上游默认源", NULL,
+  {true, "上游默认源不测速", "SKIP for upstream source", NULL}
+};
+
 MirrorSite
-  UserDefine = {"user",   "用户自定义",  "用户自定义",  NULL,  NULL};
+UserDefine = {
+  "user", "用户自定义", "用户自定义", NULL,
+  {true, "用户自定义源不测速", "SKIP for user-defined source", NULL}
+};
 
 
-typedef struct SourceInfo_t {
+typedef struct SourceInfo_t
+{
   const MirrorSite *mirror;
   const char *url;
-} SourceInfo;
+}
+SourceInfo;
 
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
-enum Capability {
+enum Capability
+{
   CanNot,
   FullyCan,
   PartiallyCan
 };
 
+
 /* Target Feature Info */
-typedef struct FeatInfo_t {
+typedef struct FeatInfo_t
+{
   bool can_get;
-  bool can_reset;       // 有的reset不是暂时没有实现，而是现在的实现根本就无法重置
+  bool can_reset;       /* 有的reset不是暂时没有实现，而是现在的实现根本就无法重置 */
 
   bool can_english;
 
-  bool can_user_define; // 用户自定义换源URL
+  bool can_user_define; /* 用户自定义换源URL */
 
   enum Capability cap_locally;
   char *cap_locally_explain;
 
   char *note;
-} FeatInfo;
+}
+FeatInfo;
+
 
 /* Target Info */
-typedef struct TargetInfo_t {
+typedef struct TargetInfo_t
+{
   void (*getfn)   (char *option);
   void (*setfn)   (char *option);
   void (*resetfn) (char *option);
@@ -188,7 +252,8 @@ typedef struct TargetInfo_t {
 
   SourceInfo *sources;
   size_t      sources_n;
-} TargetInfo;
+}
+TargetInfo;
 
 
 #define def_target_inner_s(t)    NULL,       t##_setsrc, NULL,         NULL

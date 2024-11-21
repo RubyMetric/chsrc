@@ -10,15 +10,22 @@
  * ------------------------------------------------------------*/
 
 static MirrorSite
-// 没有找到 DaoCloud 合适的下载链接，先随便给一个，以规避 chsrc 自动测速时所有 dockerhub 镜像站都没有测速链接带来的 bug
-DaoCloud = {"daocloud", "DaoCloud","上海道客网络科技有限公司", "https://www.daocloud.io/",
-            "https://qiniu-download-public.daocloud.io/DaoCloud_Enterprise/dce5/offline-community-v0.18.0-amd64.tar"},
+DaoCloud = {
+  "daocloud", "DaoCloud","上海道客网络科技有限公司", "https://www.daocloud.io/",
+  // 没有找到 DaoCloud 合适的下载链接，先随便给一个，以规避 chsrc 自动测速时所有 dockerhub 镜像站都没有测速链接带来的 bug
+  {false, NULL, NULL, "https://qiniu-download-public.daocloud.io/DaoCloud_Enterprise/dce5/offline-community-v0.18.0-amd64.tar"}
+},
 
-Fit2Cloud = {"fit2cloud", "FIT2CLOUD", "杭州飞致云信息科技有限公司", "https://www.fit2cloud.com/", NULL},
+Fit2Cloud = {
+  "fit2cloud", "FIT2CLOUD", "杭州飞致云信息科技有限公司", "https://www.fit2cloud.com/",
+  {true, NULL, NULL, NULL}
+},
 
-Huecker = {"huecker",  "(Russia) Huecker", "俄罗斯 Huecker.io",   "https://huecker.io/",
-           // 同 DaoCloud，没有合适的下载链接，先随便给一个，以避免 bug
-           "https://huecker.io/en/use.html"};
+Huecker = {
+  "huecker",  "(Russia) Huecker", "俄罗斯 Huecker.io",   "https://huecker.io/",
+  // 同 DaoCloud，没有合适的下载链接，先随便给一个，以避免 bug
+  {false, NULL, NULL, "https://huecker.io/en/use.html"}
+};
 
 /**
  * @update 2024-07-24

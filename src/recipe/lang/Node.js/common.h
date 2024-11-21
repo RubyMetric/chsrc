@@ -9,9 +9,11 @@
  * ------------------------------------------------------------*/
 
 static MirrorSite
-NpmMirror = {"npmmirror",    "npmmirror",    "npmmirror (阿里云赞助)",    "https://npmmirror.com/",
-              // 注意，这个是跳转后的地址，不确定未来会不会改变
-              "https://cdn.npmmirror.com/packages/%40tensorflow/tfjs/4.10.0/tfjs-4.10.0.tgz"}; // 29MB
+NpmMirror = {
+  "npmmirror", "npmmirror", "npmmirror (阿里云赞助)", "https://npmmirror.com/",
+  // 注意，下面这个是跳转后的地址，不确定未来会不会改变
+  {false, NULL, NULL, "https://cdn.npmmirror.com/packages/%40tensorflow/tfjs/4.10.0/tfjs-4.10.0.tgz"} // 29MB
+};
 
 
 /**
