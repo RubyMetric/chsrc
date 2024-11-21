@@ -18,7 +18,7 @@
  */
 static SourceInfo
 os_freebsd_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Ustc,           "mirrors.ustc.edu.cn"},
   {&Nju,            "mirror.nju.edu.cn"},
   {&Netease,        "mirrors.163.com"},

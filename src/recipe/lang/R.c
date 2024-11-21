@@ -16,7 +16,7 @@
  */
 static SourceInfo
 pl_r_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/cran/"},
   // {&Ali,           "https://mirrors.aliyun.com/CRAN/"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"},

@@ -47,7 +47,7 @@ RubyMetric = {"rbmt",                   // chsrc set <target> rbmt
  */
 static SourceInfo
 <category>_<target>_sources[] = {
-  {&Upstream,      "上游地址，若维护者暂时未知，可填NULL，这个主要用于reset"},
+  {&UpstreamProvider,      "上游地址，若维护者暂时未知，可填NULL，这个主要用于reset"},
   {&RubyMetric,    "https://rubymetirc.com/target"},
   {&RubyInstaller, "https://rubyinstaller.cn/target"},
   {&Gitee,         "https://gitee.com/RubyMetric/chsrc"},

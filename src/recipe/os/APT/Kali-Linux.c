@@ -14,7 +14,7 @@
  */
 static SourceInfo
 os_kali_sources[] = {
-  {&Upstream,      "http://http.kali.org/kali"},
+  {&UpstreamProvider,      "http://http.kali.org/kali"},
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/kali"},
   {&Ali,           "https://mirrors.aliyun.com/kali"},
   {&Volcengine,    "https://mirrors.volces.com/kali"},

@@ -14,7 +14,7 @@
  */
 static SourceInfo
 os_ubuntu_sources[] = {
-  {&Upstream,      "http://archive.ubuntu.com/ubuntu/"}, //不支持https
+  {&UpstreamProvider,      "http://archive.ubuntu.com/ubuntu/"}, //不支持https
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/ubuntu/"},
   {&Ali,           "https://mirrors.aliyun.com/ubuntu"},
   {&Volcengine,    "https://mirrors.volces.com/ubuntu"},

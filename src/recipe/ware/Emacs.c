@@ -19,7 +19,7 @@ EmacsChina = {
  */
 SourceInfo
 wr_emacs_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/docs/emacs-elpa"},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/help/elpa/"},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/help/elpa/"},

@@ -13,7 +13,7 @@
  */
 static SourceInfo
 os_linuxmint_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/linuxmint/"},
   {&Ali,           "http://mirrors.aliyun.com/linuxmint-packages/"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/linuxmint/"},

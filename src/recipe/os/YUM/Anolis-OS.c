@@ -14,7 +14,7 @@
  */
 static SourceInfo
 os_anolis_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Ali,            "https://mirrors.aliyun.com/anolis"},
   {&Hust,           "https://mirrors.hust.edu.cn/anolis"}
 };

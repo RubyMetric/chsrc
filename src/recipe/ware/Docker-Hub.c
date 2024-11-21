@@ -38,7 +38,7 @@ Huecker = {
 
 static SourceInfo
 wr_dockerhub_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   // {&Ustc,       "https://docker.mirrors.ustc.edu.cn/"},
 
   // https://github.com/DaoCloud/public-image-mirror

@@ -14,7 +14,7 @@
  */
 static SourceInfo
 os_trisquel_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/trisquel/"},
   {&Ali,            "https://mirrors.aliyun.com/trisquel/"},
   {&Nju,            "https://mirror.nju.edu.cn/trisquel/"},

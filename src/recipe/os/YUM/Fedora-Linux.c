@@ -16,7 +16,7 @@
  */
 static SourceInfo
 os_fedora_sources[] = {
-  {&Upstream,      "http://download.example/pub/fedora/linux"},
+  {&UpstreamProvider,      "http://download.example/pub/fedora/linux"},
   {&Ali,           "https://mirrors.aliyun.com/fedora"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/fedora"},
   {&Ustc,          "https://mirrors.ustc.edu.cn/fedora"},

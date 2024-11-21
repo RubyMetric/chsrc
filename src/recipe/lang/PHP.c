@@ -13,7 +13,7 @@
  */
 static SourceInfo
 pl_php_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Ali,           "https://mirrors.aliyun.com/composer/"},
   {&Tencent,       "https://mirrors.tencent.com/composer/"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/composer/"},

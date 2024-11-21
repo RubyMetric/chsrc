@@ -12,7 +12,7 @@
  */
 static SourceInfo
 os_opensuse_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Ali,            "https://mirrors.aliyun.com/opensuse"},
   {&Volcengine,     "https://mirrors.volces.com/opensuse"},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/opensuse"},

@@ -13,7 +13,7 @@
  */
 static SourceInfo
 wr_guix_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/git/guix.git"}
 };
 def_sources_n(wr_guix);

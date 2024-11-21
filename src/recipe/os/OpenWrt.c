@@ -12,7 +12,7 @@
  */
 static SourceInfo
 os_openwrt_sources[] = {
-  {&Upstream,       "http://downloads.openwrt.org"},
+  {&UpstreamProvider,       "http://downloads.openwrt.org"},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/openwrt"},
   {&Ali,            "https://mirrors.aliyun.com/openwrt"},
   {&Tencent,        "https://mirrors.cloud.tencent.com/openwrt"},

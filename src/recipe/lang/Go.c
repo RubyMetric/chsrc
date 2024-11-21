@@ -27,7 +27,7 @@ GoProxyIO = {
  */
 static SourceInfo
 pl_go_sources[] = {
-  {&Upstream,      "https://proxy.golang.org"},
+  {&UpstreamProvider,      "https://proxy.golang.org"},
   {&GoProxyCN,     "https://goproxy.cn"},
   {&Ali,           "https://mirrors.aliyun.com/goproxy/"},
   {&Huawei,        "https://mirrors.huaweicloud.com/goproxy/"},

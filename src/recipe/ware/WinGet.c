@@ -13,7 +13,7 @@
  */
 static SourceInfo
 wr_winget_sources[] = {
-  {&Upstream,       "https://cdn.winget.microsoft.com/cache"},
+  {&UpstreamProvider,       "https://cdn.winget.microsoft.com/cache"},
   {&Ustc,           "https://mirrors.ustc.edu.cn/winget-source"},
 };
 def_sources_n(wr_winget);

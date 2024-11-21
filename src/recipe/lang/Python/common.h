@@ -14,7 +14,7 @@
  */
 static SourceInfo
 pl_python_sources[] = {
-  {&Upstream,      "https://pypi.org/simple"},
+  {&UpstreamProvider,      "https://pypi.org/simple"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/pypi/web/simple"},
   {&Lzuoss,        "https://mirror.lzu.edu.cn/pypi/web/simple"},
   {&Jlu,           "https://mirrors.jlu.edu.cn/pypi/web/simple"},

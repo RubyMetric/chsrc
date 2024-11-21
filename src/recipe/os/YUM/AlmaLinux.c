@@ -12,7 +12,7 @@
  */
 static SourceInfo
 os_almalinux_sources[] = {
-  {&Upstream,      "http://repo.almalinux.org/almalinux"},
+  {&UpstreamProvider,      "http://repo.almalinux.org/almalinux"},
   {&Ali,           "https://mirrors.aliyun.com/almalinux"},
   {&Volcengine,    "https://mirrors.volces.com/almalinux"},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/almalinux"},

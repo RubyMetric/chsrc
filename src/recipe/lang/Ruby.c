@@ -22,7 +22,7 @@ RubyChina = {
  */
 static SourceInfo
 pl_ruby_sources[] = {
-  {&Upstream,     "https://rubygems.org"},
+  {&UpstreamProvider,     "https://rubygems.org"},
   {&RubyChina,    "https://gems.ruby-china.com/"},
   {&Ustc,         "https://mirrors.ustc.edu.cn/rubygems/"}
 

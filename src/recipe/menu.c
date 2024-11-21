@@ -164,7 +164,7 @@ available_mirrors[] = {
   &RubyChina, &EmacsChina, &NpmMirror, &GoProxyIO, &GoProxyCN, &RsProxyCN,
 
   // 暂不支持 &NugetOrg
-  // 不要列出 &Upstream 和 &UserDdefine
+  // 不要列出 &UpstreamProvider 和 &UserDefinedProvider
 };
 
 /* End Target Matrix */

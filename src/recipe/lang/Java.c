@@ -13,7 +13,7 @@
  */
 static SourceInfo
 pl_java_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Ali,           "https://maven.aliyun.com/repository/public/"},
   {&Huawei,        "https://mirrors.huaweicloud.com/repository/maven/"},
   {&Netease,       "http://mirrors.163.com/maven/repository/maven-public/"} // 网易的24小时更新一次

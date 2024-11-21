@@ -13,7 +13,7 @@
  */
 static SourceInfo
 os_netbsd_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Ali,            "https://mirrors.aliyun.com/pkgsrc/packages/NetBSD/"},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/pkgsrc/packages/NetBSD/"},
   {&Ustc,           "https://mirrors.ustc.edu.cn/pkgsrc/packages/NetBSD/"},

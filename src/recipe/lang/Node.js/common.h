@@ -28,7 +28,7 @@ NpmMirror = {
  */
 static SourceInfo
 pl_nodejs_sources[] = {
-  {&Upstream,      "https://registry.npmjs.org/"}, // @note 根据 pnpm 官网，有最后的斜线
+  {&UpstreamProvider,      "https://registry.npmjs.org/"}, // @note 根据 pnpm 官网，有最后的斜线
   {&NpmMirror,     "https://registry.npmmirror.com"},
   {&Huawei,        "https://mirrors.huaweicloud.com/repository/npm/"},
   {&Tencent,       "https://mirrors.cloud.tencent.com/npm/"},
@@ -45,7 +45,7 @@ def_sources_n(pl_nodejs);
  */
 static SourceInfo
 pl_nodejs_binary_release_sources[] = {
-  {&Upstream,      "https://nodejs.org/dist/"},
+  {&UpstreamProvider,      "https://nodejs.org/dist/"},
   {&NpmMirror,     "https://npmmirror.com/mirrors"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/nodejs-release/"},

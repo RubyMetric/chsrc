@@ -775,7 +775,7 @@ source_has_empty_url (SourceInfo *source)
     } \
   else if (is_url (option)) \
     { \
-      SourceInfo __tmp = { &UserDefine, option }; \
+      SourceInfo __tmp = { &UserDefinedProvider, option }; \
       source = __tmp; \
     } \
   else \

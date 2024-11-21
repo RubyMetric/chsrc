@@ -12,7 +12,7 @@
  */
 static SourceInfo
 os_alpine_sources[] = {
-  {&Upstream,       "http://dl-cdn.alpinelinux.org/alpine"},
+  {&UpstreamProvider,       "http://dl-cdn.alpinelinux.org/alpine"},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/alpine"},
   {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/alpine"},
   {&Sustech,        "https://mirrors.sustech.edu.cn/alpine"},

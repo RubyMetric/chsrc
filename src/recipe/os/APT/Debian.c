@@ -14,7 +14,7 @@
  */
 static SourceInfo
 os_debian_sources[] = {
-  {&Upstream,      "http://deb.debian.org/debian"},
+  {&UpstreamProvider,      "http://deb.debian.org/debian"},
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/debian/"},
   {&Ali,           "https://mirrors.aliyun.com/debian"},
   {&Volcengine,    "https://mirrors.volces.com/debian"},

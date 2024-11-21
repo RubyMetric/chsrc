@@ -12,7 +12,7 @@
  */
 static SourceInfo
 os_ros_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Ali,            "https://mirrors.aliyun.com"},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn"},
   {&Ustc,           "https://mirrors.ustc.edu.cn"},

@@ -14,7 +14,7 @@
  */
 static SourceInfo
 pl_rust_cargo_sources[] = {
-  {&Upstream,      "https://index.crates.io/"}, // @help 是这个吗？
+  {&UpstreamProvider,      "https://index.crates.io/"}, // @help 是这个吗？
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/crates.io-index/"},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"},

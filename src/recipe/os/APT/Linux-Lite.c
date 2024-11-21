@@ -13,7 +13,7 @@
  */
 static SourceInfo
 os_linuxlite_sources[] = {
-  {&Upstream,       "http://repo.linuxliteos.com/linuxlite/"},
+  {&UpstreamProvider,       "http://repo.linuxliteos.com/linuxlite/"},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/linuxliteos/"},
   {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/linuxliteos/"},
   {&Nju,            "https://mirror.nju.edu.cn/linuxliteos/"}

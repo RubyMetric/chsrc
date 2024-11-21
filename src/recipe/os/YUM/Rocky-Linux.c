@@ -12,7 +12,7 @@
  */
 static SourceInfo
 os_rockylinux_sources[] = {
-  {&Upstream,        NULL},
+  {&UpstreamProvider,        NULL},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/rocky"},
   {&Ali,            "https://mirrors.aliyun.com/rockylinux"},
   {&Volcengine,     "https://mirrors.volces.com/rockylinux"},

@@ -12,7 +12,7 @@
  */
 static SourceInfo
 os_msys2_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Ali,            "https://mirrors.aliyun.com/msys2"},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/msys2"},
   {&Ustc,           "https://mirrors.ustc.edu.cn/msys2"},

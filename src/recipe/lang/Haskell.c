@@ -12,7 +12,7 @@
  */
 static SourceInfo
 pl_haskell_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/hackage"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/hackage"},
   {&Nju,           "https://mirror.nju.edu.cn/hackage"},

@@ -14,7 +14,7 @@
  */
 static SourceInfo
 os_arch_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Ali,           "https://mirrors.aliyun.com/archlinux"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/archlinux"},
   {&Ustc,          "https://mirrors.ustc.edu.cn/archlinux"},
@@ -31,7 +31,7 @@ os_arch_sources[] = {
  * @note 根据 GitHub:@zheng7fu2 建议，拆分 archlinuxcn 出来
  */
 os_archlinuxcn_sources[] = {
-  {&Upstream,      "https://repo.archlinuxcn.org/"},
+  {&UpstreamProvider,      "https://repo.archlinuxcn.org/"},
   {&Ali,           "https://mirrors.aliyun.com/archlinuxcn/"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/archlinuxcn/"},
   {&Ustc,          "https://mirrors.ustc.edu.cn/archlinuxcn/"},

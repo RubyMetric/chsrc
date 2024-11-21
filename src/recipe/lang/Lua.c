@@ -20,7 +20,7 @@ Api7 = {
  */
 static SourceInfo
 pl_lua_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Api7,          "https://luarocks.cn"},
 };
 def_sources_n(pl_lua);

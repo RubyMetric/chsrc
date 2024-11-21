@@ -16,7 +16,7 @@
  */
 static SourceInfo
 wr_nix_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/nix-channels/"}
 };
 def_sources_n(wr_nix);

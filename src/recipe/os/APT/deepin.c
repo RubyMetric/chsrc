@@ -14,7 +14,7 @@
  */
 static SourceInfo
 os_deepin_sources[] = {
-  {&Upstream,      "https://community-packages.deepin.com/deepin"},
+  {&UpstreamProvider,      "https://community-packages.deepin.com/deepin"},
   {&Ali,           "https://mirrors.aliyun.com/deepin"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/deepin"},
   {&Ustc,          "https://mirrors.ustc.edu.cn/deepin"},

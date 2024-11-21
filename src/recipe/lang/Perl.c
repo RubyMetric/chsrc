@@ -12,7 +12,7 @@
  */
 static SourceInfo
 pl_perl_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/CPAN/"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CPAN/"},
   {&Bjtu,          "https://mirror.bjtu.edu.cn/cpan/"},

@@ -171,16 +171,3 @@ Sohu = {
   "sohu", "SOHU", "搜狐开源镜像站", "https://mirrors.sohu.com/",
   {NotSkip, NA, NA, "https://mirrors.sohu.com/deepin-cd" Big_File_deepin}
 };
-
-
-MirrorSite
-Upstream = {
-  "upstream", "Upstream", "上游默认源", NULL,
-  {SKIP, "上游默认源不测速", "SKIP for upstream source", NULL}
-};
-
-MirrorSite
-UserDefine = {
-  "user", "用户自定义", "用户自定义", NULL,
-  {SKIP, "用户自定义源不测速", "SKIP for user-defined source", NULL}
-};

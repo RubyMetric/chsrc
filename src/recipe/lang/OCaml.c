@@ -12,7 +12,7 @@
  */
 static SourceInfo
 pl_ocaml_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/git/opam-repository.git"}
 };
 def_sources_n(pl_ocaml);

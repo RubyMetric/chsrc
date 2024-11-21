@@ -15,7 +15,7 @@
  */
 static SourceInfo
 os_openkylin_sources[] = {
-  {&Upstream,  "https://archive.openkylin.top/openkylin/"},
+  {&UpstreamProvider,  "https://archive.openkylin.top/openkylin/"},
   {&Ali,       "https://mirrors.aliyun.com/openkylin/"},
   {&Netease,   "https://mirrors.163.com/openkylin/"},
 };

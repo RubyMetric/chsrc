@@ -13,7 +13,7 @@
  */
 static SourceInfo
 pl_clojure_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/help/clojars/"},
   {&Ustc,          "https://mirrors.ustc.edu.cn/help/clojars.html"}
 };

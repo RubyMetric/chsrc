@@ -13,7 +13,7 @@
  */
 static SourceInfo
 os_openbsd_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Ali,            "https://mirrors.aliyun.com/OpenBSD/"},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/OpenBSD/"},
   {&Ustc,           "https://mirrors.ustc.edu.cn/OpenBSD/"},

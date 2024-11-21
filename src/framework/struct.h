@@ -26,15 +26,29 @@ SpeedMeasureInfo;
 #define ToFill  NULL
 #define NA		  NULL
 
-typedef struct MirrorSite_t
+typedef struct SourceProvider_t
 {
-  const char *code; /* 用于用户指定镜像站 */
-  const char *abbr; /* 需要使用镜像站的英文名时，用这个代替，因为大部分镜像站没有提供正式的英文名 */
-  const char *name; /* 镜像站中文名 */
-  const char *site; /* 镜像站首页   */
+  const char *code; /* 用于用户指定某一 Provider */
+  const char *abbr; /* 需要使用 Provider 的英文名时，用这个代替，因为大部分 Provider 没有提供正式的英文名 */
+  const char *name; /* Provider 中文名 */
+  const char *site; /* Provider 首页   */
   SpeedMeasureInfo smi;
 }
-MirrorSite;
+SourceProvider;
+
+typedef SourceProvider MirrorSite;
+
+SourceProvider
+UpstreamProvider = {
+  "upstream", "Upstream", "上游默认源", NULL,
+  {SKIP, "上游默认源不测速", "SKIP for upstream source", NULL}
+};
+
+SourceProvider
+UserDefinedProvider = {
+  "user", "用户自定义", "用户自定义", NULL,
+  {SKIP, "用户自定义源不测速", "SKIP for user-defined source", NULL}
+};
 
 
 typedef struct SourceInfo_t

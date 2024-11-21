@@ -13,7 +13,7 @@
  */
 static SourceInfo
 wr_flathub_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/flathub"},
 };
 def_sources_n(wr_flathub);

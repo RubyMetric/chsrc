@@ -13,7 +13,7 @@
  */
 static SourceInfo
 pl_julia_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/julia"},
   {&Pku,           "https://mirrors.pku.edu.cn/julia"},
   {&Nju,           "https://mirror.nju.edu.cn/julia"}

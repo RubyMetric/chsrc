@@ -13,7 +13,7 @@
  */
 static SourceInfo
 os_openeuler_sources[] = {
-  {&Upstream,       "https://repo.openeuler.org/"},
+  {&UpstreamProvider,       "https://repo.openeuler.org/"},
   {&Ali,            "https://mirrors.aliyun.com/openeuler/"},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/openeuler/"},
   {&Ustc,           "https://mirrors.ustc.edu.cn/openeuler/"},

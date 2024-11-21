@@ -21,7 +21,7 @@ NugetOrg = {"nuget.org", "NuGet Org", "Nuget Organization", "https://www.nuget.o
  */
 static SourceInfo
 pl_nuget_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&NugetOrg,      "https://www.nuget.org/api/v2/"},
   {&Huawei,        "https://mirrors.huaweicloud.com/repository/nuget/v3"}
 };

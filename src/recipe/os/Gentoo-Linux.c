@@ -12,7 +12,7 @@
  */
 static SourceInfo
 os_gentoo_sources[] = {
-  {&Upstream,       NULL},
+  {&UpstreamProvider,       NULL},
   {&Ali,           "mirrors.aliyun.com"},
   {&Bfsu,          "mirrors.bfsu.edu.cn"},
   {&Ustc,          "mirrors.ustc.edu.cn"},
