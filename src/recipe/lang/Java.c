@@ -41,7 +41,7 @@ pl_java_find_maven_config ()
   char *maven_home = xy_str_delete_prefix (buf, "Maven home: ");
   maven_home = xy_str_strip (maven_home);
 
-  char *maven_config = xy_uniform_path (xy_2strjoin (maven_home, "/conf/settings.xml"));
+  char *maven_config = xy_normalize_path (xy_2strjoin (maven_home, "/conf/settings.xml"));
   return maven_config;
 }
 

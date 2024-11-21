@@ -33,7 +33,7 @@ pl_haskell_setsrc (char *option)
   char *config = NULL;
   if (xy_on_windows)
     {
-      config = xy_uniform_path ("~/AppData/Roaming/cabal/config");
+      config = xy_normalize_path ("~/AppData/Roaming/cabal/config");
     }
   else
     {
@@ -43,7 +43,7 @@ pl_haskell_setsrc (char *option)
   chsrc_note2 (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
   puts (file); br();
 
-  config = xy_uniform_path ("~/.stack/config.yaml");
+  config = xy_normalize_path ("~/.stack/config.yaml");
   file = xy_strjoin (3, "package-indices:\n"
                        "  - download-prefix: ", source.url,
                      "\n    hackage-security:\n"

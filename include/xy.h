@@ -8,7 +8,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2024-08-23>
+ * Last Modified : <2024-11-21>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C utilities for CLI applications in Ruby flavor
@@ -17,7 +17,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version      "v0.1.4.2-2024/08/23"
+#define _XY_Version      "v0.1.4.3-2024/11/21"
 #define _XY_Maintain_URL "https://gitee.com/RubyMetric/chsrc/blob/main/include/xy.h"
 
 #include <assert.h>
@@ -683,7 +683,7 @@ xy_file_exist (const char *path)
 
 /**
  * @note xy_file_exist() 和 xy_dir_exist() 两个函数在所有平台默认都支持使用 '~'，
- *       但实现中都没有调用 xy_uniform_path()，以防万一，调用前可能需要用户手动调用它
+ *       但实现中都没有调用 xy_normalize_path()，以防万一，调用前可能需要用户手动调用它
  */
 static bool
 xy_dir_exist (const char *path)
@@ -733,7 +733,7 @@ xy_dir_exist (const char *path)
  * 该函数即使在非Windows下也可调用，作用是删除路径左右两边多出来的空白符
  */
 static char *
-xy_uniform_path (const char *path)
+xy_normalize_path (const char *path)
 {
   char *new = xy_str_strip (path); // 防止开发者多写了空白符
 
@@ -755,7 +755,7 @@ xy_uniform_path (const char *path)
 static char *
 xy_parent_dir (const char *path)
 {
-  char *dir = xy_uniform_path (path);
+  char *dir = xy_normalize_path (path);
   char *last = NULL;
   if (xy_on_windows)
     {

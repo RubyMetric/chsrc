@@ -1039,7 +1039,7 @@ static void
 chsrc_view_file (const char *path)
 {
   char *cmd = NULL;
-  path = xy_uniform_path (path);
+  path = xy_normalize_path (path);
   if (xy_on_windows)
     {
       cmd = xy_2strjoin ("type ", path);
@@ -1054,7 +1054,7 @@ chsrc_view_file (const char *path)
 static void
 chsrc_ensure_dir (const char *dir)
 {
-  dir = xy_uniform_path (dir);
+  dir = xy_normalize_path (dir);
 
   if (xy_dir_exist (dir))
     {
@@ -1081,7 +1081,7 @@ chsrc_ensure_dir (const char *dir)
 static void
 chsrc_append_to_file (const char *str, const char *file)
 {
-  file = xy_uniform_path (file);
+  file = xy_normalize_path (file);
   char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
 
@@ -1100,7 +1100,7 @@ chsrc_append_to_file (const char *str, const char *file)
 static void
 chsrc_prepend_to_file (const char *str, const char *file)
 {
-  file = xy_uniform_path (file);
+  file = xy_normalize_path (file);
   char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
 
@@ -1119,7 +1119,7 @@ chsrc_prepend_to_file (const char *str, const char *file)
 static void
 chsrc_overwrite_file (const char *str, const char *file)
 {
-  file = xy_uniform_path (file);
+  file = xy_normalize_path (file);
   char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
 

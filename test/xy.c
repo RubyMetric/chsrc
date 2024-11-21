@@ -4,7 +4,7 @@
  * File Name     : xy.c
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Created On    : <2023-08-30>
- * Last Modified : <2024-08-17>
+ * Last Modified : <2024-11-21>
  *
  * 测试 xy.h
  * ------------------------------------------------------------*/
@@ -98,8 +98,8 @@ main (int argc, char const *argv[])
     }
 
 
-  puts (xy_uniform_path (" \n ~/haha/test/123 \n\r "));
-  assert_str (xy_uniform_path ("~/haha/test"), xy_parent_dir (" ~/haha/test/123"));
+  puts (xy_normalize_path (" \n ~/haha/test/123 \n\r "));
+  assert_str (xy_normalize_path ("~/haha/test"), xy_parent_dir (" ~/haha/test/123"));
 
   xy_succ ("测试完成", "测试全部通过");
 
