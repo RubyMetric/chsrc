@@ -4,11 +4,17 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-08-29>
- * Last Modified : <2024-11-21>
+ * Last Modified : <2024-11-22>
  * ------------------------------------------------------------*/
 
-static MirrorSite_t
-RubyChina = {
+static SourceProvider_t UpstreamRuby =
+{
+  "upstream", "RubyGems.org", "上游默认源 RubyGems.org", "https://rubygems.org",
+  {NotSkip, NA, NA, "https://rubygems.org/gems/nokogiri-1.15.0-java.gem"}
+};
+
+static MirrorSite_t RubyChina =
+{
   "rubychina", "RubyChina", "Ruby China 社区", "https://gems.ruby-china.com/",
   {NotSkip, NA, NA, "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"} // 9.9 MB
 };
@@ -20,9 +26,9 @@ RubyChina = {
  *
  * @note 曾经的问题 https://ruby-china.org/topics/43331
  */
-static Source_t
-pl_ruby_sources[] = {
-  {&UpstreamProvider,     "https://rubygems.org"},
+static Source_t pl_ruby_sources[] =
+{
+  {&UpstreamRuby, "https://rubygems.org"},
   {&RubyChina,    "https://gems.ruby-china.com/"},
   {&Ustc,         "https://mirrors.ustc.edu.cn/rubygems/"}
 
@@ -63,8 +69,6 @@ void
 pl_ruby_setsrc (char *option)
 {
   chsrc_ensure_program ("gem");
-
-  chsrc_set_measure_upstream ("https://rubygems.org/gems/nokogiri-1.15.0-java.gem");
 
   chsrc_yield_source_and_confirm (pl_ruby);
 
