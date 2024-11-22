@@ -9,11 +9,18 @@
  * Last Modified : <2024-11-22>
  * ------------------------------------------------------------*/
 
+static SourceProvider_t UpstreamUbuntu =
+{
+  "upstream", "archive.ubuntu.com", "上游默认源 archive.ubuntu.com", "http://archive.ubuntu.com/",
+  // https://github.com/RubyMetric/chsrc/issues/121
+  {NotSkip, NA, NA, "http://archive.ubuntu.com/ubuntu/dists/noble/Contents-amd64.gz"}
+};
+
 /**
  * @update 2024-11-21
  */
-static Source_t
-os_ubuntu_sources[] = {
+static Source_t os_ubuntu_sources[] =
+{
   {&UpstreamProvider, "http://archive.ubuntu.com/ubuntu/"}, //不支持https
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/ubuntu/"},
   {&Ali,              "https://mirrors.aliyun.com/ubuntu"},
@@ -87,9 +94,6 @@ void
 os_ubuntu_setsrc (char *option)
 {
   chsrc_ensure_root ();
-
-  // https://github.com/RubyMetric/chsrc/issues/121
-  chsrc_set_measure_upstream ("http://archive.ubuntu.com/ubuntu/dists/noble/Contents-amd64.gz");
 
   if (chsrc_check_file (OS_Ubuntu_SourceList_DEB822))
     {
