@@ -19,7 +19,7 @@
  *                 |    czyt       <czyt.go@gmail.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-11-21>
+ * Last Modified   : <2024-11-22>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
@@ -660,10 +660,10 @@ main (int argc, char const *argv[])
 
   if (CliOpt_DryRun)
     {
-      char *dry_msg = CliOpt_InEnglish ? "**Enable [Dry Run] mode. " \
+      char *dry_msg = CliOpt_InEnglish ? "Enable [Dry Run] mode. " \
                                          "Simulate the source changing process (skipping speed measurement). " \
-                                         "Commands only print but don't run**\n"
-                                       : "**开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行**\n";
+                                         "Commands only print but don't run\n"
+                                       : "开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行\n";
       chsrc_log (bdyellow(dry_msg));
     }
 

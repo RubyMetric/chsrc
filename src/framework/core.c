@@ -672,11 +672,11 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
 int
 select_mirror_autoly (Source_t *sources, size_t size, const char *target_name)
 {
+  if (!CliOpt_DryRun)
   {
-  char *msg = CliOpt_InEnglish ? "Measuring speed in sequence" : "测速中";
-
-  xy_log_brkt (App_Name, bdpurple (CliOpt_InEnglish ? "MEASURE" : "测速"), msg);
-  br();
+    char *msg = CliOpt_InEnglish ? "Measuring speed in sequence" : "测速中";
+    xy_log_brkt (App_Name, bdpurple (CliOpt_InEnglish ? "MEASURE" : "测速"), msg);
+    br();
   }
 
   if (0==size || 1==size)
@@ -689,7 +689,11 @@ select_mirror_autoly (Source_t *sources, size_t size, const char *target_name)
 
   if (CliOpt_DryRun)
     {
-      return 1; // Dry Run 时，跳过测速
+      /* Dry Run 时，跳过测速 */
+      if (ProgMode_CMD_Reset)
+        return 0; /* 选择默认源 */
+      else
+        return 1; /* 原则第一个源 */
     }
 
   bool only_one = false;
