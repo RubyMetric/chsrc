@@ -21,7 +21,7 @@ static SourceProvider_t UpstreamUbuntu =
  */
 static Source_t os_ubuntu_sources[] =
 {
-  {&UpstreamProvider, "http://archive.ubuntu.com/ubuntu/"}, //不支持https
+  {&UpstreamUbuntu,   "http://archive.ubuntu.com/ubuntu/"}, //不支持https
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/ubuntu/"},
   {&Ali,              "https://mirrors.aliyun.com/ubuntu"},
   {&Volcengine,       "https://mirrors.volces.com/ubuntu"},
