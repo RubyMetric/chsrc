@@ -89,9 +89,7 @@ os_ubuntu_setsrc (char *option)
   chsrc_ensure_root ();
 
   // https://github.com/RubyMetric/chsrc/issues/121
-  SpeedMeasureInfo_t *upsmi = &UpstreamProvider.smi;
-  upsmi->skip = NotSkip;
-  upsmi->url = "http://archive.ubuntu.com/ubuntu/dists/noble/Contents-amd64.gz";
+  chsrc_set_measure_upstream ("http://archive.ubuntu.com/ubuntu/dists/noble/Contents-amd64.gz");
 
   if (chsrc_check_file (OS_Ubuntu_SourceList_DEB822))
     {

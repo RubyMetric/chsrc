@@ -580,6 +580,17 @@ get_max_ele_idx_in_dbl_ary (double *array, int size)
 
 
 /**
+ * 默认上游源时不测速的，该函数改变该行为，测速上游源
+ */
+void
+chsrc_set_measure_upstream (char *url)
+{
+  SpeedMeasureInfo_t *upsmi = &UpstreamProvider.smi;
+  upsmi->skip = NotSkip;
+  upsmi->url = url;
+}
+
+/**
  * @param      sources        所有待测源
  * @param      size           待测源的数量
  * @param[out] speed_records  速度值记录，单位为Byte/s

@@ -64,6 +64,8 @@ pl_ruby_setsrc (char *option)
 {
   chsrc_ensure_program ("gem");
 
+  chsrc_set_measure_upstream ("https://rubygems.org/gems/nokogiri-1.15.0-java.gem");
+
   chsrc_yield_source_and_confirm (pl_ruby);
 
   char *cmd = NULL;
