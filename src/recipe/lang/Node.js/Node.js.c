@@ -71,6 +71,8 @@ pl_nodejs_setsrc (char *option)
     chsrc_note2 (msg);
   }
 
+  chsrc_set_measure_upstream (PL_NodeJS_NPM_Upstream_Measure_URL);
+
   bool npm_exist, yarn_exist, pnpm_exist;
   pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 

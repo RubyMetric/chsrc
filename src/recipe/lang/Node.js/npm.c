@@ -26,6 +26,8 @@ pl_nodejs_npm_getsrc (char *option)
 void
 pl_nodejs_npm_setsrc (char *option)
 {
+  chsrc_set_measure_upstream (PL_NodeJS_NPM_Upstream_Measure_URL);
+
   Source_t source;
   chsrc_yield_for_the_source (pl_nodejs);
   if (ProgMode_Target_Group!=true)
