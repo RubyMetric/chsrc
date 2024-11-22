@@ -5,8 +5,14 @@
  * Contributors   :  Nul None  <nul@none.org>
  * Created On     : <2023-09-03>
  * Major Revision :      1
- * Last Modified  : <2024-09-14>
+ * Last Modified  : <2024-11-22>
  * ------------------------------------------------------------*/
+
+static SourceProvider_t UpstreamPython =
+{
+  "upstream", "PyPI", "上游默认源 PyPI", "https://pypi.org/",
+  {NotSkip, NA, NA, "https://files.pythonhosted.org/packages/56/e4/55aaac2b15af4dad079e5af329a79d961e5206589d0e02b1e8da221472ed/tensorflow-2.18.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"} // 260MB
+};
 
 /**
  * @update 2024-09-14
@@ -14,18 +20,18 @@
  */
 static Source_t
 pl_python_sources[] = {
-  {&UpstreamProvider,      "https://pypi.org/simple"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/pypi/web/simple"},
-  {&Lzuoss,        "https://mirror.lzu.edu.cn/pypi/web/simple"},
-  {&Jlu,           "https://mirrors.jlu.edu.cn/pypi/web/simple"},
-  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/pypi/web/simple"},
-  {&Tuna,          "https://pypi.tuna.tsinghua.edu.cn/simple"},
-  {&Ali,           "https://mirrors.aliyun.com/pypi/simple/"},
-  {&Tencent,       "https://mirrors.cloud.tencent.com/pypi/simple"},
+  {&UpstreamPython,   "https://pypi.org/simple"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/pypi/web/simple"},
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/pypi/web/simple"},
+  {&Jlu,              "https://mirrors.jlu.edu.cn/pypi/web/simple"},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/pypi/web/simple"},
+  {&Tuna,             "https://pypi.tuna.tsinghua.edu.cn/simple"},
+  {&Ali,              "https://mirrors.aliyun.com/pypi/simple/"},
+  {&Tencent,          "https://mirrors.cloud.tencent.com/pypi/simple"},
   // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/pypi/simple"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/repository/pypi/simple"},
-  {&Hust,          "https://mirrors.hust.edu.cn/pypi/web/simple"}
-  // {&Netease,    "https://mirrors.163.com/.help/pypi.html"} // 不用，24小时更新一次
+  {&Huawei,           "https://mirrors.huaweicloud.com/repository/pypi/simple"},
+  {&Hust,             "https://mirrors.hust.edu.cn/pypi/web/simple"}
+  // {&Netease,       "https://mirrors.163.com/.help/pypi.html"} // 不用，24小时更新一次
 };
 def_sources_n(pl_python);
 
