@@ -14,10 +14,10 @@
 
 typedef struct SpeedMeasureInfo_t
 {
-  bool skip;                  /* 是否默认跳过 */
-  const char *skip_reason_CN; /* 跳过的原因（中文）*/
-  const char *skip_reason_EN; /* 跳过的原因（英文）*/
-  const char *url;            /* 测速链接 */
+  bool  skip;           /* 是否默认跳过 */
+  char *skip_reason_CN; /* 跳过的原因（中文）*/
+  char *skip_reason_EN; /* 跳过的原因（英文）*/
+  char *url;            /* 测速链接 */
 }
 SpeedMeasureInfo_t;
 
@@ -54,10 +54,10 @@ UserDefinedProvider = {
 typedef struct Source_t
 {
   union {
-    const SourceProvider_t *provider;
-    const MirrorSite_t     *mirror;
+    SourceProvider_t *provider;
+    MirrorSite_t     *mirror;
   };
-  const char *url;
+  char *url;
 }
 Source_t;
 

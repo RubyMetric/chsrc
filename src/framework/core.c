@@ -597,8 +597,8 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
     {
       Source_t src = sources[i];
 
-      const SourceProvider_t *provider = src.provider;
-      const SpeedMeasureInfo_t smi = provider->smi;
+      SourceProvider_t *provider = src.provider;
+      SpeedMeasureInfo_t smi = provider->smi;
 
       bool skip = smi.skip;
 
@@ -621,18 +621,23 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
         {
           if (xy_streql ("upstream", provider->code))
             {
-              // 上游源不测速，但不置0，因为要避免这种情况: 可能其他镜像站测速都为0，最后反而选择了该 upstream
+              /* 上游源不测速，但不置0，因为要避免这种情况: 可能其他镜像站测速都为0，最后反而选择了该 upstream */
               speed = -1024*1024*1024;
+              if (!src.url)
+                {
+                  smi.skip_reason_CN = "默认上游源URL未知，请帮助补充";
+                  smi.skip_reason_EN = "The default upstream source URL is unknown, please help to add";
+                }
             }
           else if (xy_streql ("user", provider->code))
             {
-              // 代码不会执行至此
+              /* 代码不会执行至此 */
               speed = 1024*1024*1024;
             }
           else
             {
-              // 什么情况?
-              speed = -1;
+              /* 不测速的 Provider */
+              speed = 0;
             }
           get_measured[i] = false;
           speed_records[i] = speed;
@@ -649,7 +654,11 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
       else
         {
           const char *msg = CliOpt_InEnglish ? provider->abbr : provider->name;
-          measure_msgs[i] = xy_strjoin (3, "  - ", msg, " ... ");
+          if (xy_streql ("upstream", provider->code))
+            measure_msgs[i] = xy_strjoin (3, "  ^ ", msg, " ... ");
+          else
+            measure_msgs[i] = xy_strjoin (3, "  - ", msg, " ... ");
+
           printf ("%s", measure_msgs[i]);
           fflush (stdout);
 

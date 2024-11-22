@@ -6,7 +6,7 @@
  * Contributors  :  Zhao  <1792582687@qq.com>
  *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2024-11-21>
+ * Last Modified : <2024-11-22>
  * ------------------------------------------------------------*/
 
 /**
@@ -14,18 +14,18 @@
  */
 static Source_t
 os_ubuntu_sources[] = {
-  {&UpstreamProvider,      "http://archive.ubuntu.com/ubuntu/"}, //不支持https
-  {&MirrorZ,       "https://mirrors.cernet.edu.cn/ubuntu/"},
-  {&Ali,           "https://mirrors.aliyun.com/ubuntu"},
-  {&Volcengine,    "https://mirrors.volces.com/ubuntu"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/ubuntu"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/ubuntu"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/ubuntu"},
-  {&Tencent,       "https://mirrors.tencent.com/ubuntu"},
+  {&UpstreamProvider, "http://archive.ubuntu.com/ubuntu/"}, //不支持https
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/ubuntu/"},
+  {&Ali,              "https://mirrors.aliyun.com/ubuntu"},
+  {&Volcengine,       "https://mirrors.volces.com/ubuntu"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/ubuntu"},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/ubuntu"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/ubuntu"},
+  {&Tencent,          "https://mirrors.tencent.com/ubuntu"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/ubuntu"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/ubuntu"},
-  {&Netease,       "https://mirrors.163.com/ubuntu"},
-  {&Sohu,          "https://mirrors.sohu.com/ubuntu"}
+  {&Huawei,           "https://mirrors.huaweicloud.com/ubuntu"},
+  {&Netease,          "https://mirrors.163.com/ubuntu"},
+  {&Sohu,             "https://mirrors.sohu.com/ubuntu"}
 };
 def_sources_n(os_ubuntu);
 
@@ -87,6 +87,11 @@ void
 os_ubuntu_setsrc (char *option)
 {
   chsrc_ensure_root ();
+
+  // https://github.com/RubyMetric/chsrc/issues/121
+  SpeedMeasureInfo_t *upsmi = &UpstreamProvider.smi;
+  upsmi->skip = NotSkip;
+  upsmi->url = "http://archive.ubuntu.com/ubuntu/dists/noble/Contents-amd64.gz";
 
   if (chsrc_check_file (OS_Ubuntu_SourceList_DEB822))
     {
