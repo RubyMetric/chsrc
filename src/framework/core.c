@@ -74,11 +74,13 @@ bool CliOpt_NoColor   = false;
 #define Exit_MaintainerCause  5
 #define Exit_ExternalError    6
 
-#define chsrc_log(str)   xy_log(App_Name,str)
-#define chsrc_succ(str)  xy_succ(App_Name,str)
-#define chsrc_info(str)  xy_info(App_Name,str)
-#define chsrc_warn(str)  xy_warn(App_Name,str)
-#define chsrc_error(str) xy_error(App_Name,str)
+#define chsrc_log(str)     xy_log(App_Name,str)
+#define chsrc_succ(str)    xy_succ(App_Name,str)
+#define chsrc_info(str)    xy_info(App_Name,str)
+#define chsrc_warn(str)    xy_warn(App_Name,str)
+#define chsrc_error(str)   xy_error(App_Name,str)
+#define chsrc_debug(str)   xy_warn(App_Name "DEBUG",str)
+#define chsrc_verbose(str) xy_info(App_Name,str)
 
 #define red(str)      xy_str_to_red(str)
 #define blue(str)     xy_str_to_blue(str)
@@ -93,10 +95,12 @@ bool CliOpt_NoColor   = false;
 #define bdpurple(str) xy_str_to_bold(xy_str_to_purple(str))
 
 // 2系列都是带有括号的
-#define chsrc_succ2(str)  xy_succ_brkt(App_Name,CliOpt_InEnglish?"SUCCEED":"成功",str)
-#define chsrc_log2(str)   xy_info_brkt(App_Name,"LOG",str)
-#define chsrc_warn2(str)  xy_warn_brkt(App_Name,CliOpt_InEnglish?"WARN":"警告",str)
-#define chsrc_error2(str) xy_error_brkt(App_Name,CliOpt_InEnglish?"ERROR":"错误",str)
+#define chsrc_succ2(str)    xy_succ_brkt(App_Name,CliOpt_InEnglish?"SUCCEED":"成功",str)
+#define chsrc_log2(str)     xy_info_brkt(App_Name,"LOG",str)
+#define chsrc_warn2(str)    xy_warn_brkt(App_Name,CliOpt_InEnglish?"WARN":"警告",str)
+#define chsrc_error2(str)   xy_error_brkt(App_Name,CliOpt_InEnglish?"ERROR":"错误",str)
+#define chsrc_debug2(str)   xy_warn_brkt(App_Name,"DEBUG",str)
+#define chsrc_verbose2(str) xy_info_brkt(App_Name,"VERBOSE",str)
 
 void
 chsrc_note2 (const char *str)
