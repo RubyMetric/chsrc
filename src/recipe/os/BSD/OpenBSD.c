@@ -11,17 +11,17 @@
 /**
  * @update 2024-09-14
  */
-static Source_t
-os_openbsd_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Ali,            "https://mirrors.aliyun.com/OpenBSD/"},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/OpenBSD/"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/OpenBSD/"},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/OpenBSD/"},
-  {&Tencent,        "https://mirrors.tencent.com/OpenBSD/"},
-  // {&Tencent_Intra,  "https://mirrors.tencentyun.com/OpenBSD/"},
-  {&Netease,        "https://mirrors.163.com/OpenBSD/"},
-  {&Sohu,           "https://mirrors.sohu.com/OpenBSD/"}
+static Source_t os_openbsd_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Ali,              "https://mirrors.aliyun.com/OpenBSD/"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/OpenBSD/"},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/OpenBSD/"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/OpenBSD/"},
+  {&Tencent,          "https://mirrors.tencent.com/OpenBSD/"},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/OpenBSD/"},
+  {&Netease,          "https://mirrors.163.com/OpenBSD/"},
+  {&Sohu,             "https://mirrors.sohu.com/OpenBSD/"}
 };
 def_sources_n(os_openbsd);
 

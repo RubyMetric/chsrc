@@ -8,18 +8,19 @@
  * ------------------------------------------------------------*/
 
 /**
- * @time 2024-06-08 更新
+ * @update 2024-06-08
  */
-static Source_t
-wr_cocoapods_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/git/CocoaPods/Specs.git"}
+static Source_t wr_cocoapods_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/git/CocoaPods/Specs.git"}
 };
 def_sources_n(wr_cocoapods);
 
+
 /**
- * 参考：https://mirrors.tuna.tsinghua.edu.cn/help/CocoaPods/
+ * @consult https://mirrors.tuna.tsinghua.edu.cn/help/CocoaPods/
  */
 void
 wr_cocoapods_setsrc (char *option)

@@ -10,10 +10,10 @@
 /**
  * @update 2023-09-15
  */
-static Source_t
-pl_ocaml_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/git/opam-repository.git"}
+static Source_t pl_ocaml_sources[] =
+{
+  {&UpstreamProvider, NULL},
+  {&Sjtug_Zhiyuan,   "https://mirrors.sjtug.sjtu.edu.cn/git/opam-repository.git"}
 };
 def_sources_n(pl_ocaml);
 

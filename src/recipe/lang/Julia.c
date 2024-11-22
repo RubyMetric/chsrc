@@ -8,15 +8,15 @@
  * ------------------------------------------------------------*/
 
 /**
- * @time 2023-09-05 更新
+ * @update 2023-09-05
  * @note 缺少商业公司或开源社区软件源
  */
-static Source_t
-pl_julia_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/julia"},
-  {&Pku,           "https://mirrors.pku.edu.cn/julia"},
-  {&Nju,           "https://mirror.nju.edu.cn/julia"}
+static Source_t pl_julia_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/julia"},
+  {&Pku,              "https://mirrors.pku.edu.cn/julia"},
+  {&Nju,              "https://mirror.nju.edu.cn/julia"}
 };
 def_sources_n(pl_julia);
 

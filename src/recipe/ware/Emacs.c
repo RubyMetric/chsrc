@@ -7,8 +7,8 @@
  * Last Modified : <2024-11-21>
  * ------------------------------------------------------------*/
 
-static MirrorSite_t
-EmacsChina = {
+static MirrorSite_t EmacsChina =
+{
   "emacschina", "EmacsChina", "Emacs China 社区", "https://elpamirror.emacs-china.org/",
   {SKIP, ToFill, ToFill, NULL}
 };
@@ -17,15 +17,15 @@ EmacsChina = {
  * @update 2023-09-10
  * @note Emacs用户往往只需要一次性换源，只会极少次调用 chsrc，我们只给用户提供文档
  */
-Source_t
-wr_emacs_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/docs/emacs-elpa"},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/help/elpa/"},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/help/elpa/"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/help/elpa.html"},
-  {&Zju,            "https://mirrors.zju.edu.cn/docs/elpa/"},
-  {&EmacsChina,     "https://elpamirror.emacs-china.org/"}
+Source_t wr_emacs_sources[] =
+{
+  {&UpstreamProvider,    NULL},
+  {&Sjtug_Zhiyuan,      "https://mirrors.sjtug.sjtu.edu.cn/docs/emacs-elpa"},
+  {&Tuna,               "https://mirrors.tuna.tsinghua.edu.cn/help/elpa/"},
+  {&Bfsu,               "https://mirrors.bfsu.edu.cn/help/elpa/"},
+  {&Ustc,               "https://mirrors.ustc.edu.cn/help/elpa.html"},
+  {&Zju,                "https://mirrors.zju.edu.cn/docs/elpa/"},
+  {&EmacsChina,         "https://elpamirror.emacs-china.org/"}
 };
 def_sources_n(wr_emacs);
 

@@ -14,12 +14,12 @@
 /**
  * @update 2024-10-31
  */
-static Source_t
-pl_dart_sources[] = {
-  {&UpstreamProvider,      "https://pub.dev"},
-  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/dart-pub"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"},
-  {&Nju,           "https://mirror.nju.edu.cn/dart-pub"}
+static Source_t pl_dart_sources[] =
+{
+  {&UpstreamProvider, "https://pub.dev"},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/dart-pub"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"},
+  {&Nju,              "https://mirror.nju.edu.cn/dart-pub"}
 };
 def_sources_n(pl_dart);
 

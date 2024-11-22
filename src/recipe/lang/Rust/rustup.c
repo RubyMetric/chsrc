@@ -11,15 +11,15 @@
 /**
  * @update 2024-10-02
  */
-static Source_t
-pl_rust_rustup_sources[] = {
-  {&UpstreamProvider,      "https://static.rust-lang.org"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/rustup"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/rust-static"},
-  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/rust-static"},
-  {&Zju,           "https://mirrors.zju.edu.cn/rustup"},
-  {&Iscas,         "https://mirror.iscas.ac.cn/rustup"},
-  {&RsProxyCN,    "https://rsproxy.cn"}
+static Source_t pl_rust_rustup_sources[] =
+{
+  {&UpstreamProvider, "https://static.rust-lang.org"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/rustup"},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/rust-static"},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/rust-static"},
+  {&Zju,              "https://mirrors.zju.edu.cn/rustup"},
+  {&Iscas,            "https://mirror.iscas.ac.cn/rustup"},
+  {&RsProxyCN,        "https://rsproxy.cn"}
 };
 def_sources_n(pl_rust_rustup);
 

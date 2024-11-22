@@ -10,17 +10,17 @@
 /**
  * @update 2024-09-14
  */
-static Source_t
-os_gentoo_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Ali,           "mirrors.aliyun.com"},
-  {&Bfsu,          "mirrors.bfsu.edu.cn"},
-  {&Ustc,          "mirrors.ustc.edu.cn"},
-  {&Tuna,          "mirrors.tuna.tsinghua.edu.cn"},
-  {&Tencent,       "mirrors.tencent.com"},
+static Source_t os_gentoo_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Ali,              "mirrors.aliyun.com"},
+  {&Bfsu,             "mirrors.bfsu.edu.cn"},
+  {&Ustc,             "mirrors.ustc.edu.cn"},
+  {&Tuna,             "mirrors.tuna.tsinghua.edu.cn"},
+  {&Tencent,          "mirrors.tencent.com"},
   // {&Tencent_Intra, "mirrors.tencentyun.com"},
-  {&Netease,       "mirrors.163.com"},
-  {&Sohu,          "mirrors.sohu.com"}
+  {&Netease,          "mirrors.163.com"},
+  {&Sohu,             "mirrors.sohu.com"}
 };
 def_sources_n(os_gentoo);
 

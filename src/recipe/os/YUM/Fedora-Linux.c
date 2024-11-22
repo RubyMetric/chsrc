@@ -14,17 +14,17 @@
 /**
  * @update 2024-11-04
  */
-static Source_t
-os_fedora_sources[] = {
-  {&UpstreamProvider,      "http://download.example/pub/fedora/linux"},
-  {&Ali,           "https://mirrors.aliyun.com/fedora"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/fedora"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/fedora"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/fedora"},
-  {&Tencent,       "https://mirrors.tencent.com/fedora"},
+static Source_t os_fedora_sources[] =
+{
+  {&UpstreamProvider, "http://download.example/pub/fedora/linux"},
+  {&Ali,              "https://mirrors.aliyun.com/fedora"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/fedora"},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/fedora"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/fedora"},
+  {&Tencent,          "https://mirrors.tencent.com/fedora"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/fedora"},
-  {&Netease,       "https://mirrors.163.com/fedora"},
-  {&Sohu,          "https://mirrors.sohu.com/fedora"}
+  {&Netease,          "https://mirrors.163.com/fedora"},
+  {&Sohu,             "https://mirrors.sohu.com/fedora"}
 };
 def_sources_n(os_fedora);
 

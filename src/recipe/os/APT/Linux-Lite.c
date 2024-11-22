@@ -11,12 +11,12 @@
 /**
  * @update 2024-11-21
  */
-static Source_t
-os_linuxlite_sources[] = {
-  {&UpstreamProvider,       "http://repo.linuxliteos.com/linuxlite/"},
-  {&MirrorZ,        "https://mirrors.cernet.edu.cn/linuxliteos/"},
-  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/linuxliteos/"},
-  {&Nju,            "https://mirror.nju.edu.cn/linuxliteos/"}
+static Source_t os_linuxlite_sources[] =
+{
+  {&UpstreamProvider, "http://repo.linuxliteos.com/linuxlite/"},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/linuxliteos/"},
+  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/linuxliteos/"},
+  {&Nju,              "https://mirror.nju.edu.cn/linuxliteos/"}
 };
 def_sources_n(os_linuxlite);
 

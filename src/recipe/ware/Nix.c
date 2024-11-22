@@ -14,10 +14,10 @@
  *   2. 这些链接将会在setsrc函数中补充完整
  * }
  */
-static Source_t
-wr_nix_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/nix-channels/"}
+static Source_t wr_nix_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/nix-channels/"}
 };
 def_sources_n(wr_nix);
 

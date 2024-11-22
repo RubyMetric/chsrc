@@ -7,21 +7,21 @@
  * Last Modified : <2024-08-09>
  * ------------------------------------------------------------*/
 
-static MirrorSite_t
-Api7 = {
+static MirrorSite_t Api7 =
+{
   "api7", "api7.ai", "深圳支流科技有限公司", "https://www.apiseven.com/",
   {SKIP, ToFill, ToFill, NULL}
 };
 
 
 /**
- * @time 2023-09-27 更新
+ * @update 2023-09-27
  * @note 目前只有一个源
  */
-static Source_t
-pl_lua_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Api7,          "https://luarocks.cn"},
+static Source_t pl_lua_sources[] =
+{
+  {&UpstreamProvider, NULL},
+  {&Api7,             "https://luarocks.cn"},
 };
 def_sources_n(pl_lua);
 

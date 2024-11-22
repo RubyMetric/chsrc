@@ -8,20 +8,20 @@
  * ------------------------------------------------------------*/
 
 /**
- * @time 2023-09-29 更新
+ * @update 2023-09-29
  */
-static Source_t
-os_solus_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"},
-  {&Nju,            "https://mirror.nju.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"}
+static Source_t os_solus_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"},
+  {&Nju,              "https://mirror.nju.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"}
 };
 def_sources_n(os_solus);
 
 
 /**
- * 参考: https://help.mirrors.cernet.edu.cn/solus/
+ * @consult https://help.mirrors.cernet.edu.cn/solus/
  */
 void
 os_solus_setsrc (char *option)

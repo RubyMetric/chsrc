@@ -11,11 +11,11 @@
  * @time 2023-09-10 更新
  * @note 不太好换，且用户可能不多，我们暂时只给用户提供文档
  */
-static Source_t
-pl_clojure_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/help/clojars/"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/help/clojars.html"}
+static Source_t pl_clojure_sources[] =
+{
+  {&UpstreamProvider, NULL},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/help/clojars/"},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/help/clojars.html"}
 };
 def_sources_n(pl_clojure);
 

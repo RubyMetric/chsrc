@@ -10,18 +10,18 @@
 /**
  * @update 2024-04-18
  */
-static Source_t
-os_ros_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Ali,            "https://mirrors.aliyun.com"},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn"},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn"},
-  {&Tencent,        "https://mirrors.tencent.com"},
-  // {&Tencent_Intra,  "https://mirrors.tencentyun.com"},
-  {&Huawei,         "https://mirrors.huaweicloud.com"},
-  {&Netease,        "https://mirrors.163.com"},
-  {&Sohu,           "https://mirrors.sohu.com"}
+static Source_t os_ros_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Ali,              "https://mirrors.aliyun.com"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn"},
+  {&Ustc,             "https://mirrors.ustc.edu.cn"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn"},
+  {&Tencent,          "https://mirrors.tencent.com"},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com"},
+  {&Huawei,           "https://mirrors.huaweicloud.com"},
+  {&Netease,          "https://mirrors.163.com"},
+  {&Sohu,             "https://mirrors.sohu.com"}
 };
 def_sources_n(os_ros);
 

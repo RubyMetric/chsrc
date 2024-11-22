@@ -10,15 +10,15 @@
 /**
  * @update 2024-05-24
  */
-static Source_t
-pl_perl_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/CPAN/"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CPAN/"},
-  {&Bjtu,          "https://mirror.bjtu.edu.cn/cpan/"},
-  {&Hust,          "https://mirrors.hust.edu.cn/CPAN/"},
-  {&Ali,           "https://mirrors.aliyun.com/CPAN/"},
-  {&Lzuoss,        "https://mirror.lzu.edu.cn/CPAN/"}
+static Source_t pl_perl_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/CPAN/"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CPAN/"},
+  {&Bjtu,             "https://mirror.bjtu.edu.cn/cpan/"},
+  {&Hust,             "https://mirrors.hust.edu.cn/CPAN/"},
+  {&Ali,              "https://mirrors.aliyun.com/CPAN/"},
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/CPAN/"}
 };
 def_sources_n(pl_perl);
 

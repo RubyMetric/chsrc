@@ -79,7 +79,7 @@ static const char
 *os_rockylinux [] = {"rocky",  "rockylinux", NULL,  t(&os_rockylinux_target)},
 *os_almalinux  [] = {"alma",   "almalinux",  NULL,  t(&os_almalinux_target)},
 *os_alpine     [] = {"alpine",               NULL,  t(&os_alpine_target)},
-*os_void       [] = {"void",   "voidlinux",  NULL,  t(&os_void_target)},
+*os_voidlinux  [] = {"void",   "voidlinux",  NULL,  t(&os_voidlinux_target)},
 *os_solus      [] = {"solus",                NULL,  t(&os_solus_target)},
 *os_trisquel   [] = {"trisquel",             NULL,  t(&os_trisquel_target)},
 *os_linuxlite  [] = {"lite",   "linuxlite",  NULL,  t(&os_linuxlite_target)},
@@ -110,7 +110,7 @@ static const char
 
   os_arch,    os_archlinuxcn, os_manjaro, os_gentoo,
 
-  os_alpine,   os_void,      os_solus,
+  os_alpine,   os_voidlinux,  os_solus,
 
   os_msys2,
   os_freebsd,  os_netbsd,    os_openbsd,

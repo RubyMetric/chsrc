@@ -8,15 +8,15 @@
  * ------------------------------------------------------------*/
 
 /**
- * @time 2023-09-10 更新
+ * @update 2023-09-10
  */
-static Source_t
-pl_haskell_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/hackage"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/hackage"},
-  {&Nju,           "https://mirror.nju.edu.cn/hackage"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/hackage"}
+static Source_t pl_haskell_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/hackage"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/hackage"},
+  {&Nju,              "https://mirror.nju.edu.cn/hackage"},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/hackage"}
 };
 def_sources_n(pl_haskell);
 

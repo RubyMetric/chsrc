@@ -8,20 +8,20 @@
  * ------------------------------------------------------------*/
 
 /**
- * @time 2024-06-12 更新
+ * @update 2024-06-12
  */
-static Source_t
-os_rockylinux_sources[] = {
-  {&UpstreamProvider,        NULL},
-  {&MirrorZ,        "https://mirrors.cernet.edu.cn/rocky"},
-  {&Ali,            "https://mirrors.aliyun.com/rockylinux"},
-  {&Volcengine,     "https://mirrors.volces.com/rockylinux"},
-  {&Sjtug_Zhiyuan,  "https://mirror.sjtu.edu.cn/rocky"},
-  {&Sustech,        "https://mirrors.sustech.edu.cn/rocky-linux"},
-  {&Zju,            "https://mirrors.zju.edu.cn/rocky"},
-  {&Lzuoss,         "https://mirror.lzu.edu.cn/rocky"},
-  {&Sohu,           "https://mirrors.sohu.com/Rocky"},
-  {&Netease,        "https://mirrors.163.com/rocky"}
+static Source_t os_rockylinux_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/rocky"},
+  {&Ali,              "https://mirrors.aliyun.com/rockylinux"},
+  {&Volcengine,       "https://mirrors.volces.com/rockylinux"},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/rocky"},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/rocky-linux"},
+  {&Zju,              "https://mirrors.zju.edu.cn/rocky"},
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/rocky"},
+  {&Sohu,             "https://mirrors.sohu.com/Rocky"},
+  {&Netease,          "https://mirrors.163.com/rocky"}
 };
 def_sources_n(os_rockylinux);
 

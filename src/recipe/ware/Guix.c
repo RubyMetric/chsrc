@@ -11,16 +11,16 @@
  * @update 2023-09-11
  * @note 目前只有一个源
  */
-static Source_t
-wr_guix_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/git/guix.git"}
+static Source_t wr_guix_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/git/guix.git"}
 };
 def_sources_n(wr_guix);
 
 
 /**
- * 参考: https://mirrors.sjtug.sjtu.edu.cn/docs/guix
+ * @consult https://mirrors.sjtug.sjtu.edu.cn/docs/guix
  */
 void
 wr_guix_setsrc (char *option)

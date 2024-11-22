@@ -16,12 +16,13 @@
  * }
  */
 static Source_t
-wr_homebrew_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/"},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/"},
-  {&Zju,            "https://mirrors.zju.edu.cn/"},
-  {&Sustech,        "https://mirrors.sustech.edu.cn/"}
+wr_homebrew_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/"},
+  {&Zju,              "https://mirrors.zju.edu.cn/"},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/"}
 };
 def_sources_n(wr_homebrew);
 

@@ -38,14 +38,14 @@ SourceProvider_t;
 
 typedef SourceProvider_t MirrorSite_t;
 
-SourceProvider_t
-UpstreamProvider = {
+SourceProvider_t UpstreamProvider =
+{
   "upstream", "Upstream", "上游默认源", NULL,
   {SKIP, "上游默认源不测速", "SKIP for upstream source", NULL}
-};
+},
 
-SourceProvider_t
-UserDefinedProvider = {
+UserDefinedProvider =
+{
   "user", "用户自定义", "用户自定义", NULL,
   {SKIP, "用户自定义源不测速", "SKIP for user-defined source", NULL}
 };

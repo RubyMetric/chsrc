@@ -15,12 +15,12 @@
 /**
  * @update 2024-10-31
  */
-static Source_t
-pl_dart_flutter_sources[] = {
-  {&UpstreamProvider,      "https://storage.googleapis.com"},
-  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn"}, // 没有后缀，怀疑是否存在问题
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/git/flutter"}, // URL 带 git
-  {&Nju,           "https://mirror.nju.edu.cn/flutter"}
+static Source_t pl_dart_flutter_sources[] =
+{
+  {&UpstreamProvider, "https://storage.googleapis.com"},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn"}, // 没有后缀，怀疑是否存在问题
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/git/flutter"}, // URL 带 git
+  {&Nju,              "https://mirror.nju.edu.cn/flutter"}
 };
 def_sources_n(pl_dart_flutter);
 

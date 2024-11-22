@@ -7,8 +7,8 @@
  * Last Modified : <2024-11-21>
  * ------------------------------------------------------------*/
 
-static MirrorSite_t
-RsProxyCN = {
+static MirrorSite_t RsProxyCN =
+{
   "rsproxycn", "RsProxy.cn", "字节跳动基础架构Dev Infra", "https://rsproxy.cn/",
   {SKIP, ToFill, ToFill, NULL}
 };

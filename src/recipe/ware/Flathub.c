@@ -11,16 +11,16 @@
  * @update 2023-09-11
  * @note 目前只有一个源
  */
-static Source_t
-wr_flathub_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/flathub"},
+static Source_t wr_flathub_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/flathub"},
 };
 def_sources_n(wr_flathub);
 
 
 /**
- * 参考: https://mirrors.sjtug.sjtu.edu.cn/docs/flathub
+ * @consult https://mirrors.sjtug.sjtu.edu.cn/docs/flathub
  */
 void
 wr_flathub_setsrc (char *option)

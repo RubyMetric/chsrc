@@ -13,11 +13,11 @@
 /**
  * @time 2023-09-29 更新
  */
-static Source_t
-os_openkylin_sources[] = {
-  {&UpstreamProvider,  "https://archive.openkylin.top/openkylin/"},
-  {&Ali,       "https://mirrors.aliyun.com/openkylin/"},
-  {&Netease,   "https://mirrors.163.com/openkylin/"},
+static Source_t os_openkylin_sources[] =
+{
+  {&UpstreamProvider, "https://archive.openkylin.top/openkylin/"},
+  {&Ali,              "https://mirrors.aliyun.com/openkylin/"},
+  {&Netease,          "https://mirrors.163.com/openkylin/"},
 };
 def_sources_n(os_openkylin);
 

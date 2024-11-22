@@ -12,20 +12,20 @@
 /**
  * @update 2024-11-21
  */
-static Source_t
-os_kali_sources[] = {
-  {&UpstreamProvider,      "http://http.kali.org/kali"},
-  {&MirrorZ,       "https://mirrors.cernet.edu.cn/kali"},
-  {&Ali,           "https://mirrors.aliyun.com/kali"},
-  {&Volcengine,    "https://mirrors.volces.com/kali"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/kali"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/kali"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/kali"},
-  {&Tencent,       "https://mirrors.tencent.com/kali"},
+static Source_t os_kali_sources[] =
+{
+  {&UpstreamProvider, "http://http.kali.org/kali"},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/kali"},
+  {&Ali,              "https://mirrors.aliyun.com/kali"},
+  {&Volcengine,       "https://mirrors.volces.com/kali"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/kali"},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/kali"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/kali"},
+  {&Tencent,          "https://mirrors.tencent.com/kali"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/kali"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/kali"},
-  {&Netease,       "https://mirrors.163.com/kali"},
-  {&Sohu,          "https://mirrors.sohu.com/kali"}
+  {&Huawei,           "https://mirrors.huaweicloud.com/kali"},
+  {&Netease,          "https://mirrors.163.com/kali"},
+  {&Sohu,             "https://mirrors.sohu.com/kali"}
 };
 def_sources_n(os_kali);
 

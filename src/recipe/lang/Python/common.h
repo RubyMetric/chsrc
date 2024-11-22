@@ -18,8 +18,8 @@ static SourceProvider_t UpstreamPython =
  * @update 2024-09-14
  * @note 不要添加Zju，浙大的pypi在校外访问会自动转向Tuna
  */
-static Source_t
-pl_python_sources[] = {
+static Source_t pl_python_sources[] =
+{
   {&UpstreamPython,   "https://pypi.org/simple"},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/pypi/web/simple"},
   {&Lzuoss,           "https://mirror.lzu.edu.cn/pypi/web/simple"},

@@ -13,16 +13,17 @@
  * @update 2024-11-21
  */
 static Source_t
-os_armbian_sources[] = {
-  {&UpstreamProvider,      "http://apt.armbian.com"},
-  {&MirrorZ,       "https://mirrors.cernet.edu.cn/armbian"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/armbian"},
-  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/armbian"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/armbian"},
-  {&Sustech,       "https://mirrors.sustech.edu.cn/armbian"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/armbian"},
-  {&Nju,           "https://mirrors.nju.edu.cn/armbian"},
-  {&Ali,           "https://mirrors.aliyun.com/armbian"},
+os_armbian_sources[] =
+{
+  {&UpstreamProvider, "http://apt.armbian.com"},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/armbian"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/armbian"},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/armbian"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/armbian"},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/armbian"},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/armbian"},
+  {&Nju,              "https://mirrors.nju.edu.cn/armbian"},
+  {&Ali,              "https://mirrors.aliyun.com/armbian"},
 };
 def_sources_n(os_armbian);
 

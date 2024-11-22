@@ -11,17 +11,17 @@
 /**
  * @update 2024-09-14
  */
-static Source_t
-os_netbsd_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Ali,            "https://mirrors.aliyun.com/pkgsrc/packages/NetBSD/"},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/pkgsrc/packages/NetBSD/"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/pkgsrc/packages/NetBSD/"},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/pkgsrc/packages/NetBSD/"},
-  {&Tencent,        "https://mirrors.tencent.com/pkgsrc/packages/NetBSD/"},
-  // {&Tencent_Intra,  "https://mirrors.tencentyun.com/pkgsrc/packages/NetBSD/"},
-  {&Netease,        "https://mirrors.163.com/pkgsrc/packages/NetBSD/"},
-  {&Sohu,           "https://mirrors.sohu.com/pkgsrc/packages/NetBSD/"}
+static Source_t os_netbsd_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Ali,              "https://mirrors.aliyun.com/pkgsrc/packages/NetBSD/"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/pkgsrc/packages/NetBSD/"},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/pkgsrc/packages/NetBSD/"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/pkgsrc/packages/NetBSD/"},
+  {&Tencent,          "https://mirrors.tencent.com/pkgsrc/packages/NetBSD/"},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/pkgsrc/packages/NetBSD/"},
+  {&Netease,          "https://mirrors.163.com/pkgsrc/packages/NetBSD/"},
+  {&Sohu,             "https://mirrors.sohu.com/pkgsrc/packages/NetBSD/"}
 };
 def_sources_n(os_netbsd);
 

@@ -10,14 +10,14 @@
 /**
  * @time 2024-06-12 更新
  */
-static Source_t
-os_almalinux_sources[] = {
-  {&UpstreamProvider,      "http://repo.almalinux.org/almalinux"},
-  {&Ali,           "https://mirrors.aliyun.com/almalinux"},
-  {&Volcengine,    "https://mirrors.volces.com/almalinux"},
-  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/almalinux"},
-  {&Zju,           "https://mirrors.zju.edu.cn/almalinux"},
-  {&Nju,           "https://mirror.nju.edu.cn/almalinux"},
+static Source_t os_almalinux_sources[] =
+{
+  {&UpstreamProvider, "http://repo.almalinux.org/almalinux"},
+  {&Ali,              "https://mirrors.aliyun.com/almalinux"},
+  {&Volcengine,       "https://mirrors.volces.com/almalinux"},
+  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/almalinux"},
+  {&Zju,              "https://mirrors.zju.edu.cn/almalinux"},
+  {&Nju,              "https://mirror.nju.edu.cn/almalinux"},
 };
 def_sources_n(os_almalinux);
 

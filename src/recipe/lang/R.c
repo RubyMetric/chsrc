@@ -14,12 +14,12 @@
  *   我们在换cran的同时，也直接帮助用户换bioconductor
  * }
  */
-static Source_t
-pl_r_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/cran/"},
+static Source_t pl_r_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/cran/"},
   // {&Ali,           "https://mirrors.aliyun.com/CRAN/"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"},
   // {&Sustech,       "https://mirrors.sustech.edu.cn/CRAN"},
   // {&Bfsu,          "https://mirrors.bfsu.edu.cn/CRAN/"},
   // {&Bjtu,          "https://mirror.bjtu.edu.cn/cran/"},

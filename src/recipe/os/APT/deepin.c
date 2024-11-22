@@ -12,17 +12,17 @@
 /**
  * @update 2024-09-14
  */
-static Source_t
-os_deepin_sources[] = {
-  {&UpstreamProvider,      "https://community-packages.deepin.com/deepin"},
-  {&Ali,           "https://mirrors.aliyun.com/deepin"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/deepin"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/deepin"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/deepin"},
-  {&Tencent,       "https://mirrors.tencent.com/deepin"},
+static Source_t os_deepin_sources[] =
+{
+  {&UpstreamProvider, "https://community-packages.deepin.com/deepin"},
+  {&Ali,              "https://mirrors.aliyun.com/deepin"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/deepin"},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/deepin"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/deepin"},
+  {&Tencent,          "https://mirrors.tencent.com/deepin"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/deepin"},
-  {&Netease,       "https://mirrors.163.com/deepin"},
-  {&Sohu,          "https://mirrors.sohu.com/deepin"}
+  {&Netease,          "https://mirrors.163.com/deepin"},
+  {&Sohu,             "https://mirrors.sohu.com/deepin"}
 };
 def_sources_n(os_deepin);
 

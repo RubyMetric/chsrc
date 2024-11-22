@@ -9,19 +9,19 @@
  * ------------------------------------------------------------*/
 
 /**
- * @time 2023-09-27 更新
+ * @update 2023-09-27
  *
- * @note by:ccmywish {
- *   [2023-09-24] 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports
- *   [2023-09-27] 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数
+ * @note {
+ *   2023-09-24: 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports
+ *   2023-09-27: 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数
  * }
  */
-static Source_t
-os_freebsd_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Ustc,           "mirrors.ustc.edu.cn"},
-  {&Nju,            "mirror.nju.edu.cn"},
-  {&Netease,        "mirrors.163.com"},
+static Source_t os_freebsd_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Ustc,             "mirrors.ustc.edu.cn"},
+  {&Nju,              "mirror.nju.edu.cn"},
+  {&Netease,          "mirrors.163.com"},
 };
 def_sources_n(os_freebsd);
 

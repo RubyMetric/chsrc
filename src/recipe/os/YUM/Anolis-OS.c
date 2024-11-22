@@ -10,13 +10,13 @@
  * ------------------------------------------------------------*/
 
 /**
- * @time 2024-06-12 更新
+ * @update 2024-06-12
  */
-static Source_t
-os_anolis_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Ali,            "https://mirrors.aliyun.com/anolis"},
-  {&Hust,           "https://mirrors.hust.edu.cn/anolis"}
+static Source_t os_anolis_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Ali,              "https://mirrors.aliyun.com/anolis"},
+  {&Hust,             "https://mirrors.hust.edu.cn/anolis"}
 };
 def_sources_n(os_anolis);
 

@@ -11,17 +11,17 @@
 /**
  * @update 2024-09-14
  */
-static Source_t
-os_openeuler_sources[] = {
-  {&UpstreamProvider,       "https://repo.openeuler.org/"},
-  {&Ali,            "https://mirrors.aliyun.com/openeuler/"},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/openeuler/"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/openeuler/"},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/openeuler/"},
-  {&Tencent,        "https://mirrors.tencent.com/openeuler/"},
-  // {&Tencent_Intra,  "https://mirrors.tencentyun.com/openeuler/"},
-  {&Netease,        "https://mirrors.163.com/openeuler/"},
-  {&Sohu,           "https://mirrors.sohu.com/openeuler/"}
+static Source_t os_openeuler_sources[] =
+{
+  {&UpstreamProvider, "https://repo.openeuler.org/"},
+  {&Ali,              "https://mirrors.aliyun.com/openeuler/"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/openeuler/"},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/openeuler/"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/openeuler/"},
+  {&Tencent,          "https://mirrors.tencent.com/openeuler/"},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/openeuler/"},
+  {&Netease,          "https://mirrors.163.com/openeuler/"},
+  {&Sohu,             "https://mirrors.sohu.com/openeuler/"}
 };
 def_sources_n(os_openeuler);
 

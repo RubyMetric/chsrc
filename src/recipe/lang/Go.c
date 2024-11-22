@@ -9,13 +9,14 @@
  * Last Modified  : <2024-10-31>
  * ------------------------------------------------------------*/
 
-static MirrorSite_t
-GoProxyCN = {
+static MirrorSite_t GoProxyCN =
+{
   "goproxy.cn", "Goproxy.cn", "Goproxy.cn (七牛云)", "https://goproxy.cn/",
   {NotSkip, NA, NA, "https://goproxy.cn/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"} // 30 MB
 },
 
-GoProxyIO = {
+GoProxyIO =
+{
   "goproxy.io", "GOPROXY.IO", "GOPROXY.IO", "https://goproxy.io/",
   {NotSkip, NA, NA, "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"} // 30 MB
 };
@@ -25,13 +26,13 @@ GoProxyIO = {
  * @update 2024-10-31
  * @note 缺少教育网软件源
  */
-static Source_t
-pl_go_sources[] = {
-  {&UpstreamProvider,      "https://proxy.golang.org"},
-  {&GoProxyCN,     "https://goproxy.cn"},
-  {&Ali,           "https://mirrors.aliyun.com/goproxy/"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/goproxy/"},
-  {&GoProxyIO,     "https://goproxy.io"}
+static Source_t pl_go_sources[] =
+{
+  {&UpstreamProvider, "https://proxy.golang.org"},
+  {&GoProxyCN,        "https://goproxy.cn"},
+  {&Ali,              "https://mirrors.aliyun.com/goproxy/"},
+  {&Huawei,           "https://mirrors.huaweicloud.com/goproxy/"},
+  {&GoProxyIO,        "https://goproxy.io"}
 };
 def_sources_n(pl_go);
 

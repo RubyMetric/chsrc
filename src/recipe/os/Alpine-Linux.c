@@ -10,18 +10,18 @@
 /**
  * @update 2024-09-14
  */
-static Source_t
-os_alpine_sources[] = {
-  {&UpstreamProvider,       "http://dl-cdn.alpinelinux.org/alpine"},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/alpine"},
-  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/alpine"},
-  {&Sustech,        "https://mirrors.sustech.edu.cn/alpine"},
-  {&Zju,            "https://mirrors.zju.edu.cn/alpine"},
-  {&Lzuoss,         "https://mirror.lzu.edu.cn/alpine"},
-  {&Ali,            "https://mirrors.aliyun.com/alpine"},
-  {&Tencent,        "https://mirrors.cloud.tencent.com/alpine"},
-  // {&Tencent_Intra,  "https://mirrors.cloud.tencentyun.com/alpine"},
-  {&Huawei,         "https://mirrors.huaweicloud.com/alpine"}
+static Source_t os_alpine_sources[] =
+{
+  {&UpstreamProvider, "http://dl-cdn.alpinelinux.org/alpine"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/alpine"},
+  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/alpine"},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/alpine"},
+  {&Zju,              "https://mirrors.zju.edu.cn/alpine"},
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/alpine"},
+  {&Ali,              "https://mirrors.aliyun.com/alpine"},
+  {&Tencent,          "https://mirrors.cloud.tencent.com/alpine"},
+  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/alpine"},
+  {&Huawei,           "https://mirrors.huaweicloud.com/alpine"}
 };
 def_sources_n(os_alpine);
 

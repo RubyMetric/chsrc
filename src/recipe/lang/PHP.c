@@ -11,13 +11,13 @@
  * @update 2024-09-14
  * @note 缺少教育网或开源社区软件源
  */
-static Source_t
-pl_php_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Ali,           "https://mirrors.aliyun.com/composer/"},
-  {&Tencent,       "https://mirrors.tencent.com/composer/"},
+static Source_t pl_php_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Ali,              "https://mirrors.aliyun.com/composer/"},
+  {&Tencent,          "https://mirrors.tencent.com/composer/"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/composer/"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/repository/php/"}
+  {&Huawei,           "https://mirrors.huaweicloud.com/repository/php/"}
 };
 def_sources_n(pl_php);
 

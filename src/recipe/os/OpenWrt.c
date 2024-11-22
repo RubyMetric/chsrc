@@ -10,18 +10,18 @@
 /**
  * @update 2024-08-08
  */
-static Source_t
-os_openwrt_sources[] = {
-  {&UpstreamProvider,       "http://downloads.openwrt.org"},
-  {&MirrorZ,        "https://mirrors.cernet.edu.cn/openwrt"},
-  {&Ali,            "https://mirrors.aliyun.com/openwrt"},
-  {&Tencent,        "https://mirrors.cloud.tencent.com/openwrt"},
-  // {&Tencent_Intra,  "https://mirrors.cloud.tencentyun.com/openwrt"},
-  {&Tuna,           "https://mirror.tuna.tsinghua.edu.cn/openwrt"},
-  {&Sjtug_Zhiyuan,  "https://mirror.sjtu.edu.cn/openwrt"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/openwrt"},
-  {&Pku,            "https://mirrors.pku.edu.cn/openwrt"},
-  {&Sustech,        "https://mirrors.sustech.edu.cn/openwrt"},
+static Source_t os_openwrt_sources[] =
+{
+  {&UpstreamProvider, "http://downloads.openwrt.org"},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/openwrt"},
+  {&Ali,              "https://mirrors.aliyun.com/openwrt"},
+  {&Tencent,          "https://mirrors.cloud.tencent.com/openwrt"},
+  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/openwrt"},
+  {&Tuna,             "https://mirror.tuna.tsinghua.edu.cn/openwrt"},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/openwrt"},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/openwrt"},
+  {&Pku,              "https://mirrors.pku.edu.cn/openwrt"},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/openwrt"},
 };
 
 def_sources_n(os_openwrt);

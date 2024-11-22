@@ -11,13 +11,13 @@
  * @time 2023-09-10 更新
  * @note 这些链接将会在setsrc函数中补充完整
  */
-static Source_t
-wr_anaconda_sources[] = {
-  {&UpstreamProvider,        "https://repo.anaconda.com/"},
-  {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/anaconda/"},
-  {&Bfsu,            "https://mirrors.bfsu.edu.cn/anaconda/"},
-  {&Zju,             "https://mirrors.zju.edu.cn/anaconda/"},
-  {&Sjtug_Zhiyuan,   "https://mirror.sjtu.edu.cn/anaconda"}
+static Source_t wr_anaconda_sources[] =
+{
+  {&UpstreamProvider, "https://repo.anaconda.com/"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/anaconda/"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/anaconda/"},
+  {&Zju,              "https://mirrors.zju.edu.cn/anaconda/"},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/anaconda"}
 };
 def_sources_n(wr_anaconda);
 

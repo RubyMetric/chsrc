@@ -10,16 +10,16 @@
  * ------------------------------------------------------------*/
 
 /**
- * @time 2024-11-21 更新
+ * @update 2024-11-21
  */
-static Source_t
-os_trisquel_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&MirrorZ,        "https://mirrors.cernet.edu.cn/trisquel/"},
-  {&Ali,            "https://mirrors.aliyun.com/trisquel/"},
-  {&Nju,            "https://mirror.nju.edu.cn/trisquel/"},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/trisquel/"},
-  {&Iscas,          "https://mirror.iscas.ac.cn/trisquel/"}
+static Source_t os_trisquel_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/trisquel/"},
+  {&Ali,              "https://mirrors.aliyun.com/trisquel/"},
+  {&Nju,              "https://mirror.nju.edu.cn/trisquel/"},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/trisquel/"},
+  {&Iscas,            "https://mirror.iscas.ac.cn/trisquel/"}
 };
 def_sources_n(os_trisquel);
 

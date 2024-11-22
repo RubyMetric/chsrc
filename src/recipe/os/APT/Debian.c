@@ -12,19 +12,19 @@
 /**
  * @update 2024-11-21
  */
-static Source_t
-os_debian_sources[] = {
-  {&UpstreamProvider,      "http://deb.debian.org/debian"},
-  {&MirrorZ,       "https://mirrors.cernet.edu.cn/debian/"},
-  {&Ali,           "https://mirrors.aliyun.com/debian"},
-  {&Volcengine,    "https://mirrors.volces.com/debian"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/debian"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/debian"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/debian"},
-  {&Tencent,       "https://mirrors.tencent.com/debian"},
+static Source_t os_debian_sources[] =
+{
+  {&UpstreamProvider, "http://deb.debian.org/debian"},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/debian/"},
+  {&Ali,              "https://mirrors.aliyun.com/debian"},
+  {&Volcengine,       "https://mirrors.volces.com/debian"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/debian"},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/debian"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/debian"},
+  {&Tencent,          "https://mirrors.tencent.com/debian"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/debian"},
-  {&Netease,       "https://mirrors.163.com/debian"},
-  {&Sohu,          "https://mirrors.sohu.com/debian"}
+  {&Netease,          "https://mirrors.163.com/debian"},
+  {&Sohu,             "https://mirrors.sohu.com/debian"}
 };
 def_sources_n(os_debian);
 

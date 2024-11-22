@@ -11,12 +11,12 @@
  * @time 2024-04-18 更新
  * @note 缺少教育网或开源社区软件源
  */
-static Source_t
-pl_java_sources[] = {
-  {&UpstreamProvider,       NULL},
-  {&Ali,           "https://maven.aliyun.com/repository/public/"},
-  {&Huawei,        "https://mirrors.huaweicloud.com/repository/maven/"},
-  {&Netease,       "http://mirrors.163.com/maven/repository/maven-public/"} // 网易的24小时更新一次
+static Source_t pl_java_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  {&Ali,              "https://maven.aliyun.com/repository/public/"},
+  {&Huawei,           "https://mirrors.huaweicloud.com/repository/maven/"},
+  {&Netease,          "http://mirrors.163.com/maven/repository/maven-public/"} // 网易的24小时更新一次
 };
 def_sources_n(pl_java);
 

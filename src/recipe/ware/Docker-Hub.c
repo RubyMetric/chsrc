@@ -9,19 +9,21 @@
  * Last Modified : <2024-11-22>
  * ------------------------------------------------------------*/
 
-static MirrorSite_t
-DaoCloud = {
+static MirrorSite_t DaoCloud =
+{
   "daocloud", "DaoCloud","上海道客网络科技有限公司", "https://www.daocloud.io/",
   // 没有找到 DaoCloud 合适的下载链接，先随便给一个，以规避 chsrc 自动测速时所有 dockerhub 镜像站都没有测速链接带来的 bug
   {NotSkip, NA, NA, "https://qiniu-download-public.daocloud.io/DaoCloud_Enterprise/dce5/offline-community-v0.18.0-amd64.tar"}
 },
 
-Fit2Cloud = {
+Fit2Cloud =
+{
   "fit2cloud", "FIT2CLOUD", "杭州飞致云信息科技有限公司", "https://www.fit2cloud.com/",
   {SKIP, ToFill, ToFill, NULL}
 },
 
-Huecker = {
+Huecker =
+{
   "huecker",  "(Russia) Huecker", "俄罗斯 Huecker.io",   "https://huecker.io/",
   // 同 DaoCloud，没有合适的下载链接，先随便给一个，以避免 bug
   {NotSkip, NA, NA, "https://huecker.io/en/use.html"}
@@ -36,18 +38,18 @@ Huecker = {
  * @consult https://gist.github.com/y0ngb1n/7e8f16af3242c7815e7ca2f0833d3ea6
  */
 
-static Source_t
-wr_dockerhub_sources[] = {
-  {&UpstreamProvider,       NULL},
-  // {&Ustc,       "https://docker.mirrors.ustc.edu.cn/"},
+static Source_t wr_dockerhub_sources[] =
+{
+  {&UpstreamProvider,  NULL},
+  // {&Ustc,          "https://docker.mirrors.ustc.edu.cn/"},
 
   // https://github.com/DaoCloud/public-image-mirror
-  {&DaoCloud,      "https://docker.m.daocloud.io"},
-  {&Fit2Cloud,     "https://docker.1panel.live"},
+  {&DaoCloud,         "https://docker.m.daocloud.io"},
+  {&Fit2Cloud,        "https://docker.1panel.live"},
 
   // 暂时加入，未来若国内镜像恢复，将删除
   // https://huecker.io/en/use.html#unbanned
-  {&Huecker,       "https://huecker.io"}
+  {&Huecker,          "https://huecker.io"}
 };
 
 def_sources_n(wr_dockerhub);

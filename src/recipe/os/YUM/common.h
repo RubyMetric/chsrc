@@ -7,7 +7,7 @@
  * Last Modified : <2024-08-16>
  * ------------------------------------------------------------*/
 
-// #define OS_Yum_SourceList   "/etc/yum.repos"
-#define OS_Yum_SourceList_D "/etc/yum.repos.d/"
+// #define OS_Yum_SourceList    "/etc/yum.repos"
+#define OS_Yum_SourceList_D     "/etc/yum.repos.d/"
 
-#define OS_openEuler_SourceList   "openEuler.repo"
+#define OS_openEuler_SourceList "openEuler.repo"
