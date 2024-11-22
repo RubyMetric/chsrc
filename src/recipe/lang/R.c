@@ -71,7 +71,8 @@ pl_r_setsrc (char *option)
 
   chsrc_append_to_file (w, config);
 
-  chsrc_conclude (&source, SetsrcType_Auto);
+  ProgMode_ChgType = ChgType_Auto;
+  chsrc_conclude (&source);
 }
 
 def_target(pl_r);

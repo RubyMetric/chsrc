@@ -61,8 +61,9 @@ pl_haskell_setsrc (char *option)
                        "        ignore-expiry: no");
 
   chsrc_note2 (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
-  puts (file);
-  chsrc_conclude (&source, SetsrcType_Manual);
+  say (file);
+  ProgMode_ChgType = ChgType_Manual;
+  chsrc_conclude (&source);
 }
 
 def_target_s (pl_haskell);

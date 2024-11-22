@@ -77,13 +77,14 @@ void
 void
 <category>_<target>_setsrc (char *option)
 {
-  // 下面这行是必须的，注入source变量
+  /* 下面这行是必须的，注入source变量 */
   chsrc_yield_source_and_confirm (<category>_<target>);
 
   /* 具体的换源步骤，如调用第三方命令... */
 
-  // 最后总结输出
-  chsrc_conclude (&source, setsrc_type);
+  /* 最后总结输出 */
+  ProgMode_ChgType = ChgType_;
+  chsrc_conclude (&source);
 }
 
 

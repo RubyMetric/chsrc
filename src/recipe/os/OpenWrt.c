@@ -50,7 +50,9 @@ os_openwrt_setsrc (char *option)
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*downloads.openwrt.org@", source.url, "@g' " OS_OpenWRT_SourceConfig);
 
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_conclude (&source, SetsrcType_Auto);
+
+  ProgMode_ChgType = ChgType_Auto;
+  chsrc_conclude (&source);
 }
 
 

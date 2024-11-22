@@ -32,7 +32,9 @@ os_solus_setsrc (char *option)
 
   char *cmd = xy_2strjoin ("eopkg add-repo Solus ", source.url);
   chsrc_run (cmd, RunOpt_Default);
-  chsrc_conclude (&source, SetsrcType_Auto);
+
+  ProgMode_ChgType = ChgType_Auto;
+  chsrc_conclude (&source);
 }
 
 def_target_s(os_solus);

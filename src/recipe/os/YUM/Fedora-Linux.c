@@ -37,8 +37,6 @@ def_sources_n(os_fedora);
 void
 os_fedora_setsrc (char *option)
 {
-  char *setsrc_type = xy_streql (option, SetsrcType_Reset) ? SetsrcType_Reset : SetsrcType_Auto;
-
   chsrc_ensure_root ();
 
   chsrc_yield_source_and_confirm (os_fedora);
@@ -74,14 +72,15 @@ os_fedora_setsrc (char *option)
 
   chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
 
-  chsrc_conclude (&source, setsrc_type);
+  ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
+  chsrc_conclude (&source);
 }
 
 
 void
 os_fedora_resetsrc (char *option)
 {
-  os_fedora_setsrc (SetsrcType_Reset);
+  os_fedora_setsrc (option);
 }
 
 

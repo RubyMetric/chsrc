@@ -52,9 +52,10 @@ pl_lua_setsrc (char *option)
                                       "server = \"", source.url, "\"");
 
   chsrc_note2 ("请手动修改 ~/.luarocks/upload_config.lua 文件 (用于上传):");
-  puts (upload_config);
+  say (upload_config);
 
-  chsrc_conclude (&source, SetsrcType_Manual);
+  ProgMode_ChgType = ChgType_Manual;
+  chsrc_conclude (&source);
 }
 
 def_target(pl_lua);

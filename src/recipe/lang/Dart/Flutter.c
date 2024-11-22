@@ -83,14 +83,16 @@ pl_dart_flutter_setsrc (char *option)
           chsrc_append_to_file (w, bashrc);
         }
     }
-  chsrc_conclude (&source, SetsrcType_Auto);
+
+  ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
+  chsrc_conclude (&source);
 }
 
 
 void
 pl_dart_flutter_resetsrc (char *option)
 {
-  pl_dart_flutter_setsrc (SetsrcType_Reset);
+  pl_dart_flutter_setsrc (option);
 }
 
 

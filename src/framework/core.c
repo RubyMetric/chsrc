@@ -30,6 +30,17 @@ int  ProgMode_Leader_Selected_Index = -1;
 /* 此时 chsrc_run() 不再是recipe中指定要运行的一个外部命令，而是作为一个功能实现的支撑 */
 bool ProgMode_Run_as_a_Service = false;
 
+enum ChgType_t
+{
+  ChgType_Auto,
+  ChgType_Reset,
+  ChgType_SemiAuto,
+  ChgType_Manual,
+  ChgType_Untested
+};
+
+enum ChgType_t ProgMode_ChgType = ChgType_Auto;
+
 
 /* 命令行选项 */
 bool CliOpt_IPv6      = false;
@@ -769,7 +780,7 @@ source_has_empty_url (Source_t *source)
  *  1. 用户指定某个 Mirror Code
  *  2. NULL: 用户什么都没指定 (将测速选择最快镜像)
  *  3. 用户给了一个 URL
- *  4. SetsrcType_Reset
+ *  4. ChgType_Reset
  * 选用了Leader target
  *  5. ProgMode_Leader_Selected_Index 将给出所选索引
  *
@@ -846,11 +857,6 @@ confirm_source (Source_t *source)
 #define chsrc_yield_source_and_confirm(for_what) chsrc_yield_source(for_what);chsrc_confirm_source
 
 
-#define SetsrcType_Auto     "auto"
-#define SetsrcType_Reset    "reset"
-#define SetsrcType_SemiAuto "semiauto"
-#define SetsrcType_Manual   "manual"
-#define SetsrcType_Untested "untested"
 
 #define MSG_EN_PUBLIC_URL "If the URL you specify is a public service, you are invited to contribute: chsrc issue"
 #define MSG_CN_PUBLIC_URL "若您指定的URL为公有服务，邀您参与贡献: chsrc issue"
@@ -876,22 +882,24 @@ confirm_source (Source_t *source)
 #define thank_mirror(msg) chsrc_log(xy_2strjoin(msg,purple(CliOpt_InEnglish?source->mirror->abbr:source->mirror->name)))
 
 /**
- * @param source    可为NULL
- * @param last_word 5种选择：SetsrcType_Auto | SetsrcType_Reset | SetsrcType_SemiAuto | SetsrcType_Manual | SetsrcType_Untested
- * @translation Done
+ * @param source 可为NULL
+ *
+ * @param[g] ProgMode_ChgType
  */
 void
-chsrc_conclude (Source_t *source, const char *last_word)
+chsrc_conclude (Source_t *source)
 {
   split_between_source_changing_process;
 
-  if ((ProgMode_CMD_Reset == true) || xy_streql (SetsrcType_Reset, last_word))
+  // fprintf (stderr, "chsrc: now change type: %d\n", ProgMode_ChgType);
+
+  if (ProgMode_CMD_Reset || ChgType_Reset == ProgMode_ChgType)
     {
       // source_is_upstream (source)
       char *msg = CliOpt_InEnglish ? "Has been reset to the upstream default source" : "已重置为上游默认源";
       chsrc_log (purple (msg));
     }
-  else if (xy_streql (SetsrcType_Auto, last_word))
+  else if (ChgType_Auto == ProgMode_ChgType)
     {
       if (source)
         {
@@ -914,7 +922,7 @@ chsrc_conclude (Source_t *source, const char *last_word)
           chsrc_log (msg);
         }
     }
-  else if (xy_streql (SetsrcType_SemiAuto, last_word))
+  else if (ChgType_SemiAuto == ProgMode_ChgType)
     {
       if (source)
         {
@@ -941,7 +949,7 @@ chsrc_conclude (Source_t *source, const char *last_word)
       char *msg = CliOpt_InEnglish ? MSG_EN_BETTER : MSG_CN_BETTER;
       chsrc_warn (msg);
     }
-  else if (xy_streql (SetsrcType_Manual, last_word))
+  else if (ChgType_Manual == ProgMode_ChgType)
     {
       if (source)
         {
@@ -966,7 +974,7 @@ chsrc_conclude (Source_t *source, const char *last_word)
       char *msg = CliOpt_InEnglish ? MSG_EN_BETTER : MSG_CN_BETTER;
       chsrc_warn (msg);
     }
-  else if (xy_streql (SetsrcType_Untested, last_word))
+  else if (ChgType_Untested == ProgMode_ChgType)
     {
       if (source)
         {
@@ -992,7 +1000,8 @@ chsrc_conclude (Source_t *source, const char *last_word)
     }
   else
     {
-      say (last_word);
+      fprintf (stderr, "chsrc: Wrong change type: %d\n", ProgMode_ChgType);
+      xy_unreach;
     }
 }
 

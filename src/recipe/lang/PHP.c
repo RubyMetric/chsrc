@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-08-30>
- * Last Modified : <2024-09-14>
+ * Last Modified : <2024-11-22>
  * ------------------------------------------------------------*/
 
 /**
@@ -39,7 +39,7 @@ pl_php_getsrc (char *option)
 }
 
 /**
- * PHP 换源，参考：https://developer.aliyun.com/composer
+ * @consult https://developer.aliyun.com/composer
  */
 void
 pl_php_setsrc (char *option)
@@ -57,7 +57,8 @@ pl_php_setsrc (char *option)
   char *cmd = xy_strjoin (4, "composer config", where, "repo.packagist composer ", source.url);
   chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_conclude (&source, SetsrcType_SemiAuto);
+  ProgMode_ChgType = ChgType_Auto;
+  chsrc_conclude (&source);
 }
 
 

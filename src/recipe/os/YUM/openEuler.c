@@ -44,7 +44,9 @@ os_openeuler_setsrc (char *option)
   chsrc_overwrite_file (towrite, OS_openEuler_SourceList);
 
   chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
-  chsrc_conclude (&source, SetsrcType_Auto);
+
+  ProgMode_ChgType = ChgType_Auto;
+  chsrc_conclude (&source);
 }
 
 def_target_s(os_openeuler);

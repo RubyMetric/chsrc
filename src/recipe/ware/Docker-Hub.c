@@ -151,7 +151,9 @@ wr_dockerhub_setsrc (char *option)
       chsrc_note2 ("选择“Docker Engine”选项卡，在该选项卡中找到“registry-mirrors”一栏，添加镜像地址:");
       puts (source.url);
     }
-  chsrc_conclude (&source, SetsrcType_Manual);
+
+  ProgMode_ChgType = ChgType_Manual;
+  chsrc_conclude (&source);
 }
 
 

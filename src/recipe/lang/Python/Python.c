@@ -45,8 +45,6 @@ pl_python_setsrc (char *option)
     chsrc_note2 (msg);
   }
 
-  char *setsrc_type = xy_streql (option, SetsrcType_Reset) ? SetsrcType_Reset : SetsrcType_Auto;
-
   bool pdm_exist    = false,
        poetry_exist = false;
 
@@ -71,13 +69,14 @@ pl_python_setsrc (char *option)
       pl_python_pdm_setsrc (option);
     }
 
-  chsrc_conclude (&source, setsrc_type);
+  ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
+  chsrc_conclude (&source);
 }
 
 void
 pl_python_resetsrc (char *option)
 {
-  pl_python_setsrc (SetsrcType_Reset);
+  pl_python_setsrc (option);
 }
 
 

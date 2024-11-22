@@ -66,7 +66,9 @@ os_debian_setsrc_for_deb822 (char *option)
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_conclude (&source, SetsrcType_Auto);
+
+  ProgMode_ChgType = ChgType_Auto;
+  chsrc_conclude (&source);
 }
 
 
@@ -105,7 +107,9 @@ os_debian_setsrc (char *option)
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
-  chsrc_conclude (&source, SetsrcType_Auto);
+
+  ProgMode_ChgType = ChgType_Auto;
+  chsrc_conclude (&source);
 }
 
 

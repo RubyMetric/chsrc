@@ -48,9 +48,10 @@ pl_ocaml_setsrc(char *option)
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_note2 ("如果是首次使用 opam ，请使用以下命令进行初始化");
-  puts (xy_2strjoin ("opam init default ", source.url));
+  say (xy_2strjoin ("opam init default ", source.url));
 
-  chsrc_conclude (&source, SetsrcType_SemiAuto);
+  ProgMode_ChgType = ChgType_SemiAuto;
+  chsrc_conclude (&source);
 }
 
 def_target(pl_ocaml);

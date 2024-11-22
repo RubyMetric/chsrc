@@ -45,8 +45,6 @@ pl_rust_rustup_getsrc (char *option)
 void
 pl_rust_rustup_setsrc (char *option)
 {
-  char *setsrc_type = xy_streql (option, SetsrcType_Reset) ? SetsrcType_Reset : SetsrcType_Auto;
-
   chsrc_yield_source_and_confirm (pl_rust_rustup);
 
   char *w1 = xy_strjoin (3, "export RUSTUP_DIST_SERVER=\"", source.url, "\"\n");
@@ -80,7 +78,8 @@ pl_rust_rustup_setsrc (char *option)
       chsrc_append_to_file (w, fishrc);
     }
 
-  chsrc_conclude (&source, setsrc_type);
+  ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
+  chsrc_conclude (&source);
   chsrc_note2 ("请您重启终端使rustup环境变量生效");
 }
 
@@ -91,7 +90,7 @@ pl_rust_rustup_setsrc (char *option)
 void
 pl_rust_rustup_resetsrc (char *option)
 {
-  pl_rust_rustup_setsrc (SetsrcType_Reset);
+  pl_rust_rustup_setsrc (option);
 }
 
 

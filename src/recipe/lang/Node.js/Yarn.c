@@ -72,7 +72,10 @@ pl_nodejs_yarn_setsrc (char *option)
     }
 
   if (ProgMode_Target_Group!=true)
-    chsrc_conclude (&source, SetsrcType_Auto);
+    {
+      ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
+      chsrc_conclude (&source);
+    }
 }
 
 
@@ -82,7 +85,7 @@ pl_nodejs_yarn_setsrc (char *option)
 void
 pl_nodejs_yarn_resetsrc (char *option)
 {
-  pl_nodejs_yarn_setsrc (SetsrcType_Reset);
+  pl_nodejs_yarn_setsrc (option);
 }
 
 

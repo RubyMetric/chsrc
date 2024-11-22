@@ -55,8 +55,9 @@ pl_rust_cargo_setsrc (char *option)
     "registry = \"sparse+", source.url, "\"");
 
   chsrc_note2 (xy_strjoin (3, "请您手动写入以下内容到 ", xy_normalize_path ("~/.cargo/config.toml"), " 文件中:"));
-  puts (file);
-  chsrc_conclude (&source, SetsrcType_Manual);
+  say (file);
+  ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
+  chsrc_conclude (&source);
 }
 
 
@@ -66,7 +67,7 @@ pl_rust_cargo_setsrc (char *option)
 void
 pl_rust_cargo_resetsrc (char *option)
 {
-  pl_rust_cargo_setsrc (SetsrcType_Reset);
+  pl_rust_cargo_setsrc (option);
 }
 
 

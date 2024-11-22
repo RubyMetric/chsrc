@@ -47,7 +47,8 @@ os_openbsd_setsrc (char *option)
   chsrc_backup ("/etc/installurl");
   chsrc_overwrite_file (source.url, "/etc/installurl");
 
-  chsrc_conclude (&source, SetsrcType_Untested);
+  ProgMode_ChgType = ChgType_Untested;
+  chsrc_conclude (&source);
 }
 
 def_target(os_openbsd);

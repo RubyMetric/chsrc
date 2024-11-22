@@ -67,7 +67,9 @@ os_rockylinux_setsrc (char *option)
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
-  chsrc_conclude (&source, SetsrcType_Auto);
+
+  ProgMode_ChgType = ChgType_Auto;
+  chsrc_conclude (&source);
 }
 
 

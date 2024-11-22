@@ -41,7 +41,10 @@ pl_nodejs_npm_setsrc (char *option)
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
   if (ProgMode_Target_Group!=true)
-    chsrc_conclude (&source, SetsrcType_Auto);
+    {
+      ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
+      chsrc_conclude (&source);
+    }
 }
 
 
@@ -51,7 +54,7 @@ pl_nodejs_npm_setsrc (char *option)
 void
 pl_nodejs_npm_resetsrc (char *option)
 {
-  pl_nodejs_npm_setsrc (SetsrcType_Reset);
+  pl_nodejs_npm_setsrc (option);
 }
 
 
