@@ -12,8 +12,7 @@
 /**
  * @update 2024-11-21
  */
-static Source_t
-os_armbian_sources[] =
+static Source_t os_armbian_sources[] =
 {
   {&UpstreamProvider, "http://apt.armbian.com"},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/armbian"},

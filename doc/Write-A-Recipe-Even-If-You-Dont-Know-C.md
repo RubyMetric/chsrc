@@ -6,7 +6,7 @@
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2024-08-19>
- ! Last Modified : <2024-11-08>
+ ! Last Modified : <2024-11-23>
  ! ---------------------------------------------------------- -->
 
 # Write A Recipe Even If You Don't Know C
@@ -17,7 +17,7 @@
 
 <br>
 
-我鼓励你为新的软件添加换源支持，因为通过 `chsrc` 这将非常简单，你的贡献也将非常有价值。
+我鼓励你为新的软件添加换源支持，因为通过 `chsrc` 这将非常简单，你的贡献也将非常有价值。理论上每一个 `recipe` 都需要有专人长时间维护。
 
 1. 本项目采用`GPLv3+`协议，是真正的**自由软件**，而非仅仅是开源软件
 2. 代码规范灵活遵循`GNU`标准（若标准干扰了可维护性，则并不采纳）
@@ -75,10 +75,10 @@
 
 5. 可以使用这些函数:
 
-    1. `chsrc-framework.h` 中暴露出的任何 `chsrc_` 开头的函数或宏
+    1. `framework/core.c` 中以 `chsrc_` 开头的所有函数或宏
     2. `xy.h` 中以 `xy_` 开头的所有函数或宏
 
-6. 在 `menu.c` 中添加用户可以使用的 `target` 别名
+6. 在 `recipe/menu.c` 中添加用户可以使用的 `target` 别名
 
 7. 构建并运行 `chsrc set <target>` 测试，若无问题可提交 Pull Request
 
