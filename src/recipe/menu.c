@@ -5,7 +5,7 @@
  * Contributors   :  Nil Null  <nil@null.org>
  * Created On     : <2023-09-01>
  * Major Revision :      1
- * Last Modified  : <2024-10-29>
+ * Last Modified  : <2024-12-06>
  * ------------------------------------------------------------*/
 
 /* Begin Target Matrix */
@@ -17,6 +17,7 @@ static const char
   *pl_python_pip[]    = {"pip",                    NULL, t(&pl_python_pip_target)},
   *pl_python_poetry[] = {"poetry",                 NULL, t(&pl_python_poetry_target)},
   *pl_python_pdm[]    = {"pdm",                    NULL, t(&pl_python_pdm_target)},
+  *pl_python_rye[]    = {"rye",                    NULL, t(&pl_python_rye_target)},
 
 *pl_nodejs[]        = {"node", "nodejs", NULL, t(&pl_nodejs_target)},
 *pl_nodejs_bun[]    = {"bun",            NULL, t(&pl_nodejs_bun_target)},
@@ -47,7 +48,7 @@ static const char
 **pl_packagers[] =
 {
   pl_ruby,
-  pl_python,  pl_python_pip, pl_python_poetry, pl_python_pdm,
+  pl_python,  pl_python_pip, pl_python_poetry, pl_python_pdm, pl_python_rye,
   pl_nodejs,  pl_nodejs_bun,
               pl_nodejs_npm, pl_nodejs_pnpm,   pl_nodejs_yarn,
               pl_nodejs_nvm,

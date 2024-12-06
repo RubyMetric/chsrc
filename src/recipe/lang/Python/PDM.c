@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  : Nul None <nul@none.org>
+ * Contributors  :  Nul None  <nul@none.org>
  * Created On    : <2024-06-05>
  * Last Modified : <2024-09-14>
  * ------------------------------------------------------------*/

@@ -17,14 +17,15 @@
  *                 |   GnixAij     <gaojiaxing0220@gmail.com>
  *                 |   ChatGPT     <https://chatgpt.com>
  *                 |    czyt       <czyt.go@gmail.com>
+ *                 |    zouri      <guoshuaisun@outlook.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-11-22>
+ * Last Modified   : <2024-12-06>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.1.9.4"
+#define Chsrc_Version        "0.1.9.4-dev1"
 #define Chsrc_Release_Date   "2024/11/22"
 #define Chsrc_Banner_Version "v" Chsrc_Version "-" Chsrc_Release_Date
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
@@ -38,6 +39,7 @@
   #include "recipe/lang/Python/pip.c"
   #include "recipe/lang/Python/Poetry.c"
   #include "recipe/lang/Python/PDM.c"
+  #include "recipe/lang/Python/Rye.c"
 #include "recipe/lang/Python/Python.c"
 
 #include "recipe/lang/Node.js/common.h"
