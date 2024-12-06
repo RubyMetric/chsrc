@@ -528,17 +528,17 @@ get_target (const char *input, TargetOp code, char *option)
   if (TargetOp_Set_Source==code)
     {
       if (target->setfn) target->setfn(option);
-      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现set功能，邀您帮助: chsrc issue"));
+      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 set 功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_Reset_Source==code)
     {
       if (target->resetfn) target->resetfn(option);
-      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现reset功能，邀您帮助: chsrc issue"));
+      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 reset 功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_Get_Source==code)
     {
       if (target->getfn) target->getfn("");
-      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现get功能，邀您帮助: chsrc issue"));
+      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 get 功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_List_Config==code)
     {

@@ -678,13 +678,15 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
 
 /**
  * 自动测速选择镜像站和源
- *
- * @translation Done
  */
 #define auto_select_mirror(s) select_mirror_autoly(s##_sources, s##_sources_n, (char*)#s+3)
 int
 select_mirror_autoly (Source_t *sources, size_t size, const char *target_name)
 {
+  /* reset 时选择默认源 */
+  if (ProgMode_CMD_Reset)
+    return 0;
+
   if (!CliOpt_DryRun)
   {
     char *msg = CliOpt_InEnglish ? "Measuring speed in sequence" : "测速中";
@@ -701,12 +703,9 @@ select_mirror_autoly (Source_t *sources, size_t size, const char *target_name)
     }
 
   if (CliOpt_DryRun)
+  /* Dry Run 时，跳过测速 */
     {
-      /* Dry Run 时，跳过测速 */
-      if (ProgMode_CMD_Reset)
-        return 0; /* 选择默认源 */
-      else
-        return 1; /* 原则第一个源 */
+      return 1; /* 原则第一个源 */
     }
 
   bool only_one = false;
