@@ -312,6 +312,8 @@ chsrc set python | py | pypi # 同时换 pip, poetry 和 pdm 这3个包管理器
   chsrc set poetry
   chsrc set pdm
 
+chsrc set rye
+
 chsrc set node | nodejs # 同时换 npm, yarn 和 pnpm 这3个包管理器，也可以3个独立换源
   chsrc set npm
   chsrc set yarn
