@@ -100,7 +100,7 @@
 <details>
 <summary>Windows</summary>
 
-<div style="magrin-top: 10px"> </div>
+<div style="margin-top: 20px"></div>
 
 - 可通过 `scoop` 安装，感谢 [@Gn3po4g] 与 [@niheaven]
 
@@ -133,6 +133,8 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windo
 
 <details>
 <summary>Linux</summary>
+
+<div style="margin-top: 20px"></div>
 
 - 支持 `AUR`，可通过 `yay` 安装，感谢 [@Jerry-Terrasse]
 
@@ -186,6 +188,8 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-armv7-lin
 <details>
 <summary>macOS</summary>
 
+<div style="margin-top: 20px"></div>
+
 - 可通过 `homebrew` 安装，感谢 [@Aaron-212] 与 [@chenrui333]
 
 ```bash
@@ -228,6 +232,8 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-macos
 <details>
 <summary>BSD</summary>
 
+<div style="margin-top: 20px"></div>
+
 ```bash
 $ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc
 $ clang -Iinclude src/chsrc-main.c -o chsrc
@@ -236,6 +242,8 @@ $ clang -Iinclude src/chsrc-main.c -o chsrc
 
 <details>
 <summary>其他平台</summary>
+
+<div style="margin-top: 20px"></div>
 
 ```bash
 $ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
@@ -462,7 +470,6 @@ make clean
 [@Jerry-Terrasse]: https://github.com/Jerry-Terrasse
 [@ccmywish]:       https://github.com/ccmywish
 [@Efterklang]:     https://github.com/Efterklang
-<!-- GitHub用户名为数字，改用其名 -->
-[@xuan]:           https://github.com/1328032567
+[@wickdynex]:      https://github.com/wickdynex
 
 [issue#98 on GitHub]: https://github.com/RubyMetric/chsrc/issues/98
