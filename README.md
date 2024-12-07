@@ -100,6 +100,8 @@
 <details>
 <summary>Windows</summary>
 
+<div style="magrin-top: 10px"> </div>
+
 - 可通过 `scoop` 安装，感谢 [@Gn3po4g] 与 [@niheaven]
 
 ```bash
@@ -113,7 +115,7 @@ $ scoop install chsrc
     若下方链接无法访问，可使用 `https://gitee.com/RubyMetric/chsrc/raw/main/tool/installer.ps1` 替代
 
 ```PowerShell
-$ iwr -useb "https://chsrc.run/windows" | iex
+"& { $(iwr -useb https://chsrc.run/windows) } -Version pre" | iex
 ```
 
 <br>

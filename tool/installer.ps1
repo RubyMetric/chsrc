@@ -5,7 +5,7 @@
 # Contributors  : Aoran Zeng <ccmywish@qq.com>
 #               |
 # Created On    : <2024-10-26>
-# Last Modified : <2024-10-27>
+# Last Modified : <2024-12-07>
 #
 #         chsrc installer for Windows
 # ---------------------------------------------------------------
@@ -163,7 +163,8 @@ function Install {
         $outfile = "\${binary_name}.exe"
         output_info "Downloading $binary_name ($global:arch architecture, $platform platform, version $global:version) to $global:install_dir ..."
         Invoke-WebRequest -OutFile ($global:install_dir + $outfile) -Uri $global:url -ErrorAction Stop
-        output_info "🎉 Installation completed, destination: " ($global:install_dir + $outfile)
+        # 🎉 这个符号会变成 ??? 不要添加
+        output_info "Installation completed, destination: " ($global:install_dir + $outfile)
     } catch {
         output_error "Unable to download $binary_name. Error: $_"
     }
