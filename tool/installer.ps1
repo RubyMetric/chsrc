@@ -5,7 +5,7 @@
 # Contributors  : Aoran Zeng <ccmywish@qq.com>
 #               |
 # Created On    : <2024-10-26>
-# Last Modified : <2024-12-07>
+# Last Modified : <2024-12-08>
 #
 #         chsrc installer for Windows
 # ---------------------------------------------------------------
@@ -127,7 +127,7 @@ function Set_URL {
             output_error "Unsupported architecture '$cpuArchitecture'. Only x86 or x64 architectures are supported."
         }
     }
-    output_info "My CPU architecture: $global:arch"
+    output_info "Get my CPU architecture: $global:arch"
 
     # Set URL
     if ($version -eq "pre") {
@@ -139,7 +139,7 @@ function Set_URL {
                             "v" + "${global:version}/chsrc-${global:arch}-windows.exe"
     }
 
-    output_info "Set downLoad URL: $global:url"
+    output_info "Set download URL: $global:url"
 }
 
 function Install {
@@ -161,10 +161,10 @@ function Install {
 
     try {
         $outfile = "\${binary_name}.exe"
-        output_info "Downloading $binary_name ($global:arch architecture, $platform platform, version $global:version) to $global:install_dir ..."
+        output_info "Downloading $binary_name (architecture: $global:arch, platform: $platform, version: $global:version) to $global:install_dir"
         Invoke-WebRequest -OutFile ($global:install_dir + $outfile) -Uri $global:url -ErrorAction Stop
         # 🎉 这个符号会变成 ??? 不要添加
-        output_info "Installation completed, destination: " ($global:install_dir + $outfile)
+        output_info "Installation completed, destination:" ($global:install_dir + $outfile)
     } catch {
         output_error "Unable to download $binary_name. Error: $_"
     }
