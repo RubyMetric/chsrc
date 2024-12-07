@@ -27,6 +27,8 @@ static Source_t pl_python_sources[] =
   {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/pypi/web/simple"},
   {&Tuna,             "https://pypi.tuna.tsinghua.edu.cn/simple"},
   {&Ali,              "https://mirrors.aliyun.com/pypi/simple/"},
+  {&Nju,              "https://mirror.nju.edu.cn/pypi/web/simple"},
+  {&Pku,               "https://mirrors.pku.edu.cn/pypi/web/simple"},
   {&Tencent,          "https://mirrors.cloud.tencent.com/pypi/simple"},
   // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/pypi/simple"},
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/pypi/simple"},
