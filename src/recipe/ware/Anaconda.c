@@ -14,6 +14,11 @@
 static Source_t wr_anaconda_sources[] =
 {
   {&UpstreamProvider, "https://repo.anaconda.com/"},
+  {&Nju,              "https://mirror.nju.edu.cn/anaconda/"},
+  {&Bjtu,              "https://mirror.bjtu.edu.cn/anaconda/"},
+  {&Pku,               "https://mirrors.pku.edu.cn/anaconda/"},
+  {&Xjtu,              "https://mirrors.xjtu.edu.cn/anaconda/"},
+  {&Njtech,            "https://mirrors.njtech.edu.cn/anaconda/"},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/anaconda/"},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/anaconda/"},
   {&Zju,              "https://mirrors.zju.edu.cn/anaconda/"},
