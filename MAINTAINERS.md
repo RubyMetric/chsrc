@@ -111,7 +111,7 @@
 ### Ubuntu
 1. **Director**: `@ccmywish`
 2. **Maintainers**: `@gitee:G_I_Y`
-3. **Observers**:
+3. **Observers**: `@wickdynex`
 
 ### Debian
 1. **Director**:
@@ -226,7 +226,7 @@
 ### Homebrew
 1. **Director**:
 2. **Maintainers**: `@ccmywish`
-3. **Observers**:
+3. **Observers**: `@wickdynex`
 
 ### WinGet
 1. **Director**:
