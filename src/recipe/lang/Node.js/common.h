@@ -35,7 +35,11 @@ static Source_t pl_nodejs_sources[] =
 {
   {&UpstreamNpm,  "https://registry.npmjs.org/"}, /* @note 根据 pnpm 官网，有最后的斜线 */
   {&NpmMirror,    "https://registry.npmmirror.com"},
+  {&aliyun1,      "http://npmmirror.com/"
   {&Huawei,       "https://mirrors.huaweicloud.com/repository/npm/"},
+{&ustc,"http://mirrors.ustc.edu.cn/"},
+{&aliyun,"https://npm.aliyun.com/"},
+{&163,"https://mirrors.163.com/npm/"},
   {&Tencent,      "https://mirrors.cloud.tencent.com/npm/"},
 };
 def_sources_n(pl_nodejs);
