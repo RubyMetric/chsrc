@@ -50,7 +50,7 @@
 
 1. [[Challenge] 编写统一安装的 shell 和 PowerShell 脚本](https://github.com/RubyMetric/chsrc/issues/98)
 
-    已由 [@Efterklang] 与 [@xuan] 完成
+    已由 [@Efterklang] 与 [@wickdynex] 完成
 
 </details>
 
@@ -108,7 +108,7 @@ $ scoop install chsrc
 
 <br>
 
-- 可通过 `PowerShell` 脚本一键下载最新版二进制文件，感谢 [@xuan]
+- 可通过 `PowerShell` 脚本一键下载最新版二进制文件，感谢 [@wickdynex]
 
     若下方链接无法访问，可使用 `https://gitee.com/RubyMetric/chsrc/raw/main/tool/installer.ps1` 替代
 
@@ -143,7 +143,7 @@ $ yay -S chsrc     # Build  from GitHub Release
 
 <br>
 
-- 可通过 `shell` 脚本一键安装最新版，感谢 [@Efterklang] 与 [@xuan]
+- 可通过 `shell` 脚本一键安装最新版，感谢 [@Efterklang] 与 [@wickdynex]
 
     若下方链接无法访问，可使用 `https://gitee.com/RubyMetric/chsrc/raw/main/tool/installer.sh` 替代
 
@@ -192,7 +192,7 @@ $ brew install chsrc
 
 <br>
 
-- 可通过 `shell` 脚本安装最新版，感谢 [@Efterklang] 与 [@xuan]
+- 可通过 `shell` 脚本安装最新版，感谢 [@Efterklang] 与 [@wickdynex]
 
     若下方链接无法访问，可使用 `https://gitee.com/RubyMetric/chsrc/raw/main/tool/installer.sh` 替代
 
