@@ -7,7 +7,7 @@
 # Contributors  : Aoran Zeng <ccmywish@qq.com>
 #               |
 # Created On    : <2024-10-25>
-# Last Modified : <2024-10-26>
+# Last Modified : <2024-12-08>
 #
 #         chsrc installer for Linux & macOS
 # ---------------------------------------------------------------
@@ -171,9 +171,9 @@ install() {
   path_to_executable="${userOpt_install_dir}/${binary_name}"
 
   if [ "$userOpt_lang" = "zh" ]; then
-    info "下载 ${binary_name} (${arch} 架构, ${platform} 平台， ${userOpt_version}版本) 到 ${path_to_executable}"
+    info "下载 ${binary_name} (架构: ${arch}, 平台: ${platform}, 版本: ${userOpt_version}) 到 ${path_to_executable}"
   else
-    info "Downloading ${binary_name} (${arch} architecture, ${platform} platform, version ${userOpt_version}) to ${path_to_executable}"
+    info "Downloading ${binary_name} (architecture: ${arch}, platform: ${platform}, version: ${userOpt_version}) to ${path_to_executable}"
   fi
 
   if curl -sL "$url" -o "$path_to_executable"; then
