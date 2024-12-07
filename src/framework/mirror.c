@@ -7,7 +7,7 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-11-21>
+ * Last Modified : <2024-12-07>
  *
  * 通用镜像站
  * ------------------------------------------------------------*/
@@ -107,6 +107,12 @@ Scau =
 {
   "scau", "SCAU", "华南农业大学开源软件镜像站", "https://mirrors.scau.edu.cn/",
   {NotSkip, NA, NA, "https://mirrors.scau.edu.cn/ubuntu-releases" Big_File_ubuntu}
+},
+
+NJTech =
+{
+  "njtech", "NJTech", "南京工业大学开源软件镜像站", "https://mirrors.njtech.edu.cn/",
+  {NotSkip, NA, NA, "https://mirrors.njtech.edu.cn/ubuntu-releases" Big_File_ubuntu}
 },
 
 Nju =
