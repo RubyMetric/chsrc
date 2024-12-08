@@ -18,9 +18,10 @@
  *                 |   ChatGPT     <https://chatgpt.com>
  *                 |    czyt       <czyt.go@gmail.com>
  *                 |    zouri      <guoshuaisun@outlook.com>
+ *                 |  yongxiang    <1926885268@qq.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-12-06>
+ * Last Modified   : <2024-12-08>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/

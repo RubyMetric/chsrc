@@ -2,27 +2,28 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  : Yangmoooo <yangmoooo@outlook.com>
- *               | yongxiang <1926885268@qq.com>
+ * Contributors  : Yangmoooo  <yangmoooo@outlook.com>
+ *               | yongxiang  <1926885268@qq.com>
+ *               |
  * Created On    : <2023-09-10>
- * Last Modified : <2024-12-07>
+ * Last Modified : <2024-12-08>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2023-09-10
+ * @update 2024-12-08
  * @note 这些链接将会在setsrc函数中补充完整
  */
 static Source_t wr_anaconda_sources[] =
 {
   {&UpstreamProvider, "https://repo.anaconda.com/"},
   {&Nju,              "https://mirror.nju.edu.cn/anaconda/"},
-  {&Bjtu,              "https://mirror.bjtu.edu.cn/anaconda/"},
-  {&Pku,               "https://mirrors.pku.edu.cn/anaconda/"},
-  {&Njtech,            "https://mirrors.njtech.edu.cn/anaconda/"},
+  {&Bjtu,             "https://mirror.bjtu.edu.cn/anaconda/"},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/anaconda/"},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/anaconda/"},
   {&Zju,              "https://mirrors.zju.edu.cn/anaconda/"},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/anaconda"}
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/anaconda"},
+  {&Pku,              "https://mirrors.pku.edu.cn/anaconda/"},
+  {&NJTech,           "https://mirrors.njtech.edu.cn/anaconda/"},
 };
 def_sources_n(wr_anaconda);
 

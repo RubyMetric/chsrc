@@ -2,10 +2,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors   : Aoran Zeng <ccmywish@qq.com>
- * Contributors   :  Nul None  <nul@none.org>
+ * Contributors   : yongxiang  <1926885268@qq.com>
+ *                |
  * Created On     : <2023-09-03>
  * Major Revision :      1
- * Last Modified  : <2024-11-22>
+ * Last Modified  : <2024-12-08>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t UpstreamPython =
@@ -15,7 +16,7 @@ static SourceProvider_t UpstreamPython =
 };
 
 /**
- * @update 2024-09-14
+ * @update 2024-12-08
  * @note 不要添加Zju，浙大的pypi在校外访问会自动转向Tuna
  */
 static Source_t pl_python_sources[] =
@@ -28,7 +29,7 @@ static Source_t pl_python_sources[] =
   {&Tuna,             "https://pypi.tuna.tsinghua.edu.cn/simple"},
   {&Ali,              "https://mirrors.aliyun.com/pypi/simple/"},
   {&Nju,              "https://mirror.nju.edu.cn/pypi/web/simple"},
-  {&Pku,               "https://mirrors.pku.edu.cn/pypi/web/simple"},
+  {&Pku,              "https://mirrors.pku.edu.cn/pypi/web/simple"},
   {&Tencent,          "https://mirrors.cloud.tencent.com/pypi/simple"},
   // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/pypi/simple"},
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/pypi/simple"},
