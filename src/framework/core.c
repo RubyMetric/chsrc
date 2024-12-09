@@ -693,7 +693,7 @@ select_mirror_autoly (Source_t *sources, size_t size, const char *target_name)
 
   if (xy_on_windows)
     {
-      char *curl_version = xy_run ("curl --version >nul 2>nul", 1, NULL);
+      char *curl_version = xy_run ("curl --version", 1, NULL);
       /**
        * https://github.com/RubyMetric/chsrc/issues/144
        *
