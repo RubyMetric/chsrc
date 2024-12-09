@@ -719,6 +719,25 @@ select_mirror_autoly (Source_t *sources, size_t size, const char *target_name)
       chsrc_error (msg);
       exit (Exit_UserCause);
     }
+
+  if (xy_on_windows)
+    {
+      char *curl_version = xy_run ("curl --version >nul 2>nul", 1, NULL);
+      /**
+       * https://github.com/RubyMetric/chsrc/issues/144
+       *
+       * Cygwin上，curl 的版本信息为:
+       *
+       *    curl 8.9.1 (x86_64-pc-cygwin)
+       *
+       */
+      if (strstr (curl_version, "pc-cygwin"))
+        {
+          char *msg = CliOpt_InEnglish ? "You're using curl built by Cygwin which has a bug! Please use another curl!" : "你使用的是Cygwin构建的curl，该版本的curl存在bug，请改用其他版本的curl";
+          chsrc_error (msg);
+          exit (Exit_UserCause);
+        }
+    }
   /** --------------------------------------------- */
 
   /* 总测速记录值 */
