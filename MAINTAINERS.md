@@ -36,12 +36,12 @@
 
 ### Python
 1. **Director**:
-2. **Maintainers**: `@ccmywish`
+2. **Maintainers**: `@ccmywish` `@happy-game`
 3. **Observers**:
 
 ### NodeJS
 1. **Director**:
-2. **Maintainers**: `@ccmywish`
+2. **Maintainers**: `@ccmywish` `@happy-game`
 3. **Observers**:
 
 ### Perl
@@ -116,11 +116,11 @@
 ### Debian
 1. **Director**:
 2. **Maintainers**: `@ccmywish` `@gitee:G_I_Y`
-3. **Observers**:
+3. **Observers**: `@happy-game`
 
 ### Fedora
 1. **Director**:
-2. **Maintainers**:  `@ccmywish` `@gitee:G_I_Y`
+2. **Maintainers**:  `@ccmywish` `@gitee:G_I_Y` `@happy-game`
 3. **Observers**:
 
 ### Kali
@@ -155,7 +155,7 @@
 
 ### Arch
 1. **Director**:
-2. **Maintainers**:  `@ccmywish`  `@gitee:G_I_Y`
+2. **Maintainers**:  `@ccmywish`  `@gitee:G_I_Y` `@happy-game`
 3. **Observers**:
 
 ### Manjaro
@@ -176,7 +176,7 @@
 ### OpenWrt
 1. **Director**:
 2. **Maintainers**:  `@ccmywish`
-3. **Observers**:
+3. **Observers**: `@happy-game`
 
 ### Gentoo
 1. **Director**:
@@ -255,13 +255,13 @@
 
 ### Docker Hub
 1. **Director**:
-2. **Maintainers**: `@ccmywish`
+2. **Maintainers**: `@ccmywish` `@happy-game`
 3. **Observers**:
 
 ### Anaconda
 1. **Director**:
 2. **Maintainers**: `@ccmywish`
-3. **Observers**:
+3. **Observers**: `@happy-game`
 
 ### Emacs
 1. **Director**:
