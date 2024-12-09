@@ -11,7 +11,7 @@ CFLAGS = -Iinclude # -Wall
 
 # 只有Windows会定义该变量
 ifeq ($(OS), Windows_NT)
-	CLANG_FLAGS = -Target x86_64-pc-windows-gnu
+	CLANG_FLAGS = -target x86_64-pc-windows-gnu
 endif
 ifeq ($(CC), clang)
 	CFLAGS += $(CLANG_FLAGS)
