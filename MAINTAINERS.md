@@ -97,7 +97,7 @@
 ### R
 1. **Director**:
 2. **Maintainers**:  `@ccmywish`
-3. **Observers**:  @gitee:tfcolin
+3. **Observers**:  `@gitee:tfcolin`
 
 ### Julia
 1. **Director**:
@@ -206,7 +206,7 @@
 ### FreeBSD
 1. **Director**:
 2. **Maintainers**:  `@gitee:G_I_Y` `@ccmywish`
-3. **Observers**: @ykla
+3. **Observers**: `@ykla`
 
 ### NetBSD
 1. **Director**:
