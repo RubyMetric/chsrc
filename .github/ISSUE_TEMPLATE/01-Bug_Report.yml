@@ -1,7 +1,7 @@
 name: 🐞 Bug 报告
 description: 有 Bug 了吗?
-title: "[Bug] "
-labels: []
+title: ""
+labels: ['Bug']
 body:
 
   - type: markdown

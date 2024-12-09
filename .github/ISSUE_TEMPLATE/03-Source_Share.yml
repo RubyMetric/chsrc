@@ -1,6 +1,6 @@
 name: 😋 我找到了新的可用源！
 description: 为大家分享新的可用源！
-title: "[New Source] "
+title: ""
 labels: ['源']
 body:
   - type: markdown

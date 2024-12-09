@@ -1,6 +1,6 @@
-name: 🎉 隔壁新开了个镜像站！
+name: 🎉 新开了个镜像站！
 description: 告诉我们哪里开了个新镜像站！
-title: "[New Mirror] "
+title: ""
 labels: ['镜像站']
 body:
   - type: markdown
