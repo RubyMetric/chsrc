@@ -6,9 +6,10 @@
  *               |  Heng Guo  <2085471348@qq.com>
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
  *               | Happy Game <happygame10124@gmail.com>
+ *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-11-22>
+ * Last Modified : <2024-12-09>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -488,19 +489,6 @@ measure_speed_for_url (void *url)
 
 
   char *os_devnull = xy_os_devnull;
-  bool on_cygwin = false;
-
-  // https://github.com/RubyMetric/chsrc/issues/65
-  // curl (仅)在 Cygwin 上 -o nul 会把 nul 当做普通文件
-  // 为了践行 chsrc everywhere 的承诺，我们也考虑支持 Cygwin
-  // 确保只在windows上运行 cygcheck，否则会生产nul文件
-#if  XY_On_Windows
-  if (0==system ("cygcheck --version >nul 2>nul"))
-    {
-      on_cygwin = true;
-      os_devnull = "/tmp/chsrc-measure-downloaded";
-    }
-#endif
 
   // 我们用 —L，因为Ruby China源会跳转到其他地方
   // npmmirror 也会跳转
@@ -511,24 +499,7 @@ measure_speed_for_url (void *url)
 
   // chsrc_info (xy_2strjoin ("测速命令 ", curl_cmd));
 
-  char *curl_buf = NULL;
-
-  if (on_cygwin)
-    {
-      char *curl_script = ".chsrc_measure_tmp.sh";
-      FILE *f = fopen (curl_script, "w");
-        if (f==NULL)
-          exit (Exit_UserCause);
-      fputs (curl_cmd, f);
-      fclose (f);
-      curl_buf = xy_run ( xy_2strjoin ("bash .\\", curl_script), 0, NULL);
-      system (xy_2strjoin ("del ", curl_script));
-      system (xy_strjoin (3, "bash -c \"rm ", os_devnull, "\""));
-    }
-  else
-    {
-      curl_buf = xy_run (curl_cmd, 0, NULL);
-    }
+  char *curl_buf = xy_run (curl_cmd, 0, NULL);
 
   // 如果尾部有换行，删除
   curl_buf = xy_str_strip (curl_buf);
