@@ -1,7 +1,7 @@
-name: 🎉 新开了个镜像站！
-description: 告诉我们哪里开了个新镜像站！
-title: ""
-labels: ['镜像站']
+name: 🎉 我找到了新的镜像站或源！
+description: 为大家分享新的镜像站或可用源！
+title: "分享是chsrc用户的一大美德"
+labels: ['']
 body:
   - type: markdown
     attributes:
@@ -11,7 +11,7 @@ body:
   - type: textarea
     id: description
     attributes:
-      label: 描述新的镜像站
+      label: 描述该镜像站或该源
       description: |
         1. 请告诉我们该镜像站的主体URL
         2. 你是否已经测试过该镜像站的可用性？

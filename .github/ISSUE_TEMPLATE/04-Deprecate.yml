@@ -1,6 +1,6 @@
 name: ⛓️‍💥 镜像源已失效
 description: 该镜像站已关停/该源已不再被支持
-title: ""
+title: "报告镜像源情况是chsrc用户的一大美德"
 labels: ['Deprecate']
 body:
   - type: markdown
