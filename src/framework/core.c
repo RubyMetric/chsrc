@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-12-09>
+ * Last Modified : <2024-12-10>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -819,8 +819,12 @@ source_has_empty_url (Source_t *source)
 
 
 
+static inline void
+divide_source_changing_process ()
+{
+  say ("--------------------------------");
+}
 
-#define split_between_source_changing_process   puts ("--------------------------------")
 
 /**
  * 用于 _setsrc 函数
@@ -857,7 +861,7 @@ confirm_source (Source_t *source)
       say (xy_strjoin (5, msg, green (source->mirror->abbr), " (", green (source->mirror->code), ")"));
     }
 
-  split_between_source_changing_process;
+  divide_source_changing_process();
 }
 
 #define chsrc_yield_source_and_confirm(for_what) chsrc_yield_source(for_what);chsrc_confirm_source
@@ -895,7 +899,7 @@ confirm_source (Source_t *source)
 void
 chsrc_conclude (Source_t *source)
 {
-  split_between_source_changing_process;
+  divide_source_changing_process();
 
   // fprintf (stderr, "chsrc: now change type: %d\n", ProgMode_ChgType);
 

@@ -35,7 +35,7 @@ pl_nodejs_getsrc (char *option)
   bool npm_exist, yarn_exist, pnpm_exist;
   pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
-  split_between_source_changing_process;
+  divide_source_changing_process();
 
   if (npm_exist)
     {
