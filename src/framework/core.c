@@ -245,8 +245,8 @@ query_program_exist (char *check_cmd, char *prog_name, int mode)
         {
           // xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
           log_check_result (prog_name, msg, false);
-          return false;
         }
+      return false;
     }
   else
     {
@@ -1305,6 +1305,7 @@ static char *
 chsrc_get_cpuarch ()
 {
   char *ret;
+  char *msg;
 
 #if XY_On_Windows
   SYSTEM_INFO info;
@@ -1322,10 +1323,11 @@ chsrc_get_cpuarch ()
         ret = "IA-64";  break;
       case PROCESSOR_ARCHITECTURE_UNKNOWN:
       default:
-        char *msg = CliOpt_InEnglish ? "Unable to detect CPU type" : "无法检测到CPU类型";
+        msg = CliOpt_InEnglish ? "Unable to detect CPU type" : "无法检测到CPU类型";
         chsrc_error (msg);
         exit (Exit_UserCause);
     }
+  return ret;
 #else
 
   bool exist;
@@ -1345,7 +1347,7 @@ chsrc_get_cpuarch ()
     }
   else
     {
-      char *msg = CliOpt_InEnglish ? "Unable to detect CPU type" : "无法检测到CPU类型";
+      msg = CliOpt_InEnglish ? "Unable to detect CPU type" : "无法检测到CPU类型";
       chsrc_error (msg);
       exit (Exit_UserCause);
     }
