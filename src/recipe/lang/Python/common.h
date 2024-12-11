@@ -3,10 +3,10 @@
  * -------------------------------------------------------------
  * File Authors   : Aoran Zeng <ccmywish@qq.com>
  * Contributors   : yongxiang  <1926885268@qq.com>
- *                |
+ *                | happy game <happygame1024@gmail.com>
  * Created On     : <2023-09-03>
  * Major Revision :      1
- * Last Modified  : <2024-12-08>
+ * Last Modified  : <2024-12-11>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t UpstreamPython =
@@ -39,10 +39,11 @@ static Source_t pl_python_sources[] =
 def_sources_n(pl_python);
 
 void
-pl_python_check_unofficial_pkger (bool *poetry_exist, bool *pdm_exist)
+pl_python_check_unofficial_pkger (bool *poetry_exist, bool *pdm_exist, bool *uv_exist)
 {
   *poetry_exist = chsrc_check_program ("poetry");
   *pdm_exist = chsrc_check_program ("pdm");
+  *uv_exist = chsrc_check_program ("uv");
 }
 
 
