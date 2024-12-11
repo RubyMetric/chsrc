@@ -25,15 +25,19 @@
 
 ## 🤝 协作与贡献
 
+> [!TIP]
+> **`chsrc` 不仅是一个命令行工具，同时也是一个换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。** 给新软件添加换源方法总共分几步？[Write A Recipe Even If You Don't Know C](./doc/Write-A-Recipe-Even-If-You-Dont-Know-C.md)
+
+1. 复制 [recipe 模版](./src/recipe/recipe-template.c) 并替换占位符
+2. 在 [Wiki](https://github.com/RubyMetric/chsrc/wiki) 中找可用源
+3. 添加具体的换源步骤
+4. 编译运行！`chsrc set my-favorite-software`
+
 > [!NOTE]
 > **`chsrc` 可换源 60+ 目标。每个人仅仅贡献和维护自己熟悉的部分，回报是得到其他所有领域专家的帮助**。欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献, 欢迎任何编程初学者参与贡献，作者可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)。
->
-> [积极招募 Recipe Maintainers 维护者!](https://github.com/RubyMetric/chsrc/issues/130)
 
-> [!TIP]
-> **`chsrc` 不仅是一个命令行工具，同时也是一个换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。**
->
-> 立刻为一个新软件添加换源方法！[Write A Recipe Even If You Don't Know C](./doc/Write-A-Recipe-Even-If-You-Dont-Know-C.md)
+> [!IMPORTANT]
+> [招募 Recipe 负责人与维护者!](https://github.com/RubyMetric/chsrc/issues/130)
 
 <br>
 
@@ -307,10 +311,11 @@ reset <target>            # 重置，使用上游默认使用的源
 ```bash
 chsrc set ruby|rb|gem|bundler|rubygems
 
-chsrc set python | py | pypi # 同时换 pip, poetry 和 pdm 这3个包管理器，也可以3个独立换源
+chsrc set python | py | pypi # 同时换 pip, poetry, pdm, uv 这4个包管理器，也可以4个独立换源
   chsrc set pip
   chsrc set poetry
   chsrc set pdm
+  chsrc set uv
 
 chsrc set rye
 

@@ -32,7 +32,10 @@
 
 <br>
 
-成功案例: [Armbian](../src/recipe/os/APT/Armbian.c)
+成功案例:
+
+1. [Armbian](../src/recipe/os/APT/Armbian.c)
+2. [uv](../src/recipe/lang/Python/uv.c)
 
 <br>
 
