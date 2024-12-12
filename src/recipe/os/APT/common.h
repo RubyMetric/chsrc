@@ -2,10 +2,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
+ * Contributors  : happy game <happygame1024@gmail.com>
  *               |
  * Created On    : <2024-06-14>
- * Last Modified : <2024-11-08>
+ * Last Modified : <2024-12-12>
  * ------------------------------------------------------------*/
 
 #define OS_Apt_SourceList   "/etc/apt/sources.list"
@@ -64,12 +64,9 @@ ensure_apt_sourcelist (int debian_type)
   char *codename = xy_run ("sed -nr 's/VERSION_CODENAME=(.*)/\\1/p' " ETC_OS_RELEASE, 0, NULL);
   codename = xy_str_delete_suffix (codename, "\n");
 
-  char *version_id = xy_run ("sed -nr 's/VERSION_ID=(.*)/\\1/p' " ETC_OS_RELEASE, 0, NULL);
+  char *version_id = xy_run ("sed -nr 's/VERSION_ID=\"(.*)\"/\\1/p' " ETC_OS_RELEASE, 0, NULL);
   version_id = xy_str_delete_suffix (codename, "\n");
 
-  // 得到的结果是带双引号的，需要去掉，如 "12"
-  version_id = xy_str_delete_prefix (version_id, "\"");
-  version_id = xy_str_delete_suffix (version_id, "\"");
 
   double version = atof (version_id);
 
