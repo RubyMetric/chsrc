@@ -2,9 +2,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
+ * Contributors  : happy game <happygame1024@gmail.com>
+ *               |
  * Created On    : <2023-09-24>
- * Last Modified : <2024-08-22>
+ * Last Modified : <2024-12-12>
  * ------------------------------------------------------------*/
 
 /**
@@ -37,7 +38,7 @@ os_rockylinux_setsrc (char *option)
   chsrc_yield_source_and_confirm (os_rockylinux);
 
 
-  char *version_str = xy_run ("sed -nr 's/ROCKY_SUPPORT_PRODUCT_VERSION=(.*)/\\1/p' " ETC_OS_RELEASE, 0, NULL);
+  char *version_str = xy_run ("sed -nr 's/ROCKY_SUPPORT_PRODUCT_VERSION=\"(.*)\"/\\1/p' " ETC_OS_RELEASE, 0, NULL);
   version_str = xy_str_delete_suffix (version_str, "\n");
   double version = atof (version_str);
 
