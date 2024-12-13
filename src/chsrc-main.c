@@ -21,13 +21,13 @@
  *                 |  yongxiang    <1926885268@qq.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-12-11>
+ * Last Modified   : <2024-12-13>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.1.9.5"
-#define Chsrc_Release_Date   "2024/12/06"
+#define Chsrc_Version        "0.1.9.6"
+#define Chsrc_Release_Date   "2024/12/13"
 #define Chsrc_Banner_Version "v" Chsrc_Version "-" Chsrc_Release_Date
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
