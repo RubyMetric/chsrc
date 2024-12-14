@@ -3,16 +3,17 @@
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  : Yangmoooo <yangmoooo@outlook.com>
+ *               |
  * Created On    : <2024-08-08>
- * Last Modified : <2024-08-08>
+ * Last Modified : <2024-12-14>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-08-08
+ * @update 2024-12-14
  */
 static Source_t os_openwrt_sources[] =
 {
-  {&UpstreamProvider, "http://downloads.openwrt.org"},
+  {&UpstreamProvider, "https://downloads.openwrt.org"},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/openwrt"},
   {&Ali,              "https://mirrors.aliyun.com/openwrt"},
   {&Tencent,          "https://mirrors.cloud.tencent.com/openwrt"},
@@ -36,7 +37,9 @@ os_openwrt_getsrc (char *option)
 }
 
 /**
- * 参考: https://mirror.tuna.tsinghua.edu.cn/help/openwrt/
+ * @consult
+ *    1. https://mirror.tuna.tsinghua.edu.cn/help/openwrt/
+ *    2. https://github.com/RubyMetric/chsrc/issues/153#issuecomment-2543077933
  */
 void
 os_openwrt_setsrc (char *option)
@@ -47,13 +50,38 @@ os_openwrt_setsrc (char *option)
 
   chsrc_backup (OS_OpenWRT_SourceConfig);
 
-  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*downloads.openwrt.org@", source.url, "@g' " OS_OpenWRT_SourceConfig);
+  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/releases@", source.url, "@g' " OS_OpenWRT_SourceConfig);
 
-  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
+  chsrc_run ("opkg update", RunOpt_No_Last_New_Line);
 
-  ProgMode_ChgType = ChgType_Auto;
+  ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
   chsrc_conclude (&source);
 }
 
 
-def_target(os_openwrt);
+void
+os_openwrt_resetsrc (char *option)
+{
+  os_openwrt_setsrc (option);
+}
+
+
+Feature_t
+os_openwrt_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = true;
+  f.can_reset = true;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NULL;
+  f.can_english = true;
+  f.can_user_define = true;
+
+  f.note = NULL;
+  return f;
+}
+
+
+def_target_gsf(os_openwrt);
