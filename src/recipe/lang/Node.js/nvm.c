@@ -34,8 +34,8 @@ pl_nodejs_nvm_setsrc (char *option)
 
   char *w = xy_strjoin (3, "export NVM_NODEJS_ORG_MIRROR=", source.url, "\n");
 
-  char *zshrc  = "~/.zshrc";
-  char *bashrc = "~/.bashrc";
+  char *zshrc  = xy_zshrc;
+  char *bashrc = xy_bashrc;
 
   chsrc_append_to_file (w, bashrc);
 

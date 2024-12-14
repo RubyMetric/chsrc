@@ -65,8 +65,8 @@ pl_dart_setsrc (char *option)
     }
   else
     {
-      char *zshrc  = "~/.zshrc";
-      char *bashrc = "~/.bashrc";
+      char *zshrc  = xy_zshrc;
+      char *bashrc = xy_bashrc;
 
       chsrc_backup (zshrc);
       w = xy_strjoin (3, "export PUB_HOSTED_URL=\"", source.url, "\"\n");

@@ -57,18 +57,18 @@ wr_homebrew_setsrc (char *option)
 
   char *w = xy_strjoin (6, splitter, w1, w2, w3, w4, end);
 
-  char *zshrc = "~/.zshrc";
+  char *zshrc = xy_zshrc;
   chsrc_backup (zshrc);
   chsrc_append_to_file (w, zshrc);
 
-  char *bashrc = "~/.bashrc";
+  char *bashrc = xy_bashrc;
   if (xy_file_exist (bashrc))
     {
       chsrc_backup (bashrc);
       chsrc_append_to_file (w, bashrc);
     }
 
-  char *fishrc = "~/.config/fish/config.fish";
+  char *fishrc = xy_fishrc;
   if (xy_file_exist (fishrc))
     {
       char *w1 = xy_strjoin(4, "set -x HOMEBREW_API_DOMAIN \"",     source.url, "homebrew-bottles/api",  "\"\n");

@@ -673,6 +673,10 @@ _xy_win_powershellv5_profile ()
       "\\Documents\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1");
 }
 
+#define xy_zshrc  "~/.zshrc"
+#define xy_bashrc "~/.bashrc"
+#define xy_fishrc "~/.config/fish/config.fish"
+
 /**
  * @note Windows上，`path` 不要夹带变量名，因为最终 access() 不会帮你转换
  */

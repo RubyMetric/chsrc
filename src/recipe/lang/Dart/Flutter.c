@@ -70,8 +70,8 @@ pl_dart_flutter_setsrc (char *option)
     }
   else
     {
-      char *zshrc  = "~/.zshrc";
-      char *bashrc = "~/.bashrc";
+      char *zshrc  = xy_zshrc;
+      char *bashrc = xy_bashrc;
 
       chsrc_backup (zshrc);
       w = xy_strjoin (3, "export FLUTTER_STORAGE_BASE_URL=\"", source.url, "\"\n");
