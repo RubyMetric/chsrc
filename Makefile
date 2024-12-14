@@ -1,11 +1,13 @@
-# ------------------------------------------------------------
+# --------------------------------------------------------------
 # SPDX-License-Identifier: GPL-3.0-or-later
-# -------------------------------------------------------------
+# --------------------------------------------------------------
 # Build File    : Makefile
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
+# Contributors  : Yangmoooo  <yangmoooo@outlook.com>
+#								|
 # Created On    : <2023-08-28>
-# Last Modified : <2024-09-10>
-# ---------------------------------------------------------------
+# Last Modified : <2024-12-14>
+# --------------------------------------------------------------
 
 CFLAGS = -Iinclude # -Wall
 
@@ -32,17 +34,24 @@ all:
 CI: all
 	@mv $(Target) $(CI_Build_Name)
 
-test: $(Target)
-	@perl ./test/cli.pl
-
-fastcheck: $(Target)
-	@perl ./test/cli.pl fastcheck
+test: test-xy test-fw
 
 test-xy:
 	@$(CC) test/xy.c $(CFLAGS) -o xy
 	@./xy
 
+test-fw:
+	@$(CC) test/fw.c $(CFLAGS) -o fw
+	@./fw
+
+fastcheck: $(Target)
+	@perl ./test/cli.pl fastcheck
+
+test-cli: $(Target)
+	@perl ./test/cli.pl
+
 clean:
 	-@rm *.exe  2>/dev/null
 	-@rm xy     2>/dev/null
+	-@rm fw     2>/dev/null
 	-@rm chsrc  2>/dev/null
