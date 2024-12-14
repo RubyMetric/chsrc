@@ -2,7 +2,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  : Yangmoooo <yangmoooo@outlook.com>
+ * Contributors  : Yangmoooo  <yangmoooo@outlook.com>
+ *               | happy game <happygame1024@gmail.com>
  *               |
  * Created On    : <2024-08-08>
  * Last Modified : <2024-12-14>
@@ -50,8 +51,9 @@ os_openwrt_setsrc (char *option)
 
   chsrc_backup (OS_OpenWRT_SourceConfig);
 
-  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/releases@", source.url, "@g' " OS_OpenWRT_SourceConfig);
+  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/releases@", source.url, "/releases@g' " OS_OpenWRT_SourceConfig);
 
+  chsrc_run (cmd, RunOpt_No_Last_New_Line);
   chsrc_run ("opkg update", RunOpt_No_Last_New_Line);
 
   ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
@@ -84,4 +86,4 @@ os_openwrt_feat (char *option)
 }
 
 
-def_target_gsf(os_openwrt);
+def_target_gsrf(os_openwrt);
