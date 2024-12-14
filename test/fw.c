@@ -20,6 +20,7 @@ main (int argc, char const *argv[])
       say (Chsrc_Version);
       return 0;
     }
+  xy_useutf8();
 
   br();
   chsrc_log  ("chsrc_log");
@@ -38,11 +39,16 @@ main (int argc, char const *argv[])
   chsrc_debug2 ("chsrc_debug2");
   chsrc_verbose2 ("chsrc_verbose2");
 
+  #ifdef XY_On_Windows
+    #define fw ".\\fw.exe"
+  #else
+    #define fw "./fw"
+  #endif
 
-  assert (chsrc_check_program ("./fw"));
-  assert (chsrc_check_program_quietly ("./fw"));
-  assert (chsrc_check_program_quietly_when_exist ("./fw"));
-  chsrc_ensure_program ("./fw");
+  assert (chsrc_check_program (fw));
+  assert (chsrc_check_program_quietly (fw));
+  assert (chsrc_check_program_quietly_when_exist (fw));
+  chsrc_ensure_program (fw);
 
   #define bkup "README.md.bak"
 
@@ -52,7 +58,10 @@ main (int argc, char const *argv[])
   chsrc_ensure_dir ("test");
 
   chsrc_append_to_file  ("append",  bkup);
-  chsrc_prepend_to_file ("prepend", bkup);
+  if (!xy_on_windows)
+    {
+      chsrc_prepend_to_file ("prepend", bkup);
+    }
   chsrc_overwrite_file  ("overwrite", bkup);
   chsrc_view_file (bkup);
 
