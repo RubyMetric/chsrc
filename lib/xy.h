@@ -624,7 +624,8 @@ xy_run_iter (const char *cmd,  unsigned long n,  void (*iter_func) (const char *
     {
       if (NULL == fgets (buf, size, stream))
         break;
-      ret = buf;
+      /* 存在换行的总是会把换行符读出来，删掉 */
+      ret = xy_str_delete_suffix (buf, "\n");
       count += 1;
       if (n == count)
         break;

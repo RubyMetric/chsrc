@@ -60,13 +60,10 @@ ensure_apt_sourcelist (int debian_type)
       chsrc_note2 (msg);
     }
 
-  // 反向引用需要escape一下
+  /* 反向引用需要escape */
   char *codename = xy_run ("sed -nr 's/VERSION_CODENAME=(.*)/\\1/p' " ETC_OS_RELEASE, 0);
-  codename = xy_str_delete_suffix (codename, "\n");
 
   char *version_id = xy_run ("sed -nr 's/VERSION_ID=\"(.*)\"/\\1/p' " ETC_OS_RELEASE, 0);
-  version_id = xy_str_delete_suffix (codename, "\n");
-
 
   double version = atof (version_id);
 

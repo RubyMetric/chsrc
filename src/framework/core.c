@@ -472,13 +472,15 @@ measure_speed_for_url (void *url)
 
   time_sec = "8";
 
-  /* 现在我们切换至跳转后的链接来测速，不再使用下述判断
-  if (xy_str_start_with(url, "https://registry.npmmirror"))
-    {
-      // 这里 npmmirror 跳转非常慢，需要1~3秒，所以我们给它留够至少8秒测速时间，否则非常不准
-      time_sec = "10";
-    }
-  */
+  /**
+   * 现在我们切换至跳转后的链接来测速，不再使用下述判断
+   *
+   * if (xy_str_start_with(url, "https://registry.npmmirror"))
+   *   {
+   *     // 这里 npmmirror 跳转非常慢，需要1~3秒，所以我们给它留够至少8秒测速时间，否则非常不准
+   *     time_sec = "10";
+   *   }
+   */
 
   char *ipv6 = ""; // 默认不启用
 
@@ -487,11 +489,11 @@ measure_speed_for_url (void *url)
       ipv6 = "--ipv6";
     }
 
-
   char *os_devnull = xy_os_devnull;
 
-  // 我们用 —L，因为Ruby China源会跳转到其他地方
-  // npmmirror 也会跳转
+  /**
+   * @note 我们用 —L，因为部分链接会跳转到其他地方，比如: RubyChina, npmmirror
+   */
   char *curl_cmd = xy_strjoin (8, "curl -qsL ", ipv6,
                                   " -o ", os_devnull,
                                   " -w \"%{http_code} %{speed_download}\" -m", time_sec,
@@ -500,9 +502,6 @@ measure_speed_for_url (void *url)
   // chsrc_info (xy_2strjoin ("测速命令 ", curl_cmd));
 
   char *curl_buf = xy_run (curl_cmd, 0);
-
-  // 如果尾部有换行，删除
-  curl_buf = xy_str_strip (curl_buf);
 
   return curl_buf;
 }

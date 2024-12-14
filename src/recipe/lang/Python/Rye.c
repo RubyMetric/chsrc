@@ -13,7 +13,7 @@ char *
 pl_python_find_rye_config ()
 {
   char *buf = xy_run ("rye config --show-path", 0);
-  char *rye_config = xy_normalize_path (xy_str_strip (buf));
+  char *rye_config = xy_normalize_path (buf);
 
   return rye_config;
 }

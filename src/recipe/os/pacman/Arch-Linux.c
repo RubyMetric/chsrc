@@ -28,7 +28,7 @@ static Source_t os_arch_sources[] =
 
 /**
  * @update 2024-07-03
- * @note 根据 GitHub:@zheng7fu2 建议，拆分 archlinuxcn 出来
+ * @note 根据 @zheng7fu2 建议，拆分 archlinuxcn 出来
  */
 os_archlinuxcn_sources[] =
 {
@@ -53,9 +53,9 @@ os_arch_getsrc (char *option)
 }
 
 /**
- * 参考:
- * 1. https://mirrors.tuna.tsinghua.edu.cn/help/archlinux/
- * 2. https://mirrors.tuna.tsinghua.edu.cn/help/archlinuxarm/
+ * @consult
+ *   1. https://mirrors.tuna.tsinghua.edu.cn/help/archlinux/
+ *   2. https://mirrors.tuna.tsinghua.edu.cn/help/archlinuxarm/
  */
 void
 os_arch_setsrc (char *option)
@@ -104,7 +104,7 @@ os_archlinuxcn_getsrc (char *option)
 }
 
 /**
- * 参考 https://mirrors.tuna.tsinghua.edu.cn/help/archlinuxcn/
+ * @consult https://mirrors.tuna.tsinghua.edu.cn/help/archlinuxcn/
  */
 void
 os_archlinuxcn_setsrc (char *option)

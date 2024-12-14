@@ -28,7 +28,7 @@ def_sources_n(os_rockylinux);
 
 
 /**
- * 参考: https://help.mirrors.cernet.edu.cn/rocky/
+ * @consult https://help.mirrors.cernet.edu.cn/rocky/
  */
 void
 os_rockylinux_setsrc (char *option)
@@ -37,9 +37,7 @@ os_rockylinux_setsrc (char *option)
 
   chsrc_yield_source_and_confirm (os_rockylinux);
 
-
   char *version_str = xy_run ("sed -nr 's/ROCKY_SUPPORT_PRODUCT_VERSION=\"(.*)\"/\\1/p' " ETC_OS_RELEASE, 0);
-  version_str = xy_str_delete_suffix (version_str, "\n");
   double version = atof (version_str);
 
   char *cmd = NULL;
