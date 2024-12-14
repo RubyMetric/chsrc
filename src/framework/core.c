@@ -80,8 +80,8 @@ bool CliOpt_NoColor   = false;
 #define chsrc_info(str)    xy_info(App_Name,str)
 #define chsrc_warn(str)    xy_warn(App_Name,str)
 #define chsrc_error(str)   xy_error(App_Name,str)
-#define chsrc_debug(str)   xy_warn(App_Name "DEBUG",str)
-#define chsrc_verbose(str) xy_info(App_Name,str)
+#define chsrc_debug(str)   xy_warn(App_Name "(DEBUG)",str)
+#define chsrc_verbose(str) xy_info(App_Name "(VERBOSE)",str)
 
 #define red(str)      xy_str_to_red(str)
 #define blue(str)     xy_str_to_blue(str)

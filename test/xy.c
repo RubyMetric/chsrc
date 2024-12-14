@@ -3,10 +3,12 @@
  * -------------------------------------------------------------
  * File Name     : xy.c
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
+ * Contributors  :  Nil Null  <nil@null.org>
+ *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2024-11-21>
+ * Last Modified : <2024-12-14>
  *
- * 测试 xy.h
+ * Test xy.h
  * ------------------------------------------------------------*/
 
 #include "xy.h"
@@ -101,7 +103,7 @@ main (int argc, char const *argv[])
   puts (xy_normalize_path (" \n ~/haha/test/123 \n\r "));
   assert_str (xy_normalize_path ("~/haha/test"), xy_parent_dir (" ~/haha/test/123"));
 
-  xy_succ ("测试完成", "测试全部通过");
+  xy_succ ("测试完成", "xy.h 测试全部通过");
 
   // xy_unimplemented();
   // xy_unsupported();
