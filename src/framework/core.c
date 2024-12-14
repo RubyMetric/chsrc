@@ -1284,7 +1284,14 @@ chsrc_backup (const char *path)
     }
   else
     {
-      char *ver = xy_run (xy_str_to_quietcmd ("cp --version"), 1);
+      /**
+       * @see https://github.com/RubyMetric/chsrc/issues/152#issuecomment-2542673273
+       *
+       * busybox cp 会在 stderr 输出 unrecognized option: version
+       * stderr 导入到 stdout，以便我们 xy_run() 可以接受到输出
+       *
+       */
+      char *ver = xy_run ("cp --version 2>&1", 1);
       /* cp (GNU coreutils) 9.4 */
       if (strstr (ver, "GNU coreutils"))
         {
