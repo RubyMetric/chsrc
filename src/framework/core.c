@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-12-10>
+ * Last Modified : <2024-12-14>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -1283,12 +1283,22 @@ chsrc_backup (const char *path)
     }
   else if (xy_on_windows)
     {
-      // /Y 表示覆盖
+      /* /Y 表示覆盖 */
       cmd = xy_strjoin (5, "copy /Y ", path, " ", path, ".bak" );
     }
   else
     {
-      cmd = xy_strjoin (5, "cp ", path, " ", path, ".bak --backup='t'");
+      char *ver = xy_run (xy_str_to_quietcmd ("cp --version"), 1, NULL);
+      /* cp (GNU coreutils) 9.4 */
+      if (strstr (ver, "GNU coreutils"))
+        {
+          cmd = xy_strjoin (5, "cp ", path, " ", path, ".bak --backup='t'");
+        }
+      else
+        {
+          /* 非 GNU 的 cp 可能不支持 --backup ，如 busybox cp */
+          cmd = xy_strjoin (5, "cp -f ", path, " ", path, ".bak");
+        }
     }
 
   chsrc_run_as_a_service (cmd);
