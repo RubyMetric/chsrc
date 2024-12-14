@@ -28,7 +28,6 @@
 
 #define Chsrc_Version        "0.1.9.6"
 #define Chsrc_Release_Date   "2024/12/13"
-#define Chsrc_Banner_Version "v" Chsrc_Version "-" Chsrc_Release_Date
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
@@ -408,7 +407,7 @@ void
 cli_print_help ()
 {
   say (xy_strjoin (3, "chsrc: Change Source (GPLv3+) ",
-                   purple (Chsrc_Banner_Version), " by RubyMetric"));
+                   purple("v" Chsrc_Version "-" Chsrc_Release_Date), " by RubyMetric"));
   br();
 
   if (CliOpt_InEnglish)
