@@ -86,4 +86,4 @@ os_openwrt_feat (char *option)
 }
 
 
-def_target_gsf(os_openwrt);
+def_target_gsrf(os_openwrt);
