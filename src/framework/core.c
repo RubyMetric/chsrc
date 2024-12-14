@@ -1278,8 +1278,11 @@ chsrc_backup (const char *path)
     }
   else if (xy_on_windows)
     {
-      /* /Y 表示覆盖 */
-      cmd = xy_strjoin (5, "copy /Y ", path, " ", path, ".bak" );
+      /**
+       * @note /Y 表示覆盖
+       * @note 默认情况下会输出一个 "已复制  1个文件"
+       */
+      cmd = xy_strjoin (5, "copy /Y ", path, " ", path, ".bak 1>nul");
     }
   else
     {
