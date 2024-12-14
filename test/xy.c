@@ -103,8 +103,8 @@ main (int argc, char const *argv[])
 
   xy_succ ("测试完成", "测试全部通过");
 
-  // xy_unimplement;
-  // xy_unsupport;
-  // xy_unreach;
+  // xy_unimplemented();
+  // xy_unsupported();
+  // xy_unreached();
   return 0;
 }

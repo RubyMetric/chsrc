@@ -1011,7 +1011,7 @@ chsrc_conclude (Source_t *source)
   else
     {
       fprintf (stderr, "chsrc: Wrong change type: %d\n", ProgMode_ChgType);
-      xy_unreach;
+      xy_unreached();
     }
 }
 
@@ -1217,7 +1217,7 @@ chsrc_prepend_to_file (const char *str, const char *filename)
   char *cmd = NULL;
   if (xy_on_windows)
     {
-      xy_unimplement;
+      xy_unimplemented();
     }
   else
     {

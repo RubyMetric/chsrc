@@ -82,9 +82,9 @@ void br ()                   { puts ("");}
 
 #define assert_str(a, b) assert (xy_streql ((a), (b)))
 
-#define xy_unsupport   assert(!"Unsuppoted")
-#define xy_unimplement assert(!"Unimplemented temporarily")
-#define xy_unreach     assert(!"This code shouldn't be reached")
+#define xy_unsupported()    assert(!"Unsuppoted")
+#define xy_unimplemented()  assert(!"Unimplemented temporarily")
+#define xy_unreached()      assert(!"This code shouldn't be reached")
 
 #define xy_arylen(x) (sizeof (x) / sizeof (x[0]))
 

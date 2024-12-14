@@ -371,7 +371,7 @@ cli_print_target_features (Feature_t f, const char *input_target_name)
       printf (" %s%s\n\n   %s\n", bdgreen(HalfYesMark), purple(locally_msg), f.cap_locally_explain);br();
       break;
     default:
-      xy_unreach;
+      xy_unreached();
     }
   }
 
