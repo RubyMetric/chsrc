@@ -36,7 +36,7 @@ wr_emacs_setsrc (char *option)
   chsrc_yield_source_and_confirm (wr_emacs);
 
   chsrc_note2 ("Emacs换源涉及Elisp，需要手动查阅并换源:");
-  say (source.url);
+  p(source.url);
 
   ProgMode_ChgType = ChgType_Manual;
   chsrc_conclude (&source);

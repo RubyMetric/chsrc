@@ -28,16 +28,15 @@ wr_cocoapods_setsrc (char *option)
   chsrc_yield_source_and_confirm (wr_cocoapods);
 
   chsrc_note2 ("请手动执行以下命令:");
-
-  say ("cd ~/.cocoapods/repos");
-  say ("pod repo remove master");
+  p("cd ~/.cocoapods/repos");
+  p("pod repo remove master");
   char *git_cmd = xy_strjoin (3, "git clone ", source.url, " master");
-  say (git_cmd);
-  say ("");
+  p(git_cmd);
+  br();
 
   chsrc_note2 ("最后进入项目工程目录，在Podfile中第一行加入:");
   char *source_str = xy_strjoin (3, "source '", source.url, "'");
-  say (source_str);
+  p(source_str);
 
   ProgMode_ChgType = ChgType_Manual;
   chsrc_conclude (&source);

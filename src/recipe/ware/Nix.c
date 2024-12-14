@@ -50,11 +50,11 @@ wr_nix_setsrc (char *option)
 
   chsrc_note2 ("若您使用的是NixOS，请确认您的系统版本<version>（如22.11），并手动运行:");
   cmd = xy_strjoin (3, "nix-channel --add ", source.url, "nixpkgs-<version> nixpkgs");
-  say (cmd);
+  p(cmd);
 
   cmd = xy_strjoin (3, "nix.settings.substituters = [ \"", source.url, "store\" ];");
   chsrc_note2 ("若您使用的是NixOS，请额外添加下述内容至 configuration.nix 中");
-  say (cmd);
+  p(cmd);
 
   ProgMode_ChgType = ChgType_SemiAuto;
   chsrc_conclude (&source);

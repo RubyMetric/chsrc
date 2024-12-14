@@ -26,7 +26,7 @@ pl_clojure_setsrc (char *option)
   chsrc_yield_source_and_confirm (pl_clojure);
 
   chsrc_note2 ("抱歉，Clojure换源较复杂，您可手动查阅并换源:");
-  say (source.url);
+  p(source.url);
   ProgMode_ChgType = ChgType_Manual;
   chsrc_conclude (&source);
 }

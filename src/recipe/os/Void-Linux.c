@@ -51,7 +51,7 @@ os_voidlinux_setsrc (char *option)
             );
 
   chsrc_note2 ("若报错可尝试使用以下命令:");
-  say (cmd);
+  p(cmd);
   ProgMode_ChgType = ChgType_Untested;
   chsrc_conclude (&source);
 }

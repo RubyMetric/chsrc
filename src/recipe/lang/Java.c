@@ -93,7 +93,7 @@ pl_java_setsrc (char *option)
       "}");
 
       chsrc_note2 ("请在您的 build.gradle 中添加:");
-      say (file);
+      p(file);
     }
   ProgMode_ChgType = ChgType_Manual;
   chsrc_conclude (&source);

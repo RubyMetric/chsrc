@@ -35,24 +35,24 @@ pl_nodejs_getsrc (char *option)
   bool npm_exist, yarn_exist, pnpm_exist;
   pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
-  divide_source_changing_process();
+  hr();
 
   if (npm_exist)
     {
       pl_nodejs_npm_getsrc (option);
-      say ("");
+      br();
     }
 
   if (yarn_exist)
     {
       pl_nodejs_yarn_getsrc (option);
-      say ("");
+      br();
     }
 
   if (pnpm_exist)
     {
       pl_nodejs_pnpm_getsrc (option);
-      say ("");
+      br();
     }
 }
 
@@ -80,13 +80,13 @@ pl_nodejs_setsrc (char *option)
   if (npm_exist)
     {
       pl_nodejs_npm_setsrc (option);
-      say ("");
+      br();
     }
 
   if (yarn_exist)
     {
       pl_nodejs_yarn_setsrc (option);
-      say ("");
+      br();
     }
 
   if (pnpm_exist)

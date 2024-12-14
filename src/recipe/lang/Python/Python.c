@@ -20,19 +20,19 @@ pl_python_getsrc (char *option)
 
   // 交给后面检查命令的存在性
   pl_python_pip_getsrc (option);
-  say ("");
+  br();
 
   if (poetry_exist)
     {
       pl_python_poetry_getsrc (option);
-      say ("");
+      br();
     }
 
   if (pdm_exist)
     {
       pl_python_pdm_getsrc (option);
     }
-  
+
   if (uv_exist)
     {
       pl_python_uv_getsrc (option);
@@ -63,19 +63,19 @@ pl_python_setsrc (char *option)
 
   // 交给后面检查命令的存在性
   pl_python_pip_setsrc (option);
-  say ("");
+  br();
 
   if (poetry_exist)
     {
       pl_python_poetry_setsrc (option);
-      say ("");
+      br();
     }
 
   if (pdm_exist)
     {
       pl_python_pdm_setsrc (option);
     }
-  
+
   if (uv_exist)
     {
       pl_python_uv_setsrc (option);

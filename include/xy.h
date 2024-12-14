@@ -75,10 +75,11 @@ bool xy_enable_color = true;
 void putf (double n)         { printf ("%f\n", n);   }
 void puti (long long n)      { printf ("%lld\n", n); }
 void putb (bool n)           { if (n) puts ("true"); else puts ("false"); }
-void print (const char *s)   { printf ("%s", s);  }
-void println (const char *s) { printf ("%s\n", s);}
-void say (const char *s)     { printf ("%s\n", s);}
-void br ()                   { puts ("");}
+void print (const char *s)   { printf ("%s", s);   }
+void println (const char *s) { printf ("%s\n", s); }
+void say (const char *s)     { printf ("%s\n", s); }
+void br ()                   { puts (""); }
+void p (const char *s)       { printf ("%s\n", s); }
 
 #define assert_str(a, b) assert (xy_streql ((a), (b)))
 

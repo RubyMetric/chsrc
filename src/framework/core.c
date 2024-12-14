@@ -819,11 +819,7 @@ source_has_empty_url (Source_t *source)
 
 
 
-static inline void
-divide_source_changing_process ()
-{
-  say ("--------------------------------");
-}
+#define hr() say ("--------------------------------");
 
 
 /**
@@ -861,7 +857,7 @@ confirm_source (Source_t *source)
       say (xy_strjoin (5, msg, green (source->mirror->abbr), " (", green (source->mirror->code), ")"));
     }
 
-  divide_source_changing_process();
+  hr();
 }
 
 #define chsrc_yield_source_and_confirm(for_what) chsrc_yield_source(for_what);chsrc_confirm_source
@@ -899,7 +895,7 @@ confirm_source (Source_t *source)
 void
 chsrc_conclude (Source_t *source)
 {
-  divide_source_changing_process();
+  hr();
 
   // fprintf (stderr, "chsrc: now change type: %d\n", ProgMode_ChgType);
 
