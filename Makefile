@@ -9,7 +9,7 @@
 # Last Modified : <2024-12-14>
 # --------------------------------------------------------------
 
-CFLAGS = -Iinclude # -Wall
+CFLAGS = -Iinclude -Ilib # -Wall
 
 # 只有Windows会定义该变量
 ifeq ($(OS), Windows_NT)
@@ -55,3 +55,4 @@ clean:
 	-@rm xy     2>/dev/null
 	-@rm fw     2>/dev/null
 	-@rm chsrc  2>/dev/null
+	-@rm README.md.bak* 2>/dev/null
