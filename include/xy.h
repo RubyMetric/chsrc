@@ -780,11 +780,21 @@ xy_parent_dir (const char *path)
   if (xy_on_windows)
     {
       last = strrchr (dir, '\\');
+      if (!last)
+        {
+          /* current dir */
+          return ".";
+        }
       *last = '\0';
     }
   else
     {
       last = strrchr (dir, '/');
+      if (!last)
+        {
+          /* current dir */
+          return ".";
+        }
       *last = '\0';
     }
   return dir;
