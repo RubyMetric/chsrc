@@ -97,7 +97,7 @@ wr_dockerhub_setsrc (char *option)
                                          source.url,
                                          "\")' ",
                                          WARE_DockerHub_SourceConfig);
-              char *ret = xy_run(cmd, 0, NULL);
+              char *ret = xy_run(cmd, 0);
               if (ret && !xy_streql(ret, "null\n"))
                 {
                   chsrc_note2 ("已存在源，无需重复添加");

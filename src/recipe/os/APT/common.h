@@ -61,10 +61,10 @@ ensure_apt_sourcelist (int debian_type)
     }
 
   // 反向引用需要escape一下
-  char *codename = xy_run ("sed -nr 's/VERSION_CODENAME=(.*)/\\1/p' " ETC_OS_RELEASE, 0, NULL);
+  char *codename = xy_run ("sed -nr 's/VERSION_CODENAME=(.*)/\\1/p' " ETC_OS_RELEASE, 0);
   codename = xy_str_delete_suffix (codename, "\n");
 
-  char *version_id = xy_run ("sed -nr 's/VERSION_ID=\"(.*)\"/\\1/p' " ETC_OS_RELEASE, 0, NULL);
+  char *version_id = xy_run ("sed -nr 's/VERSION_ID=\"(.*)\"/\\1/p' " ETC_OS_RELEASE, 0);
   version_id = xy_str_delete_suffix (codename, "\n");
 
 

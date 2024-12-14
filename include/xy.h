@@ -8,7 +8,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2024-11-22>
+ * Last Modified : <2024-12-14>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C utilities for CLI applications in Ruby flavor
@@ -17,7 +17,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version      "v0.1.4.3-2024/11/22"
+#define _XY_Version      "v0.1.4.4-2024/12/14"
 #define _XY_Maintain_URL "https://gitee.com/RubyMetric/chsrc/blob/main/include/xy.h"
 
 #include <assert.h>
@@ -604,7 +604,7 @@ _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *c
  * 由于目标行会被返回出来，所以 iter_func() 并不执行目标行，只会执行遍历过的行
  */
 static char *
-xy_run (const char *cmd,  unsigned long n,  void (*iter_func) (const char *))
+xy_run_iter (const char *cmd,  unsigned long n,  void (*iter_func) (const char *))
 {
   const int size = 512;
   char *buf = (char *) malloc (size);
@@ -636,6 +636,13 @@ xy_run (const char *cmd,  unsigned long n,  void (*iter_func) (const char *))
   pclose (stream);
   return ret;
 }
+
+static char *
+xy_run (const char *cmd, unsigned long n)
+{
+  xy_run_iter (cmd, n, NULL);
+}
+
 
 #define xy_os_home _xy_os_home ()
 static char *

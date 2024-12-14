@@ -37,7 +37,7 @@ pl_java_check_cmd (bool *maven_exist, bool *gradle_exist)
 char *
 pl_java_find_maven_config ()
 {
-  char *buf = xy_run ("mvn -v", 2, NULL);
+  char *buf = xy_run ("mvn -v", 2);
   char *maven_home = xy_str_delete_prefix (buf, "Maven home: ");
   maven_home = xy_str_strip (maven_home);
 

@@ -53,7 +53,7 @@ os_netbsd_setsrc (char *option)
 
   char *arch = chsrc_get_cpuarch ();
   char *vercmd  = "cat /etc/os-release | grep \"VERSION=\" | grep -Po \"[8-9].[0-9]+\"";
-  char *version = xy_run (vercmd, 0, NULL);
+  char *version = xy_run (vercmd, 0);
 
   char *url = xy_strjoin (5, source.url, arch, "/", version, "/All");
   chsrc_overwrite_file (url, "/usr/pkg/etc/pkgin/repositories.conf");

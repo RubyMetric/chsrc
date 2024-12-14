@@ -11,7 +11,7 @@
 static double
 pl_nodejs_yarn_get_yarn_version ()
 {
-  char *ver = xy_run ("yarn --version", 0, NULL);
+  char *ver = xy_run ("yarn --version", 0);
   double version = atof (ver);
   return version;
 }

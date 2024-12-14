@@ -499,7 +499,7 @@ measure_speed_for_url (void *url)
 
   // chsrc_info (xy_2strjoin ("测速命令 ", curl_cmd));
 
-  char *curl_buf = xy_run (curl_cmd, 0, NULL);
+  char *curl_buf = xy_run (curl_cmd, 0);
 
   // 如果尾部有换行，删除
   curl_buf = xy_str_strip (curl_buf);
@@ -693,7 +693,7 @@ select_mirror_autoly (Source_t *sources, size_t size, const char *target_name)
 
   if (xy_on_windows)
     {
-      char *curl_version = xy_run ("curl --version", 1, NULL);
+      char *curl_version = xy_run ("curl --version", 1);
       /**
        * https://github.com/RubyMetric/chsrc/issues/144
        *
@@ -1023,7 +1023,7 @@ chsrc_ensure_root ()
   char *euid = getenv ("$EUID");
   if (NULL==euid)
     {
-      char *buf = xy_run ("id -u", 0, NULL);
+      char *buf = xy_run ("id -u", 0);
       if (0!=atoi(buf)) goto not_root;
       else return;
     }
@@ -1288,7 +1288,7 @@ chsrc_backup (const char *path)
     }
   else
     {
-      char *ver = xy_run (xy_str_to_quietcmd ("cp --version"), 1, NULL);
+      char *ver = xy_run (xy_str_to_quietcmd ("cp --version"), 1);
       /* cp (GNU coreutils) 9.4 */
       if (strstr (ver, "GNU coreutils"))
         {
@@ -1345,14 +1345,14 @@ chsrc_get_cpuarch ()
   exist = chsrc_check_program_quietly ("arch");
   if (exist)
     {
-      ret = xy_run ("arch", 0, NULL);
+      ret = xy_run ("arch", 0);
       return ret;
     }
 
   exist = chsrc_check_program_quietly ("uname");
   if (exist)
     {
-      ret = xy_run ("uname -m", 0, NULL);
+      ret = xy_run ("uname -m", 0);
       return ret;
     }
   else
