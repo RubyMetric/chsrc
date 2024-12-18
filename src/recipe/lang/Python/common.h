@@ -4,14 +4,15 @@
  * File Authors   : Aoran Zeng <ccmywish@qq.com>
  * Contributors   : yongxiang  <1926885268@qq.com>
  *                | happy game <happygame1024@gmail.com>
+ *                |
  * Created On     : <2023-09-03>
  * Major Revision :      1
  * Last Modified  : <2024-12-11>
  * ------------------------------------------------------------*/
 
-static SourceProvider_t UpstreamPython =
+static SourceProvider_t pl_python_pypi_upstream =
 {
-  "upstream", "PyPI", "上游默认源 PyPI", "https://pypi.org/",
+  "upstream", "Upstream", "上游默认源", "https://pypi.org/",
   {NotSkip, NA, NA, "https://files.pythonhosted.org/packages/56/e4/55aaac2b15af4dad079e5af329a79d961e5206589d0e02b1e8da221472ed/tensorflow-2.18.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"} // 260MB
 };
 
@@ -21,7 +22,7 @@ static SourceProvider_t UpstreamPython =
  */
 static Source_t pl_python_sources[] =
 {
-  {&UpstreamPython,   "https://pypi.org/simple"},
+  {&pl_python_pypi_upstream ,   "https://pypi.org/simple"},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/pypi/web/simple"},
   {&Lzuoss,           "https://mirror.lzu.edu.cn/pypi/web/simple"},
   {&Jlu,              "https://mirrors.jlu.edu.cn/pypi/web/simple"},
