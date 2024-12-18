@@ -47,7 +47,7 @@ SourceProvider_t UpstreamProvider =
 };
 
 #define def_upstream            "upstream", "Upstream", "上游默认源"
-#define def_need_measure_info   {SKIP, "缺乏较大的下载对象，邀您参与贡献!", "Lack of large object URL, welcome to contribute!", NULL}
+#define def_need_measure_info   {SKIP, "缺乏较大的测速对象，邀您参与贡献!", "Lack of large object URL, welcome to contribute!", NULL}
 
 SourceProvider_t UserDefinedProvider =
 {

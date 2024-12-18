@@ -6,8 +6,14 @@
  *                |
  * Created On     : <2023-08-30>
  * Major Revision :      1
- * Last Modified  : <2024-10-31>
+ * Last Modified  : <2024-12-18>
  * ------------------------------------------------------------*/
+
+static SourceProvider_t pl_go_upstream =
+{
+  def_upstream, "https://pkg.go.dev/",
+  def_need_measure_info
+};
 
 static MirrorSite_t GoProxyCN =
 {
@@ -23,12 +29,12 @@ GoProxyIO =
 
 
 /**
- * @update 2024-10-31
+ * @update 2024-12-18
  * @note 缺少教育网软件源
  */
 static Source_t pl_go_sources[] =
 {
-  {&UpstreamProvider, "https://proxy.golang.org"},
+  {&pl_go_upstream, "https://proxy.golang.org"},
   {&GoProxyCN,        "https://goproxy.cn"},
   {&Ali,              "https://mirrors.aliyun.com/goproxy/"},
   {&Huawei,           "https://mirrors.huaweicloud.com/goproxy/"},
