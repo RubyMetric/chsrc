@@ -6,15 +6,22 @@
  * Contributors  : Yangmoooo <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-09-02>
- * Last Modified : <2024-11-21>
+ * Last Modified : <2024-12-18>
  * ------------------------------------------------------------*/
+
+static SourceProvider_t os_debian_upstream =
+{
+  def_upstream, "https://ftp.debian.org/debian/",
+  {NotSkip, NA, NA, "https://ftp.debian.org/debian/dists/bookworm/main/Contents-all.gz"} // 32MB
+};
+
 
 /**
  * @update 2024-11-21
  */
 static Source_t os_debian_sources[] =
 {
-  {&UpstreamProvider, "http://deb.debian.org/debian"},
+  {&os_debian_upstream, "http://deb.debian.org/debian"},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/debian/"},
   {&Ali,              "https://mirrors.aliyun.com/debian"},
   {&Volcengine,       "https://mirrors.volces.com/debian"},
@@ -108,8 +115,15 @@ os_debian_setsrc (char *option)
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
 
-  ProgMode_ChgType = ChgType_Auto;
+  ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
   chsrc_conclude (&source);
+}
+
+
+void
+os_debian_resetsrc (char* option)
+{
+  os_debian_setsrc (option);
 }
 
 
@@ -119,7 +133,7 @@ os_debian_feat (char *option)
   Feature_t f = {0};
 
   f.can_get = true;
-  f.can_reset = false;
+  f.can_reset = true;
 
   f.cap_locally = CanNot;
   f.cap_locally_explain = NULL;
@@ -130,5 +144,5 @@ os_debian_feat (char *option)
   return f;
 }
 
-def_target_gsf(os_debian);
+def_target_gsrf(os_debian);
 
