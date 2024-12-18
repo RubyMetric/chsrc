@@ -7,7 +7,7 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-11-21>
+ * Last Modified : <2024-12-18>
  *
  * chsrc struct
  * ------------------------------------------------------------*/
@@ -40,8 +40,10 @@ typedef SourceProvider_t MirrorSite_t;
 
 SourceProvider_t UpstreamProvider =
 {
+  /* 引入新的上游默认源时，请使下面第一行的前三个字段保持不变，只添加第四个字段 */
   "upstream", "Upstream", "上游默认源", NULL,
-  {SKIP, "上游默认源不测速", "SKIP for upstream source", NULL}
+  /* 引入新的上游默认源时，请完全修改下面这个结构体 */
+  {SKIP, "URL未知，邀您参与贡献!", "URL unknown, welcome to contribute!", NULL}
 },
 
 UserDefinedProvider =

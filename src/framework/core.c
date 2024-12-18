@@ -599,7 +599,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
               speed = -1024*1024*1024;
               if (!src.url)
                 {
-                  smi.skip_reason_CN = "默认上游源URL未知，请帮助补充";
+                  smi.skip_reason_CN = "上游默认源URL未知，请帮助补充";
                   smi.skip_reason_EN = "The default upstream source URL is unknown, please help to add";
                 }
             }
@@ -628,10 +628,16 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
       else
         {
           const char *msg = CliOpt_InEnglish ? provider->abbr : provider->name;
+
           if (xy_streql ("upstream", provider->code))
-            measure_msgs[i] = xy_strjoin (3, "  ^ ", msg, " ... ");
+            {
+              measure_msgs[i] = xy_strjoin (5, "  ^ ", msg, " (", src.url, ") ... ");
+            }
           else
-            measure_msgs[i] = xy_strjoin (3, "  - ", msg, " ... ");
+            {
+              measure_msgs[i] = xy_strjoin (3, "  - ", msg, " ... ");
+            }
+
 
           printf ("%s", measure_msgs[i]);
           fflush (stdout);
@@ -833,7 +839,7 @@ source_has_empty_url (Source_t *source)
 void
 confirm_source (Source_t *source)
 {
-  // 由于实现问题，我们把本应该独立出去的默认上游源，也放在了可以换源的数组中，而且放在第一个
+  // 由于实现问题，我们把本应该独立出去的上游默认源，也放在了可以换源的数组中，而且放在第一个
   // chsrc 已经规避用户使用未实现的 `chsrc reset`
   // 但是某些用户可能摸索着强行使用 chsrc set target upstream，从而执行起该禁用的功能，
   // 之所以禁用，是因为有的 reset 我们并没有实现，我们在这里阻止这些邪恶的用户

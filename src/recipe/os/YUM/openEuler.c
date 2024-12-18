@@ -10,9 +10,9 @@
  * Last Modified : <2024-12-18>
  * ------------------------------------------------------------*/
 
-static SourceProvider_t os_Upstream_openEuler =
+static SourceProvider_t os_openEuler_upstream =
 {
-  "upstream", "https://repo.openeuler.org/", "上游默认源 https://repo.openeuler.org/", "https://repo.openeuler.org/",
+  "upstream", "Upstream", "上游默认源", "https://repo.openeuler.org/",
   {NotSkip, NA, NA, "https://repo.openeuler.org/openEuler-24.03-LTS/ISO/x86_64/openEuler-24.03-LTS-netinst-x86_64-dvd.iso"} // 896MB
 };
 
@@ -22,7 +22,7 @@ static SourceProvider_t os_Upstream_openEuler =
  */
 static Source_t os_openeuler_sources[] =
 {
-  {&os_Upstream_openEuler, "https://repo.openeuler.org/"},
+  {&os_openEuler_upstream, "https://repo.openeuler.org/"},
   {&Ali,              "https://mirrors.aliyun.com/openeuler/"},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/openeuler/"},
   {&Ustc,             "https://mirrors.ustc.edu.cn/openeuler/"},
