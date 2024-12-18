@@ -40,13 +40,16 @@ typedef SourceProvider_t MirrorSite_t;
 
 SourceProvider_t UpstreamProvider =
 {
-  /* 引入新的上游默认源时，请使下面第一行的前三个字段保持不变，只添加第四个字段 */
+  /* 引入新的上游默认源时，请使下面第一行的前三个字段保持不变，只添加第四个字段，可使用 def_upstream 宏 */
   "upstream", "Upstream", "上游默认源", NULL,
-  /* 引入新的上游默认源时，请完全修改下面这个结构体 */
+  /* 引入新的上游默认源时，请完全修改下面这个结构体，可使用 def_need_measure_info 宏 */
   {SKIP, "URL未知，邀您参与贡献!", "URL unknown, welcome to contribute!", NULL}
-},
+};
 
-UserDefinedProvider =
+#define def_upstream            "upstream", "Upstream", "上游默认源"
+#define def_need_measure_info   {SKIP, "缺乏较大的下载对象，邀您参与贡献!", "Lack of large object URL, welcome to contribute!", NULL}
+
+SourceProvider_t UserDefinedProvider =
 {
   "user", "用户自定义", "用户自定义", NULL,
   {SKIP, "用户自定义源不测速", "SKIP for user-defined source", NULL}

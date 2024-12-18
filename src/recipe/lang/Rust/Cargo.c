@@ -3,18 +3,25 @@
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
+ *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2024-10-02>
+ * Last Modified : <2024-12-18>
  * ------------------------------------------------------------*/
 
+static SourceProvider_t pl_rust_cargo_upstream =
+{
+  def_upstream, "https://crates.io/",
+  def_need_measure_info
+};
+
 /**
- * @update 2024-10-02
+ * @update 2024-12-18
  * @note 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`
  * @note 链接末尾的 `/` 不能缺少
  */
 static Source_t pl_rust_cargo_sources[] =
 {
-  {&UpstreamProvider,      "https://index.crates.io/"}, // @help 是这个吗？
+  {&pl_rust_cargo_upstream,  "https://index.crates.io/"}, // @help 是这个吗？
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/crates.io-index/"},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"},
