@@ -3,17 +3,23 @@
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
+ *               |
  * Created On    : <2023-08-31>
- * Last Modified : <2024-08-09>
+ * Last Modified : <2024-12-18>
  * ------------------------------------------------------------*/
 
+static SourceProvider_t pl_java_upstream =
+{
+  def_upstream, "https://mvnrepository.com/",
+  def_need_measure_info
+};
+
 /**
- * @update 2024-04-18
- * @note 缺少教育网或开源社区软件源
+ * @update 2024-12-18
  */
 static Source_t pl_java_sources[] =
 {
-  {&UpstreamProvider,  NULL},
+  {&pl_java_upstream,  NULL},
   {&Ali,              "https://maven.aliyun.com/repository/public/"},
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/maven/"},
   {&Netease,          "http://mirrors.163.com/maven/repository/maven-public/"} // 网易的24小时更新一次
@@ -55,7 +61,7 @@ pl_java_getsrc (char *option)
 }
 
 /**
- * Java 换源，参考：https://developer.aliyun.com/mirror/maven
+ * @consult https://developer.aliyun.com/mirror/maven
  */
 void
 pl_java_setsrc (char *option)
