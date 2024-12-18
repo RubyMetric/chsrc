@@ -6,15 +6,21 @@
  *               | happy game <happygame1024@gmail.com>
  *               |
  * Created On    : <2024-08-08>
- * Last Modified : <2024-12-14>
+ * Last Modified : <2024-12-18>
  * ------------------------------------------------------------*/
+
+static SourceProvider_t os_openwrt_upstream =
+{
+  def_upstream, "https://downloads.openwrt.org",
+  {NotSkip, NA, NA, "https://downloads.openwrt.org/releases/23.05.5/targets/x86/64/openwrt-sdk-23.05.5-x86-64_gcc-12.3.0_musl.Linux-x86_64.tar.xz"}
+};
 
 /**
  * @update 2024-12-14
  */
 static Source_t os_openwrt_sources[] =
 {
-  {&UpstreamProvider, "https://downloads.openwrt.org"},
+  {&os_openwrt_upstream, "https://downloads.openwrt.org"},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/openwrt"},
   {&Ali,              "https://mirrors.aliyun.com/openwrt"},
   {&Tencent,          "https://mirrors.cloud.tencent.com/openwrt"},
