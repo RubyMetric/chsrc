@@ -1,11 +1,3 @@
----
-name: Pull Request  
-about: 提交PR以改进或修复`chsrc`工具的功能  
-title: "[PR] "  
-labels: ''  
-assignees: ''  
----
-
 ### 描述
 
 - **问题的背景**  
