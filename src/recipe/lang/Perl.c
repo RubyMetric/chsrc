@@ -3,16 +3,23 @@
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
+ *               |
  * Created On    : <2023-09-31>
- * Last Modified : <2024-08-09>
+ * Last Modified : <2024-12-18>
  * ------------------------------------------------------------*/
+
+static SourceProvider_t pl_perl_upstream =
+{
+  def_upstream, "https://metacpan.org/",
+  def_need_measure_info
+};
 
 /**
  * @update 2024-05-24
  */
 static Source_t pl_perl_sources[] =
 {
-  {&UpstreamProvider,  NULL},
+  {&pl_perl_upstream,  NULL},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/CPAN/"},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CPAN/"},
   {&Bjtu,             "https://mirror.bjtu.edu.cn/cpan/"},
