@@ -11,7 +11,7 @@
 
 static SourceProvider_t pl_nodejs_npm_upstream =
 {
-  "upstream", "Upstream", "上游默认源", "https://www.npmjs.com/",
+  def_upstream, "https://www.npmjs.com/",
   {NotSkip, NA, NA, "https://registry.npmjs.org/@tensorflow/tfjs/-/tfjs-4.22.0.tgz"}
 };
 
@@ -46,7 +46,7 @@ def_sources_n(pl_nodejs);
 
 static SourceProvider_t pl_nodejs_binary_release_upstream =
 {
-  "upstream", "Upstream", "上游默认源", "https://nodejs.org/",
+  def_upstream, "https://nodejs.org/",
   {NotSkip, NA, NA, "https://nodejs.org/dist/v23.4.0/node-v23.4.0.tar.gz"} // 100MB
 };
 

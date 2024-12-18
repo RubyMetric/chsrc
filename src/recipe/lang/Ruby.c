@@ -10,7 +10,7 @@
 
 static SourceProvider_t pl_ruby_upstream =
 {
-  "upstream", "Upstream", "上游默认源", "https://rubygems.org",
+  def_upstream, "https://rubygems.org",
   {NotSkip, NA, NA, "https://rubygems.org/gems/nokogiri-1.15.0-java.gem"}
 };
 
