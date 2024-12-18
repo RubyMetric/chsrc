@@ -3,15 +3,15 @@
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  *               |  Heng Guo  <2085471348@qq.com>
- * Contributors  :  Zhao  <1792582687@qq.com>
+ * Contributors  :    Zhao    <1792582687@qq.com>
  *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2024-11-22>
+ * Last Modified : <2024-12-18>
  * ------------------------------------------------------------*/
 
-static SourceProvider_t UpstreamUbuntu =
+static SourceProvider_t os_ubuntu_upstream =
 {
-  "upstream", "archive.ubuntu.com", "上游默认源 archive.ubuntu.com", "http://archive.ubuntu.com/",
+  def_upstream, "http://archive.ubuntu.com/",
   // https://github.com/RubyMetric/chsrc/issues/121
   {NotSkip, NA, NA, "http://archive.ubuntu.com/ubuntu/dists/noble/Contents-amd64.gz"}
 };
@@ -21,7 +21,7 @@ static SourceProvider_t UpstreamUbuntu =
  */
 static Source_t os_ubuntu_sources[] =
 {
-  {&UpstreamUbuntu,   "http://archive.ubuntu.com/ubuntu/"}, //不支持https
+  {&os_ubuntu_upstream, "http://archive.ubuntu.com/ubuntu/"}, // 不支持https
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/ubuntu/"},
   {&Ali,              "https://mirrors.aliyun.com/ubuntu"},
   {&Volcengine,       "https://mirrors.volces.com/ubuntu"},
