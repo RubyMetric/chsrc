@@ -3,13 +3,14 @@
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
+ *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-11-22>
+ * Last Modified : <2024-12-18>
  * ------------------------------------------------------------*/
 
-static SourceProvider_t UpstreamRuby =
+static SourceProvider_t pl_ruby_upstream =
 {
-  "upstream", "RubyGems.org", "上游默认源 RubyGems.org", "https://rubygems.org",
+  "upstream", "Upstream", "上游默认源", "https://rubygems.org",
   {NotSkip, NA, NA, "https://rubygems.org/gems/nokogiri-1.15.0-java.gem"}
 };
 
@@ -20,7 +21,7 @@ static MirrorSite_t RubyChina =
 };
 
 /**
- * @update 2024-09-04
+ * @update 2024-12-18
  * @sync https://github.com/RubyMetric/chsrc/wiki/Ruby-MirrorSite
  * @sync https://github.com/RubyMetric/chsrc/discussions/62
  *
@@ -28,7 +29,7 @@ static MirrorSite_t RubyChina =
  */
 static Source_t pl_ruby_sources[] =
 {
-  {&UpstreamRuby, "https://rubygems.org"},
+  {&pl_ruby_upstream, "https://rubygems.org"},
   {&RubyChina,    "https://gems.ruby-china.com/"},
   {&Ustc,         "https://mirrors.ustc.edu.cn/rubygems/"}
 
