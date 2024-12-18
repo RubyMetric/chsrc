@@ -85,4 +85,25 @@ os_openeuler_resetsrc (char *option)
 }
 
 
-def_target_gsr(os_openeuler);
+/**
+ * chsrc ls openeuler
+ */
+Feature_t
+os_openeuler_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = true;
+  f.can_reset = true;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NULL;
+  f.can_english = true;
+  f.can_user_define = true;
+
+  f.note = NULL;
+
+  return f;
+}
+
+def_target_gsrf(os_openeuler);
