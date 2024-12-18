@@ -3,16 +3,23 @@
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  : Yangmoooo <yangmoooo@outlook.com>
+ *               |
  * Created On    : <2023-09-24>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2024-12-18>
  * ------------------------------------------------------------*/
 
+static SourceProvider_t os_voidlinux_upstream =
+{
+  def_upstream, "https://repo-default.voidlinux.org",
+  {NotSkip, NA, NA, "https://repo-default.voidlinux.org/live/20240314/void-live-x86_64-musl-20240314-xfce.iso"}
+};
+
 /**
- * @update 2023-09-24
+ * @update 2024-12-18
  */
 static Source_t os_voidlinux_sources[] =
 {
-  {&UpstreamProvider, "https://repo-default.voidlinux.org"},
+  {&os_voidlinux_upstream, "https://repo-default.voidlinux.org"},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/voidlinux"},
   {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/voidlinux"},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/voidlinux"}
