@@ -3,18 +3,26 @@
  * -------------------------------------------------------------
  * File Authors  :  Heng Guo  <2085471348@qq.com>
  * Contributors  :  Yangmoooo <yangmoooo@outlook.com>
+ *               |
  * Created On    : <2023-09-29>
- * Last Modified : <2024-11-21>
+ * Last Modified : <2024-12-18>
  *
  * Kali Linux 基于 Debian Testing branch
  * ------------------------------------------------------------*/
+
+static SourceProvider_t os_kali_upstream =
+{
+  def_upstream, "http://http.kali.org/kali",
+  // https://github.com/RubyMetric/chsrc/issues/121
+  {NotSkip, NA, NA, "https://http.kali.org/kali/dists/kali-dev/Contents-amd64.gz"} // 47MB
+};
 
 /**
  * @update 2024-11-21
  */
 static Source_t os_kali_sources[] =
 {
-  {&UpstreamProvider, "http://http.kali.org/kali"},
+  {&os_kali_upstream, "http://http.kali.org/kali"},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/kali"},
   {&Ali,              "https://mirrors.aliyun.com/kali"},
   {&Volcengine,       "https://mirrors.volces.com/kali"},
