@@ -74,4 +74,15 @@ os_openeuler_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target_gs(os_openeuler);
+
+/**
+ * chsrc reset openeuler
+ */
+void
+os_openeuler_resetsrc (char *option)
+{
+  os_openeuler_setsrc (option);
+}
+
+
+def_target_gsr(os_openeuler);
