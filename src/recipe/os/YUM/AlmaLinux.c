@@ -3,16 +3,23 @@
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  : Yangmoooo <yangmoooo@outlook.com>
+ *               |
  * Created On    : <2024-06-12>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2024-12-18>
  * ------------------------------------------------------------*/
 
+static SourceProvider_t os_almalinux_upstream =
+{
+  def_upstream, "http://repo.almalinux.org/almalinux",
+  {NotSkip, NA, NA, "https://raw.repo.almalinux.org/almalinux/9.5/isos/x86_64/AlmaLinux-9-latest-x86_64-minimal.iso"}
+};
+
 /**
- * @update 2024-06-12
+ * @update 2024-12-18
  */
 static Source_t os_almalinux_sources[] =
 {
-  {&UpstreamProvider, "http://repo.almalinux.org/almalinux"},
+  {&os_almalinux_upstream , "http://repo.almalinux.org/almalinux"},
   {&Ali,              "https://mirrors.aliyun.com/almalinux"},
   {&Volcengine,       "https://mirrors.volces.com/almalinux"},
   {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/almalinux"},
