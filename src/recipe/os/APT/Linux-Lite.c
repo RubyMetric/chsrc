@@ -5,15 +5,21 @@
  * Contributors  : Yangmoooo <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-09-29>
- * Last Modified : <2024-11-21>
+ * Last Modified : <2024-12-18>
  * ------------------------------------------------------------*/
+
+static SourceProvider_t os_linuxlite_upstream =
+{
+  def_upstream, "http://repo.linuxliteos.com/linuxlite/",
+  {NotSkip, NA, NA, "http://repo.linuxliteos.com/linuxlite/isos/7.2/linux-lite-7.2-64bit.iso"} // 2.9GB
+};
 
 /**
  * @update 2024-11-21
  */
 static Source_t os_linuxlite_sources[] =
 {
-  {&UpstreamProvider, "http://repo.linuxliteos.com/linuxlite/"},
+  {&os_linuxlite_upstream, "http://repo.linuxliteos.com/linuxlite/"},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/linuxliteos/"},
   {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/linuxliteos/"},
   {&Nju,              "https://mirror.nju.edu.cn/linuxliteos/"}
