@@ -5,15 +5,21 @@
  * Contributors  : Yangmoooo <yangmoooo@outlook.com>
  *               |
  * Created On    : <2024-10-02>
- * Last Modified : <2024-11-22>
+ * Last Modified : <2024-12-18>
  * ------------------------------------------------------------*/
 
+static SourceProvider_t pl_rust_binary_upstream =
+{
+  def_upstream, "https://www.rust-lang.org/",
+  def_need_measure_info
+};
+
 /**
- * @update 2024-10-02
+ * @update 2024-12-18
  */
 static Source_t pl_rust_rustup_sources[] =
 {
-  {&UpstreamProvider, "https://static.rust-lang.org"},
+  {&pl_rust_binary_upstream, "https://static.rust-lang.org"},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/rustup"},
   {&Ustc,             "https://mirrors.ustc.edu.cn/rust-static"},
   {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/rust-static"},
