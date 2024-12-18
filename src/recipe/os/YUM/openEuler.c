@@ -34,8 +34,19 @@ static Source_t os_openeuler_sources[] =
 };
 def_sources_n(os_openeuler);
 
+
 /**
- * @update: 2024-12-18
+ * chsrc get openeuler
+ */
+void
+os_openeuler_getsrc (char *option)
+{
+  chsrc_view_file (OS_openEuler_SourceList);
+}
+
+
+/**
+ * chsrc set openeuler
  */
 void
 os_openeuler_setsrc (char *option)
@@ -44,7 +55,7 @@ os_openeuler_setsrc (char *option)
 
   chsrc_yield_source_and_confirm (os_openeuler);
 
-  chsrc_backup (OS_Yum_SourceList_D OS_openEuler_SourceList);
+  chsrc_backup (OS_openEuler_SourceList);
 
   // 替换 baseurl=<<URL>>/openEuler-xx.xx/...
   // openEuler-xx.xx 为 openEuler 版本号
@@ -54,7 +65,7 @@ os_openeuler_setsrc (char *option)
          source.url,
          "openEuler-\\1",
          "!g' ",
-         OS_Yum_SourceList_D OS_openEuler_SourceList);
+         OS_openEuler_SourceList);
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
@@ -63,4 +74,4 @@ os_openeuler_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target_s(os_openeuler);
+def_target_gs(os_openeuler);
