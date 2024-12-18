@@ -3,16 +3,24 @@
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  : Yangmoooo <yangmoooo@outlook.com>
+ *               |
  * Created On    : <2023-09-24>
- * Last Modified : <2024-09-14>
+ * Last Modified : <2024-12-18>
  * ------------------------------------------------------------*/
+
+static SourceProvider_t os_alpine_upstream =
+{
+  def_upstream, "http://dl-cdn.alpinelinux.org/alpine",
+  {NotSkip, NA, NA, "https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64/alpine-standard-3.21.0-x86_64.iso"}
+};
+
 
 /**
  * @update 2024-09-14
  */
 static Source_t os_alpine_sources[] =
 {
-  {&UpstreamProvider, "http://dl-cdn.alpinelinux.org/alpine"},
+  {&os_alpine_upstream, "http://dl-cdn.alpinelinux.org/alpine"},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/alpine"},
   {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/alpine"},
   {&Sustech,          "https://mirrors.sustech.edu.cn/alpine"},
@@ -33,7 +41,7 @@ os_alpine_getsrc (char *option)
 }
 
 /**
- * 参考: https://help.mirrors.cernet.edu.cn/alpine/
+ * @consult https://help.mirrors.cernet.edu.cn/alpine/
  */
 void
 os_alpine_setsrc (char *option)
