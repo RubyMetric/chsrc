@@ -5,16 +5,24 @@
  * Contributors  : Aoran Zeng <ccmywish@qq.com>
  *               | Yangmoooo <yangmoooo@outlook.com>
  *               | happy game <happygame1024@gmail.com>
+ *               |
  * Created On    : <2023-09-06>
  * Last Modified : <2024-12-18>
  * ------------------------------------------------------------*/
 
+static SourceProvider_t os_Upstream_openEuler =
+{
+  "upstream", "https://repo.openeuler.org/", "上游默认源 https://repo.openeuler.org/", "https://repo.openeuler.org/",
+  {NotSkip, NA, NA, "https://repo.openeuler.org/openEuler-24.03-LTS/ISO/x86_64/openEuler-24.03-LTS-netinst-x86_64-dvd.iso"} // 896MB
+};
+
+
 /**
- * @update 2024-09-14
+ * @update 2024-12-18
  */
 static Source_t os_openeuler_sources[] =
 {
-  {&UpstreamProvider, "https://repo.openeuler.org/"},
+  {&os_Upstream_openEuler, "https://repo.openeuler.org/"},
   {&Ali,              "https://mirrors.aliyun.com/openeuler/"},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/openeuler/"},
   {&Ustc,             "https://mirrors.ustc.edu.cn/openeuler/"},
@@ -38,7 +46,7 @@ os_openeuler_setsrc (char *option)
 
   chsrc_backup (OS_Yum_SourceList_D OS_openEuler_SourceList);
 
-  // 替换 baseurl=<<URL>>/openEuler-xx.xx/... 
+  // 替换 baseurl=<<URL>>/openEuler-xx.xx/...
   // openEuler-xx.xx 为 openEuler 版本号
   // sed -E 's!^baseurl=.*?/openEuler-([^/]+)!baseurl=source.url/openEuler-\1/!g' OS_openEuler_SourceList
   char* cmd = xy_strjoin (6, "sed ",
