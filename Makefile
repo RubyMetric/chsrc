@@ -44,6 +44,7 @@ test-fw:
 	@$(CC) test/fw.c $(CFLAGS) -o fw
 	@./fw
 
+# AUR package 安装时将执行此 target
 fastcheck: $(Target)
 	@perl ./test/cli.pl fastcheck
 

@@ -28,16 +28,11 @@
 > [!TIP]
 > **`chsrc` 不仅是一个命令行工具，同时也是一个换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。** 给新软件添加换源方法总共分几步？[Write A Recipe Even If You Don't Know C](./doc/Write-A-Recipe-Even-If-You-Dont-Know-C.md)
 
-1. 复制 [recipe 模版](./src/recipe/recipe-template.c) 并替换占位符
-2. 在 [Wiki](https://github.com/RubyMetric/chsrc/wiki) 中找可用源
-3. 添加具体的换源步骤
-4. 编译运行！`chsrc set my-favorite-software`
-
 > [!NOTE]
 > **`chsrc` 可换源 60+ 目标。每个人仅仅贡献和维护自己熟悉的部分，回报是得到其他所有领域专家的帮助**。欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献, 欢迎任何编程初学者参与贡献，作者可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)。
 
 > [!IMPORTANT]
-> [招募 Recipe 负责人与维护者!](https://github.com/RubyMetric/chsrc/issues/130)
+> [招募 Recipe 维护者](https://github.com/RubyMetric/chsrc/issues/130)
 
 <br>
 
@@ -76,6 +71,7 @@
 - [x] `Homebrew`
 - [x] `Scoop`
 - [x] `AUR`
+- [x] `WinGet`
 - [ ] `Flatpak`
 - [ ] `snap`
 - [ ] 缺乏其他平台/包维护者
@@ -408,19 +404,25 @@ chsrc set conda  | anaconda
 
 ## 🛠️ 开发
 
-请安装好 `gcc`或`clang` 和 `make` 以及 `curl`
+请安装好 `GCC` 或 `Clang` 和 `make` 以及 `curl`
+
+关于分支的说明以及如何提交代码，请参考 [doc/CONTRIBUTING.md](./doc/CONTRIBUTING.md)
 
 ```bash
-# 使用 dev 分支开发
-git clone https://gitee.com/RubyMetric/chsrc.git -b dev
+# 请务必使用 dev 分支开发
+$ git clone https://gitee.com/RubyMetric/chsrc.git -b dev
+```
 
-make          # 默认使用 cc 编译
-make CC=clang # 使用 clang 编译
-make CC=gcc   # 使用 gcc   编译
+```bash
+$ make          # 默认使用 cc 编译
+$ make CC=clang # 使用 clang 编译
+$ make CC=gcc   # 使用 gcc   编译
 
-make test    # 测试命令
-make test-xy # 测试 xy.h
-make clean
+$ make test-xy  # 测试 xy.h
+$ make test-fw  # 测试 framework
+$ make test     # 测试上述两个
+$ make test-cli # 测试命令
+$ make clean
 ```
 
 <br>
