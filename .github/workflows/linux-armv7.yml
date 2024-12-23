@@ -1,9 +1,9 @@
 name: Linux ARMv7 Build
 on:
   push:
-    branches: [ "gh-pipeline" ]
+    branches: [ "gh-build" ]
   pull_request:
-    branches: [ "gh-pipeline" ]
+    branches: [ "gh-build" ]
 
 jobs:
   armv7-linu-build-and-upload:
@@ -22,7 +22,7 @@ jobs:
             apt-get install build-essential -y -q
             apt-get install git -y -q
             pwd ; ls -al
-            git clone https://github.com/RubyMetric/chsrc -b gh-pipeline -q
+            git clone https://github.com/RubyMetric/chsrc -b gh-build -q
             cd chsrc
             make CI CI_Build_Name=chsrc-armv7-linux
             cp ./chsrc-armv7-linux /artifacts

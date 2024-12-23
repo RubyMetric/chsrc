@@ -1,9 +1,9 @@
 name: Windows Build
 on:
   push:
-    branches: [ "gh-pipeline" ]
+    branches: [ "gh-build" ]
   pull_request:
-    branches: [ "gh-pipeline" ]
+    branches: [ "gh-build" ]
 
 jobs:
   build-and-upload:

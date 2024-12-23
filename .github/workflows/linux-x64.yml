@@ -1,9 +1,9 @@
 name: Linux x64 Build
 on:
   push:
-    branches: [ "gh-pipeline" ]
+    branches: [ "gh-build" ]
   pull_request:
-    branches: [ "gh-pipeline" ]
+    branches: [ "gh-build" ]
 
 jobs:
   x64-linux-build-and-upload:
