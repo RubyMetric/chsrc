@@ -19,9 +19,9 @@
  *                 |    czyt       <czyt.go@gmail.com>
  *                 |    zouri      <guoshuaisun@outlook.com>
  *                 |  yongxiang    <1926885268@qq.com>
- *                 |
+ *                 |  YU-7   <2747046473@qq.com>
  * Created On      : <2023-08-28>
- * Last Modified   : <2024-12-18>
+ * Last Modified   : <2024-12-25>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/

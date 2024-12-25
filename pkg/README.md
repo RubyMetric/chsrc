@@ -5,6 +5,7 @@ https://github.com/RubyMetric/chsrc/issues/16
 - [x] `Homebrew`
 - [x] `Scoop`
 - [x] `AUR`
+- [x] [Winget
 - [ ] `Flatpak`
 - [ ] `snap`
 - [ ] ...
@@ -23,7 +24,7 @@ yay -S chsrc-git # Build  from the latest main branch (stable)
 
 # Homebrew
 
-https://github.com/Homebrew/homebrew-core/blob/master/Formula/c/chsrc.rb
+https://github.com/Homebrew/homebrew-core/blob/master/Formula/c/chsrc.rbRubyMetric.chsrcRubyMetric.chsrc
 
 # Scoop
 
@@ -36,3 +37,7 @@ https://github.com/ScoopInstaller/Main/blob/master/bucket/chsrc.json
 [chsrc](https://aur.archlinux.org/packages/chsrc)：从GitHub Release的代码构建
 
 [chsrc-git](https://aur.archlinux.org/packages/chsrc-git)：从最新源码构建的版本，偶尔可能不稳定
+
+# Winget
+
+`winget install RubyMetric.chsrc`：直接使用winget命令安装
