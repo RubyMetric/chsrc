@@ -70,8 +70,8 @@
 
 - [x] `Homebrew`
 - [x] `Scoop`
-- [x] `AUR`
 - [x] `WinGet`
+- [x] `AUR`
 - [ ] `Flatpak`
 - [ ] `snap`
 - [ ] 缺乏其他平台/包维护者
@@ -104,6 +104,14 @@
 
 ```bash
 $ scoop install chsrc
+```
+
+<br>
+
+- 可通过 `WinGet` 安装，感谢 [@YU-7]
+
+```bash
+$ winget install RubyMetric.chsrc
 ```
 
 <br>
@@ -468,5 +476,6 @@ $ make clean
 [@ccmywish]:       https://github.com/ccmywish
 [@Efterklang]:     https://github.com/Efterklang
 [@wickdynex]:      https://github.com/wickdynex
+[@YU-7]:           https://github.com/YU-7
 
 [issue#98 on GitHub]: https://github.com/RubyMetric/chsrc/issues/98
