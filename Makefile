@@ -21,6 +21,9 @@ endif
 ifeq ($(shell uname), Linux)
 	CFLAGS += -static
 endif
+ifdef DEBUG
+	CFLAGS += -g
+endif
 
 override WARN += -Wall -Wextra -Wno-unused-variable -Wno-unused-function -Wno-missing-braces -Wno-misleading-indentation \
 	-Wno-missing-field-initializers -Wno-unused-parameter -Wno-sign-compare
@@ -37,6 +40,10 @@ all:
 
 CI: all
 	@mv $(Target) $(CI_Build_Name)
+
+debug: CFLAGS += -g
+debug: all
+	@gdb ./chsrc
 
 test: test-xy test-fw
 
