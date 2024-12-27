@@ -6,10 +6,10 @@
 # Contributors  : Yangmoooo  <yangmoooo@outlook.com>
 #								|
 # Created On    : <2023-08-28>
-# Last Modified : <2024-12-14>
+# Last Modified : <2024-12-27>
 # --------------------------------------------------------------
 
-CFLAGS = -Iinclude -Ilib # -Wall
+CFLAGS += -Iinclude -Ilib # -Wall
 
 # 只有Windows会定义该变量
 ifeq ($(OS), Windows_NT)
@@ -22,13 +22,17 @@ ifeq ($(shell uname), Linux)
 	CFLAGS += -static
 endif
 
+override WARN += -Wall -Wextra -Wno-unused-variable -Wno-unused-function -Wno-missing-braces -Wno-misleading-indentation \
+	-Wno-missing-field-initializers -Wno-unused-parameter -Wno-sign-compare
+_C_Warning_Flags := $(WARN)
+
 Target = chsrc
 
 CI_Build_Name = chsrc
 #=======================
 
 all:
-	@$(CC) src/chsrc-main.c $(CFLAGS) -o $(Target)
+	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(Target)
 	@echo; echo Compile done using \'$(CC)\' $(CFLAGS)
 
 CI: all

@@ -561,7 +561,7 @@ get_max_ele_idx_in_dbl_ary (double *array, int size)
 void
 measure_speed_for_every_source (Source_t sources[], int size, double speed_records[])
 {
-    bool get_measured[size]; /* 是否真正执行了测速 */
+    // bool get_measured[size]; /* 是否真正执行了测速 */
      int get_measured_n = 0; /* 测速了几个        */
    char *measure_msgs[size];
 
@@ -587,7 +587,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
           speed = 0;
 
           speed_records[i] = speed;
-          get_measured[i] = false;
+          // get_measured[i] = false;
           measure_msgs[i] = NULL;
         }
 
@@ -613,7 +613,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
               /* 不测速的 Provider */
               speed = 0;
             }
-          get_measured[i] = false;
+          // get_measured[i] = false;
           speed_records[i] = speed;
 
           const char *msg = CliOpt_InEnglish ? provider->abbr : provider->name;
