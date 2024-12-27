@@ -236,7 +236,7 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-macos
 
 ```bash
 $ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc
-$ clang -Iinclude src/chsrc-main.c -o chsrc
+$ clang -Iinclude -Ilib src/chsrc-main.c -o chsrc
 ```
 </details>
 
