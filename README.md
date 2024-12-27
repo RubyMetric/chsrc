@@ -412,26 +412,7 @@ chsrc set conda  | anaconda
 
 ## 🛠️ 开发
 
-请安装好 `GCC` 或 `Clang` 和 `make` 以及 `curl`
-
-关于分支的说明以及如何提交代码，请参考 [doc/CONTRIBUTING.md](./doc/CONTRIBUTING.md)
-
-```bash
-# 请务必使用 dev 分支开发
-$ git clone https://gitee.com/RubyMetric/chsrc.git -b dev
-```
-
-```bash
-$ make          # 默认使用 cc 编译
-$ make CC=clang # 使用 clang 编译
-$ make CC=gcc   # 使用 gcc   编译
-
-$ make test-xy  # 测试 xy.h
-$ make test-fw  # 测试 framework
-$ make test     # 测试上述两个
-$ make test-cli # 测试命令
-$ make clean
-```
+请参考 [./doc/Develop.md](./doc/Develop.md)
 
 <br>
 
