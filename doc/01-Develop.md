@@ -2,7 +2,7 @@
  ! SPDX-License-Identifier: GFDL-1.3-or-later
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
- ! Doc Name      : 01-Develop.md
+ ! Doc Name      : Develop.md
  ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
@@ -20,6 +20,8 @@
 # 请务必使用 dev 分支开发
 $ git clone https://gitee.com/RubyMetric/chsrc.git -b dev
 ```
+
+关于分支的说明，可参考 [./03-CONTRIBUTING.md](./03-CONTRIBUTING.md)
 
 <br>
 
@@ -55,6 +57,6 @@ $ make clean
 
 ## 提交 PR
 
-关于分支的说明以及如何提交代码，请参考 [./CONTRIBUTING.md](./CONTRIBUTING.md)
+关于分支的说明以及如何提交代码，请参考 [./03-CONTRIBUTING.md](./03-CONTRIBUTING.md)
 
 <br>

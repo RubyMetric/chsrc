@@ -1,3 +1,15 @@
+<!-- -----------------------------------------------------------
+ ! SPDX-License-Identifier: GFDL-1.3-or-later
+ ! -------------------------------------------------------------
+ ! Doc Type      : Markdown
+ ! Doc Name      : 03-CONTRIBUTING.md
+ ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
+ ! Contributors  :  Nul None  <nul@none.org>
+ !               |
+ ! Created On    : <2024-12-13>
+ ! Last Modified : <2024-12-27>
+ ! ---------------------------------------------------------- -->
+
 # 贡献说明
 
 ## 分支
@@ -24,7 +36,7 @@
 （1）
 
 1. **如果你是 recipe director，则你完全负责这个 recipe，如果你拥有写权限，你可以直接推送代码到 `dev` 分支**
-2. 如果你是 recipe maintainer，则你需要参考 [MAINTAINERS.md](./MAINTAINERS.md)，如果只有你一个人，且你拥有写权限，你可以直接推送代码。如果有多人，则需要提一个 issue，介绍方案，然后 @ 所有 maintainer 来 review
+2. 如果你是 recipe maintainer，则你需要参考 [04-MAINTAINERS.md](./04-MAINTAINERS.md)，如果只有你一个人，且你拥有写权限，你可以直接推送代码。如果有多人，则需要提一个 issue，介绍方案，然后 @ 所有 maintainer 来 review
 
 ---
 

@@ -2,11 +2,12 @@
  ! SPDX-License-Identifier: GFDL-1.3-or-later
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
+ ! Doc Name      : Write-A-Recipe-Even-If-You-Dont-Know-C.md
  ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2024-08-19>
- ! Last Modified : <2024-12-23>
+ ! Last Modified : <2024-12-27>
  ! ---------------------------------------------------------- -->
 
 # Write A Recipe Even If You Don't Know C
@@ -17,7 +18,7 @@
 
 <br>
 
-我鼓励你为新的软件添加换源支持，因为通过 `chsrc` 这将非常简单，你的贡献也将非常有价值。理论上每一个 `recipe` 都需要有专人长时间维护。
+我鼓励你为新的软件添加换源支持，因为通过 `chsrc` 这将非常简单，你的贡献也将非常有价值。理论上每一个 `recipe` 都需要有专人长时间维护 ([招募](https://github.com/RubyMetric/chsrc/issues/130))。
 
 1. 本项目采用 `GPLv3+` 协议，是真正的**自由软件**，而非仅仅是开源软件
 2. 代码规范灵活遵循 `GNU` 标准（若标准干扰了可维护性，则并不采纳）
@@ -36,12 +37,6 @@
 
 1. [Armbian](../src/recipe/os/APT/Armbian.c)
 2. [uv](../src/recipe/lang/Python/uv.c)
-
-<br>
-
-# 贡献指导
-
-若有任何问题，可在 [GitHub discussions](https://github.com/RubyMetric/chsrc/discussions) 中询问和讨论
 
 <br>
 
@@ -64,26 +59,34 @@
 
 <br>
 
-# 编写recipe步骤
+# 编写 `recipe` 步骤
 
-1. 务必使用 `dev` 分支
+1. 确定你要编写的 `target` 的标准名称，创建 `Target-Name.c` 文件
 
-2. 在 `recipe` 目录中根据类别添加新文件，该文件可基于其它 `recipe` 或 [recipe template]
+    大小写需严格按官方，若名称包含空格，需使用 `-` 代替空格
 
-3. 最好的参照物是 [ruby.c recipe](../src/recipe/lang/Ruby.c)
+2. 根据类别将上述文件放在 `recipe/` 目录的某个子目录中
 
-4. 在各大镜像站寻找可用源；可以额外补充镜像站
+3. 复制 [recipe template] 的内容到上述文件中，并替换 `<...>` 占位符
 
-    并创建或更新对应 `target` 的镜像站可用状态Wiki页: https://github.com/RubyMetric/chsrc/wiki
+4. 参考现有 `recipe` 的写法
 
-5. 可以使用这些函数:
+    1. 看一眼就能上手的参照物是 [PHP recipe](../src/recipe/lang/PHP.c)
+    2. 最好的参照物是 [Ruby recipe](../src/recipe/lang/Ruby.c)
+    3. 组换源参照物是 [Python Group recipe](../src/recipe/lang/Python/Python.c)
+
+5. 在 [Wiki] 中记录的镜像站中寻找可用源；可以额外补充镜像站
+
+    并创建或更新对应 `target` 的镜像站可用状态 [Wiki] 页
+
+6. 可以使用这些函数:
 
     1. `framework/core.c` 中以 `chsrc_` 开头的所有函数或宏
     2. `xy.h` 中以 `xy_` 开头的所有函数或宏
 
-6. 在 `recipe/menu.c` 中添加用户可以使用的 `target` 别名
+7. 在 `recipe/menu.c` 中添加用户可以使用的 `target` 别名
 
-7. 构建并运行 `chsrc set <target>` 测试，若无问题可提交 Pull Request
+8. [编译、运行、测试 (how?)](./01-Develop.md)，若无问题可提交 Pull Request
 
 <br>
 
@@ -100,3 +103,4 @@
 <br>
 
 [recipe template]: ../src/recipe/recipe-template.c
+[Wiki]: https://github.com/RubyMetric/chsrc/wiki

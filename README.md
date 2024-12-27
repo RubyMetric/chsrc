@@ -25,6 +25,8 @@
 
 ## 🤝 协作与贡献
 
+从开发到提交贡献，全流程文档，请参考目录 [doc](./doc/)
+
 > [!TIP]
 > **`chsrc` 不仅是一个命令行工具，同时也是一个换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。** 给新软件添加换源方法总共分几步？[Write A Recipe Even If You Don't Know C](./doc/Write-A-Recipe-Even-If-You-Dont-Know-C.md)
 
@@ -32,7 +34,7 @@
 > **`chsrc` 可换源 60+ 目标。每个人仅仅贡献和维护自己熟悉的部分，回报是得到其他所有领域专家的帮助**。欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献, 欢迎任何编程初学者参与贡献，作者可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)。
 
 > [!IMPORTANT]
-> [招募 Recipe 维护者](https://github.com/RubyMetric/chsrc/issues/130)
+> [招募 recipe 维护者](https://github.com/RubyMetric/chsrc/issues/130)
 
 <br>
 
@@ -410,12 +412,6 @@ chsrc set conda  | anaconda
 
 <br>
 
-## 🛠️ 开发
-
-请参考 [./doc/Develop.md](./doc/Develop.md)
-
-<br>
-
 ## 📝 许可证
 
 - `chsrc` 主程序采用 `GPL-3.0-or-later` 许可证，保证该软件的永久自由
@@ -443,7 +439,7 @@ chsrc set conda  | anaconda
 
 你是否因为使用 `chsrc` 而节省了时间和精力 or whatever?
 
-<img src="https://raw.githubusercontent.com/ccmywish/support-my-oss-work/main/wechat.png" alt="wechat" style="width:300px;"/>
+<img src="https://raw.githubusercontent.com/ccmywish/support-my-oss-work/main/wechat.png" alt="wechat-reward" style="width:300px;"/>
 
 <br>
 

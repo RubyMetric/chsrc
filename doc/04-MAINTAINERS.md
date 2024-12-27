@@ -13,7 +13,7 @@
 
 2. **Maintainers**
 
-    维护者：实现和持续维护 recipe，需要和 Director 一起 review 代码。可参考 [CONTRIBUTIING.md](./CONTRIBUTING.md) 了解项目是如何进行提交和审阅代码的
+    维护者：实现和持续维护 recipe，需要和 Director 一起 review 代码。可参考 [03-CONTRIBUTING.md](./03-CONTRIBUTING.md) 了解项目是如何进行提交和审阅代码的
 
 
 3. **Observers**
