@@ -5,7 +5,7 @@
  * Lib Name      : xy.h
  * Lib Authors   : Aoran Zeng <ccmywish@qq.com>
  *               |  Heng Guo  <2085471348@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
+ * Contributors  :   juzeon   <skyjuzheng@gmail.com>
  *               |
  * Created On    : <2023-08-28>
  * Last Modified : <2024-12-14>
@@ -642,7 +642,7 @@ xy_run_iter (const char *cmd,  unsigned long n,  void (*iter_func) (const char *
 static char *
 xy_run (const char *cmd, unsigned long n)
 {
-  xy_run_iter (cmd, n, NULL);
+  return xy_run_iter (cmd, n, NULL);
 }
 
 
