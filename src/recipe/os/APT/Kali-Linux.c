@@ -3,9 +3,10 @@
  * -------------------------------------------------------------
  * File Authors  :  Heng Guo  <2085471348@qq.com>
  * Contributors  :  Yangmoooo <yangmoooo@outlook.com>
+ *               |  Happy Game <happygame1024@gmail.com>
  *               |
  * Created On    : <2023-09-29>
- * Last Modified : <2024-12-18>
+ * Last Modified : <2025-01-03>
  *
  * Kali Linux 基于 Debian Testing branch
  * ------------------------------------------------------------*/
@@ -18,7 +19,7 @@ static SourceProvider_t os_kali_upstream =
 };
 
 /**
- * @update 2024-11-21
+ * @update 2025-01-03
  */
 static Source_t os_kali_sources[] =
 {
@@ -29,11 +30,11 @@ static Source_t os_kali_sources[] =
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/kali"},
   {&Ustc,             "https://mirrors.ustc.edu.cn/kali"},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/kali"},
-  {&Tencent,          "https://mirrors.tencent.com/kali"},
+  // {&Tencent,          "https://mirrors.tencent.com/kali"}, // 无kali源
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/kali"},
-  {&Huawei,           "https://mirrors.huaweicloud.com/kali"},
-  {&Netease,          "https://mirrors.163.com/kali"},
-  {&Sohu,             "https://mirrors.sohu.com/kali"}
+  // {&Huawei,           "https://mirrors.huaweicloud.com/kali"}, // 未与上游同步
+  // {&Netease,          "https://mirrors.163.com/kali"}, // 无kali源
+  // {&Sohu,             "https://mirrors.sohu.com/kali"} //无kali源
 };
 def_sources_n(os_kali);
 
@@ -43,9 +44,6 @@ os_kali_getsrc (char *option)
   chsrc_view_file (OS_Apt_SourceList);
 }
 
-/**
- * HELP: 未经测试
- */
 void
 os_kali_setsrc (char *option)
 {
