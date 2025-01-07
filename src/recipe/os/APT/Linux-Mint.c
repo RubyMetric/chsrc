@@ -2,9 +2,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
+ * Contributors  : Happy Game <happygame1024@gmail.com>
+ *               |
  * Created On    : <2023-09-29>
- * Last Modified : <2024-11-21>
+ * Last Modified : <2025-01-07>
  * ------------------------------------------------------------*/
 
 /**
@@ -49,8 +50,13 @@ os_linuxmint_setsrc (char *option)
 
   chsrc_backup (OS_LinuxMint_SourceList);
 
-  char* cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/.*/?@", source.url,
-                            "@g' " OS_LinuxMint_SourceList);
+  // deb xxx wilma main upstream import backport 为mint主要源, wilma为版本代号
+  // 暂不实现自动替换基于debian或ubuntu的基础源
+  char *version_codename = xy_run ("sed -nr 's/^VERSION_CODENAME=([^\"]+)/\1/p' " ETC_OS_RELEASE, 0);
+  // sed -i '/<version_codename>/ s|http[^ ]*|<source.url>|g' OS_LinuxMint_SourceList
+  char* cmd = xy_strjoin (5, "sed -i '/",
+                          version_codename, "/ s|http[^ ]*|", 
+                          source.url, "|g' "  OS_LinuxMint_SourceList);
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
@@ -58,6 +64,7 @@ os_linuxmint_setsrc (char *option)
   ProgMode_ChgType = ChgType_Auto;
   chsrc_conclude (&source);
   chsrc_warn2 ("完成后请不要再使用 mintsources（自带的图形化软件源设置工具）进行任何操作，因为在操作后，无论是否有按“确定”，mintsources 均会覆写我们刚才换源的内容");
+  chsrc_warn2 ("已自动更换mint主要源, 但mint也使用基于debian或ubuntu的基础源, 可参考对应的debian或ubuntu换源方法进行手动换源");
 }
 
 def_target(os_linuxmint);
