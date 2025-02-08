@@ -4,9 +4,9 @@
  * File Authors  : happy game <happygame1024@gmail.com>
  *               | Aoran Zeng <ccmywish@qq.com>
  * Contributors  : Nil Null <nil@null.org>
- *               |
+ *               | MoYan <moyan@moyanjdc.top>
  * Created On    : <2024-06-08>
- * Last Modified : <2024-11-22>
+ * Last Modified : <2025-02-09>
  * ------------------------------------------------------------*/
 
 static MirrorSite_t DaoCloud =
@@ -29,6 +29,13 @@ Huecker =
   {NotSkip, NA, NA, "https://huecker.io/en/use.html"}
 };
 
+DockerProxy =
+{
+  "dockerporxy",  "DockerProxy", "DockerProxy",   "https://dockerproxy.net/",
+  // 同 DaoCloud，没有合适的下载链接，先随便给一个，以避免 bug
+  {NotSkip, NA, NA, "https://dockerproxy.net/docs"}
+};
+
 /**
  * @update 2024-07-24
  *
@@ -46,6 +53,7 @@ static Source_t wr_dockerhub_sources[] =
   // https://github.com/DaoCloud/public-image-mirror
   {&DaoCloud,         "https://docker.m.daocloud.io"},
   {&Fit2Cloud,        "https://docker.1panel.live"},
+  {&DockerProxy,     "https://dockerproxy.net"},
 
   // 暂时加入，未来若国内镜像恢复，将删除
   // https://huecker.io/en/use.html#unbanned
