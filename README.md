@@ -206,10 +206,10 @@ $ brew install chsrc
     若下方链接无法访问，可使用 `https://gitee.com/RubyMetric/chsrc/raw/main/tool/installer.sh` 替代
 
 ```bash
-# 非root用户默认安装至 ~/.local/bin
+# root用户默认安装至 ~/.local/bin
 $ curl https://chsrc.run/posix | bash
 
-# root用户默认安装至 /usr/local/bin
+# 非root用户默认安装至 /usr/local/bin
 $ curl https://chsrc.run/posix | sudo bash
 
 # 使用 -d 指定目录安装
