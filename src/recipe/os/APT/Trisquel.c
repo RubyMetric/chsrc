@@ -30,8 +30,9 @@ os_trisquel_getsrc (char *option)
   chsrc_view_file (OS_Apt_SourceList);
 }
 
+
 /**
- * 参考: https://help.mirrors.cernet.edu.cn/trisquel/
+ * @consult: https://help.mirrors.cernet.edu.cn/trisquel/
  */
 void
 os_trisquel_setsrc (char *option)
@@ -50,5 +51,6 @@ os_trisquel_setsrc (char *option)
   ProgMode_ChgType = ChgType_Untested;
   chsrc_conclude (&source);
 }
+
 
 def_target(os_trisquel);

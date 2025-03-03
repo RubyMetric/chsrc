@@ -89,6 +89,7 @@
 #include "recipe/os/APT/Armbian.c"
 // Independent
 #include "recipe/os/APT/ROS.c"
+#include "recipe/os/APT/Termux.c"
 #include "recipe/os/APT/openKylin.c"
 #include "recipe/os/APT/deepin.c"
 

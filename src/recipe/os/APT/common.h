@@ -30,6 +30,9 @@
 // independent
 #define OS_ROS_SourceList         OS_Apt_SourceList_D "ros-latest.list"
 
+#define OS_Termux_SourceList      "/data/data/com.termux/files/usr" OS_Apt_SourceList
+
+
 // Ubuntu based
 #define OS_LinuxMint_SourceList   OS_Apt_SourceList_D "official-package-repositories.list"
 

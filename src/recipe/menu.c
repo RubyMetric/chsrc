@@ -90,6 +90,7 @@ static const char
 *os_raspberrypi[] = {"raspi",  "raspberrypi",NULL,  t(&os_raspberrypi_target)},
 *os_armbian    [] = {"armbian",              NULL,  t(&os_armbian_target)},
 *os_openwrt    [] = {"openwrt", "opkg", "LEDE", NULL, t(&os_openwrt_target)},
+*os_termux     [] = {"termux", NULL,                t(&os_termux_target)},
 
 *os_openkylin  [] = {"openkylin",  NULL,            t(&os_openkylin_target)},
 *os_openeuler  [] = {"openeuler",  NULL,            t(&os_openeuler_target)},
@@ -103,7 +104,7 @@ static const char
 **os_systems[] =
 {
   os_debian,  os_ubuntu,  os_linuxmint,  os_kali,
-  os_trisquel, os_linuxlite, os_raspberrypi,  os_armbian,   os_openwrt,
+  os_trisquel, os_linuxlite, os_raspberrypi,  os_armbian,   os_openwrt, os_termux,
   os_deepin,   os_openkylin, os_ros,
 
   os_fedora,  os_rockylinux, os_almalinux,  os_openeuler, os_anolis,
