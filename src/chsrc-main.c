@@ -1,5 +1,5 @@
 /** ------------------------------------------------------------
- * Copyright © 2023-2024 Aoran Zeng, Heng Guo
+ * Copyright © 2023-2025 Aoran Zeng, Heng Guo
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * Project Name    :    chsrc
@@ -396,7 +396,7 @@ void
 cli_print_version ()
 {
   say ("chsrc " Chsrc_Version);
-  say ("Copyright (C) 2024 Aoran Zeng, Heng Guo");
+  say ("Copyright (C) 2025 Aoran Zeng, Heng Guo");
   say ("License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>");
   say ("This is free software: you are free to change and redistribute it.");
   say ("There is NO WARRANTY, to the extent permitted by law.");

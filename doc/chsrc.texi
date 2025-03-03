@@ -18,7 +18,7 @@
 
 @copying
 @comment 这是软件copyright，不是文档copyright，因此不放在titlepage
-Copyright @copyright{} 2024 Aoran Zeng, Heng Guo
+Copyright @copyright{} 2025 Aoran Zeng, Heng Guo
 @end copying
 
 @titlepage
