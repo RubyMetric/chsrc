@@ -7,7 +7,7 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-12-07>
+ * Last Modified : <2025-03-04>
  *
  * 通用镜像站
  * ------------------------------------------------------------*/
@@ -96,7 +96,8 @@ Hust =
   {NotSkip, NA, NA, "https://mirrors.hust.edu.cn/ubuntu-releases" Big_File_ubuntu}
 },
 
-// 速度暂时处于10位以后，但是目前可用的源
+// 速度暂时处于10位以后或者无测速报告，但是目前可用的源
+
 Iscas =
 {
   "iscas", "ISCAS", "中科院软件所智能软件研究中心开源镜像站", "https://mirror.iscas.ac.cn/",
@@ -113,6 +114,24 @@ NJTech =
 {
   "njtech", "NJTech", "南京工业大学开源软件镜像站", "https://mirrors.njtech.edu.cn/",
   {NotSkip, NA, NA, "https://mirrors.njtech.edu.cn/ubuntu-releases" Big_File_ubuntu}
+},
+
+Nyist =
+{
+  "nyist", "NYIST", "南阳理工学院开源软件镜像站", "https://mirror.nyist.edu.cn/",
+  {NotSkip, NA, NA, "https://mirror.nyist.edu.cn/ubuntu-releases" Big_File_ubuntu}
+},
+
+Sdu =
+{
+  "sdu", "SDU", "山东大学镜像站", "https://mirrors.sdu.edu.cn/",
+  {NotSkip, NA, NA, "https://mirrors.sdu.edu.cn/ubuntu-releases" Big_File_ubuntu}
+},
+
+Cqupt =
+{
+  "cqupt", "CQUPT", "重庆邮电大学开源镜像站", "https://mirrors.cqupt.edu.cn/",
+  {NotSkip, NA, NA, "https://mirrors.cqupt.edu.cn/ubuntu-releases" Big_File_ubuntu}
 },
 
 Nju =

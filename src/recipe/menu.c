@@ -5,7 +5,7 @@
  * Contributors   :  Nil Null  <nil@null.org>
  * Created On     : <2023-09-01>
  * Major Revision :      1
- * Last Modified  : <2024-12-11>
+ * Last Modified  : <2025-03-04>
  * ------------------------------------------------------------*/
 
 /* Begin Target Matrix */
@@ -146,7 +146,10 @@ available_mirrors[] = {
   /* 教育网 */
   &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc,
 
-  &Hust, &Iscas, &Scau, &Nju,
+  &Hust, &Iscas, &Scau,
+  &Nyist, &Sdu,  &Cqupt,
+
+  &Nju,
 
   // 已支持但未启用
   // &Cqu,
