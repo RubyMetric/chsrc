@@ -27,7 +27,7 @@ jobs:
         tag_name: pre
         files: |
           chsrc-aarch64-macos
-        token: ${{ secrets.CHSRC_UPLOAD }}
+        token: ${{ secrets.UPLOAD_TO_GITHUB }}
 
 
   build-and-upload-on-x64:
@@ -51,4 +51,4 @@ jobs:
         tag_name: pre
         files: |
           chsrc-x64-macos
-        token: ${{ secrets.CHSRC_UPLOAD }}
+        token: ${{ secrets.UPLOAD_TO_GITHUB }}

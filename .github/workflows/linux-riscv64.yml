@@ -33,4 +33,4 @@ jobs:
           tag_name: pre
           files: |
             ./artifacts/chsrc-riscv64-linux
-          token: ${{ secrets.CHSRC_UPLOAD }}
+          token: ${{ secrets.UPLOAD_TO_GITHUB }}

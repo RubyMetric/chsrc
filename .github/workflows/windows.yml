@@ -50,4 +50,4 @@ jobs:
         files: |
           chsrc-x64-windows.exe
           chsrc-x86-windows.exe
-        token: ${{ secrets.CHSRC_UPLOAD }}
+        token: ${{ secrets.UPLOAD_TO_GITHUB }}
