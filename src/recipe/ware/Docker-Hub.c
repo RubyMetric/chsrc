@@ -154,7 +154,7 @@ wr_dockerhub_setsrc (char *option)
       puts (source.url);
     }
 
-  ProgMode_ChgType = ChgType_Manual;
+  chsrc_determine_chgtype (ChgType_SemiAuto);
   chsrc_conclude (&source);
 }
 

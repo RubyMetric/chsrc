@@ -46,7 +46,7 @@ os_gentoo_setsrc (char *option)
 
   chsrc_append_to_file (w, "/etc/portage/make.conf");
 
-  ProgMode_ChgType = ChgType_Untested;
+  chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);
 }
 

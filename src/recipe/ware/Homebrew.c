@@ -81,7 +81,7 @@ wr_homebrew_setsrc (char *option)
       chsrc_append_to_file (w, fishrc);
     }
 
-  ProgMode_ChgType = ChgType_Auto;
+  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
   chsrc_note2 ("请您重启终端使Homebrew环境变量生效");
 }

@@ -49,7 +49,7 @@ pl_julia_setsrc (char *option)
 
   chsrc_append_to_file (w, PL_Julia_Config);
 
-  ProgMode_ChgType = ChgType_Untested;
+  chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);
 }
 

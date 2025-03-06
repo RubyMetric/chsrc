@@ -54,7 +54,7 @@ pl_python_pip_setsrc (char *option)
 
   if (ProgMode_Target_Group!=true)
     {
-      ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
+      chsrc_determine_chgtype (ChgType_Auto);
       chsrc_conclude (&source);
     }
 }

@@ -57,7 +57,7 @@ os_alpine_setsrc (char *option)
 
   chsrc_run ("apk update", RunOpt_No_Last_New_Line);
 
-  ProgMode_ChgType = ChgType_Untested;
+  chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);
 }
 

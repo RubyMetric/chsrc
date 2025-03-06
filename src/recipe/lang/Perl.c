@@ -63,7 +63,7 @@ pl_perl_setsrc (char *option)
   chsrc_note2 ("请您使用 perl -v 以及 cpan -v，若 Perl >= v5.36 或 CPAN >= 2.29，请额外手动调用下面的命令");
   p("perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('pushy_https', 0);; CPAN::HandleConfig->commit()\"");
 
-  ProgMode_ChgType = ChgType_SemiAuto;
+  chsrc_determine_chgtype (ChgType_SemiAuto);
   chsrc_conclude (&source);
 }
 

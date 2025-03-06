@@ -92,7 +92,8 @@ os_arch_setsrc (char *option)
     {
       chsrc_run ("pacman -Syy", RunOpt_No_Last_New_Line);
     }
-  ProgMode_ChgType = ChgType_Auto;
+
+  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
 

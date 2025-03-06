@@ -62,7 +62,8 @@ pl_haskell_setsrc (char *option)
 
   chsrc_note2 (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
   p(file);
-  ProgMode_ChgType = ChgType_Manual;
+
+  chsrc_determine_chgtype (ChgType_Manual);
   chsrc_conclude (&source);
 }
 

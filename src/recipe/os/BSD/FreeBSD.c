@@ -128,7 +128,7 @@ os_freebsd_setsrc (char *option)
     chsrc_overwrite_file (update, "/etc/freebsd-update.conf");
   */
 
-  ProgMode_ChgType = ChgType_SemiAuto;
+  chsrc_determine_chgtype (ChgType_SemiAuto);
   chsrc_conclude (&source);
 }
 

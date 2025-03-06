@@ -81,7 +81,7 @@ pl_python_setsrc (char *option)
       pl_python_uv_setsrc (option);
     }
 
-  ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
+  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
 

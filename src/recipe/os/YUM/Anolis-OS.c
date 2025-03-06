@@ -37,7 +37,7 @@ os_anolis_setsrc (char *option)
   chsrc_run ("dnf makecache", RunOpt_Default);
   chsrc_run ("dnf update", RunOpt_No_Last_New_Line);
 
-  ProgMode_ChgType = ChgType_Untested;
+  chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);
 }
 

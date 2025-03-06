@@ -67,28 +67,28 @@ void
 pl_python_uv_setsrc (char *option)
 {
   chsrc_ensure_program("uv");
-  
+
   Source_t source;
   chsrc_yield_for_the_source (pl_python);
-  
+
   char *uv_config = pl_python_find_uv_config (true);
   chsrc_backup (uv_config);
-  
+
   const char *source_content = xy_strjoin (5,
     "[[index]]\n",
     "url = \"", source.url, "\"\n",
     "default = true\n");
-  
+
   // sed -i '/^\[\[index\]\]$/,/^default = true$/{s|^url = ".*"$|url = " source.url "|}' uv_config
   // 将 [[index]] 到 default = true 之间的 url = ".*" 替换为 url = "source.url"
   char *update_source_cmd = xy_strjoin (5, "sed -i ",
                             "'/^\\[\\[index\\]\\]$/,/^default = true$/{s|^url = \".*\"$|url = \"",
-                            source.url, 
+                            source.url,
                             "\"|}' ",
                             uv_config);
-  
+
   char *append_source_cmd = xy_strjoin (4, "echo -e '", source_content, "' >> ", uv_config);
-  
+
   // grep -q '^[[index]]$' uv_config && update_source_cmd || append_source_cmd
   // 如果 uv_config 中存在 [[index]] 则更新, 否则追加到文件末尾
   // 文件不存在也是追加到新文件末尾
@@ -98,8 +98,11 @@ pl_python_uv_setsrc (char *option)
                              update_source_cmd,
                              " || ",
                              append_source_cmd);
-  
+
   chsrc_run (cmd, RunOpt_Default);
+
+  chsrc_determine_chgtype (ChgType_Auto);
+  chsrc_conclude (&source);
 }
 
 

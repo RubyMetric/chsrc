@@ -49,7 +49,7 @@ pl_python_rye_setsrc (char *option)
   chsrc_note2 (xy_strjoin (3, "请在您的 Rye 配置文件 ", rye_config, " 中添加:"));
   puts (file);
 
-  ProgMode_ChgType = ChgType_Manual;
+  chsrc_determine_chgtype (ChgType_Manual);
   chsrc_conclude (&source);
 }
 

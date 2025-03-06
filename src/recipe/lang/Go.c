@@ -83,7 +83,8 @@ pl_go_setsrc (char *option)
 
   cmd = xy_strjoin (3, "go env -w GOPROXY=", source.url, ",direct");
   chsrc_run (cmd, RunOpt_Default);
-  ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
+
+  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
 

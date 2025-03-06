@@ -43,7 +43,8 @@ pl_nodejs_bun_setsrc (char *option)
     }
 
   p(file);
-  ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
+
+  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
 

@@ -48,7 +48,7 @@ os_msys2_setsrc (char *option)
 
   chsrc_run (cmd, RunOpt_Default);
 
-  ProgMode_ChgType = ChgType_Untested;
+  chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);
 }
 

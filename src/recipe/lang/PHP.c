@@ -57,7 +57,7 @@ pl_php_setsrc (char *option)
   char *cmd = xy_strjoin (4, "composer config", where, "repo.packagist composer ", source.url);
   chsrc_run (cmd, RunOpt_Default);
 
-  ProgMode_ChgType = ChgType_Auto;
+  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
 

@@ -37,7 +37,7 @@ wr_winget_setsrc (char *option)
   chsrc_run ("winget source remove winget", RunOpt_Default);
   chsrc_run (xy_2strjoin ("winget source add winget ", source.url), RunOpt_Default);
 
-  ProgMode_ChgType = ChgType_Auto;
+  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
 
@@ -47,7 +47,7 @@ wr_winget_resetsrc (char *option)
 {
   chsrc_run ("winget source reset winget", RunOpt_Default);
 
-  ProgMode_ChgType = ChgType_Auto;
+  chsrc_determine_chgtype (ChgType_Reset);
   chsrc_conclude (NULL);
 }
 

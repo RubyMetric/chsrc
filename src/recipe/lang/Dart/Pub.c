@@ -80,7 +80,7 @@ pl_dart_setsrc (char *option)
         }
     }
 
-  ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
+  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
 

@@ -42,7 +42,7 @@ pl_nodejs_nvm_setsrc (char *option)
   if (xy_file_exist (zshrc))
     chsrc_append_to_file (w, zshrc);
 
-  ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
+  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
 

@@ -84,7 +84,7 @@ pl_rust_rustup_setsrc (char *option)
       chsrc_append_to_file (w, fishrc);
     }
 
-  ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
+  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
   chsrc_note2 ("请您重启终端使rustup环境变量生效");
 }

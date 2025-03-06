@@ -24,11 +24,13 @@ static Source_t os_raspberrypi_sources[] =
 };
 def_sources_n(os_raspberrypi);
 
+
 void
 os_raspberrypi_getsrc (char *option)
 {
   chsrc_view_file (OS_RaspberryPi_SourceList);
 }
+
 
 void
 os_raspberrypi_setsrc (char *option)
@@ -45,7 +47,7 @@ os_raspberrypi_setsrc (char *option)
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
 
-  ProgMode_ChgType = ChgType_Untested;
+  chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);
 }
 

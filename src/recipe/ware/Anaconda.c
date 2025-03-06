@@ -74,7 +74,7 @@ wr_anaconda_setsrc (char *option)
 
   chsrc_note2 ("然后运行 conda clean -i 清除索引缓存，保证用的是镜像站提供的索引");
 
-  ProgMode_ChgType = ChgType_SemiAuto;
+  chsrc_determine_chgtype (ChgType_SemiAuto);
   chsrc_conclude (&source);
 }
 

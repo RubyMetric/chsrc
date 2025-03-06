@@ -34,7 +34,7 @@ pl_lua_getsrc (char *option)
 }
 
 /**
- * Lua 换源，参考：https://luarocks.cn/
+ * @consult https://luarocks.cn/
  */
 void
 pl_lua_setsrc (char *option)
@@ -54,7 +54,7 @@ pl_lua_setsrc (char *option)
   chsrc_note2 ("请手动修改 ~/.luarocks/upload_config.lua 文件 (用于上传):");
   p(upload_config);
 
-  ProgMode_ChgType = ChgType_Manual;
+  chsrc_determine_chgtype (ChgType_Manual);
   chsrc_conclude (&source);
 }
 

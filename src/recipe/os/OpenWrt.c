@@ -62,7 +62,7 @@ os_openwrt_setsrc (char *option)
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
   chsrc_run ("opkg update", RunOpt_No_Last_New_Line);
 
-  ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
+  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
 

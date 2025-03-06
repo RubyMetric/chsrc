@@ -39,7 +39,7 @@ os_linuxmint_getsrc (char *option)
 }
 
 /**
- * 参考: https://help.mirrors.cernet.edu.cn/linuxmint/
+ * @consult https://help.mirrors.cernet.edu.cn/linuxmint/
  */
 void
 os_linuxmint_setsrc (char *option)
@@ -55,13 +55,13 @@ os_linuxmint_setsrc (char *option)
   char *version_codename = xy_run ("sed -nr 's/^VERSION_CODENAME=([^\"]+)/\1/p' " ETC_OS_RELEASE, 0);
   // sed -i '/<version_codename>/ s|http[^ ]*|<source.url>|g' OS_LinuxMint_SourceList
   char* cmd = xy_strjoin (5, "sed -i '/",
-                          version_codename, "/ s|http[^ ]*|", 
+                          version_codename, "/ s|http[^ ]*|",
                           source.url, "|g' "  OS_LinuxMint_SourceList);
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
 
-  ProgMode_ChgType = ChgType_Auto;
+  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
   chsrc_warn2 ("完成后请不要再使用 mintsources（自带的图形化软件源设置工具）进行任何操作，因为在操作后，无论是否有按“确定”，mintsources 均会覆写我们刚才换源的内容");
   chsrc_warn2 ("已自动更换mint主要源, 但mint也使用基于debian或ubuntu的基础源, 可参考对应的debian或ubuntu换源方法进行手动换源");

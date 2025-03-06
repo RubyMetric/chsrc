@@ -94,7 +94,7 @@ pl_nodejs_setsrc (char *option)
       pl_nodejs_pnpm_setsrc (option);
     }
 
-  ProgMode_ChgType = ProgMode_CMD_Reset ? ChgType_Reset : ChgType_Auto;
+  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
 

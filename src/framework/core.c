@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-12-14>
+ * Last Modified : <2025-03-06>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -783,6 +783,11 @@ source_has_empty_url (Source_t *source)
   return source->url == NULL;
 }
 
+bool
+is_reset_mode ()
+{
+  return ProgMode_CMD_Reset;
+}
 
 
 /**
@@ -868,6 +873,13 @@ confirm_source (Source_t *source)
 #define chsrc_yield_source_and_confirm(for_what) chsrc_yield_source(for_what);chsrc_confirm_source
 
 
+void
+chsrc_determine_chgtype (enum ChgType_t type)
+{
+  ProgMode_ChgType =  is_reset_mode() ? ChgType_Reset : type;
+}
+
+
 
 #define MSG_EN_PUBLIC_URL "If the URL you specify is a public service, you are invited to contribute: chsrc issue"
 #define MSG_CN_PUBLIC_URL "若您指定的URL为公有服务，邀您参与贡献: chsrc issue"
@@ -895,7 +907,7 @@ confirm_source (Source_t *source)
 /**
  * @param source 可为NULL
  *
- * @param[g] ProgMode_ChgType
+ * @param [g]ProgMode_ChgType
  */
 void
 chsrc_conclude (Source_t *source)
