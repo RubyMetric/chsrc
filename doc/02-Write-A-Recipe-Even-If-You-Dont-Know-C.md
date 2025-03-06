@@ -7,14 +7,14 @@
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2024-08-19>
- ! Last Modified : <2024-12-27>
+ ! Last Modified : <2025-03-06>
  ! ---------------------------------------------------------- -->
 
 # Write A Recipe Even If You Don't Know C
 
 # 介绍
 
-**`chsrc` 不仅是一个命令行工具，同时也是一个换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。**
+**`chsrc` 不仅是一个命令行工具，同时也是一个体现了 Ruby on Rails 思想的 MVC 换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。**
 
 <br>
 

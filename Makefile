@@ -6,10 +6,10 @@
 # Contributors  : Yangmoooo  <yangmoooo@outlook.com>
 #								|
 # Created On    : <2023-08-28>
-# Last Modified : <2024-12-27>
+# Last Modified : <2025-03-06>
 # --------------------------------------------------------------
 
-CFLAGS += -Iinclude -Ilib # -Wall
+CFLAGS += -Iinclude -Ilib
 
 # 只有Windows会定义该变量
 ifeq ($(OS), Windows_NT)
@@ -32,6 +32,8 @@ _C_Warning_Flags := $(WARN)
 Target = chsrc
 
 CI_Build_Name = chsrc
+
+DEBUGGER = gdb
 #=======================
 
 all:
@@ -43,7 +45,7 @@ CI: all
 
 debug: CFLAGS += -g
 debug: all
-	@gdb ./chsrc
+	@$(DEBUGGER) ./chsrc
 
 test: test-xy test-fw
 

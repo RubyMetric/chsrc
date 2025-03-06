@@ -7,7 +7,7 @@
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2024-12-27>
- ! Last Modified : <2024-12-27>
+ ! Last Modified : <2025-03-06>
  ! ---------------------------------------------------------- -->
 
 # 开发
@@ -34,10 +34,13 @@ $ make CC=gcc   # 使用 gcc   编译
 ```
 
 ```bash
-# 编译并直接启动 GDB
+# 重新编译并启动 GDB 调试
 $ make debug
 
-# 如果需要单独生成含有编译信息的二进制文件（这个不会自己启动GDB）
+# 重新编译并启动 LLDB 调试
+$ make debug DEBUGGER=lldb
+
+# 如果需要单独生成含有编译信息的二进制文件（这个不会自己启动debugger）
 $ make DEBUG=1
 ```
 
