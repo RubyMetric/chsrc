@@ -29,19 +29,20 @@ override WARN += -Wall -Wextra -Wno-unused-variable -Wno-unused-function -Wno-mi
 	-Wno-missing-field-initializers -Wno-unused-parameter -Wno-sign-compare
 _C_Warning_Flags := $(WARN)
 
-Target = chsrc
+Target_Name = chsrc
 
-CI_Build_Name = chsrc
+# 由 GitHub Actions 在调用时修改
+CI_ARTIFACT_NAME = chsrc
 
 DEBUGGER = gdb
 #=======================
 
 all:
-	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(Target)
+	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(Target_Name)
 	@echo; echo Compile done using \'$(CC)\' $(CFLAGS)
 
 CI: all
-	@mv $(Target) $(CI_Build_Name)
+	@mv $(Target_Name) $(CI_ARTIFACT_NAME)
 
 debug: CFLAGS += -g
 debug: all
@@ -58,10 +59,10 @@ test-fw:
 	@./fw
 
 # AUR package 安装时将执行此 target
-fastcheck: $(Target)
+fastcheck: $(Target_Name)
 	@perl ./test/cli.pl fastcheck
 
-test-cli: $(Target)
+test-cli: $(Target_Name)
 	@perl ./test/cli.pl
 
 clean:

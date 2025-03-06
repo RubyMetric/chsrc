@@ -24,7 +24,7 @@ jobs:
             pwd ; ls -al
             git clone https://github.com/RubyMetric/chsrc -b gh-build -q
             cd chsrc
-            make CI CI_Build_Name=chsrc-aarch64-linux
+            make CI CI_ARTIFACT_NAME=chsrc-aarch64-linux
             cp ./chsrc-aarch64-linux /artifacts
 
       - name: Release

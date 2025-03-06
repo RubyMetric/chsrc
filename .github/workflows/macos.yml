@@ -15,7 +15,7 @@ jobs:
 
     - name: Compile chsrc for AArch64
       run: |
-        make CI CI_Build_Name=chsrc-aarch64-macos
+        make CI CI_ARTIFACT_NAME=chsrc-aarch64-macos
 
     - name: List files
       run: ls *-macos
@@ -39,7 +39,7 @@ jobs:
 
     - name: Compile chsrc for x64
       run: |
-        make CI CI_Build_Name=chsrc-x64-macos
+        make CI CI_ARTIFACT_NAME=chsrc-x64-macos
 
     - name: List files
       run: ls *-macos
