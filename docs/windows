@@ -5,7 +5,7 @@
 # Contributors  : Aoran Zeng <ccmywish@qq.com>
 #               |
 # Created On    : <2024-10-26>
-# Last Modified : <2024-12-08>
+# Last Modified : <2025-03-07>
 #
 #         chsrc installer for Windows
 # ---------------------------------------------------------------
@@ -96,10 +96,10 @@ function Set_Install_Dir {
 }
 
 function Set_Version {
-    $pattern = '^(0\.1\.[4-9]|pre)$'
+    $pattern = '^(0\.[1-9]\.[0-9]|pre)$'
 
     if ($Version -notmatch $pattern) {
-        output_error "Invalid version '$Version'. Please provide a valid version (0.1.4 - 0.1.9 or 'pre')."
+        output_error "Invalid version '$Version'. Please provide a valid version: 0.x.y (>=0.1.4) or 'pre'"
     }
 
     # 设置版本号

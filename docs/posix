@@ -7,7 +7,7 @@
 # Contributors  : Aoran Zeng <ccmywish@qq.com>
 #               |
 # Created On    : <2024-10-25>
-# Last Modified : <2024-12-08>
+# Last Modified : <2025-03-07>
 #
 #         chsrc installer for Linux & macOS
 # ---------------------------------------------------------------
@@ -157,12 +157,12 @@ install() {
       ;;
   esac
 
-  if [[ ! "$userOpt_version" =~ ^(pre|0\.1\.([4-9]))$ ]]; then
+  if [[ ! "$userOpt_version" =~ ^(pre|0\.([1-9])\.([0-9]))$ ]]; then
       # version 不符合条件，报错
       if [ "$userOpt_lang" = "zh" ]; then
-        error "不支持的版本: ${userOpt_version}，版本号必须在 0.1.4 到 0.1.9 之间或为 'pre'"
+        error "不支持的版本: ${userOpt_version}，版本号必须为 0.x.y (>=0.1.4) 或 'pre'"
       else
-        error "Unsupported version: ${userOpt_version}. Version number must be between 0.1.4 and 0.1.9 or 'pre'"
+        error "Unsupported version: ${userOpt_version}. Version number must be 0.x.y (>=0.1.4) or 'pre'"
       fi
   fi
 
