@@ -1,9 +1,13 @@
 .vscode
 
-*.exe
-*.out
 *.o
 *.obj
+*.a
+*.lib
+*.so
+*.dll
+*.out
+*.exe
 
 # target exe name
 chsrc
