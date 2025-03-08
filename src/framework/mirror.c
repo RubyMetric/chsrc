@@ -7,12 +7,12 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-03-04>
+ * Last Modified : <2025-03-09>
  *
  * 通用镜像站
  * ------------------------------------------------------------*/
 
-#define Big_File_ubuntu     "/24.04/ubuntu-24.04.1-desktop-amd64.iso"       // 5.8 GB
+#define Big_File_ubuntu     "/18.04/ubuntu-18.04.6-desktop-amd64.iso"       // 2.3 GB
 #define Big_File_ctan       "/systems/texlive/Images/texlive.iso"           // 4.8 GB
 #define Big_File_archlinux  "/iso/latest/archlinux-x86_64.iso"              // 800 MB
 #define Big_File_deepin     "/20.9/deepin-desktop-community-20.9-amd64.iso" // 4 GB
