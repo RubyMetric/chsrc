@@ -386,6 +386,9 @@ sudo chsrc set deepin
 
 chsrc set msys2 | msys
 
+# Android
+chsrc set termux
+
 # BSD
 sudo chsrc set freebsd
 sudo chsrc set openbsd
