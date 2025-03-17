@@ -24,13 +24,13 @@
  *                 | Jialin Lyu    <jialinlvcn@aliyun.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2025-03-14>
+ * Last Modified   : <2025-03-17>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.0"
-#define Chsrc_Release_Date   "2025/03/14"
+#define Chsrc_Version        "0.2.0.1"
+#define Chsrc_Release_Date   "2025/03/17"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
