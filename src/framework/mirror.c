@@ -36,10 +36,21 @@ Tuna =
   {NotSkip, NA, NA, "https://mirrors.tuna.tsinghua.edu.cn/speedtest/1000mb.bin"}
 },
 
+/**
+ * @note 2025-3-17 SJTUG 共设两台服务器。思源服务器同步新镜像，致远服务器兼容原 SJTU 镜像站。
+ * @note 有些target（例如flathub）思源站的兼容性不好，可以考虑将两个服务器分开测试
+ */
+
 Sjtug_Zhiyuan =
 {
   "sjtu", "SJTUG-zhiyuan", "上海交通大学致远镜像站", "https://mirrors.sjtug.sjtu.edu.cn/",
   {NotSkip, NA, NA, "https://mirrors.sjtug.sjtu.edu.cn/ctan" Big_File_ctan}
+},
+
+Sjtug_Siyuan =
+{
+  "sjtu", "SJTUG-siyuan", "上海交通大学思源镜像站", "https://mirror.sjtu.edu.cn/",
+  {NotSkip, NA, NA, "https://mirror.sjtu.edu.cn/ctan" Big_File_ctan}
 },
 
 Zju =
