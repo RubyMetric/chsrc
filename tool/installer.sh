@@ -26,6 +26,7 @@ tmp_created_install_dir=""
 userOpt_version="pre"
 userOpt_help=0
 userOpt_lang="zh"
+version_prefix="v"
 
 
 
@@ -164,6 +165,11 @@ install() {
       else
         error "Unsupported version: ${userOpt_version}. Version number must be 0.x.y (>=0.1.4) or 'pre'"
       fi
+  fi
+
+  # version 版本不是 'pre'，添加'v'前缀
+  if [[ "$userOpt_version" =~ ^(0\.([1-9])\.([0-9]))$ ]]; then
+    userOpt_version="${version_prefix}${userOpt_version}"
   fi
 
   url="https://gitee.com/RubyMetric/chsrc/releases/download/${userOpt_version}/${binary_name}-${arch}-${platform}"
