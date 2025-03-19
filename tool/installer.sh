@@ -26,7 +26,6 @@ tmp_created_install_dir=""
 userOpt_version="pre"
 userOpt_help=0
 userOpt_lang="zh"
-version_prefix="v"
 
 
 
@@ -79,6 +78,85 @@ get_os() {
   echo $(uname -o | awk '{print tolower($0)}')
 }
 
+
+set_arch() {
+  arch=$(get_arch)
+
+  case "$arch" in
+    x86_64)  arch="x64" ;;
+    aarch64|arm64) arch="aarch64" ;;
+    riscv64) arch="riscv64" ;;
+    armv7*)  arch="armv7" ;;
+    *)
+      if [ "$userOpt_lang" = "zh" ]; then
+        error "不支持的架构: ${arch}"
+      else
+        error "Unsupported arch: ${arch}"
+      fi
+      ;;
+  esac
+}
+
+
+set_platform() {
+  platform=$(get_platform)
+
+  case "$platform" in
+    linux)
+      platform="linux"
+      whatos=$(get_os)
+      if [ "$whatos" = "android" ]; then
+        if [ "$userOpt_lang" = "zh" ]; then
+          info "抱歉, 暂无预编译二进制文件供安卓使用。请自行编译:"
+        else
+          info "Sorry, No precompiled binaries for Android! Please compile it on your own:"
+        fi
+        info "$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make"
+        exit 1
+      fi
+      ;;
+    darwin) platform="macos" ;;
+    bsd|dragonfly)
+      platform="bsd"
+      if [ "$userOpt_lang" = "zh" ]; then
+        info "抱歉, 暂无预编译二进制文件供BSD使用。请自行编译:"
+      else
+        info "Sorry, No precompiled binaries for BSD! Please compile it on your own:"
+      fi
+      info "$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc"
+      info "$ clang -Iinclude -Ilib src/chsrc-main.c -o chsrc"
+      exit 1
+      ;;
+    *)
+      if [ "$userOpt_lang" = "zh" ]; then
+        error "不支持的平台: ${platform}"
+      else
+        error "Unsupported platform: ${platform}"
+      fi
+      ;;
+  esac
+}
+
+
+set_binary_version() {
+  if [[ ! "$userOpt_version" =~ ^(pre|0\.([1-9])\.([0-9]))$ ]]; then
+      # version 不符合条件，报错
+      if [ "$userOpt_lang" = "zh" ]; then
+        error "不支持的版本: ${userOpt_version}，版本号必须为 0.x.y (>=0.1.4) 或 'pre'"
+      else
+        error "Unsupported version: ${userOpt_version}. Version number must be 0.x.y (>=0.1.4) or 'pre'"
+      fi
+  fi
+
+  binary_version="${userOpt_version}"
+
+  # version 版本不是 'pre'，添加'v'前缀
+  if [[ "$userOpt_version" =~ ^(0\.([1-9])\.([0-9]))$ ]]; then
+    binary_version="v${userOpt_version}"
+  fi
+}
+
+
 #
 # 1. 若用户指定了安装目录，则安装至那里
 #
@@ -96,13 +174,13 @@ set_install_dir() {
 
     # 检查目录是否存在，如果不存在则创建该目录
     if [ ! -d "$userOpt_install_dir" ]; then
-      # 多种语言输出
+
       if [ "$userOpt_lang" = "zh" ]; then
         echo "目录 $userOpt_install_dir 不存在，正在创建..."
       else
         echo "Directory $userOpt_install_dir does not exist. Creating..."
       fi
-      # 多语言输出
+
       if ! mkdir -p "$userOpt_install_dir"; then
         if [ "$userOpt_lang" = "zh" ]; then
           echo "创建目录失败，请重试"
@@ -142,88 +220,30 @@ set_install_dir() {
 
 
 install() {
-  arch=$(get_arch)
 
-  case "$arch" in
-    x86_64)  arch="x64" ;;
-    aarch64|arm64) arch="aarch64" ;;
-    riscv64) arch="riscv64" ;;
-    armv7*)  arch="armv7" ;;
-    *)
-      if [ "$userOpt_lang" = "zh" ]; then
-        error "不支持的架构: ${arch}"
-      else
-        error "Unsupported architecture: ${arch}"
-      fi
-      ;;
-  esac
+  set_binary_version
 
-  platform=$(get_platform)
+  set_arch
 
-  case "$platform" in
-    linux)
-      platform="linux"
-      whatos=$(get_os)
-      if [ "$whatos" = "android" ]; then
-        if [ "$userOpt_lang" = "zh" ]; then
-          info "抱歉, 暂无预编译二进制文件供安卓使用。请自行编译:"
-        else
-          info "Sorry, No precompiled binaries for Android! Please compile it on your own:"
-        fi
-        info "$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make"
-        exit 1
-      fi
-      ;;
-    darwin) platform="macos" ;;
-    bsd|dragonfly)
-      platform="bsd"
-      if [ "$userOpt_lang" = "zh" ]; then
-        info "抱歉, 暂无预编译二进制文件供BSD使用。请自行编译:"
-      else
-        info "Sorry, No precompiled binaries for BSD! Please compile it on your own:"
-      fi
-      info "$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc"
-      info "$ clang -Iinclude -Ilib src/chsrc-main.c -o chsrc"
-      exit 1
-      ;;
-    *)
-      if [ "$userOpt_lang" = "zh" ]; then
-        error "不支持的平台: ${platform}"
-      else
-        error "Unsupported platform: ${platform}"
-      fi
-      ;;
-  esac
+  set_platform
 
-  if [[ ! "$userOpt_version" =~ ^(pre|0\.([1-9])\.([0-9]))$ ]]; then
-      # version 不符合条件，报错
-      if [ "$userOpt_lang" = "zh" ]; then
-        error "不支持的版本: ${userOpt_version}，版本号必须为 0.x.y (>=0.1.4) 或 'pre'"
-      else
-        error "Unsupported version: ${userOpt_version}. Version number must be 0.x.y (>=0.1.4) or 'pre'"
-      fi
-  fi
+  set_install_dir
 
-  # version 版本不是 'pre'，添加'v'前缀
-  if [[ "$userOpt_version" =~ ^(0\.([1-9])\.([0-9]))$ ]]; then
-    userOpt_version="${version_prefix}${userOpt_version}"
-  fi
-
-  url="https://gitee.com/RubyMetric/chsrc/releases/download/${userOpt_version}/${binary_name}-${arch}-${platform}"
+  url="https://gitee.com/RubyMetric/chsrc/releases/download/${binary_version}/${binary_name}-${arch}-${platform}"
 
   path_to_executable="${userOpt_install_dir}/${binary_name}"
 
   if [ "$userOpt_lang" = "zh" ]; then
-    info "下载 ${binary_name} (架构: ${arch}, 平台: ${platform}, 版本: ${userOpt_version}) 到 ${path_to_executable}"
+    info "下载 ${binary_name} (架构: ${arch}, 平台: ${platform}, 版本: ${binary_version}) 到 ${path_to_executable}"
   else
-    info "Downloading ${binary_name} (architecture: ${arch}, platform: ${platform}, version: ${userOpt_version}) to ${path_to_executable}"
+    info "Downloading ${binary_name} (arch: ${arch}, platform: ${platform}, version: ${binary_version}) to ${path_to_executable}"
   fi
 
   if curl -sL "$url" -o "$path_to_executable"; then
     chmod +x "$path_to_executable"
 
     if [ "$userOpt_lang" = "zh" ]; then
-      info "🎉 安装完成，版本： $userOpt_version，路径: $path_to_executable"
+      info "🎉 安装完成，a版本： $binary_version，路径: $path_to_executable"
     else
       info "🎉 Installation completed, path: $path_to_executable"
     fi
@@ -237,6 +257,7 @@ install() {
 
   fi
 }
+
 
 cleanup() {
   if [ -n "$tmp_created_install_dir" ] && [ -d "$tmp_created_install_dir" ]; then
@@ -284,5 +305,4 @@ if [ "$userOpt_help" -eq 1 ]; then
   exit 0;
 fi
 
-set_install_dir
 install
