@@ -65,6 +65,20 @@ help() {
 }
 
 
+get_arch() {
+  echo $(uname -m | tr '[:upper:]' '[:lower:]')
+}
+
+get_platform() {
+  echo $(uname -s | awk '{print tolower($0)}')
+}
+
+# Linux   -> GNU/Linux
+# Android -> Android
+get_os() {
+  echo $(uname -o | awk '{print tolower($0)}')
+}
+
 #
 # 1. 若用户指定了安装目录，则安装至那里
 #
@@ -128,7 +142,7 @@ set_install_dir() {
 
 
 install() {
-  arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
+  arch=$(get_arch)
 
   case "$arch" in
     x86_64)  arch="x64" ;;
@@ -144,10 +158,22 @@ install() {
       ;;
   esac
 
-  platform="$(uname -s | awk '{print tolower($0)}')"
+  platform=$(get_platform)
 
   case "$platform" in
-    linux)  platform="linux" ;;
+    linux)
+      platform="linux"
+      whatos=$(get_os)
+      if [ "$whatos" = "android" ]; then
+        if [ "$userOpt_lang" = "zh" ]; then
+          info "抱歉, 暂无预编译二进制文件供安卓使用。请自行编译:"
+        else
+          info "Sorry, No precompiled binaries for Android! Please compile it on your own:"
+        fi
+        info "$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make"
+        exit 1
+      fi
+      ;;
     darwin) platform="macos" ;;
     bsd|dragonfly)
       platform="bsd"
