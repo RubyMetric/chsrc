@@ -7,7 +7,7 @@
 # Contributors  : Aoran Zeng <ccmywish@qq.com>
 #               |
 # Created On    : <2024-10-25>
-# Last Modified : <2025-03-07>
+# Last Modified : <2025-03-19>
 #
 #         chsrc installer for Linux & macOS
 # ---------------------------------------------------------------
@@ -149,6 +149,17 @@ install() {
   case "$platform" in
     linux)  platform="linux" ;;
     darwin) platform="macos" ;;
+    bsd|dragonfly)
+      platform="bsd"
+      if [ "$userOpt_lang" = "zh" ]; then
+        info "抱歉, 暂无预编译二进制文件供BSD使用。请自行编译:"
+      else
+        info "Sorry, No precompiled binaries for BSD! Please compile it on your own:"
+      fi
+      info "$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc"
+      info "$ clang -Iinclude -Ilib src/chsrc-main.c -o chsrc"
+      exit 1
+      ;;
     *)
       if [ "$userOpt_lang" = "zh" ]; then
         error "不支持的平台: ${platform}"
