@@ -14,6 +14,8 @@
 
 binary_name="chsrc"
 
+github_url="https://gitee.com/RubyMetric/chsrc.git"
+
 # 用户指定的安装目录，函数set_install_dir()将填充/校验该变量
 userOpt_install_dir=""
 # 默认安装目录
@@ -27,7 +29,29 @@ userOpt_version="pre"
 userOpt_help=0
 userOpt_lang="zh"
 
+success() {
+    if [ "$userOpt_lang" = "zh" ]; then
+      info "🎉 安装完成，版本： $userOpt_version，路径: $path_to_executable"
+    else
+      info "🎉 Installation completed, path: $path_to_executable"
+    fi
+}
 
+build_failed() {
+    if [ "$userOpt_lang" = "zh" ]; then
+      error "本地构建失败，请检查编译环境"
+    else
+      error "Local build failed, please check the build environment."
+    fi
+}
+
+download_failed() {
+    if [ "$userOpt_lang" = "zh" ]; then
+      error "下载失败，请检查您的网络连接和代理设置: ${url}"
+    else
+      error "Download failed, please check your network connection and proxy settings: ${url}"
+    fi
+}
 
 info() {
   echo "[INFO] $*"
@@ -149,10 +173,16 @@ install() {
     linux)  platform="linux" ;;
     darwin) platform="macos" ;;
     *)
-      if [ "$userOpt_lang" = "zh" ]; then
-        error "不支持的平台: ${platform}"
+      if [[ "$platform" =~ bsd ]]; then
+          BSD
+      elif isPOSIX "$platform"; then
+          POSIX
       else
-        error "Unsupported platform: ${platform}"
+        if [ "$userOpt_lang" = "zh" ]; then
+          error "不支持的平台: ${platform}"
+        else
+          error "Unsupported platform: ${platform}"
+        fi
       fi
       ;;
   esac
@@ -179,20 +209,47 @@ install() {
   if curl -sL "$url" -o "$path_to_executable"; then
     chmod +x "$path_to_executable"
 
-    if [ "$userOpt_lang" = "zh" ]; then
-      info "🎉 安装完成，版本： $userOpt_version，路径: $path_to_executable"
-    else
-      info "🎉 Installation completed, path: $path_to_executable"
-    fi
+    success
 
   else
-    if [ "$userOpt_lang" = "zh" ]; then
-      error "下载失败，请检查您的网络连接和代理设置: ${url}"
-    else
-      error "Download failed, please check your network connection and proxy settings: ${url}"
-    fi
+    
+    download_failed
 
   fi
+}
+
+# whether OS is POSIX
+isPOSIX() {
+    [[ "$1" =~ "AIX" || "$1" =~ "SunOS" || "$1" =~ "HP-UX" || "$1" =~ "Minix" || "$1" =~ "QNX" || "$1" =~ "IRIX" || "$1" =~ "DragonFly" || "$1" =~ "OpenIndiana" || "$1" =~ "UnixWare" || "$1" =~ "NeXTSTEP" || "$1" =~ "SmartOS" || "$1" =~ "Alpine" || "$1" =~ "Plan 9" ]]
+}
+
+BSD() {
+    url=${github_url}
+
+    if ! git clone "${url}" "${userOpt_install_dir}"; then
+        download_failed
+    fi
+
+
+    cd "${userOpt_install_dir}"/chsrc || exit 1
+    clang -Iinclude -Ilib src/chsrc-main.c -o chsrc
+    path_to_executable="${userOpt_install_dir}/${binary_name}"
+
+    success
+}
+
+POSIX() {
+    url=${github_url}
+
+    if ! git clone "${url}" "${userOpt_install_dir}"; then
+        download_failed
+    fi
+    
+    cd "${userOpt_install_dir}"/chsrc || exit 1
+    make
+    path_to_executable="${userOpt_install_dir}/${binary_name}"
+
+    success
 }
 
 cleanup() {
