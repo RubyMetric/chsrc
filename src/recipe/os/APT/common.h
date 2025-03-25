@@ -52,7 +52,7 @@
  * @return 文件是否存在
  */
 bool
-ensure_apt_sourcelist (int debian_type)
+ensure_debian_or_ubuntu_old_sourcelist (int debian_type)
 {
   bool exist = chsrc_check_file (OS_Apt_SourceList);
 

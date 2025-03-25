@@ -47,13 +47,15 @@ os_debian_getsrc (char *option)
       return;
     }
 
-  if (chsrc_check_file (OS_Apt_SourceList))
+  if (chsrc_check_file (OS_Debian_old_SourceList))
     {
-      chsrc_view_file (OS_Apt_SourceList);
+      chsrc_view_file (OS_Debian_old_SourceList);
       return;
     }
 
-  chsrc_error2 ("缺少源配置文件！但仍可直接通过 chsrc set debian 来添加使用新的源");
+  char *msg = CliOpt_InEnglish ? "Source list file missing! However, you can still run `chsrc set debian` to add and use new sources"
+                               : "缺少源配置文件！但仍可直接通过 chsrc set debian 来添加使用新的源";
+  chsrc_error2 (msg);
   return;
 }
 
@@ -62,7 +64,7 @@ static bool
 os_debian_does_old_sourcelist_use_cdrom (void)
 {
   /* 我们只检查旧版sourcelist，因为 common.h 中的填充只支持旧版 */
-  char *cmd = xy_2strjoin ("grep -q '^deb cdrom:' ", OS_Apt_SourceList);
+  char *cmd = xy_2strjoin ("grep -q '^deb cdrom:' ", OS_Debian_old_SourceList);
   int ret = system (cmd);
   bool use_cdrom = ret == 0;
 
@@ -112,7 +114,7 @@ os_debian_setsrc (char *option)
   chsrc_note2 ("将基于旧格式(非DEB822)换源");
 
   /* Docker环境下，Debian镜像可能不存在该文件 */
-  bool sourcelist_exist = ensure_apt_sourcelist (OS_Is_Debian_Literally);
+  bool sourcelist_exist = ensure_debian_or_ubuntu_old_sourcelist (OS_Is_Debian_Literally);
 
   /**
    * 处理带有CDROM源的sourcelist
@@ -128,7 +130,7 @@ os_debian_setsrc (char *option)
           system ("rm " OS_Debian_old_SourceList);
           chsrc_warn2 ("旧版源配置文件中使用了 CDROM 源，已删除(但备份)该配置文件，重新配置");
           /* 现在的情况是：系统中已经没有配置文件了 */
-          sourcelist_exist = ensure_apt_sourcelist (OS_Is_Debian_Literally);
+          sourcelist_exist = ensure_debian_or_ubuntu_old_sourcelist (OS_Is_Debian_Literally);
         }
     }
 

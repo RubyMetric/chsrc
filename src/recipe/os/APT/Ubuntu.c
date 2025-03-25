@@ -6,7 +6,7 @@
  * Contributors  :    Zhao    <1792582687@qq.com>
  *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2024-12-18>
+ * Last Modified : <2025-03-25>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t os_ubuntu_upstream =
@@ -46,13 +46,13 @@ os_ubuntu_getsrc (char *option)
       return;
     }
 
-  if (chsrc_check_file (OS_Apt_SourceList))
+  if (chsrc_check_file (OS_Ubuntu_old_SourceList))
     {
-      chsrc_view_file (OS_Apt_SourceList);
+      chsrc_view_file (OS_Ubuntu_old_SourceList);
       return;
     }
 
-  char *msg = CliOpt_InEnglish ? "Source config file missing! However, you can still run `chsrc set ubuntu` to add and use new sources"
+  char *msg = CliOpt_InEnglish ? "Source list file missing! However, you can still run `chsrc set ubuntu` to add and use new sources"
                                : "缺少源配置文件！但仍可直接通过 chsrc set ubuntu 来添加使用新的源";
   chsrc_error2 (msg);
   return;
@@ -98,31 +98,33 @@ os_ubuntu_setsrc (char *option)
   if (chsrc_check_file (OS_Ubuntu_SourceList_DEB822))
     {
       char *msg = CliOpt_InEnglish ? "Will change source based on new format"
-                                   : "将基于新格式换源";
+                                   : "将基于新格式(DEB822)换源";
       chsrc_note2 (msg);
       os_ubuntu_setsrc_for_deb822 (option);
       return;
     }
 
-  bool sourcelist_exist = ensure_apt_sourcelist (OS_Is_Ubuntu);
+  chsrc_note2 ("将基于旧格式(非DEB822)换源");
+
+  bool sourcelist_exist = ensure_debian_or_ubuntu_old_sourcelist (OS_Is_Ubuntu);
 
   chsrc_yield_source_and_confirm (os_ubuntu);
 
-  // 不存在的时候，用的是我们生成的无效文件，不要备份
+  /* 不存在的时候，用的是我们生成的无效文件，不要备份 */
   if (sourcelist_exist)
     {
-      chsrc_backup (OS_Apt_SourceList);
+      chsrc_backup (OS_Ubuntu_old_SourceList);
     }
 
-  char *arch = chsrc_get_cpuarch ();
+  char *arch = chsrc_get_cpuarch();
   char *cmd  = NULL;
   if (0==strncmp (arch, "x86_64", 6))
     {
-      cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu/?@", source.url, "@g\' " OS_Apt_SourceList);
+      cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu/?@", source.url, "@g\' " OS_Ubuntu_old_SourceList);
     }
   else
     {
-      cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu-ports/?@", source.url, "-ports@g\' " OS_Apt_SourceList);
+      cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu-ports/?@", source.url, "-ports@g\' " OS_Ubuntu_old_SourceList);
     }
 
   chsrc_run (cmd, RunOpt_Default);
