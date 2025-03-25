@@ -7,7 +7,7 @@
 # Contributors  : Aoran Zeng <ccmywish@qq.com>
 #               |
 # Created On    : <2024-10-25>
-# Last Modified : <2025-03-19>
+# Last Modified : <2025-03-25>
 #
 #         chsrc installer for Linux & macOS
 # ---------------------------------------------------------------
@@ -39,8 +39,18 @@ error() {
   exit 1
 }
 
-help() {
+
+is_zh() {
   if [ "$userOpt_lang" = "zh" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+
+help() {
+  if is_zh; then
     echo "chsrc-installer: 在类Unix操作系统上安装 chsrc"
     echo
     echo "使用: install.sh [选项]"
@@ -88,7 +98,7 @@ set_arch() {
     riscv64) arch="riscv64" ;;
     armv7*)  arch="armv7" ;;
     *)
-      if [ "$userOpt_lang" = "zh" ]; then
+      if is_zh; then
         error "不支持的架构: ${arch}"
       else
         error "Unsupported arch: ${arch}"
@@ -106,7 +116,7 @@ set_platform() {
       platform="linux"
       whatos=$(get_os)
       if [ "$whatos" = "android" ]; then
-        if [ "$userOpt_lang" = "zh" ]; then
+        if is_zh; then
           info "抱歉, 暂无预编译二进制文件供安卓使用。请自行编译:"
         else
           info "Sorry, No precompiled binaries for Android! Please compile it on your own:"
@@ -118,7 +128,7 @@ set_platform() {
     darwin) platform="macos" ;;
     bsd|dragonfly)
       platform="bsd"
-      if [ "$userOpt_lang" = "zh" ]; then
+      if is_zh; then
         info "抱歉, 暂无预编译二进制文件供BSD使用。请自行编译:"
       else
         info "Sorry, No precompiled binaries for BSD! Please compile it on your own:"
@@ -128,7 +138,7 @@ set_platform() {
       exit 1
       ;;
     *)
-      if [ "$userOpt_lang" = "zh" ]; then
+      if is_zh; then
         error "不支持的平台: ${platform}"
       else
         error "Unsupported platform: ${platform}"
@@ -141,7 +151,7 @@ set_platform() {
 set_binary_version() {
   if [[ ! "$userOpt_version" =~ ^(pre|0\.([1-9])\.([0-9]))$ ]]; then
       # version 不符合条件，报错
-      if [ "$userOpt_lang" = "zh" ]; then
+      if is_zh; then
         error "不支持的版本: ${userOpt_version}，版本号必须为 0.x.y (>=0.1.4) 或 'pre'"
       else
         error "Unsupported version: ${userOpt_version}. Version number must be 0.x.y (>=0.1.4) or 'pre'"
@@ -175,14 +185,14 @@ set_install_dir() {
     # 检查目录是否存在，如果不存在则创建该目录
     if [ ! -d "$userOpt_install_dir" ]; then
 
-      if [ "$userOpt_lang" = "zh" ]; then
+      if is_zh; then
         echo "目录 $userOpt_install_dir 不存在，正在创建..."
       else
         echo "Directory $userOpt_install_dir does not exist. Creating..."
       fi
 
       if ! mkdir -p "$userOpt_install_dir"; then
-        if [ "$userOpt_lang" = "zh" ]; then
+        if is_zh; then
           echo "创建目录失败，请重试"
         else
           echo "Failed to create directory, please try again"
@@ -195,7 +205,7 @@ set_install_dir() {
 
   elif existing_path=$(command -v "$binary_name" 2>/dev/null); then
 
-    if [ "$userOpt_lang" = "zh" ]; then
+    if is_zh; then
       info "$binary_name 已安装，更新路径: ${existing_path}"
     else
       info "$binary_name is already installed, updating path: ${existing_path}"
@@ -209,7 +219,7 @@ set_install_dir() {
     elif [ -d "$default_install_dir_4nonroot" ] && [ -w "$default_install_dir_4nonroot" ]; then
       userOpt_install_dir="$default_install_dir_4nonroot"
     else
-      if [ "$userOpt_lang" = "zh" ]; then
+      if is_zh; then
         error "默认安装目录 $default_install_dir_4root 和 $default_install_dir_4nonroot 不可写，请使用 sudo 命令运行脚本；或通过 -d 参数指定其它目录安装"
       else
         error "Default install dir $default_install_dir_4root and $default_install_dir_4nonroot is not writable. Please run the script with sudo; or specify another dir using the -d option."
@@ -234,7 +244,7 @@ download() {
     return $?
   fi
 
-  if [ "$userOpt_lang" = "zh" ]; then
+  if is_zh; then
     error "缺乏必要的下载工具(curl或wget)，无法下载文件"
   else
     error "Missing necessary download tools (curl or wget) to download the file!"
@@ -256,30 +266,26 @@ install() {
 
   path_to_executable="${userOpt_install_dir}/${binary_name}"
 
-  if [ "$userOpt_lang" = "zh" ]; then
+  if is_zh; then
     info "下载 ${binary_name} (架构: ${arch}, 平台: ${platform}, 版本: ${binary_version}) 到 ${path_to_executable}"
   else
     info "Downloading ${binary_name} (arch: ${arch}, platform: ${platform}, version: ${binary_version}) to ${path_to_executable}"
   fi
 
-  download $url "$path_to_executable"
-
-  if $?; then
+  if download $url "$path_to_executable"; then
     chmod +x "$path_to_executable"
 
-    if [ "$userOpt_lang" = "zh" ]; then
+    if is_zh; then
       info "🎉 安装完成，路径: $path_to_executable"
     else
       info "🎉 Installation completed, path: $path_to_executable"
     fi
-
   else
-    if [ "$userOpt_lang" = "zh" ]; then
+    if is_zh; then
       error "下载失败，请检查您的网络连接和代理设置: ${url}"
     else
       error "Download failed, please check your network connection and proxy settings: ${url}"
     fi
-
   fi
 }
 
@@ -287,7 +293,7 @@ install() {
 cleanup() {
   if [ -n "$tmp_created_install_dir" ] && [ -d "$tmp_created_install_dir" ]; then
 
-    if [ "$userOpt_lang" = "zh" ]; then
+    if is_zh; then
       echo "清理创建的目录: $tmp_created_install_dir"
     else
       echo "Cleaning up created directory: $tmp_created_install_dir"
