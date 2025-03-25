@@ -1,12 +1,14 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- *               |  Heng Guo  <2085471348@qq.com>
- * Contributors  : Yangmoooo <yangmoooo@outlook.com>
- *               |
- * Created On    : <2023-09-02>
- * Last Modified : <2024-12-18>
+ * File Authors   :   Aoran Zeng   <ccmywish@qq.com>
+ *                |    Heng Guo    <2085471348@qq.com>
+ * Contributors   :    Yangmoooo   <yangmoooo@outlook.com>
+ *                | GitHub Copilot <https://github.com/copilot>
+ *                |
+ * Created On     : <2023-09-02>
+ * Major Revision :      3
+ * Last Modified  : <2025-03-25>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t os_debian_upstream =
@@ -55,20 +57,30 @@ os_debian_getsrc (char *option)
   return;
 }
 
+
+static bool
+os_debian_does_old_sourcelist_use_cdrom (void)
+{
+  /* 我们只检查旧版sourcelist，因为 common.h 中的填充只支持旧版 */
+  char *cmd = xy_2strjoin ("grep -q '^deb cdrom:' ", OS_Apt_SourceList);
+  int ret = system (cmd);
+  bool use_cdrom = ret == 0;
+
+  return use_cdrom;
+}
+
+
 void
 os_debian_setsrc_for_deb822 (char *option)
 {
   chsrc_yield_source_and_confirm (os_debian);
-
-  chsrc_note2 ("如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并需要您运行:");
-  puts ("apt install apt-transport-https ca-certificates");
 
   chsrc_backup (OS_Debian_SourceList_DEB822);
 
   char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/debian/?@", source.url, "@g' " OS_Debian_SourceList_DEB822);
   chsrc_run (cmd, RunOpt_Default);
 
-  // debian-security 源和其他源不一样
+  /* debian-security 源和其他源不一样 */
   cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/debian-security/?@", source.url, "-security@g' " OS_Debian_SourceList_DEB822);
   chsrc_run (cmd, RunOpt_Default);
 
@@ -80,6 +92,8 @@ os_debian_setsrc_for_deb822 (char *option)
 
 
 /**
+ * 处理旧版(非DEB822) sourcelist 的换源
+ *
  * Debian 10 Buster 以上版本默认支持 HTTPS 源。如果遇到无法拉取 HTTPS 源的情况，请先使用 HTTP 源并安装
  * apt install apt-transport-https ca-certificates
  */
@@ -90,27 +104,46 @@ os_debian_setsrc (char *option)
 
   if (chsrc_check_file (OS_Debian_SourceList_DEB822))
     {
-      chsrc_note2 ("将基于新格式换源");
+      chsrc_note2 ("将基于新格式(DEB822)换源");
       os_debian_setsrc_for_deb822 (option);
       return;
     }
 
+  chsrc_note2 ("将基于旧格式(非DEB822)换源");
 
-  // Docker环境下，Debian镜像可能不存在该文件
+  /* Docker环境下，Debian镜像可能不存在该文件 */
   bool sourcelist_exist = ensure_apt_sourcelist (OS_Is_Debian_Literally);
+
+  /**
+   * 处理带有CDROM源的sourcelist
+   *
+   * https://github.com/RubyMetric/chsrc/issues/185#issuecomment-2746072917
+   */
+  if (sourcelist_exist)
+    {
+      bool use_cdrom = os_debian_does_old_sourcelist_use_cdrom();
+      if (use_cdrom)
+        {
+          chsrc_backup (OS_Debian_old_SourceList);
+          system ("rm " OS_Debian_old_SourceList);
+          chsrc_warn2 ("旧版源配置文件中使用了 CDROM 源，已删除(但备份)该配置文件，重新配置");
+          /* 现在的情况是：系统中已经没有配置文件了 */
+          sourcelist_exist = ensure_apt_sourcelist (OS_Is_Debian_Literally);
+        }
+    }
 
   chsrc_yield_source_and_confirm (os_debian);
 
   chsrc_note2 ("如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并需要您运行:");
-  puts ("apt install apt-transport-https ca-certificates");
+  say ("apt install apt-transport-https ca-certificates");
 
-  // 不存在的时候，用的是我们生成的无效文件，不要备份
+  /* 不存在的时候，用的是我们生成的用来填充占位的无效文件，不要备份 */
   if (sourcelist_exist)
     {
-      chsrc_backup (OS_Apt_SourceList);
+      chsrc_backup (OS_Debian_old_SourceList);
     }
 
-  char *cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/debian/?@", source.url, "@g\' " OS_Apt_SourceList);
+  char *cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/debian/?@", source.url, "@g\' " OS_Debian_old_SourceList);
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
@@ -145,4 +178,3 @@ os_debian_feat (char *option)
 }
 
 def_target_gsrf(os_debian);
-
