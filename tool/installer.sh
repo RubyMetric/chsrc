@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 # ---------------------------------------------------------------
-# File Name     : installer.sh
-# File Authors  :  GnixAij   <gaojiaxing0220@gmail.com>
-#               |    xuan    <wick.dynex@qq.com>
-#               |  ChatGPT   <https://chatgpt.com>
-# Contributors  : Aoran Zeng <ccmywish@qq.com>
+# File Name     :  installer.sh
+# File Authors  :    GnixAij     <gaojiaxing0220@gmail.com>
+#               |     xuan       <wick.dynex@qq.com>
+#               |    ChatGPT     <https://chatgpt.com>
+# Contributors  :  Aoran Zeng    <ccmywish@qq.com>
+#               | GitHub Copilot <https://github.com/copilot>
 #               |
 # Created On    : <2024-10-25>
 # Last Modified : <2025-03-25>
 #
-#         chsrc installer for Linux & macOS
+#         chsrc installer for POSIX (mainly Linux & macOS)
 # ---------------------------------------------------------------
 
 binary_name="chsrc"
@@ -212,6 +213,15 @@ set_install_dir() {
     fi
 
     userOpt_install_dir=$(dirname "$existing_path")
+
+    if [ ! -w "$userOpt_install_dir" ]; then
+      if is_zh; then
+        error "目录 $userOpt_install_dir 不可写，请使用 sudo 命令运行脚本；或通过 -d 参数指定其它目录安装"
+      else
+        error "Directory $userOpt_install_dir is not writable. Please run the script with sudo; or specify another dir using the -d option."
+      fi
+    fi
+
   else
     # 检查默认安装目录
     if [ -d "$default_install_dir_4root" ] && [ -w "$default_install_dir_4root" ]; then
