@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 # ---------------------------------------------------------------
-# File Name     : installer.sh
-# File Authors  :  GnixAij   <gaojiaxing0220@gmail.com>
-#               |    xuan    <wick.dynex@qq.com>
-#               |  ChatGPT   <https://chatgpt.com>
-# Contributors  : Aoran Zeng <ccmywish@qq.com>
+# File Name     :  installer.sh
+# File Authors  :    GnixAij     <gaojiaxing0220@gmail.com>
+#               |     xuan       <wick.dynex@qq.com>
+#               |    ChatGPT     <https://chatgpt.com>
+#               |   Aoran Zeng   <ccmywish@qq.com>
+# Contributors  : GitHub Copilot <https://github.com/copilot>
+#               |   DeepSeek     <https://chat.deepseek.com/>
 #               |
 # Created On    : <2024-10-25>
-# Last Modified : <2025-03-19>
+# Last Modified : <2025-03-25>
 #
-#         chsrc installer for Linux & macOS
+#         chsrc installer for POSIX (mainly Linux & macOS)
 # ---------------------------------------------------------------
 
 binary_name="chsrc"
@@ -33,14 +35,36 @@ info() {
   echo "[INFO] $*"
 }
 
-# 出现错误，直接强制退出
+warn() {
+  echo "[WARN] $*"
+}
+
 error() {
+  echo "[ERROR] $*"
+}
+
+# 用户自己输入
+typeit() {
+  echo "[->] $ $*"
+}
+
+error_exit() {
   echo -e "[ERROR] $*" >&2
   exit 1
 }
 
-help() {
+
+is_zh() {
   if [ "$userOpt_lang" = "zh" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+
+help() {
+  if is_zh; then
     echo "chsrc-installer: 在类Unix操作系统上安装 chsrc"
     echo
     echo "使用: install.sh [选项]"
@@ -62,6 +86,55 @@ help() {
     echo
   fi
 }
+
+
+let_user_build() {
+  if command -v make &>/dev/null; then
+    # 检测是否是 GNU make，如果是则用 make，如果不是则用C编译器来编译
+    if make --version | grep -q "GNU Make"; then
+      typeit "make"
+    else
+      if is_zh; then
+        warn "检测到非 GNU make，本项目的Makefile仅支持GNU make"
+      else
+        warn "Non-GNU make was detected, the Makefile for this project only supports GNU make"
+      fi
+      typeit "cc/gcc/clang -Iinclude -Ilib src/chsrc-main.c -o chsrc"
+    fi
+  else
+    if is_zh; then
+      warn "未检测到GNU make，需手动执行编译命令："
+    else
+      warn "GNU make was not detected, so we need to run the compile command manually:"
+    fi
+    typeit "cc/gcc/clang -Iinclude -Ilib src/chsrc-main.c -o chsrc"
+  fi
+}
+
+
+let_user_compile() {
+  source_zip_url="https://gitee.com/RubyMetric/chsrc/repository/archive/main.zip"
+  echo ""
+
+  if command -v git &>/dev/null; then
+    typeit "git clone https://gitee.com/RubyMetric/chsrc.git"
+    typeit "cd chsrc"
+    let_user_build
+    exit 1
+  elif command -v curl &>/dev/null; then
+    typeit "curl -LO $source_zip_url"
+  elif command -v wget &>/dev/null; then
+    typeit "wget $source_zip_url"
+  else
+    info "Please download the source code: $source_zip_url"
+  fi
+
+  typeit "unzip ./main.zip "
+  typeit "cd ./chsrc-main"
+  let_user_build
+  exit 1;
+}
+
 
 
 get_arch() {
@@ -88,11 +161,13 @@ set_arch() {
     riscv64) arch="riscv64" ;;
     armv7*)  arch="armv7" ;;
     *)
-      if [ "$userOpt_lang" = "zh" ]; then
-        error "不支持的架构: ${arch}"
+      if is_zh; then
+        warn "抱歉, 暂无预编译二进制文件供您的架构: ${arch} 使用。请自行编译："
       else
-        error "Unsupported arch: ${arch}"
+        warn "Sorry, No precompiled binaries for your arch: ${arch}. Please compile it on your own:"
       fi
+      let_user_compile
+      exit 1
       ;;
   esac
 }
@@ -106,33 +181,34 @@ set_platform() {
       platform="linux"
       whatos=$(get_os)
       if [ "$whatos" = "android" ]; then
-        if [ "$userOpt_lang" = "zh" ]; then
-          info "抱歉, 暂无预编译二进制文件供安卓使用。请自行编译:"
+        if is_zh; then
+          info "抱歉, 暂无预编译二进制文件供安卓使用。请自行编译："
         else
           info "Sorry, No precompiled binaries for Android! Please compile it on your own:"
         fi
-        info "$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make"
+        let_user_compile
         exit 1
       fi
       ;;
     darwin) platform="macos" ;;
     bsd|dragonfly)
       platform="bsd"
-      if [ "$userOpt_lang" = "zh" ]; then
-        info "抱歉, 暂无预编译二进制文件供BSD使用。请自行编译:"
+      if is_zh; then
+        info "抱歉, 暂无预编译二进制文件供BSD使用。请自行编译："
       else
         info "Sorry, No precompiled binaries for BSD! Please compile it on your own:"
       fi
-      info "$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc"
-      info "$ clang -Iinclude -Ilib src/chsrc-main.c -o chsrc"
+      let_user_compile
       exit 1
       ;;
     *)
-      if [ "$userOpt_lang" = "zh" ]; then
-        error "不支持的平台: ${platform}"
+      if is_zh; then
+        error_exit "抱歉，暂无预编译二进制文件供您的平台: ${platform} 使用。请自行编译："
       else
-        error "Unsupported platform: ${platform}"
+        error_exit "Sorry, No precompiled binaries for your platform: ${platform}. Please compile it on your own:"
       fi
+      let_user_compile
+      exit 1
       ;;
   esac
 }
@@ -141,10 +217,10 @@ set_platform() {
 set_binary_version() {
   if [[ ! "$userOpt_version" =~ ^(pre|0\.([1-9])\.([0-9]))$ ]]; then
       # version 不符合条件，报错
-      if [ "$userOpt_lang" = "zh" ]; then
-        error "不支持的版本: ${userOpt_version}，版本号必须为 0.x.y (>=0.1.4) 或 'pre'"
+      if is_zh; then
+        error_exit "不支持的版本: ${userOpt_version}，版本号必须为 0.x.y (>=0.1.4) 或 'pre'"
       else
-        error "Unsupported version: ${userOpt_version}. Version number must be 0.x.y (>=0.1.4) or 'pre'"
+        error_exit "Unsupported version: ${userOpt_version}. Version number must be 0.x.y (>=0.1.4) or 'pre'"
       fi
   fi
 
@@ -175,14 +251,14 @@ set_install_dir() {
     # 检查目录是否存在，如果不存在则创建该目录
     if [ ! -d "$userOpt_install_dir" ]; then
 
-      if [ "$userOpt_lang" = "zh" ]; then
+      if is_zh; then
         echo "目录 $userOpt_install_dir 不存在，正在创建..."
       else
         echo "Directory $userOpt_install_dir does not exist. Creating..."
       fi
 
       if ! mkdir -p "$userOpt_install_dir"; then
-        if [ "$userOpt_lang" = "zh" ]; then
+        if is_zh; then
           echo "创建目录失败，请重试"
         else
           echo "Failed to create directory, please try again"
@@ -195,13 +271,22 @@ set_install_dir() {
 
   elif existing_path=$(command -v "$binary_name" 2>/dev/null); then
 
-    if [ "$userOpt_lang" = "zh" ]; then
+    if is_zh; then
       info "$binary_name 已安装，更新路径: ${existing_path}"
     else
       info "$binary_name is already installed, updating path: ${existing_path}"
     fi
 
     userOpt_install_dir=$(dirname "$existing_path")
+
+    if [ ! -w "$userOpt_install_dir" ]; then
+      if is_zh; then
+        error_exit "目录 $userOpt_install_dir 不可写，请使用 sudo 命令运行脚本；或通过 -d 参数指定其它目录安装"
+      else
+        error_exit "Directory $userOpt_install_dir is not writable. Please run the script with sudo; or specify another dir using the -d option."
+      fi
+    fi
+
   else
     # 检查默认安装目录
     if [ -d "$default_install_dir_4root" ] && [ -w "$default_install_dir_4root" ]; then
@@ -209,12 +294,35 @@ set_install_dir() {
     elif [ -d "$default_install_dir_4nonroot" ] && [ -w "$default_install_dir_4nonroot" ]; then
       userOpt_install_dir="$default_install_dir_4nonroot"
     else
-      if [ "$userOpt_lang" = "zh" ]; then
-        error "默认安装目录 $default_install_dir_4root 和 $default_install_dir_4nonroot 不可写，请使用 sudo 命令运行脚本；或通过 -d 参数指定其它目录安装"
+      if is_zh; then
+        error_exit "默认安装目录 $default_install_dir_4root 和 $default_install_dir_4nonroot 不可写，请使用 sudo 命令运行脚本；或通过 -d 参数指定其它目录安装"
       else
-        error "Default install dir $default_install_dir_4root and $default_install_dir_4nonroot is not writable. Please run the script with sudo; or specify another dir using the -d option."
+        error_exit "Default install dir $default_install_dir_4root and $default_install_dir_4nonroot is not writable. Please run the script with sudo; or specify another dir using the -d option."
       fi
     fi
+  fi
+}
+
+#
+# @param $1: 下载链接
+# @param $2: 保存路径(带文件名)
+#
+download() {
+  if command -v curl &>/dev/null; then
+    curl -sL "$1" -o "$2"
+    return $? # 只能单独 return
+  fi
+
+  if command -v wget &>/dev/null; then
+    # follow 是wget默认行为
+    wget -qO "$2" "$1"
+    return $?
+  fi
+
+  if is_zh; then
+    error_exit "缺乏必要的下载工具(curl或wget)，无法下载文件"
+  else
+    error_exit "Missing necessary download tools (curl or wget) to download the file!"
   fi
 }
 
@@ -233,28 +341,26 @@ install() {
 
   path_to_executable="${userOpt_install_dir}/${binary_name}"
 
-  if [ "$userOpt_lang" = "zh" ]; then
+  if is_zh; then
     info "下载 ${binary_name} (架构: ${arch}, 平台: ${platform}, 版本: ${binary_version}) 到 ${path_to_executable}"
   else
     info "Downloading ${binary_name} (arch: ${arch}, platform: ${platform}, version: ${binary_version}) to ${path_to_executable}"
   fi
 
-  if curl -sL "$url" -o "$path_to_executable"; then
+  if download $url "$path_to_executable"; then
     chmod +x "$path_to_executable"
 
-    if [ "$userOpt_lang" = "zh" ]; then
-      info "🎉 安装完成，a版本： $binary_version，路径: $path_to_executable"
+    if is_zh; then
+      info "🎉 安装完成，路径: $path_to_executable"
     else
       info "🎉 Installation completed, path: $path_to_executable"
     fi
-
   else
-    if [ "$userOpt_lang" = "zh" ]; then
-      error "下载失败，请检查您的网络连接和代理设置: ${url}"
+    if is_zh; then
+      error_exit "下载失败，请检查您的网络连接和代理设置: ${url}"
     else
-      error "Download failed, please check your network connection and proxy settings: ${url}"
+      error_exit "Download failed, please check your network connection and proxy settings: ${url}"
     fi
-
   fi
 }
 
@@ -262,7 +368,7 @@ install() {
 cleanup() {
   if [ -n "$tmp_created_install_dir" ] && [ -d "$tmp_created_install_dir" ]; then
 
-    if [ "$userOpt_lang" = "zh" ]; then
+    if is_zh; then
       echo "清理创建的目录: $tmp_created_install_dir"
     else
       echo "Cleaning up created directory: $tmp_created_install_dir"
@@ -297,7 +403,7 @@ while getopts ":hd:v:l:" option; do
 done
 
 if [[ "$userOpt_lang" != "zh" && "$userOpt_lang" != "en" ]]; then
-  error "无效的语言选项: $userOpt_lang，支持的选项为 zh 和 en"
+  error_exit "无效的语言选项: $userOpt_lang，支持的选项为 zh 和 en"
 fi
 
 if [ "$userOpt_help" -eq 1 ]; then
