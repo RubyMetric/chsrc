@@ -218,6 +218,29 @@ set_install_dir() {
   fi
 }
 
+#
+# @param $1: 下载链接
+# @param $2: 保存路径(带文件名)
+#
+download() {
+  if command -v curl &>/dev/null; then
+    curl -sL "$1" -o "$2"
+    return $? # 只能单独 return
+  fi
+
+  if command -v wget &>/dev/null; then
+    # follow 是wget默认行为
+    wget -qO "$2" "$1"
+    return $?
+  fi
+
+  if [ "$userOpt_lang" = "zh" ]; then
+    error "缺乏必要的下载工具(curl或wget)，无法下载文件"
+  else
+    error "Missing necessary download tools (curl or wget) to download the file!"
+  fi
+}
+
 
 install() {
 
@@ -239,11 +262,13 @@ install() {
     info "Downloading ${binary_name} (arch: ${arch}, platform: ${platform}, version: ${binary_version}) to ${path_to_executable}"
   fi
 
-  if curl -sL "$url" -o "$path_to_executable"; then
+  download $url "$path_to_executable"
+
+  if $?; then
     chmod +x "$path_to_executable"
 
     if [ "$userOpt_lang" = "zh" ]; then
-      info "🎉 安装完成，a版本： $binary_version，路径: $path_to_executable"
+      info "🎉 安装完成，路径: $path_to_executable"
     else
       info "🎉 Installation completed, path: $path_to_executable"
     fi
