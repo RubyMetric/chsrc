@@ -4,8 +4,9 @@
 # File Authors  :    GnixAij     <gaojiaxing0220@gmail.com>
 #               |     xuan       <wick.dynex@qq.com>
 #               |    ChatGPT     <https://chatgpt.com>
-# Contributors  :  Aoran Zeng    <ccmywish@qq.com>
-#               | GitHub Copilot <https://github.com/copilot>
+#               |   Aoran Zeng   <ccmywish@qq.com>
+# Contributors  : GitHub Copilot <https://github.com/copilot>
+#               |   DeepSeek     <https://chat.deepseek.com/>
 #               |
 # Created On    : <2024-10-25>
 # Last Modified : <2025-03-25>
@@ -34,8 +35,20 @@ info() {
   echo "[INFO] $*"
 }
 
-# 出现错误，直接强制退出
+warn() {
+  echo "[WARN] $*"
+}
+
 error() {
+  echo "[ERROR] $*"
+}
+
+# 用户自己输入
+typeit() {
+  echo "[->] $ $*"
+}
+
+error_exit() {
   echo -e "[ERROR] $*" >&2
   exit 1
 }
@@ -75,6 +88,55 @@ help() {
 }
 
 
+let_user_build() {
+  if command -v make &>/dev/null; then
+    # 检测是否是 GNU make，如果是则用 make，如果不是则用C编译器来编译
+    if make --version | grep -q "GNU Make"; then
+      typeit "make"
+    else
+      if is_zh; then
+        warn "检测到非 GNU make，本项目的Makefile仅支持GNU make"
+      else
+        warn "Non-GNU make was detected, the Makefile for this project only supports GNU make"
+      fi
+      typeit "cc/gcc/clang -Iinclude -Ilib src/chsrc-main.c -o chsrc"
+    fi
+  else
+    if is_zh; then
+      warn "未检测到GNU make，需手动执行编译命令："
+    else
+      warn "GNU make was not detected, so we need to run the compile command manually:"
+    fi
+    typeit "cc/gcc/clang -Iinclude -Ilib src/chsrc-main.c -o chsrc"
+  fi
+}
+
+
+let_user_compile() {
+  source_zip_url="https://gitee.com/RubyMetric/chsrc/repository/archive/main.zip"
+  echo ""
+
+  if command -v git &>/dev/null; then
+    typeit "git clone https://gitee.com/RubyMetric/chsrc.git"
+    typeit "cd chsrc"
+    let_user_build
+    exit 1
+  elif command -v curl &>/dev/null; then
+    typeit "curl -LO $source_zip_url"
+  elif command -v wget &>/dev/null; then
+    typeit "wget $source_zip_url"
+  else
+    info "Please download the source code: $source_zip_url"
+  fi
+
+  typeit "unzip ./main.zip "
+  typeit "cd ./chsrc-main"
+  let_user_build
+  exit 1;
+}
+
+
+
 get_arch() {
   echo $(uname -m | tr '[:upper:]' '[:lower:]')
 }
@@ -100,10 +162,12 @@ set_arch() {
     armv7*)  arch="armv7" ;;
     *)
       if is_zh; then
-        error "不支持的架构: ${arch}"
+        warn "抱歉, 暂无预编译二进制文件供您的架构: ${arch} 使用。请自行编译："
       else
-        error "Unsupported arch: ${arch}"
+        warn "Sorry, No precompiled binaries for your arch: ${arch}. Please compile it on your own:"
       fi
+      let_user_compile
+      exit 1
       ;;
   esac
 }
@@ -118,11 +182,11 @@ set_platform() {
       whatos=$(get_os)
       if [ "$whatos" = "android" ]; then
         if is_zh; then
-          info "抱歉, 暂无预编译二进制文件供安卓使用。请自行编译:"
+          info "抱歉, 暂无预编译二进制文件供安卓使用。请自行编译："
         else
           info "Sorry, No precompiled binaries for Android! Please compile it on your own:"
         fi
-        info "$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make"
+        let_user_compile
         exit 1
       fi
       ;;
@@ -130,20 +194,21 @@ set_platform() {
     bsd|dragonfly)
       platform="bsd"
       if is_zh; then
-        info "抱歉, 暂无预编译二进制文件供BSD使用。请自行编译:"
+        info "抱歉, 暂无预编译二进制文件供BSD使用。请自行编译："
       else
         info "Sorry, No precompiled binaries for BSD! Please compile it on your own:"
       fi
-      info "$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc"
-      info "$ clang -Iinclude -Ilib src/chsrc-main.c -o chsrc"
+      let_user_compile
       exit 1
       ;;
     *)
       if is_zh; then
-        error "不支持的平台: ${platform}"
+        error_exit "抱歉，暂无预编译二进制文件供您的平台: ${platform} 使用。请自行编译："
       else
-        error "Unsupported platform: ${platform}"
+        error_exit "Sorry, No precompiled binaries for your platform: ${platform}. Please compile it on your own:"
       fi
+      let_user_compile
+      exit 1
       ;;
   esac
 }
@@ -153,9 +218,9 @@ set_binary_version() {
   if [[ ! "$userOpt_version" =~ ^(pre|0\.([1-9])\.([0-9]))$ ]]; then
       # version 不符合条件，报错
       if is_zh; then
-        error "不支持的版本: ${userOpt_version}，版本号必须为 0.x.y (>=0.1.4) 或 'pre'"
+        error_exit "不支持的版本: ${userOpt_version}，版本号必须为 0.x.y (>=0.1.4) 或 'pre'"
       else
-        error "Unsupported version: ${userOpt_version}. Version number must be 0.x.y (>=0.1.4) or 'pre'"
+        error_exit "Unsupported version: ${userOpt_version}. Version number must be 0.x.y (>=0.1.4) or 'pre'"
       fi
   fi
 
@@ -216,9 +281,9 @@ set_install_dir() {
 
     if [ ! -w "$userOpt_install_dir" ]; then
       if is_zh; then
-        error "目录 $userOpt_install_dir 不可写，请使用 sudo 命令运行脚本；或通过 -d 参数指定其它目录安装"
+        error_exit "目录 $userOpt_install_dir 不可写，请使用 sudo 命令运行脚本；或通过 -d 参数指定其它目录安装"
       else
-        error "Directory $userOpt_install_dir is not writable. Please run the script with sudo; or specify another dir using the -d option."
+        error_exit "Directory $userOpt_install_dir is not writable. Please run the script with sudo; or specify another dir using the -d option."
       fi
     fi
 
@@ -230,9 +295,9 @@ set_install_dir() {
       userOpt_install_dir="$default_install_dir_4nonroot"
     else
       if is_zh; then
-        error "默认安装目录 $default_install_dir_4root 和 $default_install_dir_4nonroot 不可写，请使用 sudo 命令运行脚本；或通过 -d 参数指定其它目录安装"
+        error_exit "默认安装目录 $default_install_dir_4root 和 $default_install_dir_4nonroot 不可写，请使用 sudo 命令运行脚本；或通过 -d 参数指定其它目录安装"
       else
-        error "Default install dir $default_install_dir_4root and $default_install_dir_4nonroot is not writable. Please run the script with sudo; or specify another dir using the -d option."
+        error_exit "Default install dir $default_install_dir_4root and $default_install_dir_4nonroot is not writable. Please run the script with sudo; or specify another dir using the -d option."
       fi
     fi
   fi
@@ -255,9 +320,9 @@ download() {
   fi
 
   if is_zh; then
-    error "缺乏必要的下载工具(curl或wget)，无法下载文件"
+    error_exit "缺乏必要的下载工具(curl或wget)，无法下载文件"
   else
-    error "Missing necessary download tools (curl or wget) to download the file!"
+    error_exit "Missing necessary download tools (curl or wget) to download the file!"
   fi
 }
 
@@ -292,9 +357,9 @@ install() {
     fi
   else
     if is_zh; then
-      error "下载失败，请检查您的网络连接和代理设置: ${url}"
+      error_exit "下载失败，请检查您的网络连接和代理设置: ${url}"
     else
-      error "Download failed, please check your network connection and proxy settings: ${url}"
+      error_exit "Download failed, please check your network connection and proxy settings: ${url}"
     fi
   fi
 }
@@ -338,7 +403,7 @@ while getopts ":hd:v:l:" option; do
 done
 
 if [[ "$userOpt_lang" != "zh" && "$userOpt_lang" != "en" ]]; then
-  error "无效的语言选项: $userOpt_lang，支持的选项为 zh 和 en"
+  error_exit "无效的语言选项: $userOpt_lang，支持的选项为 zh 和 en"
 fi
 
 if [ "$userOpt_help" -eq 1 ]; then
