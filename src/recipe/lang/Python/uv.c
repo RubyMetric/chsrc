@@ -95,20 +95,23 @@ pl_python_uv_setsrc (char *option)
   char *append_source_cmd = xy_strjoin (4, "printf '", source_content, "' >> ", uv_config);
 
   char *cmd = NULL;
-  if (!xy_file_exist(uv_config)) {
-    // uv_config 不存在，追加到新文件末尾
-    // run: append_source_cmd
-    cmd = append_source_cmd;
-  } else {
-    // uv_config 存在，如果存在 [[index]] 则更新，否则追加到文件末尾
-    // run: grep -q '^[[index]]$' uv_config && update_source_cmd || append_source_cmd
-    cmd = xy_strjoin (6, "grep -q '^\\[\\[index\\]\\]$' ",
-                         uv_config,
-                         " && ",
-                         update_source_cmd,
-                         " || ",
-                         append_source_cmd);
-  }
+  if (!xy_file_exist (uv_config))
+    {
+      // uv_config 不存在，追加到新文件末尾
+      // run: append_source_cmd
+      cmd = append_source_cmd;
+    }
+  else
+    {
+      // uv_config 存在，如果存在 [[index]] 则更新，否则追加到文件末尾
+      // run: grep -q '^[[index]]$' uv_config && update_source_cmd || append_source_cmd
+      cmd = xy_strjoin (6, "grep -q '^\\[\\[index\\]\\]$' ",
+                           uv_config,
+                           " && ",
+                           update_source_cmd,
+                           " || ",
+                           append_source_cmd);
+    }
 
   chsrc_run (cmd, RunOpt_Default);
 
