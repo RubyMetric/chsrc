@@ -2,9 +2,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors  : happy game <happygame1024@gmail.com>
- * Contributors  :  Nul None  <nul@none.org>
+ * Contributors  : ccy <icuichengyi@gmail.com>
  * Created On    : <2024-12-11>
- * Last Modified : <2024-12-11>
+ * Last Modified : <2025-04-02>
  * ------------------------------------------------------------*/
 
 
@@ -81,13 +81,18 @@ pl_python_uv_setsrc (char *option)
 
   // sed -i '/^\[\[index\]\]$/,/^default = true$/{s|^url = ".*"$|url = " source.url "|}' uv_config
   // 将 [[index]] 到 default = true 之间的 url = ".*" 替换为 url = "source.url"
-  char *update_source_cmd = xy_strjoin (5, "sed -i ",
+#if xy_on_macos
+  char *sed_cmd = "sed -i '' ";
+#else
+  char *sed_cmd = "sed -i ";
+#endif
+
+  char *update_source_cmd = xy_strjoin (5, sed_cmd,
                             "'/^\\[\\[index\\]\\]$/,/^default = true$/{s|^url = \".*\"$|url = \"",
                             source.url,
-                            "\"|}' ",
+                            "\"|;}' ",
                             uv_config);
-
-  char *append_source_cmd = xy_strjoin (4, "echo -e '", source_content, "' >> ", uv_config);
+  char *append_source_cmd = xy_strjoin (4, "printf '", source_content, "' >> ", uv_config);
 
   // grep -q '^[[index]]$' uv_config && update_source_cmd || append_source_cmd
   // 如果 uv_config 中存在 [[index]] 则更新, 否则追加到文件末尾
