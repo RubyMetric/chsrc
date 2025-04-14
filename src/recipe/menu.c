@@ -167,7 +167,7 @@ available_mirrors[] = {
   &Api7, &Fit2Cloud, &DaoCloud,
 
   /* 专用镜像站 */
-  &RubyChina, &EmacsChina, &NpmMirror, &GoProxyIO, &GoProxyCN, &RsProxyCN,
+  &RubyChina, &EmacsChina, &NpmMirror, &GoProxyIO, &GoProxyCN, &RsProxyCN, &FlutterCN,
 
   // 暂不支持 &NugetOrg
   // 不要列出 &UpstreamProvider 和 &UserDefinedProvider

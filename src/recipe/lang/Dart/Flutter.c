@@ -13,14 +13,21 @@
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-10-31
+ * @update 2025-04-15
  */
+static SourceProvider_t pl_dart_flutter_upstream =
+{
+  def_upstream, "https://storage.googleapis.com",
+  {NotSkip, NA, NA, "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_v1.0.0-stable.tar.xz"} // 231 MB
+};
+
 static Source_t pl_dart_flutter_sources[] =
 {
-  {&UpstreamProvider, "https://storage.googleapis.com"},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn"}, // 没有后缀，怀疑是否存在问题
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/git/flutter"}, // URL 带 git
-  {&Nju,              "https://mirror.nju.edu.cn/flutter"}
+  {&pl_dart_flutter_upstream, "https://storage.googleapis.com"},
+  {&FlutterCN,                "https://storage.flutter-io.cn"},
+  {&Sjtug_Zhiyuan,            "https://mirror.sjtu.edu.cn"}, // 没有后缀，怀疑是否存在问题
+  {&Tuna,                     "https://mirrors.tuna.tsinghua.edu.cn/flutter"},
+  {&Nju,                      "https://mirror.nju.edu.cn/flutter"}
 };
 def_sources_n(pl_dart_flutter);
 
