@@ -3,10 +3,10 @@
  * -------------------------------------------------------------
  * File Authors   : Aoran Zeng <ccmywish@qq.com>
  * Contributors   :    czyt    <czyt.go@gmail.com>
- *                |
+  *                |
  * Created On     : <2023-09-10>
  * Major Revision :      3
- * Last Modified  : <2024-10-31>
+ * Last Modified  : <2025-04-15>
  *
  * Dart Pub 软件仓库
  * ------------------------------------------------------------*/
@@ -52,16 +52,11 @@ pl_dart_setsrc (char *option)
   chsrc_yield_source_and_confirm (pl_dart);
 
   char *w = NULL;
-
+  char *cmd = NULL;
   if (xy_on_windows)
     {
-      w = xy_strjoin (3, "$env:PUB_HOSTED_URL = \"", source.url, "\"\n");
-
-      if (xy_file_exist (xy_win_powershell_profile))
-        chsrc_append_to_file (w, xy_win_powershell_profile);
-
-      if (xy_file_exist (xy_win_powershellv5_profile))
-        chsrc_append_to_file (w, xy_win_powershellv5_profile);
+      cmd = xy_strjoin (3, "setx PUB_HOSTED_URL \"", source.url, "\"");
+      chsrc_run (cmd, RunOpt_No_Last_New_Line);
     }
   else
     {

@@ -3,10 +3,10 @@
  * -------------------------------------------------------------
  * File Authors   : Aoran Zeng <ccmywish@qq.com>
  * Contributors   :    czyt    <czyt.go@gmail.com>
- *                |
+  *                |
  * Created On     : <2023-09-10>
  * Major Revision :      2
- * Last Modified  : <2024-11-22>
+ * Last Modified  : <2025-04-15>
  *
  * 2024-09-14: 不得不将Dart和Flutter拆分为两个Target，
  *             因为3家教育网镜像站给出的 Dart 和 Flutter 换源URL模式都不一样
@@ -57,16 +57,11 @@ pl_dart_flutter_setsrc (char *option)
   chsrc_yield_source_and_confirm (pl_dart_flutter);
 
   char *w = NULL;
-
+  char *cmd = NULL;
   if (xy_on_windows)
     {
-      w = xy_strjoin (3, "$env:FLUTTER_STORAGE_BASE_URL = \"", source.url, "\"\n");
-
-      if (xy_file_exist (xy_win_powershell_profile))
-        chsrc_append_to_file (w, xy_win_powershell_profile);
-
-      if (xy_file_exist (xy_win_powershellv5_profile))
-        chsrc_append_to_file (w, xy_win_powershellv5_profile);
+      cmd = xy_strjoin (3, "setx FLUTTER_STORAGE_BASE_URL \"", source.url, "\"");
+      chsrc_run (cmd, RunOpt_No_Last_New_Line);
     }
   else
     {
