@@ -66,6 +66,7 @@
   #include "recipe/lang/Rust/rustup.c"
   #include "recipe/lang/Rust/Cargo.c"
 
+#include "recipe/lang/Dart/common.h"
 #include "recipe/lang/Dart/Pub.c"
 #include "recipe/lang/Dart/Flutter.c"
 

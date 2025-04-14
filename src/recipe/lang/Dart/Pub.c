@@ -12,11 +12,18 @@
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-10-31
+ * @update 2025-04-15
  */
+ static SourceProvider_t pl_dart_upstream =
+{
+  def_upstream, "https://pub.dev",
+  {NotSkip, NA, NA, "https://pub.dev/packages/flutter_vision/versions/1.1.4.tar.gz"} // 37.05 MB
+};
+
 static Source_t pl_dart_sources[] =
 {
-  {&UpstreamProvider, "https://pub.dev"},
+  {&pl_dart_upstream, "https://pub.dev"},
+  {&FlutterCN,        "https://pub.flutter-io.cn"},
   {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/dart-pub"},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"},
   {&Nju,              "https://mirror.nju.edu.cn/dart-pub"}
