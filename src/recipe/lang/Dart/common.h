@@ -11,6 +11,6 @@
 
 static MirrorSite_t FlutterCN =
 {
-  "cfug", "CFUG", "China Flutter User Group", "https://flutter.cn/",
+  "cfug", "CFUG", "Flutter 社区", "https://flutter.cn/",
   {NotSkip, NA, NA, "https://storage.flutter-io.cn/flutter_infra_release/releases/stable/linux/flutter_linux_v1.0.0-stable.tar.xz"} // 231 MB
 };
