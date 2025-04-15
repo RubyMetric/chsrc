@@ -24,9 +24,10 @@
  *                 |  Jialin Lyu    <jialinlvcn@aliyun.com>
  *                 | GitHub Copilot <https://github.com/copilot>
  *                 |     ccy        <icuichengyi@gmail.com>
+ *                 |  MadDogOwner   <xiaoran@xrgzs.top>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2025-04-13>
+ * Last Modified   : <2025-04-15>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/

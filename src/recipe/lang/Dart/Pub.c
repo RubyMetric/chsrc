@@ -1,9 +1,10 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors   : Aoran Zeng <ccmywish@qq.com>
- * Contributors   :    czyt    <czyt.go@gmail.com>
-  *                |
+ * File Authors   : Aoran Zeng  <ccmywish@qq.com>
+ * Contributors   :    czyt     <czyt.go@gmail.com>
+ *                | MadDogOwner <xiaoran@xrgzs.top>
+ *                |
  * Created On     : <2023-09-10>
  * Major Revision :      3
  * Last Modified  : <2025-04-15>
