@@ -3,9 +3,10 @@
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  *               |  Heng Guo  <2085471348@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
+ * Contributors  : happy game <happygame1024@gmail.com>
+ *               |
  * Created On    : <2023-09-05>
- * Last Modified : <2024-08-22>
+ * Last Modified : <2025-05-24>
  * ------------------------------------------------------------*/
 
 /**
@@ -46,6 +47,7 @@ def_sources_n(os_archlinuxcn);
 
 
 #define OS_Pacman_MirrorList "/etc/pacman.d/mirrorlist"
+#define OS_Pacman_ArchLinuxCN_MirrorList "/etc/pacman.conf"
 void
 os_arch_getsrc (char *option)
 {
@@ -106,6 +108,7 @@ os_archlinuxcn_getsrc (char *option)
 
 /**
  * @consult https://mirrors.tuna.tsinghua.edu.cn/help/archlinuxcn/
+ * @update 2025-05-24
  */
 void
 os_archlinuxcn_setsrc (char *option)
@@ -114,24 +117,33 @@ os_archlinuxcn_setsrc (char *option)
 
   chsrc_yield_source_and_confirm (os_archlinuxcn);
 
-  chsrc_backup (OS_Pacman_MirrorList);
+  chsrc_backup (OS_Pacman_ArchLinuxCN_MirrorList);
 
-  bool  arch_flag = false;
   char *arch = chsrc_get_cpuarch ();
+  
+  // 检查是否已存在 archlinuxcn 配置段
+  char *check_cmd = "grep -q '\\[archlinuxcn\\]' " OS_Pacman_ArchLinuxCN_MirrorList;
+  int ret = system(check_cmd);
+  
+  if (ret == 0) {
+    char *sed_cmd = xy_strjoin (4, "sed -i '/\\[archlinuxcn\\]/{n;s|^Server = .*|Server = ", 
+                                source.url, "$arch|;}' ", OS_Pacman_ArchLinuxCN_MirrorList);
+    chsrc_run (sed_cmd, RunOpt_Default);
+  } else {
+    char *archlinuxcn_config = xy_strjoin (3, "\n[archlinuxcn]\nServer = ", source.url, "$arch\n");
+    chsrc_append_to_file (archlinuxcn_config, OS_Pacman_ArchLinuxCN_MirrorList);
+  }
 
-  char *towrite = xy_strjoin (3, "[archlinuxcn]\nServer = ", source.url, "$arch");
-  // 越前面的优先级越高
-  chsrc_prepend_to_file (towrite, OS_Pacman_MirrorList);
-
-  chsrc_run ("pacman-key --lsign-key \"farseerfc@archlinux.org\"", RunOpt_Dont_Abort_On_Failure);
+  chsrc_run ("pacman-key --lsign-key \"farseerfc@archlinux.org\"", RunOpt_Dont_Abort_On_Failure); // 此命令可能会失败, 但对换源没有影响
   chsrc_run ("pacman -Sy archlinuxcn-keyring", RunOpt_Default);
 
   chsrc_run ("pacman -Syy", RunOpt_No_Last_New_Line);
 
-  ProgMode_ChgType = ChgType_Untested;
+  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
 #undef OS_Pacman_MirrorList
+#undef OS_Pacman_ArchLinuxCN_MirrorList
 
 
 Feature_t
