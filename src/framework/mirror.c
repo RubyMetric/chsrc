@@ -8,7 +8,7 @@
  *               |  Jialin Lyu   <jialinlvcn@aliyun.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-03-09>
+ * Last Modified : <2025-05-27>
  *
  * 通用镜像站
  * ------------------------------------------------------------*/
@@ -44,13 +44,13 @@ Tuna =
 
 Sjtug_Zhiyuan =
 {
-  "sjtu", "SJTUG-zhiyuan", "上海交通大学致远镜像站", "https://mirrors.sjtug.sjtu.edu.cn/",
+  "sjtu-zy", "SJTUG-zhiyuan", "上海交通大学致远镜像站", "https://mirrors.sjtug.sjtu.edu.cn/",
   {NotSkip, NA, NA, "https://mirrors.sjtug.sjtu.edu.cn/ctan" Big_File_ctan}
 },
 
 Sjtug_Siyuan =
 {
-  "sjtu", "SJTUG-siyuan", "上海交通大学思源镜像站", "https://mirror.sjtu.edu.cn/",
+  "sjtu-sy", "SJTUG-siyuan", "上海交通大学思源镜像站", "https://mirror.sjtu.edu.cn/",
   {NotSkip, NA, NA, "https://mirror.sjtu.edu.cn/ctan" Big_File_ctan}
 },
 
