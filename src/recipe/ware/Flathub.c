@@ -46,6 +46,17 @@ def_sources_n(wr_flathub);
 
 
 /**
+ * chsrc get flathub
+ */
+void
+wr_flathub_getsrc (char *option)
+{
+  chsrc_run ("flatpak remotes", RunOpt_Default);
+  chsrc_run ("flatpak remote-info flathub", RunOpt_Default);
+}
+
+
+/**
  * @consult https://mirrors.sjtug.sjtu.edu.cn/docs/flathub
  */
 void
@@ -73,20 +84,35 @@ wr_flathub_setsrc (char *option)
 }
 
 
+/**
+ * chsrc reset flathub
+ */
+void
+wr_flathub_resetsrc (char *option)
+{
+  wr_flathub_setsrc (option);
+}
+
+
+/**
+ * chsrc ls flathub
+ */
 Feature_t
 wr_flathub_feat (char *option)
 {
   Feature_t f = {0};
 
-  f.can_get = false;
-  f.can_reset = false;
+  f.can_get = true;
+  f.can_reset = true;
 
   f.cap_locally = CanNot;
   f.cap_locally_explain = NULL;
   f.can_english = false;
   f.can_user_define = true;
 
+  f.note = "对Flathub目标进行测速的文件非常小，测速效果严重失真，若您知道可供测速的URL，欢迎参与贡献: chsrc issue";
+
   return f;
 }
 
-def_target_sf (wr_flathub);
+def_target_gsrf (wr_flathub);
