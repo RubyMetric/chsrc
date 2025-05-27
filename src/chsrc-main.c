@@ -32,7 +32,7 @@
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.1.1"
+#define Chsrc_Version        "0.2.1.1-dev1"
 #define Chsrc_Release_Date   "2025/05/27"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
