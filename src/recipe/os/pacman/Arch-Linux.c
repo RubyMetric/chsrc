@@ -83,7 +83,7 @@ os_arch_setsrc (char *option)
       to_write = xy_strjoin (3, "Server = ", source.url, "arm/$arch/$repo");
     }
 
-  // 越前面的优先级越高
+  /* 配置文件中，越前面的优先级越高 */
   chsrc_prepend_to_file (to_write, OS_Pacman_MirrorList);
 
   if (is_x86)
@@ -120,19 +120,22 @@ os_archlinuxcn_setsrc (char *option)
   chsrc_backup (OS_Pacman_ArchLinuxCN_MirrorList);
 
   char *arch = chsrc_get_cpuarch ();
-  
-  // 检查是否已存在 archlinuxcn 配置段
+
+  /* 检查是否已存在 archlinuxcn 配置段 */
   char *check_cmd = "grep -q '\\[archlinuxcn\\]' " OS_Pacman_ArchLinuxCN_MirrorList;
   int ret = system(check_cmd);
-  
-  if (ret == 0) {
-    char *sed_cmd = xy_strjoin (4, "sed -i '/\\[archlinuxcn\\]/{n;s|^Server = .*|Server = ", 
-                                source.url, "$arch|;}' ", OS_Pacman_ArchLinuxCN_MirrorList);
-    chsrc_run (sed_cmd, RunOpt_Default);
-  } else {
-    char *archlinuxcn_config = xy_strjoin (3, "\n[archlinuxcn]\nServer = ", source.url, "$arch\n");
-    chsrc_append_to_file (archlinuxcn_config, OS_Pacman_ArchLinuxCN_MirrorList);
-  }
+
+  if (ret == 0)
+    {
+      char *sed_cmd = xy_strjoin (4, "sed -i '/\\[archlinuxcn\\]/{n;s|^Server = .*|Server = ",
+                                  source.url, "$arch|;}' ", OS_Pacman_ArchLinuxCN_MirrorList);
+      chsrc_run (sed_cmd, RunOpt_Default);
+    }
+  else
+    {
+      char *archlinuxcn_config = xy_strjoin (3, "\n[archlinuxcn]\nServer = ", source.url, "$arch\n");
+      chsrc_append_to_file (archlinuxcn_config, OS_Pacman_ArchLinuxCN_MirrorList);
+    }
 
   chsrc_run ("pacman-key --lsign-key \"farseerfc@archlinux.org\"", RunOpt_Dont_Abort_On_Failure); // 此命令可能会失败, 但对换源没有影响
   chsrc_run ("pacman -Sy archlinuxcn-keyring", RunOpt_Default);

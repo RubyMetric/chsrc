@@ -4,6 +4,7 @@
  * File Name     : recipe-template.c
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
+ *               |
  * Created On    : <2024-08-09>
  * Last Modified : <2024-11-22>
  * -------------------------------------------------------------
@@ -13,21 +14,28 @@
  *
  * 模版中:
  * <target>   为该换源目标的名称
- * <category> 为该换源目标的类别，仅有3类: pl,   os, wr
+ * <category> 为该换源目标的类别，仅有3类: pl,  os, wr
  *            分别对应3个子目录:         lang, os, ware
  * ------------------------------------------------------------*/
 
 
 
-/* 模版文件从下行正式开始 */
+
+/* 模版文件内容从下方第30行正式开始 */
+
+
+
+
+
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Name     : <target>.c
  * File Authors  : Nil Null <nil@null.org> 尼尔闹先生
  * Contributors  : Nul None <nul@none.org> 怒了馕女士
- * Created On    : <2024-01-01> https://www.yuque.com/ccmywish/blog/nil-null-and-nul-none
- * Last Modified : <2024-01-01> 请更新文件标头
+ *               |
+ * Created On    : <2025-01-01> https://www.yuque.com/ccmywish/blog/nil-null-and-nul-none
+ * Last Modified : <2025-01-01> 请更新文件标头
  * ------------------------------------------------------------*/
 
 /**
@@ -42,7 +50,7 @@ RubyMetric = {"rbmt",                   // chsrc set <target> rbmt
               "https://rubymetirc.com/target/aws/aws-sdk-go/@v/v1.45.2.zip"};
 
 /**
- * @update 2024-08-09
+ * @update 2025-12-31
  * @note   该target的各个源地址，该例数据为虚拟填充
  */
 static Source_t
