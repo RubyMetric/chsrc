@@ -2,14 +2,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors  : happy game <happygame1024@gmail.com>
- * Contributors  : ccy <icuichengyi@gmail.com>
+ * Contributors  :    ccy     <icuichengyi@gmail.com>
+ *               | Aoran Zeng <ccmywish@qq.com>
+ *               |
  * Created On    : <2024-12-11>
- * Last Modified : <2025-04-02>
+ * Last Modified : <2025-06-02>
  * ------------------------------------------------------------*/
-
 
 /**
  * chsrc get uv
+ *
  * uv的配置优先级顺序如下(高到低):
  * 1. $workspaces/uv.toml
  * 2. $workspaces/pyproject.toml
@@ -27,36 +29,36 @@ pl_python_find_uv_config (bool mkdir)
 {
   if (CliOpt_Locally)
     {
-      return xy_strjoin (2, UV_LOCAL_CONFIG_PATH, UV_CONFIG);
+      return xy_2strjoin (UV_LOCAL_CONFIG_PATH, UV_CONFIG);
     }
   else
     {
       if (xy_on_windows)
         {
-          // config path on Windows
-          char *appdata = getenv("APPDATA");
-          if (!appdata) {
-            chsrc_error2 ("未能获取 APPDATA 环境变量");
-            return NULL;
-          }
-          
-          char *config_dir = xy_strjoin(2, appdata, "\\uv\\");
+          /* config path on Windows */
+          char *appdata = getenv ("APPDATA");
+
+          if (!appdata)
+            {
+              chsrc_error2 ("未能获取 APPDATA 环境变量");
+              return NULL;
+            }
+
+          char *config_dir = xy_2strjoin(appdata, "\\uv\\");
           if (mkdir)
             {
               chsrc_ensure_dir (config_dir);
             }
-          char *config_path = xy_strjoin (2, config_dir, UV_CONFIG);
-          free(config_dir);
-          return config_path;
+          return xy_2strjoin (config_dir, UV_CONFIG);
         }
-      else 
+      else
         {
-          // config path on Linux or macOS
+          /* config path on Linux or macOS */
           if (mkdir)
             {
               chsrc_ensure_dir (UV_USER_CONFIG_PATH);
             }
-          return xy_strjoin (2, UV_USER_CONFIG_PATH, UV_CONFIG);
+          return xy_2strjoin (UV_USER_CONFIG_PATH, UV_CONFIG);
         }
     }
 }
@@ -65,13 +67,17 @@ void
 pl_python_uv_getsrc (char *option)
 {
   char *uv_config = pl_python_find_uv_config (false);
+
   if (!chsrc_check_file (uv_config))
     {
       chsrc_error2 ("未找到 uv 配置文件");
       return;
     }
-  // grep -A 2 'index' config_file | sed -n 's/^url = "\(.*\)"/\1/p'
-  // 获取 [[index]] 配置项的 url
+
+  /**
+   * grep -A 2 'index' config_file | sed -n 's/^url = "\(.*\)"/\1/p'
+   * 获取 [[index]] 配置项的 url
+   */
   char *cmd = xy_strjoin (3, "grep -A 2 'index' ",
                              uv_config,
                              " | sed -n 's/^url = \"\\(.*\\)\"/\\1/p'");
@@ -106,9 +112,11 @@ pl_python_uv_setsrc (char *option)
     "url = \"", source.url, "\"\\n",
     "default = true\\n");
 
-  // sed -i '/^\[\[index\]\]$/,/^default = true$/{s|^url = ".*"$|url = " source.url "|}' uv_config
-  // 将 [[index]] 到 default = true 之间的 url = ".*" 替换为 url = "source.url"
-#if xy_on_macos
+  /**
+   * sed -i '/^\[\[index\]\]$/,/^default = true$/{s|^url = ".*"$|url = " source.url "|}' uv_config
+   * 将 [[index]] 到 default = true 之间的 url = ".*" 替换为 url = "source.url"
+   */
+#if XY_On_macOS
   char *sed_cmd = "sed -i '' ";
 #else
   char *sed_cmd = "sed -i ";
@@ -124,21 +132,25 @@ pl_python_uv_setsrc (char *option)
   char *cmd = NULL;
   if (!xy_file_exist (uv_config))
     {
-      // uv_config 不存在，追加到新文件末尾
-      // run: append_source_cmd
+      /**
+       * uv_config 不存在，追加到新文件末尾
+       * run: append_source_cmd
+       */
       cmd = append_source_cmd;
     }
   else
     {
       if (xy_on_windows)
         {
-          // TODO: Windows 下替换源暂不支持
+          /* TODO: Windows 下替换源暂不支持 */
           chsrc_note2 ("Windows 下暂不支持修改 uv.toml，请手动修改配置文件");
         }
       else
         {
-          // uv_config 存在，如果存在 [[index]] 则更新，否则追加到文件末尾
-          // run: grep -q '^[[index]]$' uv_config && update_source_cmd || append_source_cmd
+          /**
+           * uv_config 存在，如果存在 [[index]] 则更新，否则追加到文件末尾
+           * run: grep -q '^[[index]]$' uv_config && update_source_cmd || append_source_cmd
+           */
           cmd = xy_strjoin (6, "grep -q '^\\[\\[index\\]\\]$' ",
                               uv_config,
                               " && ",
