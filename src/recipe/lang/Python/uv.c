@@ -31,11 +31,33 @@ pl_python_find_uv_config (bool mkdir)
     }
   else
     {
-      if (mkdir)
-      {
-        chsrc_ensure_dir (UV_USER_CONFIG_PATH);
-      }
-      return xy_strjoin (2, UV_USER_CONFIG_PATH, UV_CONFIG);
+      if (xy_on_windows)
+        {
+          // config path on Windows
+          char *appdata = getenv("APPDATA");
+          if (!appdata) {
+            chsrc_error2 ("未能获取 APPDATA 环境变量");
+            return NULL;
+          }
+          
+          char *config_dir = xy_strjoin(2, appdata, "\\uv\\");
+          if (mkdir)
+            {
+              chsrc_ensure_dir (config_dir);
+            }
+          char *config_path = xy_strjoin (2, config_dir, UV_CONFIG);
+          free(config_dir);
+          return config_path;
+        }
+      else 
+        {
+          // config path on Linux or macOS
+          if (mkdir)
+            {
+              chsrc_ensure_dir (UV_USER_CONFIG_PATH);
+            }
+          return xy_strjoin (2, UV_USER_CONFIG_PATH, UV_CONFIG);
+        }
     }
 }
 
@@ -72,12 +94,17 @@ pl_python_uv_setsrc (char *option)
   chsrc_yield_for_the_source (pl_python);
 
   char *uv_config = pl_python_find_uv_config (true);
+  if (NULL==uv_config)
+    {
+      chsrc_error2 ("无法获取 uv 配置文件路径");
+      return;
+    }
   chsrc_backup (uv_config);
 
   const char *source_content = xy_strjoin (5,
-    "[[index]]\n",
-    "url = \"", source.url, "\"\n",
-    "default = true\n");
+    "[[index]]\\n",
+    "url = \"", source.url, "\"\\n",
+    "default = true\\n");
 
   // sed -i '/^\[\[index\]\]$/,/^default = true$/{s|^url = ".*"$|url = " source.url "|}' uv_config
   // 将 [[index]] 到 default = true 之间的 url = ".*" 替换为 url = "source.url"
@@ -103,17 +130,31 @@ pl_python_uv_setsrc (char *option)
     }
   else
     {
-      // uv_config 存在，如果存在 [[index]] 则更新，否则追加到文件末尾
-      // run: grep -q '^[[index]]$' uv_config && update_source_cmd || append_source_cmd
-      cmd = xy_strjoin (6, "grep -q '^\\[\\[index\\]\\]$' ",
-                           uv_config,
-                           " && ",
-                           update_source_cmd,
-                           " || ",
-                           append_source_cmd);
+      if (xy_on_windows)
+        {
+          // TODO: Windows 下替换源暂不支持
+          chsrc_note2 ("Windows 下暂不支持修改 uv.toml，请手动修改配置文件");
+        }
+      else
+        {
+          // uv_config 存在，如果存在 [[index]] 则更新，否则追加到文件末尾
+          // run: grep -q '^[[index]]$' uv_config && update_source_cmd || append_source_cmd
+          cmd = xy_strjoin (6, "grep -q '^\\[\\[index\\]\\]$' ",
+                              uv_config,
+                              " && ",
+                              update_source_cmd,
+                              " || ",
+                              append_source_cmd);
+        }
     }
-
-  chsrc_run (cmd, RunOpt_Default);
+  if (NULL==cmd)
+    {
+      chsrc_note2 (xy_strjoin (4, "请手动为 ", uv_config, "添加或修改 [[index]] 配置项的 url = ", source.url));
+    }
+  else
+    {
+      chsrc_run (cmd, RunOpt_Default);
+    }
 
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
