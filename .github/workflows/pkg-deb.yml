@@ -1,0 +1,182 @@
+# This workflow will build and publish DEB packages for chsrc
+# when there is a new release event.
+name: Build and Publish DEB Package
+
+on:
+  release:
+    types: [ released ]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to build'
+        required: true
+        default: '1.0.0'
+
+jobs:
+  build-deb:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [amd64, arm64, armhf]
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Get version from tag or input
+      id: get_version
+      run: |
+        if [ "${{ github.event_name }}" = "release" ]; then
+          version="${{ github.event.release.tag_name }}"
+          version=${version#v}  # Remove 'v' prefix if present
+        else
+          version="${{ github.event.inputs.version }}"
+        fi
+        echo "version=$version" >> $GITHUB_OUTPUT
+        echo "Version: $version"
+        
+    - name: Validate version tag
+      run: |
+        version="${{ steps.get_version.outputs.version }}"
+        if [[ ! $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo "Invalid version format: $version"
+          exit 1
+        fi
+        
+    - name: Set up cross-compilation for ARM architectures
+      if: matrix.arch != 'amd64'
+      run: |
+        sudo dpkg --add-architecture ${{ matrix.arch }}
+        sudo apt-get update
+        sudo apt-get install -y gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf crossbuild-essential-${{ matrix.arch }}
+        
+    - name: Update debian/changelog with version
+      run: |
+        version="${{ steps.get_version.outputs.version }}"
+        # Update changelog with new version
+        cat > debian/changelog << EOF
+        chsrc ($version-1) unstable; urgency=medium
+
+          * Release version $version
+
+         -- Aoran Zeng <ccmywish@qq.com>  $(date -R)
+
+        EOF
+        
+    - name: Set up build environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y debhelper devscripts build-essential fakeroot
+        
+    - name: Configure cross-compilation
+      if: matrix.arch == 'arm64'
+      run: |
+        echo "CC=aarch64-linux-gnu-gcc" >> $GITHUB_ENV
+        echo "DEB_BUILD_OPTIONS=nocheck" >> $GITHUB_ENV
+        
+    - name: Configure cross-compilation for armhf
+      if: matrix.arch == 'armhf'
+      run: |
+        echo "CC=arm-linux-gnueabihf-gcc" >> $GITHUB_ENV
+        echo "DEB_BUILD_OPTIONS=nocheck" >> $GITHUB_ENV
+        
+    - name: Build DEB package
+      run: |
+        version="${{ steps.get_version.outputs.version }}"
+        
+        # Build the package
+        if [ "${{ matrix.arch }}" = "amd64" ]; then
+          debuild -us -uc -b
+        else
+          # For cross-compilation, we need to use dpkg-buildpackage directly
+          DEB_BUILD_OPTIONS="nocheck" dpkg-buildpackage -us -uc -b -a${{ matrix.arch }}
+        fi
+        
+        # Move the generated .deb file to a known location
+        mkdir -p dist
+        find .. -name "chsrc_${version}*.deb" -exec mv {} dist/ \;
+        
+        # Rename to standardized format if needed
+        cd dist
+        for file in chsrc_${version}*.deb; do
+          if [ -f "$file" ]; then
+            new_name="chsrc_${version}-1_${{ matrix.arch }}.deb"
+            if [ "$file" != "$new_name" ]; then
+              mv "$file" "$new_name"
+            fi
+            break
+          fi
+        done
+        
+    - name: Verify package
+      run: |
+        version="${{ steps.get_version.outputs.version }}"
+        ls -la dist/
+        dpkg-deb --info dist/chsrc_${version}-1_${{ matrix.arch }}.deb
+        dpkg-deb --contents dist/chsrc_${version}-1_${{ matrix.arch }}.deb
+        
+    - name: Test package installation (amd64 only)
+      if: matrix.arch == 'amd64'
+      run: |
+        version="${{ steps.get_version.outputs.version }}"
+        # Install the package
+        sudo dpkg -i dist/chsrc_${version}-1_${{ matrix.arch }}.deb || true
+        sudo apt-get install -f -y || true
+        
+        # Run basic tests
+        if [ -f "test/deb-test.sh" ]; then
+          sudo bash test/deb-test.sh
+        else
+          # Basic manual test
+          chsrc help
+          echo "Package installation test passed!"
+        fi
+        
+    - name: Upload DEB artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: chsrc-deb-${{ matrix.arch }}
+        path: dist/chsrc_*.deb
+        retention-days: 30
+        
+    - name: Upload to release
+      if: github.event_name == 'release'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: dist/chsrc_${{ steps.get_version.outputs.version }}-1_${{ matrix.arch }}.deb
+        asset_name: chsrc_${{ steps.get_version.outputs.version }}-1_${{ matrix.arch }}.deb
+        asset_content_type: application/vnd.debian.binary-package
+
+  create-repository-metadata:
+    needs: build-deb
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: chsrc-deb-*
+        merge-multiple: true
+        path: ./debs
+        
+    - name: Install repository tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y dpkg-dev
+        
+    - name: Create Packages file
+      run: |
+        cd debs
+        dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+        dpkg-scanpackages . /dev/null > Packages
+        
+    - name: Upload repository metadata
+      uses: actions/upload-artifact@v4
+      with:
+        name: debian-repository-metadata
+        path: debs/Packages*
+        retention-days: 30

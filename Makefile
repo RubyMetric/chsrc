@@ -99,3 +99,24 @@ clean:
 	-@rm fw     2>/dev/null
 	-@rm chsrc  2>/dev/null
 	-@rm README.md.bak* 2>/dev/null
+
+# DEB package targets
+deb-prepare: $(Target-Name)
+	@echo "Preparing for DEB package build..."
+
+deb-build: deb-prepare
+	@echo "Building DEB package..."
+	@debuild -us -uc -b
+
+deb-clean:
+	@echo "Cleaning DEB build artifacts..."
+	-@rm -rf debian/chsrc/
+	-@rm -f ../chsrc_*.deb ../chsrc_*.changes ../chsrc_*.buildinfo
+
+install: $(Target-Name)
+	@mkdir -p $(DESTDIR)/usr/bin
+	@mkdir -p $(DESTDIR)/usr/share/man/man1
+	@cp $(Target-Name) $(DESTDIR)/usr/bin/
+	@cp doc/chsrc.1 $(DESTDIR)/usr/share/man/man1/ 2>/dev/null || true
+
+.PHONY: all CI debug test test-xy test-fw fastcheck test-cli clean deb-prepare deb-build deb-clean install
