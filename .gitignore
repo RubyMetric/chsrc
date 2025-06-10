@@ -39,6 +39,8 @@ debian/chsrc/
 debian/.debhelper/
 debian/debhelper-build-stamp
 debian/files
+debian/chsrc.debhelper.log
+debian/chsrc.substvars
 *.deb
 *.changes
 *.buildinfo
