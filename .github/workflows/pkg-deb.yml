@@ -15,9 +15,6 @@ on:
 jobs:
   build-deb:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        arch: [amd64, arm64]
     
     steps:
     - name: Checkout repository
@@ -43,13 +40,6 @@ jobs:
           exit 1
         fi
         
-    - name: Set up cross-compilation for ARM architectures
-      if: matrix.arch != 'amd64'
-      run: |
-        sudo dpkg --add-architecture ${{ matrix.arch }}
-        sudo apt-get update
-        sudo apt-get install -y gcc-aarch64-linux-gnu crossbuild-essential-${{ matrix.arch }}
-        
     - name: Update debian/changelog with version
       run: |
         version="${{ steps.get_version.outputs.version }}"
@@ -68,23 +58,12 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y debhelper devscripts build-essential fakeroot
         
-    - name: Configure cross-compilation
-      if: matrix.arch == 'arm64'
-      run: |
-        echo "CC=aarch64-linux-gnu-gcc" >> $GITHUB_ENV
-        echo "DEB_BUILD_OPTIONS=nocheck" >> $GITHUB_ENV
-        
     - name: Build DEB package
       run: |
         version="${{ steps.get_version.outputs.version }}"
         
         # Build the package
-        if [ "${{ matrix.arch }}" = "amd64" ]; then
-          debuild -us -uc -b
-        else
-          # For cross-compilation, we need to use dpkg-buildpackage directly
-          DEB_BUILD_OPTIONS="nocheck" dpkg-buildpackage -us -uc -b -a${{ matrix.arch }}
-        fi
+        debuild -us -uc -b
         
         # Move the generated .deb file to a known location
         mkdir -p dist
@@ -94,7 +73,7 @@ jobs:
         cd dist
         for file in chsrc_${version}*.deb; do
           if [ -f "$file" ]; then
-            new_name="chsrc_${version}-1_${{ matrix.arch }}.deb"
+            new_name="chsrc_${version}-1_amd64.deb"
             if [ "$file" != "$new_name" ]; then
               mv "$file" "$new_name"
             fi
@@ -106,15 +85,14 @@ jobs:
       run: |
         version="${{ steps.get_version.outputs.version }}"
         ls -la dist/
-        dpkg-deb --info dist/chsrc_${version}-1_${{ matrix.arch }}.deb
-        dpkg-deb --contents dist/chsrc_${version}-1_${{ matrix.arch }}.deb
+        dpkg-deb --info dist/chsrc_${version}-1_amd64.deb
+        dpkg-deb --contents dist/chsrc_${version}-1_amd64.deb
         
-    - name: Test package installation (amd64 only)
-      if: matrix.arch == 'amd64'
+    - name: Test package installation
       run: |
         version="${{ steps.get_version.outputs.version }}"
         # Install the package
-        sudo dpkg -i dist/chsrc_${version}-1_${{ matrix.arch }}.deb || true
+        sudo dpkg -i dist/chsrc_${version}-1_amd64.deb || true
         sudo apt-get install -f -y || true
         
         # Run basic tests
@@ -129,7 +107,7 @@ jobs:
     - name: Upload DEB artifact
       uses: actions/upload-artifact@v4
       with:
-        name: chsrc-deb-${{ matrix.arch }}
+        name: chsrc-deb-amd64
         path: dist/chsrc_*.deb
         retention-days: 30
         
@@ -140,8 +118,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: dist/chsrc_${{ steps.get_version.outputs.version }}-1_${{ matrix.arch }}.deb
-        asset_name: chsrc_${{ steps.get_version.outputs.version }}-1_${{ matrix.arch }}.deb
+        asset_path: dist/chsrc_${{ steps.get_version.outputs.version }}-1_amd64.deb
+        asset_name: chsrc_${{ steps.get_version.outputs.version }}-1_amd64.deb
         asset_content_type: application/vnd.debian.binary-package
 
   create-repository-metadata:
