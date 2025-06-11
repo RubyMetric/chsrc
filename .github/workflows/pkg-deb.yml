@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        arch: [amd64, arm64, armhf]
+        arch: [amd64, arm64]
     
     steps:
     - name: Checkout repository
@@ -48,7 +48,7 @@ jobs:
       run: |
         sudo dpkg --add-architecture ${{ matrix.arch }}
         sudo apt-get update
-        sudo apt-get install -y gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf crossbuild-essential-${{ matrix.arch }}
+        sudo apt-get install -y gcc-aarch64-linux-gnu crossbuild-essential-${{ matrix.arch }}
         
     - name: Update debian/changelog with version
       run: |
@@ -72,12 +72,6 @@ jobs:
       if: matrix.arch == 'arm64'
       run: |
         echo "CC=aarch64-linux-gnu-gcc" >> $GITHUB_ENV
-        echo "DEB_BUILD_OPTIONS=nocheck" >> $GITHUB_ENV
-        
-    - name: Configure cross-compilation for armhf
-      if: matrix.arch == 'armhf'
-      run: |
-        echo "CC=arm-linux-gnueabihf-gcc" >> $GITHUB_ENV
         echo "DEB_BUILD_OPTIONS=nocheck" >> $GITHUB_ENV
         
     - name: Build DEB package
