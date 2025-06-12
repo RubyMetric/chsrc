@@ -7,7 +7,7 @@
  *                |
  * Created On     : <2023-09-03>
  * Major Revision :      1
- * Last Modified  : <2024-12-11>
+ * Last Modified  : <2025-06-12>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t pl_python_pypi_upstream =
@@ -17,12 +17,13 @@ static SourceProvider_t pl_python_pypi_upstream =
 };
 
 /**
- * @update 2024-12-08
- * @note 不要添加Zju，浙大的pypi在校外访问会自动转向Tuna
+ * @update 2025-06-12
+ * @note 不要添加Zju，浙大的PyPI服务在校外访问会自动转向Tuna
  */
 static Source_t pl_python_sources[] =
 {
-  {&pl_python_pypi_upstream ,   "https://pypi.org/simple"},
+  {&pl_python_pypi_upstream,   "https://pypi.org/simple"},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/pypi/web/simple"},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/pypi/web/simple"},
   {&Lzuoss,           "https://mirror.lzu.edu.cn/pypi/web/simple"},
   {&Jlu,              "https://mirrors.jlu.edu.cn/pypi/web/simple"},
@@ -58,15 +59,18 @@ pl_python_get_py_program_name (char **prog_name)
 
   bool py_exist = false;
 
-  // 由于Python2和Python3的历史，目前（2024-06）许多python命令实际上仍然是python2
-  // https://gitee.com/RubyMetric/chsrc/issues/I9VZL2
-  // 因此我们首先测试 python3
+  /**
+   * @issue https://gitee.com/RubyMetric/chsrc/issues/I9VZL2
+   *
+   * 由于Python2和Python3的历史，目前（2024-06）许多python命令实际上仍然是python2
+   * 因此我们首先测试 python3
+   */
   py_exist = chsrc_check_program ("python3");
 
   if (py_exist) *prog_name = "python3";
   else
     {
-      // 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store
+      /* 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store */
       py_exist = chsrc_check_program ("python");
 
       if (py_exist) *prog_name = "python";
