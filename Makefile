@@ -114,9 +114,7 @@ deb-clean:
 	-@rm -f ../chsrc_*.deb ../chsrc_*.changes ../chsrc_*.buildinfo
 
 install: $(Target-Name)
-	@mkdir -p $(DESTDIR)/usr/bin
-	@mkdir -p $(DESTDIR)/usr/share/man/man1
-	@cp $(Target-Name) $(DESTDIR)/usr/bin/
-	@cp doc/chsrc.1 $(DESTDIR)/usr/share/man/man1/ 2>/dev/null || true
+	install -D -m 755 $(Target-Name) $(DESTDIR)/usr/bin/$(Target-Name)
+	install -D -m 644 doc/chsrc.1 $(DESTDIR)/usr/share/man/man1/chsrc.1
 
 .PHONY: all CI debug test test-xy test-fw fastcheck test-cli clean deb-prepare deb-build deb-clean install

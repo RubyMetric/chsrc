@@ -1,9 +1,9 @@
 Source: chsrc
 Section: utils
 Priority: optional
-Maintainer: Aoran Zeng <ccmywish@qq.com>
-Build-Depends: debhelper (>= 9), build-essential, libc6-dev
-Standards-Version: 4.1.2
+Maintainer: sanchuanhehe <wyihe5520@gmail.com>
+Build-Depends: debhelper-compat (= 13), build-essential, libc6-dev
+Standards-Version: 4.6.0
 Homepage: https://github.com/RubyMetric/chsrc
 Vcs-Git: https://github.com/RubyMetric/chsrc.git
 Vcs-Browser: https://github.com/RubyMetric/chsrc

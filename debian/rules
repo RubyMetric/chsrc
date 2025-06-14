@@ -8,6 +8,3 @@ override_dh_auto_build:
 
 override_dh_auto_install:
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/chsrc
-
-override_dh_auto_clean:
-	$(MAKE) clean
