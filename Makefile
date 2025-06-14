@@ -100,18 +100,6 @@ clean:
 	-@rm chsrc  2>/dev/null
 	-@rm README.md.bak* 2>/dev/null
 
-# DEB package targets
-deb-prepare: $(Target-Name)
-	@echo "Preparing for DEB package build..."
-
-deb-build: deb-prepare
-	@echo "Building DEB package..."
-	@debuild -us -uc -b
-
-deb-clean:
-	@echo "Cleaning DEB build artifacts..."
-	-@rm -rf debian/chsrc/
-	-@rm -f ../chsrc_*.deb ../chsrc_*.changes ../chsrc_*.buildinfo
 
 install: $(Target-Name)
 	install -D -m 755 $(Target-Name) $(DESTDIR)/usr/bin/$(Target-Name)
