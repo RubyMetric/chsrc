@@ -1,0 +1,22 @@
+#!/bin/sh
+# prerm script for chsrc
+
+set -e
+
+case "$1" in
+    remove|upgrade|deconfigure)
+        # Nothing special to do during removal
+        ;;
+
+    failed-upgrade)
+        ;;
+
+    *)
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
+esac
+
+#DEBHELPER#
+
+exit 0

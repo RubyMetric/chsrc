@@ -1,0 +1,5 @@
+chsrc (1.0.0) unstable; urgency=medium
+
+  * Initial debian package release
+
+ -- Aoran Zeng <ccmywish@qq.com>  Mon, 10 Jun 2025 00:00:00 +0000

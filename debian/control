@@ -1,0 +1,18 @@
+Source: chsrc
+Section: utils
+Priority: optional
+Maintainer: sanchuanhehe <wyihe5520@gmail.com>
+Build-Depends: debhelper-compat (= 13), build-essential, libc6-dev
+Standards-Version: 4.6.0
+Homepage: https://github.com/RubyMetric/chsrc
+Vcs-Git: https://github.com/RubyMetric/chsrc.git
+Vcs-Browser: https://github.com/RubyMetric/chsrc
+
+Package: chsrc
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Change Source - A tool for changing software sources
+ chsrc is a command-line tool for changing software sources (mirrors)
+ for various package managers and programming language ecosystems.
+ It supports automatic detection and switching of sources for better
+ download speeds in different regions.
