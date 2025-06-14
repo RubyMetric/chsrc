@@ -85,7 +85,7 @@ main (int argc, char const *argv[])
               xy_str_gsub ("abcdefabcdef", "abc", "DEF")); // 等量
 
 
-  assert (xy_file_exist ("./image/chsrc.png"));
+  assert (xy_file_exist ("./doc/image/chsrc.png"));
   assert (xy_dir_exist ("~"));
   if (xy_on_windows)
     {
