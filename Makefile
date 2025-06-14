@@ -76,7 +76,25 @@ debug: CFLAGS += -g
 debug: all
 	@$(DEBUGGER) ./chsrc
 
-test: test-xy test-fw
+test: test-env test-xy test-fw
+
+test-env:
+	@echo "On-Linux: $(On-Linux)"
+	@echo "On-Windows: $(On-Windows)"
+	@echo "On-macOS: $(On-macOS)"
+	@echo "CC: $(CC)"
+	@echo "CFLAGS: $(CFLAGS)"
+	@echo "Target-Name: $(Target-Name)"
+	@echo "USER: $(whoami)"
+	@echo "PWD: $(shell pwd)"
+	@echo "UID: $(id -u)"
+	@echo "GID: $(id -g)"
+	# 检查HOME环境变量
+	@if [ -z "$(HOME)" ]; then \
+	 echo "HOME environment variable is not set!"; \
+	else \
+	 echo "HOME: $(HOME)"; \
+	fi
 
 test-xy:
 	@$(CC) test/xy.c $(CFLAGS) -o xy
@@ -85,6 +103,19 @@ test-xy:
 test-fw:
 	@$(CC) test/fw.c $(CFLAGS) -o fw
 	@./fw
+
+# DEB package targets
+deb-prepare: $(Target-Name)
+	@echo "Preparing for DEB package build..."
+
+deb-build: deb-prepare
+	@echo "Building DEB package..."
+	@debuild -us -uc -b
+
+deb-clean:
+	@echo "Cleaning DEB build artifacts..."
+	-@rm -rf debian/chsrc/
+	-@rm -f ../chsrc_*.deb ../chsrc_*.changes ../chsrc_*.buildinfo
 
 # AUR package 安装时将执行此 target
 fastcheck: $(Target-Name)

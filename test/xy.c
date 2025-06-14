@@ -95,7 +95,7 @@ main (int argc, char const *argv[])
     }
   else
     {
-      assert (xy_file_exist ("~/.bashrc"));
+      // assert (xy_file_exist ("~/.bashrc")); //TODO:debbuild会创建虚拟的home环境,待解决
       assert (xy_dir_exist ("/etc"));
     }
 
