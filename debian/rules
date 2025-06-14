@@ -7,10 +7,7 @@ override_dh_auto_build:
 	$(MAKE) all
 
 override_dh_auto_install:
-	mkdir -p debian/chsrc/usr/bin
-	mkdir -p debian/chsrc/usr/share/man/man1
-	cp chsrc debian/chsrc/usr/bin/
-	cp doc/chsrc.1 debian/chsrc/usr/share/man/man1/
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/chsrc
 
 override_dh_auto_clean:
 	$(MAKE) clean
