@@ -1,10 +1,49 @@
 #!/usr/bin/make -f
+# --------------------------------------------------------------
+# SPDX-License-Identifier: GPL-3.0-or-later
+# --------------------------------------------------------------
+# Build File    : rules
+# File Authors  : sanchuanhehe <wyihe5520@gmail.com>
+#               |  Aoran Zeng  <ccmywish@qq.com>
+# Contributors  :   Nil Null   <nil@null.org>
+#								|
+# Created On    : <2025-06-14>
+# Last Modified : <2025-06-15>
+#
+# 该文件是 Makefile 格式
+# --------------------------------------------------------------
+#
+# debuild 调用 dpkg-buildpackage
+#
+# dpkg-buildpackage 通过调用 fakeroot debian/rules <target> 执行本文件
+#
+# 由于下面的 %，所有任务都将被传递给 dh
+#
+# 比如：
+#
+# 	 debian/rules <target>
+#
+# 会转换为：
+#
+#			dh <target>
+#
+# 来执行
+#
+# 简单理解，将顺序调用:
+#		1. dh clean
+#		2. dh build  (debian/rules override_dh_auto_build)
+#		3. dh binary (debian/rules override_dh_auto_install)
+# --------------------------------------------------------------
+
+# 由于 debuild 要寻找 debian/ 目录，因此当前工作目录一定在 pkg/DEB 下
+Chsrc-Root-Dir = $(CURDIR)/../../
 
 %:
 	dh $@
 
 override_dh_auto_build:
-	$(MAKE) all
+# 切换到 chsrc 根目录
+	@$(MAKE) -C $(Chsrc-Root-Dir) all
 
 override_dh_auto_install:
-	$(MAKE) install DESTDIR=$(CURDIR)/debian/chsrc
+	@$(MAKE) -C $(Chsrc-Root-Dir) install DESTDIR=$(CURDIR)/debian/chsrc
