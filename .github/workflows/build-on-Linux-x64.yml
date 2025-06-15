@@ -4,7 +4,7 @@
 # Contributors  :   Nul None  <nul@none.org>
 #               |
 # Created On    : <2023-09-14>
-# Last Modified : <2025-03-06>
+# Last Modified : <2025-06-16>
 #
 # Build chsrc on Linux (x64) and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
@@ -22,7 +22,7 @@ jobs:
 
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Build
       run: |
