@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: sanchuanhehe <wyihe5520@gmail.com>
 Build-Depends: debhelper-compat (= 13), build-essential, libc6-dev
 Standards-Version: 4.6.0
-Homepage: https://github.com/RubyMetric/chsrc
+Homepage: https://chsrc.run/
 Vcs-Git: https://github.com/RubyMetric/chsrc.git
 Vcs-Browser: https://github.com/RubyMetric/chsrc
 
