@@ -44,7 +44,8 @@ CI 维护者 [@sanchuanhehe](https://github.com/sanchuanhehe)
 
 DEB 包构建 CI 会在以下情况下自动触发：
 
-1. **Release 事件**: 当创建新的 release 时自动构建并上传 DEB 包到 release assets
+1. **Push 事件**：当 push 到 `gh-build` 分支时自动构建，并上传 DEB 包 到 `pre` 这个特定的 release 中
+2. **Release 事件**: 当创建新的 release 时自动构建，并上传 DEB 包到最新的这个 release 中
 2. **手动触发**: 可以在 GitHub Actions 页面手动触发构建
 
 <br>
