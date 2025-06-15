@@ -1,6 +1,6 @@
 # Packages
 
-https://github.com/RubyMetric/chsrc/issues/16
+## 分发情况
 
 - [x] `Homebrew`
 - [x] `Scoop`
@@ -9,6 +9,8 @@ https://github.com/RubyMetric/chsrc/issues/16
 - [ ] `Flatpak`
 - [ ] `snap`
 - [ ] ...
+
+<br>
 
 ```bash
 $ brew install chsrc
@@ -24,22 +26,31 @@ yay -S chsrc-git # Build  from the latest main branch (stable)
 
 <br>
 
-# Homebrew
+- Homebrew
 
-https://github.com/Homebrew/homebrew-core/blob/master/Formula/c/chsrc.rb
+  https://github.com/Homebrew/homebrew-core/blob/master/Formula/c/chsrc.rb
 
-# Scoop
+- Scoop
 
-https://github.com/ScoopInstaller/Main/blob/master/bucket/chsrc.json
+  https://github.com/ScoopInstaller/Main/blob/master/bucket/chsrc.json
 
-# WinGet
+- WinGet
 
-https://github.com/microsoft/winget-pkgs/tree/master/manifests/r/RubyMetric/chsrc
+  https://github.com/microsoft/winget-pkgs/tree/master/manifests/r/RubyMetric/chsrc
 
-# AUR
+- AUR:
 
-[chsrc-bin](https://aur.archlinux.org/packages/chsrc-bin): 从GitHub Release直接下载的二进制文件
+  - https://aur.archlinux.org/packages/chsrc-bin
 
-[chsrc](https://aur.archlinux.org/packages/chsrc)：从GitHub Release的代码构建
+  - https://aur.archlinux.org/packages/chsrc
 
-[chsrc-git](https://aur.archlinux.org/packages/chsrc-git)：从最新源码构建的版本，偶尔可能不稳定
+  - https://aur.archlinux.org/packages/chsrc-git
+
+<br>
+
+
+## 打包情况
+
+- [x] `DEB`
+
+<br>
