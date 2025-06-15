@@ -1,3 +1,15 @@
+<!-- -----------------------------------------------------------
+ ! SPDX-License-Identifier: GFDL-1.3-or-later
+ ! -------------------------------------------------------------
+ ! Doc Type      : Markdown
+ ! Doc Name      : README.md
+ ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
+ ! Contributors  :  Nul None  <nul@none.org>
+ !               |
+ ! Created On    : <2023-12-28>
+ ! Last Modified : <2025-06-15>
+ ! ---------------------------------------------------------- -->
+
 <div align="center">
   <img alt="chsrc logo" src="doc/image/chsrc.png"/>
 </div>
