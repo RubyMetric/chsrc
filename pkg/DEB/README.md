@@ -27,7 +27,7 @@
 - `debian/` - DEB 包构建配置目录
 - `BUILD.md` - 如何手动构建
 - `deb.makefile` - DEB 包构建 Makefile
-- `deb-test.sh` - DEB 包 **已正确安装** 测试脚本
+- `deb-installation-test.sh` - DEB 包 **已正确安装** 测试脚本
 
 <br>
 

@@ -110,18 +110,14 @@ jobs:
     - name: Test package installation
       run: |
         version="${{ steps.get_version.outputs.version }}"
+
         # Install the package
         sudo dpkg -i dist/chsrc_${version}-1_amd64.deb || true
         sudo apt-get install -f -y || true
 
-        # Run basic tests
-        if [ -f "pkg/DEB/deb-test.sh" ]; then
-          sudo bash pkg/DEB/deb-test.sh
-        else
-          # Basic manual test
-          chsrc help
-          echo "Package installation test passed!"
-        fi
+        # Run DEB installation tests
+        bash pkg/DEB/deb-installation-test.sh
+
 
     - name: Upload DEB artifact
       uses: actions/upload-artifact@v4

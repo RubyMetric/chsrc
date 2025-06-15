@@ -78,7 +78,7 @@ sudo apt-get install -f  # 修复依赖问题
 
 ```bash
 # 运行测试
-./deb-test.sh
+bash ./deb-installation-test.sh
 
 # 查看文档安装情况
 man chsrc
