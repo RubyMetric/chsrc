@@ -65,8 +65,9 @@ CFLAGS += -static
 endif
 
 all:
+	@echo "Starting: Compile chsrc executable"
 	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(Target-Name)
-	@echo; echo Compile done using \'$(CC)\' $(CFLAGS)
+	@echo Finished: Compile chsrc executable using \'$(CC)\' $(CFLAGS)
 
 CI: all
 	@mv $(Target-Name) $(CI_ARTIFACT_NAME)
@@ -105,12 +106,14 @@ test-fw:
 	@./fw
 
 # DEB package targets
-deb-prepare: $(Target-Name)
-	@echo "Preparing for DEB package build..."
+deb-prepare:
+	@echo "Starting: Prepare for building DEB package"
+	@echo "Finished: Prepare for building DEB package"
 
 deb-build: deb-prepare
-	@echo "Building DEB package..."
+	@echo "Starting: Build DEB package"
 	@debuild -us -uc -b
+	@echo "Finished: Build DEB package"
 
 deb-clean:
 	@echo "Starting: Clean DEB build artifacts"
