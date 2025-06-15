@@ -12,7 +12,7 @@ on:
       version:
         description: 'Version to build'
         required: true
-        default: '1.0.0'
+        default: '0.3.0'  # 短暂时间内不可达到的最新版本号
 
 jobs:
   build-deb:
@@ -47,8 +47,8 @@ jobs:
     - name: Update debian/changelog with version
       run: |
         version="${{ steps.get_version.outputs.version }}"
-        # Update changelog with new version
-        cat > debian/changelog << EOF
+
+        (cat << EOF; cat ./debian/changelog) > new_changelog
         chsrc ($version-1) unstable; urgency=medium
 
           * Release version $version
@@ -57,21 +57,25 @@ jobs:
 
         EOF
 
-    - name: Set up build environment
+        mv -f new_changelog ./debian/changelog
+
+
+    - name: Install build dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y debhelper devscripts build-essential fakeroot
 
-    - name: Build DEB package
+    - name: Build package
+      run: |
+        make build-deb
+
+    - name: Move package into dist
       run: |
         version="${{ steps.get_version.outputs.version }}"
 
-        # Build the package
-        debuild -us -uc -b
-
         # Move the generated .deb file to a known location
         mkdir -p dist
-        find .. -name "chsrc_${version}*.deb" -exec mv {} dist/ \;
+        find ./pkg -name "chsrc_${version}*.deb" -exec mv {} dist/ \;
 
         # Rename to standardized format if needed
         cd dist
