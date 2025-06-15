@@ -1,57 +1,52 @@
-# DEB Package CI/CD 构建
+<!-- -----------------------------------------------------------
+ ! SPDX-License-Identifier: GFDL-1.3-or-later
+ ! -------------------------------------------------------------
+ ! Doc Type      : Markdown
+ ! Doc Name      : README.md
+ ! Doc Authors   : sanchuanhehe <wyihe5520@gmail.com>
+ !               |  Aoran Zeng  <ccmywish@qq.com>
+ ! Contributors  :   Nil Null   <nil@null.org>
+ !               |
+ ! Created On    : <2025-06-14>
+ ! Last Modified : <2025-06-15>
+ ! ---------------------------------------------------------- -->
 
-本文档说明了 chsrc 项目的 DEB 包自动构建和发布流程。
+# DEB package
 
-## 自动触发
+本文档说明了 `chsrc` 项目的 DEB 包的相关情况
 
-DEB 包构建 CI 会在以下情况下自动触发：
+<br>
 
-1. **Release 事件**: 当创建新的 release 时自动构建并上传 DEB 包到 release assets
-2. **手动触发**: 可以在 GitHub Actions 页面手动触发构建
+## 相关文件
 
-## 支持的架构
+- `.github/workflows/pkg-deb.yml` - CI 配置文件
+- `CI.md` - CI 情况说明
 
-当前支持以下架构的 DEB 包构建：
+<wbr>
 
-- `amd64` (x86_64)
+- `debian/` - DEB 包构建配置目录
+- `BUILD.md` - 如何手动构建
+- `deb.makefile` - DEB 包构建 Makefile
+- `deb-test.sh` - DEB 包 **已正确安装** 测试脚本
 
-## 构建产物
+<br>
 
-每次构建会生成：
 
-1. **DEB 包文件**: `chsrc_<version>-1_<arch>.deb`
-2. **仓库元数据**: `Packages` 和 `Packages.gz` 文件用于创建 APT 仓库
+## 安装
 
-## 本地测试
-
-### 构建 DEB 包
-
-```bash
-# 准备构建环境
-sudo apt-get install build-essential debhelper devscripts fakeroot
-
-# 构建包
-make deb-build
-
-# 清理构建产物
-make deb-clean
-```
-
-### 测试安装
+如果你是普通用户，你应该从 [GitHub Releases](https://github.com/RubyMetric/chsrc/releases) 下载合适的 DEB package，然后运行以下命令安装：
 
 ```bash
-# 安装生成的包
-sudo dpkg -i ../chsrc_*.deb
-sudo apt-get install -f  # 修复依赖问题
-
-# 运行测试
-bash ./pkg/DEB/deb-test.sh
-
-# 卸载
-sudo apt-get remove chsrc
+sudo dpkg -i chsrc_*.deb
+sudo apt-get install -f  # Fix any dependency issues
 ```
 
-## 文件结构
+如果你是高级用户，你可以自己阅读本目录下的 [./BUILD.md](./BUILD.md) 来自己构建 DEB 包并按照上述同样的方式安装。
+
+<br>
+
+
+## `debian/` 目录结构
 
 ```
 debian/
@@ -64,38 +59,6 @@ debian/
 └── rules          # 构建规则
 ```
 
-## 手动发布流程
+其中，最后三个是 `+x` 的可执行文件。
 
-1. 确保所有代码已合并到主分支
-2. 更新版本号和 changelog
-3. 创建并推送 git tag: `git tag v1.2.3 && git push origin v1.2.3`
-4. 在 GitHub 上创建 release
-5. CI 将自动构建并上传 DEB 包
-
-## 故障排查
-
-### 常见问题
-
-1. **构建失败**: 检查 debian/control 中的依赖是否正确
-2. **交叉编译失败**: 确认目标架构的工具链已正确安装
-3. **安装测试失败**: 检查 postinst 脚本是否有错误
-
-### 调试构建
-
-```bash
-# 启用详细输出
-DEB_BUILD_OPTIONS="nocheck" debuild -us -uc -b
-
-# 检查构建日志
-less ../chsrc_*.build
-
-# 检查包内容
-dpkg-deb --contents chsrc_*.deb
-```
-
-## 相关文件
-
-- `.github/workflows/pkg-deb.yml` - CI 工作流配置
-- `debian/` - Debian 包配置目录
-- `pkg/DEB/deb-test.sh` - DEB 包功能测试脚本
-- `pkg/DEB/INSTALL.md` - 用户安装指南
+<br>
