@@ -135,15 +135,11 @@ jobs:
 
     - name: Upload to Releases (the newest release) if is release event
       if: github.event_name == 'release'
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.UPLOAD_TO_GITHUB }}
+      uses: softprops/action-gh-release@v2
       with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: dist/chsrc_${{ steps.get_version.outputs.version }}-1_amd64.deb
-        asset_name: chsrc_${{ steps.get_version.outputs.version }}-1_amd64.deb
-        asset_content_type: application/vnd.debian.binary-package
-
+        files: |
+          dist/chsrc_*_amd64.deb
+        token: ${{ secrets.UPLOAD_TO_GITHUB }}
 
     - name: Upload to Releases (the 'pre' release) if is push event
       if: github.event_name == 'push'
