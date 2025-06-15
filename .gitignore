@@ -35,14 +35,21 @@ chsrc.toc
 *.pdf
 
 
-# DEB package build artifacts
-debian/chsrc/
-debian/.debhelper/
-debian/debhelper-build-stamp
-debian/files
-debian/chsrc.debhelper.log
-debian/chsrc.substvars
+##############################
+#         DEB package
+##############################
+# DEB package 未归档的目录
+pkg/DEB/debian/chsrc/
 
+# 下面这个目录包含创建出 $HOME 的虚拟环境
+pkg/DEB/debian/.debhelper/
+
+pkg/DEB/debian/debhelper-build-stamp
+pkg/DEB/debian/files
+pkg/DEB/debian/chsrc.debhelper.log
+pkg/DEB/debian/chsrc.substvars
+
+# 以下为 DEB package 构建的直接产物
 chsrc_*.deb
 chsrc-dbgsym_*.ddeb
 chsrc_*.build
