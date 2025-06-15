@@ -16,6 +16,8 @@
 
 ## CI 文件
 
+CI 维护者 [@sanchuanhehe](https://github.com/sanchuanhehe)
+
 - [.github/workflows/pkg-deb.yml](.github/workflows/pkg-deb.yml)
 
 <br>

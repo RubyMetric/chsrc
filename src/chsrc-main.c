@@ -25,9 +25,10 @@
  *                 | GitHub Copilot <https://github.com/copilot>
  *                 |     ccy        <icuichengyi@gmail.com>
  *                 |  MadDogOwner   <xiaoran@xrgzs.top>
+ *                 |  sanchuanhehe  <wyihe5520@gmail.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2025-05-27>
+ * Last Modified   : <2025-06-15>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/

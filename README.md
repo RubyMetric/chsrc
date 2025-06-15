@@ -69,7 +69,7 @@
 <details>
 <summary>打包</summary>
 
-想通过 `flatpak`,`snap`,`pacman`,`apt`,`dnf` 等系统包管理工具来安装和更新`chsrc`？若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
+想通过 `dnf`, `flatpak`, `snap` 等系统包管理工具来安装和更新`chsrc`？若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
 
 - [x] `Homebrew`
 - [x] `Scoop`
@@ -142,6 +142,16 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windo
 
 <details>
 <summary>Linux</summary>
+
+- 支持 `DEB`，可通过 `apt`/`dpkg` 安装，感谢 [@sanchuanhehe]
+
+```bash
+$ sudo apt install ./chsrc_<ver>_<arch>.deb
+# 或
+$ sudo sudo dpkg -i chsrc_<ver>_<arch>.deb
+```
+
+<br>
 
 - 支持 `AUR`，可通过 `yay` 安装，感谢 [@Jerry-Terrasse]
 
@@ -458,5 +468,6 @@ chsrc set conda  | anaconda
 [@Efterklang]:     https://github.com/Efterklang
 [@wickdynex]:      https://github.com/wickdynex
 [@YU-7]:           https://github.com/YU-7
+[@sanchuanhehe]:   https://github.com/sanchuanhehe
 
 [issue#98 on GitHub]: https://github.com/RubyMetric/chsrc/issues/98
