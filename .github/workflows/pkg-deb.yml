@@ -1,6 +1,15 @@
-# This workflow will build and publish DEB packages for chsrc
-# when there is a new release event.
-name: Build and Publish DEB Package
+# ---------------------------------------------------------------
+# Workflow File : pkg-deb.yml
+# File Authors  : sanchuanhehe <wyihe5520@gmail.com>
+# Contributors  :  Aoran Zeng  <ccmywish@qq.com>
+#               |
+# Created On    : <2025-06-10>
+# Last Modified : <2025-06-15>
+#
+# This workflow build and publish DEB packages
+# ---------------------------------------------------------------
+
+name: Build and Publish DEB package
 
 on:
   release:
@@ -47,6 +56,8 @@ jobs:
     - name: Update debian/changelog with version
       run: |
         version="${{ steps.get_version.outputs.version }}"
+
+        cd ./pkg/DEB
 
         (cat << EOF; cat ./debian/changelog) > new_changelog
         chsrc ($version-1) unstable; urgency=medium
