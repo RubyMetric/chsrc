@@ -1,10 +1,10 @@
 # ---------------------------------------------------------------
-# Workflow File : pkg-for-DEB.yml
+# Workflow File : pkg-DEB.yml
 # File Authors  : sanchuanhehe <wyihe5520@gmail.com>
 # Contributors  :  Aoran Zeng  <ccmywish@qq.com>
 #               |
 # Created On    : <2025-06-10>
-# Last Modified : <2025-06-15>
+# Last Modified : <2025-06-16>
 #
 # This workflow build and publish DEB packages
 # ---------------------------------------------------------------

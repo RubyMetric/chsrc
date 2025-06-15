@@ -7,7 +7,7 @@
  ! Contributors  :  Aoran Zeng  <ccmywish@qq.com>
  !               |
  ! Created On    : <2025-06-14>
- ! Last Modified : <2025-06-15>
+ ! Last Modified : <2025-06-16>
  ! ---------------------------------------------------------- -->
 
 # DEB package CI/CD
@@ -18,7 +18,7 @@
 
 CI 维护者 [@sanchuanhehe](https://github.com/sanchuanhehe)
 
-- [.github/workflows/pkg-deb.yml](.github/workflows/pkg-deb.yml)
+- [.github/workflows/pkg-DEB.yml](../../.github/workflows/pkg-DEB.yml)
 
 <br>
 

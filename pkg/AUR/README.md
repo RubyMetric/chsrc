@@ -4,11 +4,10 @@
  ! Doc Type      : Markdown
  ! Doc Name      : README.md
  ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
- !               |  Nul None  <nul@none.org>
  ! Contributors  :  Nil Null  <nil@null.org>
  !               |
  ! Created On    : <2025-06-15>
- ! Last Modified : <2025-06-15>
+ ! Last Modified : <2025-06-16>
  ! ---------------------------------------------------------- -->
 
 # AUR package
@@ -21,12 +20,12 @@
 
 CI 维护者 [@Jerry-Terrasse](https://github.com/Jerry-Terrasse)
 
-- `.github/workflows/pkg-aur-git.yml` - CI 配置文件1
-- `.github/workflows/pkg-aur-rel.yml` - CI 配置文件2
+- [.github/workflows/pub-AUR-chsrc-git.yml](../../.github/workflows/pub-AUR-chsrc-git.yml)
+- [.github/workflows/pub-AUR-chsrc-and-chsrc-bin.yml`](../../.github/workflows/pub-AUR-chsrc-git.yml)
 
 <br>
 
-## Distribute
+## 分发
 
 位于 https://aur.archlinux.org/packages
 
