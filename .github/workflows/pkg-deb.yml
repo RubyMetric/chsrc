@@ -115,7 +115,7 @@ jobs:
       if: github.event_name == 'release'
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.UPLOAD_TO_GITHUB }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
         asset_path: dist/chsrc_${{ steps.get_version.outputs.version }}-1_amd64.deb
