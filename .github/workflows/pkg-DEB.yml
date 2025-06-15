@@ -6,7 +6,7 @@
 # Created On    : <2025-06-10>
 # Last Modified : <2025-06-16>
 #
-# This workflow build and publish DEB packages
+# Build and publish DEB packages
 # ---------------------------------------------------------------
 
 name: Build and Publish DEB package
@@ -30,18 +30,25 @@ jobs:
     steps:
     - name: Checkout repo
       uses: actions/checkout@v4
+      with:
+        ref: gh-build
 
-    - name: Get version from tag or input
+    - name: 获取版本号 from tag or input
       id: get_version
       run: |
         if [ "${{ github.event_name }}" = "release" ]; then
           version="${{ github.event.release.tag_name }}"
-          version=${version#v}  # Remove 'v' prefix if present
+          # 删除前缀 'v' if present
+          version=${version#v}
+
         elif [ "${{ github.event_name }}" = "push" ];then
-          version="9.9.9"       # Default version for push events (temporarily)
+          # 从源代码中提取版本号
+          version=$(sed -E -n 's/^#define Chsrc_Version +"([0-9]+\.[0-9]+\.[0-9]+).*"/\1/p' ./src/chsrc-main.c)
+
         else
           version="${{ github.event.inputs.version }}"
         fi
+
         echo "version=$version" >> $GITHUB_OUTPUT
         echo "Version: $version"
 
