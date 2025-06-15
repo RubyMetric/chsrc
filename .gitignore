@@ -33,3 +33,14 @@ chsrc.log
 chsrc.toc
 *.info
 *.pdf
+
+# DEB package build artifacts
+debian/chsrc/
+debian/.debhelper/
+debian/debhelper-build-stamp
+debian/files
+debian/chsrc.debhelper.log
+debian/chsrc.substvars
+*.deb
+*.changes
+*.buildinfo
