@@ -1,5 +1,11 @@
-chsrc (1.0.0) unstable; urgency=medium
+chsrc (0.2.1-1) unstable; urgency=medium
 
-  * Initial debian package release
+  * v0.2.1 已发布
 
- -- Aoran Zeng <ccmywish@qq.com>  Mon, 10 Jun 2025 00:00:00 +0000
+ -- Aoran Zeng <ccmywish@qq.com>  Sun, 15 Jun 2025 13:32:50 +0800
+
+chsrc (0.0.1-1) unstable; urgency=medium
+
+  * Initial DEB package get packaged!
+
+ -- sanchuanhehe <wyihe5520@gmail.com>  Mon, 10 Jun 2025 00:00:00 +0000
