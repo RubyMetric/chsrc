@@ -1,4 +1,4 @@
-# DEB Package CI/CD
+# DEB Package CI/CD 构建
 
 本文档说明了 chsrc 项目的 DEB 包自动构建和发布流程。
 
@@ -45,7 +45,7 @@ sudo dpkg -i ../chsrc_*.deb
 sudo apt-get install -f  # 修复依赖问题
 
 # 运行测试
-./test/deb-test.sh
+bash ./pkg/DEB/deb-test.sh
 
 # 卸载
 sudo apt-get remove chsrc
@@ -97,5 +97,5 @@ dpkg-deb --contents chsrc_*.deb
 
 - `.github/workflows/pkg-deb.yml` - CI 工作流配置
 - `debian/` - Debian 包配置目录
-- `test/deb-test.sh` - DEB 包功能测试脚本
-- `pkg/DEB-INSTALL.md` - 用户安装指南
+- `pkg/DEB/deb-test.sh` - DEB 包功能测试脚本
+- `pkg/DEB/INSTALL.md` - 用户安装指南

@@ -15,11 +15,11 @@ on:
 jobs:
   build-deb:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
+
     - name: Get version from tag or input
       id: get_version
       run: |
@@ -31,7 +31,7 @@ jobs:
         fi
         echo "version=$version" >> $GITHUB_OUTPUT
         echo "Version: $version"
-        
+
     - name: Validate version tag
       run: |
         version="${{ steps.get_version.outputs.version }}"
@@ -39,7 +39,7 @@ jobs:
           echo "Invalid version format: $version"
           exit 1
         fi
-        
+
     - name: Update debian/changelog with version
       run: |
         version="${{ steps.get_version.outputs.version }}"
@@ -52,23 +52,23 @@ jobs:
          -- Aoran Zeng <ccmywish@qq.com>  $(date -R)
 
         EOF
-        
+
     - name: Set up build environment
       run: |
         sudo apt-get update
         sudo apt-get install -y debhelper devscripts build-essential fakeroot
-        
+
     - name: Build DEB package
       run: |
         version="${{ steps.get_version.outputs.version }}"
-        
+
         # Build the package
         debuild -us -uc -b
-        
+
         # Move the generated .deb file to a known location
         mkdir -p dist
         find .. -name "chsrc_${version}*.deb" -exec mv {} dist/ \;
-        
+
         # Rename to standardized format if needed
         cd dist
         for file in chsrc_${version}*.deb; do
@@ -80,37 +80,37 @@ jobs:
             break
           fi
         done
-        
+
     - name: Verify package
       run: |
         version="${{ steps.get_version.outputs.version }}"
         ls -la dist/
         dpkg-deb --info dist/chsrc_${version}-1_amd64.deb
         dpkg-deb --contents dist/chsrc_${version}-1_amd64.deb
-        
+
     - name: Test package installation
       run: |
         version="${{ steps.get_version.outputs.version }}"
         # Install the package
         sudo dpkg -i dist/chsrc_${version}-1_amd64.deb || true
         sudo apt-get install -f -y || true
-        
+
         # Run basic tests
-        if [ -f "test/deb-test.sh" ]; then
-          sudo bash test/deb-test.sh
+        if [ -f "pkg/DEB/deb-test.sh" ]; then
+          sudo bash pkg/DEB/deb-test.sh
         else
           # Basic manual test
           chsrc help
           echo "Package installation test passed!"
         fi
-        
+
     - name: Upload DEB artifact
       uses: actions/upload-artifact@v4
       with:
         name: chsrc-deb-amd64
         path: dist/chsrc_*.deb
         retention-days: 30
-        
+
     - name: Upload to release
       if: github.event_name == 'release'
       uses: actions/upload-release-asset@v1
@@ -126,7 +126,7 @@ jobs:
     needs: build-deb
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
-    
+
     steps:
     - name: Download all artifacts
       uses: actions/download-artifact@v4
@@ -134,18 +134,18 @@ jobs:
         pattern: chsrc-deb-*
         merge-multiple: true
         path: ./debs
-        
+
     - name: Install repository tools
       run: |
         sudo apt-get update
         sudo apt-get install -y dpkg-dev
-        
+
     - name: Create Packages file
       run: |
         cd debs
         dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
         dpkg-scanpackages . /dev/null > Packages
-        
+
     - name: Upload repository metadata
       uses: actions/upload-artifact@v4
       with:
