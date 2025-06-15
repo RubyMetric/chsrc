@@ -1,5 +1,16 @@
 #!/bin/sh
+# --------------------------------------------------------------
+# SPDX-License-Identifier: GPL-3.0-or-later
+# --------------------------------------------------------------
+# DEB File      : postinst
+# File Authors  : sanchuanhehe <wyihe5520@gmail.com>
+# Contributors  :   Nil Null   <nil@null.org>
+#	            |
+# Created On    : <2025-06-14>
+# Last Modified : <2025-06-15>
+#
 # postinst script for chsrc
+# --------------------------------------------------------------
 
 set -e
 
@@ -9,10 +20,10 @@ case "$1" in
         if command -v mandb >/dev/null 2>&1; then
             mandb -q /usr/share/man/man1/chsrc.1 2>/dev/null || true
         fi
-        
+
         # Make sure chsrc is executable
         chmod +x /usr/bin/chsrc
-        
+
         echo "chsrc has been successfully installed!"
         echo "Run 'chsrc help' to get started."
         ;;
