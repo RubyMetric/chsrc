@@ -6,7 +6,7 @@
 # Contributors  : Yangmoooo  <yangmoooo@outlook.com>
 #								|
 # Created On    : <2023-08-28>
-# Last Modified : <2025-03-06>
+# Last Modified : <2025-06-15>
 # --------------------------------------------------------------
 
 On-Linux = 0
@@ -113,9 +113,10 @@ deb-build: deb-prepare
 	@debuild -us -uc -b
 
 deb-clean:
-	@echo "Cleaning DEB build artifacts..."
+	@echo "Starting: Clean DEB build artifacts"
 	-@rm -rf debian/chsrc/
-	-@rm -f ../chsrc_*.deb ../chsrc_*.changes ../chsrc_*.buildinfo
+	-@rm -f ../chsrc_*.deb ../chsrc-dbgsym_*.ddeb ../chsrc_*.changes ../chsrc_*.buildinfo ../chsrc_*.build
+	@echo "Finished: Clean DEB build artifacts"
 
 # AUR package 安装时将执行此 target
 fastcheck: $(Target-Name)
