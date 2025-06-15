@@ -2,8 +2,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # --------------------------------------------------------------
 # Build File    : Makefile
-# File Authors  : Aoran Zeng <ccmywish@qq.com>
-# Contributors  : Yangmoooo  <yangmoooo@outlook.com>
+# File Authors  :  Aoran Zeng  <ccmywish@qq.com>
+# Contributors  :  Yangmoooo   <yangmoooo@outlook.com>
+#								| sanchuanhehe <wyihe5520@gmail.com>
 #								|
 # Created On    : <2023-08-28>
 # Last Modified : <2025-06-15>
@@ -77,20 +78,20 @@ debug: CFLAGS += -g
 debug: all
 	@$(DEBUGGER) ./chsrc
 
-test: test-env test-xy test-fw
+test: test-make-env test-xy test-fw
 
-test-env:
+test-make-env:
 	@echo "On-Linux: $(On-Linux)"
 	@echo "On-Windows: $(On-Windows)"
 	@echo "On-macOS: $(On-macOS)"
 	@echo "CC: $(CC)"
 	@echo "CFLAGS: $(CFLAGS)"
 	@echo "Target-Name: $(Target-Name)"
-	@echo "USER: $(whoami)"
+	@echo "USER: $$(whoami)"
 	@echo "PWD: $(shell pwd)"
-	@echo "UID: $(id -u)"
-	@echo "GID: $(id -g)"
-	# 检查HOME环境变量
+	@echo "UID: $$(id -u)"
+	@echo "GID: $$(id -g)"
+# 检查HOME环境变量
 	@if [ -z "$(HOME)" ]; then \
 	 echo "HOME environment variable is not set!"; \
 	else \
@@ -104,22 +105,6 @@ test-xy:
 test-fw:
 	@$(CC) test/fw.c $(CFLAGS) -o fw
 	@./fw
-
-# DEB package targets
-deb-prepare:
-	@echo "Starting: Prepare for building DEB package"
-	@echo "Finished: Prepare for building DEB package"
-
-deb-build: deb-prepare
-	@echo "Starting: Build DEB package"
-	@debuild -us -uc -b
-	@echo "Finished: Build DEB package"
-
-deb-clean:
-	@echo "Starting: Clean DEB build artifacts"
-	-@rm -rf debian/chsrc/
-	-@rm -f ../chsrc_*.deb ../chsrc-dbgsym_*.ddeb ../chsrc_*.changes ../chsrc_*.buildinfo ../chsrc_*.build
-	@echo "Finished: Clean DEB build artifacts"
 
 # AUR package 安装时将执行此 target
 fastcheck: $(Target-Name)
@@ -135,9 +120,13 @@ clean:
 	-@rm chsrc  2>/dev/null
 	-@rm README.md.bak* 2>/dev/null
 
+# -include pkg/DEB/deb.makefile # 不这么做，因为 pkg/DEB/deb.makefile 需要在 pkg/DEB 目录下执行
+# 保持动词在前的任务名风格
+build-deb:
+	@$(MAKE) -C pkg/DEB -f deb.makefile deb-build
 
 install: $(Target-Name)
 	install -D -m 755 $(Target-Name) $(DESTDIR)/usr/bin/$(Target-Name)
 	install -D -m 644 doc/chsrc.1 $(DESTDIR)/usr/share/man/man1/chsrc.1
 
-.PHONY: all CI debug test test-xy test-fw fastcheck test-cli clean deb-prepare deb-build deb-clean install
+.PHONY: all CI debug test test-make-env test-xy test-fw fastcheck test-cli clean install
