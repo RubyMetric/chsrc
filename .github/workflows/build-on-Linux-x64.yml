@@ -1,4 +1,15 @@
-name: Linux x64 Build
+# ---------------------------------------------------------------
+# Workflow File : build-on-Linux-x64.yml
+# File Authors  :  Aoran Zeng <ccmywish@qq.com>
+# Contributors  :   Nul None  <nul@none.org>
+#               |
+# Created On    : <2023-09-14>
+# Last Modified : <2025-03-06>
+#
+# Build chsrc on Linux (x64) and upload it to GitHub: the 'pre' release
+# ---------------------------------------------------------------
+
+name: Build on Linux x64
 on:
   push:
     branches: [ "gh-build" ]
@@ -6,21 +17,21 @@ on:
     branches: [ "gh-build" ]
 
 jobs:
-  x64-linux-build-and-upload:
+  build-and-upload:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
 
-    - name: Compile chsrc x64
+    - name: Build
       run: |
         make CI CI_ARTIFACT_NAME=chsrc-x64-linux
 
     - name: List files
       run: ls *-linux
 
-    - name: Release
+    - name: Upload
       uses: softprops/action-gh-release@v1
       # if: startsWith(github.ref, 'refs/tags/')
       with:

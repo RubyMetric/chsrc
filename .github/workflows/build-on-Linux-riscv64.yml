@@ -1,4 +1,15 @@
-name: Linux AArch64 Build
+# ---------------------------------------------------------------
+# Workflow File : build-on-Linux-riscv64.yml
+# File Authors  :  Aoran Zeng <ccmywish@qq.com>
+# Contributors  :   Nul None  <nul@none.org>
+#               |
+# Created On    : <2023-09-14>
+# Last Modified : <2025-03-06>
+#
+# Build chsrc on Linux (riscv64) and upload it to GitHub: the 'pre' release
+# ---------------------------------------------------------------
+
+name: Build on Linux riscv64
 on:
   push:
     branches: [ "gh-build" ]
@@ -6,13 +17,13 @@ on:
     branches: [ "gh-build" ]
 
 jobs:
-  aarch64-linux-build-and-upload:
+  build-and-upload:
     runs-on: ubuntu-latest
     steps:
-      - name: Build aarch64
+      - name: Build
         uses: uraimo/run-on-arch-action@v2
         with:
-          arch: aarch64
+          arch: riscv64
           distro: ubuntu_latest
 
           dockerRunArgs: |
@@ -24,13 +35,13 @@ jobs:
             pwd ; ls -al
             git clone https://github.com/RubyMetric/chsrc -b gh-build -q
             cd chsrc
-            make CI CI_ARTIFACT_NAME=chsrc-aarch64-linux
-            cp ./chsrc-aarch64-linux /artifacts
+            make CI CI_ARTIFACT_NAME=chsrc-riscv64-linux
+            cp ./chsrc-riscv64-linux /artifacts
 
-      - name: Release
+      - name: Upload
         uses: softprops/action-gh-release@v1
         with:
           tag_name: pre
           files: |
-            ./artifacts/chsrc-aarch64-linux
+            ./artifacts/chsrc-riscv64-linux
           token: ${{ secrets.UPLOAD_TO_GITHUB }}

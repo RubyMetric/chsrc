@@ -1,0 +1,24 @@
+# ---------------------------------------------------------------
+# Workflow File : pub-WinGet.yml
+# File Authors  :   YU-7   <2747046473@qq.com>
+# Contributors  : Nul None <nul@none.org>
+#               |
+# Created On    : <2024-12-25>
+# Last Modified : <2024-12-25>
+#
+# This workflow publish to winget
+# ---------------------------------------------------------------
+
+name: Publish to WinGet
+on:
+  release:
+    types: [released]
+jobs:
+  publish:
+    runs-on: windows-latest
+    steps:
+      - uses: vedantmgoyal9/winget-releaser@main
+        with:
+          identifier:  RubyMetric.chsrc
+          installers-regex: '\.exe$' # Only .exe files
+          token: ${{ secrets.WINGET_TOKEN }}

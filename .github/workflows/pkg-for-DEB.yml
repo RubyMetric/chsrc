@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------
-# Workflow File : pkg-deb.yml
+# Workflow File : pkg-for-DEB.yml
 # File Authors  : sanchuanhehe <wyihe5520@gmail.com>
 # Contributors  :  Aoran Zeng  <ccmywish@qq.com>
 #               |
@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    - name: Checkout repo
       uses: actions/checkout@v4
 
     - name: Get version from tag or input

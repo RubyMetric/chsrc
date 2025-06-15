@@ -1,6 +1,15 @@
-# This workflow will publish the `chsrc-git` package to the AUR
-#   when the main branch is updated.
-name: Publish AUR Package (chsrc-git)
+# ---------------------------------------------------------------
+# Workflow File : pub-AUR-chsrc-git.yml
+# File Authors  : Terrasse <terrasse@qq.com>
+# Contributors  : Nul None <nul@none.org>
+#               |
+# Created On    : <2024-08-29>
+# Last Modified : <2025-03-18>
+#
+# Publish package 'chsrc-git' to AUR when branch 'main' is updated.
+# ---------------------------------------------------------------
+
+name: Publish 'chsrc-git' to AUR
 on:
   workflow_dispatch:
   push:

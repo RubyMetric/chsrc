@@ -1,4 +1,15 @@
-name: Linux ARMv7 Build
+# ---------------------------------------------------------------
+# Workflow File : build-on-Linux-ARMv7.yml
+# File Authors  :  Aoran Zeng <ccmywish@qq.com>
+# Contributors  :   Nul None  <nul@none.org>
+#               |
+# Created On    : <2023-09-14>
+# Last Modified : <2025-03-06>
+#
+# Build chsrc on Linux (ARMv7) and upload it to GitHub: the 'pre' release
+# ---------------------------------------------------------------
+
+name: Build on Linux ARMv7
 on:
   push:
     branches: [ "gh-build" ]
@@ -6,10 +17,10 @@ on:
     branches: [ "gh-build" ]
 
 jobs:
-  armv7-linu-build-and-upload:
+  build-and-upload:
     runs-on: ubuntu-latest
     steps:
-      - name: Build ARMv7
+      - name: Build
         uses: uraimo/run-on-arch-action@v2
         with:
           arch: armv7
@@ -27,7 +38,7 @@ jobs:
             make CI CI_ARTIFACT_NAME=chsrc-armv7-linux
             cp ./chsrc-armv7-linux /artifacts
 
-      - name: Release
+      - name: Upload
         uses: softprops/action-gh-release@v1
         with:
           tag_name: pre
