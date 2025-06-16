@@ -15,20 +15,24 @@ static SourceProvider_t pl_rust_cargo_upstream =
 };
 
 /**
- * @update 2024-12-18
+ * @update 2025-06-17
  * @note 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`
  * @note 链接末尾的 `/` 不能缺少
  */
 static Source_t pl_rust_cargo_sources[] =
 {
-  {&pl_rust_cargo_upstream,  "https://index.crates.io/"}, // @help 是这个吗？
+  {&pl_rust_cargo_upstream,  "https://github.com/rust-lang/crates.io-index/"},
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/crates.io-index/"},
+  {&Nju,           "https://mirror.nju.edu.cn/git/crates.io-index.git/"},
+  {&Zju,           "https://mirrors.zju.edu.cn/crates.io-index/"},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/"},
   {&Ustc,          "https://mirrors.ustc.edu.cn/crates.io-index/"},
   {&RsProxyCN,     "https://rsproxy.cn/index/"},
-  {&Hust,          "https://mirrors.hust.edu.cn/crates.io-index/"}
+  {&Ali,           "https://mirrors.aliyun.com/crates.io-index/"},
+  {&Hust,          "https://mirrors.hust.edu.cn/crates.io-index/"},
+  {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/"}
 };
 def_sources_n(pl_rust_cargo);
 
