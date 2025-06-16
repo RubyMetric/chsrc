@@ -5,14 +5,12 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2024-12-18>
+ * Last Modified : <2025-06-17>
  * ------------------------------------------------------------*/
 
-static SourceProvider_t pl_rust_cargo_upstream =
-{
-  def_upstream, "https://crates.io/",
-  def_need_measure_info
-};
+static SourceProvider_t pl_rust_cargo_upstream = {
+    def_upstream, "https://github.com/rust-lang/crates.io-index/",
+    def_need_measure_info};
 
 /**
  * @update 2025-06-17
