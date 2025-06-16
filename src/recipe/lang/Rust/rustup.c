@@ -5,7 +5,7 @@
  * Contributors  : Yangmoooo <yangmoooo@outlook.com>
  *               |
  * Created On    : <2024-10-02>
- * Last Modified : <2024-12-18>
+ * Last Modified : <2025-06-16>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t pl_rust_binary_upstream =
@@ -36,10 +36,10 @@ def_sources_n(pl_rust_rustup);
 void
 pl_rust_rustup_getsrc (char *option)
 {
-  char *cmd = "echo RUSTUP_UPDATE_ROOT;"
-              "echo RUSTUP_DIST_SERVER;";
+  char *cmd = "echo $RUSTUP_UPDATE_ROOT; "
+              "echo $RUSTUP_DIST_SERVER;";
 
-  system (cmd);
+  chsrc_run (cmd, RunOpt_Dont_Notify_On_Success|RunOpt_No_Last_New_Line);
 }
 
 
