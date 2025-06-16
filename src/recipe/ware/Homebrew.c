@@ -5,7 +5,7 @@
  * Contributors   :  Nil Null  <nil@null.org>
  * Created On     : <2023-09-10>
  * Major Revision :      3
- * Last Modified  : <2024-08-28>
+ * Last Modified  : <2025-06-16>
  * ------------------------------------------------------------*/
 
 /**
@@ -33,7 +33,8 @@ wr_homebrew_getsrc (char *option)
               "echo HOMEBREW_BOTTLE_DOMAIN=$HOMEBREW_BOTTLE_DOMAIN;"
               "echo HOMEBREW_BREW_GIT_REMOTE=$HOMEBREW_BREW_GIT_REMOTE;"
               "echo HOMEBREW_CORE_GIT_REMOTE=$HOMEBREW_CORE_GIT_REMOTE;";
-  system (cmd);
+  int status = system (cmd);
+  if (status != 0) { /* NOOP */ }
 }
 
 /**

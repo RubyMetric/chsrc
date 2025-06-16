@@ -8,7 +8,7 @@
  *                |
  * Created On     : <2023-09-02>
  * Major Revision :      3
- * Last Modified  : <2025-03-25>
+ * Last Modified  : <2025-06-16>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t os_debian_upstream =
@@ -127,7 +127,9 @@ os_debian_setsrc (char *option)
       if (use_cdrom)
         {
           chsrc_backup (OS_Debian_old_SourceList);
-          system ("rm " OS_Debian_old_SourceList);
+          int rm_status = system ("rm " OS_Debian_old_SourceList);
+          if (rm_status != 0) { /* Placate -Wunused-result */ }
+
           chsrc_warn2 ("旧版源配置文件中使用了 CDROM 源，已删除(但备份)该配置文件，重新配置");
           /* 现在的情况是：系统中已经没有配置文件了 */
           sourcelist_exist = ensure_debian_or_ubuntu_old_sourcelist (OS_Is_Debian_Literally);
