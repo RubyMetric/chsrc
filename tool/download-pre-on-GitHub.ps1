@@ -1,10 +1,11 @@
 # ---------------------------------------------------------------
-# File Name     : download-pre-onGitHub.ps1
+# File Name     : download-pre-on-GitHub.ps1
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
 # Created On    : <2023-09-21>
-# Last Modified : <2024-10-25>
+# Last Modified : <2025-06-16>
 #
-# Download all files from the `pre` release on GitHub
+# Download all files from the `pre` release on GitHub:
+#   https://github.com/RubyMetric/chsrc/releases/tag/pre
 # ---------------------------------------------------------------
 
 $destination = "~\Desktop\chsrc-pre-onGitHub"
@@ -22,6 +23,7 @@ $names = @(
   'chsrc-aarch64-linux'
   'chsrc-riscv64-linux'
   'chsrc-armv7-linux'
+  'chsrc_latest-1_amd64.deb'
 )
 
 # Like https://github.com/RubyMetric/chsrc/releases/download/latest/chsrc-x64-windows.exe
