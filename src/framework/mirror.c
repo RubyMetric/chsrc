@@ -154,16 +154,13 @@ Nju =
 
 /**
  * @note 2023-09-05 只使用了不到5次，重庆大学镜像站就把我的ip封杀了，对用户来说封杀策略过严，暂时不可靠，暂时不用
- *
- * Cqu =
- * {
- *   "cqu", "CQU", "重庆大学开源软件镜像站", "https://mirrors.cqu.edu.cn/",
- *   {NotSkip, NA, NA, "https://mirrors.cqu.edu.cn/speedtest/1000mb.bin"}
- * };
- *
- */
-
-
+ * @note 2025-06-17 重新启用，rust的镜像效果还不错，暂时没复现封杀问题
+**/
+Cqu =
+{
+  "cqu", "CQU", "重庆大学开源软件镜像站", "https://mirrors.cqu.edu.cn/",
+  {NotSkip, NA, NA, "https://mirrors.cqu.edu.cn/ubuntu-releases" Big_File_ubuntu}
+};
 
 /**
  * 商业公司提供的源
