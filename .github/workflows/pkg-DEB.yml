@@ -9,7 +9,7 @@
 # Build and publish DEB packages
 # ---------------------------------------------------------------
 
-name: Build and Publish DEB package
+name: 构建发布deb包
 
 on:
   release:
@@ -24,16 +24,17 @@ on:
         default: '0.3.0'  # 短暂时间内不可达到的最新版本号
 
 jobs:
-  build-deb:
+  Build-deb:
+    name: 构建deb包
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
+    - name: 检出代码
       uses: actions/checkout@v4
       with:
         ref: gh-build
 
-    - name: 获取版本号 from tag or input
+    - name: 获取版本号
       id: get_version
       run: |
         if [ "${{ github.event_name }}" = "release" ]; then
@@ -52,15 +53,16 @@ jobs:
         echo "version=$version" >> $GITHUB_OUTPUT
         echo "Version: $version"
 
-    - name: Validate version tag
+    - name: 验证版本号
       run: |
         version="${{ steps.get_version.outputs.version }}"
+
         if [[ ! $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
           echo "Invalid version format: $version"
           exit 1
         fi
 
-    - name: Update debian/changelog with version
+    - name: 更新 debian/changelog
       run: |
         version="${{ steps.get_version.outputs.version }}"
 
@@ -77,85 +79,78 @@ jobs:
 
         mv -f new_changelog ./debian/changelog
 
-
-    - name: Install build dependencies
+    - name: 安装构建依赖
       run: |
         sudo apt-get update
         sudo apt-get install -y debhelper devscripts build-essential fakeroot
 
-    - name: Build package
+    - name: 构建
       run: |
         make build-deb
 
-    - name: Move package into dist
+    - name: 移动构建产物到./dist和./dist-for-pre
       run: |
         version="${{ steps.get_version.outputs.version }}"
 
-        # Move the generated .deb file to a known location
-        mkdir -p dist
+        # 创建两个目录来存放构建产物（产物内容一样，只是文件名不一样）
+        mkdir dist dist-for-pre
         find ./pkg -name "chsrc_${version}*.deb" -exec mv {} dist/ \;
+        cp -r dist/ dist-for-pre/
 
-        # Rename to standardized format if needed
-        cd dist
-        for file in chsrc_${version}*.deb; do
-          if [ -f "$file" ]; then
-            new_name="chsrc_${version}-1_amd64.deb"
-            if [ "$file" != "$new_name" ]; then
-              mv "$file" "$new_name"
-            fi
-            break
-          fi
+        # 上传至 'pre' release 的文件名需要设置为 'latest', 从而稳定下载URL
+        cd ./dist-for-pre
+        for old_name in ./chsrc_${version}*.deb; do
+          new_name="${old_name/${version}-1/latest-1}"
+          mv "$old_name" "$new_name"
         done
 
-    - name: Verify package
+    - name: 验证生成的deb包
       run: |
         version="${{ steps.get_version.outputs.version }}"
         ls -la dist/
         dpkg-deb --info dist/chsrc_${version}-1_amd64.deb
         dpkg-deb --contents dist/chsrc_${version}-1_amd64.deb
 
-    - name: Test package installation
+    - name: 测试deb包能否正常安装
       run: |
         version="${{ steps.get_version.outputs.version }}"
 
-        # Install the package
         sudo dpkg -i dist/chsrc_${version}-1_amd64.deb || true
         sudo apt-get install -f -y || true
 
-        # Run DEB installation tests
         bash pkg/DEB/deb-installation-test.sh
 
-
-    - name: Upload DEB artifact
+    - name: 上传deb包到artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: chsrc-deb-amd64
+        name: chsrc-deb-files
         path: dist/chsrc_*.deb
         retention-days: 30
 
-    - name: Upload to Releases (the newest release) if is release event
+    - name: 上传附件到GitHub Releases(the newly created release)
       if: github.event_name == 'release'
       uses: softprops/action-gh-release@v2
       with:
-        files: |
-          dist/chsrc_*_amd64.deb
+        # 用 * 省略版本号，以及指代各种架构
+        files: dist/chsrc_*.deb
         token: ${{ secrets.UPLOAD_TO_GITHUB }}
 
-    - name: Upload to Releases (the 'pre' release) if is push event
+    - name: 上传附件到GitHub Releases(the 'pre' release)
       if: github.event_name == 'push'
       uses: softprops/action-gh-release@v2
       with:
         tag_name: pre
-        files: |
-          dist/chsrc_*_amd64.deb
+        # 用 * 指代各种架构
+        files: dist-for-pre/chsrc_latest-1_*.deb
         token: ${{ secrets.UPLOAD_TO_GITHUB }}
 
 
 
 
 
-  create-repository-metadata:
-    needs: build-deb
+  Create-APT-repository:
+    name: 创建APT仓库
+    needs: Build-deb
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
 
@@ -163,7 +158,7 @@ jobs:
     - name: Download all artifacts
       uses: actions/download-artifact@v4
       with:
-        pattern: chsrc-deb-*
+        pattern: chsrc-deb-files
         merge-multiple: true
         path: ./debs
 
