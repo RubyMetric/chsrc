@@ -9,7 +9,7 @@
 # Build chsrc on macOS and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
 
-name: Build on macOS
+name: 构建于 macOS
 on:
   push:
     branches: [ "gh-build" ]
@@ -21,17 +21,17 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - name: Checkout repo
+    - name: 检出代码
       uses: actions/checkout@v4
 
-    - name: Build for AArch64
+    - name: 为 AArch64 构建
       run: |
         make CI CI_ARTIFACT_NAME=chsrc-aarch64-macos
 
     - name: List files
       run: ls *-macos
 
-    - name: Upload
+    - name: 上传至 'pre' release
       uses: softprops/action-gh-release@v2
       # if: startsWith(github.ref, 'refs/tags/')
       with:
@@ -45,17 +45,17 @@ jobs:
     runs-on: macos-13 # macos-14 is AArch64(ARMv8-A)
 
     steps:
-    - name: Checkout repo
+    - name: 检出代码
       uses: actions/checkout@v4
 
-    - name: Build for x64
+    - name: 为 x64 构建
       run: |
         make CI CI_ARTIFACT_NAME=chsrc-x64-macos
 
     - name: List files
       run: ls *-macos
 
-    - name: Upload
+    - name: 上传至 'pre' release
       uses: softprops/action-gh-release@v2
       # if: startsWith(github.ref, 'refs/tags/')
       with:

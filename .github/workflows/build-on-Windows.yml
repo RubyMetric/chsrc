@@ -9,7 +9,7 @@
 # Build chsrc on Windows and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
 
-name: Build on Windows
+name: 构建于 Windows
 on:
   push:
     branches: [ "gh-build" ]
@@ -25,10 +25,10 @@ jobs:
 
     steps:
 
-    - name: Checkout repo
+    - name: 检出代码
       uses: actions/checkout@v4
 
-    - name: Install x64 gcc
+    - name: 安装 GCC
       uses: msys2/setup-msys2@v2
       with:
         msystem: UCRT64
@@ -39,11 +39,11 @@ jobs:
           mingw-w64-i686-gcc
           mingw-w64-i686-make
 
-    - name: Build
+    - name: 为 x64 构建
       run: |
         mingw32-make.exe CI CI_ARTIFACT_NAME=chsrc-x64-windows
 
-    - name: Compile chsrc x86
+    - name: 为 x32 构建
       env:
         MSYSTEM: MINGW32
       run: |
@@ -52,7 +52,7 @@ jobs:
     - name: List files
       run: ls *.exe
 
-    - name: Upload
+    - name: 上传至 'pre' release
       uses: softprops/action-gh-release@v2
       # if: startsWith(github.ref, 'refs/tags/')
       with:

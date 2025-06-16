@@ -9,7 +9,7 @@
 # Build chsrc on Linux (ARMv7) and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
 
-name: Build on Linux ARMv7
+name: 构建于 Linux ARMv7
 on:
   push:
     branches: [ "gh-build" ]
@@ -20,7 +20,7 @@ jobs:
   build-and-upload:
     runs-on: ubuntu-latest
     steps:
-      - name: Build
+      - name: 构建
         uses: uraimo/run-on-arch-action@v2
         with:
           arch: armv7
@@ -38,7 +38,7 @@ jobs:
             make CI CI_ARTIFACT_NAME=chsrc-armv7-linux
             cp ./chsrc-armv7-linux /artifacts
 
-      - name: Upload
+      - name: 上传至 'pre' release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: pre

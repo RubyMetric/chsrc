@@ -9,7 +9,7 @@
 # Build chsrc on Linux (x64) and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
 
-name: Build on Linux x64
+name: 构建于 Linux x64
 on:
   push:
     branches: [ "gh-build" ]
@@ -21,17 +21,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
+    - name: 检出代码
       uses: actions/checkout@v4
 
-    - name: Build
+    - name: 构建
       run: |
         make CI CI_ARTIFACT_NAME=chsrc-x64-linux
 
     - name: List files
       run: ls *-linux
 
-    - name: Upload
+    - name: 上传至 'pre' release
       uses: softprops/action-gh-release@v2
       # if: startsWith(github.ref, 'refs/tags/')
       with:
