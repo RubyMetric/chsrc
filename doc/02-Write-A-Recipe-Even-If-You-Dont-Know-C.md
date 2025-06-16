@@ -12,7 +12,7 @@
 
 # Write A Recipe Even If You Don't Know C
 
-# 介绍
+## 介绍
 
 **`chsrc` 不仅是一个命令行工具，同时也是一个体现了 Ruby on Rails 思想的 MVC 换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。**
 
@@ -28,8 +28,8 @@
 6. 已有大量 `recipe` 可提供参考，并提供了 [recipe template] 供直接使用
 7. 提供持续关注镜像站可用性的协作平台:
 
-    1. https://github.com/RubyMetric/chsrc/wiki
-    2. https://github.com/RubyMetric/chsrc/discussions
+    1. <https://github.com/RubyMetric/chsrc/wiki>
+    2. <https://github.com/RubyMetric/chsrc/discussions>
 
 <br>
 
@@ -40,7 +40,7 @@
 
 <br>
 
-# 基本概念
+## 基本概念
 
 1. `target`: 所要换源的目标
 
@@ -59,7 +59,7 @@
 
 <br>
 
-# 编写 `recipe` 步骤
+## 编写 `recipe` 步骤
 
 1. 确定你要编写的 `target` 的标准名称，创建 `Target-Name.c` 文件
 
@@ -90,7 +90,7 @@
 
 <br>
 
-# 开发准则
+## 开发准则
 
 1. 代码高度可移植
 
