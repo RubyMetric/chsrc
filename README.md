@@ -7,7 +7,7 @@
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2023-12-28>
- ! Last Modified : <2025-06-15>
+ ! Last Modified : <2025-06-16>
  ! ---------------------------------------------------------- -->
 
 <div align="center">
@@ -158,9 +158,12 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windo
 - 可通过 `apt`/`dpkg` 安装，感谢 [@sanchuanhehe]
 
 ```bash
-$ sudo apt install ./chsrc_<ver>_<arch>.deb
+# x64
+$ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc_latest-1_amd64.deb -o chsrc_latest-1_amd64.deb
+
+$ sudo apt install ./chsrc_latest-1_amd64.deb
 # 或
-$ sudo sudo dpkg -i chsrc_<ver>_<arch>.deb
+$ sudo sudo dpkg -i chsrc_latest-1_amd64.deb
 ```
 
 <br>
