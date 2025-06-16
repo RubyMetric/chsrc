@@ -107,6 +107,9 @@ test-fw:
 	@$(CC) test/fw.c $(CFLAGS) -o fw
 	@./fw
 
+
+check: test
+
 # AUR package 安装时将执行此 target
 fastcheck: $(Target-Name)
 	@perl ./test/cli.pl fastcheck
@@ -133,4 +136,4 @@ install: $(Target-Name)
 	install -D -m 755 $(Target-Name) $(DESTDIR)/usr/bin/$(Target-Name)
 	install -D -m 644 doc/chsrc.1 $(DESTDIR)/usr/share/man/man1/chsrc.1
 
-.PHONY: all CI debug test test-make-env test-xy test-fw fastcheck test-cli clean install build-deb clean-deb
+.PHONY: all CI debug check test test-make-env test-xy test-fw fastcheck test-cli clean install build-deb clean-deb
