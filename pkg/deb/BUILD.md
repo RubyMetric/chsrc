@@ -7,10 +7,10 @@
  ! Contributors  :  Aoran Zeng  <ccmywish@qq.com>
  !               |
  ! Created On    : <2025-06-14>
- ! Last Modified : <2025-06-15>
+ ! Last Modified : <2025-06-16>
  ! ---------------------------------------------------------- -->
 
-# 构建 DEB package
+# 构建 deb package
 
 ## 准备
 
@@ -29,8 +29,8 @@ sudo apt-get install build-essential debhelper devscripts fakeroot
 git clone https://github.com/RubyMetric/chsrc.git
 cd chsrc
 
-# 进入 DEB 目录
-cd pkg/DEB
+# 进入 deb 目录
+cd pkg/deb
 
 # 执行构建命令
 ./deb.makefile deb-make
@@ -83,10 +83,10 @@ bash ./deb-installation-test.sh
 # 查看文档安装情况
 man chsrc
 
-# 查看 DEB 包的 copyright
+# 查看 deb 包的 copyright
 cat /usr/share/doc/chsrc/copyright
 
-# 查看 DEB 包 changelog
+# 查看 deb 包 changelog
 zless /usr/share/doc/chsrc/changelog.Debian.gz
 ```
 

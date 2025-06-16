@@ -51,6 +51,6 @@ yay -S chsrc-git # Build  from the latest main branch (stable)
 
 ## 打包情况
 
-- [x] `DEB`
+- [x] `deb`
 
 <br>

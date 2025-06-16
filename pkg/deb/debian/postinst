@@ -2,12 +2,12 @@
 # --------------------------------------------------------------
 # SPDX-License-Identifier: GPL-3.0-or-later
 # --------------------------------------------------------------
-# DEB File      : postinst
+# deb File      : postinst
 # File Authors  : sanchuanhehe <wyihe5520@gmail.com>
 # Contributors  :   Nil Null   <nil@null.org>
 #	            |
 # Created On    : <2025-06-14>
-# Last Modified : <2025-06-15>
+# Last Modified : <2025-06-16>
 #
 # postinst script for chsrc
 # --------------------------------------------------------------

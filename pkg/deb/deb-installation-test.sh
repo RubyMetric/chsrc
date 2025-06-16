@@ -7,14 +7,14 @@
 # Contributors  :  Aoran Zeng  <ccmywish@qq.com>
 #	            |
 # Created On    : <2025-06-14>
-# Last Modified : <2025-06-15>
+# Last Modified : <2025-06-16>
 #
-# Test script for DEB package installation
+# Test script for deb package installation
 # --------------------------------------------------------------
 
 set -e
 
-echo "Testing installation of DEB package 'chsrc' ..."
+echo "Testing installation of deb package 'chsrc' ..."
 
 # Test 1: Check if chsrc binary exists and is executable
 if [ ! -f "/usr/bin/chsrc" ]; then
@@ -52,4 +52,4 @@ else
     exit 1
 fi
 
-echo "All installation tests of DEB package 'chsrc' passed!"
+echo "All installation tests of deb package 'chsrc' passed!"

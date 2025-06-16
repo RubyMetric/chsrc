@@ -35,7 +35,7 @@
 #		3. dh binary (debian/rules override_dh_auto_install)
 # --------------------------------------------------------------
 
-# 由于 debuild 要寻找 debian/ 目录，因此当前工作目录一定在 pkg/DEB 下
+# 由于 debuild 要寻找 debian/ 目录，因此当前工作目录一定在 pkg/deb 下
 Chsrc-Root-Dir = $(CURDIR)/../../
 
 %:

@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------
-# Workflow File : pkg-DEB.yml
+# Workflow File : pkg-deb.yml
 # File Authors  : sanchuanhehe <wyihe5520@gmail.com>
 # Contributors  :  Aoran Zeng  <ccmywish@qq.com>
 #               |
 # Created On    : <2025-06-10>
 # Last Modified : <2025-06-16>
 #
-# Build and publish DEB packages
+# Build and publish deb packages
 # ---------------------------------------------------------------
 
 name: 构建发布deb包
@@ -66,7 +66,7 @@ jobs:
       run: |
         version="${{ steps.get_version.outputs.version }}"
 
-        cd ./pkg/DEB
+        cd ./pkg/deb
 
         (cat << EOF; cat ./debian/changelog) > new_changelog
         chsrc ($version-1) unstable; urgency=medium
@@ -118,7 +118,7 @@ jobs:
         sudo dpkg -i dist/chsrc_${version}-1_amd64.deb || true
         sudo apt-get install -f -y || true
 
-        bash pkg/DEB/deb-installation-test.sh
+        bash pkg/deb/deb-installation-test.sh
 
     - name: 上传deb包到artifacts
       uses: actions/upload-artifact@v4

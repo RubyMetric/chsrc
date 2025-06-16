@@ -36,20 +36,20 @@ chsrc.toc
 
 
 ##############################
-#         DEB package
+#         deb package
 ##############################
-# DEB package 未归档的目录
-pkg/DEB/debian/chsrc/
+# deb package 未归档的目录
+pkg/deb/debian/chsrc/
 
 # 下面这个目录包含创建出 $HOME 的虚拟环境
-pkg/DEB/debian/.debhelper/
+pkg/deb/debian/.debhelper/
 
-pkg/DEB/debian/debhelper-build-stamp
-pkg/DEB/debian/files
-pkg/DEB/debian/chsrc.debhelper.log
-pkg/DEB/debian/chsrc.substvars
+pkg/deb/debian/debhelper-build-stamp
+pkg/deb/debian/files
+pkg/deb/debian/chsrc.debhelper.log
+pkg/deb/debian/chsrc.substvars
 
-# 以下为 DEB package 构建的直接产物
+# 以下为 deb package 构建的直接产物
 chsrc_*.deb
 chsrc-dbgsym_*.ddeb
 chsrc_*.build

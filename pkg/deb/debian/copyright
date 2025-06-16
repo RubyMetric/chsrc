@@ -14,7 +14,7 @@ Copyright: 2023-2025 Aoran Zeng <ccmywish@qq.com>
            2023-2025  Heng Guo  <2085471348@qq.com>
 License: MIT
 
-Files: pkg/DEB/debian/*
+Files: pkg/deb/debian/*
 Copyright: 2025 sanchuanhehe <wyihe5520@gmail.com>
 License: GPL-3+
 

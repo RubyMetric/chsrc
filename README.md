@@ -155,7 +155,7 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windo
 <details>
 <summary>Linux</summary>
 
-- 支持 `DEB`，可通过 `apt`/`dpkg` 安装，感谢 [@sanchuanhehe]
+- 可通过 `apt`/`dpkg` 安装，感谢 [@sanchuanhehe]
 
 ```bash
 $ sudo apt install ./chsrc_<ver>_<arch>.deb
