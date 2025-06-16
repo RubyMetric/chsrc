@@ -1,11 +1,12 @@
-chsrc (0.2.0-1) unstable; urgency=medium
+chsrc (0.1.9-1) unstable; urgency=medium
 
-  * v0.2.0 已发布
+  * v0.1.9 已发布
 
  -- Aoran Zeng <ccmywish@qq.com>  Sun, 15 Jun 2025 13:32:50 +0800
 
+
 chsrc (0.0.1-1) unstable; urgency=medium
 
-  * Initial deb package get packaged!
+  * 首个 deb 包已完成!
 
  -- sanchuanhehe <wyihe5520@gmail.com>  Mon, 10 Jun 2025 00:00:00 +0000
