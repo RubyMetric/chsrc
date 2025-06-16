@@ -120,10 +120,10 @@ clean:
 	-@rm chsrc  2>/dev/null
 	-@rm README.md.bak* 2>/dev/null
 
-# -include pkg/deb/deb.makefile # 不这么做，因为 pkg/deb/deb.makefile 需要在 pkg/deb 目录下执行
+# -include pkg/deb/Makefile # 不这么做，因为 pkg/deb/Makefile 需要在 pkg/deb 目录下执行
 # 保持动词在前的任务名风格
 build-deb:
-	@$(MAKE) -C pkg/deb -f deb.makefile deb-build
+	@$(MAKE) -C pkg/deb deb-build
 
 install: $(Target-Name)
 	install -D -m 755 $(Target-Name) $(DESTDIR)/usr/bin/$(Target-Name)

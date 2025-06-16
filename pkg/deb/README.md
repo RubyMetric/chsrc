@@ -20,14 +20,14 @@
 ## 相关文件
 
 - `.github/workflows/pkg-deb.yml` - CI 配置文件
-- `CI.md` - CI 情况说明
+- `./CI.md` - CI 情况说明
 
 <wbr>
 
-- `debian/` - deb 包构建配置目录
-- `BUILD.md` - 如何手动构建
-- `deb.makefile` - deb 包构建 Makefile
-- `deb-installation-test.sh` - deb 包 **已正确安装** 测试脚本
+- `./debian/` - deb 包构建配置目录
+- `./BUILD.md` - 如何手动构建
+- `./Makefile` - deb 包构建 Makefile
+- `./deb-installation-test.sh` - deb 包 **已正确安装** 测试脚本
 
 <br>
 

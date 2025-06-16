@@ -33,7 +33,7 @@ cd chsrc
 cd pkg/deb
 
 # 执行构建命令
-./deb.makefile deb-make
+./Makefile deb-make
 ```
 
 ### 调试构建
@@ -95,7 +95,7 @@ zless /usr/share/doc/chsrc/changelog.Debian.gz
 ### 清理构建产物
 
 ```bash
-./deb.makefile deb-clean
+./Makefile deb-clean
 ```
 
 <br>

@@ -2,7 +2,7 @@
 # --------------------------------------------------------------
 # SPDX-License-Identifier: GPL-3.0-or-later
 # --------------------------------------------------------------
-# Build File    : deb.makefile
+# Build File    : Makefile
 # File Authors  : sanchuanhehe <wyihe5520@gmail.com>
 # Contributors  :  Aoran Zeng  <ccmywish@qq.com>
 #								|
