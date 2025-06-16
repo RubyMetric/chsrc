@@ -8,7 +8,7 @@
  *               |  Jialin Lyu   <jialinlvcn@aliyun.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-05-27>
+ * Last Modified : <2025-06-17>
  *
  * 通用镜像站
  * ------------------------------------------------------------*/
@@ -150,20 +150,16 @@ Nju =
 {
   "nju", "NJU", "南京大学开源镜像站", "https://mirrors.nju.edu.cn/",
   {NotSkip, NA, NA, "https://mirrors.nju.edu.cn/archlinux" Big_File_archlinux}
-};
+},
 
 /**
- * @note 2023-09-05 只使用了不到5次，重庆大学镜像站就把我的ip封杀了，对用户来说封杀策略过严，暂时不可靠，暂时不用
- *
- * Cqu =
- * {
- *   "cqu", "CQU", "重庆大学开源软件镜像站", "https://mirrors.cqu.edu.cn/",
- *   {NotSkip, NA, NA, "https://mirrors.cqu.edu.cn/speedtest/1000mb.bin"}
- * };
- *
- */
-
-
+ * @note 2023-09-05 封杀策略过严，谨慎使用
+ **/
+Cqu =
+{
+  "cqu", "CQU", "重庆大学开源软件镜像站", "https://mirrors.cqu.edu.cn/",
+  {NotSkip, NA, NA, "https://mirrors.cqu.edu.cn/ubuntu-releases" Big_File_ubuntu}
+};
 
 /**
  * 商业公司提供的源

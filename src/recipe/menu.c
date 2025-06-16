@@ -6,7 +6,7 @@
  *                |
  * Created On     : <2023-09-01>
  * Major Revision :      1
- * Last Modified  : <2025-05-27>
+ * Last Modified  : <2025-06-17>
  * ------------------------------------------------------------*/
 
 /* Begin Target Matrix */
@@ -151,10 +151,7 @@ available_mirrors[] = {
   &Hust, &Iscas, &Scau,
   &Nyist, &Sdu,  &Cqupt,
 
-  &Nju,
-
-  /* 已支持但未启用 */
-  // &Cqu,
+  &Nju, &Cqu,
 
 
 
