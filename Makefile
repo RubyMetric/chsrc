@@ -1,3 +1,4 @@
+#!/usr/bin/make -f
 # --------------------------------------------------------------
 # SPDX-License-Identifier: GPL-3.0-or-later
 # --------------------------------------------------------------
@@ -7,7 +8,7 @@
 #								| sanchuanhehe <wyihe5520@gmail.com>
 #								|
 # Created On    : <2023-08-28>
-# Last Modified : <2025-06-15>
+# Last Modified : <2025-06-16>
 # --------------------------------------------------------------
 
 On-Linux = 0
@@ -125,8 +126,11 @@ clean:
 build-deb:
 	@$(MAKE) -C pkg/deb deb-build
 
+clean-deb:
+	@$(MAKE) -C pkg/deb deb-clean
+
 install: $(Target-Name)
 	install -D -m 755 $(Target-Name) $(DESTDIR)/usr/bin/$(Target-Name)
 	install -D -m 644 doc/chsrc.1 $(DESTDIR)/usr/share/man/man1/chsrc.1
 
-.PHONY: all CI debug test test-make-env test-xy test-fw fastcheck test-cli clean install
+.PHONY: all CI debug test test-make-env test-xy test-fw fastcheck test-cli clean install build-deb clean-deb
