@@ -97,6 +97,10 @@ jobs:
         find ./pkg -name "chsrc_${version}*.deb" -exec mv {} dist/ \;
         cp -r dist/ dist-for-pre/
 
+        ls -al dist/
+
+        ls -al dist-for-pre/
+
         # 上传至 'pre' release 的文件名需要设置为 'latest', 从而稳定下载URL
         cd ./dist-for-pre
         for old_name in ./chsrc_${version}*.deb; do
