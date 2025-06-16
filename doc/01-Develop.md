@@ -28,9 +28,9 @@ $ git clone https://gitee.com/RubyMetric/chsrc.git -b dev
 ## 编译运行
 
 ```bash
-$ make          # 默认使用 cc 编译
-$ make CC=clang # 使用 clang 编译
-$ make CC=gcc   # 使用 gcc   编译
+make          # 默认使用 cc 编译
+make CC=clang # 使用 clang 编译
+make CC=gcc   # 使用 gcc   编译
 ```
 
 ```bash
@@ -49,11 +49,11 @@ $ make DEBUG=1
 ## 测试
 
 ```bash
-$ make test-xy  # 测试 xy.h
-$ make test-fw  # 测试 framework
-$ make test     # 测试上述两个
-$ make test-cli # 测试命令
-$ make clean
+make test-xy  # 测试 xy.h
+make test-fw  # 测试 framework
+make test     # 测试上述两个
+make test-cli # 测试命令
+make clean
 ```
 
 <br>
