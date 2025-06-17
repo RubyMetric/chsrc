@@ -1,11 +1,12 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  : Yangmoooo <yangmoooo@outlook.com>
+ * File Authors  :  Aoran Zeng     <ccmywish@qq.com>
+ * Contributors  :   Yangmoooo     <yangmoooo@outlook.com>
+ *               |  Mikachu2333    <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2024-10-02>
- * Last Modified : <2025-06-16>
+ * Last Modified : <2025-06-17>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t pl_rust_binary_upstream =
@@ -15,18 +16,19 @@ static SourceProvider_t pl_rust_binary_upstream =
 };
 
 /**
- * @update 2024-12-18
+ * @update 2025-06-17
  */
-static Source_t pl_rust_rustup_sources[] =
-{
-  {&pl_rust_binary_upstream, "https://static.rust-lang.org"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/rustup"},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/rust-static"},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/rust-static"},
-  {&Zju,              "https://mirrors.zju.edu.cn/rustup"},
-  {&Iscas,            "https://mirror.iscas.ac.cn/rustup"},
-  {&RsProxyCN,        "https://rsproxy.cn"}
-};
+static Source_t pl_rust_rustup_sources[] = {
+    {&pl_rust_binary_upstream, "https://static.rust-lang.org"},
+    {&MirrorZ, "https://mirrors.cernet.edu.cn/rustup"},
+    {&Tuna, "https://mirrors.tuna.tsinghua.edu.cn/rustup"},
+    {&Ustc, "https://mirrors.ustc.edu.cn/rust-static"},
+    {&Nju, "https://mirror.nju.edu.cn/rustup"},
+    {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/rust-static"},
+    {&Zju, "https://mirrors.zju.edu.cn/rustup"},
+    {&Iscas, "https://mirror.iscas.ac.cn/rustup"},
+    {&Ali, "https://mirrors.aliyun.com/rustup"},
+    {&RsProxyCN, "https://rsproxy.cn"}};
 def_sources_n(pl_rust_rustup);
 
 
