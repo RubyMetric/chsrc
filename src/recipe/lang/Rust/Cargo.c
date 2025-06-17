@@ -11,19 +11,20 @@
 static SourceProvider_t pl_rust_cargo_upstream =
 {
   def_upstream, "https://crates.io/",
-  def_need_measure_info
+  {NotSkip, NA, NA, "https://crates.io/api/v1/crates/windows/0.58.0/download"}
 };
 
 /**
  * @update 2025-06-17
  * @note 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`
  * @note 链接末尾的 `/` 不能缺少
+ * @note 经验证，南大的镜像同步失败，实际情况下多数packages不可用
+ * @note 经验证，华中科大的镜像同步部分失败，较多常见packages不可用
  */
 static Source_t pl_rust_cargo_sources[] =
 {
   {&pl_rust_cargo_upstream,  "https://github.com/rust-lang/crates.io-index/"},
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/crates.io-index/"},
-  {&Nju,           "https://mirror.nju.edu.cn/git/crates.io-index.git/"},
   {&Zju,           "https://mirrors.zju.edu.cn/crates.io-index/"},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"},
@@ -31,7 +32,6 @@ static Source_t pl_rust_cargo_sources[] =
   {&Ustc,          "https://mirrors.ustc.edu.cn/crates.io-index/"},
   {&RsProxyCN,     "https://rsproxy.cn/index/"},
   {&Ali,           "https://mirrors.aliyun.com/crates.io-index/"},
-  {&Hust,          "https://mirrors.hust.edu.cn/crates.io-index/"},
   {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/"}
 };
 def_sources_n(pl_rust_cargo);
