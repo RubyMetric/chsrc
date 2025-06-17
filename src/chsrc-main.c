@@ -26,14 +26,15 @@
  *                 |     ccy        <icuichengyi@gmail.com>
  *                 |  MadDogOwner   <xiaoran@xrgzs.top>
  *                 |  sanchuanhehe  <wyihe5520@gmail.com>
+ *                 |  Mikachu2333   <mikachu.23333@zohomail.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2025-06-16>
+ * Last Modified   : <2025-06-17>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.1.2"
+#define Chsrc_Version        "0.2.1.2-dev1"
 #define Chsrc_Release_Date   "2025/06/16"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
