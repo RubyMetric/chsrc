@@ -128,7 +128,7 @@ chsrc_log_backup (const char *filename)
 }
 
 #define YesMark "✓"
-#define NoMark "☓"
+#define NoMark "X"
 #define HalfYesMark "⍻"
 
 /**
