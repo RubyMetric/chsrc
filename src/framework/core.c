@@ -9,10 +9,18 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-03-06>
+ * Last Modified : <2025-06-18>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
+
+#if defined(__STDC__) && __STDC_VERSION__ < 201112L
+#   error "chsrc requires C11 or later, please use a new compiler which at least supports C11"
+#endif
+
+#if defined(__STDC__) && __STDC_VERSION__ < 201710L
+#   warning "chsrc recommends a C17 or later compiler"
+#endif
 
 #include "xy.h"
 #include "struct.h"

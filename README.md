@@ -7,7 +7,7 @@
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2023-12-28>
- ! Last Modified : <2025-06-16>
+ ! Last Modified : <2025-06-18>
  ! ---------------------------------------------------------- -->
 
 <div align="center">
@@ -16,7 +16,7 @@
 
 全平台通用换源工具与框架 `chsrc`，**目标支持 Linux, Windows (MSYS2, Cygwin), macOS, BSD 等尽可能多的操作系统环境，龙芯、飞腾、RISC-V 等尽可能多的 CPU**。
 
-我们使用 **C99** 来完成上述目标。我们并不使用 Python 或 JS 等解释语言，因为一个简单的换源工具，不应该强行塞给用户一个庞大的解释器和数十、数百 MB 其他文件。
+我们使用 **C11** 来完成上述目标。我们并不使用 Python 或 JS 等解释语言，因为一个简单的换源工具，不应该强行塞给用户一个庞大的解释器和数十、数百 MB 其他文件。
 
 本软件为**自由软件**，SDPX 软件许可证为 `GPL-3.0-or-later and MIT`
 
