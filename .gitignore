@@ -1,6 +1,7 @@
 .vscode/*
 !.vscode/settings.json
 !.vscode/c_cpp_properties.json
+!.vscode/tasks.json
 !.vscode/README.md
 
 *.o

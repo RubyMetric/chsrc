@@ -1,0 +1,39 @@
+{
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "构建 chsrc",
+      "command": "just",
+      "args": ["build"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "使用 just build 编译"
+    },
+    {
+      "type": "shell",
+      "label": "测试 chsrc",
+      "command": "just",
+      "args": ["test"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "detail": "使用 just test 测试"
+    }
+  ],
+  "version": "2.0.0"
+}
