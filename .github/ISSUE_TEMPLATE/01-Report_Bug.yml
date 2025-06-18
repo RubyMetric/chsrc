@@ -1,9 +1,8 @@
 name: 🐞 Bug 报告
 description: 有 Bug 了吗?
 title: "详细报告BUG是chsrc用户的一大美德"
-labels: ['Bug']
+labels: ["Bug"]
 body:
-
   - type: markdown
     attributes:
       value: |
