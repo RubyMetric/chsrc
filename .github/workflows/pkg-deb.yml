@@ -1,10 +1,11 @@
 # ---------------------------------------------------------------
 # Workflow File : pkg-deb.yml
-# File Authors  : sanchuanhehe <wyihe5520@gmail.com>
-# Contributors  :  Aoran Zeng  <ccmywish@qq.com>
+# File Authors  : sanchuanhehe  <wyihe5520@gmail.com>
+# Contributors  :  Aoran Zeng   <ccmywish@qq.com>
+#               |  Mikachu2333  <mikachu.23333@zohomail.com>
 #               |
 # Created On    : <2025-06-10>
-# Last Modified : <2025-06-16>
+# Last Modified : <2025-06-18>
 #
 # Build and publish deb packages
 # ---------------------------------------------------------------
@@ -13,15 +14,21 @@ name: 构建发布deb包
 
 on:
   release:
-    types: [ released ]
+    types: [released]
   push:
-    branches: [ "gh-build" ]
+    branches: ["gh-build"]
+    paths-ignore:
+      - ".gitignore"
+      - ".vscode/**"
+      - "**.md"
+      - "LICENSE-MIT.txt"
+      - "COPYING"
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to build'
+        description: "Version to build"
         required: true
-        default: '0.3.0'  # 短暂时间内不可达到的最新版本号
+        default: "0.3.0" # 短暂时间内不可达到的最新版本号
 
 jobs:
   Build-deb:
@@ -29,124 +36,120 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      with:
-        ref: gh-build
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          ref: gh-build
 
-    - name: 获取版本号
-      id: get_version
-      run: |
-        if [ "${{ github.event_name }}" = "release" ]; then
-          version="${{ github.event.release.tag_name }}"
-          # 删除前缀 'v' if present
-          version=${version#v}
+      - name: 获取版本号
+        id: get_version
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            version="${{ github.event.release.tag_name }}"
+            # 删除前缀 'v' if present
+            version=${version#v}
 
-        elif [ "${{ github.event_name }}" = "push" ];then
-          # 从源代码中提取版本号
-          version=$(sed -E -n 's/^#define Chsrc_Version +"([0-9]+\.[0-9]+\.[0-9]+).*"/\1/p' ./src/chsrc-main.c)
+          elif [ "${{ github.event_name }}" = "push" ];then
+            # 从源代码中提取版本号
+            version=$(sed -E -n 's/^#define Chsrc_Version +"([0-9]+\.[0-9]+\.[0-9]+).*"/\1/p' ./src/chsrc-main.c)
 
-        else
-          version="${{ github.event.inputs.version }}"
-        fi
+          else
+            version="${{ github.event.inputs.version }}"
+          fi
 
-        echo "version=$version" >> $GITHUB_OUTPUT
-        echo "Version: $version"
+          echo "version=$version" >> $GITHUB_OUTPUT
+          echo "Version: $version"
 
-    - name: 验证版本号
-      run: |
-        version="${{ steps.get_version.outputs.version }}"
+      - name: 验证版本号
+        run: |
+          version="${{ steps.get_version.outputs.version }}"
 
-        if [[ ! $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-          echo "Invalid version format: $version"
-          exit 1
-        fi
+          if [[ ! $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid version format: $version"
+            exit 1
+          fi
 
-    - name: 更新 debian/changelog
-      run: |
-        version="${{ steps.get_version.outputs.version }}"
+      - name: 更新 debian/changelog
+        run: |
+          version="${{ steps.get_version.outputs.version }}"
 
-        cd ./pkg/deb
+          cd ./pkg/deb
 
-        (cat << EOF; cat ./debian/changelog) > new_changelog
-        chsrc ($version-1) unstable; urgency=medium
+          (cat << EOF; cat ./debian/changelog) > new_changelog
+          chsrc ($version-1) unstable; urgency=medium
 
-          * Release version $version
+            * Release version $version
 
-         -- Aoran Zeng <ccmywish@qq.com>  $(date -R)
+           -- Aoran Zeng <ccmywish@qq.com>  $(date -R)
 
-        EOF
+          EOF
 
-        mv -f new_changelog ./debian/changelog
+          mv -f new_changelog ./debian/changelog
 
-    - name: 安装构建依赖
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y debhelper devscripts build-essential fakeroot
+      - name: 安装构建依赖
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y debhelper devscripts build-essential fakeroot
 
-    - name: 构建
-      run: |
-        make build-deb
+      - name: 构建
+        run: |
+          make build-deb
 
-    - name: 移动构建产物到./dist和./dist-for-pre
-      run: |
-        version="${{ steps.get_version.outputs.version }}"
+      - name: 移动构建产物到./dist和./dist-for-pre
+        run: |
+          version="${{ steps.get_version.outputs.version }}"
 
-        # 创建两个目录来存放构建产物（产物内容一样，只是文件名不一样）
-        mkdir dist dist-for-pre
-        find ./pkg -name "chsrc_${version}*.deb" -exec mv {} dist/ \;
-        cp -r dist/* dist-for-pre/
+          # 创建两个目录来存放构建产物（产物内容一样，只是文件名不一样）
+          mkdir dist dist-for-pre
+          find ./pkg -name "chsrc_${version}*.deb" -exec mv {} dist/ \;
+          cp -r dist/* dist-for-pre/
 
-        # 上传至 'pre' release 的文件名需要设置为 'latest', 从而稳定下载URL
-        cd ./dist-for-pre
-        for old_name in ./chsrc_${version}*.deb; do
-          new_name="${old_name/${version}-1/latest-1}"
-          mv "$old_name" "$new_name"
-        done
+          # 上传至 'pre' release 的文件名需要设置为 'latest', 从而稳定下载URL
+          cd ./dist-for-pre
+          for old_name in ./chsrc_${version}*.deb; do
+            new_name="${old_name/${version}-1/latest-1}"
+            mv "$old_name" "$new_name"
+          done
 
-    - name: 验证生成的deb包
-      run: |
-        version="${{ steps.get_version.outputs.version }}"
-        ls -la dist/
-        dpkg-deb --info dist/chsrc_${version}-1_amd64.deb
-        dpkg-deb --contents dist/chsrc_${version}-1_amd64.deb
+      - name: 验证生成的deb包
+        run: |
+          version="${{ steps.get_version.outputs.version }}"
+          ls -la dist/
+          dpkg-deb --info dist/chsrc_${version}-1_amd64.deb
+          dpkg-deb --contents dist/chsrc_${version}-1_amd64.deb
 
-    - name: 测试deb包能否正常安装
-      run: |
-        version="${{ steps.get_version.outputs.version }}"
+      - name: 测试deb包能否正常安装
+        run: |
+          version="${{ steps.get_version.outputs.version }}"
 
-        sudo dpkg -i dist/chsrc_${version}-1_amd64.deb || true
-        sudo apt-get install -f -y || true
+          sudo dpkg -i dist/chsrc_${version}-1_amd64.deb || true
+          sudo apt-get install -f -y || true
 
-        bash pkg/deb/deb-installation-test.sh
+          bash pkg/deb/deb-installation-test.sh
 
-    - name: 上传deb包到artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: chsrc-deb-files
-        path: dist/chsrc_*.deb
-        retention-days: 30
+      - name: 上传deb包到artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: chsrc-deb-files
+          path: dist/chsrc_*.deb
+          retention-days: 30
 
-    - name: 上传附件到GitHub Releases(the newly created release)
-      if: github.event_name == 'release'
-      uses: softprops/action-gh-release@v2
-      with:
-        # 用 * 省略版本号，以及指代各种架构
-        files: dist/chsrc_*.deb
-        token: ${{ secrets.UPLOAD_TO_GITHUB }}
+      - name: 上传附件到GitHub Releases(the newly created release)
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          # 用 * 省略版本号，以及指代各种架构
+          files: dist/chsrc_*.deb
+          token: ${{ secrets.UPLOAD_TO_GITHUB }}
 
-    - name: 上传附件到GitHub Releases(the 'pre' release)
-      if: github.event_name == 'push'
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: pre
-        # 用 * 指代各种架构
-        files: dist-for-pre/chsrc_latest-1_*.deb
-        token: ${{ secrets.UPLOAD_TO_GITHUB }}
-
-
-
-
+      - name: 上传附件到GitHub Releases(the 'pre' release)
+        if: github.event_name == 'push'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: pre
+          # 用 * 指代各种架构
+          files: dist-for-pre/chsrc_latest-1_*.deb
+          token: ${{ secrets.UPLOAD_TO_GITHUB }}
 
   Create-APT-repository:
     name: 创建APT仓库
@@ -155,27 +158,27 @@ jobs:
     if: github.event_name == 'release'
 
     steps:
-    - name: Download all artifacts
-      uses: actions/download-artifact@v4
-      with:
-        pattern: chsrc-deb-files
-        merge-multiple: true
-        path: ./debs
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: chsrc-deb-files
+          merge-multiple: true
+          path: ./debs
 
-    - name: Install repository tools
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y dpkg-dev
+      - name: Install repository tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y dpkg-dev
 
-    - name: Create Packages file
-      run: |
-        cd debs
-        dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
-        dpkg-scanpackages . /dev/null > Packages
+      - name: Create Packages file
+        run: |
+          cd debs
+          dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+          dpkg-scanpackages . /dev/null > Packages
 
-    - name: Upload repository metadata
-      uses: actions/upload-artifact@v4
-      with:
-        name: debian-repository-metadata
-        path: debs/Packages*
-        retention-days: 30
+      - name: Upload repository metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: debian-repository-metadata
+          path: debs/Packages*
+          retention-days: 30

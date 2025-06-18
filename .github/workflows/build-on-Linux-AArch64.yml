@@ -1,10 +1,11 @@
 # ---------------------------------------------------------------
 # Workflow File : build-on-Linux-AArch64.yml
-# File Authors  :  Aoran Zeng <ccmywish@qq.com>
-# Contributors  :   Nul None  <nul@none.org>
+# File Authors  :  Aoran Zeng  <ccmywish@qq.com>
+# Contributors  :   Nul None   <nul@none.org>
+#               |  Mikachu2333 <mikachu.23333@zohomail.com>
 #               |
 # Created On    : <2023-09-14>
-# Last Modified : <2025-03-06>
+# Last Modified : <2025-06-18>
 #
 # Build chsrc on Linux (AArch64) and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
@@ -12,9 +13,21 @@
 name: 构建于 Linux AArch64
 on:
   push:
-    branches: [ "gh-build" ]
+    branches: ["gh-build"]
+    paths-ignore:
+      - ".gitignore"
+      - ".vscode/**"
+      - "**.md"
+      - "LICENSE-MIT.txt"
+      - "COPYING"
   pull_request:
-    branches: [ "gh-build" ]
+    branches: ["gh-build"]
+    paths-ignore:
+      - ".gitignore"
+      - ".vscode/**"
+      - "**.md"
+      - "LICENSE-MIT.txt"
+      - "COPYING"
 
 jobs:
   build-and-upload:

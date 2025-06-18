@@ -19,6 +19,6 @@ jobs:
     steps:
       - uses: vedantmgoyal9/winget-releaser@main
         with:
-          identifier:  RubyMetric.chsrc
+          identifier: RubyMetric.chsrc
           installers-regex: '\.exe$' # Only .exe files
           token: ${{ secrets.WINGET_TOKEN }}

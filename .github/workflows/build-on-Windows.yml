@@ -1,10 +1,11 @@
 # ---------------------------------------------------------------
 # Workflow File : build-on-Windows.yml
-# File Authors  :  Aoran Zeng <ccmywish@qq.com>
-# Contributors  :   Nul None  <nul@none.org>
+# File Authors  :  Aoran Zeng  <ccmywish@qq.com>
+# Contributors  :   Nul None   <nul@none.org>
+#               |  Mikachu2333 <mikachu.23333@zohomail.com>
 #               |
 # Created On    : <2023-09-14>
-# Last Modified : <2025-06-16>
+# Last Modified : <2025-06-18>
 #
 # Build chsrc on Windows and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
@@ -12,9 +13,21 @@
 name: 构建于 Windows
 on:
   push:
-    branches: [ "gh-build" ]
+    branches: ["gh-build"]
+    paths-ignore:
+      - ".gitignore"
+      - ".vscode/**"
+      - "**.md"
+      - "LICENSE-MIT.txt"
+      - "COPYING"
   pull_request:
-    branches: [ "gh-build" ]
+    branches: ["gh-build"]
+    paths-ignore:
+      - ".gitignore"
+      - ".vscode/**"
+      - "**.md"
+      - "LICENSE-MIT.txt"
+      - "COPYING"
 
 jobs:
   build-and-upload:
@@ -24,40 +37,39 @@ jobs:
         shell: msys2 {0}
 
     steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
 
-    - name: 检出代码
-      uses: actions/checkout@v4
+      - name: 安装 GCC
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: |
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-make
+            mingw-w64-i686-gcc
+            mingw-w64-i686-make
 
-    - name: 安装 GCC
-      uses: msys2/setup-msys2@v2
-      with:
-        msystem: UCRT64
-        update: true
-        install: |
-          mingw-w64-ucrt-x86_64-gcc
-          mingw-w64-ucrt-x86_64-make
-          mingw-w64-i686-gcc
-          mingw-w64-i686-make
+      - name: 为 x64 构建
+        run: |
+          mingw32-make.exe CI CI_ARTIFACT_NAME=chsrc-x64-windows
 
-    - name: 为 x64 构建
-      run: |
-        mingw32-make.exe CI CI_ARTIFACT_NAME=chsrc-x64-windows
+      - name: 为 x32 构建
+        env:
+          MSYSTEM: MINGW32
+        run: |
+          mingw32-make.exe CI CI_ARTIFACT_NAME=chsrc-x86-windows
 
-    - name: 为 x32 构建
-      env:
-        MSYSTEM: MINGW32
-      run: |
-        mingw32-make.exe CI CI_ARTIFACT_NAME=chsrc-x86-windows
+      - name: List files
+        run: ls *.exe
 
-    - name: List files
-      run: ls *.exe
-
-    - name: 上传至 'pre' release
-      uses: softprops/action-gh-release@v2
-      # if: startsWith(github.ref, 'refs/tags/')
-      with:
-        tag_name: pre
-        files: |
-          chsrc-x64-windows.exe
-          chsrc-x86-windows.exe
-        token: ${{ secrets.UPLOAD_TO_GITHUB }}
+      - name: 上传至 'pre' release
+        uses: softprops/action-gh-release@v2
+        # if: startsWith(github.ref, 'refs/tags/')
+        with:
+          tag_name: pre
+          files: |
+            chsrc-x64-windows.exe
+            chsrc-x86-windows.exe
+          token: ${{ secrets.UPLOAD_TO_GITHUB }}

@@ -4,7 +4,7 @@
 # Contributors  : Nul None <nul@none.org>
 #               |
 # Created On    : <2024-08-29>
-# Last Modified : <2025-03-18>
+# Last Modified : <2025-06-18>
 #
 # Publish package 'chsrc-git' to AUR when branch 'main' is updated.
 # ---------------------------------------------------------------
@@ -13,23 +13,23 @@ name: Publish 'chsrc-git' to AUR
 on:
   workflow_dispatch:
   push:
-    branches: [ "main" ] # chsrc-git syncs with main
+    branches: ["main"] # chsrc-git syncs with main
 
 jobs:
   publish:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Fetch PKGBUILD
-      run: |
-        wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD\?h\=chsrc-git -O ./PKGBUILD
-    - name: Publish to AUR
-      uses: KSXGitHub/github-actions-deploy-aur@v4.1.1
-      with:
-        pkgname: chsrc-git
-        pkgbuild: ./PKGBUILD
-        test: true # Check that PKGBUILD could be built, and update pkgver
-        commit_username: ${{ secrets.AUR_USERNAME }}
-        commit_email: ${{ secrets.AUR_EMAIL }}
-        ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
-        commit_message: "github-action-auto-publish\n${{ github.sha }}"
+      - name: Fetch PKGBUILD
+        run: |
+          wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD\?h\=chsrc-git -O ./PKGBUILD
+      - name: Publish to AUR
+        uses: KSXGitHub/github-actions-deploy-aur@v4.1.1
+        with:
+          pkgname: chsrc-git
+          pkgbuild: ./PKGBUILD
+          test: true # Check that PKGBUILD could be built, and update pkgver
+          commit_username: ${{ secrets.AUR_USERNAME }}
+          commit_email: ${{ secrets.AUR_EMAIL }}
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          commit_message: "github-action-auto-publish\n${{ github.sha }}"

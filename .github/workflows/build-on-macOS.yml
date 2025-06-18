@@ -1,10 +1,11 @@
 # ---------------------------------------------------------------
 # Workflow File : build-on-macOS.yml
-# File Authors  :  Aoran Zeng <ccmywish@qq.com>
-# Contributors  :   Nul None  <nul@none.org>
+# File Authors  :  Aoran Zeng  <ccmywish@qq.com>
+# Contributors  :   Nul None   <nul@none.org>
+#               |  Mikachu2333 <mikachu.23333@zohomail.com>
 #               |
 # Created On    : <2023-09-15>
-# Last Modified : <2025-06-16>
+# Last Modified : <2025-06-18>
 #
 # Build chsrc on macOS and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
@@ -12,54 +13,65 @@
 name: 构建于 macOS
 on:
   push:
-    branches: [ "gh-build" ]
+    branches: ["gh-build"]
+    paths-ignore:
+      - ".gitignore"
+      - ".vscode/**"
+      - "**.md"
+      - "LICENSE-MIT.txt"
+      - "COPYING"
   pull_request:
-    branches: [ "gh-build" ]
+    branches: ["gh-build"]
+    paths-ignore:
+      - ".gitignore"
+      - ".vscode/**"
+      - "**.md"
+      - "LICENSE-MIT.txt"
+      - "COPYING"
 
 jobs:
   build-and-upload-on-M1:
     runs-on: macos-latest
 
     steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
+      - name: 检出代码
+        uses: actions/checkout@v4
 
-    - name: 为 AArch64 构建
-      run: |
-        make CI CI_ARTIFACT_NAME=chsrc-aarch64-macos
+      - name: 为 AArch64 构建
+        run: |
+          make CI CI_ARTIFACT_NAME=chsrc-aarch64-macos
 
-    - name: List files
-      run: ls *-macos
+      - name: List files
+        run: ls *-macos
 
-    - name: 上传至 'pre' release
-      uses: softprops/action-gh-release@v2
-      # if: startsWith(github.ref, 'refs/tags/')
-      with:
-        tag_name: pre
-        files: |
-          chsrc-aarch64-macos
-        token: ${{ secrets.UPLOAD_TO_GITHUB }}
-
+      - name: 上传至 'pre' release
+        uses: softprops/action-gh-release@v2
+        # if: startsWith(github.ref, 'refs/tags/')
+        with:
+          tag_name: pre
+          files: |
+            chsrc-aarch64-macos
+          token: ${{ secrets.UPLOAD_TO_GITHUB }}
 
   build-and-upload-on-x64:
     runs-on: macos-13 # macos-14 is AArch64(ARMv8-A)
 
     steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
+      - name: 检出代码
+        uses: actions/checkout@v4
 
-    - name: 为 x64 构建
-      run: |
-        make CI CI_ARTIFACT_NAME=chsrc-x64-macos
+      - name: 为 x64 构建
+        run: |
+          make CI CI_ARTIFACT_NAME=chsrc-x64-macos
 
-    - name: List files
-      run: ls *-macos
+      - name: List files
+        run: ls *-macos
 
-    - name: 上传至 'pre' release
-      uses: softprops/action-gh-release@v2
-      # if: startsWith(github.ref, 'refs/tags/')
-      with:
-        tag_name: pre
-        files: |
-          chsrc-x64-macos
-        token: ${{ secrets.UPLOAD_TO_GITHUB }}
+      - name: 上传至 'pre' release
+        uses: softprops/action-gh-release@v2
+        # if: startsWith(github.ref, 'refs/tags/')
+        with:
+          tag_name: pre
+          files: |
+            chsrc-x64-macos
+          token: ${{ secrets.UPLOAD_TO_GITHUB }}
