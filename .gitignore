@@ -27,10 +27,10 @@ README.md.bak*
 # Generated when testing
 nul
 
-# Cygwin problem
-.chsrc_measure_tmp.sh
 
-# Texinfo
+##############################
+#          Texinfo
+##############################
 chsrc.aux
 chsrc.log
 chsrc.toc
