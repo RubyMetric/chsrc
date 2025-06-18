@@ -68,15 +68,13 @@
 
 </details>
 
-
 <details>
 <summary>镜像站可用性</summary>
 
-1. https://github.com/RubyMetric/chsrc/wiki
-2. https://github.com/RubyMetric/chsrc/discussions
+1. <https://github.com/RubyMetric/chsrc/wiki>
+2. <https://github.com/RubyMetric/chsrc/discussions>
 
 </details>
-
 
 <details>
 <summary>打包</summary>
@@ -118,7 +116,7 @@
 - 可通过 `scoop` 安装，感谢 [@Gn3po4g] 与 [@niheaven]
 
 ```bash
-$ scoop install chsrc
+scoop install chsrc
 ```
 
 <br>
@@ -126,7 +124,7 @@ $ scoop install chsrc
 - 可通过 `WinGet` 安装，感谢 [@YU-7]
 
 ```bash
-$ winget install RubyMetric.chsrc
+winget install RubyMetric.chsrc
 ```
 
 <br>
@@ -150,6 +148,7 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-windo
 # x86
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windows.exe -o chsrc.exe
 ```
+
 </details>
 
 <details>
@@ -223,7 +222,7 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-armv7-lin
 - 可通过 `homebrew` 安装，感谢 [@Aaron-212] 与 [@chenrui333]
 
 ```bash
-$ brew install chsrc
+brew install chsrc
 ```
 
 <br>
@@ -257,23 +256,26 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-aarch64-m
 # x64
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-macos -o chsrc; chmod +x ./chsrc
 ```
+
 </details>
 
 <details>
 <summary>BSD</summary>
 
 ```bash
-$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc
-$ clang -Iinclude -Ilib src/chsrc-main.c -o chsrc
+git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc
+clang -Iinclude -Ilib src/chsrc-main.c -o chsrc
 ```
+
 </details>
 
 <details>
 <summary>其他平台</summary>
 
 ```bash
-$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
+git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
 ```
+
 </details>
 
 <br>
@@ -450,17 +452,31 @@ chsrc set conda  | anaconda
 
 ## ❤️ 致谢
 
+### 镜像站
+
 感谢各个镜像站提供的优质免费镜像服务
+
 1. [mirror.c](./src/framework/mirror.c) 包含了通用的镜像站信息
 2. 各个recipe内部定义的专用镜像站
 
-另外特别感谢以下组织或项目:
+### 组织与项目
+
+感谢以下组织的支持与帮助！
 
 1. [MirrorZ 教育网镜像站](https://help.mirrors.cernet.edu.cn/)
 2. [清华大学 Tuna](https://mirrors.tuna.tsinghua.edu.cn/)
 3. [上海交通大学软件源镜像服务](https://mirrors.sjtug.sjtu.edu.cn/)
 4. [中国科学技术大学 Linux 用户协会](https://github.com/ustclug)
 5. [Thanks Mirror 项目](https://github.com/eryajf/Thanks-Mirror) by [@eryajf](https://github.com/eryajf)
+
+### 开发人员们
+
+<!-- readme: contributors -start -->
+<!-- readme: contributors -end -->
+
+### 其他
+
+[Issue #98 on GitHub](https://github.com/RubyMetric/chsrc/issues/98)
 
 <br>
 
@@ -471,18 +487,3 @@ chsrc set conda  | anaconda
 <img src="https://raw.githubusercontent.com/ccmywish/support-my-oss-work/main/wechat.png" alt="wechat-reward" style="width:300px;"/>
 
 <br>
-
-
-
-[@Aaron-212]:      https://github.com/Aaron-212
-[@chenrui333]:     https://github.com/chenrui333
-[@niheaven]:       https://github.com/niheaven
-[@Gn3po4g]:        https://github.com/Gn3po4g
-[@Jerry-Terrasse]: https://github.com/Jerry-Terrasse
-[@ccmywish]:       https://github.com/ccmywish
-[@Efterklang]:     https://github.com/Efterklang
-[@wickdynex]:      https://github.com/wickdynex
-[@YU-7]:           https://github.com/YU-7
-[@sanchuanhehe]:   https://github.com/sanchuanhehe
-
-[issue#98 on GitHub]: https://github.com/RubyMetric/chsrc/issues/98
