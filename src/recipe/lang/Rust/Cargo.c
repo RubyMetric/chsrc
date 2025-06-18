@@ -5,33 +5,40 @@
  * Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2025-06-17>
+ * Last Modified : <2025-06-18>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t pl_rust_cargo_upstream =
 {
   def_upstream, "https://crates.io/",
   {NotSkip, NA, NA, "https://crates.io/api/v1/crates/windows/0.58.0/download"}
+  /* 跳转为: https://static.crates.io/crates/windows/windows-0.58.0.crate */
 };
 
+// Ali:  https://mirrors.aliyun.com/crates/api/v1/crates/windows/0.58.0/download
+// Ustc: https://crates-io.proxy.ustclug.org/api/v1/crates/windows/0.58.0/download
+
 /**
- * @update 2025-06-17
+ * @update 2025-06-18
+ *
  * @note 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`
  * @note 链接末尾的 `/` 不能缺少
- * @note 经验证，南大的镜像同步失败，实际情况下多数packages不可用
- * @note 经验证，华中科大的镜像同步部分失败，较多常见packages不可用
+ *
+ * @note 2025-06-17: 经验证，南京大学、华中科大的镜像同步失败，实际情况下多数包都不可用
  */
 static Source_t pl_rust_cargo_sources[] =
 {
   {&pl_rust_cargo_upstream,  "https://github.com/rust-lang/crates.io-index/"},
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/crates.io-index/"},
+  {&RsProxyCN,     "https://rsproxy.cn/index/"},
+  {&Ali,           "https://mirrors.aliyun.com/crates.io-index/"},
   {&Zju,           "https://mirrors.zju.edu.cn/crates.io-index/"},
+  // {&Nju,           "https://mirror.nju.edu.cn/git/crates.io-index.git/"},
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/"},
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"},
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/"},
   {&Ustc,          "https://mirrors.ustc.edu.cn/crates.io-index/"},
-  {&RsProxyCN,     "https://rsproxy.cn/index/"},
-  {&Ali,           "https://mirrors.aliyun.com/crates.io-index/"},
+  // {&Hust,          "https://mirrors.hust.edu.cn/crates.io-index/"},
   {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/"}
 };
 def_sources_n(pl_rust_cargo);
