@@ -19,6 +19,23 @@
     },
     {
       "type": "shell",
+      "label": "构建 debug 版 chsrc",
+      "command": "just",
+      "args": ["DEBUG=1", "build"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "使用 just DEBUG=1 build 编译 debug 版"
+    },
+    {
+      "type": "shell",
       "label": "测试 chsrc",
       "command": "just",
       "args": ["test"],
