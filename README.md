@@ -39,11 +39,11 @@
 
 > [!TIP]
 > **`chsrc` 不仅是一个命令行工具，同时也是一个体现了 Ruby on Rails 思想的 MVC 换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。** [Write A Recipe Even If You Don't Know C](./doc/02-Write-A-Recipe-Even-If-You-Dont-Know-C.md)
-
+---
 > [!NOTE]
 > **`chsrc` 可换源 60+ 目标。每个人仅仅贡献和维护自己熟悉的部分，回报是得到其他所有领域专家的帮助**。欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献, 欢迎任何编程初学者参与贡献。[从开发到提交贡献，我们覆盖全流程文档](./doc/)
 ，另外作者可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)
-
+---
 > [!IMPORTANT]
 > [招募 recipe 维护者](https://github.com/RubyMetric/chsrc/issues/130)
 
@@ -68,15 +68,13 @@
 
 </details>
 
-
 <details>
 <summary>镜像站可用性</summary>
 
-1. https://github.com/RubyMetric/chsrc/wiki
-2. https://github.com/RubyMetric/chsrc/discussions
+1. <https://github.com/RubyMetric/chsrc/wiki>
+2. <https://github.com/RubyMetric/chsrc/discussions>
 
 </details>
-
 
 <details>
 <summary>打包</summary>
@@ -118,7 +116,7 @@
 - 可通过 `scoop` 安装，感谢 [@Gn3po4g] 与 [@niheaven]
 
 ```bash
-$ scoop install chsrc
+scoop install chsrc
 ```
 
 <br>
@@ -126,7 +124,7 @@ $ scoop install chsrc
 - 可通过 `WinGet` 安装，感谢 [@YU-7]
 
 ```bash
-$ winget install RubyMetric.chsrc
+winget install RubyMetric.chsrc
 ```
 
 <br>
@@ -150,6 +148,7 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-windo
 # x86
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windows.exe -o chsrc.exe
 ```
+
 </details>
 
 <details>
@@ -223,7 +222,7 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-armv7-lin
 - 可通过 `homebrew` 安装，感谢 [@Aaron-212] 与 [@chenrui333]
 
 ```bash
-$ brew install chsrc
+brew install chsrc
 ```
 
 <br>
@@ -257,23 +256,26 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-aarch64-m
 # x64
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-macos -o chsrc; chmod +x ./chsrc
 ```
+
 </details>
 
 <details>
 <summary>BSD</summary>
 
 ```bash
-$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc
-$ clang -Iinclude -Ilib src/chsrc-main.c -o chsrc
+git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc
+clang -Iinclude -Ilib src/chsrc-main.c -o chsrc
 ```
+
 </details>
 
 <details>
 <summary>其他平台</summary>
 
 ```bash
-$ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
+git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
 ```
+
 </details>
 
 <br>
@@ -451,6 +453,7 @@ chsrc set conda  | anaconda
 ## ❤️ 致谢
 
 感谢各个镜像站提供的优质免费镜像服务
+
 1. [mirror.c](./src/framework/mirror.c) 包含了通用的镜像站信息
 2. 各个recipe内部定义的专用镜像站
 
@@ -472,17 +475,12 @@ chsrc set conda  | anaconda
 
 <br>
 
-
-
 [@Aaron-212]:      https://github.com/Aaron-212
 [@chenrui333]:     https://github.com/chenrui333
 [@niheaven]:       https://github.com/niheaven
 [@Gn3po4g]:        https://github.com/Gn3po4g
 [@Jerry-Terrasse]: https://github.com/Jerry-Terrasse
-[@ccmywish]:       https://github.com/ccmywish
 [@Efterklang]:     https://github.com/Efterklang
 [@wickdynex]:      https://github.com/wickdynex
 [@YU-7]:           https://github.com/YU-7
 [@sanchuanhehe]:   https://github.com/sanchuanhehe
-
-[issue#98 on GitHub]: https://github.com/RubyMetric/chsrc/issues/98
