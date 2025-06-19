@@ -7,7 +7,7 @@
 # Contributors  :  Nul None  <nul@none.org>
 #								|
 # Created On    : <2025-06-18>
-# Last Modified : <2025-06-18>
+# Last Modified : <2025-06-19>
 #
 # just (build)
 # just debug
@@ -63,6 +63,9 @@ CFLAGS_only_promp_for_dev := CFLAGS_base + ' ' + CFLAGS_debug + CFLAGS_static + 
 
 #=======================
 
+BIN_xy := if os() == 'windows' {'xy.exe'} else {'./xy'}
+BIN_fw := if os() == 'windows' {'fw.exe'} else {'./fw'}
+#=======================
 alias b := build
 alias d := debug
 alias t := test
@@ -84,11 +87,11 @@ test: test-xy test-fw
 
 test-xy:
 	@{{CC}} test/xy.c {{CFLAGS}} -o xy
-	@./xy
+	@{{BIN_xy}}
 
 test-fw:
 	@{{CC}} test/fw.c {{CFLAGS}} -o fw
-	@./fw
+	@{{BIN_fw}}
 
 
 check: test
