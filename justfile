@@ -13,7 +13,8 @@
 # just debug
 # just test
 #
-# just DEBUG=1 # 编译出 debug 版
+# just STATIC=1 # 静态链接
+# just DEBUG=1  # 编译出 debug 版
 # --------------------------------------------------------------
 
 set windows-shell := ['cmd', '/c']
@@ -49,11 +50,13 @@ Target-Name := if DEBUG != '0' {
 CI := '0'
 CI_ARTIFACT_NAME := 'chsrc'
 
+STATIC := '0'
+
 # 在 GitHub Actions 时的 Linux 环境下，just CI=1 时触发
-CFLAGS_static := if os() == 'linux' {
-  if CI == '0' {
-    "-static"
-  } else {''}
+CFLAGS_static := if STATIC == '1' {
+	"-static"
+} else if os() == 'linux' {
+	if CI == '1' {"-static"} else {''}
 } else {''}
 
 
