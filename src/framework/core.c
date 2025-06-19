@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-06-18>
+ * Last Modified : <2025-06-19>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -1123,6 +1123,56 @@ chsrc_run_as_a_service (const char *cmd)
     chsrc_run (cmd, run_option);
   ProgMode_Run_as_a_Service = false;
 }
+
+static void
+chsrc_view_env (const char *var1, ...)
+{
+  char *cmd = NULL;
+  const char *var = var1;
+
+  va_list vars;
+  va_start (vars, var1);
+
+  bool first = true;
+  while (var)
+    {
+#ifdef XY_On_Windows
+      if (first)
+        {
+          cmd = xy_strjoin (3, "set ", var, " ");
+          first = false;
+        }
+      else
+        {
+          cmd = xy_strjoin (4, cmd, "& set ", var, " ");
+        }
+#else
+      if (first)
+        {
+          cmd = xy_strjoin (3, "echo $", var, " ");
+          first = false;
+        }
+      else
+        {
+          cmd = xy_strjoin (4, cmd, "; echo $", var, " ");
+        }
+#endif
+      var = va_arg (vars, const char *);
+    }
+
+  va_end (vars);
+
+  if (var1)
+    {
+      chsrc_run (cmd, RunOpt_Dont_Notify_On_Success|RunOpt_No_Last_New_Line);
+    }
+  else
+    {
+      /* 必须给一个参数 */
+      xy_unreached();
+    }
+}
+
 
 static void
 chsrc_view_file (const char *path)
