@@ -1,0 +1,62 @@
+# ---------------------------------------------------------------
+# Workflow File : test-PR.yml
+# File Authors  : Aoran Zeng <ccmywish@qq.com>
+# Contributors  :  Nul None  <nul@none.org>
+#               |
+# Created On    : <2025-06-19>
+# Last Modified : <2025-06-19>
+#
+# Test PR
+# ---------------------------------------------------------------
+
+name: 测试PR
+
+on:
+  pull_request:
+    types: [opened,
+            synchronize,      # 后续提交
+            ready_for_review, # draft PR 转为正式 PR
+            review_requested,
+            reopened]
+    paths:
+      - "src/**"
+      - "lib/**"
+
+jobs:
+  test-on-ubuntu:
+    name: 在Ubuntu上测试
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.base.ref == 'dev'
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 测试构建情况
+        run: |
+          make
+
+      - name: 测试test情况
+        run: |
+          make test
+
+  test-on-windows:
+    name: 在Windows上测试
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.base.ref == 'dev'
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装依赖
+        run: |
+          choco install just
+
+      - name: 测试构建情况
+        run: |
+          just
+
+      - name: 测试test情况
+        run: |
+          just test
