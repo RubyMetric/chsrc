@@ -4,7 +4,7 @@
 # Contributors  : Nul None <nul@none.org>
 #               |
 # Created On    : <2024-08-29>
-# Last Modified : <2025-03-18>
+# Last Modified : <2025-06-19>
 #
 # Publish package 'chsrc-git' to AUR when branch 'main' is updated.
 # ---------------------------------------------------------------
@@ -14,6 +14,9 @@ on:
   workflow_dispatch:
   push:
     branches: [ "main" ] # chsrc-git syncs with main
+    paths:
+      - "src/**"
+      - "lib/**"
 
 jobs:
   publish:

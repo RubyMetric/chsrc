@@ -4,7 +4,7 @@
 # Contributors  :   Nul None  <nul@none.org>
 #               |
 # Created On    : <2023-09-14>
-# Last Modified : <2025-06-16>
+# Last Modified : <2025-06-19>
 #
 # Build chsrc on Linux (x64) and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
@@ -12,8 +12,6 @@
 name: 构建于 Linux x64
 on:
   push:
-    branches: [ "gh-build" ]
-  pull_request:
     branches: [ "gh-build" ]
 
 jobs:
