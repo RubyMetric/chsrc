@@ -30,7 +30,7 @@
       ],
       "group": {
         "kind": "build",
-        "isDefault": true
+        "isDefault": false
       },
       "detail": "使用 just DEBUG=1 build 编译 debug 版"
     },
