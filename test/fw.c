@@ -5,7 +5,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2024-12-14>
- * Last Modified : <2024-12-14>
+ * Last Modified : <2025-06-19>
  * ------------------------------------------------------------*/
 
 #define Chsrc_Version "Frameworker"
@@ -69,7 +69,14 @@ main (int argc, char const *argv[])
   printf ("chsrc: CPU cores = ");
   puti (chsrc_get_cpucore ());
 
-  chsrc_run ("rm " bkup, RunOpt_No_Last_New_Line);
+  if (xy_on_windows)
+    {
+      chsrc_run ("del " bkup, RunOpt_No_Last_New_Line);
+    }
+  else
+    {
+      chsrc_run ("rm " bkup, RunOpt_No_Last_New_Line);
+    }
   chsrc_run ("echo " Chsrc_Version " test pass!", RunOpt_Dont_Notify_On_Success);
   return 0;
 }
