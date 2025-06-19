@@ -7,13 +7,18 @@
 # Contributors  :  Nul None  <nul@none.org>
 #								|
 # Created On    : <2025-06-18>
-# Last Modified : <2025-06-18>
+# Last Modified : <2025-06-19>
 #
 # just (build)
 # just debug
 # just test
+# just clean
 #
-# just DEBUG=1 # 编译出 debug 版
+# just STATIC=1 # 静态链接
+# just DEBUG=1  # 编译出 debug 版
+#
+# 该文件主要用于在原生Windows上执行项目的基本任务，而不借助于
+# GNU make 以及相应的 MSYS2、Cygwin 环境
 # --------------------------------------------------------------
 
 set windows-shell := ['cmd', '/c']
@@ -49,11 +54,13 @@ Target-Name := if DEBUG != '0' {
 CI := '0'
 CI_ARTIFACT_NAME := 'chsrc'
 
+STATIC := '0'
+
 # 在 GitHub Actions 时的 Linux 环境下，just CI=1 时触发
-CFLAGS_static := if os() == 'linux' {
-  if CI == '0' {
-    "-static"
-  } else {''}
+CFLAGS_static := if STATIC == '1' {
+	"-static"
+} else if os() == 'linux' {
+	if CI == '1' {"-static"} else {''}
 } else {''}
 
 
@@ -63,6 +70,10 @@ CFLAGS_only_promp_for_dev := CFLAGS_base + ' ' + CFLAGS_debug + CFLAGS_static + 
 
 #=======================
 
+BIN_xy := if os() == 'windows' {'xy.exe'} else {'./xy'}
+BIN_fw := if os() == 'windows' {'fw.exe'} else {'./fw'}
+BIN_rm := if os() == 'windows' {'del'}    else {'rm'}
+#=======================
 alias b := build
 alias d := debug
 alias t := test
@@ -84,11 +95,11 @@ test: test-xy test-fw
 
 test-xy:
 	@{{CC}} test/xy.c {{CFLAGS}} -o xy
-	@./xy
+	@{{BIN_xy}}
 
 test-fw:
 	@{{CC}} test/fw.c {{CFLAGS}} -o fw
-	@./fw
+	@{{BIN_fw}}
 
 
 check: test
@@ -100,8 +111,8 @@ test-cli:
 	@perl ./test/cli.pl
 
 clean:
-	-@rm *.exe  2>/dev/null
-	-@rm xy     2>/dev/null
-	-@rm fw     2>/dev/null
-	-@rm chsrc  2>/dev/null
-	-@rm README.md.bak* 2>/dev/null
+	-@{{BIN_rm}} *.exe
+	-@{{BIN_rm}} xy
+	-@{{BIN_rm}} fw
+	-@{{BIN_rm}} chsrc
+	-@{{BIN_rm}} README.md.bak*

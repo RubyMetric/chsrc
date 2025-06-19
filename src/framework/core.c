@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-06-18>
+ * Last Modified : <2025-06-19>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -1123,6 +1123,62 @@ chsrc_run_as_a_service (const char *cmd)
     chsrc_run (cmd, run_option);
   ProgMode_Run_as_a_Service = false;
 }
+
+static void
+chsrc_view_env (const char *var1, ...)
+{
+  char *cmd = NULL;
+  const char *var = var1;
+
+  va_list vars;
+  va_start (vars, var1);
+
+  bool first = true;
+  while (var)
+    {
+#ifdef XY_On_Windows
+      if (first)
+        {
+          cmd = xy_strjoin (3, "set ", var, " ");
+          first = false;
+        }
+      else
+        {
+          cmd = xy_strjoin (4, cmd, "& set ", var, " ");
+        }
+#else
+      if (first)
+        {
+          cmd = xy_strjoin (5, "echo ", var, "=$", var, " ");
+          first = false;
+        }
+      else
+        {
+          cmd = xy_strjoin (6, cmd, "; echo ", var, "=$", var, " ");
+        }
+#endif
+      var = va_arg (vars, const char *);
+    }
+
+  va_end (vars);
+
+  if (var1)
+    {
+      /**
+       * 不用 chsrc_run()，因为在Windows上，set在遇到环境变量未定义时会返回非0，导致 chsrc_run() 报告运行失败
+       * 这个错误过于醒目。我们应该像在 sh 一样，默默地没有输出即可，而不是报错
+       */
+      // chsrc_run (cmd, RunOpt_Dont_Notify_On_Success|RunOpt_No_Last_New_Line|RunOpt_Dont_Abort_On_Failure);
+      int status = system (cmd);
+      if (status!=0) {/* NOOP */}
+    }
+  else
+    {
+      /* 必须给一个参数 */
+      xy_unreached();
+    }
+}
+
 
 static void
 chsrc_view_file (const char *path)

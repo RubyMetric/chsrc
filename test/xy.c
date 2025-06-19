@@ -6,7 +6,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2024-12-14>
+ * Last Modified : <2025-06-19>
  *
  * Test xy.h
  * ------------------------------------------------------------*/
@@ -95,7 +95,14 @@ main (int argc, char const *argv[])
     }
   else
     {
-      // assert (xy_file_exist ("~/.bashrc")); //TODO:debbuild会创建虚拟的home环境,待解决
+      /**
+       * debuild 过程会创建虚拟的 HOME 环境，导致检查 .bashrc 的测试会失败，所以我们先检查一下 .profile
+       * 如果没有，则大概率也没有 .bashrc
+       */
+      if (xy_file_exist ("~/.profile"))
+        {
+          assert (xy_file_exist (xy_bashrc));
+        }
       assert (xy_dir_exist ("/etc"));
     }
 

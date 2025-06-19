@@ -485,5 +485,4 @@ chsrc set conda  | anaconda
 你是否因为使用 `chsrc` 而节省了时间和精力 or whatever?
 
 <img src="https://raw.githubusercontent.com/ccmywish/support-my-oss-work/main/wechat.png" alt="wechat-reward" style="width:300px;"/>
-
-<br>
+  

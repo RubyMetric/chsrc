@@ -7,7 +7,7 @@
  *                |
  * Created On     : <2023-09-10>
  * Major Revision :      3
- * Last Modified  : <2025-04-15>
+ * Last Modified  : <2025-06-19>
  *
  * Dart Pub 软件仓库
  * ------------------------------------------------------------*/
@@ -35,18 +35,7 @@ def_sources_n(pl_dart);
 void
 pl_dart_getsrc (char *option)
 {
-  char *cmd = NULL;
-  if (xy_on_windows)
-    {
-      // cmd = "set PUB_HOSTED_URL & set FLUTTER_STORAGE_BASE_URL";
-      cmd = "set PUB_HOSTED_URL";
-      chsrc_run (cmd, RunOpt_Default);
-    }
-  else
-    {
-      cmd = "echo $PUB_HOSTED_URL";
-      chsrc_run (cmd, RunOpt_Default);
-    }
+  chsrc_view_env ("PUB_HOSTED_URL", NULL);
 }
 
 /**

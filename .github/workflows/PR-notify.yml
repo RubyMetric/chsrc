@@ -1,0 +1,50 @@
+# ---------------------------------------------------------------
+# Workflow File : PR-notify.yml
+# File Authors  : Aoran Zeng <ccmywish@qq.com>
+# Contributors  :  Nul None  <nul@none.org>
+#               |
+# Created On    : <2025-06-19>
+# Last Modified : <2025-06-19>
+#
+# Notify PR
+# ---------------------------------------------------------------
+
+name: 告知PR者
+
+on:
+  pull_request_target:
+    types: [opened,
+            ready_for_review, # draft PR 转为正式 PR
+            review_requested,
+            reopened]
+
+jobs:
+  enforce-dev-branch:
+    name: 强制使用dev分支
+    runs-on: ubuntu-latest
+    if: github.event.pull_request_target.base.ref != 'dev'
+    steps:
+      - name: 评论
+        uses: thollander/actions-comment-pull-request@v3
+        with:
+          message: |
+            ❤️ 感谢你的贡献！但请修改使用 dev 分支！
+          comment_includes: "❤️ 感谢你的贡献！"
+      - run: |
+          echo "::error::❌ Pull Request 必须以 dev 分支为目标！当前是 ${GITHUB_BASE_REF}"
+          exit 1
+
+  welcome:
+    name: 欢迎PR者
+    runs-on: ubuntu-latest
+    if: github.event.pull_request_target.base.ref == 'dev'
+    steps:
+      - name: 评论
+        if: github.event.pull_request.type == 'opened'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ❤️ 感谢你的贡献！我们将在5天内阅读该PR并回复你
+          edit-mode: replace
+          reactions: heart
