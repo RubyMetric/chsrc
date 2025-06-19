@@ -12,9 +12,13 @@
 # just (build)
 # just debug
 # just test
+# just clean
 #
 # just STATIC=1 # 静态链接
 # just DEBUG=1  # 编译出 debug 版
+#
+# 该文件主要用于在原生Windows上执行项目的基本任务，而不借助于
+# GNU make 以及相应的 MSYS2、Cygwin 环境
 # --------------------------------------------------------------
 
 set windows-shell := ['cmd', '/c']
@@ -68,6 +72,7 @@ CFLAGS_only_promp_for_dev := CFLAGS_base + ' ' + CFLAGS_debug + CFLAGS_static + 
 
 BIN_xy := if os() == 'windows' {'xy.exe'} else {'./xy'}
 BIN_fw := if os() == 'windows' {'fw.exe'} else {'./fw'}
+BIN_rm := if os() == 'windows' {'del'}    else {'rm'}
 #=======================
 alias b := build
 alias d := debug
@@ -106,8 +111,8 @@ test-cli:
 	@perl ./test/cli.pl
 
 clean:
-	-@rm *.exe  2>/dev/null
-	-@rm xy     2>/dev/null
-	-@rm fw     2>/dev/null
-	-@rm chsrc  2>/dev/null
-	-@rm README.md.bak* 2>/dev/null
+	-@{{BIN_rm}} *.exe
+	-@{{BIN_rm}} xy
+	-@{{BIN_rm}} fw
+	-@{{BIN_rm}} chsrc
+	-@{{BIN_rm}} README.md.bak*
