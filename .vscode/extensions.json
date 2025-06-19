@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "ms-vscode.cpptools",
+        "editorconfig.editorconfig",
+        "redhat.vscode-yaml",
+        "nefrob.vscode-just-syntax"
+    ],
+    "unwantedRecommendations": [
+        "esbenp.prettier-vscode"
+    ]
+}
