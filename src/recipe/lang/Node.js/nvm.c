@@ -5,7 +5,7 @@
  * Contributors  :  Nul None   <nul@none.org>
  *               |
  * Created On    : <2024-09-23>
- * Last Modified : <2025-06-16>
+ * Last Modified : <2025-06-19>
  * ------------------------------------------------------------*/
 
 /**
@@ -14,8 +14,7 @@
 void
 pl_nodejs_nvm_getsrc (char *option)
 {
-  char *cmd = "echo $NVM_NODEJS_ORG_MIRROR";
-  chsrc_run (cmd, RunOpt_Dont_Notify_On_Success|RunOpt_No_Last_New_Line);
+  chsrc_view_env ("NVM_NODEJS_ORG_MIRROR", NULL);
 }
 
 

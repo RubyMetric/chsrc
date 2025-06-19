@@ -7,7 +7,7 @@
  *                |
  * Created On     : <2023-09-10>
  * Major Revision :      2
- * Last Modified  : <2025-04-15>
+ * Last Modified  : <2025-06-19>
  *
  * 2024-09-14: 不得不将Dart和Flutter拆分为两个Target，
  *             因为3家教育网镜像站给出的 Dart 和 Flutter 换源URL模式都不一样
@@ -39,18 +39,7 @@ def_sources_n(pl_dart_flutter);
 void
 pl_dart_flutter_getsrc (char *option)
 {
-  char *cmd = NULL;
-  if (xy_on_windows)
-    {
-      // cmd = "set PUB_HOSTED_URL & set FLUTTER_STORAGE_BASE_URL";
-      cmd = "set FLUTTER_STORAGE_BASE_URL";
-      chsrc_run (cmd, RunOpt_No_Last_New_Line);
-    }
-  else
-    {
-      cmd = "echo $FLUTTER_STORAGE_BASE_URL";
-      chsrc_run (cmd, RunOpt_No_Last_New_Line);
-    }
+  chsrc_view_env ("FLUTTER_STORAGE_BASE_URL", NULL);
 }
 
 

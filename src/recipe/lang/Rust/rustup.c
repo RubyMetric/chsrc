@@ -1,12 +1,12 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  :  Aoran Zeng     <ccmywish@qq.com>
- * Contributors  :   Yangmoooo     <yangmoooo@outlook.com>
- *               |  Mikachu2333    <mikachu.23333@zohomail.com>
+ * File Authors  :  Aoran Zeng  <ccmywish@qq.com>
+ * Contributors  :   Yangmoooo  <yangmoooo@outlook.com>
+ *               |  Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2024-10-02>
- * Last Modified : <2025-06-17>
+ * Last Modified : <2025-06-19>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t pl_rust_binary_upstream =
@@ -38,10 +38,7 @@ def_sources_n(pl_rust_rustup);
 void
 pl_rust_rustup_getsrc (char *option)
 {
-  char *cmd = "echo $RUSTUP_UPDATE_ROOT; "
-              "echo $RUSTUP_DIST_SERVER;";
-
-  chsrc_run (cmd, RunOpt_Dont_Notify_On_Success|RunOpt_No_Last_New_Line);
+  chsrc_view_env ("RUSTUP_UPDATE_ROOT", "RUSTUP_DIST_SERVER", NULL);
 }
 
 
