@@ -17,6 +17,7 @@
 
 # target exe name
 chsrc
+chsrc-debug
 
 # test files
 xy

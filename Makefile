@@ -8,7 +8,7 @@
 #								| sanchuanhehe <wyihe5520@gmail.com>
 #								|
 # Created On    : <2023-08-28>
-# Last Modified : <2025-06-16>
+# Last Modified : <2025-06-19>
 # --------------------------------------------------------------
 
 On-Linux = 0
@@ -39,16 +39,19 @@ override WARN += -Wall -Wextra -Wno-unused-variable -Wno-unused-function -Wno-mi
 	-Wno-missing-field-initializers -Wno-unused-parameter -Wno-sign-compare
 _C_Warning_Flags := $(WARN)
 
+Target-Name = chsrc
+
+Debuggable-Target-Name = chsrc-debug
+
 ifdef DEBUG
 	CFLAGS += -g
+	Target-Name = $(Debuggable-Target-Name)
 endif
 
 DEBUGGER = gdb
 
 STATIC = 0
 #=======================
-
-Target-Name = chsrc
 
 # 由 GitHub Actions 在调用时修改
 CI_ARTIFACT_NAME = chsrc
@@ -76,8 +79,9 @@ CI: all
 
 
 debug: CFLAGS += -g
+debug: Target-Name = $(Debuggable-Target-Name)
 debug: all
-	@$(DEBUGGER) ./chsrc
+	@$(DEBUGGER) $(Debuggable-Target-Name)
 
 test: test-make-env test-xy test-fw
 
