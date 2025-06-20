@@ -5,7 +5,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2024-12-14>
- * Last Modified : <2025-06-19>
+ * Last Modified : <2025-06-20>
  * ------------------------------------------------------------*/
 
 #define Chsrc_Version "Frameworker"
@@ -66,8 +66,8 @@ main (int argc, char const *argv[])
   chsrc_view_file (bkup);
 
   chsrc_log (xy_2strjoin ("CPU arch = ", chsrc_get_cpuarch ()));
-  printf ("chsrc: CPU cores = ");
-  puti (chsrc_get_cpucore ());
+  print ("chsrc: CPU cores = ");
+  println (chsrc_get_cpucore ());
 
   if (xy_on_windows)
     {

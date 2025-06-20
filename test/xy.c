@@ -18,11 +18,11 @@ main (int argc, char const *argv[])
 {
   xy_useutf8 ();
 
-  puts (xy_os_depend_str ("Hello, Windows!", "Hello, Unix!"));
+  println (xy_os_depend_str ("Hello, Windows!", "Hello, Unix!"));
 
-  puti (3);
+  println (3);
   double dbl = 3.1415;
-  putf (dbl);
+  println (dbl);
   say (xy_2strjoin ("Xi", "'an"));
   say (xy_strjoin  (2, "Xi", "'an"));
   say (xy_strjoin  (3, "屈身守分，", "以待天时，", "不可与命争也"));

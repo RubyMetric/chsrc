@@ -86,16 +86,6 @@ bool xy_enable_color = true;
   #define xy_useutf8()
 #endif
 
-XY_Deprecate_This("Not use anymore")
-void putf (double n)         { printf ("%f\n", n);   }
-XY_Deprecate_This("Not use anymore")
-void puti (long long n)      { printf ("%lld\n", n); }
-XY_Deprecate_This("Not use anymore")
-void putb (bool n)           {  }
-
-void br ()                   { puts (""); }
-void p (const char *s)       { printf ("%s\n", s); }
-
 #define assert_str(a, b) assert (xy_streql ((a), (b)))
 
 #define xy_unsupported()    assert(!"Unsuppoted")
@@ -145,6 +135,8 @@ static void _xy_println_const_str (const char *str) {printf ("%s\n", str);}
 )(x)
 #define say println
 
+void br ()                   { puts (""); }
+void p (const char *s)       { printf ("%s\n", s); }
 
 #define xy_arylen(x) (sizeof (x) / sizeof (x[0]))
 
