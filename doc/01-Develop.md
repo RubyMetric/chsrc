@@ -86,7 +86,7 @@ make clean
 ### 编译运行
 
 ```bash
-just          # 在Windows上默认使用 gcc 编译，在Linux上默认使用cc编译
+just          # 在Windows上默认使用 gcc 编译，在macOS上默认使用 clang 编译，在其他系统上默认使用 cc 编译
 just CC=clang # 使用 clang 编译
 just CC=gcc   # 使用 gcc   编译
 ```

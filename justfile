@@ -7,7 +7,7 @@
 # Contributors  :  Nul None  <nul@none.org>
 #								|
 # Created On    : <2025-06-18>
-# Last Modified : <2025-06-19>
+# Last Modified : <2025-06-20>
 #
 # just (build)
 # just debug
@@ -23,7 +23,14 @@
 
 set windows-shell := ['cmd', '/c']
 
-CC := 'gcc'
+CC := if os() == 'windows' {
+	"gcc"
+} else if os() == 'macos' {
+	"clang"
+} else {
+	"cc"
+}
+
 DEBUGGER := 'gdb'
 
 CFLAGS_base := '-Iinclude -Ilib'
