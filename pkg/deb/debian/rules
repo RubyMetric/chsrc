@@ -8,7 +8,7 @@
 # Contributors  :   Nil Null   <nil@null.org>
 #								|
 # Created On    : <2025-06-14>
-# Last Modified : <2025-06-15>
+# Last Modified : <2025-06-20>
 #
 # 该文件是 Makefile 格式
 # --------------------------------------------------------------
@@ -43,7 +43,7 @@ Chsrc-Root-Dir = $(CURDIR)/../../
 
 override_dh_auto_build:
 # 切换到 chsrc 根目录
-	@$(MAKE) -C $(Chsrc-Root-Dir) all
+	@$(MAKE) -C $(Chsrc-Root-Dir) build-in-release-mode
 
 override_dh_auto_install:
 	@$(MAKE) -C $(Chsrc-Root-Dir) install DESTDIR=$(CURDIR)/debian/chsrc

@@ -200,8 +200,10 @@ build-deb:
 clean-deb:
 	@$(MAKE) -C pkg/deb deb-clean
 
-install: build-in-release-mode
+install: $(ReleaseMode-Target-Name)
 	install -D -m 755 $(ReleaseMode-Target-Name) $(DESTDIR)/usr/bin/chsrc
 	install -D -m 644 doc/chsrc.1 $(DESTDIR)/usr/share/man/man1/chsrc.1
 
-.PHONY: all build build-in-dev-mode build-in-debug-mode build-in-release-mode build-in-ci-release-mode debug check test test-make-env test-xy test-fw fastcheck test-cli clean install build-deb clean-deb
+.PHONY: all b build bd br bcir d t check c \
+	build-in-dev-mode build-in-debug-mode build-in-release-mode build-in-ci-release-mode \
+	debug test test-make-env test-xy test-fw fastcheck test-cli clean install build-deb clean-deb
