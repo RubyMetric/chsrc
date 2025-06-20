@@ -22,6 +22,13 @@
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/main/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/main/lib/xy.h"
 
+#if defined(__STDC__) && __STDC_VERSION__ < 201112L
+#   error "xy.h requires C11 or later, please use a new compiler which at least supports C11"
+#endif
+
+#if defined(__STDC__) && __STDC_VERSION__ < 201710L
+#   warning "xy.h recommends a C17 or later compiler"
+#endif
 
 #include <assert.h>
 #include <stdarg.h>
