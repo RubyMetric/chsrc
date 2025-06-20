@@ -15,9 +15,10 @@
 *.out
 *.exe
 
-# target exe name
+# Built executables
 chsrc
 chsrc-debug
+chsrc-release
 
 # test files
 xy

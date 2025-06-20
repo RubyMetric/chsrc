@@ -142,4 +142,6 @@ clean:
 	-@{{BIN_rm}} xy
 	-@{{BIN_rm}} fw
 	-@{{BIN_rm}} chsrc
+	-@{{BIN_rm}} chsrc-debug
+	-@{{BIN_rm}} chsrc-release
 	-@{{BIN_rm}} README.md.bak*
