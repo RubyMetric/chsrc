@@ -8,7 +8,7 @@
  * Contributors  :   juzeon   <skyjuzheng@gmail.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2024-12-14>
+ * Last Modified : <2025-06-20>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C utilities for CLI applications in Ruby flavor
@@ -17,8 +17,10 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version      "v0.1.4.4-2024/12/14"
-#define _XY_Maintain_URL "https://gitee.com/RubyMetric/chsrc/blob/main/include/xy.h"
+#define _XY_Version       "v0.1.5.0-2025/06/20"
+#define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/main/lib/xy.h"
+#define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/main/lib/xy.h"
+
 
 #include <assert.h>
 #include <stdarg.h>
@@ -643,6 +645,41 @@ static char *
 xy_run (const char *cmd, unsigned long n)
 {
   return xy_run_iter (cmd, n, NULL);
+}
+
+
+
+
+/******************************************************
+ *                      cross OS
+ ******************************************************/
+
+ /**
+ * 该函数同 just 中的 os_family()，只区分 windows, unix
+ *
+ * @return 返回 "windows" 或 "unix"
+ */
+#define xy_os_family _xy_os_family ()
+static char *
+_xy_os_family ()
+{
+  if (xy_on_windows)
+    return "windows";
+  else
+    return "unix";
+}
+
+
+/**
+ * 该函数返回所在 os family 的对应字符串
+ */
+static const char *
+xy_os_depend_str (const char *str_for_win, const char *str_for_unix)
+{
+  if (xy_on_windows)
+    return str_for_win;
+  else
+    return str_for_unix;
 }
 
 

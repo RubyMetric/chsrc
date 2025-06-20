@@ -6,7 +6,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2025-06-19>
+ * Last Modified : <2025-06-20>
  *
  * Test xy.h
  * ------------------------------------------------------------*/
@@ -17,6 +17,9 @@ int
 main (int argc, char const *argv[])
 {
   xy_useutf8 ();
+
+  puts (xy_os_depend_str ("Hello, Windows!", "Hello, Unix!"));
+
   puti (3);
   double dbl = 3.1415;
   putf (dbl);
