@@ -17,3 +17,7 @@ indent_style = tab
 
 [*.md]
 trim_trailing_whitespace = true
+
+# 使用 VS Code 生成文件的默认格式
+[*.json]
+indent_size = 4
