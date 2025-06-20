@@ -4,7 +4,7 @@
 # Contributors  :   Nul None  <nul@none.org>
 #               |
 # Created On    : <2023-09-15>
-# Last Modified : <2025-06-19>
+# Last Modified : <2025-06-20>
 #
 # Build chsrc on macOS and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
@@ -15,16 +15,17 @@ on:
     branches: [ "gh-build" ]
 
 jobs:
-  build-and-upload-on-M1:
+  on-arm64:
     runs-on: macos-latest
 
     steps:
     - name: 检出代码
       uses: actions/checkout@v4
 
-    - name: 为 AArch64 构建
+    - name: 为 arm64 (AArch64) 构建
       run: |
-        make CI CI_ARTIFACT_NAME=chsrc-aarch64-macos
+        make build-in-ci-release-mode
+        mv chsrc-ci-release chsrc-aarch64-macos
 
     - name: List files
       run: ls *-macos
@@ -39,7 +40,7 @@ jobs:
         token: ${{ secrets.UPLOAD_TO_GITHUB }}
 
 
-  build-and-upload-on-x64:
+  on-x64:
     runs-on: macos-13 # macos-14 is AArch64(ARMv8-A)
 
     steps:
@@ -48,7 +49,8 @@ jobs:
 
     - name: 为 x64 构建
       run: |
-        make CI CI_ARTIFACT_NAME=chsrc-x64-macos
+        make build-in-ci-release-mode
+        mv chsrc-ci-release chsrc-x64-macos
 
     - name: List files
       run: ls *-macos

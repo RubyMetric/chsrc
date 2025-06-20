@@ -4,7 +4,7 @@
 # Contributors  :   Nul None  <nul@none.org>
 #               |
 # Created On    : <2023-09-14>
-# Last Modified : <2025-06-19>
+# Last Modified : <2025-06-20>
 #
 # Build chsrc on Linux (x64) and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
@@ -24,7 +24,8 @@ jobs:
 
     - name: 构建
       run: |
-        make CI CI_ARTIFACT_NAME=chsrc-x64-linux
+        make build-in-ci-release-mode
+        mv chsrc-ci-release chsrc-x64-linux
 
     - name: List files
       run: ls *-linux
