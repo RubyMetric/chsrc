@@ -2,13 +2,13 @@
 # --------------------------------------------------------------
 # SPDX-License-Identifier: GPL-3.0-or-later
 # --------------------------------------------------------------
-# Build File    : Makefile
+# Build File    :   Makefile
 # File Authors  :  Aoran Zeng  <ccmywish@qq.com>
 # Contributors  :  Yangmoooo   <yangmoooo@outlook.com>
 #								| sanchuanhehe <wyihe5520@gmail.com>
 #								|
 # Created On    : <2023-08-28>
-# Last Modified : <2025-06-19>
+# Last Modified : <2025-06-20>
 # --------------------------------------------------------------
 
 On-Linux = 0
@@ -63,24 +63,25 @@ ifeq ($(MAKECMDGOALS), CI)
 endif
 #=======================
 
+all: build
 
-all:
+build:
 ifeq ($(STATIC), 1)
 CFLAGS += -static
 endif
 
-all:
+build:
 	@echo "Starting: Compile chsrc executable"
 	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(Target-Name)
 	@echo Finished: Compile chsrc executable using \'$(CC)\' $(CFLAGS)
 
-CI: all
+CI: build
 	@mv $(Target-Name) $(CI_ARTIFACT_NAME)
 
 
 debug: CFLAGS += -g
 debug: Target-Name = $(Debuggable-Target-Name)
-debug: all
+debug: build
 	@$(DEBUGGER) $(Debuggable-Target-Name)
 
 test: test-make-env test-xy test-fw
@@ -140,4 +141,4 @@ install: $(Target-Name)
 	install -D -m 755 $(Target-Name) $(DESTDIR)/usr/bin/$(Target-Name)
 	install -D -m 644 doc/chsrc.1 $(DESTDIR)/usr/share/man/man1/chsrc.1
 
-.PHONY: all CI debug check test test-make-env test-xy test-fw fastcheck test-cli clean install build-deb clean-deb
+.PHONY: all build CI debug check test test-make-env test-xy test-fw fastcheck test-cli clean install build-deb clean-deb
