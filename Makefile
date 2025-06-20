@@ -44,6 +44,7 @@ Target-Name = chsrc
 DevMode-Target-Name = chsrc
 DebugMode-Target-Name = chsrc-debug
 ReleaseMode-Target-Name = chsrc-release
+CIReleaseMode-Target-Name = chsrc-ci-release
 
 CFLAGS_debug  = -g -DXY_DEBUG
 CFLAGS_static = -static
@@ -51,30 +52,43 @@ CFLAGS_optimization = -O2
 
 ifdef DEBUG
 	CFLAGS += $(CFLAGS_debug)
-	Target-Name = $(DebugMode-Target-Name)
 endif
 
 DEBUGGER = gdb
 
 STATIC = 0
 
-# 由 GitHub Actions 在调用时修改
-CI_ARTIFACT_NAME = chsrc
-
-ifeq ($(MAKECMDGOALS), CI)
-	ifeq ($(On-Linux), 1)
-		STATIC = 1
-	endif
-endif
-
 ifeq ($(STATIC), 1)
 	CFLAGS += $(CFLAGS_static)
 endif
-#=======================
 
+
+#====== CI release mode 的配置 =======
+ifeq ($(MAKECMDGOALS), build-in-ci-release-mode)
+	CFLAGS += $(CFLAGS_optimization)
+	# 仅在 Linux 上使用静态链接
+	ifeq ($(On-Linux), 1)
+		CFLAGS += $(CFLAGS_static)
+	endif
+endif
+#=====================================
+
+
+#======= Aliases =========
 all: build
 
-build:
+b: build-in-dev-mode
+build: build-in-dev-mode
+bd: build-in-debug-mode
+br: build-in-release-mode
+bcir: build-in-ci-release-mode
+d: debug
+t: test
+check: test
+c: clean
+#=======================
+
+build-in-dev-mode:
 	@echo Starting: Build in DEV mode: \'$(CC)\' $(CFLAGS) -o $(DevMode-Target-Name)
 	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(DevMode-Target-Name)
 	@echo Finished: Build in DEV mode
@@ -91,9 +105,11 @@ build-in-release-mode:
 	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(ReleaseMode-Target-Name)
 	@echo Finished: Build in RELEASE mode
 
-CI: build
-	@mv $(Target-Name) $(CI_ARTIFACT_NAME)
-
+# CI release mode 的配置在该文件上方
+build-in-ci-release-mode:
+	@echo Starting: Build in CI-RELEASE mode: \'$(CC)\' $(CFLAGS) -o $(CIReleaseMode-Target-Name)
+	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(CIReleaseMode-Target-Name)
+	@echo Finished: Build in CI-RELEASE mode
 
 debug: build-in-debug-mode
 	@$(DEBUGGER) $(DebugMode-Target-Name)
@@ -157,4 +173,4 @@ install: $(Target-Name)
 	install -D -m 755 $(Target-Name) $(DESTDIR)/usr/bin/$(Target-Name)
 	install -D -m 644 doc/chsrc.1 $(DESTDIR)/usr/share/man/man1/chsrc.1
 
-.PHONY: all build build-in-debug-mode build-in-release-mode CI debug check test test-make-env test-xy test-fw fastcheck test-cli clean install build-deb clean-deb
+.PHONY: all build build-in-dev-mode build-in-debug-mode build-in-release-mode build-in-ci-release-mode debug check test test-make-env test-xy test-fw fastcheck test-cli clean install build-deb clean-deb
