@@ -70,7 +70,7 @@ wr_anaconda_setsrc (char *option)
     }
 
   chsrc_note2 (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
-  puts (file);
+  println (file);
 
   chsrc_note2 ("然后运行 conda clean -i 清除索引缓存，保证用的是镜像站提供的索引");
 

@@ -109,8 +109,7 @@ main (int argc, char const *argv[])
       assert (xy_dir_exist ("/etc"));
     }
 
-
-  puts (xy_normalize_path (" \n ~/haha/test/123 \n\r "));
+  println (xy_normalize_path (" \n ~/haha/test/123 \n\r "));
   assert_str (xy_normalize_path ("~/haha/test"), xy_parent_dir (" ~/haha/test/123"));
 
   xy_succ ("测试完成", "xy.h 测试全部通过");

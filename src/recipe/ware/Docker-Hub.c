@@ -135,7 +135,7 @@ wr_dockerhub_setsrc (char *option)
           chsrc_append_to_file (to_add, WARE_DockerHub_SourceConfig);
         }
       // chsrc_note2 ("请向 /etc/docker/daemon.json 中添加下述内容:");
-      // puts (to_add);
+      // println (to_add);
       if (xy_on_linux)
         {
           // 由于 systemctl restart docker 会导致所有容器停止，所以不自动重启
@@ -151,7 +151,7 @@ wr_dockerhub_setsrc (char *option)
     {
       chsrc_note2 ("请打开Docker Desktop设置");
       chsrc_note2 ("选择“Docker Engine”选项卡，在该选项卡中找到“registry-mirrors”一栏，添加镜像地址:");
-      puts (source.url);
+      println (source.url);
     }
 
   chsrc_determine_chgtype (ChgType_SemiAuto);

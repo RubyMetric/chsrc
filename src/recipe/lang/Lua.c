@@ -46,7 +46,7 @@ pl_lua_setsrc (char *option)
                                 "}");
 
   chsrc_note2 ("请手动修改 ~/.luarocks/config.lua 文件 (用于下载):");
-  puts (config);
+  println (config);
 
   char *upload_config = xy_strjoin (3, "key = \"<Your API Key>\"\n"
                                       "server = \"", source.url, "\"");

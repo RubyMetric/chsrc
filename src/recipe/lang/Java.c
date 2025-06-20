@@ -83,7 +83,7 @@ pl_java_setsrc (char *option)
 
       char *maven_config = pl_java_find_maven_config ();
       chsrc_note2 (xy_strjoin (3, "请在您的 maven 配置文件 ", maven_config, " 中添加:"));
-      puts (file);
+      println (file);
     }
 
   if (gradle_exist)

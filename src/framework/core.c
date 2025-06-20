@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-06-19>
+ * Last Modified : <2025-06-20>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -631,7 +631,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
               skip_reason = CliOpt_InEnglish ? "SKIP for no reason" : "无理由跳过";
             }
           measure_msgs[i] = xy_strjoin (4, "  x ", msg, " ", yellow(skip_reason));
-          printf ("%s\n", measure_msgs[i]);
+          println (measure_msgs[i]);
         }
       else
         {
@@ -646,8 +646,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
               measure_msgs[i] = xy_strjoin (3, "  - ", msg, " ... ");
             }
 
-
-          printf ("%s", measure_msgs[i]);
+          print (measure_msgs[i]);
           fflush (stdout);
 
           char *url_ = xy_strdup (url);
