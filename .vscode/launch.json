@@ -12,7 +12,7 @@
             ],
             "preLaunchTask": "构建 debug 版 chsrc",
             "stopAtEntry": true,
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
