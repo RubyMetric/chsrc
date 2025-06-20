@@ -86,20 +86,22 @@ make clean
 ### 编译运行
 
 ```bash
-just          # 在Windows上默认使用 gcc 编译，在macOS上默认使用 clang 编译，在其他系统上默认使用 cc 编译
+just (b)      # 在Windows上默认使用 gcc 编译，在macOS上默认使用 clang 编译，在其他系统上默认使用 cc 编译
 just CC=clang # 使用 clang 编译
 just CC=gcc   # 使用 gcc   编译
+
+# 编译出 debug 版本: chsrc-debug
+just bd
+# 编译出 release 版本: chsrc-release
+just br
 ```
 
 ```bash
-# 启动 GDB 调试
+# 重新编译出 ./chsrc-debug，并启动 GDB 调试 (在macOS上启动 LLDB 调试)
 $ just debug
 
-# 使用 LLDB 调试
+# 使用其他调试器，如 LLDB 调试
 $ just DEBUGGER=lldb debug
-
-# 如果需要单独生成含有编译信息的二进制文件（这个不会自己启动debugger）
-$ just DEBUG=1
 ```
 
 <br>
