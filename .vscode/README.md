@@ -2,12 +2,12 @@
  ! SPDX-License-Identifier: GFDL-1.3-or-later
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
- ! Doc Name      : (for VS Code Devers) README.md
+ ! Doc Name      : (for VS Code users) README.md
  ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2025-06-18>
- ! Last Modified : <2025-06-19>
+ ! Last Modified : <2025-06-20>
  ! ---------------------------------------------------------- -->
 
 # Dev in VS Code

@@ -7,7 +7,7 @@
  ! Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
  !               |
  ! Created On    : <2023-12-28>
- ! Last Modified : <2025-06-19>
+ ! Last Modified : <2025-06-20>
  ! ---------------------------------------------------------- -->
 
 <div align="center">
@@ -43,14 +43,14 @@
 ---
 
 > [!NOTE]
-> 这是你可以参与的第一个现实世界中有用的C语言项目！不再是枯燥的数据结构习题，不用再面对二十年前古老界面的 **Dev-C++**，[用 VS Code 一分钟内搭建环境编译、运行、测试、Debug chsrc !](./doc/01-Develop.md)
+> 这是你可以参与的第一个现实世界中有用的C语言项目，[用 VS Code 一分钟内上手编译、运行、测试 chsrc ](./doc/01-Develop.md)
 >
 > 欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献, 欢迎任何编程初学者。[从开发到提交PR，我们覆盖全流程文档](./doc/)
 ，作者可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)
 ---
 
 > [!IMPORTANT]
-> **`chsrc` 可换源 60+ 目标。每个人仅仅贡献和维护自己熟悉的部分，回报是得到其他所有领域专家的帮助。** [欢迎成为 recipe 维护者！](https://github.com/RubyMetric/chsrc/issues/130)
+> **`chsrc` 可换源 60+ 目标。每个人仅仅贡献和维护自己熟悉的部分，回报是得到其他所有领域专家的帮助。** [欢迎成为 recipe 维护者](https://github.com/RubyMetric/chsrc/issues/130)
 
 <br>
 

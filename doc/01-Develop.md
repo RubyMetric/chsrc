@@ -7,12 +7,12 @@
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2024-12-27>
- ! Last Modified : <2025-06-19>
+ ! Last Modified : <2025-06-20>
  ! ---------------------------------------------------------- -->
 
-# 开发
+# 开发 chsrc
 
-## 开发环境
+## 依赖与开发环境
 
 请安装好：
 
@@ -28,7 +28,8 @@
 <br>
 
 
-## 准备
+
+## 获取代码
 
 ```bash
 # 请务必使用 dev 分支开发
@@ -40,7 +41,10 @@ $ git clone https://gitee.com/RubyMetric/chsrc.git -b dev
 <br>
 
 
-## 编译运行
+
+## `make` 用户
+
+### 编译运行
 
 ```bash
 make          # 默认使用 cc 编译
@@ -61,7 +65,7 @@ $ make DEBUG=1
 
 <br>
 
-## 测试
+### 测试
 
 ```bash
 make test-xy  # 测试 xy.h
@@ -72,6 +76,47 @@ make clean
 ```
 
 <br>
+
+
+
+## `just` 用户
+
+如果你使用 `just`，可以在 VS Code 中获得更好的体验
+
+### 编译运行
+
+```bash
+just          # 在Windows上默认使用 gcc 编译，在Linux上默认使用cc编译
+just CC=clang # 使用 clang 编译
+just CC=gcc   # 使用 gcc   编译
+```
+
+```bash
+# 启动 GDB 调试
+$ just debug
+
+# 使用 LLDB 调试
+$ just DEBUGGER=lldb debug
+
+# 如果需要单独生成含有编译信息的二进制文件（这个不会自己启动debugger）
+$ just DEBUG=1
+```
+
+<br>
+
+### 测试
+
+```bash
+just test-xy  # 测试 xy.h
+just test-fw  # 测试 framework
+just test     # 测试上述两个
+just test-cli # 测试命令
+just clean
+```
+
+<br>
+
+
 
 ## 提交 PR
 
