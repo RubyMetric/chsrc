@@ -31,9 +31,10 @@
 
 ## 获取代码
 
+**请务必使用 dev 分支开发**
+
 ```bash
-# 请务必使用 dev 分支开发
-$ git clone https://gitee.com/RubyMetric/chsrc.git -b dev
+git clone https://gitee.com/RubyMetric/chsrc.git -b dev
 ```
 
 关于分支的说明，可参考 [./03-CONTRIBUTING.md](./03-CONTRIBUTING.md)
@@ -42,50 +43,18 @@ $ git clone https://gitee.com/RubyMetric/chsrc.git -b dev
 
 
 
-## `make` 用户
+## 编译运行
 
-### 编译运行
+共有四种构建模式：
 
-```bash
-make (b)      # 在Windows上默认使用 cc 编译，在macOS上默认使用 clang 编译，在其他系统上默认使用 cc 编译
-make CC=clang # 使用 clang 编译
-make CC=gcc   # 使用 gcc   编译
+1. **`DEV mode`**
+2. **`DEBUG mode`**
+3. **`RELEASE mode`**
+4. **`CI-RELEASE mode`**
 
-# 编译出 debug 版本: chsrc-debug
-just bd
-# 编译出 release 版本: chsrc-release
-just br
-```
+第四种只在 GitHub Actions 使用，一般只需要前三者；而在开发时你仅需要前两者；如果不需要 Debug，仅仅第一个 **DEV mode** 就够了。
 
-```bash
-# 重新编译出 ./chsrc-debug，并启动 GDB 调试 (在macOS上启动 LLDB 调试)
-$ make debug
-
-# 重新编译出 ./chsrc-debug，并启动 LLDB 调试
-$ make debug DEBUGGER=lldb
-```
-
-<br>
-
-### 测试
-
-```bash
-make test-xy  # 测试 xy.h
-make test-fw  # 测试 framework
-make test     # 测试上述两个
-make test-cli # 测试命令
-make clean
-```
-
-<br>
-
-
-
-## `just` 用户
-
-如果你使用 `just`，可以在 VS Code 中获得更好的体验
-
-### 编译运行
+**如果你使用 `just`，可以在 VS Code 中获得更好的体验，按 `Ctrl-Shift-B` 直接使用 DEV mode 构建**
 
 ```bash
 just (b)      # 在Windows上默认使用 gcc 编译，在macOS上默认使用 clang 编译，在其他系统上默认使用 cc 编译
@@ -98,6 +67,29 @@ just bd
 just br
 ```
 
+<br>
+
+`make` 用户:
+
+```bash
+make (b)      # 在Windows上默认使用 cc 编译，在macOS上默认使用 clang 编译，在其他系统上默认使用 cc 编译
+make CC=clang # 使用 clang 编译
+make CC=gcc   # 使用 gcc   编译
+
+# 编译出 debug 版本: chsrc-debug
+make bd
+# 编译出 release 版本: chsrc-release
+make br
+```
+
+<br>
+
+
+
+## Debug
+
+**如果你使用 `just`，可以在 VS Code 中获得更好的体验，按 F5 即可立即开始 Debug**
+
 ```bash
 # 重新编译出 ./chsrc-debug，并启动 GDB 调试 (在macOS上启动 LLDB 调试)
 $ just debug
@@ -108,14 +100,30 @@ $ just DEBUGGER=lldb debug
 
 <br>
 
-### 测试
+`make` 用户:
 
 ```bash
-just test-xy  # 测试 xy.h
-just test-fw  # 测试 framework
-just test     # 测试上述两个
-just test-cli # 测试命令
-just clean
+# 重新编译出 ./chsrc-debug，并启动 GDB 调试 (在macOS上启动 LLDB 调试)
+$ make debug
+
+# 重新编译出 ./chsrc-debug，并启动 LLDB 调试
+$ make debug DEBUGGER=lldb
+```
+
+<br>
+
+
+
+## 测试
+
+`just` 用户只需要替换下述 `make` 为 `just`
+
+```bash
+make test-xy  # 测试 xy.h
+make test-fw  # 测试 framework
+make test     # 测试上述两个
+make test-cli # 测试命令
+make clean
 ```
 
 <br>
