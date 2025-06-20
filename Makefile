@@ -9,8 +9,11 @@
 #								|
 # Created On    : <2023-08-28>
 # Last Modified : <2025-06-20>
+#
+# 请阅读 ./doc/01-Develop.md 来使用
 # --------------------------------------------------------------
 
+#=========== OS Check ================
 On-Linux = 0
 On-Windows = 0
 On-macOS = 0
@@ -19,12 +22,38 @@ ifeq ($(shell uname), Linux)
 	On-Linux = 1
 endif
 
+ifeq ($(shell uname), Darwin)
+	On-macOS = 1
+endif
+
 # 只有Windows会定义$(OS)变量
 ifeq ($(OS), Windows_NT)
 	On-Windows = 1
 endif
-#=======================
+#=====================================
 
+
+
+#======== Default Tooling ============
+ifeq ($(On-Windows), 1)
+	# MSYS2 环境
+	CC = cc
+else ifeq ($(On-macOS), 1)
+	CC = clang
+else
+	CC = cc
+endif
+
+ifeq ($(On-macOS), 1)
+	DEBUGGER = lldb
+else
+	DEBUGGER = gdb
+endif
+#=====================================
+
+
+
+#======== Compilation Config ==========
 CFLAGS += -Iinclude -Ilib
 
 ifeq ($(On-Windows), 1)
@@ -39,8 +68,6 @@ override WARN += -Wall -Wextra -Wno-unused-variable -Wno-unused-function -Wno-mi
 	-Wno-missing-field-initializers -Wno-unused-parameter -Wno-sign-compare
 _C_Warning_Flags := $(WARN)
 
-Target-Name = chsrc
-
 DevMode-Target-Name = chsrc
 DebugMode-Target-Name = chsrc-debug
 ReleaseMode-Target-Name = chsrc-release
@@ -54,13 +81,13 @@ ifdef DEBUG
 	CFLAGS += $(CFLAGS_debug)
 endif
 
-DEBUGGER = gdb
-
 STATIC = 0
 
 ifeq ($(STATIC), 1)
 	CFLAGS += $(CFLAGS_static)
 endif
+#=====================================
+
 
 
 #====== CI release mode 的配置 =======
@@ -74,7 +101,8 @@ endif
 #=====================================
 
 
-#======= Aliases =========
+
+#============ Aliases ================
 all: build
 
 b: build-in-dev-mode
@@ -86,7 +114,9 @@ d: debug
 t: test
 check: test
 c: clean
-#=======================
+#=====================================
+
+
 
 build-in-dev-mode:
 	@echo Starting: Build in DEV mode: \'$(CC)\' $(CFLAGS) -o $(DevMode-Target-Name)
@@ -111,6 +141,7 @@ build-in-ci-release-mode:
 	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(CIReleaseMode-Target-Name)
 	@echo Finished: Build in CI-RELEASE mode
 
+# 永远重新编译
 debug: build-in-debug-mode
 	@$(DEBUGGER) $(DebugMode-Target-Name)
 
@@ -122,7 +153,6 @@ test-make-env:
 	@echo "On-macOS: $(On-macOS)"
 	@echo "CC: $(CC)"
 	@echo "CFLAGS: $(CFLAGS)"
-	@echo "Target-Name: $(Target-Name)"
 	@echo "USER: $$(whoami)"
 	@echo "PWD: $(shell pwd)"
 	@echo "UID: $$(id -u)"
@@ -142,24 +172,25 @@ test-fw:
 	@$(CC) test/fw.c $(CFLAGS) -o fw
 	@./fw
 
-
 check: test
 
 # AUR package 安装时将执行此 target
-fastcheck: $(Target-Name)
+fastcheck: $(DevMode-Target-Name)
 	@perl ./test/cli.pl fastcheck
 
-test-cli: $(Target-Name)
+test-cli: $(DevMode-Target-Name)
 	@perl ./test/cli.pl
 
 clean:
 	-@rm *.exe  2>/dev/null
 	-@rm xy     2>/dev/null
 	-@rm fw     2>/dev/null
-	-@rm chsrc  2>/dev/null
-	-@rm chsrc-debug    2>/dev/null
-	-@rm chsrc-release  2>/dev/null
-	-@rm README.md.bak* 2>/dev/null
+	-@rm README.md.bak*    2>/dev/null
+
+	-@rm chsrc  					 2>/dev/null
+	-@rm chsrc-debug       2>/dev/null
+	-@rm chsrc-release  	 2>/dev/null
+	-@rm chsrc-ci-release  2>/dev/null
 
 # -include pkg/deb/Makefile # 不这么做，因为 pkg/deb/Makefile 需要在 pkg/deb 目录下执行
 # 保持动词在前的任务名风格
@@ -169,8 +200,8 @@ build-deb:
 clean-deb:
 	@$(MAKE) -C pkg/deb deb-clean
 
-install: $(Target-Name)
-	install -D -m 755 $(Target-Name) $(DESTDIR)/usr/bin/$(Target-Name)
+install: build-in-release-mode
+	install -D -m 755 $(ReleaseMode-Target-Name) $(DESTDIR)/usr/bin/chsrc
 	install -D -m 644 doc/chsrc.1 $(DESTDIR)/usr/share/man/man1/chsrc.1
 
 .PHONY: all build build-in-dev-mode build-in-debug-mode build-in-release-mode build-in-ci-release-mode debug check test test-make-env test-xy test-fw fastcheck test-cli clean install build-deb clean-deb
