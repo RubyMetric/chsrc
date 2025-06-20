@@ -41,17 +41,22 @@ _C_Warning_Flags := $(WARN)
 
 Target-Name = chsrc
 
-Debuggable-Target-Name = chsrc-debug
+DevMode-Target-Name = chsrc
+DebugMode-Target-Name = chsrc-debug
+ReleaseMode-Target-Name = chsrc-release
+
+CFLAGS_debug  = -g -DXY_DEBUG
+CFLAGS_static = -static
+CFLAGS_optimization = -O2
 
 ifdef DEBUG
-	CFLAGS += -g
-	Target-Name = $(Debuggable-Target-Name)
+	CFLAGS += $(CFLAGS_debug)
+	Target-Name = $(DebugMode-Target-Name)
 endif
 
 DEBUGGER = gdb
 
 STATIC = 0
-#=======================
 
 # 由 GitHub Actions 在调用时修改
 CI_ARTIFACT_NAME = chsrc
@@ -61,28 +66,37 @@ ifeq ($(MAKECMDGOALS), CI)
 		STATIC = 1
 	endif
 endif
+
+ifeq ($(STATIC), 1)
+	CFLAGS += $(CFLAGS_static)
+endif
 #=======================
 
 all: build
 
 build:
-ifeq ($(STATIC), 1)
-CFLAGS += -static
-endif
+	@echo Starting: Build in DEV mode: \'$(CC)\' $(CFLAGS) -o $(DevMode-Target-Name)
+	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(DevMode-Target-Name)
+	@echo Finished: Build in DEV mode
 
-build:
-	@echo "Starting: Compile chsrc executable"
-	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(Target-Name)
-	@echo Finished: Compile chsrc executable using \'$(CC)\' $(CFLAGS)
+build-in-debug-mode: CFLAGS += $(CFLAGS_debug)
+build-in-debug-mode:
+	@echo Starting: Build in DEBUG mode: \'$(CC)\' $(CFLAGS) -o $(DebugMode-Target-Name)
+	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(DebugMode-Target-Name)
+	@echo Finished: Build in DEBUG mode
+
+build-in-release-mode: CFLAGS += $(CFLAGS_optimization)
+build-in-release-mode:
+	@echo Starting: Build in RELEASE mode: \'$(CC)\' $(CFLAGS) -o $(ReleaseMode-Target-Name)
+	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(ReleaseMode-Target-Name)
+	@echo Finished: Build in RELEASE mode
 
 CI: build
 	@mv $(Target-Name) $(CI_ARTIFACT_NAME)
 
 
-debug: CFLAGS += -g
-debug: Target-Name = $(Debuggable-Target-Name)
-debug: build
-	@$(DEBUGGER) $(Debuggable-Target-Name)
+debug: build-in-debug-mode
+	@$(DEBUGGER) $(DebugMode-Target-Name)
 
 test: test-make-env test-xy test-fw
 
@@ -127,6 +141,8 @@ clean:
 	-@rm xy     2>/dev/null
 	-@rm fw     2>/dev/null
 	-@rm chsrc  2>/dev/null
+	-@rm chsrc-debug    2>/dev/null
+	-@rm chsrc-release  2>/dev/null
 	-@rm README.md.bak* 2>/dev/null
 
 # -include pkg/deb/Makefile # 不这么做，因为 pkg/deb/Makefile 需要在 pkg/deb 目录下执行
@@ -141,4 +157,4 @@ install: $(Target-Name)
 	install -D -m 755 $(Target-Name) $(DESTDIR)/usr/bin/$(Target-Name)
 	install -D -m 644 doc/chsrc.1 $(DESTDIR)/usr/share/man/man1/chsrc.1
 
-.PHONY: all build CI debug check test test-make-env test-xy test-fw fastcheck test-cli clean install build-deb clean-deb
+.PHONY: all build build-in-debug-mode build-in-release-mode CI debug check test test-make-env test-xy test-fw fastcheck test-cli clean install build-deb clean-deb
