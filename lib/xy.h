@@ -31,6 +31,17 @@
 #include <string.h>
 #include <unistd.h>
 
+#if defined(__STDC__) && __STDC_VERSION__ >= 202311
+  #define XY_Dreprecate_This(msg) [[deprecated(msg)]]
+#elif defined(__GNUC__) || defined(__clang__)
+  #define XY_Deprecate_This(msg) __attribute__((deprecated(msg)))
+#elif defined(_MSC_VER)
+  #define XY_Deprecate_This(msg) __declspec(deprecated(msg))
+#else
+  #define XY_Deprecate_This(msg)
+#endif
+
+
 /* Global */
 bool xy_enable_color = true;
 
@@ -74,9 +85,13 @@ bool xy_enable_color = true;
   #define xy_useutf8()
 #endif
 
+XY_Deprecate_This("Not use anymore")
 void putf (double n)         { printf ("%f\n", n);   }
+XY_Deprecate_This("Not use anymore")
 void puti (long long n)      { printf ("%lld\n", n); }
+XY_Deprecate_This("Not use anymore")
 void putb (bool n)           { if (n) puts ("true"); else puts ("false"); }
+
 void print (const char *s)   { printf ("%s", s);   }
 void println (const char *s) { printf ("%s\n", s); }
 void say (const char *s)     { printf ("%s\n", s); }
