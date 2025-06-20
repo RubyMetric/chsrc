@@ -9,7 +9,7 @@
  *               |  Mikachu2333  <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-06-17>
+ * Last Modified : <2025-06-20>
  *
  * 通用镜像站
  * ------------------------------------------------------------*/
@@ -155,7 +155,7 @@ Nju =
 
 /**
  * @note 2023-09-05 封杀策略过严，谨慎使用
- **/
+ */
 Cqu =
 {
   "cqu", "CQU", "重庆大学开源软件镜像站", "https://mirrors.cqu.edu.cn/",
@@ -168,7 +168,7 @@ Cqu =
 MirrorSite_t Ali =
 {
   "ali", "Ali OPSX Public", "阿里巴巴开源镜像站(公网)", "https://developer.aliyun.com/mirror/",
-  {NotSkip, NA, NA, "https://mirrors.aliyun.com/deepin-cd" Big_File_deepin}
+  {NotSkip, NA, NA, "https://mirrors.aliyun.com/ubuntu/ls-lR.gz"} // 31MB左右
 },
 /*
 // https://mirrors.cloud.aliyuncs.com/
@@ -189,7 +189,7 @@ Ali_ECS_classic =
 Tencent =
 {
   "tencent", "Tencent Public", "腾讯软件源(公网)", "https://mirrors.tencent.com/",
-  {NotSkip, NA, NA, "https://mirrors.cloud.tencent.com/ubuntu-releases" Big_File_ubuntu}
+  {NotSkip, NA, NA, "https://mirrors.cloud.tencent.com/mariadb/mariadb-12.1.0/winx64-packages/mariadb-12.1.0-winx64-debugsymbols.zip"} // 110MB左右
 },
 /*
 Tencent_Intra =
