@@ -22,7 +22,7 @@ static Source_t os_rockylinux_sources[] =
   {&Zju,              "https://mirrors.zju.edu.cn/rocky"},
   {&Lzuoss,           "https://mirror.lzu.edu.cn/rocky"},
   {&Sohu,             "https://mirrors.sohu.com/Rocky"},
-  {&Netease,          "https://mirrors.163.com/rocky"}
+  // {&Netease,          "https://mirrors.163.com/rocky"} /* 不启用原因：过慢 */
 };
 def_sources_n(os_rockylinux);
 

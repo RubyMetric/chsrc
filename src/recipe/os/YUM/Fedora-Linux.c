@@ -6,13 +6,13 @@
  * Contributors  : Aoran Zeng <ccmywish@qq.com>
  *               |
  * Created On    : <2023-09-26>
- * Last Modified : <2024-11-04>
+ * Last Modified : <2025-06-20>
  *
  * 名称为 Fedora Linux
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-11-04
+ * @update 2025-06-20
  */
 static Source_t os_fedora_sources[] =
 {
@@ -23,7 +23,7 @@ static Source_t os_fedora_sources[] =
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/fedora"},
   {&Tencent,          "https://mirrors.tencent.com/fedora"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/fedora"},
-  {&Netease,          "https://mirrors.163.com/fedora"},
+  // {&Netease,          "https://mirrors.163.com/fedora"}, /* 不启用原因：过慢 */
   {&Sohu,             "https://mirrors.sohu.com/fedora"}
 };
 def_sources_n(os_fedora);

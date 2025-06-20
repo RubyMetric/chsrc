@@ -36,7 +36,7 @@ static Source_t pl_python_sources[] =
   // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/pypi/simple"},
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/pypi/simple"},
   {&Hust,             "https://mirrors.hust.edu.cn/pypi/web/simple"}
-  // {&Netease,       "https://mirrors.163.com/.help/pypi.html"} // 不用，24小时更新一次
+  // {&Netease,       "https://mirrors.163.com/.help/pypi.html"} /* 不启用原因：24小时更新一次 */
 };
 def_sources_n(pl_python);
 

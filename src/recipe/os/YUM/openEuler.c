@@ -29,7 +29,7 @@ static Source_t os_openeuler_sources[] =
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/openeuler/"},
   {&Tencent,          "https://mirrors.tencent.com/openeuler/"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/openeuler/"},
-  {&Netease,          "https://mirrors.163.com/openeuler/"}
+  // {&Netease,          "https://mirrors.163.com/openeuler/"}   /* 不启用原因：过慢 */
   // {&Sohu,             "https://mirrors.sohu.com/openeuler/"}
 };
 def_sources_n(os_openeuler);

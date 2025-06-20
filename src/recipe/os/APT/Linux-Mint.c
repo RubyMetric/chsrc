@@ -27,7 +27,7 @@ static Source_t os_linuxmint_sources[] =
   {&Sustech,          "https://mirrors.sustech.edu.cn/linuxmint/"},
   {&Iscas,            "https://mirror.iscas.ac.cn/linuxmint/"},
   {&Scau,             "https://mirrors.scau.edu.cn/linuxmint/"},
-  {&Netease,          "https://mirrors.163.com/linuxmint/packages/"},
+  // {&Netease,          "https://mirrors.163.com/linuxmint/packages/"} /* 不启用原因：过慢 */
 };
 def_sources_n(os_linuxmint);
 

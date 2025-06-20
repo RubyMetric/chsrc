@@ -218,6 +218,10 @@ Volceengine_Intra =
   "https://mirrors.ivolces.com/ubuntu-releases" Big_File_ubuntu },
 */
 
+
+/**
+ * @note 2026-06-20 网易开源镜像站的速度始终过低，不建议再使用
+ */
 Netease =
 {
   "netease", "Netease", "网易开源镜像站", "https://mirrors.163.com/",

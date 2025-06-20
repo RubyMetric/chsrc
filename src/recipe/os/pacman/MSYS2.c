@@ -1,14 +1,14 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  : Heng Guo <2085471348@qq.com>
- * Contributors  : Nil Null <nil@null.org>
+ * File Authors  :  Heng Guo  <2085471348@qq.com>
+ * Contributors  : Aoran Zeng <ccmywish@qq.com>
  * Created On    : <2023-09-06>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2025-06-20>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-04-18
+ * @update 2025-06-20
  */
 static Source_t os_msys2_sources[] =
 {
@@ -19,7 +19,7 @@ static Source_t os_msys2_sources[] =
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/msys2"},
   {&Tencent,          "https://mirrors.tencent.com/msys2"},
   {&Huawei,           "https://mirrors.huaweicloud.com/msys2"},
-  {&Netease,          "https://mirrors.163.com/msys2"},
+  // {&Netease,          "https://mirrors.163.com/msys2"}, /* 不启用原因：过慢 */
   {&Sohu,             "https://mirrors.sohu.com/msys2"}
 };
 def_sources_n(os_msys2);

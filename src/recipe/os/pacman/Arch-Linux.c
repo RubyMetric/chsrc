@@ -6,11 +6,11 @@
  * Contributors  : happy game <happygame1024@gmail.com>
  *               |
  * Created On    : <2023-09-05>
- * Last Modified : <2025-05-24>
+ * Last Modified : <2025-06-20>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-07-03
+ * @update 2025-06-20
  * @note 不要给后面加 / ，因为ARM情况下，还要额外加一个 arm 后缀
  */
 static Source_t os_arch_sources[] =
@@ -22,9 +22,9 @@ static Source_t os_arch_sources[] =
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/archlinux"},
   {&Tencent,          "https://mirrors.tencent.com/archlinux"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/archlinux"},
-  {&Huawei,           "https://mirrors.huaweicloud.com/archlinux"}, // 不支持 archlinuxcn
-  {&Netease,          "https://mirrors.163.com/archlinux"},         // archlinuxcn 的URL和其他镜像站不同
-  // {&Sohu,          "https://mirrors.sohu.com/archlinux"}       // 不支持 archlinuxcn
+  {&Huawei,           "https://mirrors.huaweicloud.com/archlinux"},
+  // {&Netease,          "https://mirrors.163.com/archlinux"},  /* 不启用原因：过慢 */
+  // {&Sohu,          "https://mirrors.sohu.com/archlinux"}
 },
 
 /**
@@ -40,7 +40,7 @@ os_archlinuxcn_sources[] =
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/"},
   {&Tencent,          "https://mirrors.cloud.tencent.com/archlinuxcn/"},
   // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/archlinuxcn/"},
-  {&Netease,          "https://mirrors.163.com/archlinux-cn/"}
+  // {&Netease,          "https://mirrors.163.com/archlinux-cn/"} /* 不启用原因：过慢 */
 };
 def_sources_n(os_arch);
 def_sources_n(os_archlinuxcn);

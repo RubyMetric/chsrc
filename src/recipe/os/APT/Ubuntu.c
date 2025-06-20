@@ -31,7 +31,7 @@ static Source_t os_ubuntu_sources[] =
   {&Tencent,          "https://mirrors.tencent.com/ubuntu"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/ubuntu"},
   {&Huawei,           "https://mirrors.huaweicloud.com/ubuntu"},
-  {&Netease,          "https://mirrors.163.com/ubuntu"},
+  // {&Netease,          "https://mirrors.163.com/ubuntu"}, /* 不启用原因：过慢 */
   {&Sohu,             "https://mirrors.sohu.com/ubuntu"}
 };
 def_sources_n(os_ubuntu);
