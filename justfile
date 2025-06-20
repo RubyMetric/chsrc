@@ -50,13 +50,9 @@ CFLAGS_warn := WARN
 DEBUG := '0'
 CFLAGS_debug := if DEBUG != '0' { "-g" } else { "" }
 
-Debuggable-Target-Name := 'chsrc-debug'
-
-Target-Name := if DEBUG != '0' {
-	Debuggable-Target-Name
-} else {
-	'chsrc'
-}
+DevMode-Target-Name     := 'chsrc'
+DebugMode-Target-Name   := 'chsrc-debug'
+ReleaseMode-Target-Name := 'chsrc-release'
 
 CI := '0'
 CI_ARTIFACT_NAME := 'chsrc'
@@ -71,9 +67,13 @@ CFLAGS_static := if STATIC == '1' {
 } else {''}
 
 
-CFLAGS := CFLAGS_base + ' ' + CFLAGS_debug + ' ' + CFLAGS_warn + ' ' + CFLAGS_static + ' ' + CFLAGS_for_Clang
+# CFLAGS := CFLAGS_base + ' ' + CFLAGS_debug + ' ' + CFLAGS_warn + ' ' + CFLAGS_static + ' ' + CFLAGS_for_Clang
 
-CFLAGS_only_promp_for_dev := CFLAGS_base + ' ' + CFLAGS_debug + CFLAGS_static + CFLAGS_for_Clang
+CFLAGS_dev_mode     := CFLAGS_base + ' ' + CFLAGS_warn  + ' ' + ' ' + CFLAGS_for_Clang
+CFLAGS_debug_mode   := CFLAGS_base + ' ' + CFLAGS_debug + ' ' + CFLAGS_warn   + ' ' + CFLAGS_for_Clang
+CFLAGS_release_mode := CFLAGS_base + ' ' + CFLAGS_warn  + ' ' + CFLAGS_static + ' ' + CFLAGS_for_Clang
+
+CFLAGS_prompt := CFLAGS_base + ' ' + CFLAGS_debug + CFLAGS_static + CFLAGS_for_Clang
 
 #=======================
 
@@ -81,31 +81,43 @@ BIN_xy := if os() == 'windows' {'xy.exe'} else {'./xy'}
 BIN_fw := if os() == 'windows' {'fw.exe'} else {'./fw'}
 BIN_rm := if os() == 'windows' {'del'}    else {'rm'}
 #=======================
-alias b := build
+alias b := build-in-dev-mode
+alias bd:= build-in-debug-mode
+alias br:= build-in-release-mode
 alias d := debug
 alias t := test
 
-default: build
+default: build-in-dev-mode
 
-build:
-  @echo Starting: Compile chsrc executable
-  @{{CC}} src/chsrc-main.c {{CFLAGS}} -o {{Target-Name}}
-  @echo Finished: Compile chsrc executable using '{{CC}}' {{CFLAGS_only_promp_for_dev}} -o {{Target-Name}}
+build-in-dev-mode:
+  @echo Starting: Build in DEV mode: '{{CC}}' {{CFLAGS_prompt}} -o {{DevMode-Target-Name}}
+  @{{CC}} src/chsrc-main.c {{CFLAGS_dev_mode}} -o {{DevMode-Target-Name}}
+  @echo Finished: Build in DEV mode
 
-CI: build
-	@mv {{Target-Name}} {{CI_ARTIFACT_NAME}}
+build-in-debug-mode:
+	@echo Starting: Build in DEBUG mode: '{{CC}}' {{CFLAGS_prompt}} -o {{DebugMode-Target-Name}}
+	@{{CC}} src/chsrc-main.c {{CFLAGS_debug_mode}} -o {{DebugMode-Target-Name}}
+	@echo Finished: Build in DEBUG mode
 
-debug:
-  @{{DEBUGGER}} {{Debuggable-Target-Name}}
+build-in-release-mode:
+	@echo Starting: Build in RELEASE mode: '{{CC}}' {{CFLAGS_prompt}} -o {{ReleaseMode-Target-Name}}
+	@{{CC}} src/chsrc-main.c {{CFLAGS_release_mode}} -o {{ReleaseMode-Target-Name}}
+	@echo Finished: Build in RELEASE mode
+
+CI: build-in-dev-mode
+	@mv {{ReleaseMode-Target-Name}} {{CI_ARTIFACT_NAME}}
+
+debug: build-in-debug-mode
+  @{{DEBUGGER}} {{DebugMode-Target-Name}}
 
 test: test-xy test-fw
 
 test-xy:
-	@{{CC}} test/xy.c {{CFLAGS}} -o xy
+	@{{CC}} test/xy.c {{CFLAGS_dev_mode}} -o xy
 	@{{BIN_xy}}
 
 test-fw:
-	@{{CC}} test/fw.c {{CFLAGS}} -o fw
+	@{{CC}} test/fw.c {{CFLAGS_dev_mode}} -o fw
 	@{{BIN_fw}}
 
 
