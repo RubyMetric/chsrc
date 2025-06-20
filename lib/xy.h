@@ -2,7 +2,7 @@
  * Copyright © 2023-2025 Aoran Zeng, Heng Guo
  * SPDX-License-Identifier: MIT
  * -------------------------------------------------------------
- * Lib Name      : xy.h
+ * Lib Name      :    xy.h
  * Lib Authors   : Aoran Zeng <ccmywish@qq.com>
  *               |  Heng Guo  <2085471348@qq.com>
  * Contributors  :   juzeon   <skyjuzheng@gmail.com>
@@ -11,7 +11,8 @@
  * Last Modified : <2025-06-20>
  *
  * xy: 襄阳、咸阳
- * Corss-Platform C utilities for CLI applications in Ruby flavor
+ * Corss-Platform C11 utilities for CLI applications in mixed flavor:
+ * Ruby、Perl、Raku、HTML、Python、just、etc
  * ------------------------------------------------------------*/
 
 #ifndef XY_H
@@ -90,11 +91,8 @@ void putf (double n)         { printf ("%f\n", n);   }
 XY_Deprecate_This("Not use anymore")
 void puti (long long n)      { printf ("%lld\n", n); }
 XY_Deprecate_This("Not use anymore")
-void putb (bool n)           { if (n) puts ("true"); else puts ("false"); }
+void putb (bool n)           {  }
 
-void print (const char *s)   { printf ("%s", s);   }
-void println (const char *s) { printf ("%s\n", s); }
-void say (const char *s)     { printf ("%s\n", s); }
 void br ()                   { puts (""); }
 void p (const char *s)       { printf ("%s\n", s); }
 
@@ -103,6 +101,50 @@ void p (const char *s)       { printf ("%s\n", s); }
 #define xy_unsupported()    assert(!"Unsuppoted")
 #define xy_unimplemented()  assert(!"Unimplemented temporarily")
 #define xy_unreached()      assert(!"This code shouldn't be reached")
+
+static void _xy_print_int    (int n) {printf ("%d", n);}
+static void _xy_print_long   (long n) {printf ("%ld", n);}
+static void _xy_print_long_long (long long n) {printf ("%lld", n);}
+static void _xy_print_float  (float n) {printf ("%f", n);}
+static void _xy_print_double (double n) {printf ("%f", n);}
+static void _xy_print_bool   (bool b) {printf("%s", (b) ? "true" : "false");}
+static void _xy_print_str    (char *str) {printf ("%s", str);}
+static void _xy_print_const_str (const char *str) {printf ("%s", str);}
+
+static void _xy_println_int    (int n) {printf ("%d\n", n);}
+static void _xy_println_long   (long n) {printf ("%ld\n", n);}
+static void _xy_println_long_long (long long n) {printf ("%lld\n", n);}
+static void _xy_println_float  (float n) {printf ("%f\n", n);}
+static void _xy_println_double (double n) {printf ("%f\n", n);}
+static void _xy_println_bool   (bool b) {printf("%s\n", (b) ? "true" : "false");}
+static void _xy_println_str    (char *str) {printf ("%s\n", str);}
+static void _xy_println_const_str (const char *str) {printf ("%s\n", str);}
+
+#define print(x) _Generic((x), \
+  int:       _xy_print_int,  \
+  long:      _xy_print_long, \
+  long long: _xy_print_long_long, \
+  float:     _xy_print_float,  \
+  double:    _xy_print_double, \
+  bool:      _xy_print_bool, \
+  char *:    _xy_print_str,  \
+  const char *:   _xy_print_const_str, \
+  default:   assert(!"Unsupported type for print()!") \
+)(x)
+
+#define println(x) _Generic((x), \
+  int:       _xy_println_int,  \
+  long:      _xy_println_long, \
+  long long: _xy_println_long_long, \
+  float:     _xy_println_float,  \
+  double:    _xy_println_double, \
+  bool:      _xy_println_bool, \
+  char *:    _xy_println_str,  \
+  const char *:   _xy_println_const_str, \
+  default:   assert(!"Unsupported type for println()/say()!") \
+)(x)
+#define say println
+
 
 #define xy_arylen(x) (sizeof (x) / sizeof (x[0]))
 
