@@ -5,11 +5,11 @@
  * Contributors  : happy game <happygame1024@gmail.com>
  *               |
  * Created On    : <2023-09-24>
- * Last Modified : <2024-12-12>
+ * Last Modified : <2025-06-20>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-06-12
+ * @update 2025-06-20
  */
 static Source_t os_rockylinux_sources[] =
 {
@@ -21,8 +21,8 @@ static Source_t os_rockylinux_sources[] =
   {&Sustech,          "https://mirrors.sustech.edu.cn/rocky-linux"},
   {&Zju,              "https://mirrors.zju.edu.cn/rocky"},
   {&Lzuoss,           "https://mirror.lzu.edu.cn/rocky"},
-  {&Sohu,             "https://mirrors.sohu.com/Rocky"},
-  // {&Netease,          "https://mirrors.163.com/rocky"} /* 不启用原因：过慢 */
+  // {&Netease,          "https://mirrors.163.com/rocky"},  /* 不启用原因：过慢 */
+  // {&Sohu,             "https://mirrors.sohu.com/Rocky"}  /* 不启用原因：过慢 */
 };
 def_sources_n(os_rockylinux);
 

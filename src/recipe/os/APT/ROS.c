@@ -22,8 +22,8 @@ static Source_t os_ros_sources[] =
   {&Tencent,          "https://mirrors.tencent.com"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com"},
   {&Huawei,           "https://mirrors.huaweicloud.com"},
-  {&Netease,          "https://mirrors.163.com"},
-  {&Sohu,             "https://mirrors.sohu.com"}
+  // {&Netease,          "https://mirrors.163.com"}, /* 不启用原因：过慢 */
+  // {&Sohu,             "https://mirrors.sohu.com"} /* 不启用原因：过慢 */
 };
 def_sources_n(os_ros);
 

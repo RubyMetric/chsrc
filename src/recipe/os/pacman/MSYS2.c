@@ -20,7 +20,7 @@ static Source_t os_msys2_sources[] =
   {&Tencent,          "https://mirrors.tencent.com/msys2"},
   {&Huawei,           "https://mirrors.huaweicloud.com/msys2"},
   // {&Netease,          "https://mirrors.163.com/msys2"}, /* 不启用原因：过慢 */
-  {&Sohu,             "https://mirrors.sohu.com/msys2"}
+  // {&Sohu,             "https://mirrors.sohu.com/msys2"} /* 不启用原因：过慢 */
 };
 def_sources_n(os_msys2);
 

@@ -24,7 +24,7 @@ static Source_t os_fedora_sources[] =
   {&Tencent,          "https://mirrors.tencent.com/fedora"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/fedora"},
   // {&Netease,          "https://mirrors.163.com/fedora"}, /* 不启用原因：过慢 */
-  {&Sohu,             "https://mirrors.sohu.com/fedora"}
+  // {&Sohu,             "https://mirrors.sohu.com/fedora"} /* 不启用原因：过慢 */
 };
 def_sources_n(os_fedora);
 

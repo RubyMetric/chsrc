@@ -22,7 +22,7 @@ static Source_t os_deepin_sources[] =
   {&Tencent,          "https://mirrors.tencent.com/deepin"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/deepin"},
   // {&Netease,          "https://mirrors.163.com/deepin"}, /* 不启用原因：过慢 */
-  {&Sohu,             "https://mirrors.sohu.com/deepin"}
+  // {&Sohu,             "https://mirrors.sohu.com/deepin"} /* 不启用原因：过慢 */
 };
 def_sources_n(os_deepin);
 

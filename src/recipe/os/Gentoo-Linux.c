@@ -4,11 +4,11 @@
  * File Authors  : Heng Guo <2085471348@qq.com>
  * Contributors  : Aoran Zeng <ccmywish@qq.com>
  * Created On    : <2023-09-05>
- * Last Modified : <2024-11-22>
+ * Last Modified : <2025-06-20>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-09-14
+ * @update 2025-06-20
  */
 static Source_t os_gentoo_sources[] =
 {
@@ -19,8 +19,8 @@ static Source_t os_gentoo_sources[] =
   {&Tuna,             "mirrors.tuna.tsinghua.edu.cn"},
   {&Tencent,          "mirrors.tencent.com"},
   // {&Tencent_Intra, "mirrors.tencentyun.com"},
-  {&Netease,          "mirrors.163.com"},
-  {&Sohu,             "mirrors.sohu.com"}
+  // {&Netease,          "mirrors.163.com"}, /* 不启用原因：过慢 */
+  // {&Sohu,             "mirrors.sohu.com"} /* 不启用原因：过慢 */
 };
 def_sources_n(os_gentoo);
 

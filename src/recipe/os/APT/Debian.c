@@ -33,7 +33,7 @@ static Source_t os_debian_sources[] =
   {&Tencent,          "https://mirrors.tencent.com/debian"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/debian"},
   // {&Netease,          "https://mirrors.163.com/debian"}, /* 不启用原因：过慢 */
-  {&Sohu,             "https://mirrors.sohu.com/debian"}
+  // {&Sohu,             "https://mirrors.sohu.com/debian"} /* 不启用原因：过慢 */
 };
 def_sources_n(os_debian);
 

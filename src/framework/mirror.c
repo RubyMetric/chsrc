@@ -228,6 +228,9 @@ Netease =
   {NotSkip, NA, NA, "https://mirrors.163.com/deepin-cd" Big_File_deepin}
 },
 
+/**
+ * @note 2026-06-20 搜狐开源镜像站的速度始终过低，不建议再使用
+ */
 Sohu =
 {
   "sohu", "SOHU", "搜狐开源镜像站", "https://mirrors.sohu.com/",

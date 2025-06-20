@@ -24,7 +24,7 @@ static Source_t os_arch_sources[] =
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/archlinux"},
   {&Huawei,           "https://mirrors.huaweicloud.com/archlinux"},
   // {&Netease,          "https://mirrors.163.com/archlinux"},  /* 不启用原因：过慢 */
-  // {&Sohu,          "https://mirrors.sohu.com/archlinux"}
+  // {&Sohu,          "https://mirrors.sohu.com/archlinux"}     /* 不启用原因：过慢 */
 },
 
 /**

@@ -4,11 +4,11 @@
  * File Authors  : Heng Guo <2085471348@qq.com>
  * Contributors  : Aoran Zeng <ccmywish@qq.com>
  * Created On    : <2023-09-17>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2025-06-20>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-08-16
+ * @update 2025-06-20
  */
 static Source_t os_opensuse_sources[] =
 {
@@ -20,8 +20,8 @@ static Source_t os_opensuse_sources[] =
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/opensuse"},
   {&Tencent,          "https://mirrors.tencent.com/opensuse"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/opensuse"},
-  {&Netease,          "https://mirrors.163.com/opensuse"},
-  {&Sohu,             "https://mirrors.sohu.com/opensuse"}
+  // {&Netease,          "https://mirrors.163.com/opensuse"}, /* 不启用原因：过慢 */
+  // {&Sohu,             "https://mirrors.sohu.com/opensuse"} /* 不启用原因：过慢 */
 };
 def_sources_n(os_opensuse);
 

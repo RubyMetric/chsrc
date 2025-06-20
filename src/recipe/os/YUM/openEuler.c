@@ -7,7 +7,7 @@
  *               | happy game <happygame1024@gmail.com>
  *               |
  * Created On    : <2023-09-06>
- * Last Modified : <2024-12-18>
+ * Last Modified : <2025-06-20>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t os_openEuler_upstream =
@@ -18,7 +18,7 @@ static SourceProvider_t os_openEuler_upstream =
 
 
 /**
- * @update 2024-12-18
+ * @update 2025-06-20
  */
 static Source_t os_openeuler_sources[] =
 {
@@ -30,7 +30,7 @@ static Source_t os_openeuler_sources[] =
   {&Tencent,          "https://mirrors.tencent.com/openeuler/"},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/openeuler/"},
   // {&Netease,          "https://mirrors.163.com/openeuler/"}   /* 不启用原因：过慢 */
-  // {&Sohu,             "https://mirrors.sohu.com/openeuler/"}
+  // {&Sohu,             "https://mirrors.sohu.com/openeuler/"}  /* 不启用原因：过慢 */
 };
 def_sources_n(os_openeuler);
 
