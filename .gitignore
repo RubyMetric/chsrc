@@ -1,3 +1,6 @@
+##############################
+#          VS Code
+##############################
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
@@ -6,6 +9,11 @@
 !.vscode/launch.json
 !.vscode/README.md
 
+
+
+##############################
+#         Binaries
+##############################
 *.o
 *.obj
 *.a
@@ -15,22 +23,32 @@
 *.out
 *.exe
 
-# Built executables
+
+
+##############################
+#      Built executables
+##############################
 chsrc
 chsrc-debug
 chsrc-release
+chsrc-ci-release
 
-# test files
+
+
+##############################
+#        Test files
+##############################
 xy
 fw
 README.md.bak*
+
+# Generated when testing (when there's a bug)
+nul
 
 # 'chsrc set -local' generated
 .bundle
 .npmrc
 
-# Generated when testing
-nul
 
 
 ##############################
@@ -41,6 +59,7 @@ chsrc.log
 chsrc.toc
 *.info
 *.pdf
+
 
 
 ##############################
