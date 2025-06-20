@@ -1,56 +1,62 @@
 {
-  "tasks": [
-    {
-      "type": "shell",
-      "label": "构建 chsrc",
-      "command": "just",
-      "args": ["build"],
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "problemMatcher": [
-        "$gcc"
-      ],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "detail": "使用 just build 编译"
-    },
-    {
-      "type": "shell",
-      "label": "构建 debug 版 chsrc",
-      "command": "just",
-      "args": ["DEBUG=1", "build"],
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "problemMatcher": [
-        "$gcc"
-      ],
-      "group": {
-        "kind": "build",
-        "isDefault": false
-      },
-      "detail": "使用 just DEBUG=1 build 编译 debug 版"
-    },
-    {
-      "type": "shell",
-      "label": "测试 chsrc",
-      "command": "just",
-      "args": ["test"],
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "problemMatcher": [
-        "$gcc"
-      ],
-      "group": {
-        "kind": "test",
-        "isDefault": true
-      },
-      "detail": "使用 just test 测试"
-    }
-  ],
-  "version": "2.0.0"
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "构建 chsrc",
+            "command": "just",
+            "args": [
+                "build"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "使用 just build 编译"
+        },
+        {
+            "type": "shell",
+            "label": "构建 debug 版 chsrc",
+            "command": "just",
+            "args": [
+                "build-in-debug-mode"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "detail": "使用 just build-in-debug-mode 编译 debug 版"
+        },
+        {
+            "type": "shell",
+            "label": "测试 chsrc",
+            "command": "just",
+            "args": [
+                "test"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "detail": "使用 just test 测试"
+        }
+    ],
+    "version": "2.0.0"
 }
