@@ -21,3 +21,6 @@ trim_trailing_whitespace = true
 # 使用 VS Code 生成文件的默认格式
 [*.json]
 indent_size = 4
+
+[*.{yaml,yml}]
+indent_size = 2
