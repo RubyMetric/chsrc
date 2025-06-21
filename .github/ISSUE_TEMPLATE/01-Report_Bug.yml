@@ -1,7 +1,8 @@
 name: 🐞 Bug 报告
 description: 有 Bug 了吗?
 title: "详细报告BUG是chsrc用户的一大美德"
-labels: ["Bug"]
+# labels: [ ]
+type: Bug
 body:
   - type: markdown
     attributes:
@@ -82,5 +83,5 @@ body:
       label: 防止重复问题
       description: 您确认在打开这个新的 issue 之前已经搜索过类似的issue。您可以评论或订阅已经存在的相关 issue
       options:
-        - label: 我已在项目的 GitHub 和 Gitee 两个仓库分别搜索过类似的 issue
+        - label: 我已在项目中搜索过类似的 issue
           required: true

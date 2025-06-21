@@ -1,7 +1,8 @@
 name: 🎉 我找到了新的镜像站或源！
 description: 为大家分享新的镜像站或可用源！
 title: "分享是chsrc用户的一大美德"
-labels: [""]
+# labels: [ ]
+type: Contribute
 body:
   - type: markdown
     attributes:
