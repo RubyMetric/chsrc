@@ -4,7 +4,7 @@
 # Contributors  :  Nul None  <nul@none.org>
 #               |
 # Created On    : <2025-06-19>
-# Last Modified : <2025-06-19>
+# Last Modified : <2025-06-20>
 #
 # Notify PR
 # ---------------------------------------------------------------
@@ -28,10 +28,10 @@ jobs:
         uses: thollander/actions-comment-pull-request@v3
         with:
           message: |
-            ❤️ 感谢你的贡献！但请修改使用 dev 分支！
-          comment_includes: "❤️ 感谢你的贡献！"
+            ❤️ 感谢你的贡献！你的 PR 当前基于 ${{github.base_ref}} 分支，请修改使用 `dev` 分支！
+          comment-tag: "❤️ 感谢你的贡献！"
       - run: |
-          echo "::error::❌ Pull Request 必须以 dev 分支为目标！当前是 ${GITHUB_BASE_REF}"
+          echo "::error::❌ PR 必须以 dev 分支为目标！当前是 ${GITHUB_BASE_REF}"
           exit 1
 
   welcome:
@@ -45,6 +45,6 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            ❤️ 感谢你的贡献！我们将在5天内阅读该PR并回复你
+            ❤️ 感谢你的贡献！我们将在5天内阅读此 PR 并回复你
           edit-mode: replace
           reactions: heart
