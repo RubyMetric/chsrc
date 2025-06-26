@@ -23,7 +23,7 @@ jobs:
   enforce-dev-branch:
     name: 强制使用dev分支
     runs-on: ubuntu-latest
-    if: github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+    if: (github.event.pull_request.base.ref == 'main' || github.event.pull_request.base.ref == 'gh-build' || github.event.pull_request.base.ref == 'gh-site') && github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
     steps:
       - name: 评论
         uses: thollander/actions-comment-pull-request@v3
@@ -38,7 +38,7 @@ jobs:
   welcome:
     name: 欢迎PR者
     runs-on: ubuntu-latest
-    if: github.event.pull_request.base.ref == 'dev' && github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+    if: (github.event.pull_request.base.ref != 'main' && github.event.pull_request.base.ref != 'gh-build' && github.event.pull_request.base.ref != 'gh-site') && github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
     steps:
       - name: 评论
         if: github.event.pull_request.type == 'opened'
