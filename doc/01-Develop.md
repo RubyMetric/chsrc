@@ -3,11 +3,12 @@
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
  ! Doc Name      : 01-Develop.md
- ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
- ! Contributors  :  Nul None  <nul@none.org>
+ ! Doc Authors   : Aoran Zeng   <ccmywish@qq.com>
+ ! Contributors  :  Nul None    <nul@none.org>
+                 | Mikachu2333  <Mikachu.23333@zohomail.com>
  !               |
  ! Created On    : <2024-12-27>
- ! Last Modified : <2025-06-20>
+ ! Last Modified : <2025-06-26>
  ! ---------------------------------------------------------- -->
 
 # 开发 chsrc
@@ -27,8 +28,6 @@
 
 <br>
 
-
-
 ## 获取代码
 
 **请务必使用 dev 分支开发**
@@ -40,8 +39,6 @@ git clone https://gitee.com/RubyMetric/chsrc.git -b dev
 关于分支的说明，可参考 [./03-CONTRIBUTING.md](./03-CONTRIBUTING.md)
 
 <br>
-
-
 
 ## 编译运行
 
@@ -84,8 +81,6 @@ make br
 
 <br>
 
-
-
 ## Debug
 
 **如果你使用 `just`，可以在 VS Code 中获得更好的体验，按 F5 即可立即开始 Debug**
@@ -112,8 +107,6 @@ $ make debug DEBUGGER=lldb
 
 <br>
 
-
-
 ## 测试
 
 `just` 用户只需要替换下述 `make` 为 `just`
@@ -127,8 +120,6 @@ make clean
 ```
 
 <br>
-
-
 
 ## 提交 PR
 
