@@ -22,16 +22,16 @@ jobs:
   enforce-dev-branch:
     name: 强制使用dev分支
     runs-on: ubuntu-latest
-    if: github.event.pull_request_target.base.ref != 'dev'
+    if: github.event.pull_request_target.base.ref == 'main'
     steps:
       - name: 评论
         uses: thollander/actions-comment-pull-request@v3
         with:
           message: |
-            ❤️ 感谢你的贡献！你的 PR 当前基于 ${{github.base_ref}} 分支，请修改使用 `dev` 分支！
+            ❤️ 感谢你的贡献！你的 PR 当前基于 ${{GITHUB_BASE_REF}} 分支，请修改使用 `dev` 分支！
           comment-tag: "❤️ 感谢你的贡献！"
       - run: |
-          echo "::error::❌ PR 必须以 dev 分支为目标！当前是 ${GITHUB_BASE_REF}"
+          echo "::error::❌ PR 必须以非 `main` 分支为目标！当前是 ${GITHUB_BASE_REF} 分支"
           exit 1
 
   welcome:
