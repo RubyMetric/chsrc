@@ -13,11 +13,13 @@ name: 测试PR
 
 on:
   pull_request:
-    types: [opened,
-            synchronize,      # 后续提交
-            ready_for_review, # draft PR 转为正式 PR
-            review_requested,
-            reopened]
+    types: [
+        opened,
+        synchronize, # 后续提交
+        ready_for_review, # draft PR 转为正式 PR
+        review_requested,
+        reopened,
+      ]
     paths:
       - "src/**"
       - "lib/**"

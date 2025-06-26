@@ -10,22 +10,25 @@
 # Notify PR
 # ---------------------------------------------------------------
 
-name: 告知PR者
+name: Comment PR
 
 on:
   pull_request_target:
-    types: [opened,
-            ready_for_review, # draft PR 转为正式 PR
-            review_requested,
-            reopened]
+    types: [
+        opened,
+        ready_for_review, # draft PR 转为正式 PR
+        review_requested,
+        reopened,
+      ]
 
 jobs:
   enforce-dev-branch:
     name: 强制使用dev分支
     runs-on: ubuntu-latest
+    # 非self-pr、非main、非gh-build、非gh-site
     if: (github.event.pull_request.base.ref == 'main' || github.event.pull_request.base.ref == 'gh-build' || github.event.pull_request.base.ref == 'gh-site') && github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
     steps:
-      - name: 评论
+      - name: 警告分支错误
         uses: thollander/actions-comment-pull-request@v3
         with:
           message: |
@@ -38,10 +41,10 @@ jobs:
   welcome:
     name: 欢迎PR者
     runs-on: ubuntu-latest
+    # 非self-pr、非main、非gh-build、非gh-site
     if: (github.event.pull_request.base.ref != 'main' && github.event.pull_request.base.ref != 'gh-build' && github.event.pull_request.base.ref != 'gh-site') && github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
     steps:
-      - name: 评论
-        if: github.event.pull_request.type == 'opened'
+      - name: 感谢pr并回复
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
