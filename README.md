@@ -7,7 +7,7 @@
  ! Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
  !               |
  ! Created On    : <2023-12-28>
- ! Last Modified : <2025-06-20>
+ ! Last Modified : <2025-06-26>
  ! ---------------------------------------------------------- -->
 
 <div align="center">
@@ -43,7 +43,7 @@
 ---
 
 > [!NOTE]
-> 这是你可以参与的第一个现实世界中有用的C语言项目，[用 VS Code 一分钟内上手编译、运行、测试 chsrc ](./doc/01-Develop.md)
+> 这是你可以参与的第一个现实世界中有用的C语言项目，[用 VS Code 一分钟内上手编译、运行、测试 chsrc](./doc/01-Develop.md)
 >
 > 欢迎对 GitHub、Gitee 协作不熟悉的人以此为契机学习参与贡献, 欢迎任何编程初学者。[从开发到提交PR，我们覆盖全流程文档](./doc/)
 ，作者可提供一定的 [贡献指导](https://github.com/RubyMetric/chsrc/discussions/50)
