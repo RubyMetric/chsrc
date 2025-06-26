@@ -28,7 +28,7 @@ jobs:
         uses: thollander/actions-comment-pull-request@v3
         with:
           message: |
-            ❤️ 感谢你的贡献！你的 PR 当前基于 ${{GITHUB_BASE_REF}} 分支，请修改使用 `dev` 分支！
+            ❤️ 感谢你的贡献！你的 PR 当前基于 ${{GITHUB_BASE_REF}} 分支，请修改为非 `main` 分支（**推荐使用 `dev` 分支**）！
           comment-tag: "❤️ 感谢你的贡献！"
       - run: |
           echo "::error::❌ PR 必须以非 `main` 分支为目标！当前是 ${GITHUB_BASE_REF} 分支"
