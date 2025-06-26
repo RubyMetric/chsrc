@@ -1,10 +1,11 @@
 # ---------------------------------------------------------------
 # Workflow File : PR-notify.yml
-# File Authors  : Aoran Zeng <ccmywish@qq.com>
-# Contributors  :  Nul None  <nul@none.org>
+# File Authors  : Aoran Zeng   <ccmywish@qq.com>
+# Contributors  :  Nul None    <nul@none.org>
+#               | Mikachu2333  <mikachu.23333@zohomail.com>
 #               |
 # Created On    : <2025-06-19>
-# Last Modified : <2025-06-20>
+# Last Modified : <2025-06-26>
 #
 # Notify PR
 # ---------------------------------------------------------------
