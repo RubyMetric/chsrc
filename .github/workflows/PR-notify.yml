@@ -31,6 +31,10 @@ jobs:
             ❤️ 感谢你的贡献！你的 PR 当前基于 ${{github.base_ref}} 分支，请修改使用 `dev` 分支！
           comment-tag: "❤️ 感谢你的贡献！"
       - run: |
+          echo "github.event.pull_request_target.base.label = [${{github.event.pull_request_target.base.label}}]"
+          echo "github.event.pull_request_target.base.ref = [${{github.event.pull_request_target.base.ref}}]"
+          echo "github.event.pull_request.base.label = [${{github.event.pull_request.base.label}}]"
+          echo "github.event.pull_request.base.ref = [${{github.event.pull_request.base.ref}}]"
           echo "::error::❌ PR 必须以 dev 分支为目标！当前是 ${GITHUB_BASE_REF}"
           exit 1
 
