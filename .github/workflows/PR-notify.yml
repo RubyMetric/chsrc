@@ -41,7 +41,6 @@ jobs:
     if: github.event.pull_request.base.ref == 'dev'
     steps:
       - name: 评论
-        if: github.event.pull_request.type == 'opened'
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
@@ -49,3 +48,7 @@ jobs:
             ❤️ 感谢你的贡献！我们将在5天内阅读此 PR 并回复你
           edit-mode: replace
           reactions: heart
+      - run: |
+          echo "github.event.pull_request.type = [${{github.event.pull_request.type}}]"
+          echo "github.event_name   = [${{github.event_name}}]"
+          echo "github.event.action = [${{github.event.action}}]"
