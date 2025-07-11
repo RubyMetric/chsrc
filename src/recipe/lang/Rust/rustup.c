@@ -19,15 +19,15 @@ static SourceProvider_t pl_rust_binary_upstream =
  * @update 2025-06-17
  */
 static Source_t pl_rust_rustup_sources[] = {
-  {&pl_rust_binary_upstream, "https://static.rust-lang.org"},
-  {&MirrorZ,       "https://mirrors.cernet.edu.cn/rustup"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/rustup"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/rust-static"},
-  {&Nju,           "https://mirror.nju.edu.cn/rustup"},
-  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/rust-static"},
-  {&Zju,           "https://mirrors.zju.edu.cn/rustup"},
-  {&Iscas,         "https://mirror.iscas.ac.cn/rustup"},
-  {&Ali,           "https://mirrors.aliyun.com/rustup"},
+  {&pl_rust_binary_upstream, "https://static.rust-lang.org", NULL},
+  {&MirrorZ,       "https://mirrors.cernet.edu.cn/rustup", NULL},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/rustup", NULL},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/rust-static", NULL},
+  {&Nju,           "https://mirror.nju.edu.cn/rustup", NULL},
+  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/rust-static", NULL},
+  {&Zju,           "https://mirrors.zju.edu.cn/rustup", NULL},
+  {&Iscas,         "https://mirror.iscas.ac.cn/rustup", NULL},
+  {&Ali,           "https://mirrors.aliyun.com/rustup", NULL},
   {&RsProxyCN,     "https://rsproxy.cn"}};
 def_sources_n(pl_rust_rustup);
 

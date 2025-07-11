@@ -28,26 +28,35 @@ static Source_t pl_rust_cargo_sources[] =
 {
   {&pl_rust_cargo_upstream,  "https://github.com/rust-lang/crates.io-index/",
                               NULL},
+
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/crates.io-index/",
                     NULL},
   {&RsProxyCN,     "https://rsproxy.cn/index/",
                     NULL},
   {&Ali,           "https://mirrors.aliyun.com/crates.io-index/",
                    "https://mirrors.aliyun.com/crates/api/v1/crates/windows/0.58.0/download"},
+
   {&Zju,           "https://mirrors.zju.edu.cn/crates.io-index/",
                     NULL},
+
   // {&Nju,        "https://mirror.nju.edu.cn/git/crates.io-index.git/",
   //                NULL},
+
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/",
                     NULL},
+
   {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/",
                     NULL},
+
   {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/",
                     NULL},
+
   {&Ustc,          "https://mirrors.ustc.edu.cn/crates.io-index/",
                    "https://crates-io.proxy.ustclug.org/api/v1/crates/windows/0.58.0/download"},
+
   // {&Hust,       "https://mirrors.hust.edu.cn/crates.io-index/",
   //                NULL},
+
   {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/",
                     NULL}
 };

@@ -506,6 +506,33 @@ iterate_targets_ (const char ***array, size_t size, const char *input, const cha
 
 #define iterate_targets(ary, input, target) iterate_targets_(ary, xy_arylen(ary), input, target)
 
+
+/**
+ * 我们总是最后告诉用户一些维护信息
+ */
+void
+cli_notify_for_users ()
+{
+  char *msg = "2025-07-11:\n\n"
+
+  "  有时，同一镜像站对不同资源的实际服务速度差异，可能比不同镜像站之间的差异还要大。\n\n"
+
+  "    * 精准测速: 能真实反映您未来使用该资源时的速度，因为它直接测量您关注的那个资源。\n\n"
+
+  "    * 模糊测速: 仅代表该镜像站提供服务的一个可能速度。因而可能会出现测速数值较高，但实际使用体验不佳的现象。\n\n"
+
+  "  因此，当您遇到模糊测速时，请务必向我们提交准确的测速链接，这既能帮助您，也能造福所有用户。\n\n"
+
+  "  chsrc 是一个自助和共建的项目。 维护者对于不熟悉的生态系统很难提供有价值的贡献。请您将这部分功能视为您的专属，您可以完全掌控和维护它，就像您是唯一的负责人一样。\n";
+
+  br();br();
+
+  chsrc_note2 (msg);
+}
+
+
+
+
 typedef enum {
   TargetOp_Get_Source = 1,
   TargetOp_Set_Source,
@@ -515,7 +542,7 @@ typedef enum {
 } TargetOp;
 
 /**
- * 寻找target，并根据`code`执行相应的操作
+ * 寻找target，并根据 @param:code 执行相应的操作
  *
  * @param  input   用户输入的目标
  * @param  code    对target要执行的操作
@@ -585,6 +612,14 @@ get_target (const char *input, TargetOp code, char *option)
       select_mirror_autoly (target->sources, target->sources_n, input);
       return true;
     }
+
+  if (TargetOp_Set_Source==code
+      || TargetOp_Reset_Source==code
+      || TargetOp_Measure_Source==code)
+    {
+      cli_notify_for_users();
+    }
+
   return true;
 }
 
