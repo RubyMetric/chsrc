@@ -39,7 +39,6 @@ static Source_t pl_go_sources[] =
   {&pl_go_upstream, "https://proxy.golang.org", NULL},
   {&GoProxyCN,        "https://goproxy.cn", DelegateToMirror},
   {&Ali,              "https://mirrors.aliyun.com/goproxy/", NULL},
-  {&Huawei,           "https://mirrors.huaweicloud.com/goproxy/", NULL},
   {&GoProxyIO,        "https://goproxy.io", DelegateToMirror}
 };
 def_sources_n(pl_go);
