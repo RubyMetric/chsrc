@@ -17,12 +17,14 @@ static SourceProvider_t pl_go_upstream =
 
 static MirrorSite_t GoProxyCN =
 {
+  IS_DedicatedMirrorSite,
   "goproxy.cn", "Goproxy.cn", "Goproxy.cn (七牛云)", "https://goproxy.cn/",
   {NotSkip, NA, NA, "https://goproxy.cn/github.com/aws/aws-sdk-go/@v/v1.45.2.zip", ACCURATE} // 30 MB
 },
 
 GoProxyIO =
 {
+  IS_DedicatedMirrorSite,
   "goproxy.io", "GOPROXY.IO", "GOPROXY.IO", "https://goproxy.io/",
   {NotSkip, NA, NA, "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip", ACCURATE} // 30 MB
 };

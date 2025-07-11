@@ -9,6 +9,7 @@
 
 static MirrorSite_t NugetOrg =
 {
+  IS_UpstreamProvider,
   "nuget.org", "NuGet Org", "Nuget Organization", "https://www.nuget.org/",
   {SKIP, ToFill, ToFill, NULL, ROUGH}
 };

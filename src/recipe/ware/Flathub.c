@@ -26,12 +26,14 @@ static SourceProvider_t wr_flathub_upstream =
 
 wr_flathub_siyuan =
 {
+  IS_DedicatedMirrorSite,
   "sjtu-sy", "SJTUG-siyuan", "上海交通大学思源镜像站Flathub", "https://mirror.sjtu.edu.cn/",
   {NotSkip, NA, NA, "https://mirror.sjtu.edu.cn/flathub/flathub.gpg"}
 },
 
 wr_flathub_zhiyuan =
 {
+  IS_DedicatedMirrorSite,
   "sjtu-zy", "SJTUG-zhiyuan", "上海交通大学致远镜像站Flathub", "https://mirrors.sjtug.sjtu.edu.cn/",
   {NotSkip, NA, NA, "https://mirrors.sjtug.sjtu.edu.cn/flathub/flathub.gpg"}
 };

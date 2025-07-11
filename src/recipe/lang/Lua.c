@@ -9,6 +9,7 @@
 
 static MirrorSite_t Api7 =
 {
+  IS_DedicatedMirrorSite,
   "api7", "api7.ai", "深圳支流科技有限公司", "https://www.apiseven.com/",
   {SKIP, ToFill, ToFill, NULL, ROUGH}
 };

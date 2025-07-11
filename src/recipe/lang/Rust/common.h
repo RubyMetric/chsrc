@@ -9,6 +9,7 @@
 
 static MirrorSite_t RsProxyCN =
 {
+  IS_DedicatedMirrorSite,
   "rsproxycn", "RsProxy.cn", "字节跳动基础架构Dev Infra", "https://rsproxy.cn/",
   {NotSkip, NA, NA, "https://rsproxy.cn/api/v1/crates/windows/0.58.0/download", ACCURATE}
 };

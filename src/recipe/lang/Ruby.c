@@ -16,6 +16,7 @@ static SourceProvider_t pl_ruby_upstream =
 
 static MirrorSite_t RubyChina =
 {
+  IS_DedicatedMirrorSite,
   "rubychina", "RubyChina", "Ruby China 社区", "https://gems.ruby-china.com/",
   {NotSkip, NA, NA, "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem", ACCURATE} // 9.9 MB
 };

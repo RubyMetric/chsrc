@@ -17,6 +17,7 @@ static SourceProvider_t pl_nodejs_npm_upstream =
 
 static MirrorSite_t NpmMirror =
 {
+  IS_DedicatedMirrorSite,
   "npmmirror", "npmmirror", "npmmirror (阿里云赞助)", "https://npmmirror.com/",
   // 注意，下面这个是跳转后的地址，不确定未来会不会改变
   {NotSkip, NA, NA, "https://cdn.npmmirror.com/packages/%40tensorflow/tfjs/4.22.0/tfjs-4.22.0.tgz", ACCURATE} // 29MB

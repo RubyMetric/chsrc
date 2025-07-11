@@ -30,8 +30,18 @@ ProviderSpeedMeasureInfo_t;
 #define ACCURATE true
 #define ROUGH    false
 
+typedef enum ProviderType_t
+{
+  IS_GeneralMirrorSite,   /* 通用镜像站 */
+  IS_DedicatedMirrorSite, /* 专用镜像站 */
+  IS_UpstreamProvider,    /* 上游默认源 */
+  IS_VirtualProvider,     /* 用户提供   */
+}
+ProviderType_t;
+
 typedef struct SourceProvider_t
 {
+  const ProviderType_t type; /* 类型 */
   const char *code; /* 用于用户指定某一 Provider */
   const char *abbr; /* 需要使用 Provider 的英文名时，用这个代替，因为大部分 Provider 没有提供正式的英文名 */
   const char *name; /* Provider 中文名 */
@@ -44,17 +54,19 @@ typedef SourceProvider_t MirrorSite_t;
 
 SourceProvider_t UpstreamProvider =
 {
+  IS_UpstreamProvider,
   /* 引入新的上游默认源时，请使下面第一行的前三个字段保持不变，只添加第四个字段，可使用 def_upstream 宏 */
   "upstream", "Upstream", "上游默认源", NULL,
   /* 引入新的上游默认源时，请完全修改下面这个结构体，可使用 def_need_measure_info 宏 */
   {SKIP, "URL未知，邀您参与贡献!", "URL unknown, welcome to contribute!", NULL, ACCURATE}
 };
 
-#define def_upstream            "upstream", "Upstream", "上游默认源"
+#define def_upstream            IS_UpstreamProvider, "upstream", "Upstream", "上游默认源"
 #define def_need_measure_info   {SKIP, "缺乏较大的测速对象，邀您参与贡献!", "Lack of large object URL, welcome to contribute!", NULL, ACCURATE}
 
 SourceProvider_t UserDefinedProvider =
 {
+  IS_VirtualProvider,
   "user", "用户自定义", "用户自定义", NULL,
   {SKIP, "用户自定义源不测速", "SKIP for user-defined source", NULL, ACCURATE}
 };
