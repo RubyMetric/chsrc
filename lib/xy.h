@@ -8,7 +8,7 @@
  * Contributors  :   juzeon   <skyjuzheng@gmail.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-06-20>
+ * Last Modified : <2025-07-11>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C11 utilities for CLI applications in mixed flavor:
@@ -18,7 +18,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.1.5.0-2025/06/20"
+#define _XY_Version       "v0.1.5.1-2025/07/11"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/main/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/main/lib/xy.h"
 
@@ -40,7 +40,7 @@
 #include <unistd.h>
 
 #if defined(__STDC__) && __STDC_VERSION__ >= 202311
-  #define XY_Dreprecate_This(msg) [[deprecated(msg)]]
+  #define XY_Deprecate_This(msg) [[deprecated(msg)]]
 #elif defined(__GNUC__) || defined(__clang__)
   #define XY_Deprecate_This(msg) __attribute__((deprecated(msg)))
 #elif defined(_MSC_VER)

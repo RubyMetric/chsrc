@@ -350,7 +350,7 @@ cmd_to_check_program (char *prog_name)
   return quiet_cmd;
 }
 
-XY_Dreprecate_This("Use cmd_to_check_program() instead")
+XY_Deprecate_This("Use cmd_to_check_program() instead")
 static char *
 cmd_to_check_program2 (char *prog_name)
 {
