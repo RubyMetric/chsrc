@@ -28,7 +28,7 @@
  */
 MirrorSite_t MirrorZ =
 {
-  "mirrorz", "MirrorZ",  "MirrorZ 校园网镜像站", "https://mirrors.cernet.edu.cn/",
+  "mirrorz", "MirrorZ",  "校园网联合镜像站(MirrorZ)", "https://mirrors.cernet.edu.cn/",
   {SKIP, "功能特殊无法测速，跳过", "SKIP because of its special function", NULL, ROUGH}
 },
 
