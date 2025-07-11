@@ -635,9 +635,9 @@ get_max_ele_idx_in_dbl_ary (double *array, int size)
 void
 measure_speed_for_every_source (Source_t sources[], int size, double speed_records[])
 {
-    // bool get_measured[size]; /* 是否真正执行了测速 */
-     int get_measured_n = 0; /* 测速了几个        */
-   char *measure_msgs[size];
+  // bool get_measured[size]; /* 是否真正执行了测速 */
+  int get_measured_n = 0;     /* 测速了几个        */
+  char *measure_msgs[size];
 
   double speed = 0.0;
 
@@ -648,15 +648,28 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
       SourceProvider_t *provider = src.provider;
       ProviderSpeedMeasureInfo_t psmi = provider->psmi;
 
-      bool skip = psmi.skip;
+      bool provider_skip = psmi.skip;
 
-      const char *url = psmi.url;
+      bool has_dedicated_speed_url = false;
 
-      if (!skip && NULL==url)
-        // 这种情况应当被视为bug，但是我们目前还是软处理
+      /**
+       * 存在两类测速链接
+       * 1. 有*专用测速链接*时，我们选专用，这是精准测速
+       * 2. 若无，我们用*镜像站整体测速链接*来进行代替，
+       *      若是专用镜像站，则是精准测速
+       *      若是通用镜像站，则是模糊测速
+       */
+      const char *provider_speed_url = psmi.url;
+      const char *dedicated_speed_url = src.speed_measure_url;
+
+      /* 最终用来测速的 URL */
+      char *url = NULL;
+
+      if (!provider_skip && !provider_speed_url)
+      /* 没有声明跳过，但是却没有提供 URL，这是维护者维护时出了纰漏，我们软处理 */
         {
           char *msg1 = ENGLISH ? "Maintainers don't offer " : "维护者未提供 ";
-          char *msg2 = ENGLISH ? " mirror site's speed measure link, so skip it" : " 镜像站测速链接，跳过该站点";
+          char *msg2 = ENGLISH ? " mirror site's speed measure link, so skip it" : " 镜像站测速链接，跳过该站点（需修复）";
           chsrc_warn (xy_strjoin (3, msg1, provider->code, msg2));
           speed = 0;
 
@@ -664,17 +677,45 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
           // get_measured[i] = false;
           measure_msgs[i] = NULL;
         }
+      else if (!provider_skip && provider_speed_url)
+        {
+          if (is_url(provider_speed_url))
+            {
+              url = xy_strdup (provider_speed_url);
+              chsrc_debug ("m", xy_2strjoin ("使用镜像站整体测速链接: ", url));
+            }
+        }
+      else if (provider_skip)
+        {
+          /* Provider 被声明为跳过测速，下方判断精准测速链接有无提供，若也没有提供，将会输出跳过原因  */
+        }
 
-      if (skip)
+      if (dedicated_speed_url)
+        {
+          if (is_url(dedicated_speed_url))
+            {
+              url = xy_strdup (dedicated_speed_url);
+              has_dedicated_speed_url = true;
+              chsrc_debug ("m", xy_2strjoin ("使用专用测速链接: ", url));
+            }
+          else
+            {
+              // 一定是一个URL，防止维护者没填，这里有一些脏数据
+              xy_unreached();
+            }
+        }
+
+
+      if (provider_skip && !has_dedicated_speed_url)
         {
           if (xy_streql ("upstream", provider->code))
             {
-              /* 上游源不测速，但不置0，因为要避免这种情况: 可能其他镜像站测速都为0，最后反而选择了该 upstream */
+              /* 上游源不测速，但不置0，因为要避免这么一种情况: 可能其他镜像站测速都为0，最后反而选择了该 upstream */
               speed = -1024*1024*1024;
               if (!src.url)
                 {
-                  psmi.skip_reason_CN = "上游默认源URL未知，请帮助补充";
-                  psmi.skip_reason_EN = "The default upstream source URL is unknown, please help to add";
+                  psmi.skip_reason_CN = "缺乏对上游默认源进行测速的URL，请帮助补充";
+                  psmi.skip_reason_EN = "Lack of URL to measure upstream default source provider, please help to add";
                 }
             }
           else if (xy_streql ("user", provider->code))
@@ -696,33 +737,41 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
             {
               skip_reason = ENGLISH ? "SKIP for no reason" : "无理由跳过";
             }
-          measure_msgs[i] = xy_strjoin (4, "  x ", msg, " ", yellow(skip_reason));
+          measure_msgs[i] = xy_strjoin (4, faint("  x "), msg, " ", yellow(faint(skip_reason)));
           println (measure_msgs[i]);
+
+          /* 下一位 */
+          continue;
         }
-      else
+
+      /* 此时，一定获得了一个用于测速的链接 */
+      if (url)
         {
           const char *msg = ENGLISH ? provider->abbr : provider->name;
 
           bool is_accurate = provider->psmi.accurate;
-          char *accurate_msg = CHINESE ? (is_accurate ? "[精准测速]" :  faint("[模糊测速]"))
-                                       : (is_accurate ? "[accurate]" : faint("[rough]"));
+          char *accurate_msg = CHINESE ? (is_accurate ? bdblue(faint("[精准测速]")) :  faint("[模糊测速]"))
+                                       : (is_accurate ? bdblue(faint("[accurate]")) : faint("[rough]"));
 
           if (xy_streql ("upstream", provider->code))
             {
-              measure_msgs[i] = xy_strjoin (7, "  ^ ", msg, " (", src.url, ") ", accurate_msg, " ... ");
+              measure_msgs[i] = xy_strjoin (7, faint("  ^ "), msg, " (", src.url, ") ", accurate_msg, faint(" ... "));
             }
           else
             {
-              measure_msgs[i] = xy_strjoin (5, "  - ", msg, " ", accurate_msg, " ... ");
+              measure_msgs[i] = xy_strjoin (5, faint("  - "), msg, " ", accurate_msg, faint(" ... "));
             }
 
           print (measure_msgs[i]);
           fflush (stdout);
 
-          char *url_ = xy_strdup (url);
-          char *curl_result = measure_speed_for_url (url_);
+          char *curl_result = measure_speed_for_url (url);
           double speed = parse_and_say_curl_result (curl_result);
           speed_records[i] = speed;
+        }
+      else
+        {
+          xy_unreached();
         }
     }
 }
@@ -813,7 +862,7 @@ select_mirror_autoly (Source_t *sources, size_t size, const char *target_name)
       char *msg1 = ENGLISH ? "NOTICE  mirror site: " : "镜像站提示: ";
       char   *is = ENGLISH ? " is " : " 是 ";
       char *msg2 = ENGLISH ? "'s ONLY mirror available currently, thanks for their generous support"
-                                    : " 目前唯一可用镜像站，感谢他们的慷慨支持";
+                           : " 目前唯一可用镜像站，感谢他们的慷慨支持";
       const char *name = ENGLISH ? sources[fast_idx].mirror->abbr
                                           : sources[fast_idx].mirror->name;
       say (xy_strjoin (5, msg1, bdgreen(name), green(is), green(target_name), green(msg2)));
@@ -999,13 +1048,13 @@ chsrc_conclude (Source_t *source)
           if (source_is_userdefine (source))
             {
               char *msg = ENGLISH ? MSG_EN_FULLY_AUTO      MSG_EN_PUBLIC_URL \
-                                           : MSG_CN_FULLY_AUTO ", " MSG_CN_PUBLIC_URL;
+                                  : MSG_CN_FULLY_AUTO ", " MSG_CN_PUBLIC_URL;
               chsrc_log (msg);
             }
           else
             {
               char *msg = ENGLISH ? MSG_EN_FULLY_AUTO      MSG_EN_THANKS \
-                                           : MSG_CN_FULLY_AUTO ", " MSG_CN_THANKS;
+                                  : MSG_CN_FULLY_AUTO ", " MSG_CN_THANKS;
               thank_mirror (msg);
             }
         }
@@ -1022,20 +1071,20 @@ chsrc_conclude (Source_t *source)
           if (source_is_userdefine (source))
             {
               char *msg = ENGLISH ? MSG_EN_SEMI_AUTO      MSG_EN_STILL      MSG_EN_PUBLIC_URL \
-                                           : MSG_CN_SEMI_AUTO ", " MSG_CN_STILL "。" MSG_CN_PUBLIC_URL;
+                                  : MSG_CN_SEMI_AUTO ", " MSG_CN_STILL "。" MSG_CN_PUBLIC_URL;
               chsrc_log (msg);
             }
           else
             {
               char *msg = ENGLISH ? MSG_EN_SEMI_AUTO      MSG_EN_STILL      MSG_EN_THANKS \
-                                           : MSG_CN_SEMI_AUTO ", " MSG_CN_STILL "。" MSG_CN_THANKS;
+                                  : MSG_CN_SEMI_AUTO ", " MSG_CN_STILL "。" MSG_CN_THANKS;
               thank_mirror (msg);
             }
         }
       else
         {
           char *msg = ENGLISH ? MSG_EN_SEMI_AUTO      MSG_EN_STILL \
-                                       : MSG_CN_SEMI_AUTO ", " MSG_CN_STILL;
+                              : MSG_CN_SEMI_AUTO ", " MSG_CN_STILL;
           chsrc_log (msg);
         }
 
@@ -1049,13 +1098,13 @@ chsrc_conclude (Source_t *source)
           if (source_is_userdefine (source))
             {
               char *msg = ENGLISH ? MSG_EN_CONSTRAINT      MSG_EN_PUBLIC_URL \
-                                           : MSG_CN_CONSTRAINT "; " MSG_CN_PUBLIC_URL;
+                                  : MSG_CN_CONSTRAINT "; " MSG_CN_PUBLIC_URL;
               chsrc_log (msg);
             }
           else
             {
               char *msg = ENGLISH ? MSG_EN_CONSTRAINT      MSG_EN_THANKS \
-                                           : MSG_CN_CONSTRAINT ", " MSG_CN_THANKS;
+                                  : MSG_CN_CONSTRAINT ", " MSG_CN_THANKS;
               thank_mirror (msg);
             }
         }

@@ -69,8 +69,8 @@ typedef struct Source_t
   /* 用于换源的 URL */
   char *url;
 
-  /* 精准测速 URL*/
-  char *accurate_speed_measure_url;
+  /* 对该 source 的专用测速链接，这就是精准测速 */
+  char *speed_measure_url;
 }
 Source_t;
 
