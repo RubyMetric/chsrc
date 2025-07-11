@@ -5,18 +5,16 @@
  * Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2025-06-18>
+ * Last Modified : <2025-07-11>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t pl_rust_cargo_upstream =
 {
   def_upstream, "https://crates.io/",
-  {NotSkip, NA, NA, "https://crates.io/api/v1/crates/windows/0.58.0/download"}
+  {NotSkip, NA, NA, "https://crates.io/api/v1/crates/windows/0.58.0/download", ACCURATE}
   /* 跳转为: https://static.crates.io/crates/windows/windows-0.58.0.crate */
 };
 
-// Ali:  https://mirrors.aliyun.com/crates/api/v1/crates/windows/0.58.0/download
-// Ustc: https://crates-io.proxy.ustclug.org/api/v1/crates/windows/0.58.0/download
 
 /**
  * @update 2025-06-18
@@ -28,18 +26,30 @@ static SourceProvider_t pl_rust_cargo_upstream =
  */
 static Source_t pl_rust_cargo_sources[] =
 {
-  {&pl_rust_cargo_upstream,  "https://github.com/rust-lang/crates.io-index/"},
-  {&MirrorZ,       "https://mirrors.cernet.edu.cn/crates.io-index/"},
-  {&RsProxyCN,     "https://rsproxy.cn/index/"},
-  {&Ali,           "https://mirrors.aliyun.com/crates.io-index/"},
-  {&Zju,           "https://mirrors.zju.edu.cn/crates.io-index/"},
-  // {&Nju,           "https://mirror.nju.edu.cn/git/crates.io-index.git/"},
-  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/"},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/crates.io-index/"},
-  // {&Hust,          "https://mirrors.hust.edu.cn/crates.io-index/"},
-  {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/"}
+  {&pl_rust_cargo_upstream,  "https://github.com/rust-lang/crates.io-index/",
+                              NULL},
+  {&MirrorZ,       "https://mirrors.cernet.edu.cn/crates.io-index/",
+                    NULL},
+  {&RsProxyCN,     "https://rsproxy.cn/index/",
+                    NULL},
+  {&Ali,           "https://mirrors.aliyun.com/crates.io-index/",
+                   "https://mirrors.aliyun.com/crates/api/v1/crates/windows/0.58.0/download"},
+  {&Zju,           "https://mirrors.zju.edu.cn/crates.io-index/",
+                    NULL},
+  // {&Nju,        "https://mirror.nju.edu.cn/git/crates.io-index.git/",
+  //                NULL},
+  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/",
+                    NULL},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/",
+                    NULL},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/",
+                    NULL},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/crates.io-index/",
+                   "https://crates-io.proxy.ustclug.org/api/v1/crates/windows/0.58.0/download"},
+  // {&Hust,       "https://mirrors.hust.edu.cn/crates.io-index/",
+  //                NULL},
+  {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/",
+                    NULL}
 };
 def_sources_n(pl_rust_cargo);
 
