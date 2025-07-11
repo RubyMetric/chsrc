@@ -13,7 +13,7 @@
 static SourceProvider_t pl_python_pypi_upstream =
 {
   def_upstream, "https://pypi.org/",
-  {NotSkip, NA, NA, "https://files.pythonhosted.org/packages/56/e4/55aaac2b15af4dad079e5af329a79d961e5206589d0e02b1e8da221472ed/tensorflow-2.18.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"} // 260MB
+  {NotSkip, NA, NA, "https://files.pythonhosted.org/packages/56/e4/55aaac2b15af4dad079e5af329a79d961e5206589d0e02b1e8da221472ed/tensorflow-2.18.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", ACCURATE} // 260MB
 };
 
 /**

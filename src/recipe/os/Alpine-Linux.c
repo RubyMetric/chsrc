@@ -11,7 +11,7 @@
 static SourceProvider_t os_alpine_upstream =
 {
   def_upstream, "http://dl-cdn.alpinelinux.org/alpine",
-  {NotSkip, NA, NA, "https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64/alpine-standard-3.21.0-x86_64.iso"}
+  {NotSkip, NA, NA, "https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64/alpine-standard-3.21.0-x86_64.iso", ACCURATE}
 };
 
 

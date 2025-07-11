@@ -14,7 +14,7 @@
 static SourceProvider_t wr_flathub_upstream =
 {
   def_upstream, "https://flathub.org/repo",
-  {NotSkip, NA, NA, "https://flathub.org/repo/flathub.gpg"}
+  {NotSkip, NA, NA, "https://flathub.org/repo/flathub.gpg", ROUGH}
 },
 
 /**

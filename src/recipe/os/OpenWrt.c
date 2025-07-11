@@ -12,7 +12,7 @@
 static SourceProvider_t os_openwrt_upstream =
 {
   def_upstream, "https://downloads.openwrt.org",
-  {NotSkip, NA, NA, "https://downloads.openwrt.org/releases/23.05.5/targets/x86/64/openwrt-sdk-23.05.5-x86-64_gcc-12.3.0_musl.Linux-x86_64.tar.xz"}
+  {NotSkip, NA, NA, "https://downloads.openwrt.org/releases/23.05.5/targets/x86/64/openwrt-sdk-23.05.5-x86-64_gcc-12.3.0_musl.Linux-x86_64.tar.xz", ACCURATE}
 };
 
 /**

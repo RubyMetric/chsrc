@@ -47,7 +47,7 @@ def_sources_n(pl_nodejs_group);
 static SourceProvider_t pl_nodejs_binary_release_upstream =
 {
   def_upstream, "https://nodejs.org/",
-  {NotSkip, NA, NA, "https://nodejs.org/dist/v23.4.0/node-v23.4.0.tar.gz"} // 100MB
+  {NotSkip, NA, NA, "https://nodejs.org/dist/v23.4.0/node-v23.4.0.tar.gz", ACCURATE} // 100MB
 };
 
 /**

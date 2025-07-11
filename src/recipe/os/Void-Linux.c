@@ -11,7 +11,7 @@
 static SourceProvider_t os_voidlinux_upstream =
 {
   def_upstream, "https://repo-default.voidlinux.org",
-  {NotSkip, NA, NA, "https://repo-default.voidlinux.org/live/20240314/void-live-x86_64-musl-20240314-xfce.iso"}
+  {NotSkip, NA, NA, "https://repo-default.voidlinux.org/live/20240314/void-live-x86_64-musl-20240314-xfce.iso", ACCURATE}
 };
 
 /**

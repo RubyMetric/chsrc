@@ -18,7 +18,7 @@
  static SourceProvider_t pl_dart_upstream =
 {
   def_upstream, "https://pub.dev",
-  {NotSkip, NA, NA, "https://pub.dev/packages/flutter_vision/versions/1.1.4.tar.gz"} // 37.05 MB
+  {NotSkip, NA, NA, "https://pub.dev/packages/flutter_vision/versions/1.1.4.tar.gz", ACCURATE} // 37.05 MB
 };
 
 static Source_t pl_dart_sources[] =

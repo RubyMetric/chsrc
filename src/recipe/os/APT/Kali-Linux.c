@@ -15,7 +15,7 @@ static SourceProvider_t os_kali_upstream =
 {
   def_upstream, "http://http.kali.org/kali",
   // https://github.com/RubyMetric/chsrc/issues/121
-  {NotSkip, NA, NA, "https://http.kali.org/kali/dists/kali-dev/Contents-amd64.gz"} // 47MB
+  {NotSkip, NA, NA, "https://http.kali.org/kali/dists/kali-dev/Contents-amd64.gz", ACCURATE} // 47MB
 };
 
 /**

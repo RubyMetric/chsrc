@@ -13,7 +13,7 @@
 static SourceProvider_t os_openEuler_upstream =
 {
   def_upstream, "https://repo.openeuler.org/",
-  {NotSkip, NA, NA, "https://repo.openeuler.org/openEuler-24.03-LTS/ISO/x86_64/openEuler-24.03-LTS-netinst-x86_64-dvd.iso"} // 896MB
+  {NotSkip, NA, NA, "https://repo.openeuler.org/openEuler-24.03-LTS/ISO/x86_64/openEuler-24.03-LTS-netinst-x86_64-dvd.iso", ACCURATE} // 896MB
 };
 
 

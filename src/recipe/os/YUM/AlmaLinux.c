@@ -11,7 +11,7 @@
 static SourceProvider_t os_almalinux_upstream =
 {
   def_upstream, "http://repo.almalinux.org/almalinux",
-  {NotSkip, NA, NA, "https://raw.repo.almalinux.org/almalinux/9.5/isos/x86_64/AlmaLinux-9-latest-x86_64-minimal.iso"}
+  {NotSkip, NA, NA, "https://raw.repo.almalinux.org/almalinux/9.5/isos/x86_64/AlmaLinux-9-latest-x86_64-minimal.iso", ACCURATE}
 };
 
 /**

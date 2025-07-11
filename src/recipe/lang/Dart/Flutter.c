@@ -19,7 +19,7 @@
 static SourceProvider_t pl_dart_flutter_upstream =
 {
   def_upstream, "https://storage.googleapis.com",
-  {NotSkip, NA, NA, "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_v1.0.0-stable.tar.xz"} // 231 MB
+  {NotSkip, NA, NA, "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_v1.0.0-stable.tar.xz", ACCURATE} // 231 MB
 };
 
 static Source_t pl_dart_flutter_sources[] =

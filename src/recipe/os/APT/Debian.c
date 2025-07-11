@@ -14,7 +14,7 @@
 static SourceProvider_t os_debian_upstream =
 {
   def_upstream, "https://ftp.debian.org/debian/",
-  {NotSkip, NA, NA, "https://ftp.debian.org/debian/dists/bookworm/main/Contents-all.gz"} // 32MB
+  {NotSkip, NA, NA, "https://ftp.debian.org/debian/dists/bookworm/main/Contents-all.gz", ACCURATE} // 32MB
 };
 
 

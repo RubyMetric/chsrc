@@ -11,7 +11,7 @@
 static SourceProvider_t os_linuxlite_upstream =
 {
   def_upstream, "http://repo.linuxliteos.com/linuxlite/",
-  {NotSkip, NA, NA, "http://repo.linuxliteos.com/linuxlite/isos/7.2/linux-lite-7.2-64bit.iso"} // 2.9GB
+  {NotSkip, NA, NA, "http://repo.linuxliteos.com/linuxlite/isos/7.2/linux-lite-7.2-64bit.iso", ACCURATE} // 2.9GB
 };
 
 /**

@@ -13,7 +13,7 @@ static SourceProvider_t os_ubuntu_upstream =
 {
   def_upstream, "http://archive.ubuntu.com/",
   // https://github.com/RubyMetric/chsrc/issues/121
-  {NotSkip, NA, NA, "http://archive.ubuntu.com/ubuntu/dists/noble/Contents-amd64.gz"}
+  {NotSkip, NA, NA, "http://archive.ubuntu.com/ubuntu/dists/noble/Contents-amd64.gz", ACCURATE}
 };
 
 /**
