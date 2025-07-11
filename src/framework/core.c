@@ -732,7 +732,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
             {
               /* 防止维护者没填，这里有一些脏数据，我们软处理：假装该链接URL不存在 */
               has_dedicated_speed_url = false;
-              chsrc_debug ("m", xy_2strjoin ("专用测速链接为脏数据，请修复: ", provider.name));
+              chsrc_debug ("m", xy_2strjoin ("专用测速链接为脏数据，请修复: ", provider->name));
             }
         }
 
@@ -780,7 +780,16 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
         {
           const char *msg = ENGLISH ? provider->abbr : provider->name;
 
-          bool is_accurate = provider->psmi.accurate;
+          bool is_accurate = false;
+          if (has_dedicated_speed_url)
+            {
+              is_accurate = true;
+            }
+          else if (provider->psmi.accurate)
+            {
+              is_accurate = true;
+            }
+
           char *accurate_msg = CHINESE ? (is_accurate ? bdblue(faint("[精准测速]")) :  faint("[模糊测速]"))
                                        : (is_accurate ? bdblue(faint("[accurate]")) : faint("[rough]"));
 

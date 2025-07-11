@@ -74,6 +74,13 @@ typedef struct Source_t
 }
 Source_t;
 
+/* 不用给专用测速链接，因为 Upstream 的整体测速链接已是精准测速 */
+#define DelegateToUpstream  NULL
+/* 不用给专用测速链接，因为该镜像站是专用镜像站，其整体测速链接已是精准测速 */
+#define DelegateToMirror    NULL
+/* 看到该注释的贡献者，你可以帮忙寻找专用测速链接 */
+#define NeedContribute      NULL
+
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
 
