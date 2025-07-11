@@ -700,8 +700,9 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
             }
           else
             {
-              // 一定是一个URL，防止维护者没填，这里有一些脏数据
-              xy_unreached();
+              /* 防止维护者没填，这里有一些脏数据，我们软处理：假装该链接URL不存在 */
+              has_dedicated_speed_url = false;
+              chsrc_debug ("m", xy_2strjoin ("专用测速链接为脏数据，请修复: ", provider.name));
             }
         }
 
