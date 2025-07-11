@@ -70,7 +70,8 @@ pl_python_get_py_program_name (char **prog_name)
   if (py_exist) *prog_name = "python3";
   else
     {
-      /* 不要调用 python 自己，而是使用 python --version，避免Windows弹出Microsoft Store */
+      /* 不要调用 python 自己，而是使用 python --version，或者其他方式
+         因为直接执行 python 会使Windows弹出Microsoft Store */
       py_exist = chsrc_check_program ("python");
 
       if (py_exist) *prog_name = "python";

@@ -295,7 +295,7 @@ is_url (const char *str)
 /**
  * 检测二进制程序是否存在
  *
- * @param  check_cmd  检测 `prog_name` 是否存在的一段命令，一般来说，填 `prog_name` 本身即可，
+ * @param  check_cmd  检测 @param:prog_name 是否存在的一段命令，一般来说，填 @param:prog_name 本身即可，
  *                    但是某些情况下，需要使用其他命令绕过一些特殊情况，比如 python 这个命令在Windows上
  *                    会自动打开 Microsoft Store，需避免
  *
@@ -332,55 +332,85 @@ query_program_exist (char *check_cmd, char *prog_name, int mode)
 
 
 /**
+ * @brief 生成用于 '检测一个程序是否存在' 的命令，该内部函数由 chsrc_check_program() 家族调用
+ *
+ * 检查一个程序是否存在时，我们曾经使用 "调用 程序名 --version" 的方式 (即 cmd_to_check_program2())，
+ * 但是该方式有三个问题：
+ *
+ *  1. 该程序得到直接执行，可能不太安全 (虽然基本不可能)
+ *  2. 有一些程序启动速度太慢，即使只调用 --version，也依旧会花费许多时间，比如 mvn
+ *  3. 有些程序并不支持 --version 选项 (虽然基本不可能)
+ *
+ * 我们利用 Windows 和 Unix 上都有 where 命令的事实，解决了上述问题
+ */
+static char *
+cmd_to_check_program (char *prog_name)
+{
+  char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin ("where ", prog_name));
+  return quiet_cmd;
+}
+
+XY_Dreprecate_This("Use cmd_to_check_program() instead")
+static char *
+cmd_to_check_program2 (char *prog_name)
+{
+  char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (prog_name, " --version"));
+  return quiet_cmd;
+}
+
+
+/**
+ * @brief 检测程序是否存在
+ *
  * @note
- *  1. 一般只在 Recipe 中使用，显式检测每一个需要用到的 program
- *  2. 无论存在与否，**均输出**
+ *  1. 一般只在 recipe 中使用，显式检测每一个需要用到的 program
+ *  2. 无论存在与否，*均输出检测信息*
  *
  */
 bool
 chsrc_check_program (char *prog_name)
 {
-  char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (prog_name, " --version"));
-  return query_program_exist (quiet_cmd, prog_name, Noisy_When_Exist|Noisy_When_NonExist);
+  return query_program_exist (cmd_to_check_program(prog_name), prog_name, Noisy_When_Exist|Noisy_When_NonExist);
 }
 
 /**
+ * @brief 检测程序是否存在
+ *
  * @note
  *  1. 此函数没有强制性，只返回检查结果
- *  2. 无论存在与否，**均不输出**
- *  3. 此函数只能对接受 --version 选项的命令行程序有效
- *
+ *  2. 无论存在与否，*均不输出检测信息*
  */
 bool
 chsrc_check_program_quietly (char *prog_name)
 {
-  char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (prog_name, " --version"));
-  return query_program_exist (quiet_cmd, prog_name, Quiet_When_Exist|Quiet_When_NonExist);
+  return query_program_exist (cmd_to_check_program(prog_name), prog_name, Quiet_When_Exist|Quiet_When_NonExist);
 }
 
 /**
- * @note 存在时不输出，不存在时才输出
+ * @brief 检测程序是否存在
+ *
+ * @note 存在时不输出检测信息，不存在时才输出检测信息
  *
  */
 bool
 chsrc_check_program_quietly_when_exist (char *prog_name)
 {
-  char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (prog_name, " --version"));
-  return query_program_exist (quiet_cmd, prog_name, Quiet_When_Exist|Noisy_When_NonExist);
+  return query_program_exist (cmd_to_check_program(prog_name), prog_name, Quiet_When_Exist|Noisy_When_NonExist);
 }
 
 
 /**
+ * @brief 确保程序一定存在
+ *
  * @note
  *  1. 此函数具有强制性，检测不到就直接退出
- *  2. 检查到存在时不输出，检查到不存在时输出
+ *  2. 存在时不输出检测信息，不存在时才输出检测信息
  *
  */
 void
 chsrc_ensure_program (char *prog_name)
 {
-  char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (prog_name, " --version"));
-  bool exist = query_program_exist (quiet_cmd, prog_name, Quiet_When_Exist|Noisy_When_NonExist);
+  bool exist = query_program_exist (cmd_to_check_program(prog_name), prog_name, Quiet_When_Exist|Noisy_When_NonExist);
   if (exist)
     {
       // OK, nothing should be done
