@@ -8,8 +8,10 @@
  *                |
  * Created On     : <2023-09-02>
  * Major Revision :      3
- * Last Modified  : <2025-06-16>
+ * Last Modified  : <2025-07-11>
  * ------------------------------------------------------------*/
+
+#define OS_Debian_Speed_URL_Postfix "/dists/bookworm/main/Contents-all.gz"
 
 static SourceProvider_t os_debian_upstream =
 {
@@ -19,23 +21,37 @@ static SourceProvider_t os_debian_upstream =
 
 
 /**
- * @update 2024-11-21
+ * @update 2025-07-11
  */
 static Source_t os_debian_sources[] =
 {
-  {&os_debian_upstream, "http://deb.debian.org/debian"},
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/debian/"},
-  {&Ali,              "https://mirrors.aliyun.com/debian"},
-  {&Volcengine,       "https://mirrors.volces.com/debian"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/debian"},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/debian"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/debian"},
-  {&Tencent,          "https://mirrors.tencent.com/debian"},
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/debian"},
-  // {&Netease,          "https://mirrors.163.com/debian"}, /* 不启用原因：过慢 */
-  // {&Sohu,             "https://mirrors.sohu.com/debian"} /* 不启用原因：过慢 */
+  {&os_debian_upstream, "http://deb.debian.org/debian", DelegateToUpstream},
+
+  /* MirrorZ 的速度这么测也是可以的 */
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/debian/", FeedBySourcesPrepare },
+  {&Ali,              "https://mirrors.aliyun.com/debian",  FeedBySourcesPrepare},
+  {&Volcengine,       "https://mirrors.volces.com/debian",  FeedBySourcesPrepare},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/debian", FeedBySourcesPrepare},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/debian", FeedBySourcesPrepare},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/debian", FeedBySourcesPrepare},
+  {&Tencent,          "https://mirrors.tencent.com/debian", FeedBySourcesPrepare},
+
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/debian", FeedBySourcesPrepare},
+
+  /* 不启用原因：过慢 */
+  // {&Netease,       "https://mirrors.163.com/debian", FeedBySourcesPrepare},
+
+  /* 不启用原因：过慢 */
+  // {&Sohu,          "https://mirrors.sohu.com/debian", FeedBySourcesPrepare}
 };
 def_sources_n(os_debian);
+
+
+void
+os_debian_sources_prepare ()
+{
+  chsrc_sources_prepare_speedurl_with_postfix (os_debian, OS_Debian_Speed_URL_Postfix);
+}
 
 
 void

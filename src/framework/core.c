@@ -819,6 +819,42 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
 
 
 /**
+ * @brief 填充专用测速链接
+ *
+ * 该宏的作用是将某个 target 源的专用测速链接填充到 Source_t 中的 speed_url 字段中
+ *
+ * 即使不需要该宏也是可以的，但是代价就是维护者要维护比较重复的两个字段: url 和 speed_url
+ *
+ * @note 该宏仅当在 recipe 中使用， 由 <category>_<target>_sources_prepare() 调用
+ */
+#define chsrc_sources_prepare_speedurl_with_postfix(target,str) sources_prepare_speedurl_with_postfix(target##_sources, target##_sources_n, str)
+static void
+sources_prepare_speedurl_with_postfix (Source_t sources[], int n, char *postfix)
+{
+  for (int i=0; i<n; i++)
+    {
+      Source_t *src = &sources[i];
+
+      ProviderType_t type = src->provider->type;
+
+      if (IS_DedicatedMirrorSite==type || IS_UpstreamProvider==type)
+        {
+          /* 这两个不用填，因为定义这二者的时候如果给了整体测速URL，则就是ACCURATE的，我们直接会DelegateTo那里 */
+          continue;
+        }
+
+      if (src->url)
+        {
+          /* 为空时才修改 或者里面是脏数据 */
+          if (NULL==src->speed_measure_url || !is_url(src->speed_measure_url))
+            src->speed_measure_url = xy_2strjoin (src->url, postfix);
+        }
+    }
+}
+
+
+
+/**
  * 自动测速选择镜像站和源
  */
 #define auto_select_mirror(s) select_mirror_autoly(s##_sources, s##_sources_n, (char*)#s+3)

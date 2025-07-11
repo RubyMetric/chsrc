@@ -92,6 +92,8 @@ Source_t;
 #define DelegateToMirror    NULL
 /* 看到该注释的贡献者，你可以帮忙寻找专用测速链接 */
 #define NeedContribute      NULL
+/* 由 _sources_prepare 填充 */
+#define FeedBySourcesPrepare NULL
 
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
