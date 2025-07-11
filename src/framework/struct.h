@@ -7,24 +7,28 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-12-18>
+ * Last Modified : <2025-07-11>
  *
  * chsrc struct
  * ------------------------------------------------------------*/
 
-typedef struct SpeedMeasureInfo_t
+typedef struct ProviderSpeedMeasureInfo_t
 {
   bool  skip;           /* 是否默认跳过 */
   char *skip_reason_CN; /* 跳过的原因（中文）*/
   char *skip_reason_EN; /* 跳过的原因（英文）*/
   char *url;            /* 测速链接 */
+  bool  accurate;       /* 是否为精准测速，上游源和专用镜像站为true，通用镜像站为false*/
 }
-SpeedMeasureInfo_t;
+ProviderSpeedMeasureInfo_t;
 
 #define SKIP    true
 #define NotSkip false
 #define ToFill  NULL
 #define NA		  NULL
+
+#define ACCURATE true
+#define ROUGH    false
 
 typedef struct SourceProvider_t
 {
@@ -32,7 +36,7 @@ typedef struct SourceProvider_t
   const char *abbr; /* 需要使用 Provider 的英文名时，用这个代替，因为大部分 Provider 没有提供正式的英文名 */
   const char *name; /* Provider 中文名 */
   const char *site; /* Provider 首页   */
-  SpeedMeasureInfo_t smi;
+  ProviderSpeedMeasureInfo_t psmi;
 }
 SourceProvider_t;
 
@@ -43,16 +47,16 @@ SourceProvider_t UpstreamProvider =
   /* 引入新的上游默认源时，请使下面第一行的前三个字段保持不变，只添加第四个字段，可使用 def_upstream 宏 */
   "upstream", "Upstream", "上游默认源", NULL,
   /* 引入新的上游默认源时，请完全修改下面这个结构体，可使用 def_need_measure_info 宏 */
-  {SKIP, "URL未知，邀您参与贡献!", "URL unknown, welcome to contribute!", NULL}
+  {SKIP, "URL未知，邀您参与贡献!", "URL unknown, welcome to contribute!", NULL, ACCURATE}
 };
 
 #define def_upstream            "upstream", "Upstream", "上游默认源"
-#define def_need_measure_info   {SKIP, "缺乏较大的测速对象，邀您参与贡献!", "Lack of large object URL, welcome to contribute!", NULL}
+#define def_need_measure_info   {SKIP, "缺乏较大的测速对象，邀您参与贡献!", "Lack of large object URL, welcome to contribute!", NULL, ACCURATE}
 
 SourceProvider_t UserDefinedProvider =
 {
   "user", "用户自定义", "用户自定义", NULL,
-  {SKIP, "用户自定义源不测速", "SKIP for user-defined source", NULL}
+  {SKIP, "用户自定义源不测速", "SKIP for user-defined source", NULL, ACCURATE}
 };
 
 
@@ -62,7 +66,11 @@ typedef struct Source_t
     SourceProvider_t *provider;
     MirrorSite_t     *mirror;
   };
+  /* 用于换源的 URL */
   char *url;
+
+  /* 精准测速 URL*/
+  char *accurate_speed_measure_url;
 }
 Source_t;
 

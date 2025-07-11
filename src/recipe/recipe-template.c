@@ -42,12 +42,14 @@
  * 定义专服务于该target的镜像站，该例数据为虚拟填充
  */
 static MirrorSite_t
-RubyMetric = {"rbmt",                   // chsrc set <target> rbmt
+RubyMetric = {"rbmt",                   // 该镜像站的 code, 可以这么使用: chsrc set <target> rbmt
               "RubyMetric",             // 该镜像站的缩写
               "RubyMetric.com",         // 该镜像站的全名
               "https://rubymetirc.com", // 镜像站首页
                                         // 镜像站某个较大的可下载物的下载链接，用于测速
-              "https://rubymetirc.com/target/aws/aws-sdk-go/@v/v1.45.2.zip"};
+              "https://rubymetirc.com/target/aws/aws-sdk-go/@v/v1.45.2.zip",
+
+              ACCURATE};                // 是否为精准测速，若使用间接URL来测速，则填ROUGH
 
 /**
  * @update 2025-12-31

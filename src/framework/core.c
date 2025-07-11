@@ -154,6 +154,7 @@ ProgStatus =
 #define chsrc_debug(str)   xy_warn(App_Name "(DEBUG)",str)
 #define chsrc_verbose(str) xy_info(App_Name "(VERBOSE)",str)
 
+#define faint(str)    xy_str_to_faint(str)
 #define red(str)      xy_str_to_red(str)
 #define blue(str)     xy_str_to_blue(str)
 #define green(str)    xy_str_to_green(str)
@@ -637,11 +638,11 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
       Source_t src = sources[i];
 
       SourceProvider_t *provider = src.provider;
-      SpeedMeasureInfo_t smi = provider->smi;
+      ProviderSpeedMeasureInfo_t psmi = provider->psmi;
 
-      bool skip = smi.skip;
+      bool skip = psmi.skip;
 
-      const char *url = smi.url;
+      const char *url = psmi.url;
 
       if (!skip && NULL==url)
         // 这种情况应当被视为bug，但是我们目前还是软处理
@@ -664,8 +665,8 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
               speed = -1024*1024*1024;
               if (!src.url)
                 {
-                  smi.skip_reason_CN = "上游默认源URL未知，请帮助补充";
-                  smi.skip_reason_EN = "The default upstream source URL is unknown, please help to add";
+                  psmi.skip_reason_CN = "上游默认源URL未知，请帮助补充";
+                  psmi.skip_reason_EN = "The default upstream source URL is unknown, please help to add";
                 }
             }
           else if (xy_streql ("user", provider->code))
@@ -682,7 +683,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
           speed_records[i] = speed;
 
           const char *msg = ENGLISH ? provider->abbr : provider->name;
-          const char *skip_reason = ENGLISH ? smi.skip_reason_EN : smi.skip_reason_CN;
+          const char *skip_reason = ENGLISH ? psmi.skip_reason_EN : psmi.skip_reason_CN;
           if (NULL==skip_reason)
             {
               skip_reason = ENGLISH ? "SKIP for no reason" : "无理由跳过";
@@ -694,13 +695,17 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
         {
           const char *msg = ENGLISH ? provider->abbr : provider->name;
 
+          bool is_accurate = provider->psmi.accurate;
+          char *accurate_msg = CHINESE ? (is_accurate ? "[精准测速]" :  faint("[模糊测速]"))
+                                       : (is_accurate ? "[accurate]" : faint("[rough]"));
+
           if (xy_streql ("upstream", provider->code))
             {
-              measure_msgs[i] = xy_strjoin (5, "  ^ ", msg, " (", src.url, ") ... ");
+              measure_msgs[i] = xy_strjoin (7, "  ^ ", msg, " (", src.url, ") ", accurate_msg, " ... ");
             }
           else
             {
-              measure_msgs[i] = xy_strjoin (3, "  - ", msg, " ... ");
+              measure_msgs[i] = xy_strjoin (5, "  - ", msg, " ", accurate_msg, " ... ");
             }
 
           print (measure_msgs[i]);

@@ -10,7 +10,7 @@
 static MirrorSite_t EmacsChina =
 {
   "emacschina", "EmacsChina", "Emacs China 社区", "https://elpamirror.emacs-china.org/",
-  {SKIP, ToFill, ToFill, NULL}
+  {SKIP, ToFill, ToFill, NULL, ROUGH}
 };
 
 /**

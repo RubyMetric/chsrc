@@ -6,7 +6,7 @@
  *                |
  * Created On     : <2023-08-30>
  * Major Revision :      1
- * Last Modified  : <2024-12-18>
+ * Last Modified  : <2025-07-11>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t pl_go_upstream =
@@ -18,13 +18,13 @@ static SourceProvider_t pl_go_upstream =
 static MirrorSite_t GoProxyCN =
 {
   "goproxy.cn", "Goproxy.cn", "Goproxy.cn (七牛云)", "https://goproxy.cn/",
-  {NotSkip, NA, NA, "https://goproxy.cn/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"} // 30 MB
+  {NotSkip, NA, NA, "https://goproxy.cn/github.com/aws/aws-sdk-go/@v/v1.45.2.zip", ACCURATE} // 30 MB
 },
 
 GoProxyIO =
 {
   "goproxy.io", "GOPROXY.IO", "GOPROXY.IO", "https://goproxy.io/",
-  {NotSkip, NA, NA, "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip"} // 30 MB
+  {NotSkip, NA, NA, "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip", ACCURATE} // 30 MB
 };
 
 

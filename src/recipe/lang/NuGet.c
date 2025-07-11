@@ -10,7 +10,7 @@
 static MirrorSite_t NugetOrg =
 {
   "nuget.org", "NuGet Org", "Nuget Organization", "https://www.nuget.org/",
-  {SKIP, ToFill, ToFill, NULL}
+  {SKIP, ToFill, ToFill, NULL, ROUGH}
 };
 
 /**

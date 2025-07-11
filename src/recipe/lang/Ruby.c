@@ -5,19 +5,19 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2024-12-18>
+ * Last Modified : <2025-07-11>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t pl_ruby_upstream =
 {
   def_upstream, "https://rubygems.org",
-  {NotSkip, NA, NA, "https://rubygems.org/gems/nokogiri-1.15.0-java.gem"}
+  {NotSkip, NA, NA, "https://rubygems.org/gems/nokogiri-1.15.0-java.gem", ACCURATE}
 };
 
 static MirrorSite_t RubyChina =
 {
   "rubychina", "RubyChina", "Ruby China 社区", "https://gems.ruby-china.com/",
-  {NotSkip, NA, NA, "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem"} // 9.9 MB
+  {NotSkip, NA, NA, "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem", ACCURATE} // 9.9 MB
 };
 
 /**

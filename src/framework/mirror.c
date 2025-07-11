@@ -9,7 +9,7 @@
  *               |  Mikachu2333  <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-06-20>
+ * Last Modified : <2025-07-11>
  *
  * 通用镜像站
  * ------------------------------------------------------------*/
@@ -29,13 +29,13 @@
 MirrorSite_t MirrorZ =
 {
   "mirrorz", "MirrorZ",  "MirrorZ 校园网镜像站", "https://mirrors.cernet.edu.cn/",
-  {SKIP, "功能特殊无法测速，跳过", "SKIP because of its special function"}
+  {SKIP, "功能特殊无法测速，跳过", "SKIP because of its special function", NULL, ROUGH}
 },
 
 Tuna =
 {
   "tuna", "TUNA", "清华大学开源软件镜像站", "https://mirrors.tuna.tsinghua.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.tuna.tsinghua.edu.cn/speedtest/1000mb.bin"}
+  {NotSkip, NA, NA, "https://mirrors.tuna.tsinghua.edu.cn/speedtest/1000mb.bin", ROUGH}
 },
 
 /**
@@ -46,67 +46,67 @@ Tuna =
 Sjtug_Zhiyuan =
 {
   "sjtu-zy", "SJTUG-zhiyuan", "上海交通大学致远镜像站", "https://mirrors.sjtug.sjtu.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.sjtug.sjtu.edu.cn/ctan" Big_File_ctan}
+  {NotSkip, NA, NA, "https://mirrors.sjtug.sjtu.edu.cn/ctan" Big_File_ctan, ROUGH}
 },
 
 Sjtug_Siyuan =
 {
   "sjtu-sy", "SJTUG-siyuan", "上海交通大学思源镜像站", "https://mirror.sjtu.edu.cn/",
-  {NotSkip, NA, NA, "https://mirror.sjtu.edu.cn/ctan" Big_File_ctan}
+  {NotSkip, NA, NA, "https://mirror.sjtu.edu.cn/ctan" Big_File_ctan, ROUGH}
 },
 
 Zju =
 {
   "zju", "ZJU", "浙江大学开源软件镜像站", "https://mirrors.zju.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.zju.edu.cn/ubuntu-releases" Big_File_ubuntu}
+  {NotSkip, NA, NA, "https://mirrors.zju.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
 Lzuoss =
 {
   "lzu", "LZUOSS", "兰州大学开源社区镜像站", "https://mirror.lzu.edu.cn/",
-  {NotSkip, NA, NA, "https://mirror.lzu.edu.cn/CTAN" Big_File_ctan}
+  {NotSkip, NA, NA, "https://mirror.lzu.edu.cn/CTAN" Big_File_ctan, ROUGH}
 },
 
 Jlu =
 {
   "jlu", "JLU", "吉林大学开源镜像站", "https://mirrors.jlu.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.jlu.edu.cn/_static/speedtest.bin"}
+  {NotSkip, NA, NA, "https://mirrors.jlu.edu.cn/_static/speedtest.bin", ROUGH}
 },
 
 Bfsu =
 {
   "bfsu", "BFSU", "北京外国语大学开源软件镜像站", "https://mirrors.bfsu.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.bfsu.edu.cn/speedtest/1000mb.bin"}
+  {NotSkip, NA, NA, "https://mirrors.bfsu.edu.cn/speedtest/1000mb.bin", ROUGH}
 },
 
 Pku =
 {
   "pku", "PKU", "北京大学开源镜像站", "https://mirrors.pku.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.pku.edu.cn/ubuntu-releases" Big_File_ubuntu}
+  {NotSkip, NA, NA, "https://mirrors.pku.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
 Bjtu =
 {
   "bjtu", "BJTU", "北京交通大学自由与开源软件镜像站", "https://mirror.bjtu.edu.cn/",
-  {NotSkip, NA, NA, "https://mirror.bjtu.edu.cn/archlinux" Big_File_archlinux}
+  {NotSkip, NA, NA, "https://mirror.bjtu.edu.cn/archlinux" Big_File_archlinux, ROUGH}
 },
 
 Sustech =
 {
   "sustech", "SUSTech", "南方科技大学开源软件镜像站", "https://mirrors.sustech.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.sustech.edu.cn/site/speedtest/1000mb.bin"}
+  {NotSkip, NA, NA, "https://mirrors.sustech.edu.cn/site/speedtest/1000mb.bin", ROUGH}
 },
 
 Ustc =
 {
   "ustc", "USTC", "中国科学技术大学开源镜像站", "https://mirrors.ustc.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.ustc.edu.cn/ubuntu-releases" Big_File_ubuntu}
+  {NotSkip, NA, NA, "https://mirrors.ustc.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
 Hust =
 {
   "hust", "HUST", "华中科技大学开源镜像站", "https://mirrors.hust.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.hust.edu.cn/ubuntu-releases" Big_File_ubuntu}
+  {NotSkip, NA, NA, "https://mirrors.hust.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
 // 速度暂时处于10位以后或者无测速报告，但是目前可用的源
@@ -114,43 +114,43 @@ Hust =
 Iscas =
 {
   "iscas", "ISCAS", "中科院软件所智能软件研究中心开源镜像站", "https://mirror.iscas.ac.cn/",
-  {NotSkip, NA, NA, "https://mirror.iscas.ac.cn/ubuntu-releases" Big_File_ubuntu}
+  {NotSkip, NA, NA, "https://mirror.iscas.ac.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
 Scau =
 {
   "scau", "SCAU", "华南农业大学开源软件镜像站", "https://mirrors.scau.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.scau.edu.cn/ubuntu-releases" Big_File_ubuntu}
+  {NotSkip, NA, NA, "https://mirrors.scau.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
 NJTech =
 {
   "njtech", "NJTech", "南京工业大学开源软件镜像站", "https://mirrors.njtech.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.njtech.edu.cn/ubuntu-releases" Big_File_ubuntu}
+  {NotSkip, NA, NA, "https://mirrors.njtech.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
 Nyist =
 {
   "nyist", "NYIST", "南阳理工学院开源软件镜像站", "https://mirror.nyist.edu.cn/",
-  {NotSkip, NA, NA, "https://mirror.nyist.edu.cn/ubuntu-releases" Big_File_ubuntu}
+  {NotSkip, NA, NA, "https://mirror.nyist.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
 Sdu =
 {
   "sdu", "SDU", "山东大学镜像站", "https://mirrors.sdu.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.sdu.edu.cn/ubuntu-releases" Big_File_ubuntu}
+  {NotSkip, NA, NA, "https://mirrors.sdu.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
 Cqupt =
 {
   "cqupt", "CQUPT", "重庆邮电大学开源镜像站", "https://mirrors.cqupt.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.cqupt.edu.cn/ubuntu-releases" Big_File_ubuntu}
+  {NotSkip, NA, NA, "https://mirrors.cqupt.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
 Nju =
 {
   "nju", "NJU", "南京大学开源镜像站", "https://mirrors.nju.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.nju.edu.cn/archlinux" Big_File_archlinux}
+  {NotSkip, NA, NA, "https://mirrors.nju.edu.cn/archlinux" Big_File_archlinux, ROUGH}
 },
 
 /**
@@ -159,7 +159,7 @@ Nju =
 Cqu =
 {
   "cqu", "CQU", "重庆大学开源软件镜像站", "https://mirrors.cqu.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.cqu.edu.cn/ubuntu-releases" Big_File_ubuntu}
+  {NotSkip, NA, NA, "https://mirrors.cqu.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 };
 
 /**
@@ -168,71 +168,71 @@ Cqu =
 MirrorSite_t Ali =
 {
   "ali", "Ali OPSX Public", "阿里巴巴开源镜像站(公网)", "https://developer.aliyun.com/mirror/",
-  {NotSkip, NA, NA, "https://mirrors.aliyun.com/ubuntu/ls-lR.gz"} // 31MB左右
+  {NotSkip, NA, NA, "https://mirrors.aliyun.com/ubuntu/ls-lR.gz", ROUGH} // 31MB左右
 },
 /*
 // https://mirrors.cloud.aliyuncs.com/
 Ali_ECS_VPC =
 {
   "ali-ECS-VPC", "Ali OPSX ECS VPC", "阿里巴巴开源镜像站(ECS VPC网络)", "https://developer.aliyun.com/mirror/",
-  {NotSkip, NA, NA, "https://mirrors.cloud.aliyuncs.com/deepin-cd" Big_File_deepin}
+  {NotSkip, NA, NA, "https://mirrors.cloud.aliyuncs.com/deepin-cd" Big_File_deepin, ROUGH}
 },
 
 // https://mirrors.aliyuncs.com/
 Ali_ECS_classic =
 {
   "ali-ECS", "Ali OPSX ECS", "阿里巴巴开源镜像站(ECS 经典网络)", "https://developer.aliyun.com/mirror/",
-  {NotSkip, NA, NA, "https://mirrors.aliyuncs.com/deepin-cd" Big_File_deepin}
+  {NotSkip, NA, NA, "https://mirrors.aliyuncs.com/deepin-cd" Big_File_deepin, ROUGH}
 },
 */
 
 Tencent =
 {
   "tencent", "Tencent Public", "腾讯软件源(公网)", "https://mirrors.tencent.com/",
-  {NotSkip, NA, NA, "https://mirrors.cloud.tencent.com/mariadb/mariadb-12.1.0/winx64-packages/mariadb-12.1.0-winx64-debugsymbols.zip"} // 110MB左右
+  {NotSkip, NA, NA, "https://mirrors.cloud.tencent.com/mariadb/mariadb-12.1.0/winx64-packages/mariadb-12.1.0-winx64-debugsymbols.zip", ROUGH} // 110MB左右
 },
 /*
 Tencent_Intra =
 {
   "tencent-intra", "Tencent Intranet",  "腾讯软件源(内网)", "https://mirrors.tencent.com/",
-  {NotSkip, NA, NA, "https://mirrors.cloud.tencentyun.com/ubuntu-releases" Big_File_ubuntu}
+  {NotSkip, NA, NA, "https://mirrors.cloud.tencentyun.com/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 */
 
 Huawei =
 {
   "huawei",  "Huawei Cloud", "华为开源镜像站",  "https://mirrors.huaweicloud.com/",
-  {NotSkip, NA, NA, "https://mirrors.huaweicloud.com/ubuntu-releases" Big_File_ubuntu}
+  {NotSkip, NA, NA, "https://mirrors.huaweicloud.com/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
 Volcengine =
 {
   "volc", "Volcengine", "火山引擎开源软件镜像站(公网)", "https://developer.volcengine.com/mirror/",
-  {NotSkip, NA, NA, "https://mirrors.volces.com/ubuntu-releases" Big_File_ubuntu}
+  {NotSkip, NA, NA, "https://mirrors.volces.com/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 /*
 Volceengine_Intra =
 {
   "volc-intra",  "Volcengine Intranet", "火山引擎开源软件镜像站(内网)",
   "https://developer.volcengine.com/mirror/",
-  "https://mirrors.ivolces.com/ubuntu-releases" Big_File_ubuntu },
+  "https://mirrors.ivolces.com/ubuntu-releases" Big_File_ubuntu, ROUGH},
 */
 
 
 /**
- * @note 2026-06-20 网易开源镜像站的速度始终过低，不建议再使用
+ * @note 2025-06-20 网易开源镜像站的速度始终过低，不建议再使用
  */
 Netease =
 {
   "netease", "Netease", "网易开源镜像站", "https://mirrors.163.com/",
-  {NotSkip, NA, NA, "https://mirrors.163.com/deepin-cd" Big_File_deepin}
+  {NotSkip, NA, NA, "https://mirrors.163.com/deepin-cd" Big_File_deepin, ROUGH}
 },
 
 /**
- * @note 2026-06-20 搜狐开源镜像站的速度始终过低，不建议再使用
+ * @note 2025-06-20 搜狐开源镜像站的速度始终过低，不建议再使用
  */
 Sohu =
 {
   "sohu", "SOHU", "搜狐开源镜像站", "https://mirrors.sohu.com/",
-  {NotSkip, NA, NA, "https://mirrors.sohu.com/deepin-cd" Big_File_deepin}
+  {NotSkip, NA, NA, "https://mirrors.sohu.com/deepin-cd" Big_File_deepin, ROUGH}
 };
