@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nul None  <nul@none.org>
  * Created On    : <2024-12-06>
- * Last Modified : <2024-12-06>
+ * Last Modified : <2025-07-11>
  *
  * 由于Rye已经有后继uv了，所以我们不把该管理器纳入Python group中
  * ------------------------------------------------------------*/
@@ -38,6 +38,7 @@ pl_python_rye_getsrc (char *option)
 void
 pl_python_rye_setsrc (char *option)
 {
+  /* 并不在 Python group 中，所以不考虑 target group 情况 */
   chsrc_yield_source_and_confirm (pl_python);
 
   const char *file = xy_strjoin (7,

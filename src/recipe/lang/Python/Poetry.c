@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2024-08-08>
- * Last Modified : <2024-09-14>
+ * Last Modified : <2025-07-11>
  * ------------------------------------------------------------*/
 
 // @note Poetry 默认使用项目级换源
@@ -27,9 +27,8 @@ pl_python_poetry_getsrc (char *option)
 void
 pl_python_poetry_setsrc (char *option)
 {
-  Source_t source;
-  chsrc_yield_for_the_source (pl_python);
-  if (!chsrc_in_target_group_mode())
+  chsrc_yield_source (pl_python);
+  if (chsrc_in_standalone_mode())
     chsrc_confirm_source;
 
   char *cmd = NULL;
@@ -40,7 +39,7 @@ pl_python_poetry_setsrc (char *option)
   cmd = xy_2strjoin ("poetry source add my_mirror ", source.url);
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
-  if (!chsrc_in_target_group_mode())
+  if (chsrc_in_standalone_mode())
     {
       chsrc_determine_chgtype (ChgType_Auto);
       chsrc_conclude (&source);

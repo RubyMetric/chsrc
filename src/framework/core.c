@@ -51,6 +51,8 @@ TargetGroupMode =
 };
 
 bool chsrc_in_target_group_mode() {return TargetGroupMode.in;}
+// 并非作为 follower target，而是自身作为一个独立的 target 执行
+bool chsrc_in_standalone_mode() {return !TargetGroupMode.in;}
 void chsrc_set_target_group_mode(){TargetGroupMode.in = true;}
 
 
@@ -855,13 +857,14 @@ source_has_empty_url (Source_t *source)
  *   3. 用户什么都没指定，          即 chsrc set <target>
  *   4. 用户正在重置源，            即 chsrc reset <target>
  *
- * 如果处于 Target Group 模式下，leader target 可能会指定一个源，因此还有一种情况:
+ * 如果处于 Target Group 模式下，leader target 已经测速过了，follower target 不能再次测速，而是直接选择 leader 测过的结果
  *
- *   5. leader target 指定了某个源
+ *   5. leader target 测速出来的某个源
  *
  * @dependency 已存在的局部变量 @var:option
  */
-#define chsrc_yield_for_the_source(for_what) \
+#define chsrc_yield_source(for_what) \
+  Source_t source; \
   if (chsrc_in_target_group_mode() && TargetGroupMode.leader_selected_index==-1) \
     { \
       TargetGroupMode.leader_selected_index = use_specific_mirror_or_auto_select (option, for_what); \
@@ -882,9 +885,6 @@ source_has_empty_url (Source_t *source)
       source = for_what##_sources[__index]; \
     }
 
-#define chsrc_yield_source(for_what) \
-  Source_t source; \
-  chsrc_yield_for_the_source(for_what)
 
 
 

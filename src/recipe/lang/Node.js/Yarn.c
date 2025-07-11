@@ -5,7 +5,7 @@
  * Contributors   :  Mr. Will  <mr.will.com@outlook.com>
  * Created On     : <2023-09-09>
  * Major Reviison :      3
- * Last Modified  : <2024-09-13>
+ * Last Modified  : <2025-07-11>
  * ------------------------------------------------------------*/
 
 static double
@@ -40,9 +40,8 @@ pl_nodejs_yarn_getsrc (char *option)
 void
 pl_nodejs_yarn_setsrc (char *option)
 {
-  Source_t source;
-  chsrc_yield_for_the_source (pl_nodejs);
-  if (!chsrc_in_target_group_mode())
+  chsrc_yield_source (pl_nodejs);
+  if (chsrc_in_standalone_mode())
     chsrc_confirm_source;
 
   char *cmd = NULL;
@@ -71,7 +70,7 @@ pl_nodejs_yarn_setsrc (char *option)
       chsrc_run (cmd, RunOpt_No_Last_New_Line);
     }
 
-  if (!chsrc_in_target_group_mode())
+  if (chsrc_in_standalone_mode())
     {
       chsrc_determine_chgtype (ChgType_Auto);
       chsrc_conclude (&source);

@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nul None  <nul@none.org>
  * Created On    : <2023-09-03>
- * Last Modified : <2024-09-14>
+ * Last Modified : <2025-07-11>
  * ------------------------------------------------------------*/
 
 /**
@@ -38,9 +38,8 @@ pl_python_pip_setsrc (char *option)
       return;
     }
 
-  Source_t source;
-  chsrc_yield_for_the_source (pl_python);
-  if (!chsrc_in_target_group_mode())
+  chsrc_yield_source (pl_python);
+  if (chsrc_in_standalone_mode())
     chsrc_confirm_source;
 
   char *py_prog_name = NULL;
@@ -52,7 +51,7 @@ pl_python_pip_setsrc (char *option)
   char *cmd = xy_2strjoin (py_prog_name, xy_2strjoin (" -m pip config --user set global.index-url ", source.url));
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
-  if (!chsrc_in_target_group_mode())
+  if (chsrc_in_standalone_mode())
     {
       chsrc_determine_chgtype (ChgType_Auto);
       chsrc_conclude (&source);

@@ -6,7 +6,7 @@
  *               | Aoran Zeng <ccmywish@qq.com>
  *               |
  * Created On    : <2024-12-11>
- * Last Modified : <2025-06-02>
+ * Last Modified : <2025-07-11>
  * ------------------------------------------------------------*/
 
 /**
@@ -94,10 +94,11 @@ pl_python_uv_getsrc (char *option)
 void
 pl_python_uv_setsrc (char *option)
 {
-  chsrc_ensure_program("uv");
+  chsrc_ensure_program ("uv");
 
-  Source_t source;
-  chsrc_yield_for_the_source (pl_python);
+  chsrc_yield_source (pl_python);
+  if (chsrc_in_standalone_mode())
+    chsrc_confirm_source;
 
   char *uv_config = pl_python_find_uv_config (true);
   if (NULL==uv_config)
@@ -168,8 +169,12 @@ pl_python_uv_setsrc (char *option)
       chsrc_run (cmd, RunOpt_Default);
     }
 
-  chsrc_determine_chgtype (ChgType_Auto);
-  chsrc_conclude (&source);
+
+  if(chsrc_in_standalone_mode())
+    {
+      chsrc_determine_chgtype (ChgType_Auto);
+      chsrc_conclude (&source);
+    }
 }
 
 
