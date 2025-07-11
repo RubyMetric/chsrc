@@ -74,7 +74,7 @@ pl_nodejs_setsrc (char *option)
   bool npm_exist, yarn_exist, pnpm_exist;
   pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
-  ProgMode_Target_Group = true;
+  chsrc_set_target_group_mode ();
   chsrc_yield_source_and_confirm (pl_nodejs);
 
   if (npm_exist)

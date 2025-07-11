@@ -57,7 +57,7 @@ pl_python_setsrc (char *option)
 
   pl_python_check_unofficial_pkger (&poetry_exist, &pdm_exist, &uv_exist);
 
-  ProgMode_Target_Group = true;
+  chsrc_set_target_group_mode ();
   chsrc_yield_source_and_confirm (pl_python);
 
 

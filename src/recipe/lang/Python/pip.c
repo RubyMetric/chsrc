@@ -40,7 +40,7 @@ pl_python_pip_setsrc (char *option)
 
   Source_t source;
   chsrc_yield_for_the_source (pl_python);
-  if (ProgMode_Target_Group!=true)
+  if (!chsrc_in_target_group_mode())
     chsrc_confirm_source;
 
   char *py_prog_name = NULL;
@@ -52,7 +52,7 @@ pl_python_pip_setsrc (char *option)
   char *cmd = xy_2strjoin (py_prog_name, xy_2strjoin (" -m pip config --user set global.index-url ", source.url));
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
-  if (ProgMode_Target_Group!=true)
+  if (!chsrc_in_target_group_mode())
     {
       chsrc_determine_chgtype (ChgType_Auto);
       chsrc_conclude (&source);

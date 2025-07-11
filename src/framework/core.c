@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-06-20>
+ * Last Modified : <2025-07-11>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -30,11 +30,42 @@
 
 static int chsrc_get_cpucore ();
 
+
+/**
+ * Target Group 模式
+ *
+ *   1. 一个 target group 包含了多个 target，这些都被叫做 follower target
+ *   2. 触发该运行模式的 target 被称为 leader target，其往往只是一个virtual target，类似 APT 中的 virtual package
+ *
+ * 目前使用该模式的有两个: Python 和 Node.js，因为二者的包管理器存在多个
+ */
+struct
+{
+  boolean in;
+  int leader_selected_index; /* leader target 选中的索引 */
+}
+TargetGroupMode =
+{
+  .in = false,
+  .leader_selected_index = -1
+};
+
+bool
+chsrc_in_target_group_mode ()
+{
+  return TargetGroupMode.in;
+}
+
+void
+chsrc_set_target_group_mode ()
+{
+  TargetGroupMode.in = true;
+}
+
+
 bool ProgMode_CMD_Measure = false;
 bool ProgMode_CMD_Reset   = false;
 
-bool ProgMode_Target_Group = false;
-int  ProgMode_Leader_Selected_Index = -1;
 
 /* 此时 chsrc_run() 不再是recipe中指定要运行的一个外部命令，而是作为一个功能实现的支撑 */
 bool ProgMode_Run_as_a_Service = false;
@@ -139,10 +170,8 @@ chsrc_log_backup (const char *filename)
 #define NoMark "x"
 #define HalfYesMark "⍻"
 
-/**
- * @translation Done
- */
-void
+
+static void
 log_check_result (const char *check_what, const char *check_type, bool exist)
 {
   char *chk_msg       = NULL;
@@ -176,10 +205,7 @@ log_check_result (const char *check_what, const char *check_type, bool exist)
 }
 
 
-/**
- * @translation Done
- */
-void
+static void
 log_cmd_result (bool result, int exit_status)
 {
   char *run_msg  = NULL;
@@ -234,7 +260,6 @@ is_url (const char *str)
  *
  * @param  prog_name   要检测的二进制程序名
  *
- * @translation Done
  */
 bool
 query_program_exist (char *check_cmd, char *prog_name, int mode)
@@ -798,26 +823,30 @@ is_reset_mode ()
 
 
 /**
- * 用户*只可能*通过下面5种方式来换源，无论哪一种都会返回一个 Source_t 出来
- * option:
- *  1. 用户指定某个 Mirror Code
- *  2. NULL: 用户什么都没指定 (将测速选择最快镜像)
- *  3. 用户给了一个 URL
- *  4. ChgType_Reset
- * 选用了Leader target
- *  5. ProgMode_Leader_Selected_Index 将给出所选索引
+ * @brief 确定所换源的信息，存储在局部变量 @var:source 中
  *
- * @dependency 变量 option
+ * 用户*只可能*通过下面5种方式来换源，无论哪一种都会返回一个 Source_t 出来
+ *
+ *   1. 用户指定了一个 Mirror Code，即 chsrc set <target> <code>
+ *   2. 用户指定了一个 URL，        即 chsrc set <target> https://ur
+ *   3. 用户什么都没指定，          即 chsrc set <target>
+ *   4. 用户正在重置源，            即 chsrc reset <target>
+ *
+ * 如果处于 Target Group 模式下，leader target 可能会指定一个源，因此还有一种情况:
+ *
+ *   5. leader target 指定了某个源
+ *
+ * @dependency 已存在的局部变量 @var:option
  */
 #define chsrc_yield_for_the_source(for_what) \
-  if (ProgMode_Target_Group==true && ProgMode_Leader_Selected_Index==-1) \
+  if (chsrc_in_target_group_mode() && TargetGroupMode.leader_selected_index==-1) \
     { \
-      ProgMode_Leader_Selected_Index = use_specific_mirror_or_auto_select (option, for_what); \
-      source = for_what##_sources[ProgMode_Leader_Selected_Index]; \
+      TargetGroupMode.leader_selected_index = use_specific_mirror_or_auto_select (option, for_what); \
+      source = for_what##_sources[TargetGroupMode.leader_selected_index]; \
     } \
-  else if (ProgMode_Target_Group==true && ProgMode_Leader_Selected_Index!=-1) \
+  else if (chsrc_in_target_group_mode() && TargetGroupMode.leader_selected_index!=-1) \
     { \
-      source = for_what##_sources[ProgMode_Leader_Selected_Index]; \
+      source = for_what##_sources[TargetGroupMode.leader_selected_index]; \
     } \
   else if (is_url (option)) \
     { \
@@ -844,8 +873,6 @@ is_reset_mode ()
  *
  * 1. 告知用户选择了什么源和镜像
  * 2. 对选择的源和镜像站进行一定的校验
- *
- * @translation Done
  */
 #define chsrc_confirm_source confirm_source(&source)
 void
