@@ -151,7 +151,11 @@ ProgStatus =
 #define chsrc_info(str)    xy_info(App_Name,str)
 #define chsrc_warn(str)    xy_warn(App_Name,str)
 #define chsrc_error(str)   xy_error(App_Name,str)
-#define chsrc_debug(str)   xy_warn(App_Name "(DEBUG)",str)
+#ifdef XY_DEBUG
+  #define chsrc_debug(dom,str) xy_warn(App_Name "(DEBUG " dom ")",str)
+#else
+  #define chsrc_debug(dom,str)
+#endif
 #define chsrc_verbose(str) xy_info(App_Name "(VERBOSE)",str)
 
 #define faint(str)    xy_str_to_faint(str)
@@ -172,7 +176,11 @@ ProgStatus =
 #define chsrc_log2(str)     xy_info_brkt(App_Name,"LOG",str)
 #define chsrc_warn2(str)    xy_warn_brkt(App_Name,ENGLISH?"WARN":"警告",str)
 #define chsrc_error2(str)   xy_error_brkt(App_Name,ENGLISH?"ERROR":"错误",str)
-#define chsrc_debug2(str)   xy_warn_brkt(App_Name,"DEBUG",str)
+#ifdef XY_DEBUG
+  #define chsrc_debug2(dom,str) xy_warn_brkt(App_Name,"DEBUG " dom,str)
+#else
+  #define chsrc_debug2(dom,str)
+#endif
 #define chsrc_verbose2(str) xy_info_brkt(App_Name,"VERBOSE",str)
 
 void
