@@ -125,13 +125,13 @@ struct
   ChgType_t chgtype;           /* 换源实现的类型 */
 
   /* 此时 chsrc_run() 不再是recipe中指定要运行的一个外部命令，而是作为一个功能实现的支撑 */
-  bool chsrc_run_saas;
+  bool chsrc_run_faas;
 }
 ProgStatus =
 {
   .leader_selected_index = -1,
   .chgtype = ChgType_Auto,
-  .chsrc_run_saas = false
+  .chsrc_run_faas = false
 };
 
 
@@ -1262,7 +1262,7 @@ not_root:
 static void
 chsrc_run (const char *cmd, int run_option)
 {
-  if (ProgStatus.chsrc_run_saas)
+  if (ProgStatus.chsrc_run_faas)
     {
       run_option |= RunOpt_Dont_Notify_On_Success|RunOpt_No_Last_New_Line;
     }
@@ -1309,10 +1309,10 @@ static void
 chsrc_run_as_a_service (const char *cmd)
 {
   int run_option = RunOpt_Default;
-  ProgStatus.chsrc_run_saas = true;
+  ProgStatus.chsrc_run_faas = true;
     run_option |= RunOpt_Dont_Notify_On_Success|RunOpt_No_Last_New_Line;
     chsrc_run (cmd, run_option);
-  ProgStatus.chsrc_run_saas = false;
+  ProgStatus.chsrc_run_faas = false;
 }
 
 static void
