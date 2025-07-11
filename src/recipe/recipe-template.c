@@ -6,7 +6,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2024-08-09>
- * Last Modified : <2024-11-22>
+ * Last Modified : <2025-07-11>
  * -------------------------------------------------------------
  * 本文件作为一个通用模板：
  *
@@ -91,7 +91,7 @@ void
   /* 具体的换源步骤，如调用第三方命令... */
 
   /* 最后总结输出 */
-  ProgMode_ChgType = ChgType_;
+  chsrc_determine_chgtype (ChgType_xxx);
   chsrc_conclude (&source);
 }
 
@@ -133,7 +133,7 @@ Feature_t
 }
 
 
-// 定义此 target，参考 "source.h"
+// 定义此 target，参考 @file:source.h
 // 下列情形多选1
 def_target(<category>_<target>);
 def_target_gsr(<category>_<target>);

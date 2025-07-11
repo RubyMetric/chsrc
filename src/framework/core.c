@@ -31,31 +31,7 @@
 static int chsrc_get_cpucore ();
 
 
-/**
- * Target Group 模式
- *
- *   1. 一个 target group 包含了多个 target，这些都被叫做 follower target
- *   2. 触发该运行模式的 target 被称为 leader target，其往往只是一个virtual target，类似 APT 中的 virtual package
- *
- * 目前使用该模式的有两个: Python 和 Node.js，因为二者的包管理器存在多个
- */
-struct
-{
-  boolean in;
-  int leader_selected_index; /* leader target 选中的索引 */
-}
-TargetGroupMode =
-{
-  .in = false,
-  .leader_selected_index = -1
-};
-
-bool chsrc_in_target_group_mode() {return TargetGroupMode.in;}
-// 并非作为 follower target，而是自身作为一个独立的 target 执行
-bool chsrc_in_standalone_mode() {return !TargetGroupMode.in;}
-void chsrc_set_target_group_mode(){TargetGroupMode.in = true;}
-
-
+/* Global Program Mode */
 struct
 {
   // 用户命令
@@ -85,6 +61,11 @@ ProgMode =
 };
 
 /* recipe 相关 mode */
+bool chsrc_in_target_group_mode() {return ProgMode.TargetGroupMode;}
+// 并非作为 follower target，而是自身作为一个独立的 target 执行
+bool chsrc_in_standalone_mode() {return !ProgMode.TargetGroupMode;}
+void chsrc_set_target_group_mode(){ProgMode.TargetGroupMode = true;}
+
 bool chsrc_in_reset_mode(){return ProgMode.ResetMode;}
 bool chsrc_in_local_mode(){return ProgMode.LocalMode;}
 bool chsrc_in_english_mode(){return ProgMode.EnglishMode;}
@@ -98,6 +79,17 @@ bool chsrc_in_no_color_mode(){return ProgMode.NoColorMode;}
 static bool in_measure_mode(){return ProgMode.MeasureMode;}
 static bool in_ipv6_mode(){return ProgMode.Ipv6Mode;}
 static bool in_dry_run_mode(){return ProgMode.DryRunMode;}
+
+
+/**
+ * Target Group mode (相反则称为 standalone mode)
+ *
+ *   1. 一个 target group 包含了多个 target，这些都被叫做 follower target
+ *   2. 触发该运行模式的 target 被称为 leader target，其往往只是一个virtual target，类似 APT 中的 virtual package
+ *
+ * 目前使用该模式的有两个: Python 和 Node.js，因为二者的包管理器存在多个
+ */
+
 
 /**
  * -local 的含义是启用 *项目级* 换源
@@ -116,22 +108,31 @@ static bool in_dry_run_mode(){return ProgMode.DryRunMode;}
  * 3. 最终效果本质由第三方软件决定，如 poetry 默认实现的就是项目级的换源
  */
 
-
-
-/* 此时 chsrc_run() 不再是recipe中指定要运行的一个外部命令，而是作为一个功能实现的支撑 */
-bool ProgMode_Run_as_a_Service = false;
-
-enum ChgType_t
+typedef enum ChgType_t
 {
   ChgType_Auto,
   ChgType_Reset,
   ChgType_SemiAuto,
   ChgType_Manual,
   ChgType_Untested
+} ChgType_t;
+
+
+/* Global Program Status */
+struct
+{
+  int leader_selected_index;   /* leader target 选中的索引 */
+  ChgType_t chgtype;           /* 换源实现的类型 */
+
+  /* 此时 chsrc_run() 不再是recipe中指定要运行的一个外部命令，而是作为一个功能实现的支撑 */
+  bool chsrc_run_saas;
+}
+ProgStatus =
+{
+  .leader_selected_index = -1,
+  .chgtype = ChgType_Auto,
+  .chsrc_run_saas = false
 };
-
-enum ChgType_t ProgMode_ChgType = ChgType_Auto;
-
 
 
 
@@ -865,14 +866,14 @@ source_has_empty_url (Source_t *source)
  */
 #define chsrc_yield_source(for_what) \
   Source_t source; \
-  if (chsrc_in_target_group_mode() && TargetGroupMode.leader_selected_index==-1) \
+  if (chsrc_in_target_group_mode() && ProgStatus.leader_selected_index==-1) \
     { \
-      TargetGroupMode.leader_selected_index = use_specific_mirror_or_auto_select (option, for_what); \
-      source = for_what##_sources[TargetGroupMode.leader_selected_index]; \
+      ProgStatus.leader_selected_index = use_specific_mirror_or_auto_select (option, for_what); \
+      source = for_what##_sources[ProgStatus.leader_selected_index]; \
     } \
-  else if (chsrc_in_target_group_mode() && TargetGroupMode.leader_selected_index!=-1) \
+  else if (chsrc_in_target_group_mode() && ProgStatus.leader_selected_index!=-1) \
     { \
-      source = for_what##_sources[TargetGroupMode.leader_selected_index]; \
+      source = for_what##_sources[ProgStatus.leader_selected_index]; \
     } \
   else if (is_url (option)) \
     { \
@@ -931,9 +932,9 @@ confirm_source (Source_t *source)
 
 
 void
-chsrc_determine_chgtype (enum ChgType_t type)
+chsrc_determine_chgtype (ChgType_t type)
 {
-  ProgMode_ChgType =  chsrc_in_reset_mode() ? ChgType_Reset : type;
+  ProgStatus.chgtype =  chsrc_in_reset_mode() ? ChgType_Reset : type;
 }
 
 
@@ -964,21 +965,21 @@ chsrc_determine_chgtype (enum ChgType_t type)
 /**
  * @param source 可为NULL
  *
- * @dependency @gvar:ProgMode_ChgType
+ * @dependency @gvar:ProgStatus.chgtype
  */
 void
 chsrc_conclude (Source_t *source)
 {
   hr();
 
-  // fprintf (stderr, "chsrc: now change type: %d\n", ProgMode_ChgType);
+  // fprintf (stderr, "chsrc: now change type: %d\n", ProgStatus.chgtype);
   if (chsrc_in_reset_mode())
     {
       // source_is_upstream (source)
       char *msg = ENGLISH ? "Has been reset to the upstream default source" : "已重置为上游默认源";
       chsrc_log (purple (msg));
     }
-  else if (ChgType_Auto == ProgMode_ChgType)
+  else if (ChgType_Auto == ProgStatus.chgtype)
     {
       if (source)
         {
@@ -1001,7 +1002,7 @@ chsrc_conclude (Source_t *source)
           chsrc_log (msg);
         }
     }
-  else if (ChgType_SemiAuto == ProgMode_ChgType)
+  else if (ChgType_SemiAuto == ProgStatus.chgtype)
     {
       if (source)
         {
@@ -1028,7 +1029,7 @@ chsrc_conclude (Source_t *source)
       char *msg = ENGLISH ? MSG_EN_BETTER : MSG_CN_BETTER;
       chsrc_warn (msg);
     }
-  else if (ChgType_Manual == ProgMode_ChgType)
+  else if (ChgType_Manual == ProgStatus.chgtype)
     {
       if (source)
         {
@@ -1053,7 +1054,7 @@ chsrc_conclude (Source_t *source)
       char *msg = ENGLISH ? MSG_EN_BETTER : MSG_CN_BETTER;
       chsrc_warn (msg);
     }
-  else if (ChgType_Untested == ProgMode_ChgType)
+  else if (ChgType_Untested == ProgStatus.chgtype)
     {
       if (source)
         {
@@ -1079,7 +1080,7 @@ chsrc_conclude (Source_t *source)
     }
   else
     {
-      fprintf (stderr, "chsrc: Wrong change type: %d\n", ProgMode_ChgType);
+      fprintf (stderr, "chsrc: Wrong change type: %d\n", ProgStatus.chgtype);
       xy_unreached();
     }
 }
@@ -1119,7 +1120,7 @@ not_root:
 static void
 chsrc_run (const char *cmd, int run_option)
 {
-  if (ProgMode_Run_as_a_Service)
+  if (ProgStatus.chsrc_run_saas)
     {
       run_option |= RunOpt_Dont_Notify_On_Success|RunOpt_No_Last_New_Line;
     }
@@ -1166,10 +1167,10 @@ static void
 chsrc_run_as_a_service (const char *cmd)
 {
   int run_option = RunOpt_Default;
-  ProgMode_Run_as_a_Service = true;
+  ProgStatus.chsrc_run_saas = true;
     run_option |= RunOpt_Dont_Notify_On_Success|RunOpt_No_Last_New_Line;
     chsrc_run (cmd, run_option);
-  ProgMode_Run_as_a_Service = false;
+  ProgStatus.chsrc_run_saas = false;
 }
 
 static void
