@@ -26,7 +26,7 @@ pl_nodejs_npm_getsrc (char *option)
 void
 pl_nodejs_npm_setsrc (char *option)
 {
-  chsrc_yield_source (pl_nodejs);
+  chsrc_yield_source (pl_nodejs_group);
   if (chsrc_in_standalone_mode())
     chsrc_confirm_source;
 
@@ -78,4 +78,4 @@ pl_nodejs_npm_feat (char *option)
 }
 
 // def_target_gsrf(pl_nodejs_npm);
-Target_t pl_nodejs_npm_target = {def_target_inner_gsrf(pl_nodejs_npm),def_target_sourcesn(pl_nodejs)};
+Target_t pl_nodejs_npm_target = {def_target_inner_gsrf(pl_nodejs_npm),def_target_sourcesn(pl_nodejs_group)};

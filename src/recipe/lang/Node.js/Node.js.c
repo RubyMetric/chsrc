@@ -6,7 +6,7 @@
  *                |
  * Created On     : <2023-08-30>
  * Major Revision :      2
- * Last Modified  : <2024-11-08>
+ * Last Modified  : <2025-07-11>
  * ------------------------------------------------------------*/
 
 void
@@ -30,7 +30,7 @@ pl_nodejs_check_cmd (bool *npm_exist, bool *yarn_exist, bool *pnpm_exist)
  * chsrc get nodejs
  */
 void
-pl_nodejs_getsrc (char *option)
+pl_nodejs_group_getsrc (char *option)
 {
   bool npm_exist, yarn_exist, pnpm_exist;
   pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
@@ -61,13 +61,13 @@ pl_nodejs_getsrc (char *option)
  * chsrc set nodejs
  */
 void
-pl_nodejs_setsrc (char *option)
+pl_nodejs_group_setsrc (char *option)
 {
   {
-    char *msg = ENGLISH ? "Three package managers will be replaced for you at the same time: " \
-                                   "npm, pnpm, yarn. If you need to change the source independently, " \
-                                   "please run independently `chsrc set <pkg-manager>`"
-                                 : "将同时为您更换3个包管理器 npm, pnpm, Yarn 的源，若需要独立换源，请独立运行 chsrc set <pkg-manager>";
+    char *msg = ENGLISH ? "Three package managers will be replaced for you at the same time: "
+                          "npm, pnpm, yarn. If you need to change the source independently, "
+                          "please run independently `chsrc set <pkg-manager>`"
+                        : "将同时为您更换3个包管理器 npm, pnpm, Yarn 的源，若需要独立换源，请独立运行 chsrc set <pkg-manager>";
     chsrc_note2 (msg);
   }
 
@@ -75,7 +75,7 @@ pl_nodejs_setsrc (char *option)
   pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
   chsrc_set_target_group_mode ();
-  chsrc_yield_source_and_confirm (pl_nodejs);
+  chsrc_yield_source_and_confirm (pl_nodejs_group);
 
   if (npm_exist)
     {
@@ -103,9 +103,9 @@ pl_nodejs_setsrc (char *option)
  * chsrc reset nodejs
  */
 void
-pl_nodejs_resetsrc (char *option)
+pl_nodejs_group_resetsrc (char *option)
 {
-  pl_nodejs_setsrc (option);
+  pl_nodejs_group_setsrc (option);
 }
 
 
@@ -113,7 +113,7 @@ pl_nodejs_resetsrc (char *option)
  * chsrc ls nodejs
  */
 Feature_t
-pl_nodejs_feat (char *option)
+pl_nodejs_group_feat (char *option)
 {
   Feature_t f = {0};
 
@@ -128,4 +128,4 @@ pl_nodejs_feat (char *option)
   return f;
 }
 
-def_target_gsrf (pl_nodejs);
+def_target_gsrf (pl_nodejs_group);

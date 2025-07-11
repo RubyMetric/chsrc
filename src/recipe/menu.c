@@ -6,7 +6,7 @@
  *                |
  * Created On     : <2023-09-01>
  * Major Revision :      1
- * Last Modified  : <2025-06-17>
+ * Last Modified  : <2025-07-11>
  * ------------------------------------------------------------*/
 
 /* Begin Target Matrix */
@@ -21,7 +21,7 @@ static const char
   *pl_python_rye[]    = {"rye",                    NULL, t(&pl_python_rye_target)},
   *pl_python_uv[]     = {"uv",                     NULL, t(&pl_python_uv_target)},
 
-*pl_nodejs[]        = {"node", "nodejs", NULL, t(&pl_nodejs_target)},
+*pl_nodejs[]        = {"node", "nodejs", NULL, t(&pl_nodejs_group_target)},
 *pl_nodejs_bun[]    = {"bun",            NULL, t(&pl_nodejs_bun_target)},
   *pl_nodejs_npm[]  = {"npm",            NULL, t(&pl_nodejs_npm_target)},
   *pl_nodejs_yarn[] = {"yarn",           NULL, t(&pl_nodejs_yarn_target)},

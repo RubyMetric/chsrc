@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  : Lontten  <lontten@163.com>
  * Created On    : <2024-09-29>
- * Last Modified : <2024-10-02>
+ * Last Modified : <2025-07-11>
  * ------------------------------------------------------------*/
 
 /**
@@ -28,7 +28,7 @@ void
 pl_nodejs_bun_setsrc (char *option)
 {
   // 用的是 npm Registry 的源
-  chsrc_yield_source (pl_nodejs);
+  chsrc_yield_source (pl_nodejs_group);
 
   char *file = xy_strjoin(3, "[install]\n"
                              "registry = \"", source.url, "\"");
@@ -80,4 +80,4 @@ pl_nodejs_bun_feat (char *option)
 }
 
 // def_target_gsrf(pl_nodejs_bun);
-Target_t pl_nodejs_bun_target = {def_target_inner_gsrf(pl_nodejs_bun),def_target_sourcesn(pl_nodejs)};
+Target_t pl_nodejs_bun_target = {def_target_inner_gsrf(pl_nodejs_bun),def_target_sourcesn(pl_nodejs_group)};

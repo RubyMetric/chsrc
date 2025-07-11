@@ -6,7 +6,7 @@
  *                |
  * Created On     : <2023-09-09>
  * Major Revision :      1
- * Last Modified  : <2024-12-18>
+ * Last Modified  : <2025-07-11>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t pl_nodejs_npm_upstream =
@@ -32,14 +32,14 @@ static MirrorSite_t NpmMirror =
  * }
  *
  */
-static Source_t pl_nodejs_sources[] =
+static Source_t pl_nodejs_group_sources[] =
 {
   {&pl_nodejs_npm_upstream,  "https://registry.npmjs.org/"}, /* @note 根据 pnpm 官网，有最后的斜线 */
   {&NpmMirror,    "https://registry.npmmirror.com"},
   {&Huawei,       "https://mirrors.huaweicloud.com/repository/npm/"},
   {&Tencent,      "https://mirrors.cloud.tencent.com/npm/"},
 };
-def_sources_n(pl_nodejs);
+def_sources_n(pl_nodejs_group);
 
 
 
