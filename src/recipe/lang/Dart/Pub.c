@@ -7,10 +7,12 @@
  *                |
  * Created On     : <2023-09-10>
  * Major Revision :      3
- * Last Modified  : <2025-06-19>
+ * Last Modified  : <2025-07-11>
  *
  * Dart Pub 软件仓库
  * ------------------------------------------------------------*/
+
+#define PL_Dart_Pub_Speed_URL_Postfix "/packages/flutter_vision/versions/1.1.4.tar.gz
 
 /**
  * @update 2025-04-15
@@ -23,11 +25,19 @@
 
 static Source_t pl_dart_sources[] =
 {
-  {&pl_dart_upstream, "https://pub.dev"},
-  {&FlutterCN,        "https://pub.flutter-io.cn"},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/dart-pub"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"},
-  {&Nju,              "https://mirror.nju.edu.cn/dart-pub"}
+  {&pl_dart_upstream, "https://pub.dev", DelegateToUpstream},
+
+  {&FlutterCN,        "https://pub.flutter-io.cn",
+                      "https://pub.flutter-io.cn" PL_Dart_Pub_Speed_URL_Postfix},
+
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/dart-pub",
+                      "https://mirror.sjtu.edu.cn/dart-pub" PL_Dart_Pub_Speed_URL_Postfix},
+
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/dart-pub",
+                      "https://mirrors.tuna.tsinghua.edu.cn/dart-pub" PL_Dart_Pub_Speed_URL_Postfix},
+
+  {&Nju,              "https://mirror.nju.edu.cn/dart-pub",
+                      "https://mirror.nju.edu.cn/dart-pub" PL_Dart_Pub_Speed_URL_Postfix}
 };
 def_sources_n(pl_dart);
 

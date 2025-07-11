@@ -7,11 +7,13 @@
  *                |
  * Created On     : <2023-09-10>
  * Major Revision :      2
- * Last Modified  : <2025-06-19>
+ * Last Modified  : <2025-07-11>
  *
  * 2024-09-14: 不得不将Dart和Flutter拆分为两个Target，
  *             因为3家教育网镜像站给出的 Dart 和 Flutter 换源URL模式都不一样
  * ------------------------------------------------------------*/
+
+#define PL_Dart_Flutter_Speed_URL_Postfix "/flutter_infra_release/releases/stable/linux/flutter_linux_v1.0.0-stable.tar.xz"
 
 /**
  * @update 2025-04-15
@@ -24,11 +26,15 @@ static SourceProvider_t pl_dart_flutter_upstream =
 
 static Source_t pl_dart_flutter_sources[] =
 {
-  {&pl_dart_flutter_upstream, "https://storage.googleapis.com"},
-  {&FlutterCN,                "https://storage.flutter-io.cn"},
-  {&Sjtug_Zhiyuan,            "https://mirror.sjtu.edu.cn"}, // 没有后缀，怀疑是否存在问题
-  {&Tuna,                     "https://mirrors.tuna.tsinghua.edu.cn/flutter"},
-  {&Nju,                      "https://mirror.nju.edu.cn/flutter"}
+  {&pl_dart_flutter_upstream, "https://storage.googleapis.com", DelegateToUpstream},
+  {&FlutterCN,                "https://storage.flutter-io.cn",  DelegateToMirror},
+  {&Sjtug_Zhiyuan,            "https://mirror.sjtu.edu.cn",     NULL }, /* 官方文档也没有给后缀，怀疑是否存在问题 */
+
+  {&Tuna,                     "https://mirrors.tuna.tsinghua.edu.cn/flutter",
+                              "https://mirrors.tuna.tsinghua.edu.cn/flutter" PL_Dart_Flutter_Speed_URL_Postfix},
+
+  {&Nju,                      "https://mirror.nju.edu.cn/flutter",
+                              "https://mirror.nju.edu.cn/flutter" PL_Dart_Flutter_Speed_URL_Postfix}
 };
 def_sources_n(pl_dart_flutter);
 
