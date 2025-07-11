@@ -50,37 +50,40 @@ TargetGroupMode =
   .leader_selected_index = -1
 };
 
-bool
-chsrc_in_target_group_mode ()
+bool chsrc_in_target_group_mode() {return TargetGroupMode.in;}
+void chsrc_set_target_group_mode(){TargetGroupMode.in = true;}
+
+
+struct
 {
-  return TargetGroupMode.in;
+  // 用户命令
+  bool MeasureMode;
+  bool ResetMode;
+
+  // 内部实现
+  bool TargetGroupMode;
+
+  // 用户命令选项
+  bool Ipv6Mode;
+  bool LocalMode;
+  bool EnglishMode;
+  bool DryRunMode;
+  bool NoColorMode;
 }
-
-void
-chsrc_set_target_group_mode ()
+ProgMode =
 {
-  TargetGroupMode.in = true;
-}
-
-
-bool ProgMode_CMD_Measure = false;
-bool ProgMode_CMD_Reset   = false;
-
-
-/* 此时 chsrc_run() 不再是recipe中指定要运行的一个外部命令，而是作为一个功能实现的支撑 */
-bool ProgMode_Run_as_a_Service = false;
-
-enum ChgType_t
-{
-  ChgType_Auto,
-  ChgType_Reset,
-  ChgType_SemiAuto,
-  ChgType_Manual,
-  ChgType_Untested
+  .MeasureMode = false,
+  .ResetMode   = false,
+  .TargetGroupMode = false,
+  .Ipv6Mode = false,
+  .LocalMode = false,
+  .EnglishMode = false,
+  .DryRunMode = false,
+  .NoColorMode = false
 };
 
-enum ChgType_t ProgMode_ChgType = ChgType_Auto;
 
+bool chsrc_in_reset_mode(){return ProgMode.ResetMode;}
 
 /* 命令行选项 */
 bool CliOpt_IPv6      = false;
@@ -88,6 +91,7 @@ bool CliOpt_Locally   = false;
 bool CliOpt_InEnglish = false;
 bool CliOpt_DryRun    = false;
 bool CliOpt_NoColor   = false;
+
 
 /**
  * -local 的含义是启用 *项目级* 换源
@@ -105,6 +109,29 @@ bool CliOpt_NoColor   = false;
  *
  * 3. 最终效果本质由第三方软件决定，如 poetry 默认实现的就是项目级的换源
  */
+
+
+bool ProgMode_CMD_Measure = false;
+
+
+/* 此时 chsrc_run() 不再是recipe中指定要运行的一个外部命令，而是作为一个功能实现的支撑 */
+bool ProgMode_Run_as_a_Service = false;
+
+enum ChgType_t
+{
+  ChgType_Auto,
+  ChgType_Reset,
+  ChgType_SemiAuto,
+  ChgType_Manual,
+  ChgType_Untested
+};
+
+enum ChgType_t ProgMode_ChgType = ChgType_Auto;
+
+
+
+
+
 
 #define Exit_OK               0
 #define Exit_Fatal            1
@@ -407,7 +434,7 @@ query_provider_exist (Source_t *sources, size_t size, char *target, char *input)
     }
 
   /* if (xy_streql ("reset", input)) 不再使用这种方式 */
-  if (ProgMode_CMD_Reset)
+  if (chsrc_in_reset_mode())
     {
       char *msg = CliOpt_InEnglish ? "Will reset to the upstream's default source" : "将重置为上游默认源";
       say (msg);
@@ -692,7 +719,7 @@ int
 select_mirror_autoly (Source_t *sources, size_t size, const char *target_name)
 {
   /* reset 时选择默认源 */
-  if (ProgMode_CMD_Reset)
+  if (chsrc_in_reset_mode())
     return 0;
 
   if (!CliOpt_DryRun)
@@ -815,12 +842,6 @@ source_has_empty_url (Source_t *source)
   return source->url == NULL;
 }
 
-bool
-is_reset_mode ()
-{
-  return ProgMode_CMD_Reset;
-}
-
 
 /**
  * @brief 确定所换源的信息，存储在局部变量 @var:source 中
@@ -910,7 +931,7 @@ confirm_source (Source_t *source)
 void
 chsrc_determine_chgtype (enum ChgType_t type)
 {
-  ProgMode_ChgType =  is_reset_mode() ? ChgType_Reset : type;
+  ProgMode_ChgType =  chsrc_in_reset_mode() ? ChgType_Reset : type;
 }
 
 
@@ -941,7 +962,7 @@ chsrc_determine_chgtype (enum ChgType_t type)
 /**
  * @param source 可为NULL
  *
- * @param [g]ProgMode_ChgType
+ * @dependency @gvar:ProgMode_ChgType
  */
 void
 chsrc_conclude (Source_t *source)
@@ -949,8 +970,7 @@ chsrc_conclude (Source_t *source)
   hr();
 
   // fprintf (stderr, "chsrc: now change type: %d\n", ProgMode_ChgType);
-
-  if (ProgMode_CMD_Reset || ChgType_Reset == ProgMode_ChgType)
+  if (chsrc_in_reset_mode())
     {
       // source_is_upstream (source)
       char *msg = CliOpt_InEnglish ? "Has been reset to the upstream default source" : "已重置为上游默认源";
