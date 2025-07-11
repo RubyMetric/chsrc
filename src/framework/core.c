@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-07-11>
+ * Last Modified : <2025-07-12>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -341,12 +341,16 @@ query_program_exist (char *check_cmd, char *prog_name, int mode)
  *  2. 有一些程序启动速度太慢，即使只调用 --version，也依旧会花费许多时间，比如 mvn
  *  3. 有些程序并不支持 --version 选项 (虽然基本不可能)
  *
- * 我们利用 Windows 和 Unix 上都有 where 命令的事实，解决了上述问题
+ * @note Unix 中，where 仅在 zsh 中可以使用，sh 和 Bash 中均无法使用，因为其并非二进制程序
+ *       所以在 Unix 中，只能使用 which 或 whereis
  */
 static char *
 cmd_to_check_program (char *prog_name)
 {
-  char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin ("where ", prog_name));
+  char *check_tool = xy_on_windows ?  "where " : "which ";
+
+  char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (check_tool, prog_name));
+
   return quiet_cmd;
 }
 
