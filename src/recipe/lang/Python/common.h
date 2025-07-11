@@ -7,8 +7,14 @@
  *                |
  * Created On     : <2023-09-03>
  * Major Revision :      1
- * Last Modified  : <2025-06-12>
+ * Last Modified  : <2025-07-11>
  * ------------------------------------------------------------*/
+
+/**
+ * 注意这个前缀是 host/pipi/web/pacakges....
+ * 下面有几个镜像站微调了这个路径，我们只要确认能找到 packages 目录就好
+ */
+#define PL_Python_Group_Speed_URL_Postfix "/packages/56/e4/55aaac2b15af4dad079e5af329a79d961e5206589d0e02b1e8da221472ed/tensorflow-2.18.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"
 
 static SourceProvider_t pl_python_pypi_upstream =
 {
@@ -17,26 +23,54 @@ static SourceProvider_t pl_python_pypi_upstream =
 };
 
 /**
- * @update 2025-06-12
+ * @update 2025-07-11
  * @note 不要添加Zju，浙大的PyPI服务在校外访问会自动转向Tuna
  */
 static Source_t pl_python_sources[] =
 {
-  {&pl_python_pypi_upstream,   "https://pypi.org/simple"},
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/pypi/web/simple"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/pypi/web/simple"},
-  {&Lzuoss,           "https://mirror.lzu.edu.cn/pypi/web/simple"},
-  {&Jlu,              "https://mirrors.jlu.edu.cn/pypi/web/simple"},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/pypi/web/simple"},
-  {&Tuna,             "https://pypi.tuna.tsinghua.edu.cn/simple"},
-  {&Ali,              "https://mirrors.aliyun.com/pypi/simple/"},
-  {&Nju,              "https://mirror.nju.edu.cn/pypi/web/simple"},
-  {&Pku,              "https://mirrors.pku.edu.cn/pypi/web/simple"},
-  {&Tencent,          "https://mirrors.cloud.tencent.com/pypi/simple"},
-  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/pypi/simple"},
-  {&Huawei,           "https://mirrors.huaweicloud.com/repository/pypi/simple"},
-  {&Hust,             "https://mirrors.hust.edu.cn/pypi/web/simple"}
-  // {&Netease,       "https://mirrors.163.com/.help/pypi.html"} /* 不启用原因：24小时更新一次 */
+  {&pl_python_pypi_upstream,   "https://pypi.org/simple", DelegateToUpstream},
+
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/pypi/web/simple",
+                      "https://mirrors.cernet.edu.cn/pypi/web" PL_Python_Group_Speed_URL_Postfix},
+
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/pypi/web/simple",
+                      "https://mirrors.bfsu.edu.cn/pypi/web" PL_Python_Group_Speed_URL_Postfix},
+
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/pypi/web/simple",
+                      "https://mirror.lzu.edu.cn/pypi/web"   PL_Python_Group_Speed_URL_Postfix},
+
+  {&Jlu,              "https://mirrors.jlu.edu.cn/pypi/web/simple",
+                      "https://mirrors.jlu.edu.cn/pypi/web"  PL_Python_Group_Speed_URL_Postfix},
+
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/pypi/web/simple",
+                      "https://mirror.sjtu.edu.cn/pypi/web" PL_Python_Group_Speed_URL_Postfix},
+
+  {&Tuna,             "https://pypi.tuna.tsinghua.edu.cn/simple",
+                      "https://pypi.tuna.tsinghua.edu.cn" PL_Python_Group_Speed_URL_Postfix},
+
+  {&Ali,              "https://mirrors.aliyun.com/pypi/simple/",
+                      "https://mirrors.aliyun.com/pypi" PL_Python_Group_Speed_URL_Postfix},
+
+  {&Nju,              "https://mirror.nju.edu.cn/pypi/web/simple",
+                      "https://mirror.nju.edu.cn/pypi/web" PL_Python_Group_Speed_URL_Postfix},
+
+  {&Pku,              "https://mirrors.pku.edu.cn/pypi/web/simple",
+                      "https://mirrors.pku.edu.cn/pypi/web" PL_Python_Group_Speed_URL_Postfix},
+
+  {&Tencent,          "https://mirrors.cloud.tencent.com/pypi/simple",
+                      "https://mirrors.cloud.tencent.com/pypi" PL_Python_Group_Speed_URL_Postfix},
+
+  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/pypi/simple",
+  //                  "https://mirrors.cloud.tencentyun.com/pypi" PL_Python_Group_Speed_URL_Postfix,
+
+  {&Huawei,           "https://mirrors.huaweicloud.com/repository/pypi/simple",
+                      "https://mirrors.huaweicloud.com/repository/pypi" PL_Python_Group_Speed_URL_Postfix},
+
+  {&Hust,             "https://mirrors.hust.edu.cn/pypi/web/simple",
+                      "https://mirrors.hust.edu.cn/pypi/web" PL_Python_Group_Speed_URL_Postfix},
+
+  /* 不启用原因：24小时更新一次 */
+  // {&Netease,       "https://mirrors.163.com/.help/pypi.html", NULL}
 };
 def_sources_n(pl_python);
 

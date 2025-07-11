@@ -12,7 +12,7 @@
  * Dart Pub 软件仓库
  * ------------------------------------------------------------*/
 
-#define PL_Dart_Pub_Speed_URL_Postfix "/packages/flutter_vision/versions/1.1.4.tar.gz
+#define PL_Dart_Pub_Speed_URL_Postfix "/packages/flutter_vision/versions/1.1.4.tar.gz"
 
 /**
  * @update 2025-04-15
