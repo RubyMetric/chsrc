@@ -34,7 +34,7 @@ pl_python_poetry_setsrc (char *option)
 
   char *cmd = NULL;
 
-  if (CliOpt_Locally==false)
+  if (!chsrc_in_local_mode())
     chsrc_note2 ("Poertry 仅支持项目级换源");
 
   cmd = xy_2strjoin ("poetry source add my_mirror ", source.url);

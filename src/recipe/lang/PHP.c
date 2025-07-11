@@ -49,7 +49,7 @@ pl_php_setsrc (char *option)
   chsrc_yield_source_and_confirm (pl_php);
 
   char *where = " -g ";
-  if (CliOpt_Locally==true)
+  if (chsrc_in_local_mode())
     {
       where = " ";
     }

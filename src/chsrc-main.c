@@ -210,20 +210,20 @@ void
 cli_print_available_mirrors ()
 {
   {
-  char *msg = CliOpt_InEnglish ? "To specify a source, use chsrc set " : "指定使用某源，请使用 chsrc set ";
+  char *msg = ENGLISH ? "To specify a source, use chsrc set " : "指定使用某源，请使用 chsrc set ";
   say (bdblue(xy_strjoin (3, msg, "<target>", " <code>\n")));
   }
 
   {
-  char *msg = CliOpt_InEnglish ? "Available Mirror Sites: \n" : "可用镜像站: \n";
+  char *msg = ENGLISH ? "Available Mirror Sites: \n" : "可用镜像站: \n";
   say (bdgreen(msg));
   }
 
   {
-  char *msg1 = CliOpt_InEnglish ? "Mirror abbr" : "镜像站简写";
-  char *msg2 = CliOpt_InEnglish ? "Mirror URL"  : "镜像站URL";
-  char *msg3 = CliOpt_InEnglish ? "Mirror Name" : "镜像站";
-  char *format = CliOpt_InEnglish ? "  %-13s%-28s%-35s%s\n" : "  %-13s%-33s%-42s%s\n";
+  char *msg1 = ENGLISH ? "Mirror abbr" : "镜像站简写";
+  char *msg2 = ENGLISH ? "Mirror URL"  : "镜像站URL";
+  char *msg3 = ENGLISH ? "Mirror Name" : "镜像站";
+  char *format = ENGLISH ? "  %-13s%-28s%-35s%s\n" : "  %-13s%-33s%-42s%s\n";
   printf (format, "code", msg1, msg2, msg3);
   say    ("---------    --------------    -------------------------------------     ---------------------");
   }
@@ -257,27 +257,27 @@ void
 cli_print_supported_targets ()
 {
   {
-  char *msg = CliOpt_InEnglish ? "Support following targets (same line indicates these targets are compatible)"
+  char *msg = ENGLISH ? "Support following targets (same line indicates these targets are compatible)"
                                : "支持对以下目标换源 (同一行表示这几个命令兼容)" ;
   say (bdblue(msg)); br();
   }
 
   {
-  char *msg = CliOpt_InEnglish ? "Programming Languages" : "编程语言";
+  char *msg = ENGLISH ? "Programming Languages" : "编程语言";
   say (bdgreen(msg));
   say ("-------------------------");
   cli_print_supported_targets_ (pl_packagers, xy_arylen(pl_packagers));
   }
 
   {
-  char *msg = CliOpt_InEnglish ? "Operating Systems" : "操作系统";
+  char *msg = ENGLISH ? "Operating Systems" : "操作系统";
   say (bdgreen(msg));
   say ("-------------------------");
   cli_print_supported_targets_ (os_systems,   xy_arylen(os_systems));
   }
 
   {
-  char *msg = CliOpt_InEnglish ? "Softwares" : "软件";
+  char *msg = ENGLISH ? "Softwares" : "软件";
   say (bdgreen(msg));
   say ("-------------------------");
   cli_print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
@@ -287,7 +287,7 @@ cli_print_supported_targets ()
 void
 cli_print_supported_pl ()
 {
-  char *msg = CliOpt_InEnglish ? "Support following Programming Languages (same line indicates these targets are compatible)\n"
+  char *msg = ENGLISH ? "Support following Programming Languages (same line indicates these targets are compatible)\n"
                                : "支持对以下编程语言生态换源 (同一行表示这几个目标兼容)\n";
   say (bdgreen(msg));
 
@@ -297,7 +297,7 @@ cli_print_supported_pl ()
 void
 cli_print_supported_os ()
 {
-  char *msg = CliOpt_InEnglish ? "Support following Operating Systems (same line indicates these targets are compatible)\n"
+  char *msg = ENGLISH ? "Support following Operating Systems (same line indicates these targets are compatible)\n"
                                : "支持对以下操作系统换源 (同一行表示这几个目标兼容)\n";
   say (bdgreen(msg));
   cli_print_supported_targets_ (os_systems, xy_arylen(os_systems));
@@ -306,7 +306,7 @@ cli_print_supported_os ()
 void
 cli_print_supported_wr ()
 {
-  char *msg = CliOpt_InEnglish ? "Support following Softwares (same line indicates these targets are compatible)\n"
+  char *msg = ENGLISH ? "Support following Softwares (same line indicates these targets are compatible)\n"
                                : "支持对以下软件换源 (同一行表示这几个目标兼容)\n";
   say (bdgreen(msg));
   cli_print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
@@ -337,19 +337,19 @@ void
 cli_print_target_features (Feature_t f, const char *input_target_name)
 {
   {
-  char *msg = CliOpt_InEnglish ? "\nAvailable Features:\n" : "\n可用功能:\n";
+  char *msg = ENGLISH ? "\nAvailable Features:\n" : "\n可用功能:\n";
   say (bdgreen(msg));
   }
 
   {
-  char *msg = CliOpt_InEnglish ? " Get: View the current source state " : " Get: 查看当前源状态 ";
+  char *msg = ENGLISH ? " Get: View the current source state " : " Get: 查看当前源状态 ";
   char *get_msg = xy_strjoin (3, msg, "| chsrc get ", input_target_name);
   if (f.can_get) printf (" %s%s\n", bdgreen(YesMark), purple(get_msg));
   else printf (" %s%s\n", bdred(NoMark), get_msg);br();
   }
 
   {
-  char *msg = CliOpt_InEnglish ? " Reset: Reset to the default source " : " Reset: 重置回默认源 ";
+  char *msg = ENGLISH ? " Reset: Reset to the default source " : " Reset: 重置回默认源 ";
   char *reset_msg = xy_strjoin (3, msg, "| chsrc reset ", input_target_name);
   if (f.can_reset) printf (" %s%s\n", bdgreen(YesMark), purple(reset_msg));
   else printf (" %s%s\n", bdred(NoMark), reset_msg);br();
@@ -357,7 +357,7 @@ cli_print_target_features (Feature_t f, const char *input_target_name)
 
 
   {
-  char *msg = CliOpt_InEnglish ? " UserDefine: using user-defined source URL " : " UserDefine: 用户自定义换源URL ";
+  char *msg = ENGLISH ? " UserDefine: using user-defined source URL " : " UserDefine: 用户自定义换源URL ";
   char *user_define_msg = xy_strjoin (5, msg, "| chsrc set ", input_target_name, " https://user-define-url.org/", input_target_name);
   if (f.can_user_define) printf (" %s%s\n", bdgreen(YesMark), purple(user_define_msg));
   else printf (" %s%s\n", bdred(NoMark), user_define_msg);br();
@@ -365,7 +365,7 @@ cli_print_target_features (Feature_t f, const char *input_target_name)
 
 
   {
-  char *msg = CliOpt_InEnglish ? " Locally: Change source only for this project " : " Locally: 仅对本项目换源 ";
+  char *msg = ENGLISH ? " Locally: Change source only for this project " : " Locally: 仅对本项目换源 ";
   char *locally_msg = xy_strjoin (3, msg, "| chsrc set -local ", input_target_name);
 
   switch (f.cap_locally)
@@ -386,7 +386,7 @@ cli_print_target_features (Feature_t f, const char *input_target_name)
 
 
   {
-  char *msg = CliOpt_InEnglish ? " English: Output in English " : " English: 英文输出 ";
+  char *msg = ENGLISH ? " English: Output in English " : " English: 英文输出 ";
   char *english_msg = xy_strjoin (3, msg, "| chsrc set -en ", input_target_name);
   if (f.can_english) printf (" %s%s\n", bdgreen(YesMark), purple(english_msg));
   else printf (" %s%s\n", bdred(NoMark), english_msg);br();
@@ -394,7 +394,7 @@ cli_print_target_features (Feature_t f, const char *input_target_name)
 
   if (f.note)
     {
-      char *msg = CliOpt_InEnglish ? "NOTE: " : "备注: ";
+      char *msg = ENGLISH ? "NOTE: " : "备注: ";
       printf ("%s%s\n", bdyellow (msg), bdyellow (f.note));
     }
 }
@@ -420,7 +420,7 @@ cli_print_help ()
                    purple("v" Chsrc_Version "-" Chsrc_Release_Date), " by RubyMetric"));
   br();
 
-  if (CliOpt_InEnglish)
+  if (ENGLISH)
     {
       for (int i=0; i<xy_arylen (Chsrc_Usage_English); i++)
         say (Chsrc_Usage_English[i]);
@@ -554,20 +554,20 @@ get_target (const char *input, TargetOp code, char *option)
   else if (TargetOp_List_Config==code)
     {
       {
-      char *msg = CliOpt_InEnglish ? "To specify a source, use chsrc set " : "指定使用某源，请使用 chsrc set ";
+      char *msg = ENGLISH ? "To specify a source, use chsrc set " : "指定使用某源，请使用 chsrc set ";
       say (bdblue(xy_strjoin (3, msg, input, " <code>\n")));
       }
 
       {
-      char *msg = CliOpt_InEnglish ? "Available Sources: \n" : "可用源: \n";
+      char *msg = ENGLISH ? "Available Sources: \n" : "可用源: \n";
       say (bdgreen(msg));
       }
 
       {
-      char *msg1 = CliOpt_InEnglish ? "Mirror abbr" : "镜像站简写";
-      char *msg2 = CliOpt_InEnglish ? "Source URL"  : "换源URL";
-      char *msg3 = CliOpt_InEnglish ? "Mirror Name" : "镜像站";
-      char *format = CliOpt_InEnglish ? "  %-13s%-33s%-38s%s\n" : "  %-13s%-36s%-46s%s\n";
+      char *msg1 = ENGLISH ? "Mirror abbr" : "镜像站简写";
+      char *msg2 = ENGLISH ? "Source URL"  : "换源URL";
+      char *msg3 = ENGLISH ? "Mirror Name" : "镜像站";
+      char *format = ENGLISH ? "  %-13s%-33s%-38s%s\n" : "  %-13s%-36s%-46s%s\n";
       printf (format, "code", msg1, msg2, msg3);
       say    ("---------    --------------    -----------------------------------------------    ---------------------");
       }
@@ -627,23 +627,23 @@ main (int argc, char const *argv[])
         {
           if (xy_streql (argv[i], "-ipv6"))
             {
-              CliOpt_IPv6 = true;
+              ProgMode.Ipv6Mode = true;
             }
           else if (xy_streql (argv[i], "-local"))
             {
-              CliOpt_Locally = true;
+              ProgMode.LocalMode = true;
             }
           else if (xy_streql (argv[i], "-en") || xy_streql (argv[i], "-english"))
             {
-              CliOpt_InEnglish = true;
+              ProgMode.EnglishMode = true;
             }
           else if (xy_streql (argv[i], "-dry"))
             {
-              CliOpt_DryRun = true;
+              ProgMode.DryRunMode = true;
             }
           else if (xy_streql (argv[i], "-no-color") || xy_streql (argv[i], "-no-colour"))
             {
-              CliOpt_NoColor = true;
+              ProgMode.NoColorMode = true;
               xy_enable_color = false;
             }
           else if (    xy_streql (argv[i], "-h")
@@ -660,7 +660,7 @@ main (int argc, char const *argv[])
             }
           else
             {
-              char *msg = CliOpt_InEnglish ? "Unknown option: " : "未识别的命令行选项 ";
+              char *msg = ENGLISH ? "Unknown option: " : "未识别的命令行选项 ";
               chsrc_error (xy_2strjoin (msg, argv[i])); return Exit_Unknown;
             }
           cli_arg_Target_pos++;
@@ -671,9 +671,9 @@ main (int argc, char const *argv[])
 
   bool matched = false;
 
-  if (CliOpt_DryRun)
+  if (in_dry_run_mode())
     {
-      char *dry_msg = CliOpt_InEnglish ? "Enable [Dry Run] mode. " \
+      char *dry_msg = ENGLISH ? "Enable [Dry Run] mode. " \
                                          "Simulate the source changing process (skipping speed measurement). " \
                                          "Commands only print but don't run\n"
                                        : "开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行\n";
@@ -756,12 +756,12 @@ main (int argc, char const *argv[])
     {
       if (argc < cli_arg_Target_pos)
         {
-          char *msg = CliOpt_InEnglish ? "Please provide the target name you want to measure. " MSG_EN_USE_LIST_TARGETS
+          char *msg = ENGLISH ? "Please provide the target name you want to measure. " MSG_EN_USE_LIST_TARGETS
                                        : "请您提供想要测速源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
           return Exit_Unknown;
         }
-      ProgMode_CMD_Measure = true;
+      ProgMode.MeasureMode = true;
       target = argv[cli_arg_Target_pos];
       matched = get_target (target, TargetOp_Measure_Source, NULL);
       if (!matched) goto not_matched;
@@ -775,7 +775,7 @@ main (int argc, char const *argv[])
     {
       if (argc < cli_arg_Target_pos)
         {
-          char *msg = CliOpt_InEnglish ? "Please provide the target name you want to view the source. " MSG_EN_USE_LIST_TARGETS
+          char *msg = ENGLISH ? "Please provide the target name you want to view the source. " MSG_EN_USE_LIST_TARGETS
                                        : "请您提供想要查看源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
           return Exit_Unknown;
@@ -792,7 +792,7 @@ main (int argc, char const *argv[])
     {
       if (argc < cli_arg_Target_pos)
         {
-          char *msg = CliOpt_InEnglish ? "Please provide the target name you want to set the source. " MSG_EN_USE_LIST_TARGETS
+          char *msg = ENGLISH ? "Please provide the target name you want to set the source. " MSG_EN_USE_LIST_TARGETS
                                        : "请您提供想要设置源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
           return Exit_Unknown;
@@ -817,7 +817,7 @@ main (int argc, char const *argv[])
     {
       if (argc < cli_arg_Target_pos)
         {
-          char *msg = CliOpt_InEnglish ? "Please provide the target name you want to reset the source. " MSG_EN_USE_LIST_TARGETS
+          char *msg = ENGLISH ? "Please provide the target name you want to reset the source. " MSG_EN_USE_LIST_TARGETS
                                        : "请您提供想要重置源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
           return Exit_Unknown;
@@ -842,8 +842,8 @@ main (int argc, char const *argv[])
 
   else
     {
-      char *msg1 = CliOpt_InEnglish ? "Unknown command `" : "不支持的命令 ";
-      char *msg2 = CliOpt_InEnglish ? "`. Use `chsrc help` to view usage" : ". 请使用 chsrc help 查看使用方式";
+      char *msg1 = ENGLISH ? "Unknown command `" : "不支持的命令 ";
+      char *msg2 = ENGLISH ? "`. Use `chsrc help` to view usage" : ". 请使用 chsrc help 查看使用方式";
       chsrc_error (xy_strjoin (3, msg1, command, msg2));
       return Exit_Unknown;
     }
@@ -851,7 +851,7 @@ main (int argc, char const *argv[])
 not_matched:
   if (!matched)
     {
-      char *msg = CliOpt_InEnglish ? "Unknown target. "  MSG_EN_USE_LIST_TARGETS
+      char *msg = ENGLISH ? "Unknown target. "  MSG_EN_USE_LIST_TARGETS
                                    : "暂不支持的换源目标。" MSG_CN_USE_LIST_TARGETS;
       chsrc_error (msg);
       return Exit_Unknown;

@@ -33,7 +33,7 @@ pl_nodejs_npm_setsrc (char *option)
 
   char *cmd = NULL;
 
-  if (CliOpt_Locally==true)
+  if (chsrc_in_local_mode())
     cmd = xy_2strjoin ("npm config --location project set registry ", source.url);
   else
     cmd = xy_2strjoin ("npm config set registry ", source.url);

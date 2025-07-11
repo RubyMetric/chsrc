@@ -35,7 +35,7 @@ os_armbian_getsrc (char *option)
       return;
     }
 
-  char *msg = CliOpt_InEnglish ? "Source list config file missing! Path: " OS_Armbian_SourceList
+  char *msg = ENGLISH ? "Source list config file missing! Path: " OS_Armbian_SourceList
                                : "缺少源配置文件！路径：" OS_Armbian_SourceList;
   chsrc_error2 (msg);
 }

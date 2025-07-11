@@ -34,7 +34,7 @@ pl_nodejs_pnpm_setsrc (char *option)
 
   char *cmd = NULL;
 
-  if (CliOpt_Locally)
+  if (chsrc_in_local_mode())
     cmd = xy_2strjoin ("pnpm config --location project set registry ", source.url);
   else
     cmd = xy_2strjoin ("pnpm config -g set registry ", source.url);

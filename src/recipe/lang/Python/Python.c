@@ -44,7 +44,7 @@ void
 pl_python_setsrc (char *option)
 {
   {
-    char *msg = CliOpt_InEnglish ? "Three package managers will be replaced for you at the same time: " \
+    char *msg = ENGLISH ? "Three package managers will be replaced for you at the same time: " \
                                          "pip, Poetry, PDM. If you need to change the source independently, " \
                                          "please run independently `chsrc set <pkg-manager>`"
                                        : "将同时为您更换4个包管理器 pip, Poetry, PDM, uv 的源，若需要独立换源，请独立运行 chsrc set <pkg-manager>";

@@ -53,7 +53,7 @@ os_debian_getsrc (char *option)
       return;
     }
 
-  char *msg = CliOpt_InEnglish ? "Source list file missing! However, you can still run `chsrc set debian` to add and use new sources"
+  char *msg = ENGLISH ? "Source list file missing! However, you can still run `chsrc set debian` to add and use new sources"
                                : "缺少源配置文件！但仍可直接通过 chsrc set debian 来添加使用新的源";
   chsrc_error2 (msg);
   return;

@@ -33,7 +33,7 @@ pl_nodejs_bun_setsrc (char *option)
   char *file = xy_strjoin(3, "[install]\n"
                              "registry = \"", source.url, "\"");
 
-  if (CliOpt_Locally==true)
+  if (chsrc_in_local_mode())
     {
       chsrc_note2 ("请您手动写入以下内容到本项目根目录的 bunfig.toml 文件中");
     }

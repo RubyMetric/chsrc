@@ -50,7 +50,7 @@ pl_nodejs_yarn_setsrc (char *option)
   // 从 Yarn V2 开始，使用新的配置名
   if (pl_nodejs_yarn_get_yarn_version () >= 2)
     {
-      if (CliOpt_Locally==true) // Yarn 默认情况下就是基于本项目换源
+      if (chsrc_in_local_mode()) // Yarn 默认情况下就是基于本项目换源
         cmd = xy_2strjoin ("yarn config set npmRegistryServer ", source.url);
       else
         cmd = xy_2strjoin ("yarn config set npmRegistryServer --home ", source.url);
@@ -59,9 +59,9 @@ pl_nodejs_yarn_setsrc (char *option)
     }
   else
     {
-      if (CliOpt_Locally)
+      if (chsrc_in_local_mode())
         {
-          char *msg = CliOpt_InEnglish ? "Yarn v1 doesn't support `-local`. SKIP changing source!" : "Yarn v1 不支持 -local，跳过换源";
+          char *msg = ENGLISH ? "Yarn v1 doesn't support `-local`. SKIP changing source!" : "Yarn v1 不支持 -local，跳过换源";
           chsrc_error (msg);
           // 不能直接退出，因为 Leader target 不能就此结束
           return;

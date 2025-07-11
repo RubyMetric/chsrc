@@ -83,7 +83,7 @@ pl_ruby_setsrc (char *option)
   chsrc_ensure_program ("bundle");
 
   char *where = " --global ";
-  if (CliOpt_Locally==true)
+  if (chsrc_in_local_mode())
     {
       where = " --local ";
     }

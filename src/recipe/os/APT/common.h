@@ -62,7 +62,7 @@ ensure_debian_or_ubuntu_old_sourcelist (int debian_type)
     }
   else
     {
-      char *msg = CliOpt_InEnglish ? "Will generate a new source list file"
+      char *msg = ENGLISH ? "Will generate a new source list file"
                                    : "将生成新的源配置文件";
       chsrc_note2 (msg);
     }
@@ -123,7 +123,7 @@ ensure_debian_or_ubuntu_old_sourcelist (int debian_type)
         }
       else
         {
-          char *msg = CliOpt_InEnglish ? "Your Debian version is too low (<10) for chsrc to support"
+          char *msg = ENGLISH ? "Your Debian version is too low (<10) for chsrc to support"
                                        : "您的 Debian 版本过低 (<10)，暂不支持换源";
           chsrc_error (msg);
           exit (Exit_Unsupported);

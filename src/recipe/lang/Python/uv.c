@@ -27,7 +27,7 @@
 char *
 pl_python_find_uv_config (bool mkdir)
 {
-  if (CliOpt_Locally)
+  if (chsrc_in_local_mode())
     {
       return xy_2strjoin (UV_LOCAL_CONFIG_PATH, UV_CONFIG);
     }

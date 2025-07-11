@@ -18,7 +18,7 @@ pl_nodejs_check_cmd (bool *npm_exist, bool *yarn_exist, bool *pnpm_exist)
 
   if (!*npm_exist && !*yarn_exist && !*pnpm_exist)
     {
-      char *msg = CliOpt_InEnglish ? "No npm, yarn or pnpm command found, check if at least one is present"
+      char *msg = ENGLISH ? "No npm, yarn or pnpm command found, check if at least one is present"
                                    : "未找到 npm 或 yarn 或 pnpm 命令，请检查是否存在其一";
       chsrc_error (msg);
       exit (Exit_UserCause);
@@ -64,7 +64,7 @@ void
 pl_nodejs_setsrc (char *option)
 {
   {
-    char *msg = CliOpt_InEnglish ? "Three package managers will be replaced for you at the same time: " \
+    char *msg = ENGLISH ? "Three package managers will be replaced for you at the same time: " \
                                    "npm, pnpm, yarn. If you need to change the source independently, " \
                                    "please run independently `chsrc set <pkg-manager>`"
                                  : "将同时为您更换3个包管理器 npm, pnpm, Yarn 的源，若需要独立换源，请独立运行 chsrc set <pkg-manager>";
