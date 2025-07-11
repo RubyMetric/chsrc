@@ -9,6 +9,8 @@
  * Last Modified  : <2025-07-11>
  * ------------------------------------------------------------*/
 
+#define PL_Nodejs_Group_Speed_URL_Postfix "/@tensorflow/tfjs/-/tfjs-4.22.0.tgz"
+
 static SourceProvider_t pl_nodejs_npm_upstream =
 {
   def_upstream, "https://www.npmjs.com/",
@@ -24,26 +26,28 @@ static MirrorSite_t NpmMirror =
 };
 
 /**
- * @update 2024-09-23
+ * @update 2025-07-11
  * @sync https://github.com/RubyMetric/chsrc/wiki/Node.js-MirrorSite
  * @sync https://github.com/RubyMetric/chsrc/discussions/85
  *
- * @note {
+ * @note
  *   Sjtug, Tuna, Lzuoss, Jlu, Bfsu, 网易，搜狐 都没有
- * }
- *
  */
 static Source_t pl_nodejs_group_sources[] =
 {
-  {&pl_nodejs_npm_upstream,  "https://registry.npmjs.org/"}, /* @note 根据 pnpm 官网，有最后的斜线 */
-  {&NpmMirror,    "https://registry.npmmirror.com"},
-  {&Huawei,       "https://mirrors.huaweicloud.com/repository/npm/"},
-  {&Tencent,      "https://mirrors.cloud.tencent.com/npm/"},
+  {&pl_nodejs_npm_upstream,  "https://registry.npmjs.org/", DelegateToUpstream}, /* @note 根据 pnpm 官网，有最后的斜线 */
+  {&NpmMirror,    "https://registry.npmmirror.com", DelegateToMirror},
+
+  {&Huawei,       "https://mirrors.huaweicloud.com/repository/npm/",
+                  "https://mirrors.huaweicloud.com/repository/npm/" PL_Nodejs_Group_Speed_URL_Postfix},
+
+  {&Tencent,      "https://mirrors.cloud.tencent.com/npm/",
+                  "https://mirrors.cloud.tencent.com/npm/" PL_Nodejs_Group_Speed_URL_Postfix},
 };
 def_sources_n(pl_nodejs_group);
 
 
-
+#define PL_Nodejs_Binary_Speed_URL_Postfix "/v23.4.0/node-v23.4.0-linux-x64.tar.xz"
 
 static SourceProvider_t pl_nodejs_binary_release_upstream =
 {
@@ -52,20 +56,31 @@ static SourceProvider_t pl_nodejs_binary_release_upstream =
 };
 
 /**
- * @update 2024-12-18
+ * @update 2025-07-11
  * @sync https://github.com/RubyMetric/chsrc/wiki/Node.js-BinaryRelease-MirrorSite
  * @sync https://github.com/RubyMetric/chsrc/discussions/85
  *
  */
 static Source_t pl_nodejs_binary_release_sources[] =
 {
-  {&pl_nodejs_binary_release_upstream,  "https://nodejs.org/dist/"},
-  {&NpmMirror,          "https://npmmirror.com/mirrors"},
-  {&Tuna,               "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/"},
-  {&Bfsu,               "https://mirrors.bfsu.edu.cn/nodejs-release/"},
-  {&Ustc,               "https://mirrors.ustc.edu.cn/node/"},
+  {&pl_nodejs_binary_release_upstream,  "https://nodejs.org/dist/", DelegateToUpstream},
 
-  {&Huawei,             "https://mirrors.huaweicloud.com/nodejs/"},
-  {&Tencent,            "https://mirrors.cloud.tencent.com/nodejs-release/"},
+  {&NpmMirror,          "https://npmmirror.com/mirrors",
+                        "https://registry.npmmirror.com/-/binary/node/v23.4.0/node-v23.4.0.tar.gz"},
+
+  {&Tuna,               "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/",
+                        "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/" PL_Nodejs_Binary_Speed_URL_Postfix},
+
+  {&Bfsu,               "https://mirrors.bfsu.edu.cn/nodejs-release/",
+                        "https://mirrors.bfsu.edu.cn/nodejs-release/" PL_Nodejs_Binary_Speed_URL_Postfix},
+
+  {&Ustc,               "https://mirrors.ustc.edu.cn/node/",
+                        "https://mirrors.ustc.edu.cn/node/" PL_Nodejs_Binary_Speed_URL_Postfix},
+
+  {&Huawei,             "https://mirrors.huaweicloud.com/nodejs/",
+                        "https://mirrors.huaweicloud.com/nodejs/" PL_Nodejs_Binary_Speed_URL_Postfix},
+
+  {&Tencent,            "https://mirrors.cloud.tencent.com/nodejs-release/",
+                        "https://mirrors.cloud.tencent.com/nodejs-release/" PL_Nodejs_Binary_Speed_URL_Postfix}
 };
 def_sources_n(pl_nodejs_binary_release);
