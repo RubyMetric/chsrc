@@ -8,7 +8,7 @@
 #   https://github.com/RubyMetric/chsrc/releases/tag/pre
 # ---------------------------------------------------------------
 
-$destination = "~\Desktop\chsrc-pre-onGitHub"
+$destination = "~\Desktop\chsrc-pre-on-GitHub"
 
 Write-Output "=> Mkdir $destination"
 mkdir -Force $destination | Out-Null

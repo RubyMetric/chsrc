@@ -7,7 +7,7 @@
  ! Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
  !               |
  ! Created On    : <2023-12-28>
- ! Last Modified : <2025-07-11>
+ ! Last Modified : <2025-07-12>
  ! ---------------------------------------------------------- -->
 
 <div align="center">
@@ -62,6 +62,8 @@
 
 3. [搜集测速地址，进行精准测速](https://github.com/RubyMetric/chsrc/issues/205)
 
+4. [chsrc-bootstrap: 为不存在预编译 `chsrc` 的平台提供支持](https://github.com/RubyMetric/chsrc/issues/230)
+
 <br>
 
 <details>
@@ -84,7 +86,7 @@
 <details>
 <summary>打包</summary>
 
-想通过 `dnf`, `flatpak`, `snap` 等系统包管理工具来安装和更新`chsrc`？若您可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
+想通过 `dnf`, `flatpak`, `snap` 等系统包管理工具来安装和更新`chsrc`？若可提供维护，请访问 [issue#16 on GitHub](https://github.com/RubyMetric/chsrc/issues/16)
 
 - [x] `Homebrew`
 - [x] `Scoop`
@@ -139,6 +141,9 @@ winget install RubyMetric.chsrc
     若下方链接无法访问，可使用 `https://gitee.com/RubyMetric/chsrc/raw/main/tool/installer.ps1` 替代
 
 ```PowerShell
+# 使用 -Version 指定版本 (不指定时默认为 pre)
+#   1. 安装 pre 版本; 这比从包管理器安装的总是更新一些
+#   2. 安装旧版本; 有时新版本可能引入某些 Bug，临时使用旧版本解决燃眉之急
 "& { $(iwr -useb https://chsrc.run/windows) } -Version pre" | iex
 ```
 
@@ -197,6 +202,11 @@ $ curl https://chsrc.run/posix | sudo bash
 # 使用 -d 指定目录安装
 $ curl https://chsrc.run/posix | bash -s -- -d ./
 
+# 使用 -v 指定版本 (不指定时默认为 pre)
+#   1. 安装 pre 版本; 这比从包管理器安装的总是更新一些
+#   2. 安装旧版本; 有时新版本可能引入某些 Bug，临时使用旧版本解决燃眉之急
+$ curl https://chsrc.run/posix | bash -s -- -v 0.2.1
+
 # 使用 -l en 输出英文
 $ curl https://chsrc.run/posix | bash -s -- -l en
 ```
@@ -246,6 +256,11 @@ $ curl https://chsrc.run/posix | sudo bash
 # 使用 -d 指定目录安装
 $ curl https://chsrc.run/posix | bash -s -- -d ./
 
+# 使用 -v 指定版本 (不指定时默认为 pre)
+#   1. 安装 pre 版本; 这比从包管理器安装的总是更新一些
+#   2. 安装旧版本; 有时新版本可能引入某些 Bug，临时使用旧版本解决燃眉之急
+$ curl https://chsrc.run/posix | bash -s -- -v 0.2.1
+
 # 使用 -l en 输出英文
 $ curl https://chsrc.run/posix | bash -s -- -l en
 ```
@@ -267,9 +282,26 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-macos
 <details>
 <summary>BSD</summary>
 
+如果已安装好了编译 `chsrc` 所需要的依赖，可直接运行:
+
 ```bash
 git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc
 clang -Iinclude -Ilib src/chsrc-main.c -o chsrc
+```
+
+**如果还不存在这些依赖，你将会被死锁住: 我还没有换源，我该如何安装这些依赖呢？**
+
+这就是 [chsrc-bootstrap](./bootstrap/) 起作用的时刻，你可使用BSD系统的原生脚本语言编写 `bootstrapper`，[并向我们提交](https://github.com/RubyMetric/chsrc/issues/230)
+
+注: `chsrc` 实现的 `FreeBSD recipe` 长期存在问题，因此一个新的 `bootstrapper` 是相当必要的，请帮助你自己和大家!
+
+</details>
+
+<details>
+<summary>Android/Termux</summary>
+
+```bash
+wget -O - https://gitee.com/RubyMetric/chsrc/raw/main/bootstrap/Termux.bash | bash
 ```
 
 </details>
@@ -277,9 +309,15 @@ clang -Iinclude -Ilib src/chsrc-main.c -o chsrc
 <details>
 <summary>其他平台</summary>
 
+若你所在的平台不存在预编译好的 `chsrc`，你需要手动编译。如果已安装好了编译 `chsrc` 所需要的依赖，可直接运行:
+
 ```bash
 git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
 ```
+
+**如果还不存在这些依赖，你将会被死锁住: 我还没有换源，我该如何安装这些依赖呢？**
+
+这就是 [chsrc-bootstrap](./bootstrap/) 起作用的时刻，你可使用该平台原生脚本语言编写 `bootstrapper`，[并向我们提交](https://github.com/RubyMetric/chsrc/issues/230)
 
 </details>
 
@@ -333,7 +371,7 @@ reset <target>            # 重置，使用上游默认使用的源
     $ chsrc ls  ruby
     $ chsrc set ruby rubychina
 
-若您有自己的镜像地址，使用自定义URL
+若有自己的镜像，可以使用自定义URL
 
     $ chsrc set ruby https://gems.ruby-china.com/
 

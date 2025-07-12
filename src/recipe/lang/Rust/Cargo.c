@@ -91,7 +91,7 @@ pl_rust_cargo_setsrc (char *option)
     "[source.mirror]\n"
     "registry = \"sparse+", source.url, "\"");
 
-  chsrc_note2 (xy_strjoin (3, "请您手动写入以下内容到 ", xy_normalize_path ("~/.cargo/config.toml"), " 文件中:"));
+  chsrc_note2 (xy_strjoin (3, "请手动写入以下内容到 ", xy_normalize_path ("~/.cargo/config.toml"), " 文件中:"));
   p(file);
 
   chsrc_determine_chgtype (ChgType_Auto);

@@ -35,11 +35,11 @@ pl_nodejs_bun_setsrc (char *option)
 
   if (chsrc_in_local_mode())
     {
-      chsrc_note2 ("请您手动写入以下内容到本项目根目录的 bunfig.toml 文件中");
+      chsrc_note2 ("请手动写入以下内容到本项目根目录的 bunfig.toml 文件中");
     }
   else
     {
-      chsrc_note2 (xy_strjoin (3, "请您手动写入以下内容到 ", xy_normalize_path ("~/.bunfig.toml"), " 文件中"));
+      chsrc_note2 (xy_strjoin (3, "请手动写入以下内容到 ", xy_normalize_path ("~/.bunfig.toml"), " 文件中"));
     }
 
   p(file);

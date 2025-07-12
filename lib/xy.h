@@ -11,8 +11,7 @@
  * Last Modified : <2025-07-11>
  *
  * xy: 襄阳、咸阳
- * Corss-Platform C11 utilities for CLI applications in mixed flavor:
- * Ruby、Perl、Raku、HTML、Python、just、etc
+ * Corss-Platform C11 utilities for CLI applications in mixed flavor (mostly Ruby)
  * ------------------------------------------------------------*/
 
 #ifndef XY_H

@@ -154,7 +154,7 @@ os_debian_setsrc (char *option)
 
   chsrc_yield_source_and_confirm (os_debian);
 
-  chsrc_note2 ("如果遇到无法拉取 HTTPS 源的情况，我们会使用 HTTP 源并需要您运行:");
+  chsrc_note2 ("如果遇到无法拉取 HTTPS 源的情况，请手动运行:");
   say ("apt install apt-transport-https ca-certificates");
 
   /* 不存在的时候，用的是我们生成的用来填充占位的无效文件，不要备份 */
