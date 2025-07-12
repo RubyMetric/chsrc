@@ -7,11 +7,11 @@ body:
   - type: markdown
     attributes:
       value: |
-        感谢您花时间填写此 Bug 报告!
+        感谢花时间填写此 Bug 报告!
 
-        1. 有时您是通过包管理器安装的 `chsrc`，其版本往往稍旧，您可先尝试使用REAME中提供的安装命令来获取最新版本
+        1. 你可能是通过包管理器安装的 `chsrc`，其版本往往稍旧，你可先尝试使用REAME中提供的安装命令来获取最新版本
 
-        2. 有时 Bug 是在最新版本中引入的，此时您可在安装命令时指定 `-v` 参数临时使用旧版本解决燃眉之急，详情查看README
+        2. 有时 Bug 是在最新版本中引入的，此时你可在安装命令时指定 `-v` 参数临时使用旧版本解决燃眉之急，详情查看README
 
   - type: textarea
     id: what-did-you-do
@@ -85,7 +85,7 @@ body:
     id: terms
     attributes:
       label: 防止重复问题
-      description: 您确认在打开这个新的 issue 之前已经搜索过类似的issue。您可以评论或订阅已经存在的相关 issue
+      description: 请确认在打开这个新的 issue 之前已经搜索过类似的issue。你可以评论或订阅已经存在的相关 issue
       options:
         - label: 我已在项目中搜索过类似的 issue
           required: true
