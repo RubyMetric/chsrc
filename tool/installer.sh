@@ -9,7 +9,7 @@
 #               |   DeepSeek     <https://chat.deepseek.com/>
 #               |
 # Created On    : <2024-10-25>
-# Last Modified : <2025-03-25>
+# Last Modified : <2025-07-12>
 #
 #         chsrc installer for POSIX (mainly Linux & macOS)
 # ---------------------------------------------------------------
@@ -111,6 +111,10 @@ let_user_build() {
   fi
 }
 
+let_user_use_bootstrap() {
+  info "请参考: https://github.com/RubyMetric/chsrc/tree/main/bootstrap 查找是否存在已有的 boostrapper"
+}
+
 
 let_user_compile() {
   source_zip_url="https://gitee.com/RubyMetric/chsrc/repository/archive/main.zip"
@@ -162,10 +166,11 @@ set_arch() {
     armv7*)  arch="armv7" ;;
     *)
       if is_zh; then
-        warn "抱歉, 暂无预编译二进制文件供您的架构: ${arch} 使用。请自行编译："
+        warn "抱歉, 暂无预编译二进制文件供您的架构: ${arch} 使用。请使用 chsrc-bootstrap 或 自行编译："
       else
         warn "Sorry, No precompiled binaries for your arch: ${arch}. Please compile it on your own:"
       fi
+      let_user_use_bootstrap
       let_user_compile
       exit 1
       ;;
@@ -182,11 +187,11 @@ set_platform() {
       whatos=$(get_os)
       if [ "$whatos" = "android" ]; then
         if is_zh; then
-          info "抱歉, 暂无预编译二进制文件供安卓使用。请自行编译："
+          info "使用 chsrc-bootstrap: Termux"
         else
-          info "Sorry, No precompiled binaries for Android! Please compile it on your own:"
+          info "Use chsrc-bootstrap: Termux"
         fi
-        let_user_compile
+          wget -O - https://gitee.com/RubyMetric/chsrc/raw/main/bootstrap/Termux.bash | bash
         exit 1
       fi
       ;;
@@ -194,19 +199,21 @@ set_platform() {
     bsd|dragonfly)
       platform="bsd"
       if is_zh; then
-        info "抱歉, 暂无预编译二进制文件供BSD使用。请自行编译："
+        info "抱歉, 暂无预编译二进制文件供BSD使用。请使用 chsrc-bootstrap 或 自行编译："
       else
         info "Sorry, No precompiled binaries for BSD! Please compile it on your own:"
       fi
+      let_user_use_bootstrap
       let_user_compile
       exit 1
       ;;
     *)
       if is_zh; then
-        error_exit "抱歉，暂无预编译二进制文件供您的平台: ${platform} 使用。请自行编译："
+        error_exit "抱歉，暂无预编译二进制文件供您的平台: ${platform} 使用。请使用 chsrc-bootstrap 或 自行编译："
       else
         error_exit "Sorry, No precompiled binaries for your platform: ${platform}. Please compile it on your own:"
       fi
+      let_user_use_bootstrap
       let_user_compile
       exit 1
       ;;
