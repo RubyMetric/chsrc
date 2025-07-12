@@ -12,13 +12,17 @@
 
 # rawstr4c
 
+在你需要写一个复杂的C语言字符串的时候，请想起我... \" / \n ' \\ `
+
+<br>
+
 ## 配置语法
 
 ```markdown
 
-- config-name = `value`
+- config-item = `value`
 
-- config-name2 = `:mode`
+- config-item2 = `:mode`
 
 ```
 
@@ -30,9 +34,23 @@
 
 
 
-## 配置选项
+## 配置项
 
-- translate = `:hex` | `:oct` | `:escape`
+- output =
+
+  - `:terminal` = 在终端输出
+  - `:global-variable` = 输出为一个 `.h` 文件，定义为全局变量
+  - `:macro` = 输出为一个 `.h` 文件，定义为宏
+
+- output-file =
+
+  自定义生成的头文件名
+
+- translate =
+
+  - `:oct` = 八进制
+  - `:hex` = 十六进制
+  - `:escape` = 仅转义
 
 - postfix =
 
@@ -42,6 +60,10 @@
 - name =
 
   生成的变量名，默认将会包含前缀和后缀
+
+- name-literally = `true` | `false`
+
+  无视其他配置项，直接使用 `name` 作为变量名
 
 - keep-prefix =
 
