@@ -30,7 +30,7 @@ end
 
 ## `chsrc-bootstrap` to the Rescue
 
-`chsrc-bootstrap` 是一组使用原生脚本语言的脚本，用来完成两件事情:
+`chsrc-bootstrap` 是一组使用原生脚本语言的脚本，每个脚本称为 `bootstrapper`，用来完成两件事情:
 
 1. 帮助用户进行最基本的换源，让用户能够立即开始使用该系统安装其他软件
 
