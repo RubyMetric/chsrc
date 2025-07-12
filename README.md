@@ -7,7 +7,7 @@
  ! Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
  !               |
  ! Created On    : <2023-12-28>
- ! Last Modified : <2025-07-11>
+ ! Last Modified : <2025-07-12>
  ! ---------------------------------------------------------- -->
 
 <div align="center">
@@ -139,6 +139,9 @@ winget install RubyMetric.chsrc
     若下方链接无法访问，可使用 `https://gitee.com/RubyMetric/chsrc/raw/main/tool/installer.ps1` 替代
 
 ```PowerShell
+# 您可通过 -Version 参数
+#   1. 安装 pre 版本; 这比从包管理器安装的总是更新一些
+#   2. 安装旧版本; 有时新版本可能引入某些 Bug，临时使用旧版本解决燃眉之急
 "& { $(iwr -useb https://chsrc.run/windows) } -Version pre" | iex
 ```
 
@@ -197,6 +200,11 @@ $ curl https://chsrc.run/posix | sudo bash
 # 使用 -d 指定目录安装
 $ curl https://chsrc.run/posix | bash -s -- -d ./
 
+# 使用 -v 指定版本 (不指定时默认为 pre)
+#   1. 安装 pre 版本; 这比从包管理器安装的总是更新一些
+#   2. 安装旧版本; 有时新版本可能引入某些 Bug，临时使用旧版本解决燃眉之急
+$ curl https://chsrc.run/posix | bash -s -- -v 0.2.1
+
 # 使用 -l en 输出英文
 $ curl https://chsrc.run/posix | bash -s -- -l en
 ```
@@ -245,6 +253,11 @@ $ curl https://chsrc.run/posix | sudo bash
 
 # 使用 -d 指定目录安装
 $ curl https://chsrc.run/posix | bash -s -- -d ./
+
+# 使用 -v 指定版本 (不指定时默认为 pre)
+#   1. 安装 pre 版本; 这比从包管理器安装的总是更新一些
+#   2. 安装旧版本; 有时新版本可能引入某些 Bug，临时使用旧版本解决燃眉之急
+$ curl https://chsrc.run/posix | bash -s -- -v 0.2.1
 
 # 使用 -l en 输出英文
 $ curl https://chsrc.run/posix | bash -s -- -l en
