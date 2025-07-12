@@ -117,7 +117,7 @@ pl_python_uv_setsrc (char *option)
    * sed -i '/^\[\[index\]\]$/,/^default = true$/{s|^url = ".*"$|url = " source.url "|}' uv_config
    * 将 [[index]] 到 default = true 之间的 url = ".*" 替换为 url = "source.url"
    */
-#if XY_On_macOS
+#if defined(XY_On_macOS) || defined(XY_On_BSD)
   char *sed_cmd = "sed -i '' ";
 #else
   char *sed_cmd = "sed -i ";
