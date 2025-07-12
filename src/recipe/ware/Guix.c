@@ -31,7 +31,7 @@ wr_guix_setsrc (char *option)
                                "       (inherit (car %default-channels))\n"
                                "       (url \"", source.url, "\")))");
 
-  chsrc_note2 ("为防止扰乱配置文件，请您手动写入以下内容到 ~/.config/guix/channels.scm 文件中");
+  chsrc_note2 ("为防止扰乱配置文件，请手动写入以下内容到 ~/.config/guix/channels.scm 文件中");
   p(file);
 
   chsrc_determine_chgtype (ChgType_Manual);

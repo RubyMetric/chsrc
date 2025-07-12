@@ -47,7 +47,7 @@ pl_python_rye_setsrc (char *option)
     "url = \"",  source.url,          "\"");
 
   char *rye_config = pl_python_find_rye_config ();
-  chsrc_note2 (xy_strjoin (3, "请在您的 Rye 配置文件 ", rye_config, " 中添加:"));
+  chsrc_note2 (xy_strjoin (3, "请在配置文件 ", rye_config, " 中添加:"));
   println (file);
 
   chsrc_determine_chgtype (ChgType_Manual);

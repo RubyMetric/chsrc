@@ -112,7 +112,7 @@ wr_flathub_feat (char *option)
   f.can_english = false;
   f.can_user_define = true;
 
-  f.note = "对Flathub目标进行测速的文件非常小，测速效果严重失真，若您知道可供测速的URL，欢迎参与贡献: chsrc issue";
+  f.note = "对Flathub目标进行测速的文件非常小，测速效果严重失真，若你知道可供测速的URL，欢迎参与贡献: chsrc issue";
 
   return f;
 }

@@ -29,13 +29,13 @@
  *                 |  Mikachu2333   <mikachu.23333@zohomail.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2025-07-11>
+ * Last Modified   : <2025-07-12>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.1.3"
-#define Chsrc_Release_Date   "2025/07/11"
+#define Chsrc_Version        "0.2.1.4"
+#define Chsrc_Release_Date   "2025/07/12"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
@@ -517,13 +517,13 @@ cli_notify_for_users ()
 
   "  有时，同一镜像站对不同资源的实际服务速度差异，可能比不同镜像站之间的差异还要大。\n\n"
 
-  "    * 精准测速: 能真实反映您未来使用该资源时的速度，因为它直接测量您关注的那个资源。\n\n"
+  "    * 精准测速: 能真实反映你未来使用该资源时的速度，因为它直接测量你关注的那个资源。\n\n"
 
   "    * 模糊测速: 仅代表该镜像站提供服务的一个可能速度。因而可能会出现测速数值较高，但实际使用体验不佳的现象。\n\n"
 
-  "  因此，当您遇到模糊测速时，请务必向我们提交准确的测速链接，这既能帮助您，也能造福所有用户。\n\n"
+  "  因此，当你遇到模糊测速时，请尽可能向我们提交准确的测速链接，这既能帮助你自己，也能造福所有用户。\n\n"
 
-  "  chsrc 是一个自助和共建的项目。 维护者对于不熟悉的生态系统很难提供有价值的贡献。请您将这部分功能视为您的专属，您可以完全掌控和维护它，就像您是唯一的负责人一样。\n";
+  "  chsrc 是一个自助和共建的项目。 维护者对于不熟悉的生态系统很难提供有价值的贡献。请将这部分功能视为你的专属实现，你可以完全掌控和维护它，就像你是唯一的负责人一样。\n";
 
   br();br();
 
@@ -792,7 +792,7 @@ main (int argc, char const *argv[])
       if (argc < cli_arg_Target_pos)
         {
           char *msg = ENGLISH ? "Please provide the target name you want to measure. " MSG_EN_USE_LIST_TARGETS
-                                       : "请您提供想要测速源的目标名。" MSG_CN_USE_LIST_TARGETS;
+                                       : "请提供想要测速源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
           return Exit_Unknown;
         }
@@ -811,7 +811,7 @@ main (int argc, char const *argv[])
       if (argc < cli_arg_Target_pos)
         {
           char *msg = ENGLISH ? "Please provide the target name you want to view the source. " MSG_EN_USE_LIST_TARGETS
-                                       : "请您提供想要查看源的目标名。" MSG_CN_USE_LIST_TARGETS;
+                                       : "请提供想要查看源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
           return Exit_Unknown;
         }
@@ -828,7 +828,7 @@ main (int argc, char const *argv[])
       if (argc < cli_arg_Target_pos)
         {
           char *msg = ENGLISH ? "Please provide the target name you want to set the source. " MSG_EN_USE_LIST_TARGETS
-                                       : "请您提供想要设置源的目标名。" MSG_CN_USE_LIST_TARGETS;
+                                       : "请提供想要设置源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
           return Exit_Unknown;
         }
@@ -853,7 +853,7 @@ main (int argc, char const *argv[])
       if (argc < cli_arg_Target_pos)
         {
           char *msg = ENGLISH ? "Please provide the target name you want to reset the source. " MSG_EN_USE_LIST_TARGETS
-                                       : "请您提供想要重置源的目标名。" MSG_CN_USE_LIST_TARGETS;
+                                       : "请提供想要重置源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
           return Exit_Unknown;
         }

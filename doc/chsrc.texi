@@ -160,7 +160,7 @@ $ chsrc set ruby
 $ chsrc ls  ruby
 $ chsrc set ruby rubychina
 
-# 如果您有自己的镜像地址，使用自定义URL
+# 可以使用自定义URL
 $ chsrc set ruby https://gems.ruby-china.com/
 
 # 使用维护团队测试的最快镜像站

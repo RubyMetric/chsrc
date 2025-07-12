@@ -35,7 +35,7 @@ like `./chsrc list ware`,  qr/brew\s*homebrew/,   'chsrc list ware';
 =begin
 测试 chsrc get
 =cut
-my $get_null = qr/chsrc: 请您提供想要查看源的目标名/;
+my $get_null = qr/chsrc: 请提供想要查看源的目标名/;
 like `./chsrc get -no-color 2>&1`,  $get_null,    'chsrc get -no-color';
 
 my $fake_target_name = qr/暂不支持的换源目标/;
