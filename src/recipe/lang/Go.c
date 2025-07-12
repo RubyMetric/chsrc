@@ -3,10 +3,11 @@
  * -------------------------------------------------------------
  * File Authors   : Aoran Zeng <ccmywish@qq.com>
  * Contributors   :    czyt    <czyt.go@gmail.com>
+*                 |  Rui Yang   <techoc@foxmail.com>
  *                |
  * Created On     : <2023-08-30>
  * Major Revision :      1
- * Last Modified  : <2025-07-11>
+ * Last Modified  : <2025-07-12>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t pl_go_upstream =
@@ -39,7 +40,8 @@ static Source_t pl_go_sources[] =
   {&pl_go_upstream, "https://proxy.golang.org", NULL},
   {&GoProxyCN,        "https://goproxy.cn", DelegateToMirror},
   {&Ali,              "https://mirrors.aliyun.com/goproxy/", NULL},
-  {&Huawei,           "https://mirrors.huaweicloud.com/goproxy/", NULL},
+  // 注释华为镜像源 详见 https://github.com/RubyMetric/chsrc/issues/227
+  // {&Huawei,           "https://mirrors.huaweicloud.com/goproxy/", NULL},
   {&GoProxyIO,        "https://goproxy.io", DelegateToMirror}
 };
 def_sources_n(pl_go);
