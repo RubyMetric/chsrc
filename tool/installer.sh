@@ -166,7 +166,7 @@ set_arch() {
     armv7*)  arch="armv7" ;;
     *)
       if is_zh; then
-        warn "抱歉, 暂无预编译二进制文件供您的架构: ${arch} 使用。请使用 chsrc-bootstrap 或 自行编译："
+        warn "抱歉, 暂无预编译二进制文件供你所在的平台架构: ${arch} 使用。请使用 chsrc-bootstrap 或 自行编译："
       else
         warn "Sorry, No precompiled binaries for your arch: ${arch}. Please compile it on your own:"
       fi
@@ -209,7 +209,7 @@ set_platform() {
       ;;
     *)
       if is_zh; then
-        error_exit "抱歉，暂无预编译二进制文件供您的平台: ${platform} 使用。请使用 chsrc-bootstrap 或 自行编译："
+        error_exit "抱歉，暂无预编译二进制文件供你所在的平台: ${platform} 使用。请使用 chsrc-bootstrap 或 自行编译："
       else
         error_exit "Sorry, No precompiled binaries for your platform: ${platform}. Please compile it on your own:"
       fi
@@ -364,7 +364,7 @@ install() {
     fi
   else
     if is_zh; then
-      error_exit "下载失败，请检查您的网络连接和代理设置: ${url}"
+      error_exit "下载失败，请检查网络连接和代理设置: ${url}"
     else
       error_exit "Download failed, please check your network connection and proxy settings: ${url}"
     fi

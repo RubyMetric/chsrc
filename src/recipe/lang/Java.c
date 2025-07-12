@@ -82,7 +82,7 @@ pl_java_setsrc (char *option)
       "</mirror>");
 
       char *maven_config = pl_java_find_maven_config ();
-      chsrc_note2 (xy_strjoin (3, "请在您的 maven 配置文件 ", maven_config, " 中添加:"));
+      chsrc_note2 (xy_strjoin (3, "请在 maven 配置文件 ", maven_config, " 中添加:"));
       println (file);
     }
 
@@ -98,7 +98,7 @@ pl_java_setsrc (char *option)
       "  }\n"
       "}");
 
-      chsrc_note2 ("请在您的 build.gradle 中添加:");
+      chsrc_note2 ("请在 build.gradle 中添加:");
       p(file);
     }
 

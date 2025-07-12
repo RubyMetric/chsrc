@@ -66,7 +66,7 @@ os_fedora_setsrc (char *option)
          "/etc/yum.repos.d/fedora-updates.repo");
   chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_note2 ("已为您更换baseurl, 但fedora默认会优先使用metalink来匹配最快的源, 如您在获取metadata时速度较慢可自行将其注释:");
+  chsrc_note2 ("已更换baseurl, 但Fedora默认会优先使用metalink来匹配最快的源, 若在获取metadata时速度较慢可自行将其注释:");
   chsrc_log2 ("(1) /etc/yum.repos.d/fedora.repo");
   chsrc_log2 ("(2) /etc/yum.repos.d/fedora-updates.repo");
 

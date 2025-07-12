@@ -48,12 +48,12 @@ wr_nix_setsrc (char *option)
 
   chsrc_run ("nix-channel --update", RunOpt_Default);
 
-  chsrc_note2 ("若您使用的是NixOS，请确认您的系统版本<version>（如22.11），并手动运行:");
+  chsrc_note2 ("若你使用的是NixOS，请确认你的系统版本<version>（如22.11），并手动运行:");
   cmd = xy_strjoin (3, "nix-channel --add ", source.url, "nixpkgs-<version> nixpkgs");
   p(cmd);
 
   cmd = xy_strjoin (3, "nix.settings.substituters = [ \"", source.url, "store\" ];");
-  chsrc_note2 ("若您使用的是NixOS，请额外添加下述内容至 configuration.nix 中");
+  chsrc_note2 ("若你使用的是NixOS，请额外添加下述内容至 configuration.nix 中");
   p(cmd);
 
   chsrc_determine_chgtype (ChgType_SemiAuto);

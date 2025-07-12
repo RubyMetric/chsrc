@@ -32,7 +32,7 @@ def_sources_n(pl_nuget);
 void
 pl_nuget_getsrc (char *option)
 {
-  chsrc_error ("暂时无法查看NuGet源，若有需求，请您提交issue");
+  chsrc_error ("暂时无法查看NuGet源，若有需求，请提交issue");
 }
 
 /**
@@ -41,7 +41,7 @@ pl_nuget_getsrc (char *option)
 void
 pl_nuget_setsrc (char *option)
 {
-  chsrc_error ("暂时无法为NuGet换源，若有需求，请您提交issue");
+  chsrc_error ("暂时无法为NuGet换源，若有需求，请提交issue");
 }
 
 

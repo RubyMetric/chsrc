@@ -371,7 +371,7 @@ reset <target>            # 重置，使用上游默认使用的源
     $ chsrc ls  ruby
     $ chsrc set ruby rubychina
 
-若你有自己的镜像地址，使用自定义URL
+若有自己的镜像，可以使用自定义URL
 
     $ chsrc set ruby https://gems.ruby-china.com/
 
