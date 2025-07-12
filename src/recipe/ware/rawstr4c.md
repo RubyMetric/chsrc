@@ -4,17 +4,28 @@
 - postfix = `:use-language`
 
 - translate = `:escape`
-- output = `terminal`
+- output = `:terminal`
 
 
 ## Homebrew
+
+### read user config (for both Bash and Fish)
+
+- name = `read_config_cmd`
+- name-literally = `true`
+
+```bash
+echo HOMEBREW_API_DOMAIN=$HOMEBREW_API_DOMAIN;
+echo HOMEBREW_BOTTLE_DOMAIN=$HOMEBREW_BOTTLE_DOMAIN;
+echo HOMEBREW_BREW_GIT_REMOTE=$HOMEBREW_BREW_GIT_REMOTE;
+echo HOMEBREW_CORE_GIT_REMOTE=$HOMEBREW_CORE_GIT_REMOTE;
+```
 
 ### Bash config
 
 - keep-prefix = `true`
 - keep-postfix = `true`
 - name = `config`
-- name-literally = `false`
 
 最终输出变量将会成为 `_rawstr4c_config_in_bash`
 
@@ -30,6 +41,7 @@ export HOMEBREW_BOTTLE_DOMAIN="@1@/homebrew-bottles"
 
 ### Fish config
 
+- name = `config`
 - language = `fish`
 
 ```bash
