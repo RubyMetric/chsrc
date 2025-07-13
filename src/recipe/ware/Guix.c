@@ -4,17 +4,18 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-11>
- * Last Modified : <2024-08-15>
+ * Last Modified : <2025-07-13>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2023-09-11
- * @note 目前只有一个源
+ * @update 2025-07-13
+ *
+ * @note 目前只有一个源, guixcn 的源不知道是否可用
  */
 static Source_t wr_guix_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/git/guix.git"}
+  {&UpstreamProvider,  NULL, NULL},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/git/guix.git", DelegateToMirror}
 };
 def_sources_n(wr_guix);
 
@@ -38,4 +39,19 @@ wr_guix_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target_s (wr_guix);
+
+Feature_t
+wr_guix_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = false;
+  f.can_reset = false;
+
+  f.can_english = false;
+  f.can_user_define = false;
+
+  return f;
+}
+
+def_target_sf(wr_guix);

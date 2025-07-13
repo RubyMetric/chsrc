@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-10-10>
- * Last Modified : <2024-11-21>
+ * Last Modified : <2025-07-13>
  * ------------------------------------------------------------*/
 
 static MirrorSite_t EmacsChina =
@@ -15,12 +15,13 @@ static MirrorSite_t EmacsChina =
 };
 
 /**
- * @update 2023-09-10
+ * @update 2025-07-13
  * @note Emacs用户往往只需要一次性换源，只会极少次调用 chsrc，我们只给用户提供文档
  */
 Source_t wr_emacs_sources[] =
 {
-  {&UpstreamProvider,    NULL},
+  {&UpstreamProvider,    NULL, NULL},
+  {&MirrorZ,            "https://help.mirrors.cernet.edu.cn/elpa/"},
   {&Sjtug_Zhiyuan,      "https://mirrors.sjtug.sjtu.edu.cn/docs/emacs-elpa"},
   {&Tuna,               "https://mirrors.tuna.tsinghua.edu.cn/help/elpa/"},
   {&Bfsu,               "https://mirrors.bfsu.edu.cn/help/elpa/"},
@@ -43,4 +44,19 @@ wr_emacs_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target_s (wr_emacs);
+
+Feature_t
+wr_emacs_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = false;
+  f.can_reset = false;
+
+  f.can_english = false;
+  f.can_user_define = false;
+
+  return f;
+}
+
+def_target_sf(wr_emacs);

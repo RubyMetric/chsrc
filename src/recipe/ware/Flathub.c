@@ -28,21 +28,21 @@ wr_flathub_siyuan =
 {
   IS_DedicatedMirrorSite,
   "sjtu-sy", "SJTUG-siyuan", "上海交通大学思源镜像站Flathub", "https://mirror.sjtu.edu.cn/",
-  {NotSkip, NA, NA, "https://mirror.sjtu.edu.cn/flathub/flathub.gpg"}
+  {NotSkip, NA, NA, "https://mirror.sjtu.edu.cn/flathub/flathub.gpg", ROUGH} /* 由于实在找不到其他可测文件，所以这也只能是 ROUGH */
 },
 
 wr_flathub_zhiyuan =
 {
   IS_DedicatedMirrorSite,
   "sjtu-zy", "SJTUG-zhiyuan", "上海交通大学致远镜像站Flathub", "https://mirrors.sjtug.sjtu.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.sjtug.sjtu.edu.cn/flathub/flathub.gpg"}
+  {NotSkip, NA, NA, "https://mirrors.sjtug.sjtu.edu.cn/flathub/flathub.gpg", ROUGH}
 };
 
 static Source_t wr_flathub_sources[] =
 {
-  {&wr_flathub_upstream,  "https://flathub.org/repo"},
-  {&wr_flathub_siyuan,    "https://mirror.sjtu.edu.cn/flathub"},
-  {&wr_flathub_zhiyuan,   "https://mirrors.sjtug.sjtu.edu.cn/flathub"},
+  {&wr_flathub_upstream,  "https://flathub.org/repo", NULL},
+  {&wr_flathub_siyuan,    "https://mirror.sjtu.edu.cn/flathub", DelegateToMirror},
+  {&wr_flathub_zhiyuan,   "https://mirrors.sjtug.sjtu.edu.cn/flathub", DelegateToMirror},
 };
 def_sources_n(wr_flathub);
 
