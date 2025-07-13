@@ -63,12 +63,21 @@ my class CVariableNameGenerator {
       return $section-config.get('name', $title.lc).as-string();
     }
 
-    my $prefix = $global-config.get('prefix', '_rawstr4c').as-string();
-    my $language = $section-config.get('language').as-string();
-    my $postfix = self.resolve-postfix($global-config, $language);
+    # 优先从 section-config 获取配置，如果没有则从 global-config 获取
+    my $prefix = $section-config.exist('prefix') ??
+                 $section-config.get('prefix').as-string() !!
+                 $global-config.get('prefix', '_rawstr4c').as-string();
 
-    my $keep-prefix = $section-config.get('keep-prefix', 'true').as-bool();
-    my $keep-postfix = $section-config.get('keep-postfix', 'true').as-bool();
+    my $language = $section-config.get('language').as-string();
+    my $postfix = self.resolve-postfix($global-config, $section-config, $language);
+
+    my $keep-prefix = $section-config.exist('keep-prefix') ??
+                      $section-config.get('keep-prefix').as-bool() !!
+                      $global-config.get('keep-prefix', 'true').as-bool();
+
+    my $keep-postfix = $section-config.exist('keep-postfix') ??
+                       $section-config.get('keep-postfix').as-bool() !!
+                       $global-config.get('keep-postfix', 'true').as-bool();
 
     my $name = $section-config.get('name', $title.lc).as-string();
     $name = $name.subst(/\s+/, '_', :g);
@@ -84,8 +93,11 @@ my class CVariableNameGenerator {
     return $var-name || "unnamed_var";
   }
 
-  method resolve-postfix($global-config, $language) {
-    my $postfix = $global-config.get('postfix');
+  method resolve-postfix($global-config, $section-config, $language) {
+    # 优先从 section-config 获取 postfix
+    my $postfix = $section-config.exist('postfix') ??
+                  $section-config.get('postfix') !!
+                  $global-config.get('postfix');
 
     if $postfix.is-mode() && $postfix.as-mode() eq 'use-language' {
       return $language ?? 'in_' ~ $language !! '';
@@ -204,9 +216,16 @@ class Generator {
   }
 
   method get-config-value($global-config, $section-config, $key, $default = '') {
-    return $section-config.exist($key) ??
-           $section-config.get($key) !!
-           $global-config.get($key, $default);
+    # 优先级：section-config > global-config > default
+    if $section-config && $section-config.exist($key) {
+      return $section-config.get($key);
+    }
+    elsif $global-config && $global-config.exist($key) {
+      return $global-config.get($key);
+    }
+    else {
+      return $global-config.get($key, $default);
+    }
   }
 
 
@@ -233,7 +252,9 @@ class Generator {
       say "Output mode = $output-mode";
 
       my $language = $section-config.get('language', 'None').as-string();
+      my $prefix = self.get-config-value($global-config, $section-config, 'prefix', '_rawstr4c').as-string();
       say "Language = $language";
+      say "Prefix = $prefix (from " ~ ($section-config.exist('prefix') ?? 'section' !! 'global') ~ ")";
       say '';
     }
 

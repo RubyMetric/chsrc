@@ -47,7 +47,7 @@ wr_anaconda_setsrc (char *option)
 {
   chsrc_yield_source_and_confirm (wr_anaconda);
 
-  char *w = xy_str_gsub (_rawstr4c_condarc, "@1@", source.url);
+  char *w = xy_str_gsub (RAWSTR_wr_anaconda_condarc, "@1@", source.url);
 
   /* Windows 也是在这里 */
   char *configfile = xy_2strjoin (xy_os_home, "/.condarc");
