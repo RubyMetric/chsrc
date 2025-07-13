@@ -13,6 +13,7 @@
  *                 |    Terrasse    <terrasse@qq.com>
  *                 |    Lontten     <lontten@163.com>
  *                 |   happy game   <happygame1024@gmail.com>
+ *                 |    Word2VecT   <tangzinan@bupt.edu.cn>
  *                 |     xuan       <wick.dynex@qq.com>
  *                 |    GnixAij     <gaojiaxing0220@gmail.com>
  *                 |    ChatGPT     <https://chatgpt.com>
@@ -30,7 +31,7 @@
  *                 |   Rui Yang     <techoc@foxmail.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2025-07-13>
+ * Last Modified   : <2025-07-14>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/

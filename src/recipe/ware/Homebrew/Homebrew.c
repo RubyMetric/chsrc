@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors   : Aoran Zeng <ccmywish@qq.com>
- * Contributors   :  Nil Null  <nil@null.org>
+ * Contributors   :  Word2VecT <tangzinan@bupt.edu.cn>
  * Created On     : <2023-09-10>
  * Major Revision :      3
  * Last Modified  : <2025-07-14>
@@ -52,7 +52,7 @@ wr_homebrew_setsrc (char *option)
 {
   chsrc_yield_source_and_confirm (wr_homebrew);
 
-  char *w = RAWSTR_wr_homebrew_config_in_bash;
+  char *w = xy_str_gsub (RAWSTR_wr_homebrew_config_in_bash, "@1@", source.url);
 
   char *zshrc = xy_zshrc;
   chsrc_backup (zshrc);
@@ -68,7 +68,7 @@ wr_homebrew_setsrc (char *option)
   char *fishrc = xy_fishrc;
   if (xy_file_exist (fishrc))
     {
-      char *w = RAWSTR_wr_homebrew_config_in_fish;
+      char *w = xy_str_gsub (RAWSTR_wr_homebrew_config_in_fish, "@1@", source.url);
       chsrc_backup (fishrc);
       chsrc_append_to_file (w, fishrc);
     }

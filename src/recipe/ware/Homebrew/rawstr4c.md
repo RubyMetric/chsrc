@@ -1,3 +1,13 @@
+<!-- -----------------------------------------------------------
+ ! SPDX-License-Identifier: GPL-3.0-or-later
+ ! -------------------------------------------------------------
+ ! Config Type   : rawstr4c (Markdown)
+ ! Config Authors: Aoran Zeng <ccmywish@qq.com>
+ ! Contributors  :  Word2VecT <tangzinan@bupt.edu.cn>
+ ! Created On    : <2025-07-14>
+ ! Last Modified : <2025-07-14>
+ ! ---------------------------------------------------------- -->
+
 # rawstr4c input
 
 该文件尽可能测试 `rawstr4c` 的多个功能，以下三个变量的输出，将分别为:
