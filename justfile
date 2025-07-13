@@ -7,7 +7,7 @@
 # Contributors  :  Nul None  <nul@none.org>
 #								|
 # Created On    : <2025-06-18>
-# Last Modified : <2025-06-20>
+# Last Modified : <2025-07-13>
 #
 # 该文件主要用于在原生Windows上执行项目的基本任务，而不借助于
 # GNU make 以及相应的 MSYS2、Cygwin 环境
@@ -145,3 +145,7 @@ clean:
 	-@{{BIN_rm}} chsrc-debug
 	-@{{BIN_rm}} chsrc-release
 	-@{{BIN_rm}} README.md.bak*
+
+# 使用: just rawstr4c [--debug] Markdown.md
+rawstr4c *args:
+	@{{ if os() == 'windows' { 'tool\\rawstr4c\\bin\\run.bat' } else { 'bash ./tool/rawstr4c/bin/run.sh' } }} {{args}}

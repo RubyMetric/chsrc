@@ -8,7 +8,7 @@
 #								| sanchuanhehe <wyihe5520@gmail.com>
 #								|
 # Created On    : <2023-08-28>
-# Last Modified : <2025-06-20>
+# Last Modified : <2025-07-13>
 #
 # 请阅读 ./doc/01-Develop.md 来使用
 # --------------------------------------------------------------
@@ -204,6 +204,12 @@ install: $(ReleaseMode-Target-Name)
 	install -D -m 755 $(ReleaseMode-Target-Name) $(DESTDIR)/usr/bin/chsrc
 	install -D -m 644 doc/chsrc.1 $(DESTDIR)/usr/share/man/man1/chsrc.1
 
+# 这样还是太麻烦，不用，我们还是靠 just 来调用吧
+#
+# 通过 make rawstr4c ARGS="[--debug] Markdown.md" 来调用
+#rawstr4c:
+#	@bash ./tool/rawstr4c/bin/run.sh $(ARGS)
+
 .PHONY: all b build bd br bcir d t check c \
 	build-in-dev-mode build-in-debug-mode build-in-release-mode build-in-ci-release-mode \
-	debug test test-make-env test-xy test-fw fastcheck test-cli clean install build-deb clean-deb
+	debug test test-make-env test-xy test-fw fastcheck test-cli clean install build-deb clean-deb rawstr4c
