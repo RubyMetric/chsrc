@@ -4,20 +4,24 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-26>
- * Last Modified : <2024-08-15>
+ * Last Modified : <2025-07-13>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2023-09-22
- * @note {
- *   1. 目前只有一个源
- *   2. 这些链接将会在setsrc函数中补充完整
- * }
+ * @update 2025-07-13
+ *
+ * @note 链接将会在setsrc函数中补充完整
  */
 static Source_t wr_nix_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/nix-channels/"}
+  {&UpstreamProvider,  NULL, NULL},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/nix-channels/", NULL},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/", NULL},
+  {&Nju,              "https://mirror.nju.edu.cn/nix-channels/",   NULL},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/nix-channels/", NULL},
+  {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn/nix-channels/",   NULL},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/nix-channels/", NULL},
+  {&Iscas,            "https://mirror.iscas.ac.cn/nix-channels/",  NULL}
 };
 def_sources_n(wr_nix);
 
@@ -29,9 +33,9 @@ wr_nix_check_cmd ()
 }
 
 /**
- * 参考:
- *  1. https://mirrors.bfsu.edu.cn/help/nix-channels/
- *  2. https://gitee.com/RubyMetric/chsrc/issues/I83894
+ * @consult
+ *    1. https://help.mirrors.cernet.edu.cn/nix-channels/
+ *    2. https://gitee.com/RubyMetric/chsrc/issues/I83894
  */
 void
 wr_nix_setsrc (char *option)
