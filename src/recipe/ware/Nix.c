@@ -64,4 +64,18 @@ wr_nix_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target_s (wr_nix);
+Feature_t
+wr_nix_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = false;
+  f.can_reset = false;
+
+  f.can_english = false;
+  f.can_user_define = false;
+
+  return f;
+}
+
+def_target_sf (wr_nix);
