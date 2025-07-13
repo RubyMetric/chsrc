@@ -4,21 +4,25 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-10>
- * Last Modified : <2024-08-15>
+ * Last Modified : <2025-07-13>
+ *
+ * MiKTeX 和 TeX Live 都是流行的 LaTeX 发行版，但它们是不同的实现
  * ------------------------------------------------------------*/
 
 /**
- * @update 2023-09-10
+ * @update 2025-07-13
  */
 static Source_t wr_tex_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/ctan/systems/texlive/tlnet"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/CTAN/systems/texlive/tlnet"},
-  {&Lzuoss,           "https://mirror.lzu.edu.cn/CTAN/systems/texlive/tlnet"},
-  {&Jlu,              "https://mirrors.jlu.edu.cn/CTAN/systems/texlive/tlnet"},
-  {&Sustech,          "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet"}
+  {&UpstreamProvider,  NULL, NULL},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/CTAN/systems/texlive/tlnet", NULL},
+  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/ctan/systems/texlive/tlnet", NULL},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet", NULL},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/CTAN/systems/texlive/tlnet", NULL},
+  {&Bjtu,             "https://mirror.bjtu.edu.cn/ctan/systems/texlive/tlnet", NULL},
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/CTAN/systems/texlive/tlnet", NULL},
+  {&Jlu,              "https://mirrors.jlu.edu.cn/CTAN/systems/texlive/tlnet", NULL},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet", NULL}
 };
 def_sources_n(wr_tex);
 
@@ -32,7 +36,7 @@ wr_tex_check_cmd (bool *tlmgr_exist, bool *mpm_exist)
   if (!*tlmgr_exist && !*mpm_exist)
     {
       chsrc_error ("未找到 tlmgr 或 mpm 命令，请检查是否存在（其一）");
-      exit(1);
+      exit (Exit_UserCause);
     }
 }
 
@@ -53,7 +57,7 @@ wr_tex_getsrc (char *option)
 }
 
 /**
- * 参考 https://help.mirrors.cernet.edu.cn/CTAN/
+ * @consult https://help.mirrors.cernet.edu.cn/CTAN/
  */
 void
 wr_tex_setsrc (char *option)
@@ -82,4 +86,19 @@ wr_tex_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target(wr_tex);
+
+Feature_t
+wr_tex_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = true;
+  f.can_reset = false;
+
+  f.can_english = false;
+  f.can_user_define = true;
+
+  return f;
+}
+
+def_target_gsf(wr_tex);
