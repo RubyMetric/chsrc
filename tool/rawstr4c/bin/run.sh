@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # ---------------------------------------------------------------
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ---------------------------------------------------------------
 # File Name     : run.sh
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
 # Contributors  :  Nul None  <nul@none.org>

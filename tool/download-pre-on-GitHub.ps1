@@ -1,4 +1,6 @@
 # ---------------------------------------------------------------
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ---------------------------------------------------------------
 # File Name     : download-pre-on-GitHub.ps1
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
 # Created On    : <2023-09-21>

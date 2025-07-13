@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # ---------------------------------------------------------------
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ---------------------------------------------------------------
 # File Name     :  installer.sh
 # File Authors  :    GnixAij     <gaojiaxing0220@gmail.com>
 #               |     xuan       <wick.dynex@qq.com>

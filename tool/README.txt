@@ -1,4 +1,6 @@
 # ---------------------------------------------------------------
+# SPDX-License-Identifier: GFDL-1.3-or-later
+# ---------------------------------------------------------------
 # Doc Type      :   Text
 # Doc Name      : (Tools Introduction.md)
 # Doc Authors   :   xuan     <wick.dynex@qq.com>

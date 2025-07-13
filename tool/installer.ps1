@@ -1,4 +1,6 @@
 # ---------------------------------------------------------------
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ---------------------------------------------------------------
 # File Name     : installer.ps1
 # File Authors  :    xuan    <wick.dynex@qq.com>
 #               |  ChatGPT   <https://chatgpt.com/>

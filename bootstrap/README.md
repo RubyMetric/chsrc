@@ -1,3 +1,15 @@
+<!-- -----------------------------------------------------------
+ ! SPDX-License-Identifier: GFDL-1.3-or-later
+ ! -------------------------------------------------------------
+ ! Doc Type      : Markdown
+ ! Doc Name      : (chsrc-bootstrap Introduction.md)
+ ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
+ ! Contributors  :  Nul None  <nul@none.org>
+ !               |
+ ! Created On    : <2025-07-12>
+ ! Last Modified : <2025-07-12>
+ ! ---------------------------------------------------------- -->
+
 # Bootstrap
 
 ```ruby
