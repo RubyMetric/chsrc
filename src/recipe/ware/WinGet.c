@@ -38,7 +38,7 @@ wr_winget_setsrc (char *option)
   chsrc_yield_source_and_confirm (wr_winget);
 
   chsrc_run ("winget source remove winget", RunOpt_Default);
-  chsrc_run (xy_2strjoin ("winget source add winget ", source.url), RunOpt_Default);
+  chsrc_run (xy_strjoin (3, "winget source add winget ", source.url, " --trust-level trusted"), RunOpt_Default);
 
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
