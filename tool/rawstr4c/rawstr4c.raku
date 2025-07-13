@@ -1,5 +1,8 @@
 #!/usr/bin/env raku
 # ---------------------------------------------------------------
+# Copyright © 2025-2025 Aoran Zeng
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ---------------------------------------------------------------
 # File Name     : rawstr4c.raku
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
 # Contributors  :  Nul None  <nul@none.org>
