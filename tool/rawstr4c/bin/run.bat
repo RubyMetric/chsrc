@@ -1,5 +1,5 @@
 :: ---------------------------------------------------------------
-:: File Name     : rawstr4c.bat
+:: File Name     : run.bat
 :: File Authors  : Aoran Zeng <ccmywish@qq.com>
 :: Contributors  :  Nul None  <nul@none.org>
 :: Created On    : <2025-07-13>
@@ -11,11 +11,12 @@
 ::
 ::   用户必须在代码根目录中运行此文件
 ::
-::     .\rawstr4c\bin\rawstr4c.bat [--debug] <Markdown.md>
+::     %PREFIX%\bin\run.bat [--debug] <Markdown.md>
 ::
-::     .\rawstr4c\bin\rawstr4c.bat [--debug] <Dir>
+::     %PREFIX%\bin\run.bat [--debug] <Dir>
 :: ---------------------------------------------------------------
 
 @echo off
+set PREFIX=tool\rawstr4c
 REM -I 选项必须在文件前面
-raku -I .\rawstr4c\lib .\rawstr4c\rawstr4c.raku %*
+raku -I %PREFIX%\lib %PREFIX%\rawstr4c.raku %*
