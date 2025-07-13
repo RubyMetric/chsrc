@@ -9,7 +9,7 @@
  *               |  Mikachu2333  <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-07-11>
+ * Last Modified : <2025-07-13>
  *
  * 通用镜像站
  * ------------------------------------------------------------*/
@@ -113,6 +113,13 @@ Ustc =
   IS_GeneralMirrorSite,
   "ustc", "USTC", "中国科学技术大学开源镜像站", "https://mirrors.ustc.edu.cn/",
   {NotSkip, NA, NA, "https://mirrors.ustc.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
+},
+
+Xjtu =
+{
+  IS_GeneralMirrorSite,
+  "xjtu", "XJTU", "西安交通大学软件镜像站", "https://mirrors.xjtu.edu.cn/",
+  {NotSkip, NA, NA, "https://mirrors.xjtu.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
 Hust =
