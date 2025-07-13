@@ -9,14 +9,12 @@
 # rawstr4c.md parsing
 # ---------------------------------------------------------------
 
-unit module Rawstr4C;
+unit module Parser;
 
-# 不能用 Bool，只能用 Boolean
+#| 不能用 Bool，只能用 Boolean
 my enum ConfigValueType <String Mode Boolean>;
 
-#
-# @brief 配置项的值
-#
+#| 配置项的值
 my class ConfigValue {
   has ConfigValueType $.type;
   has $.raw-value;
@@ -74,9 +72,8 @@ my class ConfigValue {
 }
 
 
-#
-# @brief 承载 config items 的容器
-#
+
+#| 包含所有 config items 的容器
 my class Config {
 
   has %.items;
@@ -100,9 +97,7 @@ my class Config {
   }
 }
 
-=begin comment
-
-仅存在两个域:
+#|( 仅存在两个域:
 
   1. Global dom
   2. Section dom
@@ -111,15 +106,14 @@ my class Config {
 
 因此，Parser 解析完毕后将包含:
   - $global-config
-  - @sections
+  - @sections (多个 $section)
 
-一个 section 包含:
+一个 $section 是 Hash，其包含:
   - title
   - level
   - raw-string
-  - config (Config 对象)
-
-=end comment
+  - config
+)
 class Parser {
   has $.global-config;
   has @.sections;

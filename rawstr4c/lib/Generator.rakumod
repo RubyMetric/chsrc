@@ -1,6 +1,6 @@
 #!/usr/bin/env raku
 # ---------------------------------------------------------------
-# File Name     : CGenerator.rakumod
+# File Name     : Generator.rakumod
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
 # Contributors  :  Nul None  <nul@none.org>
 # Created On    : <2025-07-12>
@@ -9,11 +9,11 @@
 # Generates C code from raw string
 # ---------------------------------------------------------------
 
-unit module CGenerator;
+unit module Generator;
 
-use ConfigParser;
+use Parser;
 
-class CStringConverter {
+my class CStringConverter {
 
   method convert-char($char, $mode) {
     given $mode {
@@ -51,7 +51,7 @@ class CStringConverter {
 }
 
 
-class CVariableNameGenerator {
+my class CVariableNameGenerator {
 
   method generate($global-config, $section-config, $title) {
 
@@ -95,7 +95,7 @@ class CVariableNameGenerator {
 
 
 #| 生成 .h 文件或/和 .c 文件，或存储到 @variables 中
-class CVariableGenerator {
+my class CVariableGenerator {
   has @.variables;
   has $.c-header-filename;
 
