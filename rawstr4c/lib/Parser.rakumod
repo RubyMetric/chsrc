@@ -1,22 +1,23 @@
 #!/usr/bin/env raku
 # ---------------------------------------------------------------
-# File Name     : ConfigParser.rakumod
+# File Name     : Parser.rakumod
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
 # Contributors  :  Nul None  <nul@none.org>
 # Created On    : <2025-07-12>
 # Last Modified : <2025-07-13>
 #
-# Configuration parsing
+# rawstr4c.md parsing
 # ---------------------------------------------------------------
 
-unit module ConfigParser;
+unit module Rawstr4C;
 
-enum ConfigValueType <String Mode Boolean>;
+# 不能用 Bool，只能用 Boolean
+my enum ConfigValueType <String Mode Boolean>;
 
 #
 # @brief 配置项的值
 #
-class ConfigValue {
+my class ConfigValue {
   has ConfigValueType $.type;
   has $.raw-value;
   has $.parsed-value;
@@ -76,7 +77,7 @@ class ConfigValue {
 #
 # @brief 承载 config items 的容器
 #
-class Config {
+my class Config {
 
   has %.items;
 
@@ -106,10 +107,20 @@ class Config {
   1. Global dom
   2. Section dom
 
-我们要求，在 Global dom 里，只存在配置，不存在 code block. 而 code block 只能在 Section dom 中存在.
+我们要求，在 Global dom 里，只存在配置，不存在 code block. 而 code block 只能在 Section dom 中存在。
+
+因此，Parser 解析完毕后将包含:
+  - $global-config
+  - @sections
+
+一个 section 包含:
+  - title
+  - level
+  - raw-string
+  - config (Config 对象)
 
 =end comment
-class Parser is export {
+class Parser {
   has $.global-config;
   has @.sections;
 
