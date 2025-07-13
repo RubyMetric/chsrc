@@ -99,7 +99,10 @@ my class CVariableGenerator {
   has @.variables;
   has $.c-header-filename;
 
-  method new($c-header-filename = "rawstr4c.h") {
+  method new() {
+
+    my $c-header-filename = "rawstr4c.h";
+
     self.bless(:$c-header-filename, :variables([]));
   }
 
@@ -183,11 +186,11 @@ class Generator {
   has $.varname-generator;
   has $.variable-generator;
 
-  method new($output-file = 'rawstr4c.h') {
+  method new() {
     self.bless(
-      :cstring-converter(CStringConverter.new()),
-      :varname-generator(CVariableNameGenerator.new()),
-      :variable-generator(CVariableGenerator.new($output-file))
+      :cstring-converter(CStringConverter.new),
+      :varname-generator(CVariableNameGenerator.new),
+      :variable-generator(CVariableGenerator.new)
     );
   }
 
@@ -202,6 +205,7 @@ class Generator {
     my $section-config = $section<config>;
     my $title = $section<title>;
     my $code = $section<raw-string>;
+    my $debug-parser = $global-config.get('debug', False).as-bool();
 
     return unless $code;
 
@@ -215,13 +219,15 @@ class Generator {
 
     my $output-mode = $global-config.get('output', ':terminal').as-mode();
 
-    say "Variable name: $var-name";
-    say "Translation mode: $translate-mode";
-    say "Output mode: $output-mode";
+    if $debug-parser {
+      say "Variable name: $var-name";
+      say "Translation mode: $translate-mode";
+      say "Output mode: $output-mode";
 
-    my $language = $section-config.get('language', 'None').as-string();
-    say "Language: $language";
-    say '';
+      my $language = $section-config.get('language', 'None').as-string();
+      say "Language: $language";
+      say '';
+    }
 
     my $c-string = $.cstring-converter.convert-string($code, $translate-mode);
 
@@ -243,7 +249,7 @@ class Generator {
   }
 
 
-  method generate-all($parser) {
+  method generate($parser) {
     my $global-config = $parser.global-config;
 
     # 这个 generate-for-section() 要么把变量输出到终端，要么累计到 @variabels 中

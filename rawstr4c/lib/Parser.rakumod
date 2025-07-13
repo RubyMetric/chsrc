@@ -78,6 +78,8 @@ my class Config {
 
   has %.items;
 
+  # 如果非要在程序内部中调用，而不是直接从 Markdown 文件中读取出来
+  # 一定要记得 $raw-value 用的是 rawstr4c 的语法！也就是说，这里一定是一个字符串
   method set($k, $raw-value) {
     %.items{$k} = ConfigValue.new($raw-value);
   }
@@ -223,13 +225,17 @@ class Parser {
     }
   }
 
-  method debug-info() {
+  # 输出 config, 包含 global config 以及 section config
+  method debug() {
     say "Global config:";
     for $.global-config.keys.sort -> $item {
       my $value = $.global-config.get($item);
       say "  $item = {$value.as-string} (type: {$value.type})";
     }
     say "";
+
+    # 设置debug标志，后续在 Generator 中根据此信息输出 section config
+    $.global-config.set('debug', "true");
 
     say "Found " ~ @.sections.elems ~ " sections:";
     for @.sections -> $section {
