@@ -4,17 +4,19 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2024-06-08>
- * Last Modified : <2024-08-15>
+ * Last Modified : <2025-07-13>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-06-08
+ * @update 2025-07-13
  */
 static Source_t wr_cocoapods_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/git/CocoaPods/Specs.git"}
+  {&UpstreamProvider,  NULL, NULL},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git", NULL},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/git/CocoaPods/Specs.git", NULL},
+  {&Nju,              "https://mirror.nju.edu.cn/git/CocoaPods/Specs.git",   NULL},
+  {&Nyist,            "https://mirror.nyist.edu.cn/git/CocoaPods/Specs.git", NULL}
 };
 def_sources_n(wr_cocoapods);
 
@@ -42,4 +44,19 @@ wr_cocoapods_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target_s (wr_cocoapods);
+
+Feature_t
+wr_cocoapods_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = false;
+  f.can_reset = false;
+
+  f.can_english = false;
+  f.can_user_define = true;
+
+  return f;
+}
+
+def_target_sf (wr_cocoapods);
