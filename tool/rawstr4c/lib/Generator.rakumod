@@ -130,13 +130,13 @@ my class CVariableGenerator {
       given $var<type> {
         when 'global-variable' {
           if $output-mode eq 'global-variable-only-header' {
-            $header ~= "char {$var<name>}[] = \"{$var<content>}\";\n";
+            $header ~= "char {$var<name>}[] = \"{$var<content>}\";\n\n";
           } else {
             $header ~= "extern char {$var<name>}[];\n";
           }
         }
         when 'macro' {
-          $header ~= "#define {$var<name>.uc} \"{$var<content>}\"\n";
+          $header ~= "#define {$var<name>.uc} \"{$var<content>}\"\n\n";
         }
       }
     }
@@ -187,12 +187,14 @@ my class CVariableGenerator {
 
 
 class Generator {
+  has $.parser;
   has $.cstring-converter;
   has $.varname-generator;
   has $.variable-generator;
 
-  method new() {
+  method new($parser) {
     self.bless(
+      :$parser,
       :cstring-converter(CStringConverter.new),
       :varname-generator(CVariableNameGenerator.new),
       :variable-generator(CVariableGenerator.new)
@@ -214,8 +216,6 @@ class Generator {
 
     return unless $code;
 
-    say "=== Section: $title ===";
-
     my $translate-mode = self.get-config-value(
       $global-config, $section-config, 'translate', ':escape'
     ).as-mode();
@@ -225,12 +225,13 @@ class Generator {
     my $output-mode = $global-config.get('output', ':terminal').as-mode();
 
     if $debug-parser {
-      say "Variable name: $var-name";
-      say "Translation mode: $translate-mode";
-      say "Output mode: $output-mode";
+      say "--- Section: $title ---";
+      say "Variable name = $var-name";
+      say "Translation mode = $translate-mode";
+      say "Output mode = $output-mode";
 
       my $language = $section-config.get('language', 'None').as-string();
-      say "Language: $language";
+      say "Language = $language";
       say '';
     }
 
@@ -239,6 +240,7 @@ class Generator {
     given $output-mode {
       when 'terminal' {
         say 'char ' ~ $var-name ~ '[] = "' ~ $c-string ~ '";';
+        say "";
       }
       when 'global-variable' | 'global-variable-only-header' {
         $.variable-generator.add-variable($var-name, $c-string, 'global-variable');
@@ -250,15 +252,15 @@ class Generator {
         die "Illegal output mode: $output-mode";
       }
     }
-    say "\n";
   }
 
 
-  method generate($parser) {
-    my $global-config = $parser.global-config;
+  method generate() {
+
+    my $global-config = $.parser.global-config;
 
     # 这个 generate-for-section() 要么把变量输出到终端，要么累计到 @variabels 中
-    for $parser.sections -> $section {
+    for $.parser.sections -> $section {
       self.generate-for-section($global-config, $section);
     }
 
@@ -266,7 +268,7 @@ class Generator {
 
     # 最后把累计到 @variables 的内容输出到文件
     if $output-mode ne 'terminal' {
-      my $dest-dir = $parser.input-file.dirname.Str;
+      my $dest-dir = $.parser.input-file.dirname.Str;
       $.variable-generator.save-files($output-mode, $dest-dir);
     }
   }

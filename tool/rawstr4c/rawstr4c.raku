@@ -41,9 +41,9 @@ sub MAIN(
     die "Error: '$input-path' is neither a file nor a directory\n";
   }
 
-  my $parser = Parser::Parser.new(input-file=>$markdown-file);
+  my $parser = Parser::Parser.new($markdown-file);
   $parser.parse;
   $parser.debug if $debug;
 
-  Generator::Generator.new.generate($parser);
+  Generator::Generator.new($parser).generate;
 }

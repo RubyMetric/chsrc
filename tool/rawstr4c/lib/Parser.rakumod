@@ -122,7 +122,7 @@ class Parser {
   has $.global-config;
   has @.sections;
 
-  method new(:$input-file) {
+  method new($input-file) {
     self.bless(
       :$input-file,
       global-config => Config.new(),
@@ -231,10 +231,10 @@ class Parser {
 
   # 输出 config, 包含 global config 以及 section config
   method debug() {
-    say "Global config:";
+    say "--- Global config ---";
     for $.global-config.keys.sort -> $item {
       my $value = $.global-config.get($item);
-      say "  $item = {$value.as-string} (type: {$value.type})";
+      say "$item = {$value.as-string} (type: {$value.type})";
     }
     say "";
 
