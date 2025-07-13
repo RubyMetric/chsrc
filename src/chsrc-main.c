@@ -30,7 +30,7 @@
  *                 |   Rui Yang     <techoc@foxmail.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2025-07-12>
+ * Last Modified   : <2025-07-13>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
@@ -128,7 +128,7 @@
 #include "recipe/ware/TeX-Live.c"
 #include "recipe/ware/Emacs.c"
 #include "recipe/ware/WinGet.c"
-#include "recipe/ware/Homebrew.c"
+#include "recipe/ware/Homebrew/Homebrew.c"
 #include "recipe/ware/CocoaPods.c"
 #include "recipe/ware/Nix.c"
 #include "recipe/ware/Guix.c"
