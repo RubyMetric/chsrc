@@ -7,7 +7,7 @@
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
 # Contributors  :  Nul None  <nul@none.org>
 # Created On    : <2025-07-12>
-# Last Modified : <2025-07-13>
+# Last Modified : <2025-07-14>
 #
 # rawstr4c:
 #
@@ -41,11 +41,8 @@ sub MAIN(
     die "Error: '$input-path' is neither a file nor a directory\n";
   }
 
-  my $content = $markdown-file.IO.slurp;
-
-  my $parser = Parser::Parser.new();
-
-  $parser.parse($content);
+  my $parser = Parser::Parser.new(input-file=>$markdown-file);
+  $parser.parse;
   $parser.debug if $debug;
 
   Generator::Generator.new.generate($parser);

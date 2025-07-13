@@ -4,7 +4,7 @@
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
 # Contributors  :  Nul None  <nul@none.org>
 # Created On    : <2025-07-12>
-# Last Modified : <2025-07-13>
+# Last Modified : <2025-07-14>
 #
 # rawstr4c.md parsing
 # ---------------------------------------------------------------
@@ -107,8 +107,9 @@ my class Config {
 我们要求，在 Global dom 里，只存在配置，不存在 code block. 而 code block 只能在 Section dom 中存在。
 
 因此，Parser 解析完毕后将包含:
-  - $global-config
-  - @sections (多个 $section)
+  - IO::Path  $input-file
+  - Hash      $global-config
+  - @sections is Array[Hash] (多个 $section)
 
 一个 $section 是 Hash，其包含:
   - title
@@ -117,11 +118,13 @@ my class Config {
   - config
 )
 class Parser {
+  has $.input-file is rw;
   has $.global-config;
   has @.sections;
 
-  method new() {
+  method new(:$input-file) {
     self.bless(
+      :$input-file,
       global-config => Config.new(),
       sections => []
     );
@@ -139,7 +142,8 @@ class Parser {
     return False;
   }
 
-  method parse($content) {
+  method parse() {
+    my $content = $.input-file.slurp;
     my @lines = $content.lines;
 
     my $current-section;
