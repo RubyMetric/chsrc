@@ -135,7 +135,7 @@
 #include "recipe/ware/Guix.c"
 #include "recipe/ware/Flathub.c"
 #include "recipe/ware/Docker-Hub.c"
-#include "recipe/ware/Anaconda.c"
+#include "recipe/ware/Anaconda/Anaconda.c"
 
 #include "recipe/menu.c"
 
