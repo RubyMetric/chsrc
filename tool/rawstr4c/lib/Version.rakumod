@@ -13,5 +13,5 @@ unit module Version;
 constant VERSION = "0.1.0.1";
 constant RELEASE_DATE = "2025/07/14";
 
-constant Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/tool/rawstr4c"
-constant Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/tool/rawstr4c"
+constant Maintain_URL = "https://github.com/RubyMetric/chsrc/blob/dev/tool/rawstr4c";
+constant Maintain_URL2 = "https://gitee.com/RubyMetric/chsrc/blob/dev/tool/rawstr4c";

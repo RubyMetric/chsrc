@@ -18,8 +18,8 @@
 #define XY_H
 
 #define _XY_Version       "v0.1.5.1-2025/07/11"
-#define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/main/lib/xy.h"
-#define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/main/lib/xy.h"
+#define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
+#define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
 #if defined(__STDC__) && __STDC_VERSION__ < 201112L
 #   error "xy.h requires C11 or later, please use a new compiler which at least supports C11"
