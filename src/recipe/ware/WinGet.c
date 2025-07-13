@@ -4,17 +4,20 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2024-06-07>
- * Last Modified : <2024-08-17>
+ * Last Modified : <2025-07-13>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-06-07
- * @note 目前仅有一个源
+ * @update 2025-07-13
  */
 static Source_t wr_winget_sources[] =
 {
-  {&UpstreamProvider,   "https://cdn.winget.microsoft.com/cache"},
-  {&Ustc,               "https://mirrors.ustc.edu.cn/winget-source"},
+  {&UpstreamProvider,   "https://cdn.winget.microsoft.com/cache",    NULL},
+  {&MirrorZ,            "https://mirrors.cernet.edu.cn/winget-source", NULL},
+  {&Ustc,               "https://mirrors.ustc.edu.cn/winget-source", NULL},
+  {&Nju,                "https://mirror.nju.edu.cn/winget-source",   NULL},
+  {&Nyist,              "https://mirror.nyist.edu.cn/winget-source", NULL},
+  {&Xjtu,               "https://mirrors.xjtu.edu.cn/winget-source", NULL}
 };
 def_sources_n(wr_winget);
 
