@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-07-12>
+ * Last Modified : <2025-07-14>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -25,6 +25,7 @@
 #include "xy.h"
 #include "struct.h"
 #include "mirror.c"
+#include "chef.h"
 
 #define App_Name "chsrc"
 
@@ -275,14 +276,6 @@ log_cmd_result (bool result, int exit_status)
       char *log = xy_2strjoin (red (fail_msg), bdred (buf));
       xy_log_brkt (red (App_Name), bdred (run_msg), log);
     }
-}
-
-
-
-bool
-is_url (const char *str)
-{
-  return (xy_str_start_with (str, "http://") || xy_str_start_with (str, "https://"));
 }
 
 
