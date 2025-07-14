@@ -31,13 +31,13 @@
  *                 |   Rui Yang     <techoc@foxmail.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2025-07-14>
+ * Last Modified   : <2025-07-15>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.1.5-dev1"
-#define Chsrc_Release_Date   "2025/07/12"
+#define Chsrc_Version        "0.2.2-alpha1"
+#define Chsrc_Release_Date   "2025/07/15"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
@@ -170,7 +170,9 @@ Chsrc_Usage[] = {
   "-no-color                 无颜色输出\n",
 
   "镜像站状态: <https://github.com/RubyMetric/chsrc/wiki>",
-  "维护: <" Chsrc_Maintain_URL ">"
+  "维护: <" Chsrc_Maintain_URL ">\n",
+
+  "邀请您担任 Chef 或 Taster, 为用户把关您熟悉的秘制菜肴 (recipe): <https://github.com/RubyMetric/chsrc/issues/130>"
 };
 
 static const char *
@@ -203,7 +205,9 @@ Chsrc_Usage_English[] = {
   "-no-color                 Output without color\n",
 
   "Mirror status: <https://github.com/RubyMetric/chsrc/wiki>",
-  "Maintain:      <" Chsrc_Maintain_URL ">"
+  "Maintain:      <" Chsrc_Maintain_URL ">\n",
+
+  "We sincerely invite you to become a Chef or Taster to ensure the quality of recipes you are familiar with for users: <https://github.com/RubyMetric/chsrc/issues/130>"
 };
 
 
@@ -260,7 +264,7 @@ cli_print_supported_targets ()
 {
   {
   char *msg = ENGLISH ? "Support following targets (same line indicates these targets are compatible)"
-                               : "支持对以下目标换源 (同一行表示这几个命令兼容)" ;
+                      : "支持对以下目标换源 (同一行表示这几个命令兼容)" ;
   say (bdblue(msg)); br();
   }
 
@@ -290,7 +294,7 @@ void
 cli_print_supported_pl ()
 {
   char *msg = ENGLISH ? "Support following Programming Languages (same line indicates these targets are compatible)\n"
-                               : "支持对以下编程语言生态换源 (同一行表示这几个目标兼容)\n";
+                      : "支持对以下编程语言生态换源 (同一行表示这几个目标兼容)\n";
   say (bdgreen(msg));
 
   cli_print_supported_targets_ (pl_packagers,   xy_arylen(pl_packagers));
@@ -300,7 +304,7 @@ void
 cli_print_supported_os ()
 {
   char *msg = ENGLISH ? "Support following Operating Systems (same line indicates these targets are compatible)\n"
-                               : "支持对以下操作系统换源 (同一行表示这几个目标兼容)\n";
+                      : "支持对以下操作系统换源 (同一行表示这几个目标兼容)\n";
   say (bdgreen(msg));
   cli_print_supported_targets_ (os_systems, xy_arylen(os_systems));
 }
@@ -309,7 +313,7 @@ void
 cli_print_supported_wr ()
 {
   char *msg = ENGLISH ? "Support following Softwares (same line indicates these targets are compatible)\n"
-                               : "支持对以下软件换源 (同一行表示这几个目标兼容)\n";
+                      : "支持对以下软件换源 (同一行表示这几个目标兼容)\n";
   say (bdgreen(msg));
   cli_print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
 }
@@ -513,19 +517,15 @@ iterate_targets_ (const char ***array, size_t size, const char *input, const cha
  * 我们总是最后告诉用户一些维护信息
  */
 void
-cli_notify_for_users ()
+cli_notify_lastly_for_users ()
 {
-  char *msg = "2025-07-11:\n\n"
+  char *msg = "2025-07-15:\n\n"
 
-  "  有时，同一镜像站对不同资源的实际服务速度差异，可能比不同镜像站之间的差异还要大。\n\n"
+  "  * 精准测速: 能真实反映你未来使用该资源时的速度，因为它直接测量你关注的那个资源。\n"
+  "  * 模糊测速: 仅代表该镜像站提供服务的一个可能速度。因而可能会出现测速数值较高，但实际使用体验不佳的现象。\n\n"
 
-  "    * 精准测速: 能真实反映你未来使用该资源时的速度，因为它直接测量你关注的那个资源。\n\n"
-
-  "    * 模糊测速: 仅代表该镜像站提供服务的一个可能速度。因而可能会出现测速数值较高，但实际使用体验不佳的现象。\n\n"
-
-  "  因此，当你遇到模糊测速时，请尽可能向我们提交准确的测速链接，这既能帮助你自己，也能造福所有用户。\n\n"
-
-  "  chsrc 是一个自助和共建的项目。 维护者对于不熟悉的生态系统很难提供有价值的贡献。请将这部分功能视为你的专属实现，你可以完全掌控和维护它，就像你是唯一的负责人一样。\n";
+  "当你遇到模糊测速时，请尽可能向我们提交准确的测速链接。\n"
+  "邀请您担任 Chef 或 Taster, 为用户把关您熟悉的秘制菜肴 (recipe): <https://github.com/RubyMetric/chsrc/issues/130>\n";
 
   br();br();
 
@@ -619,7 +619,7 @@ get_target (const char *input, TargetOp code, char *option)
       || TargetOp_Reset_Source==code
       || TargetOp_Measure_Source==code)
     {
-      cli_notify_for_users();
+      cli_notify_lastly_for_users();
     }
 
   return true;
