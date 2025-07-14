@@ -5,7 +5,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2024-12-14>
- * Last Modified : <2025-06-20>
+ * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
 #define Chsrc_Version "Frameworker"
@@ -28,7 +28,7 @@ main (int argc, char const *argv[])
   chsrc_info ("chsrc_info");
   chsrc_warn ("chsrc_warn");
   chsrc_error ("chsrc_error");
-  chsrc_debug ("chsrc_debug");
+  chsrc_debug ("fw", "chsrc_debug");
   chsrc_verbose ("chsrc_verbose");
 
   chsrc_succ2 ("chsrc_succ2");
@@ -36,19 +36,14 @@ main (int argc, char const *argv[])
   chsrc_note2 ("chsrc_note2");
   chsrc_warn2 ("chsrc_warn2");
   chsrc_error2 ("chsrc_error2");
-  chsrc_debug2 ("chsrc_debug2");
+  chsrc_debug2 ("fw", "chsrc_debug2");
   chsrc_verbose2 ("chsrc_verbose2");
 
-  #ifdef XY_On_Windows
-    #define fw ".\\fw.exe"
-  #else
-    #define fw "./fw"
-  #endif
-
-  assert (chsrc_check_program (fw));
-  assert (chsrc_check_program_quietly (fw));
-  assert (chsrc_check_program_quietly_when_exist (fw));
-  chsrc_ensure_program (fw);
+  // 现在 chsrc_check_program() 无法检测本目录文件了
+  assert (chsrc_check_program ("curl"));
+  assert (chsrc_check_program_quietly ("curl"));
+  assert (chsrc_check_program_quietly_when_exist ("curl"));
+  chsrc_ensure_program ("curl");
 
   #define bkup "README.md.bak"
 
@@ -77,6 +72,12 @@ main (int argc, char const *argv[])
     {
       chsrc_run ("rm " bkup, RunOpt_No_Last_New_Line);
     }
+
+  char *tmpfile = NULL;
+  FILE *tmp = chsrc_make_tmpfile ("tmpfile", ".txt", true, &tmpfile);
+  fclose (tmp);
+  remove (tmpfile);
+
   chsrc_run ("echo " Chsrc_Version " test pass!", RunOpt_Dont_Notify_On_Success);
   return 0;
 }
