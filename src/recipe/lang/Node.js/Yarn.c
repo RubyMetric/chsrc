@@ -42,7 +42,7 @@ pl_nodejs_yarn_setsrc (char *option)
 {
   chsrc_yield_source (pl_nodejs_group);
   if (chsrc_in_standalone_mode())
-    chsrc_confirm_source;
+    chsrc_confirm_source();
 
   char *cmd = NULL;
 

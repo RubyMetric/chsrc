@@ -1033,7 +1033,7 @@ source_has_empty_url (Source_t *source)
  * 1. 告知用户选择了什么源和镜像
  * 2. 对选择的源和镜像站进行一定的校验
  */
-#define chsrc_confirm_source confirm_source(&source)
+#define chsrc_confirm_source() confirm_source(&source)
 void
 confirm_source (Source_t *source)
 {
@@ -1063,7 +1063,7 @@ confirm_source (Source_t *source)
   hr();
 }
 
-#define chsrc_yield_source_and_confirm(for_what) chsrc_yield_source(for_what);chsrc_confirm_source
+#define chsrc_yield_source_and_confirm(for_what) chsrc_yield_source(for_what);chsrc_confirm_source()
 
 
 void

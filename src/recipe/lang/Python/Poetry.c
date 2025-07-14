@@ -29,7 +29,7 @@ pl_python_poetry_setsrc (char *option)
 {
   chsrc_yield_source (pl_python_group);
   if (chsrc_in_standalone_mode())
-    chsrc_confirm_source;
+    chsrc_confirm_source();
 
   char *cmd = NULL;
 

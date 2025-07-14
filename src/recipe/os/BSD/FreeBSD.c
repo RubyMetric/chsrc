@@ -42,7 +42,7 @@ os_freebsd_setsrc (char *option)
   int index = use_specific_mirror_or_auto_select (option, os_freebsd);
 
   Source_t source = os_freebsd_sources[index];
-  chsrc_confirm_source;
+  chsrc_confirm_source();
 
   chsrc_log2 ("1. 添加 freebsd-pkg 源 (二进制安装包)");
   chsrc_ensure_dir ("/usr/local/etc/pkg/repos");

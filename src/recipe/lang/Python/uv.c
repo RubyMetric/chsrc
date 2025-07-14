@@ -98,7 +98,7 @@ pl_python_uv_setsrc (char *option)
 
   chsrc_yield_source (pl_python_group);
   if (chsrc_in_standalone_mode())
-    chsrc_confirm_source;
+    chsrc_confirm_source();
 
   char *uv_config = pl_python_find_uv_config (true);
   if (NULL==uv_config)
