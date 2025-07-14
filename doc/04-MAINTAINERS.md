@@ -2,21 +2,23 @@
 
 作为该语言的资深用户、该软件的专家、镜像站维护人员等，你总是对镜像站和源的可用状态拥有一手信息，我们需要你的帮助。如果想要达到最理想的维护状态，每一个 recipe 都需要有专人长时间维护。所以我们在这个文件记录的是愿意**长期**维护的人，如果是一次性提交代码，只需要在对应 recipe 的文件标头中记录即可。
 
+**我们的代码里使用了 recipe (某个菜的烹饪方法) 这个词，因而整个项目便和 “吃” 有关，比如 `menu`: 汇集了所有的 target 的菜单。因此，我们的维护者身份依然使用了这个惯例：**
+
 一个 recipe 的协作者可分为：
 
-1. **Director**
+1. **Chef**
 
-    负责人：对一个 recipe 完全负责，有写权限时可以直接推代码
+    主厨: 对一个 recipe 完全负责，有写权限时可以直接推代码
 
-    **目前项目的发展阶段还处于 *外行实现内行* 的情况，比如 Homebrew recipe，实现者根本不是 Homebrew 的真实用户，只是根据各种文档来实现，然后等待用户反馈。所以这里当前的实现者最多只能是 Maintainer，无法承担 Director 的责任**
+    **目前项目的发展阶段还处于 *外行实现内行* 的情况，比如 Homebrew recipe，实现者根本不是 Homebrew 的真实用户，只是根据各种文档来实现，然后等待用户反馈。所以这里当前的实现者最多只能是 Sous Chef，无法承担 Chef 的责任**
 
-2. **Maintainers**
+2. **Sous Chef**
 
-    维护者：实现和持续维护 recipe，需要和 Director 一起 review 代码。可参考 [03-CONTRIBUTING.md](./03-CONTRIBUTING.md) 了解项目是如何进行提交和审阅代码的
+    副主厨：实现和持续维护 recipe，需要和 Chef 一起 review 代码。可参考 [03-CONTRIBUTING.md](./03-CONTRIBUTING.md) 了解项目是如何进行提交和审阅代码的
 
-3. **Observers**
+3. **Taster**
 
-    观察者：对该 target 和 recipe 持续反馈和关注的用户。如果你觉得你无法承担作为维护者的责任，可以退而求其次作为观察者积极参与其中
+    试吃员：对该 target 和 recipe 持续反馈和关注的用户。如果你觉得你无法承担作为维护者的责任，可以退而求其次作为观察者积极参与其中
 
 <br>
 
@@ -28,9 +30,9 @@
 
 ## Framework
 
-1. **Director**: `@ccmywish` `@gitee:G_I_Y`
-2. **Maintainers**:
-3. **Observers**:
+1. **Chef**: `@ccmywish` `@gitee:G_I_Y`
+2. **Sous Chef**:
+3. **Taster**:
 
 <br>
 
@@ -38,93 +40,93 @@
 
 ### Ruby
 
-1. **Director**: `@ccmywish`
-2. **Maintainers**:
-3. **Observers**:
+1. **Chef**: `@ccmywish`
+2. **Sous Chef**:
+3. **Taster**:
 
 ### Python
 
-1. **Director**:
-2. **Maintainers**: `@ccmywish` `@happy-game`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**: `@ccmywish` `@happy-game`
+3. **Taster**:
 
 ### NodeJS
 
-1. **Director**:
-2. **Maintainers**: `@ccmywish` `@happy-game`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**: `@ccmywish` `@happy-game`
+3. **Taster**:
 
 ### Perl
 
-1. **Director**:
-2. **Maintainers**: `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**: `@ccmywish`
+3. **Taster**:
 
 ### PHP
 
-1. **Director**:
-2. **Maintainers**:  `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@ccmywish`
+3. **Taster**:
 
 ### Go
 
-1. **Director**:
-2. **Maintainers**:  `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@ccmywish`
+3. **Taster**:
 
 ### Rust
 
-1. **Director**:
-2. **Maintainers**:  `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@ccmywish`
+3. **Taster**:
 
 ### Java
 
-1. **Director**:
-2. **Maintainers**:  `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@ccmywish`
+3. **Taster**:
 
 ### Clojure
 
-1. **Director**:
-2. **Maintainers**:
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:
+3. **Taster**:
 
 ### NuGet
 
-1. **Director**:
-2. **Maintainers**:
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:
+3. **Taster**:
 
 ### Dart
 
-1. **Director**:
-2. **Maintainers**:  `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@ccmywish`
+3. **Taster**:
 
 ### Haskell
 
-1. **Director**:
-2. **Maintainers**:  `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@ccmywish`
+3. **Taster**:
 
 ### OCaml
 
-1. **Director**:
-2. **Maintainers**:  `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@ccmywish`
+3. **Taster**:
 
 ### R
 
-1. **Director**:
-2. **Maintainers**:  `@ccmywish`
-3. **Observers**:  `@gitee:tfcolin`
+1. **Chef**:
+2. **Sous Chef**:  `@ccmywish`
+3. **Taster**:  `@gitee:tfcolin`
 
 ### Julia
 
-1. **Director**:
-2. **Maintainers**:  `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@ccmywish`
+3. **Taster**:
 
 <br>
 
@@ -132,135 +134,135 @@
 
 ### Ubuntu
 
-1. **Director**: `@ccmywish`
-2. **Maintainers**: `@gitee:G_I_Y`
-3. **Observers**: `@wickdynex`
+1. **Chef**: `@ccmywish`
+2. **Sous Chef**: `@gitee:G_I_Y`
+3. **Taster**: `@wickdynex`
 
 ### Debian
 
-1. **Director**:
-2. **Maintainers**: `@ccmywish` `@gitee:G_I_Y`
-3. **Observers**: `@happy-game`
+1. **Chef**:
+2. **Sous Chef**: `@ccmywish` `@gitee:G_I_Y`
+3. **Taster**: `@happy-game`
 
 ### Fedora
 
-1. **Director**:
-2. **Maintainers**:  `@ccmywish` `@gitee:G_I_Y` `@happy-game`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@ccmywish` `@gitee:G_I_Y` `@happy-game`
+3. **Taster**:
 
 ### Kali
 
-1. **Director**:
-2. **Maintainers**:  `@gitee:G_I_Y`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@gitee:G_I_Y`
+3. **Taster**:
 
 ### Linux Mint
 
-1. **Director**:
-2. **Maintainers**: `@ccmywish` `@gitee:G_I_Y`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**: `@ccmywish` `@gitee:G_I_Y`
+3. **Taster**:
 
 ### Armbian
 
-1. **Director**:
-2. **Maintainers**:  `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@ccmywish`
+3. **Taster**:
 
 ### Raspberry Pi OS
 
-1. **Director**:
-2. **Maintainers**:  `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@ccmywish`
+3. **Taster**:
 
 ### ROS
 
-1. **Director**:
-2. **Maintainers**:  `@gitee:G_I_Y` `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@gitee:G_I_Y` `@ccmywish`
+3. **Taster**:
 
 ### Trisquel
 
-1. **Director**:
-2. **Maintainers**: `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**: `@ccmywish`
+3. **Taster**:
 
 ### Arch
 
-1. **Director**:
-2. **Maintainers**:  `@ccmywish`  `@gitee:G_I_Y` `@happy-game`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@ccmywish`  `@gitee:G_I_Y` `@happy-game`
+3. **Taster**:
 
 ### Manjaro
 
-1. **Director**:
-2. **Maintainers**:  `@gitee:G_I_Y` `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@gitee:G_I_Y` `@ccmywish`
+3. **Taster**:
 
 ### msys2
 
-1. **Director**:
-2. **Maintainers**:  `@gitee:G_I_Y` `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@gitee:G_I_Y` `@ccmywish`
+3. **Taster**:
 
 ### Alpine
 
-1. **Director**:
-2. **Maintainers**:  `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@ccmywish`
+3. **Taster**:
 
 ### OpenWrt
 
-1. **Director**:
-2. **Maintainers**:  `@ccmywish`
-3. **Observers**: `@happy-game`
+1. **Chef**:
+2. **Sous Chef**:  `@ccmywish`
+3. **Taster**: `@happy-game`
 
 ### Gentoo
 
-1. **Director**:
-2. **Maintainers**:  `@gitee:G_I_Y`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@gitee:G_I_Y`
+3. **Taster**:
 
 ### Void Linux
 
-1. **Director**:
-2. **Maintainers**:  `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@ccmywish`
+3. **Taster**:
 
 ### deepin
 
-1. **Director**:
-2. **Maintainers**:  `@gitee:G_I_Y`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@gitee:G_I_Y`
+3. **Taster**:
 
 ### OpenKylin
 
-1. **Director**:
-2. **Maintainers**:  `@gitee:G_I_Y`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@gitee:G_I_Y`
+3. **Taster**:
 
 ### OpenEuler
 
-1. **Director**:
-2. **Maintainers**:  `@gitee:G_I_Y`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@gitee:G_I_Y`
+3. **Taster**:
 
 ### FreeBSD
 
-1. **Director**:
-2. **Maintainers**:  `@gitee:G_I_Y` `@ccmywish`
-3. **Observers**: `@ykla`
+1. **Chef**:
+2. **Sous Chef**:  `@gitee:G_I_Y` `@ccmywish`
+3. **Taster**: `@ykla`
 
 ### NetBSD
 
-1. **Director**:
-2. **Maintainers**:  `@gitee:G_I_Y` `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@gitee:G_I_Y` `@ccmywish`
+3. **Taster**:
 
 ### OpenBSD
 
-1. **Director**:
-2. **Maintainers**:  `@gitee:G_I_Y` `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**:  `@gitee:G_I_Y` `@ccmywish`
+3. **Taster**:
 
 <br>
 
@@ -268,62 +270,62 @@
 
 ### Homebrew
 
-1. **Director**:
-2. **Maintainers**: `@ccmywish`
-3. **Observers**: `@wickdynex`
+1. **Chef**:
+2. **Sous Chef**: `@ccmywish`
+3. **Taster**: `@wickdynex`
 
 ### WinGet
 
-1. **Director**:
-2. **Maintainers**: `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**: `@ccmywish`
+3. **Taster**:
 
 ### Flathub
 
-1. **Director**:
-2. **Maintainers**: `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**: `@ccmywish`
+3. **Taster**:
 
 ### Nix
 
-1. **Director**:
-2. **Maintainers**: `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**: `@ccmywish`
+3. **Taster**:
 
 ### Guix
 
-1. **Director**:
-2. **Maintainers**: `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**: `@ccmywish`
+3. **Taster**:
 
 ### CocoaPods
 
-1. **Director**:
-2. **Maintainers**: `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**: `@ccmywish`
+3. **Taster**:
 
 ### Docker Hub
 
-1. **Director**:
-2. **Maintainers**: `@ccmywish` `@happy-game`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**: `@ccmywish` `@happy-game`
+3. **Taster**:
 
 ### Anaconda
 
-1. **Director**:
-2. **Maintainers**: `@ccmywish`
-3. **Observers**: `@happy-game`
+1. **Chef**:
+2. **Sous Chef**: `@ccmywish`
+3. **Taster**: `@happy-game`
 
 ### Emacs
 
-1. **Director**:
-2. **Maintainers**: `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**: `@ccmywish`
+3. **Taster**:
 
 ### Tex Live
 
-1. **Director**:
-2. **Maintainers**: `@ccmywish`
-3. **Observers**:
+1. **Chef**:
+2. **Sous Chef**: `@ccmywish`
+3. **Taster**:
 
 <br>
