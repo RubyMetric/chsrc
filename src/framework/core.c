@@ -1308,6 +1308,74 @@ chsrc_run_as_a_service (const char *cmd)
   ProgStatus.chsrc_run_faas = false;
 }
 
+
+
+/**
+ * @brief 在本目录创建一个临时文件
+ *
+ * @param[in]  filename    文件名，不包含后缀名
+ * @oaram[in]  postfix     后缀名，需要自己加 '.'
+ * @oaram[in]  loud        创建成功时是否提示用户
+ * @param[out] tmpfilename 生成的临时文件名，可以为 NULL
+ *
+ * @return 返回一个 FILE*，调用者需要关闭该文件
+ */
+FILE *
+chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilename)
+{
+#ifdef XY_On_Windows
+  /**
+   * Windows 上没有 mkstemps()，只有 mkstemp() 和 _mktemp_s()，这后两者效果是等价的，只不过传参不同，
+   * 这意味着我们无法给一个文件名后缀（postfix），只能生成一个临时文件名
+   * 然而 PowerShell 的执行，即使加了 -File 参数，也必须要求你拥有 .ps1 后缀
+   * 这使得我们在 Windows 上只能创建一个假的临时文件
+   */
+  char *tmpfile = xy_strjoin (3, "chsrc_tmp_", filename, postfix);
+  FILE *f = fopen (tmpfile, "w+");
+#else
+  char *tmpfile = xy_strjoin (4, "/tmp/", "chsrc_tmp_", filename, "_XXXXXX", postfix);
+  size_t postfix_len = strlen (postfix);
+
+  /* 和 _mktemp_s() 参数不同，前者是整个缓存区大小，这里的长度是后缀长度 */
+  int fd = mkstemps (tmpfile, postfix_len);
+  FILE *f = fdopen (fd, "w+");
+#endif
+
+  if (!f)
+    {
+      char *msg = CHINESE ? "无法创建临时文件: " : "Unable to create temporary file: ";
+            msg = xy_2strjoin (msg, tmpfile);
+      chsrc_error2 (msg);
+      exit (Exit_ExternalError);
+    }
+  else if (loud)
+    {
+      char *msg = CHINESE ? "已创建临时文件: " : "Temporary file created: ";
+            msg = xy_2strjoin (msg, tmpfile);
+      chsrc_succ2 (msg);
+    }
+
+  /**
+   * 允许生成文件后不了解其文件名，调用者只了解 FILE*
+   * 这样的话，其实是是无法删除该文件的，但是生成在 /tmp 目录下我们恰好可以不用清理
+   * 但是在 Windows 上，就没有办法了，所以我们禁止在 Windows 上不指定返回出的临时文件名
+   */
+  if (xy_on_windows && !tmpfilename)
+    {
+      chsrc_error2 ("在 Windows 上，创建临时文件时必须指定返回的临时文件名");
+      xy_unreached();
+    }
+
+  if (tmpfilename)
+    {
+      *tmpfilename = xy_strdup (tmpfile);
+    }
+
+  return f;
+}
+
+
+
 static void
 chsrc_view_env (const char *var1, ...)
 {
