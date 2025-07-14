@@ -6,7 +6,8 @@
  *               | Aoran Zeng <ccmywish@qq.com>
  *               |
  * Created On    : <2024-12-11>
- * Last Modified : <2025-07-11>
+ * Major Revision :      1
+ * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
 /**
@@ -19,9 +20,9 @@
  * 4. /etc/uv/uv.toml
  */
 
-#define UV_CONFIG "uv.toml"
-#define UV_LOCAL_CONFIG_PATH "./"
-#define UV_USER_CONFIG_PATH  "~/.config/uv/"
+#define PL_Python_uv_ConfigFile       "uv.toml"
+#define PL_Python_uv_Local_ConfigPath "./"
+#define PL_Python_uv_User_ConfigPath  "~/.config/uv/"
 
 
 char *
@@ -29,7 +30,7 @@ pl_python_find_uv_config (bool mkdir)
 {
   if (chsrc_in_local_mode())
     {
-      return xy_2strjoin (UV_LOCAL_CONFIG_PATH, UV_CONFIG);
+      return xy_2strjoin (PL_Python_uv_Local_ConfigPath, PL_Python_uv_ConfigFile);
     }
   else
     {
@@ -49,16 +50,16 @@ pl_python_find_uv_config (bool mkdir)
             {
               chsrc_ensure_dir (config_dir);
             }
-          return xy_2strjoin (config_dir, UV_CONFIG);
+          return xy_2strjoin (config_dir, PL_Python_uv_ConfigFile);
         }
       else
         {
           /* config path on Linux or macOS */
           if (mkdir)
             {
-              chsrc_ensure_dir (UV_USER_CONFIG_PATH);
+              chsrc_ensure_dir (PL_Python_uv_User_ConfigPath);
             }
-          return xy_2strjoin (UV_USER_CONFIG_PATH, UV_CONFIG);
+          return xy_2strjoin (PL_Python_uv_User_ConfigPath, PL_Python_uv_ConfigFile);
         }
     }
 }
@@ -74,13 +75,8 @@ pl_python_uv_getsrc (char *option)
       return;
     }
 
-  /**
-   * grep -A 2 'index' config_file | sed -n 's/^url = "\(.*\)"/\1/p'
-   * 获取 [[index]] 配置项的 url
-   */
-  char *cmd = xy_strjoin (3, "grep -A 2 'index' ",
-                             uv_config,
-                             " | sed -n 's/^url = \"\\(.*\\)\"/\\1/p'");
+  /* 获取 [[index]] 配置项的 url */
+  char *cmd = xy_str_gsub (RAWSTR_pl_python_get_uv_config, "@f@", uv_config);
   chsrc_run (cmd, RunOpt_Default);
 }
 
@@ -108,26 +104,21 @@ pl_python_uv_setsrc (char *option)
     }
   chsrc_backup (uv_config);
 
-  const char *source_content = xy_strjoin (5,
-    "[[index]]\\n",
-    "url = \"", source.url, "\"\\n",
-    "default = true\\n");
+  const char *source_content = xy_str_gsub (RAWSTR_pl_python_uv_config_source_content, "@url@", source.url);
 
-  /**
-   * sed -i '/^\[\[index\]\]$/,/^default = true$/{s|^url = ".*"$|url = " source.url "|}' uv_config
-   * 将 [[index]] 到 default = true 之间的 url = ".*" 替换为 url = "source.url"
-   */
 #if defined(XY_On_macOS) || defined(XY_On_BSD)
   char *sed_cmd = "sed -i '' ";
 #else
   char *sed_cmd = "sed -i ";
 #endif
 
-  char *update_source_cmd = xy_strjoin (5, sed_cmd,
-                            "'/^\\[\\[index\\]\\]$/,/^default = true$/{s|^url = \".*\"$|url = \"",
-                            source.url,
-                            "\"|;}' ",
-                            uv_config);
+  /**
+   * 将 [[index]] 到 default = true 之间的 url = ".*" 替换为 url = "source.url"
+   */
+  char *update_source_cmd = xy_str_gsub (RAWSTR_pl_python_set_uv_config, "@sed@", sed_cmd);
+        update_source_cmd = xy_str_gsub (update_source_cmd, "@f@", uv_config);
+        update_source_cmd = xy_str_gsub (update_source_cmd, "@url@", source.url);
+
   char *append_source_cmd = xy_strjoin (4, "printf '", source_content, "' >> ", uv_config);
 
   char *cmd = NULL;
@@ -150,14 +141,10 @@ pl_python_uv_setsrc (char *option)
         {
           /**
            * uv_config 存在，如果存在 [[index]] 则更新，否则追加到文件末尾
-           * run: grep -q '^[[index]]$' uv_config && update_source_cmd || append_source_cmd
            */
-          cmd = xy_strjoin (6, "grep -q '^\\[\\[index\\]\\]$' ",
-                              uv_config,
-                              " && ",
-                              update_source_cmd,
-                              " || ",
-                              append_source_cmd);
+          cmd = xy_str_gsub (RAWSTR_pl_python_final_uv_cmd, "@f@", uv_config);
+          cmd = xy_str_gsub (cmd, "@ucmd@", update_source_cmd);
+          cmd = xy_str_gsub (cmd, "@acmd@", append_source_cmd);
         }
     }
   if (NULL==cmd)

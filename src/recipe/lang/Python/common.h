@@ -7,8 +7,10 @@
  *                |
  * Created On     : <2023-09-03>
  * Major Revision :      1
- * Last Modified  : <2025-07-11>
+ * Last Modified  : <2025-07-14>
  * ------------------------------------------------------------*/
+
+ #include "rawstr4c.h"
 
 /**
  * 注意这个前缀是 host/pipi/web/pacakges....
