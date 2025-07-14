@@ -3,9 +3,10 @@
  * -------------------------------------------------------------
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
- *               |
  * Created On    : <2024-12-14>
  * Last Modified : <2025-07-14>
+ *
+ * 该文件最好启用 DEBUG mode 编译
  * ------------------------------------------------------------*/
 
 #define Chsrc_Version "Frameworker"
@@ -77,6 +78,18 @@ main (int argc, char const *argv[])
   FILE *tmp = chsrc_make_tmpfile ("tmpfile", ".txt", true, &tmpfile);
   fclose (tmp);
   remove (tmpfile);
+
+  // chsrc_run_in_inline_pwsh_shell ("Write-Host \"Hello from inline PowerShell\"");
+
+  if (xy_on_windows)
+    {
+      chsrc_run_as_pwsh_file ("Write-Host \"Hello from PowerShell file\"");
+    }
+  else
+    {
+      chsrc_run_as_sh_file ("echo Hello from sh file");
+      chsrc_run_as_bash_file ("echo Hello from Bash file");
+    }
 
   chsrc_run ("echo " Chsrc_Version " test pass!", RunOpt_Dont_Notify_On_Success);
   return 0;
