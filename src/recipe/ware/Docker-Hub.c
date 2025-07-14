@@ -6,7 +6,7 @@
  * Contributors  : Nil Null <nil@null.org>
  *               |
  * Created On    : <2024-06-08>
- * Last Modified : <2024-11-22>
+ * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
 static MirrorSite_t DaoCloud =
@@ -22,37 +22,22 @@ Fit2Cloud =
   IS_DedicatedMirrorSite,
   "fit2cloud", "FIT2CLOUD", "杭州飞致云信息科技有限公司", "https://www.fit2cloud.com/",
   {SKIP, ToFill, ToFill, NULL, ROUGH}
-},
-
-Huecker =
-{
-  IS_DedicatedMirrorSite,
-  "huecker",  "(Russia) Huecker", "俄罗斯 Huecker.io",   "https://huecker.io/",
-  // 同 DaoCloud，没有合适的下载链接，先随便给一个，以避免 bug
-  {NotSkip, NA, NA, "https://huecker.io/en/use.html", ROUGH}
 };
 
 /**
- * @update 2024-07-24
- *
- * @note USTC 与 SJTUG 于 2024-06-06 停止支持 DockerHub
- * @note NJU 于 2024-06-07 停止支持 DockerHub
+ * @update 2025-07-14
  *
  * @consult https://gist.github.com/y0ngb1n/7e8f16af3242c7815e7ca2f0833d3ea6
  */
 
 static Source_t wr_dockerhub_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  // {&Ustc,          "https://docker.mirrors.ustc.edu.cn/"},
+  {&UpstreamProvider,  NULL, NULL},
+  // {&Ustc,          "https://docker.mirrors.ustc.edu.cn/", NULL},
 
   // https://github.com/DaoCloud/public-image-mirror
-  {&DaoCloud,         "https://docker.m.daocloud.io"},
-  {&Fit2Cloud,        "https://docker.1panel.live"},
-
-  // 暂时加入，未来若国内镜像恢复，将删除
-  // https://huecker.io/en/use.html#unbanned
-  {&Huecker,          "https://huecker.io"}
+  {&DaoCloud,         "https://docker.m.daocloud.io", NULL},
+  {&Fit2Cloud,        "https://docker.1panel.live",   NULL}
 };
 
 def_sources_n(wr_dockerhub);

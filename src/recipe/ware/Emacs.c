@@ -21,13 +21,13 @@ static MirrorSite_t EmacsChina =
 Source_t wr_emacs_sources[] =
 {
   {&UpstreamProvider,    NULL, NULL},
-  {&MirrorZ,            "https://help.mirrors.cernet.edu.cn/elpa/"},
-  {&Sjtug_Zhiyuan,      "https://mirrors.sjtug.sjtu.edu.cn/docs/emacs-elpa"},
-  {&Tuna,               "https://mirrors.tuna.tsinghua.edu.cn/help/elpa/"},
-  {&Bfsu,               "https://mirrors.bfsu.edu.cn/help/elpa/"},
-  {&Ustc,               "https://mirrors.ustc.edu.cn/help/elpa.html"},
-  {&Zju,                "https://mirrors.zju.edu.cn/docs/elpa/"},
-  {&EmacsChina,         "https://elpamirror.emacs-china.org/"}
+  {&MirrorZ,            "https://help.mirrors.cernet.edu.cn/elpa/", NULL},
+  {&Sjtug_Zhiyuan,      "https://mirrors.sjtug.sjtu.edu.cn/docs/emacs-elpa", NULL},
+  {&Tuna,               "https://mirrors.tuna.tsinghua.edu.cn/help/elpa/",  NULL},
+  {&Bfsu,               "https://mirrors.bfsu.edu.cn/help/elpa/",     NULL},
+  {&Ustc,               "https://mirrors.ustc.edu.cn/help/elpa.html", NULL},
+  {&Zju,                "https://mirrors.zju.edu.cn/docs/elpa/",      NULL},
+  {&EmacsChina,         "https://elpamirror.emacs-china.org/",        NULL}
 };
 def_sources_n(wr_emacs);
 
@@ -38,7 +38,7 @@ wr_emacs_setsrc (char *option)
   chsrc_yield_source_and_confirm (wr_emacs);
 
   chsrc_note2 ("Emacs换源涉及Elisp，需要手动查阅并换源:");
-  p(source.url);
+  p (source.url);
 
   chsrc_determine_chgtype (ChgType_Manual);
   chsrc_conclude (&source);
