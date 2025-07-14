@@ -80,7 +80,12 @@ my class CVariableNameGenerator {
                        $global-config.get('keep-postfix', 'true').as-bool();
 
     my $name = $section-config.get('name', $title.lc).as-string();
-    $name = $name.subst(/\s+/, '_', :g);
+    # 替换非法字符
+    $name = $name.subst(/<-[a..z A..Z 0..9 _]>/, '_', :g);
+    # 合并连续的下划线
+    $name = $name.subst(/_+/, '_', :g);
+    # 移除结尾的下划线
+    $name = $name.subst(/_+$/, '');
 
     # 组装变量名
     my $var-name = "";
