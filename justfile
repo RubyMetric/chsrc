@@ -7,7 +7,7 @@
 # Contributors  :  Nul None  <nul@none.org>
 #								|
 # Created On    : <2025-06-18>
-# Last Modified : <2025-07-13>
+# Last Modified : <2025-07-14>
 #
 # 该文件主要用于在原生Windows上执行项目的基本任务，而不借助于
 # GNU make 以及相应的 MSYS2、Cygwin 环境
@@ -123,12 +123,13 @@ debug: build-in-debug-mode
 
 test: test-xy test-fw
 
+# 这两个测试文件都用 DEBUG mode
 test-xy:
-	@{{CC}} test/xy.c {{CFLAGS_dev_mode}} -o xy
+	@{{CC}} test/xy.c {{CFLAGS_debug_mode}} -o xy
 	@{{BIN_xy}}
 
 test-fw:
-	@{{CC}} test/fw.c {{CFLAGS_dev_mode}} -o fw
+	@{{CC}} test/fw.c {{CFLAGS_debug_mode}} -o fw
 	@{{BIN_fw}}
 
 fastcheck:

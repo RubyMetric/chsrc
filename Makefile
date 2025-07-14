@@ -8,7 +8,7 @@
 #								| sanchuanhehe <wyihe5520@gmail.com>
 #								|
 # Created On    : <2023-08-28>
-# Last Modified : <2025-07-13>
+# Last Modified : <2025-07-14>
 #
 # 请阅读 ./doc/01-Develop.md 来使用
 # --------------------------------------------------------------
@@ -164,10 +164,13 @@ test-make-env:
 	 echo "HOME: $(HOME)"; \
 	fi
 
+# 这两个测试文件都用 DEBUG mode
+test-xy: CFLAGS += $(CFLAGS_debug)
 test-xy:
 	@$(CC) test/xy.c $(CFLAGS) -o xy
 	@./xy
 
+test-fw: CFLAGS += $(CFLAGS_debug)
 test-fw:
 	@$(CC) test/fw.c $(CFLAGS) -o fw
 	@./fw
