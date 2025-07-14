@@ -1,13 +1,16 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  : happy game <happygame1024@gmail.com>
- *               | Aoran Zeng <ccmywish@qq.com>
- * Contributors  : Nil Null <nil@null.org>
- *               |
- * Created On    : <2024-06-08>
- * Last Modified : <2025-07-14>
+ * File Authors   : happy game <happygame1024@gmail.com>
+ *                | Aoran Zeng <ccmywish@qq.com>
+ * Contributors   : Nil Null <nil@null.org>
+ *                |
+ * Created On     : <2024-06-08>
+ * Major Revision :      2
+ * Last Modified  : <2025-07-14>
  * ------------------------------------------------------------*/
+
+#include "rawstr4c.h"
 
 static MirrorSite_t DaoCloud =
 {
@@ -41,14 +44,14 @@ static Source_t wr_dockerhub_sources[] =
 
 def_sources_n(wr_dockerhub);
 
-#define WARE_DockerHub_SourceConfig "/etc/docker/daemon.json"
+#define WR_DockerHub_ConfigFile "/etc/docker/daemon.json"
 
 void
 wr_dockerhub_getsrc (char *option)
 {
   if (xy_on_linux || xy_on_bsd)
     {
-      chsrc_view_file (WARE_DockerHub_SourceConfig);
+      chsrc_view_file (WR_DockerHub_ConfigFile);
     }
   else
     {
@@ -70,62 +73,53 @@ wr_dockerhub_setsrc (char *option)
 
   if (xy_on_linux || xy_on_bsd)
     {
-      char *to_add = xy_strjoin (3, "{\n"
-                                    "  \"registry-mirrors\": [\"", source.url, "\"]\n"
-                                    "}");
-      if (chsrc_check_file (WARE_DockerHub_SourceConfig))
+      char *to_add = xy_str_gsub (RAWSTR_wr_dockerhub_insert_content, "@1@", source.url);
+
+      if (chsrc_check_file (WR_DockerHub_ConfigFile))
         {
           chsrc_note2 ("已找到Docker配置文件，将自动换源");
-          chsrc_backup (WARE_DockerHub_SourceConfig);
+          chsrc_backup (WR_DockerHub_ConfigFile);
+
           if (chsrc_check_program_quietly ("jq"))
             {
-              // 检查是否已经存在 source.url
-              char *cmd = xy_strjoin (4, "jq '.[\"registry-mirrors\"] | index(\"",
-                                         source.url,
-                                         "\")' ",
-                                         WARE_DockerHub_SourceConfig);
-              char *ret = xy_run(cmd, 0);
-              if (ret && !xy_streql(ret, "null"))
+              /* 检查是否已经存在 source.url */
+              char *cmd = xy_str_gsub (RAWSTR_wr_dockerhub_check_cmd, "@1@", source.url);
+                    cmd = xy_str_gsub (cmd, "@2@", WR_DockerHub_ConfigFile);
+
+              char *result = xy_run (cmd, 0);
+              if (result && !xy_streql (result, "null"))
                 {
                   chsrc_note2 ("已存在源，无需重复添加");
                 }
               else
                 {
-                  cmd = xy_strjoin (6, "jq '.[\"registry-mirrors\"] |= [\"",
-                                       source.url,
-                                       "\"] + .' ",
-                                       xy_2strjoin(WARE_DockerHub_SourceConfig, ".bak"),
-                                       " > ",
-                                       WARE_DockerHub_SourceConfig);
+                  cmd = xy_str_gsub (RAWSTR_wr_dockerhub_insert_cmd, "@1@", source.url);
+                  cmd = xy_str_gsub (cmd, "@2@", WR_DockerHub_ConfigFile);
                   chsrc_run (cmd, RunOpt_Default);
-                  chsrc_note2 ("源已添加");
+                  chsrc_succ2 ("源已添加");
                 }
             }
           else
             {
-              chsrc_note2("未找到 jq 命令, 将使用 sed 换源");
-              char *cmd = xy_strjoin (5, "sed ",
-                                       "-z -i 's|\"registry-mirrors\":[^]]*]|\"registry-mirrors\":[\"",
-                                       source.url,
-                                       "\"]|' ",
-                                       WARE_DockerHub_SourceConfig);
+              chsrc_note2 ("未找到 jq 命令, 将使用 sed 换源");
+              char *cmd = xy_str_gsub (RAWSTR_wr_dockerhub_sed_command, "@1@", source.url);
+                    cmd = xy_str_gsub (cmd, "@2@", WR_DockerHub_ConfigFile);
               chsrc_run (cmd, RunOpt_Default);
             }
         }
       else
         {
-          // 不存在 /etc/docker/daemon.json 时可以直接写入文件
+          /* 不存在 /etc/docker/daemon.json 时可以直接写入文件 */
           chsrc_note2 ("未找到Docker配置文件, 将自动创建");
           chsrc_ensure_dir ("/etc/docker");
-          chsrc_run ( xy_2strjoin("touch ", WARE_DockerHub_SourceConfig), RunOpt_Default);
+          chsrc_run ( xy_2strjoin ("touch ", WR_DockerHub_ConfigFile), RunOpt_Default);
 
-          chsrc_append_to_file (to_add, WARE_DockerHub_SourceConfig);
+          chsrc_append_to_file (to_add, WR_DockerHub_ConfigFile);
         }
-      // chsrc_note2 ("请向 /etc/docker/daemon.json 中添加下述内容:");
-      // println (to_add);
+
       if (xy_on_linux)
         {
-          // 由于 systemctl restart docker 会导致所有容器停止，所以不自动重启
+          /* 由于 systemctl restart docker 会导致所有容器停止，所以不自动重启 */
           chsrc_note2 ("请自行运行: sudo systemctl restart docker");
           chsrc_note2 ("该命令会重启所有容器, 请在合适的时机执行");
         }
@@ -136,8 +130,8 @@ wr_dockerhub_setsrc (char *option)
     }
   else
     {
-      chsrc_note2 ("请打开Docker Desktop设置");
-      chsrc_note2 ("选择“Docker Engine”选项卡，在该选项卡中找到“registry-mirrors”一栏，添加镜像地址:");
+      chsrc_note2 ("请打开 Docker Desktop 设置");
+      chsrc_note2 ("选择 'Docker Engine' 选项卡，在该选项卡中找到 'registry-mirrors' 一栏，添加镜像地址:");
       println (source.url);
     }
 
