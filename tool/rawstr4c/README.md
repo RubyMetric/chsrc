@@ -27,13 +27,30 @@ just rawstr4c ./src/recipe/ware
 
 
 
+## Convention
+
+一个配置文件，应使用这样的顺序:
+
+- section 标题
+- 对该变量的说明
+- 配置项
+- 配置项注释
+- code block (raw string)
+- 对 code block 内容的注释
+
+<br>
+
+
+
 ## 配置语法
 
 ```markdown
 
-- config-item = `value`
+- config-item1 = `:mode`
 
-- config-item2 = `:mode`
+- config-item2 = `true|false|yes|no`
+
+- config-item3 = `string value`
 
 ```
 
