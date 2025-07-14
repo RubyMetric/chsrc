@@ -1375,6 +1375,92 @@ chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilename
 }
 
 
+/**
+ * 以 bash file.bash 的形式运行脚本内容
+ */
+void
+chsrc_run_as_bash_file (const char *script_content)
+{
+  char *tmpfile = NULL;
+  FILE *f = chsrc_make_tmpfile ("bash_script", ".bash", false, &tmpfile);
+  fwrite (script_content, strlen (script_content), 1, f);
+  fclose (f);
+  // chmod (tmpfile, 0700);
+  char *msg = CHINESE ? "即将执行 Bash 脚本内容:" : "The Bash script content will be executed:";
+  chsrc_note2 (msg);
+  println (script_content);
+  char *cmd = xy_2strjoin ("bash ", tmpfile);
+  chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
+  remove (tmpfile);
+}
+
+
+/**
+ * 以 sh file.sh 的形式运行脚本内容
+ */
+void
+chsrc_run_as_sh_file (const char *script_content)
+{
+  char *tmpfile = NULL;
+  FILE *f = chsrc_make_tmpfile ("sh_script", ".sh", false, &tmpfile);
+  fwrite (script_content, strlen (script_content), 1, f);
+  fclose (f);
+  // chmod (tmpfile, 0700);
+  char *msg = CHINESE ? "即将执行 sh 脚本内容:" : "The sh script content will be executed:";
+  chsrc_note2 (msg);
+  println (script_content);
+  char *cmd = xy_2strjoin ("sh ", tmpfile);
+  chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
+  remove (tmpfile);
+}
+
+
+/**
+ * 以 pwsh file.ps1 的形式运行脚本内容
+ */
+void
+chsrc_run_as_pwsh_file (const char *script_content)
+{
+  char *tmpfile = NULL;
+  FILE *f = chsrc_make_tmpfile ("pwsh_script", ".ps1", false, &tmpfile);
+  fwrite (script_content, strlen (script_content), 1, f);
+  fclose (f);
+  char *msg = CHINESE ? "即将执行 PowerShell 脚本内容:" : "The PowerShell script content will be executed:";
+  chsrc_note2 (msg);
+  println (script_content);
+  char *cmd = xy_2strjoin ("pwsh ", tmpfile);
+  chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
+  remove (tmpfile);
+}
+
+
+/**
+ * @param cmdline 需要自己负责转义
+ *
+ * @danger 需要经过 Bash 的转义，很容易出错，不要用这个函数
+ */
+XY_Deprecate_This("Don't use this function")
+void
+chsrc_run_in_inline_bash_shell (const char *cmdline)
+{
+  char *cmd = xy_strjoin (3, "bash -c '", cmdline, "'");
+  chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
+}
+
+
+/**
+ * @param cmdline 需要自己负责转义
+ *
+ * @danger 需要经过 PowerShell 的转义，很容易出错，不要用这个函数
+ */
+XY_Deprecate_This("Don't use this function")
+void
+chsrc_run_in_inline_pwsh_shell (const char *cmdline)
+{
+  char *cmd = xy_strjoin (3, "pwsh -Command '", cmdline, "'");
+  chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
+}
+
 
 static void
 chsrc_view_env (const char *var1, ...)
