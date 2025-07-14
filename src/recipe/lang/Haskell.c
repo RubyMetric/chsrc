@@ -7,6 +7,8 @@
  * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
+#include "rawstr4c.h"
+
 /**
  * @update 2023-09-10
  */
@@ -16,11 +18,16 @@ static Source_t pl_haskell_sources[] =
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/hackage", DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/hackage",          DelegateToMirror},
   {&Nju,              "https://mirror.nju.edu.cn/hackage",             DelegateToMirror},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/hackage",          DelegateToMirror}
+  {&Ustc,             "https://mirrors.ustc.edu.cn/hackage",          DelegateToMirror},
+  {&Iscas,            "https://mirror.iscas.ac.cn/hackage",           DelegateToMirror},
+  {&Nyist,            "https://mirror.nyist.edu.cn/hackage",          DelegateToMirror}
 };
 def_sources_n(pl_haskell);
 
 
+/**
+ * @consult https://help.mirrors.cernet.edu.cn/hackage/
+ */
 void
 pl_haskell_setsrc (char *option)
 {
@@ -44,24 +51,9 @@ pl_haskell_setsrc (char *option)
   println (file); br();
 
   config = xy_normalize_path ("~/.stack/config.yaml");
-  file = xy_strjoin (3, "package-indices:\n"
-                       "  - download-prefix: ", source.url,
-                     "\n    hackage-security:\n"
-                       "        keyids:\n"
-                       "        - 0a5c7ea47cd1b15f01f5f51a33adda7e655bc0f0b0615baa8e271f4c3351e21d\n"
-                       "        - 1ea9ba32c526d1cc91ab5e5bd364ec5e9e8cb67179a471872f6e26f0ae773d42\n"
-                       "        - 280b10153a522681163658cb49f632cde3f38d768b736ddbc901d99a1a772833\n"
-                       "        - 2a96b1889dc221c17296fcc2bb34b908ca9734376f0f361660200935916ef201\n"
-                       "        - 2c6c3627bd6c982990239487f1abd02e08a02e6cf16edb105a8012d444d870c3\n"
-                       "        - 51f0161b906011b52c6613376b1ae937670da69322113a246a09f807c62f6921\n"
-                       "        - 772e9f4c7db33d251d5c6e357199c819e569d130857dc225549b40845ff0890d\n"
-                       "        - aa315286e6ad281ad61182235533c41e806e5a787e0b6d1e7eef3f09d137d2e9\n"
-                       "        - fe331502606802feac15e514d9b9ea83fee8b6ffef71335479a2e68d84adc6b0\n"
-                       "        key-threshold: 3\n"
-                       "        ignore-expiry: no");
-
+  file = xy_str_gsub (RAWSTR_pl_stackage, "@url@", source.url);
   chsrc_note2 (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
-  p(file);
+  p (file);
 
   chsrc_determine_chgtype (ChgType_Manual);
   chsrc_conclude (&source);
