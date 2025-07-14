@@ -14,7 +14,7 @@
 #pragma once
 
 bool
-is_url (const char *str)
+chef_is_url (const char *str)
 {
   return (xy_str_start_with (str, "http://") || xy_str_start_with (str, "https://"));
 }

@@ -7,7 +7,7 @@
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2024-08-19>
- ! Last Modified : <2025-03-06>
+ ! Last Modified : <2025-07-14>
  ! ---------------------------------------------------------- -->
 
 # Write A Recipe Even If You Don't Know C
@@ -23,7 +23,7 @@
 1. 本项目采用 `GPLv3+` 协议，是真正的**自由软件**，而非仅仅是开源软件
 2. 代码规范灵活遵循 `GNU` 标准（若标准干扰了可维护性，则并不采纳）
 3. 高度模块化，目录结构清晰易懂
-4. 极小依赖，极易构建，只需要 `GCC` 或 `Clang` 即可编译
+4. 极小依赖，极易构建，只需要 `GCC` 或 `Clang` 即可编译 (`make` 和 `just`可简化，但不是必需的)
 5. 易于将 `shell` 脚本转换为等价的 `recipe`
 6. 已有大量 `recipe` 可提供参考，并提供了 [recipe template] 供直接使用
 7. 提供持续关注镜像站可用性的协作平台:
@@ -83,6 +83,9 @@
 
     1. `framework/core.c` 中以 `chsrc_` 开头的所有函数或宏
     2. `xy.h` 中以 `xy_` 开头的所有函数或宏
+    3. `chec.h` 中以 `chef_` 开头的所有函数或宏
+
+    一个简单的方法是，在 VS Code 中按快捷键 `Ctrl-T` 搜索上述三种前缀
 
 7. 在 `recipe/menu.c` 中添加用户可以使用的 `target` 别名
 

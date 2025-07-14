@@ -451,7 +451,7 @@ chsrc_check_file (char *path)
 int
 query_provider_exist (Source_t *sources, size_t size, char *target, char *input)
 {
-  if (is_url (input))
+  if (chef_is_url (input))
     {
       char *msg = ENGLISH ? "Using user-defined sources for this software is not supported at this time, please contact the developers to ask why or request support" : "暂不支持对该软件使用用户自定义源，请联系开发者询问原因或请求支持";
       chsrc_error (msg);
@@ -706,7 +706,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
         }
       else if (!provider_skip && provider_speed_url)
         {
-          if (is_url(provider_speed_url))
+          if (chef_is_url (provider_speed_url))
             {
               url = xy_strdup (provider_speed_url);
               chsrc_debug ("m", xy_2strjoin ("使用镜像站整体测速链接: ", url));
@@ -719,7 +719,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
 
       if (dedicated_speed_url)
         {
-          if (is_url(dedicated_speed_url))
+          if (chef_is_url (dedicated_speed_url))
             {
               url = xy_strdup (dedicated_speed_url);
               has_dedicated_speed_url = true;
@@ -843,7 +843,7 @@ sources_prepare_speedurl_with_postfix (Source_t sources[], int n, char *postfix)
       if (src->url)
         {
           /* 为空时才修改 或者里面是脏数据 */
-          if (NULL==src->speed_measure_url || !is_url(src->speed_measure_url))
+          if (NULL==src->speed_measure_url || !chef_is_url (src->speed_measure_url))
             src->speed_measure_url = xy_2strjoin (src->url, postfix);
         }
     }
@@ -1010,7 +1010,7 @@ source_has_empty_url (Source_t *source)
     { \
       source = for_what##_sources[ProgStatus.leader_selected_index]; \
     } \
-  else if (is_url (option)) \
+  else if (chef_is_url (option)) \
     { \
       Source_t __tmp = { &UserDefinedProvider, option }; \
       source = __tmp; \
@@ -1427,7 +1427,7 @@ chsrc_append_to_file (const char *str, const char *filename)
   if (NULL==f)
     {
       char *msg = ENGLISH ? xy_2strjoin ("Unable to open file to write: ", file)
-                                   : xy_2strjoin ("无法打开文件以写入: ", file);
+                          : xy_2strjoin ("无法打开文件以写入: ", file);
       chsrc_error2 (msg);
       exit (Exit_UserCause);
     }

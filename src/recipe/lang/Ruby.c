@@ -56,7 +56,7 @@ void
 pl_ruby_remove_gem_source (const char *source)
 {
   char *cmd = NULL;
-  if (is_url (source))
+  if (chef_is_url (source))
     {
       cmd = xy_2strjoin ("gem sources -r ", source);
       chsrc_run (cmd, RunOpt_Default);
