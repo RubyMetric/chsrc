@@ -5,7 +5,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2023-08-31>
- * Last Modified : <2024-12-18>
+ * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t pl_java_upstream =
@@ -19,10 +19,11 @@ static SourceProvider_t pl_java_upstream =
  */
 static Source_t pl_java_sources[] =
 {
-  {&pl_java_upstream,  NULL},
-  {&Ali,              "https://maven.aliyun.com/repository/public/"},
-  {&Huawei,           "https://mirrors.huaweicloud.com/repository/maven/"},
-  {&Netease,          "http://mirrors.163.com/maven/repository/maven-public/"} // 网易的24小时更新一次
+  {&pl_java_upstream,  NULL, NULL},
+  {&Ali,              "https://maven.aliyun.com/repository/public/",       DelegateToMirror},
+  {&Huawei,           "https://mirrors.huaweicloud.com/repository/maven/", DelegateToMirror},
+  /* 网易的24小时更新一次 */
+  {&Netease,          "http://mirrors.163.com/maven/repository/maven-public/", DelegateToMirror}
 };
 def_sources_n(pl_java);
 
@@ -106,4 +107,22 @@ pl_java_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target(pl_java);
+
+Feature_t
+pl_java_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = true;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NA;
+  f.can_english = false;
+  f.can_user_define = true;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_gsf(pl_java);

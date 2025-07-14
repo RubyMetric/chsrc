@@ -4,19 +4,18 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-08-31>
- * Last Modified : <2024-11-22>
+ * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2023-09-05
- * @note 缺少商业公司或开源社区软件源
+ * @update 2025-07-14
  */
 static Source_t pl_julia_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/julia"},
-  {&Pku,              "https://mirrors.pku.edu.cn/julia"},
-  {&Nju,              "https://mirror.nju.edu.cn/julia"}
+  {&UpstreamProvider,  NULL, NULL},
+  {&Pku,              "https://mirrors.pku.edu.cn/julia", DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn/julia",   DelegateToMirror},
+  {&Iscas,            "https://mirror.iscas.ac.cn/julia",  DelegateToMirror}
 };
 def_sources_n(pl_julia);
 

@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-10>
- * Last Modified : <2024-08-15>
+ * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
 /**
@@ -12,11 +12,11 @@
  */
 static Source_t pl_haskell_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/hackage"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/hackage"},
-  {&Nju,              "https://mirror.nju.edu.cn/hackage"},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/hackage"}
+  {&UpstreamProvider,  NULL, NULL},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/hackage", DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/hackage",          DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn/hackage",             DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/hackage",          DelegateToMirror}
 };
 def_sources_n(pl_haskell);
 
@@ -67,4 +67,22 @@ pl_haskell_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target_s (pl_haskell);
+
+Feature_t
+pl_haskell_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = false;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NA;
+  f.can_english = false;
+  f.can_user_define = true;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_sf (pl_haskell);

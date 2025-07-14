@@ -23,11 +23,12 @@ static MirrorSite_t NugetOrg =
  */
 static Source_t pl_nuget_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&NugetOrg,         "https://www.nuget.org/api/v2/"},
-  {&Huawei,           "https://mirrors.huaweicloud.com/repository/nuget/v3"}
+  {&UpstreamProvider,  NULL, NULL},
+  {&NugetOrg,         "https://www.nuget.org/api/v2/", NULL},
+  {&Huawei,           "https://mirrors.huaweicloud.com/repository/nuget/v3", DelegateToMirror}
 };
 def_sources_n(pl_nuget);
+
 
 void
 pl_nuget_getsrc (char *option)
@@ -35,9 +36,7 @@ pl_nuget_getsrc (char *option)
   chsrc_error ("暂时无法查看NuGet源，若有需求，请提交issue");
 }
 
-/**
- * NuGet 换源
- */
+
 void
 pl_nuget_setsrc (char *option)
 {
@@ -45,4 +44,21 @@ pl_nuget_setsrc (char *option)
 }
 
 
-def_target_s (pl_nuget);
+Feature_t
+pl_nuget_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = false;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NA;
+  f.can_english = false;
+  f.can_user_define = false;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_gsf(pl_nuget);

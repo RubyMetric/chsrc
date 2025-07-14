@@ -5,7 +5,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2023-09-31>
- * Last Modified : <2024-12-18>
+ * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t pl_perl_upstream =
@@ -19,13 +19,13 @@ static SourceProvider_t pl_perl_upstream =
  */
 static Source_t pl_perl_sources[] =
 {
-  {&pl_perl_upstream,  NULL},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/CPAN/"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CPAN/"},
-  {&Bjtu,             "https://mirror.bjtu.edu.cn/cpan/"},
-  {&Hust,             "https://mirrors.hust.edu.cn/CPAN/"},
-  {&Ali,              "https://mirrors.aliyun.com/CPAN/"},
-  {&Lzuoss,           "https://mirror.lzu.edu.cn/CPAN/"}
+  {&pl_perl_upstream,  NULL, NULL},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/CPAN/", DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CPAN/", DelegateToMirror},
+  {&Bjtu,             "https://mirror.bjtu.edu.cn/cpan/",  DelegateToMirror},
+  {&Hust,             "https://mirrors.hust.edu.cn/CPAN/", DelegateToMirror},
+  {&Ali,              "https://mirrors.aliyun.com/CPAN/",  DelegateToMirror},
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/CPAN/",  DelegateToMirror}
 };
 def_sources_n(pl_perl);
 
@@ -61,10 +61,29 @@ pl_perl_setsrc (char *option)
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_note2 ("请使用 perl -v 以及 cpan -v，若 Perl >= v5.36 或 CPAN >= 2.29，请额外手动调用下面的命令");
-  p("perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('pushy_https', 0);; CPAN::HandleConfig->commit()\"");
+  p ("perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('pushy_https', 0);; CPAN::HandleConfig->commit()\"");
 
   chsrc_determine_chgtype (ChgType_SemiAuto);
   chsrc_conclude (&source);
 }
 
-def_target(pl_perl);
+
+Feature_t
+pl_perl_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = true;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NA;
+  f.can_english = false;
+  f.can_user_define = true;
+
+  f.note = NULL;
+  return f;
+}
+
+
+def_target_gsf(pl_perl);

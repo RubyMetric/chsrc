@@ -4,25 +4,25 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-21>
- * Last Modified : <2024-11-22>
+ * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
 /**
  * @update 2023-09-04
- * @note {
+ *
+ * @note
  *   以下注释的，是不含有bioconductor的镜像站，
  *   我们在换cran的同时，也直接帮助用户换bioconductor
- * }
  */
 static Source_t pl_r_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/cran/"},
-  // {&Ali,           "https://mirrors.aliyun.com/CRAN/"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"},
-  // {&Sustech,       "https://mirrors.sustech.edu.cn/CRAN"},
-  // {&Bfsu,          "https://mirrors.bfsu.edu.cn/CRAN/"},
-  // {&Bjtu,          "https://mirror.bjtu.edu.cn/cran/"},
+  {&UpstreamProvider,  NULL, NULL},
+  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/cran/",    DelegateToMirror},
+  // {&Ali,           "https://mirrors.aliyun.com/CRAN/",           DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CRAN/", DelegateToMirror},
+  // {&Sustech,       "https://mirrors.sustech.edu.cn/CRAN",        DelegateToMirror},
+  // {&Bfsu,          "https://mirrors.bfsu.edu.cn/CRAN/",          DelegateToMirror},
+  // {&Bjtu,          "https://mirror.bjtu.edu.cn/cran/",           DelegateToMirror},
 };
 def_sources_n(pl_r);
 
@@ -75,4 +75,22 @@ pl_r_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target(pl_r);
+
+Feature_t
+pl_r_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = true;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NA;
+  f.can_english = false;
+  f.can_user_define = false;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_gsf(pl_r);

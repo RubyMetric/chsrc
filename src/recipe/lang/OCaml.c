@@ -4,16 +4,16 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-15>
- * Last Modified : <2024-08-15>
+ * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
 /**
- * @update 2023-09-15
+ * @update 2025-07-14
  */
 static Source_t pl_ocaml_sources[] =
 {
-  {&UpstreamProvider, NULL},
-  {&Sjtug_Zhiyuan,   "https://mirrors.sjtug.sjtu.edu.cn/git/opam-repository.git"}
+  {&UpstreamProvider, NULL, NULL},
+  {&Sjtug_Zhiyuan,   "https://mirrors.sjtug.sjtu.edu.cn/git/opam-repository.git", NULL}
 };
 def_sources_n(pl_ocaml);
 
@@ -56,4 +56,23 @@ pl_ocaml_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target(pl_ocaml);
+
+Feature_t
+pl_ocaml_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = true;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NA;
+  f.can_english = false;
+  f.can_user_define = true;
+
+  f.note = NULL;
+  return f;
+}
+
+
+def_target_gsf(pl_ocaml);
