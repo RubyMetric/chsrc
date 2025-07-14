@@ -38,7 +38,7 @@ pl_python_pip_setsrc (char *option)
       return;
     }
 
-  chsrc_yield_source (pl_python);
+  chsrc_yield_source (pl_python_group);
   if (chsrc_in_standalone_mode())
     chsrc_confirm_source;
 
@@ -91,4 +91,4 @@ pl_python_pip_feat (char *option)
 }
 
 // def_target_gsrf(pl_python_pip);
-Target_t pl_python_pip_target = {def_target_inner_gsrf(pl_python_pip),def_target_sourcesn(pl_python)};
+Target_t pl_python_pip_target = {def_target_inner_gsrf(pl_python_pip),def_target_sourcesn(pl_python_group)};

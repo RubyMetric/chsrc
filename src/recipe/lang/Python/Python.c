@@ -5,12 +5,12 @@
  * Contributors  : happy game <happygame1024@gmail.com>
  *               |
  * Created On    : <2023-09-03>
- * Last Modified : <2024-12-11>
+ * Last Modified : <2025-07-14>
  *
  * ------------------------------------------------------------*/
 
 void
-pl_python_getsrc (char *option)
+pl_python_group_getsrc (char *option)
 {
   bool pdm_exist    = false,
        poetry_exist = false,
@@ -41,7 +41,7 @@ pl_python_getsrc (char *option)
 
 
 void
-pl_python_setsrc (char *option)
+pl_python_group_setsrc (char *option)
 {
   {
     char *msg = ENGLISH ? "Three package managers will be replaced for you at the same time: "
@@ -58,7 +58,7 @@ pl_python_setsrc (char *option)
   pl_python_check_unofficial_pkger (&poetry_exist, &pdm_exist, &uv_exist);
 
   chsrc_set_target_group_mode ();
-  chsrc_yield_source_and_confirm (pl_python);
+  chsrc_yield_source_and_confirm (pl_python_group);
 
 
   // 交给后面检查命令的存在性
@@ -86,14 +86,14 @@ pl_python_setsrc (char *option)
 }
 
 void
-pl_python_resetsrc (char *option)
+pl_python_group_resetsrc (char *option)
 {
-  pl_python_setsrc (option);
+  pl_python_group_setsrc (option);
 }
 
 
 Feature_t
-pl_python_feat (char *option)
+pl_python_group_feat (char *option)
 {
   Feature_t f = {0};
 
@@ -101,11 +101,11 @@ pl_python_feat (char *option)
   f.can_reset = true;
 
   f.cap_locally = PartiallyCan;
-  f.cap_locally_explain = "Support `Poetry` & `PDM`, `uv`. No support for `pip`";
+  f.cap_locally_explain = "Support Poetry, PDM, uv. No support for pip";
   f.can_english = false;
   f.can_user_define = true;
 
   return f;
 }
 
-def_target_gsrf(pl_python);
+def_target_gsrf(pl_python_group);

@@ -26,7 +26,7 @@ static SourceProvider_t pl_python_pypi_upstream =
  * @update 2025-07-11
  * @note 不要添加Zju，浙大的PyPI服务在校外访问会自动转向Tuna
  */
-static Source_t pl_python_sources[] =
+static Source_t pl_python_group_sources[] =
 {
   {&pl_python_pypi_upstream,   "https://pypi.org/simple", DelegateToUpstream},
 
@@ -72,7 +72,7 @@ static Source_t pl_python_sources[] =
   /* 不启用原因：24小时更新一次 */
   // {&Netease,       "https://mirrors.163.com/.help/pypi.html", NULL}
 };
-def_sources_n(pl_python);
+def_sources_n(pl_python_group);
 
 void
 pl_python_check_unofficial_pkger (bool *poetry_exist, bool *pdm_exist, bool *uv_exist)

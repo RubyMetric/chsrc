@@ -14,7 +14,7 @@
 static const char
 *pl_ruby  [] = {"gem",    "ruby",  "rb", "rubygem",  "rubygems", "bundler",  NULL, t(&pl_ruby_target)},
 
-*pl_python[]          = {"python", "pypi",  "py",  NULL, t(&pl_python_target)},
+*pl_python[]          = {"python", "pypi",  "py",  NULL, t(&pl_python_group_target)},
   *pl_python_pip[]    = {"pip",                    NULL, t(&pl_python_pip_target)},
   *pl_python_poetry[] = {"poetry",                 NULL, t(&pl_python_poetry_target)},
   *pl_python_pdm[]    = {"pdm",                    NULL, t(&pl_python_pdm_target)},

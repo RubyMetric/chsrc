@@ -39,7 +39,7 @@ void
 pl_python_rye_setsrc (char *option)
 {
   /* 并不在 Python group 中，所以不考虑 target group 情况 */
-  chsrc_yield_source_and_confirm (pl_python);
+  chsrc_yield_source_and_confirm (pl_python_group);
 
   const char *file = xy_strjoin (7,
     "[[sources]]\n",
@@ -87,4 +87,4 @@ pl_python_rye_feat (char *option)
 }
 
 // def_target_gsrf(pl_python_rye);
-Target_t pl_python_rye_target = {def_target_inner_gsrf(pl_python_rye),def_target_sourcesn(pl_python)};
+Target_t pl_python_rye_target = {def_target_inner_gsrf(pl_python_rye),def_target_sourcesn(pl_python_group)};

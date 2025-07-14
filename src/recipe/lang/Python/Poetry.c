@@ -27,7 +27,7 @@ pl_python_poetry_getsrc (char *option)
 void
 pl_python_poetry_setsrc (char *option)
 {
-  chsrc_yield_source (pl_python);
+  chsrc_yield_source (pl_python_group);
   if (chsrc_in_standalone_mode())
     chsrc_confirm_source;
 
@@ -78,4 +78,4 @@ pl_python_poetry_feat (char *option)
 }
 
 // def_target_gsrf(pl_python_poetry);
-Target_t pl_python_poetry_target = {def_target_inner_gsrf(pl_python_poetry),def_target_sourcesn(pl_python)};
+Target_t pl_python_poetry_target = {def_target_inner_gsrf(pl_python_poetry),def_target_sourcesn(pl_python_group)};
