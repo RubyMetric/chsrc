@@ -5,7 +5,7 @@
  ! Config Authors: Aoran Zeng <ccmywish@qq.com>
  ! Contributors  :  Nil Null  <nil@null.org>
  ! Created On    : <2025-07-14>
- ! Last Modified : <2025-07-14>
+ ! Last Modified : <2025-07-15>
  ! ---------------------------------------------------------- -->
 
 # rawstr4c input
@@ -13,6 +13,35 @@
 - prefix = `RAWSTR_pl`
 - output = `:global-variable-only-header`
 - translate = `:oct`
+
+
+## Java
+
+### maven config
+
+```xml
+<mirror>
+    <id>@1@</id>
+    <mirrorOf>*</mirrorOf>
+    <name>@name@</name>
+    <url>@url@</url>
+</mirror>
+```
+
+
+### build.gradle
+
+```groovy
+allprojects {
+    repositories {
+        maven { url '@url@' }
+        mavenLocal()
+        mavenCentral()
+    }
+}
+```
+
+
 
 ## stackage
 

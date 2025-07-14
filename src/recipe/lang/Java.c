@@ -8,6 +8,8 @@
  * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
+#include "rawstr4c.h"
+
 static SourceProvider_t pl_java_upstream =
 {
   def_upstream, "https://mvnrepository.com/",
@@ -74,14 +76,9 @@ pl_java_setsrc (char *option)
 
   if (maven_exist)
     {
-      const char *file = xy_strjoin (7,
-      "<mirror>\n"
-      "  <id>", source.mirror->code, "</id>\n"
-      "  <mirrorOf>*</mirrorOf>\n"
-      "  <name>", source.mirror->name, "</name>\n"
-      "  <url>", source.url, "</url>\n"
-      "</mirror>");
-
+      char *file = xy_str_gsub (RAWSTR_pl_maven_config, "@1@", source.mirror->code);
+            file = xy_str_gsub (file, "@name@", source.mirror->name);
+            file = xy_str_gsub (file, "@url@", source.url);
       char *maven_config = pl_java_find_maven_config ();
       chsrc_note2 (xy_strjoin (3, "请在 maven 配置文件 ", maven_config, " 中添加:"));
       println (file);
@@ -90,17 +87,9 @@ pl_java_setsrc (char *option)
   if (gradle_exist)
     {
       if (maven_exist) br();
-      const char* file = xy_strjoin (3,
-      "allprojects {\n"
-      "  repositories {\n"
-      "    maven { url '", source.url, "' }\n"
-      "    mavenLocal()\n"
-      "    mavenCentral()\n"
-      "  }\n"
-      "}");
-
+      char* file = xy_str_gsub (RAWSTR_pl_build_gradle, "@url@", source.url);
       chsrc_note2 ("请在 build.gradle 中添加:");
-      p(file);
+      println (file);
     }
 
   chsrc_determine_chgtype (ChgType_Manual);
