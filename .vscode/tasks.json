@@ -56,6 +56,44 @@
                 "isDefault": true
             },
             "detail": "使用 just test 测试"
+        },
+        {
+            "type": "shell",
+            "label": "测试 framework",
+            "command": "just",
+            "args": [
+                "test-fw"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "detail": "使用 just test-fw 测试 framework"
+        },
+        {
+            "type": "shell",
+            "label": "测试 xy.h",
+            "command": "just",
+            "args": [
+                "test-xy"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "detail": "使用 just test-xy 测试 xy.h"
         }
     ],
     "version": "2.0.0"
