@@ -6,7 +6,7 @@
  *                |
  * Created On     : <2023-09-01>
  * Major Revision :      1
- * Last Modified  : <2025-07-13>
+ * Last Modified  : <2025-07-14>
  * ------------------------------------------------------------*/
 
 /* Begin Target Matrix */
@@ -146,12 +146,11 @@ static MirrorSite_t*
 available_mirrors[] = {
 
   /* ------------------------ 教育网(通用镜像站) ------------------------ */
-  &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Sjtug_Siyuan, &Zju, &Lzuoss, &Jlu, &Bfsu, &Pku, &Bjtu, &Sustech, &Ustc, &Xjtu,
+  &MirrorZ, &Tuna, &Sjtug_Zhiyuan, &Sjtug_Siyuan, &Bfsu, &Ustc, &Zju, &Jlu, &Lzuoss, &Pku, &Bjtu, &Sustech, &Nju, &Xjtu,
 
-  &Hust, &Iscas, &Scau,
-  &Nyist, &Sdu,  &Cqupt,
-
-  &Nju, &Cqu,
+  &Hust,   &Iscas, &Hit, &Scau,
+  &NJTech, &Nyist, &Sdu, &Qlu,
+  &Cqupt,  &Cqu,   &Neosoft,
 
 
 

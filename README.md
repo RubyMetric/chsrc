@@ -502,7 +502,7 @@ chsrc set conda  | anaconda
 
 另外特别感谢以下组织或项目:
 
-1. [MirrorZ 教育网镜像站](https://help.mirrors.cernet.edu.cn/)
+1. [校园网联合镜像站(MirrorZ)](https://help.mirrors.cernet.edu.cn/)
 2. [清华大学 Tuna](https://mirrors.tuna.tsinghua.edu.cn/)
 3. [上海交通大学软件源镜像服务](https://mirrors.sjtug.sjtu.edu.cn/)
 4. [中国科学技术大学 Linux 用户协会](https://github.com/ustclug)

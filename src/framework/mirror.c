@@ -9,7 +9,7 @@
  *               |  Mikachu2333  <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-07-13>
+ * Last Modified : <2025-07-14>
  *
  * 通用镜像站
  * ------------------------------------------------------------*/
@@ -24,7 +24,7 @@
  *
  * @sync https://github.com/RubyMetric/chsrc/wiki
  *
- * Wiki中的排序是根据 https://github.com/mirrorz-org/oh-my-mirrorz 挑选速度前10位
+ * 排序部分参考 https://github.com/mirrorz-org/oh-my-mirrorz
  */
 MirrorSite_t MirrorZ =
 {
@@ -41,7 +41,7 @@ Tuna =
 },
 
 /**
- * @note 2025-3-17 SJTUG 共设两台服务器。思源服务器同步新镜像，致远服务器兼容原 SJTU 镜像站。
+ * @note 2025-03-17 SJTUG 共设两台服务器。思源服务器同步新镜像，致远服务器兼容原 SJTU 镜像站。
  * @note 有些target（例如flathub）思源站的兼容性不好，可以考虑将两个服务器分开测试
  */
 
@@ -59,18 +59,25 @@ Sjtug_Siyuan =
   {NotSkip, NA, NA, "https://mirror.sjtu.edu.cn/ctan" Big_File_ctan, ROUGH}
 },
 
+Bfsu =
+{
+  IS_GeneralMirrorSite,
+  "bfsu", "BFSU", "北京外国语大学开源软件镜像站", "https://mirrors.bfsu.edu.cn/",
+  {NotSkip, NA, NA, "https://mirrors.bfsu.edu.cn/speedtest/1000mb.bin", ROUGH}
+},
+
+Ustc =
+{
+  IS_GeneralMirrorSite,
+  "ustc", "USTC", "中国科学技术大学开源软件镜像", "https://mirrors.ustc.edu.cn/",
+  {NotSkip, NA, NA, "https://mirrors.ustc.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
+},
+
 Zju =
 {
   IS_GeneralMirrorSite,
   "zju", "ZJU", "浙江大学开源软件镜像站", "https://mirrors.zju.edu.cn/",
   {NotSkip, NA, NA, "https://mirrors.zju.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
-},
-
-Lzuoss =
-{
-  IS_GeneralMirrorSite,
-  "lzu", "LZUOSS", "兰州大学开源社区镜像站", "https://mirror.lzu.edu.cn/",
-  {NotSkip, NA, NA, "https://mirror.lzu.edu.cn/CTAN" Big_File_ctan, ROUGH}
 },
 
 Jlu =
@@ -80,11 +87,11 @@ Jlu =
   {NotSkip, NA, NA, "https://mirrors.jlu.edu.cn/_static/speedtest.bin", ROUGH}
 },
 
-Bfsu =
+Lzuoss =
 {
   IS_GeneralMirrorSite,
-  "bfsu", "BFSU", "北京外国语大学开源软件镜像站", "https://mirrors.bfsu.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.bfsu.edu.cn/speedtest/1000mb.bin", ROUGH}
+  "lzu", "LZUOSS", "兰州大学开源社区镜像站", "https://mirror.lzu.edu.cn/",
+  {NotSkip, NA, NA, "https://mirror.lzu.edu.cn/CTAN" Big_File_ctan, ROUGH}
 },
 
 Pku =
@@ -108,11 +115,11 @@ Sustech =
   {NotSkip, NA, NA, "https://mirrors.sustech.edu.cn/site/speedtest/1000mb.bin", ROUGH}
 },
 
-Ustc =
+Nju =
 {
   IS_GeneralMirrorSite,
-  "ustc", "USTC", "中国科学技术大学开源镜像站", "https://mirrors.ustc.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.ustc.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
+  "nju", "NJU", "南京大学开源镜像站", "https://mirrors.nju.edu.cn/",
+  {NotSkip, NA, NA, "https://mirrors.nju.edu.cn/archlinux" Big_File_archlinux, ROUGH}
 },
 
 Xjtu =
@@ -129,13 +136,18 @@ Hust =
   {NotSkip, NA, NA, "https://mirrors.hust.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
-// 速度暂时处于10位以后或者无测速报告，但是目前可用的源
-
 Iscas =
 {
   IS_GeneralMirrorSite,
   "iscas", "ISCAS", "中科院软件所智能软件研究中心开源镜像站", "https://mirror.iscas.ac.cn/",
   {NotSkip, NA, NA, "https://mirror.iscas.ac.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
+},
+
+Hit =
+{
+  IS_GeneralMirrorSite,
+  "hit", "HIT", "哈尔滨工业大学开源软件镜像站", "https://mirrors.hit.edu.cn/",
+  {NotSkip, NA, NA, "https://mirrors.hit.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
 Scau =
@@ -166,18 +178,18 @@ Sdu =
   {NotSkip, NA, NA, "https://mirrors.sdu.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
+Qlu =
+{
+  IS_GeneralMirrorSite,
+  "qlu", "QLU", "齐鲁工业大学开源镜像站", "https://mirrors.qlu.edu.cn/",
+  {NotSkip, NA, NA, "https://mirrors.qlu.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
+},
+
 Cqupt =
 {
   IS_GeneralMirrorSite,
   "cqupt", "CQUPT", "重庆邮电大学开源镜像站", "https://mirrors.cqupt.edu.cn/",
   {NotSkip, NA, NA, "https://mirrors.cqupt.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
-},
-
-Nju =
-{
-  IS_GeneralMirrorSite,
-  "nju", "NJU", "南京大学开源镜像站", "https://mirrors.nju.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.nju.edu.cn/archlinux" Big_File_archlinux, ROUGH}
 },
 
 /**
@@ -188,7 +200,16 @@ Cqu =
   IS_GeneralMirrorSite,
   "cqu", "CQU", "重庆大学开源软件镜像站", "https://mirrors.cqu.edu.cn/",
   {NotSkip, NA, NA, "https://mirrors.cqu.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
+},
+
+Neosoft =
+{
+  IS_GeneralMirrorSite,
+  "neosoft", "Neosoft", "大连东软信息学院开源镜像站", "https://mirrors.neusoft.edu.cn/",
+  {NotSkip, NA, NA, "https://mirrors.neusoft.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 };
+
+
 
 /**
  * 商业公司提供的源
