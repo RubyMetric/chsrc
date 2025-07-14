@@ -5,7 +5,7 @@
  * Contributors  : Yangmoooo <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-09-24>
- * Last Modified : <2024-12-18>
+ * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t os_voidlinux_upstream =
@@ -19,10 +19,10 @@ static SourceProvider_t os_voidlinux_upstream =
  */
 static Source_t os_voidlinux_sources[] =
 {
-  {&os_voidlinux_upstream, "https://repo-default.voidlinux.org"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/voidlinux"},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/voidlinux"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/voidlinux"}
+  {&os_voidlinux_upstream, "https://repo-default.voidlinux.org",        DelegateToUpstream},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/voidlinux", DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/voidlinux",           DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/voidlinux",          DelegateToMirror}
 };
 def_sources_n(os_voidlinux);
 
@@ -58,10 +58,35 @@ os_voidlinux_setsrc (char *option)
             );
 
   chsrc_note2 ("若报错可尝试使用以下命令:");
-  p(cmd);
+  p (cmd);
 
   chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);
 }
 
-def_target(os_voidlinux);
+
+void
+os_voidlinux_resetsrc (char *option)
+{
+  os_voidlinux_setsrc (option);
+}
+
+
+Feature_t
+os_voidlinux_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = true;
+  f.can_reset = true;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NULL;
+  f.can_english = false;
+  f.can_user_define = true;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_gsrf(os_voidlinux);
