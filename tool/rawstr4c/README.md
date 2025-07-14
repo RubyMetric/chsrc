@@ -7,7 +7,7 @@
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2025-07-12>
- ! Last Modified : <2025-07-13>
+ ! Last Modified : <2025-07-14>
  ! ---------------------------------------------------------- -->
 
 # rawstr4c
@@ -73,7 +73,7 @@ just rawstr4c ./src/recipe/ware
 
 - name =
 
-  生成的变量名，默认将会包含前缀和后缀
+  生成的变量名，默认将会包含前缀和后缀。如果没有给该配置项，将会使用该节标题
 
 - name-literally = `false` | `true`
 
