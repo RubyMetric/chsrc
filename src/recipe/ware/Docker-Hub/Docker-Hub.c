@@ -13,7 +13,7 @@ static MirrorSite_t DaoCloud =
 {
   IS_DedicatedMirrorSite,
   "daocloud", "DaoCloud","上海道客网络科技有限公司", "https://www.daocloud.io/",
-  // 没有找到 DaoCloud 合适的下载链接，先随便给一个，以规避 chsrc 自动测速时所有 dockerhub 镜像站都没有测速链接带来的 bug
+  // 没有找到 DaoCloud 合适的下载链接，先随便给一个，以规避 chsrc 自动测速时所有 Docker Hub 镜像站都没有测速链接带来的 Bug
   {NotSkip, NA, NA, "https://qiniu-download-public.daocloud.io/DaoCloud_Enterprise/dce5/offline-community-v0.18.0-amd64.tar", ACCURATE}
 },
 
@@ -29,7 +29,6 @@ Fit2Cloud =
  *
  * @consult https://gist.github.com/y0ngb1n/7e8f16af3242c7815e7ca2f0833d3ea6
  */
-
 static Source_t wr_dockerhub_sources[] =
 {
   {&UpstreamProvider,  NULL, NULL},
@@ -53,8 +52,8 @@ wr_dockerhub_getsrc (char *option)
     }
   else
     {
-      chsrc_note2 ("请打开Docker Desktop设置");
-      chsrc_note2 ("选择“Docker Engine”选项卡，在该选项卡中找到“registry-mirrors”一栏查看");
+      chsrc_note2 ("请打开 Docker Desktop 设置");
+      chsrc_note2 ("选择 'Docker Engine' 选项卡，在该选项卡中找到 'registry-mirrors' 一栏查看");
     }
 }
 
