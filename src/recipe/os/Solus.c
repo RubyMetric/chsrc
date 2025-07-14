@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-29>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
 /**
@@ -12,10 +12,10 @@
  */
 static Source_t os_solus_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"},
-  {&Nju,              "https://mirror.nju.edu.cn/solus/packages/shannon/eopkg-index.xml.xz"}
+  {&UpstreamProvider,  NULL, NULL},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/solus/packages/shannon/eopkg-index.xml.xz", DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/solus/packages/shannon/eopkg-index.xml.xz",          DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn/solus/packages/shannon/eopkg-index.xml.xz",            DelegateToMirror}
 };
 def_sources_n(os_solus);
 
@@ -37,4 +37,22 @@ os_solus_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target_s(os_solus);
+
+Feature_t
+os_solus_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = false;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NULL;
+  f.can_english = false;
+  f.can_user_define = true;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_sf(os_solus);
