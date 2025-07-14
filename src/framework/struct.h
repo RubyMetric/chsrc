@@ -18,7 +18,7 @@ typedef struct ProviderSpeedMeasureInfo_t
   char *skip_reason_CN; /* 跳过的原因（中文）*/
   char *skip_reason_EN; /* 跳过的原因（英文）*/
   char *url;            /* 测速链接 */
-  bool  accurate;       /* 是否为精准测速，上游源和专用镜像站为true，通用镜像站为false*/
+  bool  accurate;       /* 是否为精准测速，上游源和专用镜像站为 ACCURATE，通用镜像站为 ROUGH */
 }
 ProviderSpeedMeasureInfo_t;
 

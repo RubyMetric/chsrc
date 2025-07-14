@@ -30,7 +30,7 @@ MirrorSite_t MirrorZ =
 {
   IS_GeneralMirrorSite,
   "mirrorz", "MirrorZ",  "校园网联合镜像站(MirrorZ)", "https://mirrors.cernet.edu.cn/",
-  {SKIP, "功能特殊无法测速，跳过", "SKIP because of its special function", NULL, ROUGH}
+  {NotSkip,  NA, NA, "https://mirrors.cernet.edu.cn/ubuntu/dists/noble/Contents-amd64.gz", ROUGH}
 },
 
 Tuna =
