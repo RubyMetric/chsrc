@@ -80,7 +80,7 @@ os_ubuntu_getsrc (char *option)
     }
 
   char *msg = ENGLISH ? "Source list file missing! However, you can still run `chsrc set ubuntu` to add and use new sources"
-                               : "缺少源配置文件！但仍可直接通过 chsrc set ubuntu 来添加使用新的源";
+                      : "缺少源配置文件！但仍可直接通过 chsrc set ubuntu 来添加使用新的源";
   chsrc_error2 (msg);
   return;
 }
@@ -125,7 +125,7 @@ os_ubuntu_setsrc (char *option)
   if (chsrc_check_file (OS_Ubuntu_SourceList_DEB822))
     {
       char *msg = ENGLISH ? "Will change source based on new format"
-                                   : "将基于新格式(DEB822)换源";
+                          : "将基于新格式(DEB822)换源";
       chsrc_note2 (msg);
       os_ubuntu_setsrc_for_deb822 (option);
       return;

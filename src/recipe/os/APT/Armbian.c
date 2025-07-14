@@ -6,7 +6,7 @@
  *               |  Yangmoooo <yangmoooo@outlook.com>
  *               |
  * Created On    : <2024-06-14>
- * Last Modified : <2024-11-21>
+ * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
 /**
@@ -14,17 +14,18 @@
  */
 static Source_t os_armbian_sources[] =
 {
-  {&UpstreamProvider, "http://apt.armbian.com"},
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/armbian"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/armbian"},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/armbian"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/armbian"},
-  {&Sustech,          "https://mirrors.sustech.edu.cn/armbian"},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/armbian"},
-  {&Nju,              "https://mirrors.nju.edu.cn/armbian"},
-  {&Ali,              "https://mirrors.aliyun.com/armbian"},
+  {&UpstreamProvider, "http://apt.armbian.com", NULL},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/armbian",        DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/armbian", DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/armbian",            DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/armbian",           DelegateToMirror},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/armbian",        DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/armbian",           DelegateToMirror},
+  {&Nju,              "https://mirrors.nju.edu.cn/armbian",             DelegateToMirror},
+  {&Ali,              "https://mirrors.aliyun.com/armbian",             DelegateToMirror},
 };
 def_sources_n(os_armbian);
+
 
 void
 os_armbian_getsrc (char *option)
@@ -36,9 +37,10 @@ os_armbian_getsrc (char *option)
     }
 
   char *msg = ENGLISH ? "Source list config file missing! Path: " OS_Armbian_SourceList
-                               : "缺少源配置文件！路径：" OS_Armbian_SourceList;
+                      : "缺少源配置文件！路径：" OS_Armbian_SourceList;
   chsrc_error2 (msg);
 }
+
 
 /**
  * @consult https://mirrors.tuna.tsinghua.edu.cn/help/armbian
@@ -63,13 +65,20 @@ os_armbian_setsrc (char *option)
 }
 
 
+void
+os_armbian_resetsrc (char *option)
+{
+  os_armbian_setsrc (option);
+}
+
+
 Feature_t
 os_armbian_feat (char *option)
 {
   Feature_t f = {0};
 
   f.can_get = true;
-  f.can_reset = false;
+  f.can_reset = true;
 
   f.cap_locally = CanNot;
   f.can_english = true;
@@ -78,4 +87,4 @@ os_armbian_feat (char *option)
   return f;
 }
 
-def_target_gsf(os_armbian);
+def_target_gsrf(os_armbian);
