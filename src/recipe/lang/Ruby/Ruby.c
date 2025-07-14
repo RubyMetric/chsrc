@@ -5,7 +5,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-07-11>
+ * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t pl_ruby_upstream =
@@ -23,24 +23,20 @@ static MirrorSite_t RubyChina =
 
 /**
  * @update 2024-12-18
- * @sync https://github.com/RubyMetric/chsrc/wiki/Ruby-MirrorSite
- * @sync https://github.com/RubyMetric/chsrc/discussions/62
- *
- * @note 曾经的问题 https://ruby-china.org/topics/43331
  */
 static Source_t pl_ruby_sources[] =
 {
-  {&pl_ruby_upstream, "https://rubygems.org"},
-  {&RubyChina,    "https://gems.ruby-china.com/"},
-  {&Ustc,         "https://mirrors.ustc.edu.cn/rubygems/"}
+  {&pl_ruby_upstream, "https://rubygems.org",         NULL},
+  {&RubyChina,        "https://gems.ruby-china.com/", NULL},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/rubygems/", NULL}
 
-  // {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/"},
-  // {&Bfsu,      "https://mirrors.bfsu.edu.cn/rubygems/"},
+  // {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/", NULL},
+  // {&Bfsu,      "https://mirrors.bfsu.edu.cn/rubygems/",          NULL},
 
-  // {&Tencent,   "https://mirrors.tencent.com/rubygems/"},
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/rubygems/"},
-  // {&Ali,       "https://mirrors.aliyun.com/rubygems/"},
-  // {&Huawei,    "https://mirrors.huaweicloud.com/repository/rubygems/"},
+  // {&Tencent,   "https://mirrors.tencent.com/rubygems/",          NULL},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/rubygems/",   NULL},
+  // {&Ali,       "https://mirrors.aliyun.com/rubygems/",            NULL},
+  // {&Huawei,    "https://mirrors.huaweicloud.com/repository/rubygems/", NULL},
 };
 def_sources_n(pl_ruby);
 

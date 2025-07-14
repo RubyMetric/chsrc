@@ -36,14 +36,14 @@
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.1.4-dev1"
+#define Chsrc_Version        "0.2.1.5-dev1"
 #define Chsrc_Release_Date   "2025/07/12"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
 #include "framework/core.c"
 
-#include "recipe/lang/Ruby.c"
+#include "recipe/lang/Ruby/Ruby.c"
 
 #include "recipe/lang/Python/common.h"
   #include "recipe/lang/Python/pip.c"
