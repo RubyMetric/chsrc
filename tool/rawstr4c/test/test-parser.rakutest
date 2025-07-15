@@ -11,8 +11,8 @@
 use lib '../lib';
 use Parser;
 
-my $test-file1 = './fixture/test-hierarchy-with-root.md'.IO;
-my $test-file2 = './fixture/test-hierarchy-without-root.md'.IO;
+my $test-file1 = './fixture/test-hierarchy-with-root.md';
+my $test-file2 = './fixture/test-hierarchy-without-root.md';
 my $parser1 = Parser::Parser.new($test-file1);
 my $parser2 = Parser::Parser.new($test-file2);
 

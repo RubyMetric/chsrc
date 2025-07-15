@@ -157,12 +157,26 @@ my class Section {
   - ...
 )
 class Parser {
-  has IO::Path $.input-file is rw;
+  has Str $.input-file is rw;
   #| 所有sections的扁平数组，已经是深度遍历的了
   has Section @!sections;
 
-  method new($input-file) {
-    self.bless(:$input-file);
+  #| $path 可能是文件，也可能是目录
+  method new($path) {
+    my $markdown-file;
+
+    if $path.IO.d {
+      $markdown-file = $path.IO.add("rawstr4c.md");
+      unless $markdown-file.e {
+        die "Error: No 'rawstr4c.md' file found in directory '$path'\n";
+      }
+    }
+    elsif $path.IO.f {
+      $markdown-file = $path.IO;
+    } else {
+      die "Error: '$path' is neither a file nor a directory\n";
+    }
+    self.bless(:input-file($markdown-file.Str));
   }
 
   # 获取根section（level 0）
@@ -184,7 +198,7 @@ class Parser {
 
 
   method parse() {
-    my $content = $.input-file.slurp;
+    my $content = $.input-file.IO.slurp;
     my @lines = $content.lines;
 
     my $current-section;
