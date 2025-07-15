@@ -1,8 +1,8 @@
-- global-prefix = `GLOBAL_`
-- global-output = `:terminal`
+- root-prefix = `GLOBAL_`
+- root-output = `:terminal`
 
 ```c
-int global_code_block = 1;
+int root_code_block = 1;
 ```
 
 some comments

@@ -11,8 +11,8 @@
 use lib '../lib';
 use Parser;
 
-my $test-file1 = './fixture/test-hierarchy-with-global.md'.IO;
-my $test-file2 = './fixture/test-hierarchy-without-global.md'.IO;
+my $test-file1 = './fixture/test-hierarchy-with-root.md'.IO;
+my $test-file2 = './fixture/test-hierarchy-without-root.md'.IO;
 my $parser1 = Parser::Parser.new($test-file1);
 my $parser2 = Parser::Parser.new($test-file2);
 
@@ -24,9 +24,9 @@ sub print-sections-flatly($parser)
 {
   say "====== sections ======";
   for $parser.sections.kv -> $i, $section {
-    my $title = $section.title || "(Global)";
+    my $title = $section.title || "(Root)";
     my $has-config = $section.config.keys ?? "有配置" !! "无配置";
-    my $has-code = $section.raw-string ?? "有代码" !! "无代码";
+    my $has-code = $section.codeblock ?? "有代码" !! "无代码";
     say "  [$i] Level {$section.level}: $title - $has-config, $has-code";
   }
 }
@@ -40,7 +40,7 @@ sub print-sections-hierarchyly($parser) {
 
   sub format-section($section, $level) {
     my $prefix = '  ' x $level;
-    my $title = $section.title // '(Global)';
+    my $title = $section.title // '(Root)';
     return "{$prefix}- {$title} (level {$section.level})";
   }
 
@@ -54,9 +54,8 @@ sub print-sections-hierarchyly($parser) {
     }
   }
 
-  # 从parser的global section开始打印
-  my $global = $parser.global-section();
-  print-section-tree($global, $indent);
+  my $root = $parser.root-section();
+  print-section-tree($root, $indent);
 }
 
 
