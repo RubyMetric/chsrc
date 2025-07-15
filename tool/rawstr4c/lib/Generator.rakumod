@@ -5,9 +5,9 @@
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
 # Contributors  :  Nul None  <nul@none.org>
 # Created On    : <2025-07-12>
-# Last Modified : <2025-07-14>
+# Last Modified : <2025-07-16>
 #
-# Generates C code from raw string
+# Generates C code from rawstr4c configuration
 # ---------------------------------------------------------------
 
 unit module Generator;
@@ -55,7 +55,7 @@ my class CStringConverter {
 
 my class CVariableNameGenerator {
 
-  method generate($global-config, $section-config, $title) {
+  method generate($root-config, $section-config, $title) {
 
     # 检查 name-literally
     my $name-literally = $section-config.get('name-literally');
@@ -63,21 +63,21 @@ my class CVariableNameGenerator {
       return $section-config.get('name', $title.lc).as-string();
     }
 
-    # 优先从 section-config 获取配置，如果没有则从 global-config 获取
+    # 优先从 section-config 获取配置，如果没有则从 root-config 获取
     my $prefix = $section-config.exist('prefix') ??
                  $section-config.get('prefix').as-string() !!
-                 $global-config.get('prefix', '_rawstr4c').as-string();
+                 $root-config.get('prefix', '_rawstr4c').as-string();
 
     my $language = $section-config.get('language').as-string();
-    my $postfix = self.resolve-postfix($global-config, $section-config, $language);
+    my $postfix = self.resolve-postfix($root-config, $section-config, $language);
 
     my $keep-prefix = $section-config.exist('keep-prefix') ??
                       $section-config.get('keep-prefix').as-bool() !!
-                      $global-config.get('keep-prefix', 'true').as-bool();
+                      $root-config.get('keep-prefix', 'true').as-bool();
 
     my $keep-postfix = $section-config.exist('keep-postfix') ??
                        $section-config.get('keep-postfix').as-bool() !!
-                       $global-config.get('keep-postfix', 'true').as-bool();
+                       $root-config.get('keep-postfix', 'true').as-bool();
 
     my $name = $section-config.get('name', $title.lc).as-string();
     # 替换非法字符
@@ -98,11 +98,11 @@ my class CVariableNameGenerator {
     return $varname || "unnamed_var";
   }
 
-  method resolve-postfix($global-config, $section-config, $language) {
+  method resolve-postfix($root-config, $section-config, $language) {
     # 优先从 section-config 获取 postfix
     my $postfix = $section-config.exist('postfix') ??
                   $section-config.get('postfix') !!
-                  $global-config.get('postfix');
+                  $root-config.get('postfix');
 
     if $postfix.is-mode() && $postfix.as-mode() eq 'use-language' {
       return $language ?? 'in_' ~ $language !! '';
@@ -222,35 +222,35 @@ class Generator {
     );
   }
 
-  method get-config-value($global-config, $section-config, $key, $default = '') {
-    # 优先级：section-config > global-config > default
+  method get-config-value($root-config, $section-config, $key, $default = '') {
+    # 优先级：section-config > root-config > default
     if $section-config && $section-config.exist($key) {
       return $section-config.get($key);
     }
-    elsif $global-config && $global-config.exist($key) {
-      return $global-config.get($key);
+    elsif $root-config && $root-config.exist($key) {
+      return $root-config.get($key);
     }
     else {
-      return $global-config.get($key, $default);
+      return $root-config.get($key, $default);
     }
   }
 
 
-  method generate-for-section($global-config, $section) {
-    my $section-config = $section<config>;
-    my $title = $section<title>;
-    my $code = $section<raw-string>;
-    my $debug-parser = $global-config.get('debug', False).as-bool();
+  method generate-for-section($root-config, $section) {
+    my $section-config = $section.config;
+    my $title = $section.title;
+    my $code = $section.codeblock;
+    my $debug-parser = $root-config.get('debug', False).as-bool();
 
     return unless $code;
 
     my $translate-mode = self.get-config-value(
-      $global-config, $section-config, 'translate', ':escape'
+      $root-config, $section-config, 'translate', ':escape'
     ).as-mode();
 
-    my $varname = $.varname-generator.generate($global-config, $section-config, $title);
+    my $varname = $.varname-generator.generate($root-config, $section-config, $title);
 
-    my $output-mode = $global-config.get('output', ':terminal').as-mode();
+    my $output-mode = $root-config.get('output', ':terminal').as-mode();
 
     if $debug-parser {
       say "--- Section: $title ---";
@@ -259,9 +259,9 @@ class Generator {
       say "Output mode = $output-mode";
 
       my $language = $section-config.get('language', 'None').as-string();
-      my $prefix = self.get-config-value($global-config, $section-config, 'prefix', '_rawstr4c').as-string();
+      my $prefix = self.get-config-value($root-config, $section-config, 'prefix', '_rawstr4c').as-string();
       say "Language = $language";
-      say "Prefix = $prefix (from " ~ ($section-config.exist('prefix') ?? 'section' !! 'global') ~ ")";
+      say "Prefix = $prefix (from " ~ ($section-config.exist('prefix') ?? 'section' !! 'root') ~ ")";
       say '';
     }
 
@@ -287,18 +287,22 @@ class Generator {
 
   method generate() {
 
-    my $global-config = $.parser.global-config;
+    my $root-section = $.parser.root-section;
+    my $root-config = $root-section.config;
+
+    # 获取所有需要处理的 sections：包括 root section 和所有子 sections
+    my @all-sections = ($root-section, |$root-section.get-all-descendants());
 
     # 这个 generate-for-section() 要么把变量输出到终端，要么累计到 @variabels 中
-    for $.parser.sections -> $section {
-      self.generate-for-section($global-config, $section);
+    for @all-sections -> $section {
+      self.generate-for-section($root-config, $section);
     }
 
-    my $output-mode = $global-config.get('output', ':terminal').as-mode();
+    my $output-mode = $root-config.get('output', ':terminal').as-mode();
 
     # 最后把累计到 @variables 的内容输出到文件
     if $output-mode ne 'terminal' {
-      my $dest-dir = $.parser.input-file.dirname.Str;
+      my $dest-dir = $.parser.input-file.IO.dirname.Str;
       $.variable-generator.save-files($output-mode, $dest-dir);
     }
   }
