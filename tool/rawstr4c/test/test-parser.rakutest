@@ -5,57 +5,68 @@
 # Test File     : test-parser.rakutest
 # Test Authors  : Aoran Zeng <ccmywish@qq.com>
 # Created On    : <2025-07-15>
-# Last Modified : <2025-07-15>
+# Last Modified : <2025-07-16>
 # ---------------------------------------------------------------
 
 use lib '../lib';
 use Parser;
 
-sub MAIN() {
-  my $test-file = './fixture/test-hierarchy.md'.IO;
-  unless $test-file.e {
-    die "测试文件 test-hierarchy.md 不存在！";
-  }
+my $test-file1 = './fixture/test-hierarchy-with-global.md'.IO;
+my $test-file2 = './fixture/test-hierarchy-without-global.md'.IO;
+my $parser1 = Parser::Parser.new($test-file1);
+my $parser2 = Parser::Parser.new($test-file2);
 
-  my $parser = Parser::Parser.new($test-file);
-  $parser.parse;
+$parser1.parse();
+$parser2.parse();
 
-  say "====== 全局配置 ======";
-  for $parser.global-config.keys.sort -> $key {
-    my $value = $parser.global-config.get($key);
-    say "$key = {$value.as-string} (type: {$value.type})";
-  }
-  say "";
 
-  say "====== Section TOC ======";
-  print-sections-hierarchy($parser.root-sections, 0);
-  say "";
-
-  say "====== 扁平化 Section 列表 ======";
-  my @flat-sections = $parser.sections;
-  say "总共 {+@flat-sections} 个 sections:";
-  for @flat-sections -> $section {
-    my $hier-path = $section.get-hierarchical-path;
-    my $has-code = $section.raw-string ?? True !! False;
-    say "  - {$section.title}";
-    say "    层级: {$section.level}) $hier-path";
-    say "    代码块: $has-code";
-
-    # 显示section的配置
-    if $section.config.keys {
-      say "    配置: " ~ $section.config.keys.join(", ");
-    }
-    say "";
+sub print-sections-flatly($parser)
+{
+  say "====== sections ======";
+  for $parser.sections.kv -> $i, $section {
+    my $title = $section.title || "(Global)";
+    my $has-config = $section.config.keys ?? "有配置" !! "无配置";
+    my $has-code = $section.raw-string ?? "有代码" !! "无代码";
+    say "  [$i] Level {$section.level}: $title - $has-config, $has-code";
   }
 }
 
-sub print-sections-hierarchy(@sections, $indent-level) {
-  my $indent = "  " x $indent-level;
-  for @sections -> $section {
-    say "$indent- {$section.title}";
-    # 深度遍历
+
+sub print-sections-hierarchyly($parser) {
+
+  say "====== hierarchy ======";
+
+  my $indent = 0;
+
+  sub format-section($section, $level) {
+    my $prefix = '  ' x $level;
+    my $title = $section.title // '(Global)';
+    return "{$prefix}- {$title} (level {$section.level})";
+  }
+
+  sub print-section-tree($section, $level) {
+    say format-section($section, $level);
+
     if $section.has-children {
-      print-sections-hierarchy($section.children, $indent-level + 1);
+      for $section.children -> $child {
+        print-section-tree($child, $level + 1);
+      }
     }
   }
+
+  # 从parser的global section开始打印
+  my $global = $parser.global-section();
+  print-section-tree($global, $indent);
 }
+
+
+sub print-parser-summary($parser) {
+  print-sections-flatly($parser);
+  print-sections-hierarchyly($parser);
+}
+
+
+# 测试两个文件
+print-parser-summary($parser1);
+say "\n\n";
+print-parser-summary($parser2);
