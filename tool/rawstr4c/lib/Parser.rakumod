@@ -161,22 +161,9 @@ class Parser {
   #| 所有sections的扁平数组，已经是深度遍历的了
   has Section @!sections;
 
-  #| $path 可能是文件，也可能是目录
-  method new($path) {
-    my $markdown-file;
-
-    if $path.IO.d {
-      $markdown-file = $path.IO.add("rawstr4c.md");
-      unless $markdown-file.e {
-        die "Error: No 'rawstr4c.md' file found in directory '$path'\n";
-      }
-    }
-    elsif $path.IO.f {
-      $markdown-file = $path.IO;
-    } else {
-      die "Error: '$path' is neither a file nor a directory\n";
-    }
-    self.bless(:input-file($markdown-file.Str));
+  #| $markdown-file 必须是一个存在的 markdown 文件路径
+  method new($markdown-file) {
+    self.bless(:input-file($markdown-file));
   }
 
   # 获取根section（level 0）
