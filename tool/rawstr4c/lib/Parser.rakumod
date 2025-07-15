@@ -159,17 +159,15 @@ my class Section {
 class Parser {
   has IO::Path $.input-file is rw;
   #| 所有sections的扁平数组，已经是深度遍历的了
-  has Section @.sections;
+  has Section @!sections;
 
   method new($input-file) {
-    self.bless(
-      :$input-file,
-    );
+    self.bless(:$input-file);
   }
 
   # 获取根section（level 0）
   method root-section() {
-    return @.sections.first({ $_.level == 0 });
+    return @!sections.first({ $_.level == 0 });
   }
 
   # 配置项所在行 -> 解析为配置项
@@ -199,7 +197,7 @@ class Parser {
     # 都创建一个 root section (level 0)
     my $root-config = Config.new();
     $current-section = Section.new("", 0, $root-config);
-    @.sections.push: $current-section;
+    @!sections.push: $current-section;
 
     # 开始遍历
     my $line-count = 0;
@@ -217,7 +215,7 @@ class Parser {
         # 准备创建一个新的 section
         $rawstr = "";
         my $new-section = Section.new($title, $level, Config.new());
-        @.sections.push: $new-section;
+        @!sections.push: $new-section;
 
         # 找到合适的父节点
         my $parent = self.find-parent-section($level);
@@ -262,12 +260,59 @@ class Parser {
   }
 
   method find-parent-section($new-level) {
-    # 从@.sections尾部向前找，找到第一个level小于new-level的section作为父节点
-    for @.sections.reverse -> $section {
+    # 从@!sections尾部向前找，找到第一个level小于new-level的section作为父节点
+    for @!sections.reverse -> $section {
       if $section.level < $new-level {
         return $section;
       }
     }
     return Nil;  # 没有找到父节点，说明是 root section
+  }
+
+
+
+  # 调试方法：扁平打印所有sections
+  method debug-print-sections-flatly() {
+    say "====== sections ======";
+    for @!sections.kv -> $i, $section {
+      my $title = $section.title || "(Root)";
+      my $has-config = $section.config.keys ?? "有配置" !! "无配置";
+      my $has-code = $section.codeblock ?? "有代码" !! "无代码";
+      say "  [$i] Level {$section.level}: $title - $has-config, $has-code";
+    }
+  }
+
+  # 调试方法：层级打印sections
+  method debug-print-sections-hierarchyly() {
+    say "====== hierarchy ======";
+
+    my $indent = 0;
+
+    # 嵌套的格式化函数
+    my sub format-section($section, $level) {
+      my $prefix = '  ' x $level;
+      my $title = $section.title // '(Root)';
+      return "{$prefix}- {$title} (level {$section.level})";
+    }
+
+    # 嵌套的递归打印函数
+    my sub print-section-tree($section, $level) {
+      say format-section($section, $level);
+
+      if $section.has-children {
+        for $section.children -> $child {
+          print-section-tree($child, $level + 1);
+        }
+      }
+    }
+
+    my $root = self.root-section();
+    print-section-tree($root, $indent);
+  }
+
+  # 调试方法：完整的调试信息打印
+  method debug-print-summary() {
+    self.debug-print-sections-flatly();
+    self.debug-print-sections-hierarchyly();
   }
 }

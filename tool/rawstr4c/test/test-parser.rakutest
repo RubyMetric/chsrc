@@ -19,53 +19,7 @@ my $parser2 = Parser::Parser.new($test-file2);
 $parser1.parse();
 $parser2.parse();
 
-
-sub print-sections-flatly($parser)
-{
-  say "====== sections ======";
-  for $parser.sections.kv -> $i, $section {
-    my $title = $section.title || "(Root)";
-    my $has-config = $section.config.keys ?? "有配置" !! "无配置";
-    my $has-code = $section.codeblock ?? "有代码" !! "无代码";
-    say "  [$i] Level {$section.level}: $title - $has-config, $has-code";
-  }
-}
-
-
-sub print-sections-hierarchyly($parser) {
-
-  say "====== hierarchy ======";
-
-  my $indent = 0;
-
-  sub format-section($section, $level) {
-    my $prefix = '  ' x $level;
-    my $title = $section.title // '(Root)';
-    return "{$prefix}- {$title} (level {$section.level})";
-  }
-
-  sub print-section-tree($section, $level) {
-    say format-section($section, $level);
-
-    if $section.has-children {
-      for $section.children -> $child {
-        print-section-tree($child, $level + 1);
-      }
-    }
-  }
-
-  my $root = $parser.root-section();
-  print-section-tree($root, $indent);
-}
-
-
-sub print-parser-summary($parser) {
-  print-sections-flatly($parser);
-  print-sections-hierarchyly($parser);
-}
-
-
 # 测试两个文件
-print-parser-summary($parser1);
-say "\n\n";
-print-parser-summary($parser2);
+$parser1.debug-print-summary();
+say "";
+$parser2.debug-print-summary();
