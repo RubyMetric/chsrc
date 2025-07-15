@@ -5,7 +5,7 @@
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
 # Contributors  :  Nul None  <nul@none.org>
 # Created On    : <2025-07-12>
-# Last Modified : <2025-07-14>
+# Last Modified : <2025-07-15>
 #
 # rawstr4c.md parsing
 # ---------------------------------------------------------------
@@ -18,8 +18,8 @@ my enum ConfigValueType <String Mode Boolean>;
 #| 配置项的值
 my class ConfigValue {
   has ConfigValueType $.type;
-  has $.raw-value;
-  has $.parsed-value;
+  has Str             $.raw-value;
+  has Any             $.parsed-value;
 
   method new($raw-text) {
     my $type;
@@ -108,20 +108,20 @@ my class Config {
 我们要求，在 Global dom 里，只存在配置，不存在 code block. 而 code block 只能在 Section dom 中存在。
 
 因此，Parser 解析完毕后将包含:
-  - IO::Path  $input-file
-  - Hash      $global-config
-  - @sections is Array[Hash] (多个 $section)
+  - input-file
+  - global-config
+  - sections (多个 section)
 
-一个 $section 是 Hash，其包含:
+一个 section 是 Hash，其包含:
   - title
   - level
   - raw-string
   - config
 )
 class Parser {
-  has $.input-file is rw;
-  has $.global-config;
-  has @.sections;
+  has IO::Path $.input-file is rw;
+  has Config   $.global-config;
+  has Hash     @.sections;
 
   method new($input-file) {
     self.bless(

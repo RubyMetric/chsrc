@@ -88,14 +88,14 @@ my class CVariableNameGenerator {
     $name = $name.subst(/_+$/, '');
 
     # 组装变量名
-    my $var-name = "";
-    $var-name ~= $prefix if $keep-prefix && $prefix;
-    $var-name ~= "_" if $var-name && $name;
-    $var-name ~= $name if $name;
-    $var-name ~= "_" if $var-name && $postfix && $keep-postfix;
-    $var-name ~= $postfix if $postfix && $keep-postfix;
+    my $varname = "";
+    $varname ~= $prefix if $keep-prefix && $prefix;
+    $varname ~= "_" if $varname && $name;
+    $varname ~= $name if $name;
+    $varname ~= "_" if $varname && $postfix && $keep-postfix;
+    $varname ~= $postfix if $postfix && $keep-postfix;
 
-    return $var-name || "unnamed_var";
+    return $varname || "unnamed_var";
   }
 
   method resolve-postfix($global-config, $section-config, $language) {
@@ -115,8 +115,8 @@ my class CVariableNameGenerator {
 
 #| 生成 .h 文件或/和 .c 文件，或存储到 @variables 中
 my class CVariableGenerator {
-  has @.variables;
-  has $.c-header-filename;
+  has Hash @.variables;
+  has Str  $.c-header-filename;
 
   method new() {
 
@@ -125,11 +125,12 @@ my class CVariableGenerator {
     self.bless(:$c-header-filename, :variables([]));
   }
 
-  method add-variable($name, $content, $type) {
+  #| C变量名，C变量值, 生成类型
+  method add-variable($name, $value, $kind) {
     @.variables.push: {
-      name => $name,
-      content => $content,
-      type => $type
+      name  => $name,
+      value => $value,
+      kind  => $kind
     };
   }
 
@@ -146,16 +147,16 @@ my class CVariableGenerator {
     EOF
 
     for @.variables -> $var {
-      given $var<type> {
+      given $var<kind> {
         when 'global-variable' {
           if $output-mode eq 'global-variable-only-header' {
-            $header ~= "char {$var<name>}[] = \"{$var<content>}\";\n\n";
+            $header ~= "char {$var<name>}[] = \"{$var<value>}\";\n\n";
           } else {
             $header ~= "extern char {$var<name>}[];\n";
           }
         }
         when 'macro' {
-          $header ~= "#define {$var<name>.uc} \"{$var<content>}\"\n\n";
+          $header ~= "#define {$var<name>.uc} \"{$var<value>}\"\n\n";
         }
       }
     }
@@ -176,8 +177,8 @@ my class CVariableGenerator {
     EOF
 
     for @.variables -> $var {
-      if $var<type> eq 'global-variable' {
-        $source ~= "char {$var<name>}[] = \"{$var<content>}\";\n";
+      if $var<kind> eq 'global-variable' {
+        $source ~= "char {$var<name>}[] = \"{$var<value>}\";\n";
       }
     }
 
@@ -193,7 +194,7 @@ my class CVariableGenerator {
     say "Generated C header file: $c-header-file";
 
     if $output-mode eq 'global-variable' {
-      my $has-globals = @.variables.grep({ $_<type> eq 'global-variable' }).elems > 0;
+      my $has-globals = @.variables.grep({ $_<kind> eq 'global-variable' }).elems > 0;
       if $has-globals {
         my $c-source-filename = $.c-header-filename.subst(/'.h'$/, '.c');
         my $c-source-file = $dest-dir.IO.child($c-source-filename).Str;
@@ -206,10 +207,11 @@ my class CVariableGenerator {
 
 
 class Generator {
-  has $.parser;
-  has $.cstring-converter;
-  has $.varname-generator;
-  has $.variable-generator;
+
+  has Parser::Parser         $.parser;
+  has CStringConverter       $.cstring-converter;
+  has CVariableNameGenerator $.varname-generator;
+  has CVariableGenerator     $.variable-generator;
 
   method new($parser) {
     self.bless(
@@ -246,13 +248,13 @@ class Generator {
       $global-config, $section-config, 'translate', ':escape'
     ).as-mode();
 
-    my $var-name = $.varname-generator.generate($global-config, $section-config, $title);
+    my $varname = $.varname-generator.generate($global-config, $section-config, $title);
 
     my $output-mode = $global-config.get('output', ':terminal').as-mode();
 
     if $debug-parser {
       say "--- Section: $title ---";
-      say "Variable name = $var-name";
+      say "Variable name = $varname";
       say "Translation mode = $translate-mode";
       say "Output mode = $output-mode";
 
@@ -267,14 +269,14 @@ class Generator {
 
     given $output-mode {
       when 'terminal' {
-        say 'char ' ~ $var-name ~ '[] = "' ~ $c-string ~ '";';
+        say 'char ' ~ $varname ~ '[] = "' ~ $c-string ~ '";';
         say "";
       }
       when 'global-variable' | 'global-variable-only-header' {
-        $.variable-generator.add-variable($var-name, $c-string, 'global-variable');
+        $.variable-generator.add-variable($varname, $c-string, 'global-variable');
       }
       when 'macro' {
-        $.variable-generator.add-variable($var-name, $c-string, 'macro');
+        $.variable-generator.add-variable($varname, $c-string, 'macro');
       }
       default {
         die "Illegal output mode: $output-mode";
