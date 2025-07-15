@@ -15,45 +15,48 @@
 #
 # ---------------------------------------------------------------
 
-use lib 'lib';
 use Parser;
 use Generator;
 
+sub USAGE() {
+  print q:to/END/;
+    Usage: rawstr4c <FILE.md|DIR> [--debug] [--help]
+
+    Arguments:
+      FILE.md    Process a specific markdown file
+      DIR        Process rawstr4c.md file in the given directory
+
+    Options:
+      --debug    Show debug information during processing
+      --help     Show this help message
+
+    Error: Unknown option or invalid arguments provided.
+    END
+  exit(1);
+}
+
 sub MAIN(
-  # 必须声明为可选，否则一直报奇怪的错
-  Str $input-path?,
+  # 一定要声明为必选，强制用户输入，未输入时直接进入 USAGE
+  Str $input-path,
   Bool :$debug = False,  #= --debug
-  Bool :$help            #= --help
+  Bool :$help            #= 命令行指定 --help 的时候强制进入 USAGE
 )
 {
-  if $help || !$input-path {
-    print q:to/END/;
-      Usage: rawstr4c <FILE.md|DIR> [--debug]
-
-      Arguments:
-        FILE.md    Process a specific markdown file
-        DIR        Process rawstr4c.md file in the given directory
-
-      Options:
-        --debug    Show debug information during processing
-        --help     Show this help message
-      END
-    # exit($help ?? 0 !! 1);
-    exit(0);
-  }
-
   my $markdown-file;
 
   if $input-path.IO.d {
     $markdown-file = $input-path.IO.add("rawstr4c.md");
     unless $markdown-file.e {
-      die "Error: No 'rawstr4c.md' file found in directory '$input-path'";
+      # 也可以 warn
+      note "Error: No 'rawstr4c.md' file found in directory '$input-path'";
+      exit(1);
     }
   }
   elsif $input-path.IO.f {
     $markdown-file = $input-path.IO;
   } else {
-    die "Error: '$input-path' is neither a file nor a directory";
+    note "Error: '$input-path' is neither a file nor a directory";
+    exit(1);
   }
 
   my $parser = Parser::Parser.new($markdown-file.Str);
