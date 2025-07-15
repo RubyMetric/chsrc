@@ -13,13 +13,13 @@
 unit module Parser;
 
 #| 不能用 Bool，只能用 Boolean
-my enum ConfigItemValueType <String Mode Boolean>;
+my enum ConfigItem's-ValueType <String Mode Boolean>;
 
 #| 配置项的值
-my class ConfigItemValue {
-  has ConfigItemValueType $.type;
-  has Str                 $.raw-value;
-  has Any                 $.parsed-value;
+my class ConfigItem's-Value {
+  has ConfigItem's-ValueType $.type;
+  has Str                    $.raw-value;
+  has Any                    $.parsed-value;
 
   method new($raw-text) {
     my $type;
@@ -82,11 +82,11 @@ my class Config {
   # 如果非要在程序内部中调用，而不是直接从 Markdown 文件中读取出来
   # 一定要记得 $raw-value 用的是 rawstr4c 的语法！也就是说，这里一定是一个字符串
   method set($k, $raw-value) {
-    %!items{$k} = ConfigItemValue.new($raw-value);
+    %!items{$k} = ConfigItem's-Value.new($raw-value);
   }
 
   method get($k, $default = Nil) {
-    return %!items{$k} // ($default ?? ConfigItemValue.new($default) !! ConfigItemValue.new(''));
+    return %!items{$k} // ($default ?? ConfigItem's-Value.new($default) !! ConfigItem's-Value.new(''));
   }
 
   method exist($k) {
