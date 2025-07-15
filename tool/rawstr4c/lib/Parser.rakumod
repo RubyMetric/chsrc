@@ -5,7 +5,7 @@
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
 # Contributors  :  Nul None  <nul@none.org>
 # Created On    : <2025-07-12>
-# Last Modified : <2025-07-15>
+# Last Modified : <2025-07-16>
 #
 # rawstr4c.md parsing
 # ---------------------------------------------------------------
@@ -100,35 +100,76 @@ my class Config {
   }
 }
 
-#|( 仅存在两个域:
 
-  1. Global dom
-  2. Section dom
+#| 表示一个 section
+class Section {
 
-我们要求，在 Global dom 里，只存在配置，不存在 code block. 而 code block 只能在 Section dom 中存在。
+  has Str $.title;
+  has Int $.level;
+  has Config $.config;
+  has Str $.codeblock is rw;
+  has Section $.parent is rw;
+  has Section @.children;
 
-因此，Parser 解析完毕后将包含:
-  - input-file
-  - global-config
-  - sections (多个 section)
 
-一个 section 是 Hash，其包含:
-  - title
-  - level
-  - raw-string
-  - config
+  method new($title, $level, $config = Config.new(), Section $parent?) {
+    self.bless(:$title, :level($level), :config($config), :$parent, :children([]));
+  }
+
+  method add-child($child-section) {
+    $child-section.parent = self;
+    @.children.push: $child-section;
+  }
+
+  method has-children() {
+    return @.children.elems > 0;
+  }
+
+  # 递归获取所有后代section（深度优先遍历）
+  method get-all-descendants() {
+    my @descendants;
+    for @.children -> $child {
+      @descendants.push: $child;
+      @descendants.append: $child.get-all-descendants();
+    }
+    return @descendants;
+  }
+
+  # 获取section的路径（从根到当前节点）
+  method get-hierarchical-path() {
+    my @path;
+    my $current = self;
+    while $current {
+      @path.unshift: $current.title;
+      $current = $current.parent;
+    }
+    return @path.join(" > ");
+  }
+}
+
+
+#|(
+所有内容都是 section:
+
+  - level 0:  root section 无标题
+  - level 1:  #  一级标题
+  - level 2:  ## 二级标题
+  - ...
 )
 class Parser {
   has IO::Path $.input-file is rw;
-  has Config   $.global-config;
-  has Hash     @.sections;
+  #| 所有sections的扁平数组，已经是深度遍历的了
+  has Section @.sections;
 
   method new($input-file) {
     self.bless(
       :$input-file,
-      global-config => Config.new(),
-      sections => []
     );
+  }
+
+  # 获取根section（level 0）
+  method root-section() {
+    return @.sections.first({ $_.level == 0 });
   }
 
   # 配置项所在行 -> 解析为配置项
@@ -143,109 +184,90 @@ class Parser {
     return False;
   }
 
+
   method parse() {
     my $content = $.input-file.slurp;
     my @lines = $content.lines;
 
     my $current-section;
-    my $current-section-config = Config.new();
-    my $in-global = True;
-    my $in-code-block = False;
+    my $in-codeblock = False;
 
     # 在代码块中的 raw string
     my $rawstr = "";
 
+    # 无论有没有具体的 root 信息 (比如所处理的文件第一行就是标题)，
+    # 都创建一个 root section (level 0)
+    my $root-config = Config.new();
+    $current-section = Section.new("", 0, $root-config);
+    @.sections.push: $current-section;
 
     # 开始遍历
+    my $line-count = 0;
     for @lines -> $line {
+      $line-count++;
 
-      # Step1: 记录层次 level
-      #
-      # @note 我们要避免，在代码块中也有 # 字符，比如在代码块里写的是 shell 脚本
-      if !$in-code-block && $line ~~ /^ '#' ('#'*) \s* (.+) / {
+      # Step1: 处理标题，这里最重要，因为是判断上一个 section 结束的标志
+      if !$in-codeblock && $line ~~ /^ '#' ('#'*) \s* (.+) / {
         my $level = 1 + $0.chars;
         my $title = ~$1;
 
-        # 只有匹配到下一个标题时，才说明前一个 section 已经结束，此时才有机会存下来
-        # Global dom 里是没有 raw string 的，所以被这里的条件排除掉了
-        if $rawstr && $current-section && $current-section<title> {
-          $current-section<raw-string> = $rawstr;
-          $current-section<config> = $current-section-config;
-          @.sections.push: $current-section;
-        }
+        # 保存当前section的codeblock
+        $current-section.codeblock = $rawstr;
 
+        # 准备创建一个新的 section
         $rawstr = "";
+        my $new-section = Section.new($title, $level, Config.new());
+        @.sections.push: $new-section;
 
-        if $level == 1 {
-          $in-global = True;
-          $current-section = {};
-          $current-section-config = Config.new();
-        } else {
-          $in-global = False;
-          $current-section = {
-            title => $title,
-            level => $level,
-          };
-          $current-section-config = Config.new();
+        # 找到合适的父节点
+        my $parent = self.find-parent-section($level);
+
+        if $parent {
+          $parent.add-child($new-section);
         }
+
+        $current-section = $new-section;
         next;
       }
 
-      # Step2: 处理配置项
-      if $in-global {
-        if self.parse-config-item-line($line, $.global-config) {
-          next;
-        }
-      } elsif $current-section {
-        if self.parse-config-item-line($line, $current-section-config) {
-          next;
-        }
+      # Step2: 处理配置项 (如果该行不是配置项则下一行)
+      if self.parse-config-item-line($line, $current-section.config) {
+        next;
       }
 
-      # Step3: 开始处理raw string
+      # Step3: 开始处理 codeblock
       if $line ~~ /^ '```' (.*)? / {
-        if $in-code-block {
-          $in-code-block = False;
+        if $in-codeblock {
+          $in-codeblock = False;
         } else {
-          $in-code-block = True;
+          $in-codeblock = True;
           my $lang = ~($0 // '');
-          if $lang && $current-section && !$current-section-config.exist('language') {
-            $current-section-config.set('language', $lang);
+          if $lang && $current-section && !$current-section.config.exist('language') {
+            $current-section.config.set('language', $lang);
           }
         }
         next;
       }
 
       # 代码块里的内容统统进来
-      if $in-code-block {
+      if $in-codeblock {
         $rawstr ~= $line ~ "\n";
       }
     }
 
-    # 遍历结束, 这意味着文件已经阅读完毕，最后一个section还没存，现在存它
-    if $rawstr && $current-section && $current-section<title> {
-      $current-section<raw-string> = $rawstr;
-      $current-section<config> = $current-section-config;
-      @.sections.push: $current-section;
+    # 遍历结束，保存最后一个section的codeblock
+    if $rawstr && $current-section {
+      $current-section.codeblock = $rawstr;
     }
   }
 
-  # 输出 config, 包含 global config 以及 section config
-  method debug() {
-    say "--- Global config ---";
-    for $.global-config.keys.sort -> $item {
-      my $value = $.global-config.get($item);
-      say "$item = {$value.as-string} (type: {$value.type})";
+  method find-parent-section($new-level) {
+    # 从@.sections尾部向前找，找到第一个level小于new-level的section作为父节点
+    for @.sections.reverse -> $section {
+      if $section.level < $new-level {
+        return $section;
+      }
     }
-    say "";
-
-    # 设置debug标志，后续在 Generator 中根据此信息输出 section config
-    $.global-config.set('debug', "true");
-
-    say "Found " ~ @.sections.elems ~ " sections:";
-    for @.sections -> $section {
-      say "Section: " ~ $section<title>;
-    }
-    say "";
+    return Nil;  # 没有找到父节点，说明是 root section
   }
 }
