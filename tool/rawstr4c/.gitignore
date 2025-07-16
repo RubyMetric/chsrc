@@ -1,1 +1,4 @@
 lib/.precomp
+
+rawstr4c.c
+rawstr4c.h
