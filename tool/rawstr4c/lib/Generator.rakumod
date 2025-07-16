@@ -86,6 +86,8 @@ my class CVariableNameGenerator {
       $name = $config-name.string-value;
     }
 
+    my $name-literally = $config.name-literally.bool-value;
+
     # 替换非法字符
     $name = $name.subst(/<-[a..z A..Z 0..9 _]>/, '_', :g);
     # 合并连续的下划线
@@ -93,14 +95,19 @@ my class CVariableNameGenerator {
     # 移除结尾的下划线
     $name = $name.subst(/_+$/, '');
 
-    # 组装变量名
-    my $varname = "";
-    $varname ~= $prefix if $keep-prefix && $prefix;
-    $varname ~= "_" if $varname && $name;
-    $varname ~= $name if $name;
-    $varname ~= "_" if $varname && $postfix && $keep-postfix;
-    $varname ~= $postfix if $postfix && $keep-postfix;
 
+    my $varname = "";
+    if $name-literally {
+      # 如果是字面量，直接使用原名
+      $varname = $name;
+    } else {
+      # 否则，按照规则组装变量名
+      $varname ~= $prefix if $keep-prefix && $prefix;
+      $varname ~= "_" if $varname && $name;
+      $varname ~= $name if $name;
+      $varname ~= "_" if $varname && $postfix && $keep-postfix;
+      $varname ~= $postfix if $postfix && $keep-postfix;
+    }
     return $varname || "unnamed_var";
   }
 }
@@ -236,11 +243,11 @@ class Generator {
 
     if $debug-config {
       say "--- Section: $title ---";
-      say "Variable name = $varname";
-      say "Translation mode = $translate-mode";
       say "Output mode = $output-mode";
+      say "Translation mode = $translate-mode";
       say "Language = $language";
-      say "Prefix = $prefix (inherited from hierarchy)";
+      say "Prefix = $prefix";
+      say "Variable name = $varname";
       say '';
     }
 
