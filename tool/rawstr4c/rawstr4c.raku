@@ -19,8 +19,12 @@ use Parser;
 use Generator;
 
 sub USAGE() {
+  usage;
+}
+
+sub usage() {
   print q:to/END/;
-    Usage: rawstr4c <FILE.md|DIR> [--debug] [--help]
+    Usage: rawstr4c [--debug] [--help] <FILE.md|DIR>
 
     Arguments:
       FILE.md    Process a specific markdown file
@@ -28,18 +32,21 @@ sub USAGE() {
 
     Options:
       --debug    Show debug information during processing
+                 Value can be [generator|parser]. Default to generator.
+
       --help     Show this help message
 
     Error: Unknown option or invalid arguments provided.
     END
-  exit(1);
 }
+
 
 sub MAIN(
   # 一定要声明为必选，强制用户输入，未输入时直接进入 USAGE
-  Str $input-path,
-  Bool :$debug = False,  #= --debug
-  Bool :$help            #= 命令行指定 --help 的时候强制进入 USAGE
+  Str  $input-path,
+  # 如果是 Str 类型，则 --debug 缺少命令行参数
+  # 如果是 Any 类型，则可以直接使用 --debug，值为 True
+  Any  :$debug,
 )
 {
   my $markdown-file;
@@ -61,7 +68,18 @@ sub MAIN(
 
   my $parser = Parser::Parser.new($markdown-file.Str);
   $parser.parse;
-  $parser.debug-print-summary if $debug;
 
-  Generator::Generator.new($parser).generate;
+  my $generator = Generator::Generator.new($parser);
+
+  if ($debug.defined) {
+    given $debug {
+      when 'parser' {
+        $parser.debug;
+      }
+      default {
+        $generator.debug;
+      }
+    }
+  }
+  $generator.generate;
 }
