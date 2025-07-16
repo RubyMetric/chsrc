@@ -300,7 +300,7 @@ class Parser {
 
   # 调试方法：扁平打印所有sections
   method debug-print-sections-flatly() {
-    say "====== sections ======";
+    say "====== Sections ======";
     for @!sections.kv -> $i, $section {
       my $title = $section.title || "(Root)";
       my $has-config = $section.configblock.keys ?? "有配置" !! "无配置";
@@ -311,7 +311,7 @@ class Parser {
 
   # 调试方法：层级打印sections
   method debug-print-sections-hierarchyly() {
-    say "====== hierarchy ======";
+    say "====== Hierarchy ======";
 
     my $indent = 0;
 
@@ -349,7 +349,7 @@ class Parser {
   }
 
   # 调试方法：完整的调试信息打印
-  method debug-print-summary() {
+  method debug() {
     self.debug-print-sections-flatly();
     self.debug-print-sections-hierarchyly();
   }

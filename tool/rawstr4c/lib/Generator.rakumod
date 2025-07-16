@@ -39,7 +39,7 @@ my class CStringConverter {
           default   { return $char; }
         }
       }
-      default { die "Unknown translation mode: $mode"; }
+      default { die "Unknown translate mode: $mode"; }
     }
   }
 
@@ -61,17 +61,7 @@ my class CVariableNameGenerator {
     my $config = Config::SectionConfig.new($section);
 
     my $prefix = $config.prefix.string-value;
-    my $language = $config.language.string-value;
-
-    my $postfix;
-
-    my $config-postfix = $config.postfix;
-    if $config-postfix.is-mode() && $config-postfix.mode-value() eq 'use-language' {
-      $postfix = $language ?? 'in_' ~ $language !! '';
-    } else {
-      # 如果不是模式，那就是用户给了一个具体的字符串
-      $postfix = $config-postfix.string-value();
-    }
+    my $postfix = $config.postfix.string-value;
 
     my $keep-prefix = $config.keep-prefix.bool-value;
     my $keep-postfix = $config.keep-postfix.bool-value;
@@ -208,6 +198,7 @@ my class CVariableGenerator {
 
 class Generator {
 
+  has Bool                   $!enable-debug = False; # 是否启用调试模式
   has Parser::Parser         $.parser;
   has CStringConverter       $.string-converter;
   has CVariableNameGenerator $.varname-generator;
@@ -222,6 +213,9 @@ class Generator {
     );
   }
 
+  method debug() {
+    $!enable-debug = True;
+  }
 
   method generate-for-section($section) {
     my $configblock = $section.configblock;
@@ -230,23 +224,25 @@ class Generator {
 
     my $config = Config::SectionConfig.new($section);
 
-    my $debug-config = $config.debug.bool-value;
+    my $debug-in-config = $config.debug.bool-value;
 
     return unless $rawstr;
 
     my $translate-mode = $config.translate-mode.mode-value;
     my $output-mode = $config.output-mode.mode-value;
-    my $language = $config.language.string-value;
-    my $prefix = $config.prefix.string-value;
-
     my $varname = $.varname-generator.generate($section);
 
-    if $debug-config {
-      say "--- Section: $title ---";
+    if $debug-in-config || $!enable-debug {
+      my $language = $config.language.string-value;
+      my $prefix = $config.prefix.string-value;
+      my $postfix = $config.postfix.string-value;
+
+      say "------ Section: $title ------";
       say "Output mode = $output-mode";
-      say "Translation mode = $translate-mode";
+      say "Translate mode = $translate-mode";
       say "Language = $language";
-      say "Prefix = $prefix";
+      say "Prefix  = $prefix";
+      say "Postfix = $postfix";
       say "Variable name = $varname";
       say '';
     }
