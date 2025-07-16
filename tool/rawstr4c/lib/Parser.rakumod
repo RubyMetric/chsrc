@@ -303,8 +303,8 @@ class Parser {
     say "====== Sections ======";
     for @!sections.kv -> $i, $section {
       my $title = $section.title || "(Root)";
-      my $has-config = $section.configblock.keys ?? "有配置" !! "无配置";
-      my $has-code = $section.codeblock ?? "有代码" !! "无代码";
+      my $has-config = $section.configblock.keys ?? "[Has Config]" !! "[NO Config]";
+      my $has-code = $section.codeblock ?? "[Has Code]" !! "[NO Code]";
       say "  [$i] Level {$section.level}: $title - $has-config, $has-code";
     }
   }

@@ -10,7 +10,7 @@
 
 unit module Version;
 
-constant VERSION = "0.2.0.0";
+constant VERSION = "0.2.1.0";
 constant RELEASE_DATE = "2025/07/16";
 
 constant Maintain_URL = "https://github.com/RubyMetric/chsrc/blob/dev/tool/rawstr4c";
