@@ -73,7 +73,7 @@ class SectionConfig {
 
   #| RS4C-Mode
   method output-mode() {
-    return self.get-inherited-config('output-mode', ':terminal');
+    return self.get-inherited-config('output', ':terminal');
   }
 
   #| RS4C-String
