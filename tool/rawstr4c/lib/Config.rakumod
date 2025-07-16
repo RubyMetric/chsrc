@@ -99,9 +99,19 @@ class SectionConfig {
     return self.get-direct-config('language');
   }
 
-  #| RS4C-String 或 RS4C-Nil
+  #| RS4C-String
   method name() {
-    return self.get-direct-config('name');
+    # RS4C-String 或 RS4C-Nil
+    my $config-name = self.get-direct-config('name');
+
+    my $name;
+
+    if $config-name.is-nil {
+      $name = $.section.title.lc
+    } else {
+      $name = $config-name.string-value;
+    }
+    return Parser::ConfigItem's-Value.new($name);
   }
 
   #| RS4C-Bool

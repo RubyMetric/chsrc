@@ -76,15 +76,7 @@ my class CVariableNameGenerator {
     my $keep-prefix = $config.keep-prefix.bool-value;
     my $keep-postfix = $config.keep-postfix.bool-value;
 
-    my $config-name = $config.name;
-    my $name;
-
-    if $config-name.is-nil() {
-      $name = $section.title.lc
-    } else {
-      $name = $config-name.string-value;
-    }
-
+    my $name = $config.name.string-value;
     my $namespace = $config.namespace.string-value;
     my $name-literally = $config.name-literally.bool-value;
 
