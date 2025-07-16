@@ -1,0 +1,118 @@
+# ---------------------------------------------------------------
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ---------------------------------------------------------------
+# File Name     : Config.rakumod
+# File Authors  : Aoran Zeng <ccmywish@qq.com>
+# Contributors  :  Nul None  <nul@none.org>
+# Created On    : <2025-07-16>
+# Last Modified : <2025-07-16>
+#
+# Represent a section's working configuration
+# ---------------------------------------------------------------
+
+use Parser;
+
+unit module Config;
+
+#| 一个 section 的配置 (基于层次化结构而形成的最终真正生效的配置)
+class SectionConfig {
+
+  has Parser::Section $.section;
+
+  method new($section) {
+    self.bless(:$section);
+  }
+
+  #| 从当前 section 开始，向上遍历父节点查找配置项
+  #|
+  #| @param $default 注意，这里要使用配置项值的语法!
+  #|
+  method get-inherited-config($key, Str $default?) {
+    my $current = $.section;
+    while $current {
+      if $current.configblock.exist($key) {
+
+        return $current.configblock.get($key);
+      }
+      $current = $current.parent;
+    }
+    # 如果都没找到，生成一个新值
+    # 当 $default 为空时，生成的是 RS4C-Nil
+    return Parser::ConfigItem's-Value.new($default);
+  }
+
+
+  #| 非层次化读取，仅读取当前 section 自己的配置项
+  #|
+  #| @param $default 注意，这里要使用配置项值的语法!
+  #|
+  method get-direct-config($key, Str $default?) {
+
+    if $.section.configblock.exist($key) {
+      return $.section.configblock.get($key);
+    }
+
+    if ! $default.defined {
+      # say "DEBUG: Key <$key> is undefined";
+    }
+    return Parser::ConfigItem's-Value.new($default);
+  }
+
+
+  # ============================================================
+
+  # 返回当前 section 的 各种配置
+  # 注意，这些函数仅仅忠实地要么返回层次化值，要么返回自己configblock的值，要么返回一个默认值
+  # 从不考虑 section 其他部分对配置的影响
+  # 对 section 其他部分的考虑是 Generator 的职责
+
+  #| RS4C-Mode
+  method translate-mode() {
+    return self.get-inherited-config('translate', ':escape');
+  }
+
+  #| RS4C-Mode
+  method output-mode() {
+    return self.get-inherited-config('output-mode', ':terminal');
+  }
+
+  #| RS4C-String
+  method prefix() {
+    return self.get-inherited-config('prefix', '_rawstr4c');
+  }
+
+  #| RS4C-Mode 或 RS4C-String
+  method postfix() {
+    return self.get-inherited-config('postfix', ':use-language');
+  }
+
+  #| RS4C-Bool
+  method keep-prefix() {
+    return self.get-inherited-config('keep-prefix', 'true');
+  }
+
+  #| RS4C-Bool
+  method keep-postfix() {
+    return self.get-inherited-config('keep-postfix', 'true');
+  }
+
+  #| RS4C-String 或 RS4C-Nil
+  method language() {
+    return self.get-direct-config('language');
+  }
+
+  #| RS4C-String 或 RS4C-Nil
+  method name() {
+    return self.get-direct-config('name');
+  }
+
+  #| RS4C-Bool
+  method name-literally() {
+    return self.get-direct-config('name-literally', 'false');
+  }
+
+  #| RS4C-Bool
+  method debug() {
+    return self.get-inherited-config('debug', 'false');
+  }
+}
