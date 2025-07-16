@@ -13,6 +13,7 @@
 unit module Generator;
 
 use Parser;
+use Config;
 use Version;
 
 my class CStringConverter {
@@ -53,41 +54,38 @@ my class CStringConverter {
 }
 
 
-#| 配置管理器，负责处理层次化配置的继承逻辑
-class ConfigManager {
-  #| 从当前 section 开始，向上遍历父节点查找配置项
-  method get-inherited-config($section, $key, $default = '') {
-    my $current = $section;
-    while $current {
-      if $current.config && $current.config.exist($key) {
-        return $current.config.get($key);
-      }
-      $current = $current.parent;
-    }
-    # 如果都没找到，使用 section 的 config 来获取默认值
-    return $section.config.get($key, $default);
-  }
-}
-
 
 my class CVariableNameGenerator {
 
-  method generate($section, $section-config, $title) {
+  method generate($section) {
 
-    # 检查 name-literally (并不层次化)
-    my $name-literally = $section-config.get('name-literally');
-    if $name-literally.is-bool() && $name-literally.as-bool() {
-      return $section-config.get('name', $title.lc).as-string();
+    my $config = Config::SectionConfig.new($section);
+
+    my $prefix = $config.prefix.string-value;
+    my $language = $config.language.string-value;
+
+    my $postfix;
+
+    my $config-postfix = $config.postfix;
+    if $config-postfix.is-mode() && $config-postfix.mode-value() eq 'use-language' {
+      $postfix = $language ?? 'in_' ~ $language !! '';
+    } else {
+      # 如果不是模式，那就是用户给了一个具体的字符串
+      $postfix = $config-postfix.string-value();
     }
 
-    # 从层次化配置中获取值，使用 ConfigManager 类方法
-    my $prefix = ConfigManager.get-inherited-config($section, 'prefix', '_rawstr4c').as-string();
-    my $language = $section-config.get('language').as-string();
-    my $postfix = self.resolve-postfix($section, $language);
-    my $keep-prefix = ConfigManager.get-inherited-config($section, 'keep-prefix', 'true').as-bool();
-    my $keep-postfix = ConfigManager.get-inherited-config($section, 'keep-postfix', 'true').as-bool();
+    my $keep-prefix = $config.keep-prefix.bool-value;
+    my $keep-postfix = $config.keep-postfix.bool-value;
 
-    my $name = $section-config.get('name', $title.lc).as-string();
+    my $config-name = $config.name;
+    my $name;
+
+    if $config-name.is-nil() {
+      $name = $section.title.lc
+    } else {
+      $name = $config-name.string-value;
+    }
+
     # 替换非法字符
     $name = $name.subst(/<-[a..z A..Z 0..9 _]>/, '_', :g);
     # 合并连续的下划线
@@ -104,16 +102,6 @@ my class CVariableNameGenerator {
     $varname ~= $postfix if $postfix && $keep-postfix;
 
     return $varname || "unnamed_var";
-  }
-
-  method resolve-postfix($section, $language) {
-    my $postfix = ConfigManager.get-inherited-config($section, 'postfix', ':use-language');
-
-    if $postfix.is-mode() && $postfix.as-mode() eq 'use-language' {
-      return $language ?? 'in_' ~ $language !! '';
-    }
-    # 如果不是模式，那就是用户给了一个具体的字符串
-    return $postfix.as-string();
   }
 }
 
@@ -229,33 +217,34 @@ class Generator {
 
 
   method generate-for-section($section) {
-    my $section-config = $section.config;
+    my $configblock = $section.configblock;
     my $title = $section.title;
-    my $code = $section.codeblock;
-    my $debug-parser = ConfigManager.get-inherited-config($section, 'debug', 'false').as-bool();
+    my $rawstr = $section.codeblock;
 
-    return unless $code;
+    my $config = Config::SectionConfig.new($section);
 
-    my $translate-mode = ConfigManager.get-inherited-config($section, 'translate', 'escape').as-mode();
+    my $debug-config = $config.debug.bool-value;
 
-    my $varname = $.varname-generator.generate($section, $section-config, $title);
+    return unless $rawstr;
 
-    my $output-mode = ConfigManager.get-inherited-config($section, 'output', 'terminal').as-mode();
+    my $translate-mode = $config.translate-mode.mode-value;
+    my $output-mode = $config.output-mode.mode-value;
+    my $language = $config.language.string-value;
+    my $prefix = $config.prefix.string-value;
 
-    if $debug-parser {
+    my $varname = $.varname-generator.generate($section);
+
+    if $debug-config {
       say "--- Section: $title ---";
       say "Variable name = $varname";
       say "Translation mode = $translate-mode";
       say "Output mode = $output-mode";
-
-      my $language = $section-config.get('language', 'None').as-string();
-      my $prefix = ConfigManager.get-inherited-config($section, 'prefix', '_rawstr4c').as-string();
       say "Language = $language";
       say "Prefix = $prefix (inherited from hierarchy)";
       say '';
     }
 
-    my $c-string = $.string-converter.convert-string($code, $translate-mode);
+    my $c-string = $.string-converter.convert-string($rawstr, $translate-mode);
 
     given $output-mode {
       when 'terminal' {
@@ -278,6 +267,7 @@ class Generator {
   method generate() {
 
     my $root-section = $.parser.root-section;
+    my $config = Config::SectionConfig.new($root-section);
 
     # 获取所有需要处理的 sections：包括 root section 和所有子 sections
     my @all-sections = ($root-section, |$root-section.get-all-descendants());
@@ -287,7 +277,7 @@ class Generator {
       self.generate-for-section($section);
     }
 
-    my $output-mode = ConfigManager.get-inherited-config($root-section, 'output', 'terminal').as-mode();
+    my $output-mode = $config.output-mode.mode-value;
 
     # 最后把累计到 @variables 的内容输出到文件
     if $output-mode ne 'terminal' {
