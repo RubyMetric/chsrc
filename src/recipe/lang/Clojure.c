@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-10>
- * Last Modified : <2025-07-14>
+ * Last Modified : <2025-07-16>
  * ------------------------------------------------------------*/
 
 #include "rawstr4c.h"
@@ -33,13 +33,13 @@ pl_clojure_setsrc (char *option)
   if (chsrc_in_local_mode())
     {
       chsrc_note2 ("请在项目根目录中的 project.clj 中手动添加 :mirrors 关键字:");
-      char *config = xy_str_gsub (RAWSTR_pl_project_clj, "@url@", source.url);
+      char *config = xy_str_gsub (RAWSTR_pl_clojure_project_clj, "@url@", source.url);
       println (config);
     }
   else
     {
       chsrc_note2 ("请在 ~/.lein/projfiles.clj 中手动添加 :mirrors 关键字:");
-      char *config = xy_str_gsub (RAWSTR_pl_projfiles_clj, "@url@", source.url);
+      char *config = xy_str_gsub (RAWSTR_pl_clojure_projfiles_clj, "@url@", source.url);
       println (config);
     }
 

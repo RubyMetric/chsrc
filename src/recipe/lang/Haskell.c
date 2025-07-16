@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-10>
- * Last Modified : <2025-07-14>
+ * Last Modified : <2025-07-16>
  * ------------------------------------------------------------*/
 
 #include "rawstr4c.h"
@@ -51,7 +51,7 @@ pl_haskell_setsrc (char *option)
   println (file); br();
 
   config = xy_normalize_path ("~/.stack/config.yaml");
-  file = xy_str_gsub (RAWSTR_pl_stackage, "@url@", source.url);
+  file = xy_str_gsub (RAWSTR_pl_haskell_stackage_yaml, "@url@", source.url);
   chsrc_note2 (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
   p (file);
 

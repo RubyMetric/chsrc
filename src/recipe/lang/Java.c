@@ -5,7 +5,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2023-08-31>
- * Last Modified : <2025-07-14>
+ * Last Modified : <2025-07-16>
  * ------------------------------------------------------------*/
 
 #include "rawstr4c.h"
@@ -76,7 +76,7 @@ pl_java_setsrc (char *option)
 
   if (maven_exist)
     {
-      char *file = xy_str_gsub (RAWSTR_pl_maven_config, "@1@", source.mirror->code);
+      char *file = xy_str_gsub (RAWSTR_pl_java_maven_config, "@1@", source.mirror->code);
             file = xy_str_gsub (file, "@name@", source.mirror->name);
             file = xy_str_gsub (file, "@url@", source.url);
       char *maven_config = pl_java_find_maven_config ();
@@ -87,7 +87,7 @@ pl_java_setsrc (char *option)
   if (gradle_exist)
     {
       if (maven_exist) br();
-      char* file = xy_str_gsub (RAWSTR_pl_build_gradle, "@url@", source.url);
+      char* file = xy_str_gsub (RAWSTR_pl_java_build_gradle, "@url@", source.url);
       chsrc_note2 ("请在 build.gradle 中添加:");
       println (file);
     }
