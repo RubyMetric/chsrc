@@ -62,9 +62,7 @@ class SectionConfig {
   # ============================================================
 
   # 返回当前 section 的 各种配置
-  # 注意，这些函数仅仅忠实地要么返回层次化值，要么返回自己configblock的值，要么返回一个默认值
-  # 从不考虑 section 其他部分对配置的影响
-  # 对 section 其他部分的考虑是 Generator 的职责
+  # 注意，这些函数全部都返回 ConfigValue's-Value 实例
 
   #| RS4C-Mode
   method translate-mode() {
@@ -110,6 +108,28 @@ class SectionConfig {
   method name-literally() {
     return self.get-direct-config('name-literally', 'false');
   }
+
+
+  # RS4C-String
+  method namespace() {
+    my $config-namespace = self.get-direct-config('namespace', '');
+
+    my $current-namespace = $config-namespace.string-value;
+
+    # 嵌套增加
+    my $parent = $.section.parent;
+    while $parent {
+      if $parent.configblock.exist('namespace') {
+        $current-namespace = $parent.configblock.get('namespace').string-value ~ $current-namespace;
+      } else {
+        # 空字符串
+        $current-namespace =  '' ~ $current-namespace;
+      }
+      $parent = $parent.parent;
+    }
+    return Parser::ConfigItem's-Value.new($current-namespace);
+  }
+
 
   #| RS4C-Bool
   method debug() {

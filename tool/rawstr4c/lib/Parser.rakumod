@@ -99,6 +99,7 @@ class ConfigItem's-Value {
 
 
 #| 包含所有 config items 的容器
+#| 所有 get 出的值一定是 ConfigItem's-Value 实例
 my class ConfigBlock {
 
   has %!items;

@@ -85,6 +85,7 @@ my class CVariableNameGenerator {
       $name = $config-name.string-value;
     }
 
+    my $namespace = $config.namespace.string-value;
     my $name-literally = $config.name-literally.bool-value;
 
     # 替换非法字符
@@ -102,8 +103,13 @@ my class CVariableNameGenerator {
     } else {
       # 否则，按照规则组装变量名
       $varname ~= $prefix if $keep-prefix && $prefix;
+
+      $varname ~= "_" if $varname && $namespace;
+      $varname ~= $namespace if $namespace;
+
       $varname ~= "_" if $varname && $name;
       $varname ~= $name if $name;
+
       $varname ~= "_" if $varname && $postfix && $keep-postfix;
       $varname ~= $postfix if $postfix && $keep-postfix;
     }
