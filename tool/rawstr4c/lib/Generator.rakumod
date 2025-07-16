@@ -274,21 +274,23 @@ class Generator {
   method generate() {
 
     my $root-section = $.parser.root-section;
-    my $config = Config::SectionConfig.new($root-section);
 
     # 获取所有需要处理的 sections：包括 root section 和所有子 sections
     my @all-sections = ($root-section, |$root-section.get-all-descendants());
 
-    # 这个 generate-for-section() 要么把变量输出到终端，要么累计到 @variabels 中
+    # 这个 generate-for-section() 要么把变量输出到终端，要么累计到 @variables 中
     for @all-sections -> $section {
       self.generate-for-section($section);
     }
 
-    my $output-mode = $config.output-mode.mode-value;
-
-    # 最后把累计到 @variables 的内容输出到文件
-    if $output-mode ne 'terminal' {
+    # 如果有任何变量被添加 (没有被输出到终端)，就保存文件
+    if $.variable-generator.variables.elems > 0 {
       my $dest-dir = $.parser.input-file.IO.dirname.Str;
+
+      # 检查是否有 "头、源并存的变量"，如果有就使用并存的头文件和源文件模式
+      my $has-global-vars = $.variable-generator.variables.grep({ $_<kind> eq 'global-variable' }).elems > 0;
+      my $output-mode = $has-global-vars ?? 'global-variable' !! 'global-variable-only-header';
+
       $.variable-generator.save-files($output-mode, $dest-dir);
     }
   }
