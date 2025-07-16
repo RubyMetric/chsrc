@@ -79,9 +79,22 @@ class SectionConfig {
     return self.get-inherited-config('prefix', '_rawstr4c');
   }
 
-  #| RS4C-Mode 或 RS4C-String
+  #| RS4C-String
   method postfix() {
-    return self.get-inherited-config('postfix', ':use-language');
+    # RS4C-Mode 或 RS4C-String
+    my $config-postfix = self.get-inherited-config('postfix', ':use-language');
+
+    my $language = self.language.string-value;
+    my $postfix;
+
+    if $config-postfix.is-mode() && $config-postfix.mode-value() eq 'use-language' {
+      $postfix = 'in_' ~ $language;
+    } else {
+      # 如果不是模式，那就是用户给了一个具体的字符串
+      $postfix = $config-postfix.string-value();
+    }
+
+    return Parser::ConfigItem's-Value.new($postfix);
   }
 
   #| RS4C-Bool
