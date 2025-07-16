@@ -134,7 +134,8 @@ my class CVariableGenerator {
     };
   }
 
-  method generate-c-header-file($output-mode = 'global-variable') {
+  #| 生成 C 头文件的内容
+  method generate-c-header-file() {
     my $header = qq:to/EOF/;
     #pragma once
 
@@ -148,15 +149,17 @@ my class CVariableGenerator {
 
     for @.variables -> $var {
       given $var<kind> {
+        when 'global-variable-only-header' {
+          $header ~= "char {$var<name>}[] = \"{$var<value>}\";\n\n";
+        }
         when 'global-variable' {
-          if $output-mode eq 'global-variable-only-header' {
-            $header ~= "char {$var<name>}[] = \"{$var<value>}\";\n\n";
-          } else {
-            $header ~= "extern char {$var<name>}[];\n";
-          }
+          $header ~= "extern char {$var<name>}[];\n";
         }
         when 'macro' {
           $header ~= "#define {$var<name>.uc} \"{$var<value>}\"\n\n";
+        }
+        default {
+          die "Unknown variable kind: {$var<kind>}";
         }
       }
     }
@@ -164,6 +167,7 @@ my class CVariableGenerator {
     return $header;
   }
 
+  #| 生成 C 源文件的内容
   method generate-c-source-file() {
     my $source = qq:to/EOF/;
     /**
@@ -181,26 +185,25 @@ my class CVariableGenerator {
         $source ~= "char {$var<name>}[] = \"{$var<value>}\";\n";
       }
     }
-
     return $source;
   }
 
 
-  method save-files($output-mode, $dest-dir) {
+  method save-files($dest-dir) {
 
     my $c-header-file = $dest-dir.IO.child($.c-header-filename).Str;
 
-    $c-header-file.IO.spurt(self.generate-c-header-file($output-mode));
+    $c-header-file.IO.spurt(self.generate-c-header-file());
     say "Generated C header file: $c-header-file";
 
-    if $output-mode eq 'global-variable' {
-      my $has-globals = @.variables.grep({ $_<kind> eq 'global-variable' }).elems > 0;
-      if $has-globals {
-        my $c-source-filename = $.c-header-filename.subst(/'.h'$/, '.c');
-        my $c-source-file = $dest-dir.IO.child($c-source-filename).Str;
-        $c-source-file.IO.spurt(self.generate-c-source-file());
-        say "Generated C source file: $c-source-file";
-      }
+    # 检查是否有 "头、源并存的变量"，如果有就使用并存的头文件和源文件模式
+    my $need-gen-c-source-file = @.variables.grep({ $_<kind> eq 'global-variable' }).elems > 0;
+
+    if $need-gen-c-source-file {
+      my $c-source-filename = $.c-header-filename.subst(/'.h'$/, '.c');
+      my $c-source-file = $dest-dir.IO.child($c-source-filename).Str;
+      $c-source-file.IO.spurt(self.generate-c-source-file());
+      say "Generated C source file: $c-source-file";
     }
   }
 }
@@ -258,8 +261,11 @@ class Generator {
         say 'char ' ~ $varname ~ '[] = "' ~ $c-string ~ '";';
         say "";
       }
-      when 'global-variable' | 'global-variable-only-header' {
+      when 'global-variable' {
         $.variable-generator.add-variable($varname, $c-string, 'global-variable');
+      }
+      when 'global-variable-only-header' {
+        $.variable-generator.add-variable($varname, $c-string, 'global-variable-only-header');
       }
       when 'macro' {
         $.variable-generator.add-variable($varname, $c-string, 'macro');
@@ -286,12 +292,7 @@ class Generator {
     # 如果有任何变量被添加 (没有被输出到终端)，就保存文件
     if $.variable-generator.variables.elems > 0 {
       my $dest-dir = $.parser.input-file.IO.dirname.Str;
-
-      # 检查是否有 "头、源并存的变量"，如果有就使用并存的头文件和源文件模式
-      my $has-global-vars = $.variable-generator.variables.grep({ $_<kind> eq 'global-variable' }).elems > 0;
-      my $output-mode = $has-global-vars ?? 'global-variable' !! 'global-variable-only-header';
-
-      $.variable-generator.save-files($output-mode, $dest-dir);
+      $.variable-generator.save-files($dest-dir);
     }
   }
 }
