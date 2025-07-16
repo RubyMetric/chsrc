@@ -21,36 +21,42 @@ class ConfigItem's-Value {
   has Str                    $.raw-value;
   has Any                    $.parsed-value;
 
-  method new($raw-text) {
+  #| $raw-text 为 undefined 的情况只有一种，那就是内部刻意生成
+  method new(Str $input-text) {
     my $type;
-    my $parsed;
+    my $parsed-value;
 
-    given $raw-text {
-      when /^ ':' (.+) $/ {
-        # 模式值 :mode
-        $type = RS4C-Mode;
-        $parsed = ~$0;
-      }
-      when /^ ('true'|'false'|'yes'|'no') $/ {
-        # 特殊字面量 - true/false/yes/no 都是 literal
-        $type = RS4C-Bool;
-        $parsed = ~$0 ~~ /^('true'|'yes')$/ ?? True !! False;
-      }
-      # 明确区分空字符串和无值情况
-      # 这种情况不可能是用户写的(并没有nil这个字面量)，只由内部实现时刻意传 Nil 出现
-      when Nil {
-        $type = RS4C-Nil;
-        $parsed = Nil;
-      }
-      # 输入为空时被当做是字符串类型
-      default {
-        # 普通字符串
-        $type = RS4C-String;
-        $parsed = $raw-text;
+    my $raw-value = $input-text;
+
+    # 明确区分空字符串和无值情况
+    # 这种情况不可能是用户写的(并没有nil这个字面量)
+    if ! $input-text.defined {
+      $type = RS4C-Nil;
+      $parsed-value = Nil;
+      $raw-value = "<internal-rs4c-nil>"; # 一个完全用不到的值，但是由于 $.raw-value 类型是字符串，所以必须随便给一个值
+    }
+    else {
+      # wrtd: 不要试图在这里利用 given when 统一处理未定义的值，因为会一直报错
+      given $input-text {
+        when /^ ':' (.+) $/ {
+          # 模式值 :mode
+          $type = RS4C-Mode;
+          $parsed-value = ~$0;
+        }
+        when /^ ('true'|'false'|'yes'|'no') $/ {
+          # 特殊字面量 - true/false/yes/no 都是 literal
+          $type = RS4C-Bool;
+          $parsed-value = ~$0 ~~ /^('true'|'yes')$/ ?? True !! False;
+        }
+        # 输入为空时被当做是字符串类型
+        default {
+          # 普通字符串
+          $type = RS4C-String;
+          $parsed-value = $input-text;
+        }
       }
     }
-
-    self.bless(:$type, :raw-value($raw-text), :parsed-value($parsed));
+    self.bless(:$type, :$raw-value, :$parsed-value);
   }
 
   # 获得适合调用者接受的值
