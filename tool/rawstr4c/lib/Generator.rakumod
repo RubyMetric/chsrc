@@ -53,31 +53,39 @@ my class CStringConverter {
 }
 
 
+#| 配置管理器，负责处理层次化配置的继承逻辑
+class ConfigManager {
+  #| 从当前 section 开始，向上遍历父节点查找配置项
+  method get-inherited-config($section, $key, $default = '') {
+    my $current = $section;
+    while $current {
+      if $current.config && $current.config.exist($key) {
+        return $current.config.get($key);
+      }
+      $current = $current.parent;
+    }
+    # 如果都没找到，使用 section 的 config 来获取默认值
+    return $section.config.get($key, $default);
+  }
+}
+
+
 my class CVariableNameGenerator {
 
-  method generate($root-config, $section-config, $title) {
+  method generate($section, $section-config, $title) {
 
-    # 检查 name-literally
+    # 检查 name-literally (并不层次化)
     my $name-literally = $section-config.get('name-literally');
     if $name-literally.is-bool() && $name-literally.as-bool() {
       return $section-config.get('name', $title.lc).as-string();
     }
 
-    # 优先从 section-config 获取配置，如果没有则从 root-config 获取
-    my $prefix = $section-config.exist('prefix') ??
-                 $section-config.get('prefix').as-string() !!
-                 $root-config.get('prefix', '_rawstr4c').as-string();
-
+    # 从层次化配置中获取值，使用 ConfigManager 类方法
+    my $prefix = ConfigManager.get-inherited-config($section, 'prefix', '_rawstr4c').as-string();
     my $language = $section-config.get('language').as-string();
-    my $postfix = self.resolve-postfix($root-config, $section-config, $language);
-
-    my $keep-prefix = $section-config.exist('keep-prefix') ??
-                      $section-config.get('keep-prefix').as-bool() !!
-                      $root-config.get('keep-prefix', 'true').as-bool();
-
-    my $keep-postfix = $section-config.exist('keep-postfix') ??
-                       $section-config.get('keep-postfix').as-bool() !!
-                       $root-config.get('keep-postfix', 'true').as-bool();
+    my $postfix = self.resolve-postfix($section, $language);
+    my $keep-prefix = ConfigManager.get-inherited-config($section, 'keep-prefix', 'true').as-bool();
+    my $keep-postfix = ConfigManager.get-inherited-config($section, 'keep-postfix', 'true').as-bool();
 
     my $name = $section-config.get('name', $title.lc).as-string();
     # 替换非法字符
@@ -98,11 +106,8 @@ my class CVariableNameGenerator {
     return $varname || "unnamed_var";
   }
 
-  method resolve-postfix($root-config, $section-config, $language) {
-    # 优先从 section-config 获取 postfix
-    my $postfix = $section-config.exist('postfix') ??
-                  $section-config.get('postfix') !!
-                  $root-config.get('postfix');
+  method resolve-postfix($section, $language) {
+    my $postfix = ConfigManager.get-inherited-config($section, 'postfix', ':use-language');
 
     if $postfix.is-mode() && $postfix.as-mode() eq 'use-language' {
       return $language ?? 'in_' ~ $language !! '';
@@ -209,48 +214,33 @@ my class CVariableGenerator {
 class Generator {
 
   has Parser::Parser         $.parser;
-  has CStringConverter       $.cstring-converter;
+  has CStringConverter       $.string-converter;
   has CVariableNameGenerator $.varname-generator;
   has CVariableGenerator     $.variable-generator;
 
   method new($parser) {
     self.bless(
       :$parser,
-      :cstring-converter(CStringConverter.new),
+      :string-converter(CStringConverter.new),
       :varname-generator(CVariableNameGenerator.new),
       :variable-generator(CVariableGenerator.new)
     );
   }
 
-  method get-config-value($root-config, $section-config, $key, $default = '') {
-    # 优先级：section-config > root-config > default
-    if $section-config && $section-config.exist($key) {
-      return $section-config.get($key);
-    }
-    elsif $root-config && $root-config.exist($key) {
-      return $root-config.get($key);
-    }
-    else {
-      return $root-config.get($key, $default);
-    }
-  }
 
-
-  method generate-for-section($root-config, $section) {
+  method generate-for-section($section) {
     my $section-config = $section.config;
     my $title = $section.title;
     my $code = $section.codeblock;
-    my $debug-parser = $root-config.get('debug', False).as-bool();
+    my $debug-parser = ConfigManager.get-inherited-config($section, 'debug', 'false').as-bool();
 
     return unless $code;
 
-    my $translate-mode = self.get-config-value(
-      $root-config, $section-config, 'translate', ':escape'
-    ).as-mode();
+    my $translate-mode = ConfigManager.get-inherited-config($section, 'translate', 'escape').as-mode();
 
-    my $varname = $.varname-generator.generate($root-config, $section-config, $title);
+    my $varname = $.varname-generator.generate($section, $section-config, $title);
 
-    my $output-mode = $root-config.get('output', ':terminal').as-mode();
+    my $output-mode = ConfigManager.get-inherited-config($section, 'output', 'terminal').as-mode();
 
     if $debug-parser {
       say "--- Section: $title ---";
@@ -259,13 +249,13 @@ class Generator {
       say "Output mode = $output-mode";
 
       my $language = $section-config.get('language', 'None').as-string();
-      my $prefix = self.get-config-value($root-config, $section-config, 'prefix', '_rawstr4c').as-string();
+      my $prefix = ConfigManager.get-inherited-config($section, 'prefix', '_rawstr4c').as-string();
       say "Language = $language";
-      say "Prefix = $prefix (from " ~ ($section-config.exist('prefix') ?? 'section' !! 'root') ~ ")";
+      say "Prefix = $prefix (inherited from hierarchy)";
       say '';
     }
 
-    my $c-string = $.cstring-converter.convert-string($code, $translate-mode);
+    my $c-string = $.string-converter.convert-string($code, $translate-mode);
 
     given $output-mode {
       when 'terminal' {
@@ -288,17 +278,16 @@ class Generator {
   method generate() {
 
     my $root-section = $.parser.root-section;
-    my $root-config = $root-section.config;
 
     # 获取所有需要处理的 sections：包括 root section 和所有子 sections
     my @all-sections = ($root-section, |$root-section.get-all-descendants());
 
     # 这个 generate-for-section() 要么把变量输出到终端，要么累计到 @variabels 中
     for @all-sections -> $section {
-      self.generate-for-section($root-config, $section);
+      self.generate-for-section($section);
     }
 
-    my $output-mode = $root-config.get('output', ':terminal').as-mode();
+    my $output-mode = ConfigManager.get-inherited-config($root-section, 'output', 'terminal').as-mode();
 
     # 最后把累计到 @variables 的内容输出到文件
     if $output-mode ne 'terminal' {
