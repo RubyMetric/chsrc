@@ -7,7 +7,7 @@
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2025-07-12>
- ! Last Modified : <2025-07-14>
+ ! Last Modified : <2025-07-16>
  ! ---------------------------------------------------------- -->
 
 # rawstr4c
@@ -33,10 +33,10 @@ just rawstr4c ./src/recipe/ware
 
 - section 标题
 - 对该变量的说明
-- 配置项
-- 配置项注释
-- code block (raw string)
-- 对 code block 内容的注释
+- 配置块 configblock
+- 配置块 configblock 注释
+- 代码块 codeblock (raw string)
+- 代码块 codeblock 内容的注释
 
 <br>
 
@@ -56,7 +56,7 @@ just rawstr4c ./src/recipe/ware
 
 配置项总是以 `-` 开头，配置项名称后跟一个 `=`，右值必须使用 ``` `` ``` 来包裹
 
-注意，如果值并非是由用户随意给出，而是只能是默认的几种值之一，则使用 `:` 作为前缀
+注意，如果值并非是由用户随意给出，则应该设置为 mode 类型，使用 `:` 作为前缀
 
 <br>
 
@@ -73,7 +73,7 @@ just rawstr4c ./src/recipe/ware
   - `:global-variable` = 输出一个 `.h` 文件和对应的 `.c` 文件，定义为全局变量
   - `:global-variable-only-header` = 仅输出为一个 `.h` 文件，定义为全局变量
 
-- output-file =
+- ~~output-file~~ = (暂未实现)
 
   自定义生成的头文件名，默认值为 `rawstr4c.h`
 
@@ -85,8 +85,8 @@ just rawstr4c ./src/recipe/ware
 
 - postfix =
 
-  - `:use-language` = 使用 code block 的语言
-  - `scratch string` = 使用某一自定义字符串为后缀
+  - `:use-language` = 使用 codeblock 的语言
+  - `your string` = 使用某一自定义字符串为后缀
 
 - name =
 
@@ -95,6 +95,10 @@ just rawstr4c ./src/recipe/ware
 - name-literally = `false` | `true`
 
   无视其他配置项，直接使用 `name` 作为变量名
+
+- namespace =
+
+  将作为变量名 `name` 之前 `prefix` 之后的前缀，将影响下一层级的 section
 
 - keep-prefix = `true` | `false`
 
