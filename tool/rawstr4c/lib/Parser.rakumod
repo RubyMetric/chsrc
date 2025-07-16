@@ -318,7 +318,18 @@ class Parser {
     my sub format-section($section, $level) {
       my $prefix = '  ' x $level;
       my $title = $section.title // '(Root)';
-      return "{$prefix}- {$title} (level {$section.level})";
+      my $base-info = "{$prefix}- {$title} (level {$section.level})";
+
+      my $config-info = "";
+      if $section.configblock.keys {
+        my @config-items;
+        for $section.configblock.keys -> $key {
+          my $value = $section.configblock.get($key);
+          @config-items.push: "$key = {$value.raw-value}";
+        }
+        $config-info = "\n" ~ "{$prefix}  [" ~ @config-items.join(", ") ~ "]";
+      }
+      return $base-info ~ $config-info;
     }
 
     # 嵌套的递归打印函数
