@@ -17,38 +17,54 @@
 
 use Parser;
 use Generator;
+use Version;
 
 sub USAGE() {
-  usage;
-}
+  print qq:to/END/;
+    rawstr4c: Raw String for C (GPLv3+) {Version::VERSION}-{Version::RELEASE_DATE}
 
-sub usage() {
-  print q:to/END/;
-    Usage: rawstr4c [--debug] [--help] <FILE.md|DIR>
+    Usage: rawstr4c [options] <FILE.md|DIR>
 
     Arguments:
-      FILE.md    Process a specific markdown file
-      DIR        Process rawstr4c.md file in the given directory
+    FILE.md    Process a specific markdown file
+    DIR        Process rawstr4c.md file in the given directory
 
     Options:
-      --debug    Show debug information during processing
-                 Value can be [generator|parser]. Default to generator.
+    -d|--debug    Show debug information during processing
+                  Value can be [generator|parser]. Default to generator.
 
-      --help     Show this help message
+    -v|--version  Show version information
 
-    Error: Unknown option or invalid arguments provided.
+    -h|--help     Show this help message
+
     END
 }
 
 
 sub MAIN(
-  # 一定要声明为必选，强制用户输入，未输入时直接进入 USAGE
-  Str  $input-path,
+  Str  $input-path?,
   # 如果是 Str 类型，则 --debug 缺少命令行参数
   # 如果是 Any 类型，则可以直接使用 --debug，值为 True
   Any  :$debug,
+  Any  :$version,
+  :$d, :$v, :$h
 )
 {
+  if ($version || $v) {
+    print Version::VERSION_CONTENT_FOR_-version;
+    exit(0);
+  }
+
+  if ($h) {
+    USAGE;
+    exit(0);
+  }
+
+  if (!$input-path) {
+    USAGE;
+    exit(0);
+  }
+
   my $markdown-file;
 
   if $input-path.IO.d {
@@ -73,13 +89,17 @@ sub MAIN(
 
   if ($debug.defined) {
     given $debug {
-      when 'parser' {
-        $parser.debug;
-      }
-      default {
-        $generator.debug;
-      }
+      when 'parser' {$parser.debug;}
+      default       {$generator.debug;}
     }
   }
+
+  if ($d.defined) {
+    given $d {
+      when 'parser' {$parser.debug;}
+      default       {$generator.debug;}
+    }
+  }
+
   $generator.generate;
 }
