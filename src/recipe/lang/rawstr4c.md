@@ -5,7 +5,7 @@
  ! Config Authors: Aoran Zeng <ccmywish@qq.com>
  ! Contributors  :  Nil Null  <nil@null.org>
  ! Created On    : <2025-07-14>
- ! Last Modified : <2025-07-15>
+ ! Last Modified : <2025-07-16>
  ! ---------------------------------------------------------- -->
 
 # rawstr4c input
@@ -16,6 +16,8 @@
 - keep-postfix = `false`
 
 ## Java
+
+- namespace = `java`
 
 ### maven config
 
@@ -45,6 +47,10 @@ allprojects {
 
 ## stackage
 
+- name = `haskell_stackage`
+- keep-postfix = `true`
+- postfix = `yaml`
+
 ```yaml
 package-index:
   download-prefix: @url@
@@ -67,6 +73,8 @@ package-index:
 
 
 ## Clojar
+
+- namespace = `clojure`
 
 ### project.clj
 
