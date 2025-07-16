@@ -75,7 +75,7 @@ my class ConfigItem's-Value {
 
 
 #| 包含所有 config items 的容器
-my class Config {
+my class ConfigBlock {
 
   has %!items;
 
@@ -104,16 +104,18 @@ my class Config {
 #| 表示一个 section
 my class Section {
 
-  has Str $.title;
-  has Int $.level;
-  has Config $.config;
-  has Str $.codeblock is rw;
-  has Section $.parent is rw;
-  has Section @.children;
+  has Str         $.title;
+  has Int         $.level;
+  has ConfigBlock $.configblock;
+  has Str         $.codeblock is rw;
+  has Section     $.parent is rw;
+  has Section     @.children;
 
 
-  method new($title, $level, $config = Config.new(), Section $parent?) {
-    self.bless(:$title, :level($level), :config($config), :$parent, :children([]));
+  method new($title, $level) {
+    my $configblock = ConfigBlock.new();
+    # parent 和 codeblock 刻意不初始化
+    self.bless(:$title, :$level, :$configblock, :children([]));
   }
 
   method add-child($child-section) {
@@ -196,8 +198,7 @@ class Parser {
 
     # 无论有没有具体的 root 信息 (比如所处理的文件第一行就是标题)，
     # 都创建一个 root section (level 0)
-    my $root-config = Config.new();
-    $current-section = Section.new("", 0, $root-config);
+    $current-section = Section.new("", 0);
     @!sections.push: $current-section;
 
     # 开始遍历
@@ -215,7 +216,7 @@ class Parser {
 
         # 准备创建一个新的 section
         $rawstr = "";
-        my $new-section = Section.new($title, $level, Config.new());
+        my $new-section = Section.new($title, $level);
         @!sections.push: $new-section;
 
         # 找到合适的父节点
@@ -230,7 +231,7 @@ class Parser {
       }
 
       # Step2: 处理配置项 (如果该行不是配置项则下一行)
-      if self.parse-config-item-line($line, $current-section.config) {
+      if self.parse-config-item-line($line, $current-section.configblock) {
         next;
       }
 
@@ -241,8 +242,8 @@ class Parser {
         } else {
           $in-codeblock = True;
           my $lang = ~($0 // '');
-          if $lang && $current-section && !$current-section.config.exist('language') {
-            $current-section.config.set('language', $lang);
+          if $lang && $current-section && !$current-section.configblock.exist('language') {
+            $current-section.configblock.set('language', $lang);
           }
         }
         next;
@@ -277,7 +278,7 @@ class Parser {
     say "====== sections ======";
     for @!sections.kv -> $i, $section {
       my $title = $section.title || "(Root)";
-      my $has-config = $section.config.keys ?? "有配置" !! "无配置";
+      my $has-config = $section.configblock.keys ?? "有配置" !! "无配置";
       my $has-code = $section.codeblock ?? "有代码" !! "无代码";
       say "  [$i] Level {$section.level}: $title - $has-config, $has-code";
     }
