@@ -70,22 +70,22 @@ class ConfigItem's-Value {
   # 这些函数防止开发者写错类型
   method nil-value() {
     return self.value if $.type == RS4C-Nil;
-    die "The config value type is not RS4C-Nil, but: {$.type}";
+    die "The config value type should be RS4C-Nil, but it is: {$.type}";
   }
 
   method string-value() {
     return self.value if $.type == RS4C-String;
-    die "The config value type is not RS4C-String, but: {$.type}";
+    die "The config value type should be RS4C-String, but it is: {$.type}";
   }
 
   method bool-value() {
     return self.value if $.type == RS4C-Bool;
-    die "The config value type is not RS4C-Bool, but: {$.type}";
+    die "The config value type should be RS4C-Bool, but it is: {$.type}";
   }
 
   method mode-value() {
     return self.value if $.type == RS4C-Mode;
-    die "The config value type is not RS4C-Mode, but: {$.type}";
+    die "The config value type should be RS4C-Mode, but it is: {$.type}";
   }
 
 

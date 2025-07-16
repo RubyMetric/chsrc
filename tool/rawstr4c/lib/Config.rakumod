@@ -94,10 +94,23 @@ class SectionConfig {
     return self.get-inherited-config('keep-postfix', 'true');
   }
 
-  #| RS4C-String 或 RS4C-Nil
+
+  #| RS4C-String
   method language() {
-    return self.get-direct-config('language');
+    # RS4C-String 或 RS4C-Nil
+    my $config-language = self.get-direct-config('language');
+
+    my Str $lang;
+
+    if $config-language.is-nil {
+      # codeblock 没有写语言，就给 Unknown
+      $lang = 'Unknown';
+    } else {
+      $lang = $config-language.string-value;
+    }
+    return Parser::ConfigItem's-Value.new($lang);
   }
+
 
   #| RS4C-String
   method name() {
