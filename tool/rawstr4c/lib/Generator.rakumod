@@ -31,7 +31,6 @@ my class CStringConverter {
       when 'escape' {
         given $char {
           when '"'  { return '\\"'; }
-          when "'"  { return "\\'"; }
           when '\\' { return '\\\\'; }
           when "\n" { return '\\n'; }
           when "\t" { return '\\t'; }
