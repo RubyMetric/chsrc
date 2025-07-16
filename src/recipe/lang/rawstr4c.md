@@ -13,7 +13,7 @@
 - prefix = `RAWSTR_pl`
 - output = `:global-variable-only-header`
 - translate = `:oct`
-
+- keep-postfix = `false`
 
 ## Java
 
