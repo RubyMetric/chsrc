@@ -8,7 +8,7 @@
  * Contributors  :   juzeon   <skyjuzheng@gmail.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-07-11>
+ * Last Modified : <2025-07-19>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C11 utilities for CLI applications in mixed flavor (mostly Ruby)
@@ -17,7 +17,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.1.5.1-2025/07/11"
+#define _XY_Version       "v0.1.5.2-2025/07/19"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -247,11 +247,10 @@ xy_strjoin (unsigned int count, ...)
 
   for (int i = 0; i < count; i++)
     {
-      // 是否需要重新分配
       bool need_realloc = false;
 
       str = va_arg (args, const char *);
-      al_need += strlen (str);
+      al_need += strlen (str) + 1;
       while (al_need > al_cur)
         {
           al_times += 1;
