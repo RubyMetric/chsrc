@@ -229,7 +229,7 @@ xy_2strjoin (const char *str1, const char *str2)
 static char *
 xy_strjoin (unsigned int count, ...)
 {
-  size_t al_fixed = 128;
+  size_t al_fixed = 256;
   char *ret = calloc (1, al_fixed);
   // 已分配次数
   int al_times = 1;
