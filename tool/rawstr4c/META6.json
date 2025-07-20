@@ -1,0 +1,28 @@
+{
+    "name": "rawstr4c",
+    "version": "0.2.1",
+    "description": "Raw strings for the C programming language",
+
+    "authors": ["Aoran Zeng"],
+    "auth": "zef:ccmywish",
+    "license": "Artistic-2.0",
+
+    "tags": ["c"],
+    "support": {
+        "homepage":   "https://github.com/RubyMetric/chsrc/blob/dev/tool/rawstr4c",
+        "source":     "https://github.com/RubyMetric/chsrc/blob/dev/tool/rawstr4c",
+        "bugtracker": "https://github.com/RubyMetric/chsrc/issues"
+    },
+
+    "raku": "6.*",
+    "resources": [],
+    "depends": [],
+    "build-depends": [],
+    "test-depends": [],
+    "provides": {
+        "Rawstr4c::Parser": "lib/Rawstr4c/Parser.rakumod",
+        "Rawstr4c::Config": "lib/Rawstr4c/Config.rakumod",
+        "Rawstr4c::Generator": "lib/Rawstr4c/Generator.rakumod",
+        "Rawstr4c::Version": "lib/Rawstr4c/Version.rakumod"
+    }
+}
