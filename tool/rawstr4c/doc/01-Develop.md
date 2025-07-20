@@ -37,15 +37,41 @@ git clone https://gitee.com/RubyMetric/chsrc.git -b dev
 
 ## Run
 
+**For convenience, when developing, we only use `just` to invoke it.**
+
+> [!IMPORTANT]
+> When developing `rawstr4c` and maintaining `chsrc`,
+> we must always give a path relative to the root directory of the whole `chsrc` project!
+> This is because `just` will switch back to the project root directory by itself.
+
+```bash
+# Now we've already cd into the current dir
+cd src/recipe
+# Still have to use path relative to root!!!
+just rawstr4c ./src/recipe/ware
+```
+
 ```bash
 just rawstr4c
 ```
 
+We can install the distribution, by this way, we don't need `just`.
+
 ```bash
 zef install .
 
-rawstr4c
+rawstr4c --help
+```
 
+And therefore no such limitations mentioned above!
+
+```bash
+cd src/recipe
+# No need to to use path relative to root now!!!
+rawstr4c .
+```
+
+```bash
 zef uninstall rawstr4c
 ```
 
