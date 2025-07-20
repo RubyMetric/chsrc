@@ -7,7 +7,15 @@
 # Last Modified  : <2025-07-21>
 #
 # Make rawstr4c distribution file (tar.gz)
+#
+# Usage:
+#
+#           .\make-distribution.ps1 [-upload]
 # ---------------------------------------------------------------
+
+param(
+  [switch]$upload
+)
 
 $files = @()
 
@@ -38,3 +46,18 @@ $archiveName = "rawstr4c-$(Get-Date -Format 'yyyyMMdd').tar.gz"
 $files | tar -czf $archiveName -T -
 
 Write-Host "打包完成: $archiveName" -ForegroundColor Green
+Write-Host "提示: 可指定 -upload 直接上传" -ForegroundColor Green
+
+# 如果指定了 upload 参数，则上传到 fez
+if ($upload) {
+  Write-Host "正在上传到 fez..." -ForegroundColor Yellow
+
+  try {
+    fez upload --file $archiveName
+    Write-Host "上传成功!" -ForegroundColor Green
+  } catch {
+    Write-Error "上传失败: $_"
+    exit 1
+  }
+}
+
