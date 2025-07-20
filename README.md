@@ -7,7 +7,7 @@
  ! Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
  !               |
  ! Created On    : <2023-12-28>
- ! Last Modified : <2025-07-14>
+ ! Last Modified : <2025-07-20>
  ! ---------------------------------------------------------- -->
 
 <div align="center">
@@ -168,10 +168,10 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windo
 
 ```bash
 # x64
-$ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc_latest-1_amd64.deb -o chsrc_latest-1_amd64.deb
+$ curl -LO https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc_latest-1_amd64.deb
 
 # 也可以使用 Wget
-wget https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc_latest-1_amd64.deb -O chsrc_latest-1_amd64.deb
+wget https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc_latest-1_amd64.deb
 
 $ sudo apt install ./chsrc_latest-1_amd64.deb
 # 或
@@ -519,6 +519,8 @@ chsrc set conda  | anaconda
 ## 🚀 赞赏支持
 
 你是否因为使用 `chsrc` 而节省了时间和精力 or whatever?
+
+爱发电主页: <https://afdian.com/a/ccmywish>
 
 <img src="https://raw.githubusercontent.com/ccmywish/support-my-oss-work/main/wechat.png" alt="wechat-reward" style="width:300px;"/>
 
