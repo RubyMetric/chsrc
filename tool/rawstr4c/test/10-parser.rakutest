@@ -2,14 +2,14 @@
 # ---------------------------------------------------------------
 # SPDX-License-Identifier: GPL-3.0-or-later
 # ---------------------------------------------------------------
-# Test File     : test-parser.rakutest
+# Test File     : 10-parser.rakutest
 # Test Authors  : Aoran Zeng <ccmywish@qq.com>
 # Created On    : <2025-07-15>
 # Last Modified : <2025-07-21>
 #
 # $(cwd) 为 test/ 时:
 #
-#     raku ./test-parser.rakutest
+#     raku ./10-parser.rakutest
 # ---------------------------------------------------------------
 
 use lib '../lib';
