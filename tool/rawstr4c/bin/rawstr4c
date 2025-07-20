@@ -11,8 +11,7 @@
 #
 # rawstr4c:
 #
-#             Raw strings for C programming language
-#
+#             Raw strings for the C programming language
 # ---------------------------------------------------------------
 
 use Parser;
@@ -21,7 +20,7 @@ use Version;
 
 sub USAGE() {
   print qq:to/END/;
-    rawstr4c: Raw String for C (GPLv3+) {Version::VERSION}-{Version::RELEASE_DATE}
+    rawstr4c: Raw String for C (GPLv3+) v{Version::VERSION}-{Version::RELEASE_DATE}
 
     Usage: rawstr4c [options] <FILE.md|DIR>
 
