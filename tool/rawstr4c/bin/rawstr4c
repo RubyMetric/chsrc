@@ -81,10 +81,10 @@ sub MAIN(
     exit(1);
   }
 
-  my $parser = Parser::Parser.new($markdown-file.Str);
+  my $parser = Rawstr4c::Parser::Parser.new($markdown-file.Str);
   $parser.parse;
 
-  my $generator = Generator::Generator.new($parser);
+  my $generator = Rawstr4c::Generator::Generator.new($parser);
 
   if ($debug.defined) {
     given $debug {

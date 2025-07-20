@@ -38,7 +38,7 @@ class SectionConfig {
     }
     # 如果都没找到，生成一个新值
     # 当 $default 为空时，生成的是 RS4C-Nil
-    return Parser::ConfigItem's-Value.new($default);
+    return Rawstr4c::Parser::ConfigItem's-Value.new($default);
   }
 
 
@@ -55,7 +55,7 @@ class SectionConfig {
     if ! $default.defined {
       # say "DEBUG: Key <$key> is undefined";
     }
-    return Parser::ConfigItem's-Value.new($default);
+    return Rawstr4c::Parser::ConfigItem's-Value.new($default);
   }
 
 
@@ -94,7 +94,7 @@ class SectionConfig {
       $postfix = $config-postfix.string-value();
     }
 
-    return Parser::ConfigItem's-Value.new($postfix);
+    return Rawstr4c::Parser::ConfigItem's-Value.new($postfix);
   }
 
   #| RS4C-Bool
@@ -121,7 +121,7 @@ class SectionConfig {
     } else {
       $lang = $config-language.string-value;
     }
-    return Parser::ConfigItem's-Value.new($lang);
+    return Rawstr4c::Parser::ConfigItem's-Value.new($lang);
   }
 
 
@@ -137,7 +137,7 @@ class SectionConfig {
     } else {
       $name = $config-name.string-value;
     }
-    return Parser::ConfigItem's-Value.new($name);
+    return Rawstr4c::Parser::ConfigItem's-Value.new($name);
   }
 
   #| RS4C-Bool
@@ -163,7 +163,7 @@ class SectionConfig {
       }
       $parent = $parent.parent;
     }
-    return Parser::ConfigItem's-Value.new($current-namespace);
+    return Rawstr4c::Parser::ConfigItem's-Value.new($current-namespace);
   }
 
 

@@ -58,7 +58,7 @@ my class CVariableNameGenerator {
 
   method generate($section) {
 
-    my $config = Config::SectionConfig.new($section);
+    my $config = Rawstr4c::Config::SectionConfig.new($section);
 
     my $prefix = $config.prefix.string-value;
     my $postfix = $config.postfix.string-value;
@@ -222,7 +222,7 @@ class Generator {
     my $title = $section.title;
     my $rawstr = $section.codeblock;
 
-    my $config = Config::SectionConfig.new($section);
+    my $config = Rawstr4c::Config::SectionConfig.new($section);
 
     my $debug-in-config = $config.debug.bool-value;
 
