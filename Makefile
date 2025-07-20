@@ -8,7 +8,7 @@
 #								| sanchuanhehe <wyihe5520@gmail.com>
 #								|
 # Created On    : <2023-08-28>
-# Last Modified : <2025-07-14>
+# Last Modified : <2025-07-21>
 #
 # 请阅读 ./doc/01-Develop.md 来使用
 # --------------------------------------------------------------
@@ -211,7 +211,7 @@ install: $(ReleaseMode-Target-Name)
 #
 # 通过 make rawstr4c ARGS="[--debug] Markdown.md" 来调用
 #rawstr4c:
-#	@bash ./tool/rawstr4c/bin/run.sh $(ARGS)
+#	@bash ./tool/rawstr4c/run/run.sh $(ARGS)
 
 .PHONY: all b build bd br bcir d t check c \
 	build-in-dev-mode build-in-debug-mode build-in-release-mode build-in-ci-release-mode \
