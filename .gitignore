@@ -90,5 +90,7 @@ chsrc_*.changes
 ##############################
 .precomp
 
+*.tar.gz
+
 tool/rawstr4c/test/fixture/rawstr4c.c
 tool/rawstr4c/test/fixture/rawstr4c.h
