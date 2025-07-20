@@ -82,3 +82,13 @@ chsrc-dbgsym_*.ddeb
 chsrc_*.build
 chsrc_*.buildinfo
 chsrc_*.changes
+
+
+
+##############################
+#          rawstr4c
+##############################
+.precomp
+
+tool/rawstr4c/test/fixture/rawstr4c.c
+tool/rawstr4c/test/fixture/rawstr4c.h
