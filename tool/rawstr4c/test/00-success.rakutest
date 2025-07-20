@@ -1,0 +1,20 @@
+#!/usr/bin/env raku
+# ---------------------------------------------------------------
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ---------------------------------------------------------------
+# Test File     : 00-success.rakutest
+# Test Authors  : Aoran Zeng <ccmywish@qq.com>
+# Created On    : <2025-07-21>
+# Last Modified : <2025-07-21>
+#
+# $(cwd) 为 test/ 时:
+#
+#     raku ./00-success.rakutest
+# ---------------------------------------------------------------
+
+use Test;
+
+pass;
+
+# 最后总结
+done-testing;
