@@ -2,25 +2,20 @@
  ! SPDX-License-Identifier: GFDL-1.3-or-later
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
- ! Doc Name      : (rawstr4c configuration).md
+ ! Doc Name      : (rawstr4c introduction).md
  ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2025-07-12>
- ! Last Modified : <2025-07-16>
+ ! Last Modified : <2025-07-21>
  ! ---------------------------------------------------------- -->
 
 # rawstr4c
 
-当你需要写一个复杂的C语言字符串的时候，可使用该工具
-
-出于方便，我们仅使用 `just` 来调用
+Use this tool when you need to write complex C language strings.
 
 ```bash
-cd src/recipe
-
-# 尽管我们已经在 recipe 目录中了，但是 just 自己会重新切换到项目根目录，所以我们总是给一个相对根目录的路径
-just rawstr4c ./src/recipe/ware
+$ rawstr4c --help
 ```
 
 <br>
@@ -29,20 +24,20 @@ just rawstr4c ./src/recipe/ware
 
 ## Convention
 
-一个配置文件，应使用这样的顺序:
+A configuration file should use this order:
 
-- section 标题
-- 对该变量的说明
-- 配置块 configblock
-- 配置块 configblock 注释
-- 代码块 codeblock (raw string)
-- 代码块 codeblock 内容的注释
+1. section title
+2. description of the variable
+3. configuration block (configblock)
+4. configuration block (configblock) comments
+5. code block (codeblock) (raw string)
+6. comments for the content of the code block (codeblock)
 
 <br>
 
 
 
-## 配置语法
+## Configuration Syntax
 
 ```markdown
 
@@ -54,56 +49,56 @@ just rawstr4c ./src/recipe/ware
 
 ```
 
-配置项总是以 `-` 开头，配置项名称后跟一个 `=`，右值必须使用 ``` `` ``` 来包裹
+Configuration items always start with `-`, followed by the configuration item name and an `=`, and the right-hand value must be wrapped with ``` `` ```.
 
-注意，如果值并非是由用户随意给出，则应该设置为 mode 类型，使用 `:` 作为前缀
+Note: if the value is not arbitrarily given by the user, it should be set as a mode type, using `:` as a prefix.
 
 <br>
 
 
 
-## 配置项
+## Configuration Items
 
-注意，如非特殊说明，第一项为默认值
+Note: unless otherwise specified, the first item is the default value
 
 - output =
 
-  - `:terminal` = 在终端输出
-  - `:macro` = 输出为一个 `.h` 文件，定义为宏
-  - `:global-variable` = 输出一个 `.h` 文件和对应的 `.c` 文件，定义为全局变量
-  - `:global-variable-only-header` = 仅输出为一个 `.h` 文件，定义为全局变量
+  - `:terminal` = output to terminal
+  - `:macro` = output as a `.h` file, defined as macro
+  - `:global-variable` = output a `.h` file and corresponding `.c` file, defined as global variable
+  - `:global-variable-only-header` = output only as a `.h` file, defined as global variable
 
-- ~~output-file~~ = (暂未实现)
+- ~~output-file~~ = (not yet implemented)
 
-  自定义生成的头文件名，默认值为 `rawstr4c.h`
+  Custom generated header filename, default value is `rawstr4c.h`
 
 - translate =
 
-  - `:escape` = 仅转义
-  - `:oct` = 八进制
-  - `:hex` = 十六进制
+  - `:escape` = escape only
+  - `:oct` = octal
+  - `:hex` = hexadecimal
 
 - postfix =
 
-  - `:use-language` = 使用 codeblock 的语言
-  - `your string` = 使用某一自定义字符串为后缀
+  - `:use-language` = use the language of the codeblock
+  - `your string` = use a custom string as suffix
 
 - name =
 
-  生成的变量名，默认将会包含前缀和后缀。如果没有给该配置项，将会使用该节标题
+  Generated variable name, will include prefix and suffix by default. If this configuration item is not given, the section title will be used
 
 - name-literally = `false` | `true`
 
-  无视其他配置项，直接使用 `name` 作为变量名
+  Ignore other configuration items and directly use `name` as the variable name
 
 - namespace =
 
-  将作为变量名 `name` 之前 `prefix` 之后的前缀，将影响下一层级的 section
+  Will serve as a prefix after `prefix` and before variable name `name`, affecting the next level section
 
 - keep-prefix = `true` | `false`
 
-  变量名是否使用前缀
+  Whether the variable name uses prefix
 
 - keep-postfix = `true` | `false`
 
-  变量名是否使用后缀
+  Whether the variable name uses postfix
