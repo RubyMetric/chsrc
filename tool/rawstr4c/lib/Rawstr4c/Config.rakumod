@@ -10,14 +10,14 @@
 # Represent a section's working configuration
 # ---------------------------------------------------------------
 
-use Parser;
+use Rawstr4c::Parser;
 
-unit module Config;
+unit module Rawstr4c::Config;
 
 #| 一个 section 的配置 (基于层次化结构而形成的最终真正生效的配置)
 class SectionConfig {
 
-  has Parser::Section $.section;
+  has Rawstr4c::Parser::Section $.section;
 
   method new($section) {
     self.bless(:$section);

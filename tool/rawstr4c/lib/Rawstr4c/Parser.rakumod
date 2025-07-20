@@ -10,7 +10,7 @@
 # rawstr4c.md parsing
 # ---------------------------------------------------------------
 
-unit module Parser;
+unit module Rawstr4c::Parser;
 
 #| 不能用 Bool，只能用 Boolean
 my enum ConfigItem's-ValueType < RS4C-Nil RS4C-String RS4C-Mode RS4C-Bool>;

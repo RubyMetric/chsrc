@@ -8,7 +8,7 @@
 # Last Modified : <2025-07-16>
 # ---------------------------------------------------------------
 
-unit module Version;
+unit module Rawstr4c::Version;
 
 constant VERSION = "0.2.1.0";
 constant RELEASE_DATE = "2025/07/16";

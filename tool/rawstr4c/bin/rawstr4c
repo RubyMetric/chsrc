@@ -14,13 +14,13 @@
 #             Raw strings for the C programming language
 # ---------------------------------------------------------------
 
-use Parser;
-use Generator;
-use Version;
+use Rawstr4c::Parser;
+use Rawstr4c::Generator;
+use Rawstr4c::Version;
 
 sub USAGE() {
   print qq:to/END/;
-    rawstr4c: Raw String for C (GPLv3+) v{Version::VERSION}-{Version::RELEASE_DATE}
+    rawstr4c: Raw String for C (GPLv3+) v{Rawstr4c::Version::VERSION}-{Rawstr4c::Version::RELEASE_DATE}
 
     Usage: rawstr4c [options] <FILE.md|DIR>
 

@@ -10,11 +10,11 @@
 # Generates C code from rawstr4c configuration
 # ---------------------------------------------------------------
 
-unit module Generator;
+unit module Rawstr4c::Generator;
 
-use Parser;
-use Config;
-use Version;
+use Rawstr4c::Parser;
+use Rawstr4c::Config;
+use Rawstr4c::Version;
 
 my class CStringConverter {
 
@@ -198,11 +198,11 @@ my class CVariableGenerator {
 
 class Generator {
 
-  has Bool                   $!enable-debug = False; # 是否启用调试模式
-  has Parser::Parser         $.parser;
-  has CStringConverter       $.string-converter;
-  has CVariableNameGenerator $.varname-generator;
-  has CVariableGenerator     $.variable-generator;
+  has Bool                     $!enable-debug = False; # 是否启用调试模式
+  has Rawstr4c::Parser::Parser $.parser;
+  has CStringConverter         $.string-converter;
+  has CVariableNameGenerator   $.varname-generator;
+  has CVariableGenerator       $.variable-generator;
 
   method new($parser) {
     self.bless(
