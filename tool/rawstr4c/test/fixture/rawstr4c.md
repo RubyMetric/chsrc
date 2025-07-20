@@ -2,8 +2,12 @@
 
 random words
 
-- postfix = `rakutest`
+- name = `test`
+
+rawstr4c config description
 
 ```raku
 say "hello world";
 ```
+
+code block description
