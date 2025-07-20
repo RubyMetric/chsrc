@@ -10,7 +10,7 @@
     "tags": ["c"],
     "support": {
         "homepage":   "https://github.com/RubyMetric/chsrc/blob/dev/tool/rawstr4c",
-        "source":     "https://github.com/RubyMetric/chsrc/blob/dev/tool/rawstr4c",
+        "source":     "https://github.com/RubyMetric/chsrc.git",
         "bugtracker": "https://github.com/RubyMetric/chsrc/issues"
     },
 
