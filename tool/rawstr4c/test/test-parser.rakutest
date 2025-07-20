@@ -5,7 +5,11 @@
 # Test File     : test-parser.rakutest
 # Test Authors  : Aoran Zeng <ccmywish@qq.com>
 # Created On    : <2025-07-15>
-# Last Modified : <2025-07-16>
+# Last Modified : <2025-07-21>
+#
+# $(cwd) 为 test/ 时:
+#
+#     raku ./test-parser.rakutest
 # ---------------------------------------------------------------
 
 use lib '../lib';
@@ -20,6 +24,6 @@ $parser1.parse();
 $parser2.parse();
 
 # 测试两个文件
-$parser1.debug-print-summary();
+$parser1.debug();
 say "";
-$parser2.debug-print-summary();
+$parser2.debug();
