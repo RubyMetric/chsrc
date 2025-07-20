@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: Artistic-2.0
 # ---------------------------------------------------------------
 # File Name     : Generator.rakumod
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
