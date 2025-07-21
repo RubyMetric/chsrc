@@ -5,7 +5,7 @@
  * Contributors  : Yangmoooo <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-09-29>
- * Last Modified : <2024-12-18>
+ * Last Modified : <2025-07-21>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t os_linuxlite_upstream =
@@ -19,10 +19,10 @@ static SourceProvider_t os_linuxlite_upstream =
  */
 static Source_t os_linuxlite_sources[] =
 {
-  {&os_linuxlite_upstream, "http://repo.linuxliteos.com/linuxlite/"},
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/linuxliteos/"},
-  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/linuxliteos/"},
-  {&Nju,              "https://mirror.nju.edu.cn/linuxliteos/"}
+  {&os_linuxlite_upstream, "http://repo.linuxliteos.com/linuxlite/",    DelegateToUpstream},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/linuxliteos/",    DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/linuxliteos/", DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn/linuxliteos/",         DelegateToMirror}
 };
 def_sources_n(os_linuxlite);
 
@@ -53,4 +53,30 @@ os_linuxlite_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target(os_linuxlite);
+
+void
+os_linuxlite_resetsrc (char *option)
+{
+  os_linuxlite_setsrc (option);
+}
+
+
+Feature_t
+os_linuxlite_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = true;
+  f.can_reset = true;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NULL;
+
+  f.can_english = true;
+  f.can_user_define = true;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_gsrf(os_linuxlite);

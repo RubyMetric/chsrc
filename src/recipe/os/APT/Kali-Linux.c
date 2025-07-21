@@ -6,7 +6,7 @@
  *               |  Happy Game <happygame1024@gmail.com>
  *               |
  * Created On    : <2023-09-29>
- * Last Modified : <2025-06-20>
+ * Last Modified : <2025-07-21>
  *
  * Kali Linux 基于 Debian Testing branch
  * ------------------------------------------------------------*/
@@ -23,14 +23,16 @@ static SourceProvider_t os_kali_upstream =
  */
 static Source_t os_kali_sources[] =
 {
-  {&os_kali_upstream, "http://http.kali.org/kali"},
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/kali"},
-  {&Ali,              "https://mirrors.aliyun.com/kali"},
-  {&Volcengine,       "https://mirrors.volces.com/kali"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/kali"},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/kali"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/kali"},
-  // {&Huawei,           "https://mirrors.huaweicloud.com/kali"}, // 未与上游同步
+  {&os_kali_upstream, "http://http.kali.org/kali",          DelegateToUpstream},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/kali", DelegateToMirror},
+  {&Ali,              "https://mirrors.aliyun.com/kali",    DelegateToMirror},
+  {&Volcengine,       "https://mirrors.volces.com/kali",    DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/kali",   DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/kali",   DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/kali", DelegateToMirror},
+
+  /* 不启用原因: 未与上游同步 */
+  // {&Huawei,           "https://mirrors.huaweicloud.com/kali",   DelegateToMirror},
 };
 def_sources_n(os_kali);
 
@@ -60,4 +62,30 @@ os_kali_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target(os_kali);
+
+void
+os_kali_resetsrc (char *option)
+{
+  os_kali_setsrc (option);
+}
+
+
+Feature_t
+os_kali_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = true;
+  f.can_reset = true;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NULL;
+
+  f.can_english = true;
+  f.can_user_define = true;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_gsrf(os_kali);

@@ -5,7 +5,7 @@
  * Contributors  : Happy Game <happygame1024@gmail.com>
  *               |
  * Created On    : <2023-09-29>
- * Last Modified : <2025-01-07>
+ * Last Modified : <2025-07-21>
  * ------------------------------------------------------------*/
 
 /**
@@ -14,20 +14,21 @@
  */
 static Source_t os_linuxmint_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/linuxmint/"},
-  {&Ali,              "http://mirrors.aliyun.com/linuxmint-packages/"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/linuxmint/"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/linuxmint/"},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/linuxmint/"},
-  {&Jlu,              "https://mirrors.jlu.edu.cn/linuxmint/"},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/linuxmint/"},
-  {&Bjtu,             "https://mirror.bjtu.edu.cn/linuxmint/"},
-  {&Zju,              "https://mirrors.zju.edu.cn/linuxmint/"},
-  {&Sustech,          "https://mirrors.sustech.edu.cn/linuxmint/"},
-  {&Iscas,            "https://mirror.iscas.ac.cn/linuxmint/"},
-  {&Scau,             "https://mirrors.scau.edu.cn/linuxmint/"},
-  // {&Netease,          "https://mirrors.163.com/linuxmint/packages/"} /* 不启用原因：过慢 */
+  {&UpstreamProvider,  NULL, NULL},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/linuxmint/", DelegateToMirror},
+  {&Ali,              "http://mirrors.aliyun.com/linuxmint-packages/",   DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/linuxmint/", DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/linuxmint/",          DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/linuxmint/",            DelegateToMirror},
+  {&Jlu,              "https://mirrors.jlu.edu.cn/linuxmint/",            DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/linuxmint/",           DelegateToMirror},
+  {&Bjtu,             "https://mirror.bjtu.edu.cn/linuxmint/",             DelegateToMirror},
+  {&Zju,              "https://mirrors.zju.edu.cn/linuxmint/",             DelegateToMirror},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/linuxmint/",         DelegateToMirror},
+  {&Iscas,            "https://mirror.iscas.ac.cn/linuxmint/",             DelegateToMirror},
+  {&Scau,             "https://mirrors.scau.edu.cn/linuxmint/",            DelegateToMirror},
+  /* 不启用原因：过慢 */
+  // {&Netease,          "https://mirrors.163.com/linuxmint/packages/",    DelegateToMirror}
 };
 def_sources_n(os_linuxmint);
 
@@ -67,4 +68,24 @@ os_linuxmint_setsrc (char *option)
   chsrc_warn2 ("已自动更换mint主要源, 但mint也使用基于debian或ubuntu的基础源, 可参考对应的debian或ubuntu换源方法进行手动换源");
 }
 
-def_target(os_linuxmint);
+
+
+Feature_t
+os_linuxmint_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = true;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NULL;
+
+  f.can_english = true;
+  f.can_user_define = true;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_gsf(os_linuxmint);

@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-29>
- * Last Modified : <2024-11-21>
+ * Last Modified : <2025-07-21>
  *
  * Trisquel基于Ubuntu开发，不含任何专有软件及专有固件，内核使用 Linux-libre
  * ------------------------------------------------------------*/
@@ -14,12 +14,12 @@
  */
 static Source_t os_trisquel_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/trisquel/"},
-  {&Ali,              "https://mirrors.aliyun.com/trisquel/"},
-  {&Nju,              "https://mirror.nju.edu.cn/trisquel/"},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/trisquel/"},
-  {&Iscas,            "https://mirror.iscas.ac.cn/trisquel/"}
+  {&UpstreamProvider,  NULL, NULL},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/trisquel/", DelegateToMirror},
+  {&Ali,              "https://mirrors.aliyun.com/trisquel/",    DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn/trisquel/",     DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/trisquel/",   DelegateToMirror},
+  {&Iscas,            "https://mirror.iscas.ac.cn/trisquel/",    DelegateToMirror}
 };
 def_sources_n(os_trisquel);
 
@@ -32,7 +32,7 @@ os_trisquel_getsrc (char *option)
 
 
 /**
- * @consult: https://help.mirrors.cernet.edu.cn/trisquel/
+ * @consult https://help.mirrors.cernet.edu.cn/trisquel/
  */
 void
 os_trisquel_setsrc (char *option)
@@ -53,4 +53,22 @@ os_trisquel_setsrc (char *option)
 }
 
 
-def_target(os_trisquel);
+Feature_t
+os_trisquel_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = true;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NULL;
+
+  f.can_english = true;
+  f.can_user_define = true;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_gsf(os_trisquel);

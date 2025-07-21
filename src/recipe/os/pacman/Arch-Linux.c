@@ -15,16 +15,19 @@
  */
 static Source_t os_arch_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&Ali,              "https://mirrors.aliyun.com/archlinux"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/archlinux"},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/archlinux"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/archlinux"},
-  {&Tencent,          "https://mirrors.tencent.com/archlinux"},
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/archlinux"},
-  {&Huawei,           "https://mirrors.huaweicloud.com/archlinux"},
-  // {&Netease,          "https://mirrors.163.com/archlinux"},  /* 不启用原因：过慢 */
-  // {&Sohu,          "https://mirrors.sohu.com/archlinux"}     /* 不启用原因：过慢 */
+  {&UpstreamProvider,  NULL, NULL},
+  {&Ali,              "https://mirrors.aliyun.com/archlinux",  DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/archlinux", DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/archlinux", DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/archlinux", DelegateToMirror},
+  {&Tencent,          "https://mirrors.tencent.com/archlinux", DelegateToMirror},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/archlinux", DelegateToMirror},
+  {&Huawei,           "https://mirrors.huaweicloud.com/archlinux", DelegateToMirror},
+
+  /* 不启用原因：过慢 */
+  // {&Netease,          "https://mirrors.163.com/archlinux", DelegateToMirror},
+  /* 不启用原因：过慢 */
+  // {&Sohu,          "https://mirrors.sohu.com/archlinux",   DelegateToMirror}
 },
 
 /**
@@ -33,14 +36,16 @@ static Source_t os_arch_sources[] =
  */
 os_archlinuxcn_sources[] =
 {
-  {&UpstreamProvider, "https://repo.archlinuxcn.org/"},
-  {&Ali,              "https://mirrors.aliyun.com/archlinuxcn/"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/archlinuxcn/"},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/archlinuxcn/"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/"},
-  {&Tencent,          "https://mirrors.cloud.tencent.com/archlinuxcn/"},
-  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/archlinuxcn/"},
-  // {&Netease,          "https://mirrors.163.com/archlinux-cn/"} /* 不启用原因：过慢 */
+  {&UpstreamProvider, "https://repo.archlinuxcn.org/",            DelegateToUpstream},
+  {&Ali,              "https://mirrors.aliyun.com/archlinuxcn/",  DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/archlinuxcn/", DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/archlinuxcn/", DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/", DelegateToMirror},
+  {&Tencent,          "https://mirrors.cloud.tencent.com/archlinuxcn/",    DelegateToMirror},
+  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/archlinuxcn/", DelegateToMirror},
+
+  /* 不启用原因：过慢 */
+  // {&Netease,          "https://mirrors.163.com/archlinux-cn/", DelegateToMirror}
 };
 def_sources_n(os_arch);
 def_sources_n(os_archlinuxcn);

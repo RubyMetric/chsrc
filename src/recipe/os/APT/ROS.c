@@ -6,7 +6,7 @@
  *               |    zouri   <guoshuaisun@outlook.com>
  *               |
  * Created On    : <2023-09-03>
- * Last Modified : <2024-12-06>
+ * Last Modified : <2025-07-21>
  * ------------------------------------------------------------*/
 
 /**
@@ -14,16 +14,19 @@
  */
 static Source_t os_ros_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&Ali,              "https://mirrors.aliyun.com"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn"},
-  {&Ustc,             "https://mirrors.ustc.edu.cn"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn"},
-  {&Tencent,          "https://mirrors.tencent.com"},
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com"},
-  {&Huawei,           "https://mirrors.huaweicloud.com"},
-  // {&Netease,          "https://mirrors.163.com"}, /* 不启用原因：过慢 */
-  // {&Sohu,             "https://mirrors.sohu.com"} /* 不启用原因：过慢 */
+  {&UpstreamProvider,  NULL, NULL},
+
+  {&Ali,              "https://mirrors.aliyun.com",  DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn", DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn", DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn", DelegateToMirror},
+  {&Tencent,          "https://mirrors.tencent.com", DelegateToMirror},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com", DelegateToMirror},
+  {&Huawei,           "https://mirrors.huaweicloud.com", DelegateToMirror},
+  /* 不启用原因：过慢 */
+  // {&Netease,          "https://mirrors.163.com", DelegateToMirror},
+  /* 不启用原因：过慢 */
+  // {&Sohu,             "https://mirrors.sohu.com", DelegateToMirror}
 };
 def_sources_n(os_ros);
 
