@@ -48,7 +48,7 @@ pl_python_group_setsrc (char *option)
                           "pip, Poetry, PDM. If you need to change the source independently, "
                           "please run independently `chsrc set <pkg-manager>`"
                         : "将同时更换4个包管理器 pip, Poetry, PDM, uv 的源，若需要独立换源，请独立运行 chsrc set <pkg-manager>";
-    chsrc_note2 (msg);
+    chsrc_alert2 (msg);
   }
 
   bool pdm_exist    = false,

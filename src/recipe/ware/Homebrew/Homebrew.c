@@ -75,7 +75,7 @@ wr_homebrew_setsrc (char *option)
 
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
-  chsrc_note2 ("请重启终端使Homebrew环境变量生效");
+  chsrc_alert2 ("请重启终端使Homebrew环境变量生效");
 }
 
 

@@ -44,7 +44,7 @@ os_fedora_setsrc (char *option)
 
   chsrc_yield_source_and_confirm (os_fedora);
 
-  chsrc_note2 ("Fedora 38 及以下版本暂不支持");
+  chsrc_alert2 ("Fedora 38 及以下版本暂不支持");
 
   chsrc_backup ("/etc/yum.repos.d/fedora.repo");
   chsrc_backup ("/etc/yum.repos.d/fedora-updates.repo");
@@ -69,7 +69,7 @@ os_fedora_setsrc (char *option)
          "/etc/yum.repos.d/fedora-updates.repo");
   chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_note2 ("已更换baseurl, 但Fedora默认会优先使用metalink来匹配最快的源, 若在获取metadata时速度较慢可自行将其注释:");
+  chsrc_alert2 ("已更换baseurl, 但Fedora默认会优先使用metalink来匹配最快的源, 若在获取metadata时速度较慢可自行将其注释:");
   chsrc_log2 ("(1) /etc/yum.repos.d/fedora.repo");
   chsrc_log2 ("(2) /etc/yum.repos.d/fedora-updates.repo");
 

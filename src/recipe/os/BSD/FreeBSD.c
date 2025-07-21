@@ -60,7 +60,7 @@ os_freebsd_setsrc (char *option)
   chsrc_note2 (
     xy_strjoin (3, "若要使用季度分支，请在", conf ,"中将latest改为quarterly"));
 
-  chsrc_note2 ("若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将'http'改成'https'，最后使用'pkg update -f'刷新缓存即可\n");
+  chsrc_alert2 ("若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将'http'改成'https'，最后使用'pkg update -f'刷新缓存即可\n");
   br();
 
   chsrc_log2 ("2. 修改 freebsd-ports 源");
@@ -77,7 +77,7 @@ os_freebsd_setsrc (char *option)
       char *git_cmd = xy_strjoin (3, "git clone --depth 1 https://", source.url, "/freebsd-ports/ports.git /usr/ports");
       chsrc_run (git_cmd, RunOpt_Default);
       source = os_freebsd_sources[index]; // 恢复至选中的源
-      chsrc_note2 ("下次更新请使用 git -C /usr/ports pull 而非使用 gitup");
+      chsrc_alert2 ("下次更新请使用 git -C /usr/ports pull 而非使用 gitup");
     }
   else
     {
@@ -114,7 +114,7 @@ os_freebsd_setsrc (char *option)
 
 
   // HELP: 暂时没有源提供
-  chsrc_note2 ("4. 抱歉，目前境内无 freebsd-update 源，若存在请报告issue，谢谢");
+  chsrc_alert2 ("4. 抱歉，目前境内无 freebsd-update 源，若存在请报告issue，谢谢");
   /*
     chsrc_log2 ("3. 修改 freebsd-update 源");
 

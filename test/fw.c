@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2024-12-14>
- * Last Modified : <2025-07-14>
+ * Last Modified : <2025-07-21>
  *
  * 该文件最好启用 DEBUG mode 编译
  * ------------------------------------------------------------*/
@@ -35,6 +35,7 @@ main (int argc, char const *argv[])
   chsrc_succ2 ("chsrc_succ2");
   chsrc_log2  ("chsrc_log2");
   chsrc_note2 ("chsrc_note2");
+  chsrc_alert2 ("chsrc_alert2");
   chsrc_warn2 ("chsrc_warn2");
   chsrc_error2 ("chsrc_error2");
   chsrc_debug2 ("fw", "chsrc_debug2");

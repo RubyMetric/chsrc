@@ -140,7 +140,7 @@ os_debian_setsrc (char *option)
       return;
     }
 
-  chsrc_note2 ("将基于旧格式(非DEB822)换源");
+  chsrc_alert2 ("将基于旧格式(非DEB822)换源");
 
   /* Docker环境下，Debian镜像可能不存在该文件 */
   bool sourcelist_exist = ensure_debian_or_ubuntu_old_sourcelist (OS_Is_Debian_Literally);
@@ -167,7 +167,7 @@ os_debian_setsrc (char *option)
 
   chsrc_yield_source_and_confirm (os_debian);
 
-  chsrc_note2 ("如果遇到无法拉取 HTTPS 源的情况，请手动运行:");
+  chsrc_alert2 ("如果遇到无法拉取 HTTPS 源的情况，请手动运行:");
   say ("apt install apt-transport-https ca-certificates");
 
   /* 不存在的时候，用的是我们生成的用来填充占位的无效文件，不要备份 */

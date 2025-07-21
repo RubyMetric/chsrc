@@ -66,7 +66,7 @@ wr_flathub_setsrc (char *option)
 {
   chsrc_yield_source_and_confirm (wr_flathub);
 
-  chsrc_note2 ("若出现问题，可先调用以下命令:");
+  chsrc_alert2 ("若出现问题，可先调用以下命令:");
   char *note = xy_strjoin (3,
     "wget ", source.url, "/flathub.gpg\n"
     "flatpak remote-modify --gpg-import=flathub.gpg flathub"

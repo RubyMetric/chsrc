@@ -15,7 +15,7 @@
 void
 pl_python_poetry_getsrc (char *option)
 {
-  chsrc_note2 ("poetry换源情况: 请查阅本项目 pyproject.toml 中 [[tool.poetry.source]]");
+  chsrc_note2 ("poetry换源情况: 请查看本项目 pyproject.toml 中 [[tool.poetry.source]]");
 }
 
 
@@ -34,7 +34,7 @@ pl_python_poetry_setsrc (char *option)
   char *cmd = NULL;
 
   if (!chsrc_in_local_mode())
-    chsrc_note2 ("Poertry 仅支持项目级换源");
+    chsrc_alert2 ("Poetry 仅支持项目级换源");
 
   cmd = xy_2strjoin ("poetry source add my_mirror ", source.url);
   chsrc_run (cmd, RunOpt_No_Last_New_Line);

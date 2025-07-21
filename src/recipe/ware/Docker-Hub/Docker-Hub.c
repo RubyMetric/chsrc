@@ -89,7 +89,7 @@ wr_dockerhub_setsrc (char *option)
               char *result = xy_run (cmd, 0);
               if (result && !xy_streql (result, "null"))
                 {
-                  chsrc_note2 ("已存在源，无需重复添加");
+                  chsrc_alert2 ("已存在源，无需重复添加");
                 }
               else
                 {
@@ -101,7 +101,7 @@ wr_dockerhub_setsrc (char *option)
             }
           else
             {
-              chsrc_note2 ("未找到 jq 命令, 将使用 sed 换源");
+              chsrc_alert2 ("未找到 jq 命令, 将使用 sed 换源");
               char *cmd = xy_str_gsub (RAWSTR_wr_dockerhub_sed_command, "@1@", source.url);
                     cmd = xy_str_gsub (cmd, "@2@", WR_DockerHub_ConfigFile);
               chsrc_run (cmd, RunOpt_Default);
@@ -110,7 +110,7 @@ wr_dockerhub_setsrc (char *option)
       else
         {
           /* 不存在 /etc/docker/daemon.json 时可以直接写入文件 */
-          chsrc_note2 ("未找到Docker配置文件, 将自动创建");
+          chsrc_alert2 ("未找到Docker配置文件, 将自动创建");
           chsrc_ensure_dir ("/etc/docker");
           chsrc_run ( xy_2strjoin ("touch ", WR_DockerHub_ConfigFile), RunOpt_Default);
 
@@ -120,12 +120,12 @@ wr_dockerhub_setsrc (char *option)
       if (xy_on_linux)
         {
           /* 由于 systemctl restart docker 会导致所有容器停止，所以不自动重启 */
-          chsrc_note2 ("请自行运行: sudo systemctl restart docker");
-          chsrc_note2 ("该命令会重启所有容器, 请在合适的时机执行");
+          chsrc_alert2 ("请自行运行: sudo systemctl restart docker");
+          chsrc_alert2 ("该命令会重启所有容器, 请在合适的时机执行");
         }
       else
         {
-          chsrc_note2 ("然后请手动重启 docker 服务");
+          chsrc_alert2 ("然后请手动重启 docker 服务");
         }
     }
   else

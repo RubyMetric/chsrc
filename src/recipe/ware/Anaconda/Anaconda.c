@@ -56,7 +56,7 @@ wr_anaconda_setsrc (char *option)
     {
       if (xy_file_exist (configfile))
         {
-          chsrc_note2 ("配置文件不存在，将使用 conda 命令创建");
+          chsrc_alert2 ("配置文件不存在，将使用 conda 命令创建");
           bool conda_exist = chsrc_check_program ("conda");
           if (!conda_exist)
             {

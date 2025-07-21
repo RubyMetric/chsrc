@@ -1575,7 +1575,7 @@ chsrc_ensure_dir (const char *dir)
   chsrc_run_as_a_service (cmd);
 
   char *msg = ENGLISH ? "Directory doesn't exist, created automatically " : "目录不存在，已自动创建 ";
-  chsrc_note2 (xy_2strjoin (msg, dir));
+  chsrc_alert2 (xy_2strjoin (msg, dir));
 }
 
 
@@ -1701,7 +1701,7 @@ chsrc_backup (const char *path)
   if (!exist)
     {
       char *msg = ENGLISH ? "File doesn't exist, skip backup: " : "文件不存在,跳过备份: ";
-      chsrc_note2 (xy_2strjoin (msg, path));
+      chsrc_alert2 (xy_2strjoin (msg, path));
       return;
     }
 

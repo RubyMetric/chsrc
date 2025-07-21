@@ -49,8 +49,8 @@ pl_ocaml_setsrc (char *option)
 
   chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_note2 ("如果是首次使用 opam ，请使用以下命令进行初始化");
-  p(xy_2strjoin ("opam init default ", source.url));
+  chsrc_alert2 ("如果是首次使用 opam ，请使用以下命令进行初始化");
+  println (xy_2strjoin ("opam init default ", source.url));
 
   chsrc_determine_chgtype (ChgType_SemiAuto);
   chsrc_conclude (&source);
