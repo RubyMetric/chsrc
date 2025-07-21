@@ -64,6 +64,7 @@ os_opensuse_setsrc (char *option)
     if (choice == 1)
       {
         chsrc_run_as_bash_file (RAWSTR_os_openSUSE_leap_in_bash);
+        break;
       }
     if (choice == 2)
       {
