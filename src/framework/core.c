@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-07-14>
+ * Last Modified : <2025-07-21>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -1388,7 +1388,7 @@ chsrc_run_as_bash_file (const char *script_content)
   // chmod (tmpfile, 0700);
   char *msg = CHINESE ? "即将执行 Bash 脚本内容:" : "The Bash script content will be executed:";
   chsrc_note2 (msg);
-  println (script_content);
+  println (faint(script_content));
   char *cmd = xy_2strjoin ("bash ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
   remove (tmpfile);
@@ -1408,7 +1408,7 @@ chsrc_run_as_sh_file (const char *script_content)
   // chmod (tmpfile, 0700);
   char *msg = CHINESE ? "即将执行 sh 脚本内容:" : "The sh script content will be executed:";
   chsrc_note2 (msg);
-  println (script_content);
+  println (faint(script_content));
   char *cmd = xy_2strjoin ("sh ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
   remove (tmpfile);
@@ -1427,7 +1427,7 @@ chsrc_run_as_pwsh_file (const char *script_content)
   fclose (f);
   char *msg = CHINESE ? "即将执行 PowerShell 脚本内容:" : "The PowerShell script content will be executed:";
   chsrc_note2 (msg);
-  println (script_content);
+  println (faint(script_content));
   char *cmd = xy_2strjoin ("pwsh ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
   remove (tmpfile);
