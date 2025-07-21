@@ -7,7 +7,7 @@
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2024-12-27>
- ! Last Modified : <2025-06-20>
+ ! Last Modified : <2025-07-21>
  ! ---------------------------------------------------------- -->
 
 # 开发 chsrc
@@ -19,6 +19,7 @@
   1. `GCC` 或 `Clang`
   2. [just] 或 `make`
   3. `curl`
+  4. [rawstr4c] (可选)
 
 **我推荐你使用 VS Code 开发，你可以在一分钟内成功编译、运行和 Debug `chsrc`**
 
@@ -136,4 +137,7 @@ make clean
 
 <br>
 
+
+
+[rawstr4c]: https://github.com/RubyMetric/rawstr4c
 [just]: https://github.com/casey/just
