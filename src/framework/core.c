@@ -172,7 +172,7 @@ ProgStatus =
 #define bdyellow(str) xy_str_to_bold(xy_str_to_yellow(str))
 #define bdpurple(str) xy_str_to_bold(xy_str_to_purple(str))
 
-// 2系列都是带有括号的
+/* 2系列都是带有括号的 */
 #define chsrc_succ2(str)    xy_succ_brkt(App_Name,ENGLISH?"SUCCEED":"成功",str)
 #define chsrc_log2(str)     xy_info_brkt(App_Name,"LOG",str)
 #define chsrc_warn2(str)    xy_warn_brkt(App_Name,ENGLISH?"WARN":"警告",str)
@@ -184,12 +184,26 @@ ProgStatus =
 #endif
 #define chsrc_verbose2(str) xy_info_brkt(App_Name,"VERBOSE",str)
 
+/**
+ * @note 输出在 stdout 中
+ */
 void
 chsrc_note2 (const char *str)
 {
   char *msg = ENGLISH ? "NOTE" : "提示";
+  xy_log_brkt (blue(App_Name), bdblue(msg), blue(str));
+}
+
+/**
+ * @note 输出在 stdout 中
+ */
+void
+chsrc_alert2 (const char *str)
+{
+  char *msg = ENGLISH ? "ALERT" : "提醒";
   xy_log_brkt (yellow(App_Name), bdyellow(msg), yellow(str));
 }
+
 
 void
 chsrc_log_write (const char *filename)
