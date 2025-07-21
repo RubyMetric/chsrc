@@ -6,7 +6,7 @@
  *                |
  * Created On     : <2023-09-01>
  * Major Revision :      1
- * Last Modified  : <2025-07-14>
+ * Last Modified  : <2025-07-21>
  * ------------------------------------------------------------*/
 
 /* Begin Target Matrix */
@@ -68,11 +68,12 @@ static const char
 
 
 static const char
-*os_ubuntu     [] = {"ubuntu",               NULL,  t(&os_ubuntu_target)},
-*os_linuxmint  [] = {"linuxmint", "mint",    NULL,  t(&os_linuxmint_target)},
+/* Zorin OS 完全使用 Ubuntu 的换源方法，二者兼容 */
+*os_ubuntu     [] = {"ubuntu",   "zorinos",  NULL,  t(&os_ubuntu_target)},
+*os_linuxmint  [] = {"linuxmint",             NULL,  t(&os_linuxmint_target)},
 *os_debian     [] = {"debian",               NULL,  t(&os_debian_target)},
 *os_fedora     [] = {"fedora",               NULL,  t(&os_fedora_target)},
-*os_opensuse   [] = {"opensuse",   NULL,            t(&os_opensuse_target)},
+*os_opensuse   [] = {"opensuse", "opensuse-leap", "opensuse-tumbleweed", NULL, t(&os_opensuse_target)},
 *os_kali       [] = {"kali",                 NULL,  t(&os_kali_target)},
 *os_msys2      [] = {"msys2",   "msys",      NULL,  t(&os_msys2_target)},
 *os_arch       [] = {"arch",    "archlinux", NULL,  t(&os_arch_target)},
@@ -82,10 +83,10 @@ static const char
 *os_rockylinux [] = {"rocky",  "rockylinux", NULL,  t(&os_rockylinux_target)},
 *os_almalinux  [] = {"alma",   "almalinux",  NULL,  t(&os_almalinux_target)},
 *os_alpine     [] = {"alpine",               NULL,  t(&os_alpine_target)},
-*os_voidlinux  [] = {"void",   "voidlinux",  NULL,  t(&os_voidlinux_target)},
+*os_voidlinux  [] = {"voidlinux",            NULL,  t(&os_voidlinux_target)},
 *os_solus      [] = {"solus",                NULL,  t(&os_solus_target)},
 *os_trisquel   [] = {"trisquel",             NULL,  t(&os_trisquel_target)},
-*os_linuxlite  [] = {"lite",   "linuxlite",  NULL,  t(&os_linuxlite_target)},
+*os_linuxlite  [] = {"linuxlite",             NULL,  t(&os_linuxlite_target)},
 *os_ros        [] = {"ros",    "ros2",       NULL,  t(&os_ros_target)},
 
 *os_raspberrypi[] = {"raspi",  "raspberrypi",NULL,  t(&os_raspberrypi_target)},

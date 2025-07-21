@@ -7,7 +7,7 @@
  ! Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
  !               |
  ! Created On    : <2023-12-28>
- ! Last Modified : <2025-07-20>
+ ! Last Modified : <2025-07-21>
  ! ---------------------------------------------------------- -->
 
 <div align="center">
@@ -436,10 +436,12 @@ chsrc set julia
 
 ```bash
 sudo chsrc set ubuntu
-sudo chsrc set linuxmint | mint
+sudo chsrc set zorinos
+sudo chsrc set linuxmint
 sudo chsrc set debian
 sudo chsrc set fedora
-sudo chsrc set suse  | opensuse
+# 同时支持 Leap 和 Tumbleweed
+sudo chsrc set opensuse
 sudo chsrc set kali
 sudo chsrc set arch
 sudo chsrc set archlinuxcn
@@ -448,11 +450,11 @@ sudo chsrc set gentoo
 sudo chsrc set rocky | rockylinux
 sudo chsrc set alma  | almalinux
 sudo chsrc set alpine
-sudo chsrc set void  | voidlinux
+sudo chsrc set voidlinux
 sudo chsrc set solus
 sudo chsrc set ros   | ros2
 sudo chsrc set trisquel
-sudo chsrc set lite  | linuxlite
+sudo chsrc set linuxlite
 sudo chsrc set raspi | raspberrypi
 sudo chsrc set armbian
 sudo chsrc set openwrt
