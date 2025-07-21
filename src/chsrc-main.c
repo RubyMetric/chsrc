@@ -31,13 +31,13 @@
  *                 |   Rui Yang     <techoc@foxmail.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2025-07-19>
+ * Last Modified   : <2025-07-21>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.2-alpha3"
-#define Chsrc_Release_Date   "2025/07/19"
+#define Chsrc_Version        "0.2.2-beta1"
+#define Chsrc_Release_Date   "2025/07/21"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
