@@ -102,7 +102,7 @@
 
 <br>
 
-[rawstr4c]: ../tool/rawstr4c/
+[rawstr4c]: https://github.com/RubyMetric/rawstr4c
 [chsrc-bootstrap]: ../bootstrap/
 [recipe template]: ../src/recipe/recipe-template.c
 [Wiki]: https://github.com/RubyMetric/chsrc/wiki

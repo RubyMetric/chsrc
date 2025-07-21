@@ -148,5 +148,5 @@ clean:
 	-@{{BIN_rm}} README.md.bak*
 
 # 使用: just rawstr4c [--debug] Markdown.md
-rawstr4c *args:
-	@{{ if os() == 'windows' { 'tool\\rawstr4c\\run\\run.bat' } else { 'bash ./tool/rawstr4c/run/run.sh' } }} {{args}}
+# rawstr4c *args:
+#	@{{ if os() == 'windows' { 'tool\\rawstr4c\\run\\run.bat' } else { 'bash ./tool/rawstr4c/run/run.sh' } }} {{args}}
