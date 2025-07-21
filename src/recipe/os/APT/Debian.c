@@ -8,7 +8,7 @@
  *                |
  * Created On     : <2023-09-02>
  * Major Revision :      3
- * Last Modified  : <2025-07-11>
+ * Last Modified  : <2025-07-21>
  * ------------------------------------------------------------*/
 
 #define OS_Debian_Speed_URL_Postfix "/dists/bookworm/main/Contents-all.gz"
@@ -28,13 +28,26 @@ static Source_t os_debian_sources[] =
   {&os_debian_upstream, "http://deb.debian.org/debian", DelegateToUpstream},
 
   /* MirrorZ 的速度这么测也是可以的 */
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/debian/", FeedBySourcesPrepare },
-  {&Ali,              "https://mirrors.aliyun.com/debian",  FeedBySourcesPrepare},
-  {&Volcengine,       "https://mirrors.volces.com/debian",  FeedBySourcesPrepare},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/debian", FeedBySourcesPrepare},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/debian", FeedBySourcesPrepare},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/debian", FeedBySourcesPrepare},
-  {&Tencent,          "https://mirrors.tencent.com/debian", FeedBySourcesPrepare},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/debian/",
+                      "https://mirrors.cernet.edu.cn/debian/" OS_Debian_Speed_URL_Postfix},
+
+  {&Ali,              "https://mirrors.aliyun.com/debian",
+                      "https://mirrors.aliyun.com/debian"    OS_Debian_Speed_URL_Postfix},
+
+  {&Volcengine,       "https://mirrors.volces.com/debian",
+                      "https://mirrors.volces.com/debian" OS_Debian_Speed_URL_Postfix},
+
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/debian",
+                      "https://mirrors.bfsu.edu.cn/debian" OS_Debian_Speed_URL_Postfix},
+
+  {&Ustc,             "https://mirrors.ustc.edu.cn/debian",
+                      "https://mirrors.ustc.edu.cn/debian" OS_Debian_Speed_URL_Postfix},
+
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/debian",
+                      "https://mirrors.tuna.tsinghua.edu.cn/debian" OS_Debian_Speed_URL_Postfix},
+
+  {&Tencent,          "https://mirrors.tencent.com/debian",
+                      "https://mirrors.tencent.com/debian" OS_Debian_Speed_URL_Postfix},
 
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/debian", FeedBySourcesPrepare},
 
@@ -70,7 +83,7 @@ os_debian_getsrc (char *option)
     }
 
   char *msg = ENGLISH ? "Source list file missing! However, you can still run `chsrc set debian` to add and use new sources"
-                               : "缺少源配置文件！但仍可直接通过 chsrc set debian 来添加使用新的源";
+                      : "缺少源配置文件！但仍可直接通过 chsrc set debian 来添加使用新的源";
   chsrc_error2 (msg);
   return;
 }
