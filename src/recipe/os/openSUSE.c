@@ -42,8 +42,39 @@ os_opensuse_setsrc (char *option)
 
   chsrc_yield_source_and_confirm (os_opensuse);
 
-  /* TODO: 实现 Tumbleweed 换源 */
-  chsrc_run_as_bash_file (RAWSTR_os_openSUSE_leap_in_bash);
+  while (1) {
+    chsrc_note2 ("请选择你的操作系统为:");
+    printf ("%s", R"(
+1. openSUSE Leap
+2. openSUSE Tumbleweed
+
+==> )");
+
+    int choice = 0;
+
+    /* 接受到一个数字时返回1，非法为0，流结束为-1 */
+    if (scanf("%d", &choice) != 1)
+      {
+        /* 清除输入缓冲区 */
+        int ch;
+        while ((ch = getchar()) != '\n' && ch != EOF);
+        chsrc_error2 ("输入无效！请输入数字");
+        continue;
+      }
+    if (choice == 1)
+      {
+        chsrc_run_as_bash_file (RAWSTR_os_openSUSE_leap_in_bash);
+      }
+    if (choice == 2)
+      {
+        chsrc_run_as_bash_file (RAWSTR_os_openSUSE_tumbleweed_in_bash);
+        break;
+      }
+    else
+      {
+        chsrc_error2 ("无效的选择，请输入 1 或 2 ");
+      }
+  }
 
   chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);
