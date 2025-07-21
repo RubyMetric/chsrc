@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  : Lontten  <lontten@163.com>
  * Created On    : <2024-09-29>
- * Last Modified : <2025-07-11>
+ * Last Modified : <2025-07-21>
  * ------------------------------------------------------------*/
 
 /**
@@ -30,8 +30,13 @@ pl_nodejs_bun_setsrc (char *option)
   // 用的是 npm Registry 的源
   chsrc_yield_source (pl_nodejs_group);
 
-  char *file = xy_strjoin(3, "[install]\n"
-                             "registry = \"", source.url, "\"");
+  char *file =
+R"(
+[install]
+registry = "@url@"
+)";
+
+  file = xy_str_gsub (file, "@url@", source.url);
 
   if (chsrc_in_local_mode())
     {

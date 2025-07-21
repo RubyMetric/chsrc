@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nul None  <nul@none.org>
  * Created On    : <2024-12-06>
- * Last Modified : <2025-07-11>
+ * Last Modified : <2025-07-21>
  *
  * 由于Rye已经有后继uv了，所以我们不把该管理器纳入Python group中
  * ------------------------------------------------------------*/
@@ -41,10 +41,15 @@ pl_python_rye_setsrc (char *option)
   /* 并不在 Python group 中，所以不考虑 target group 情况 */
   chsrc_yield_source_and_confirm (pl_python_group);
 
-  const char *file = xy_strjoin (7,
-    "[[sources]]\n",
-    "name = \"", source.mirror->abbr, "\"\n",
-    "url = \"",  source.url,          "\"");
+  const char *file =
+R"(
+[[sources]]
+name = "@1@"
+url  = "@2@"
+)";
+
+  file = xy_str_gsub (file, "@1@", source.mirror->abbr);
+  file = xy_str_gsub (file, "@2@", source.url);
 
   char *rye_config = pl_python_find_rye_config ();
   chsrc_note2 (xy_strjoin (3, "请在配置文件 ", rye_config, " 中添加:"));

@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-10>
- * Last Modified : <2025-07-16>
+ * Last Modified : <2025-07-21>
  * ------------------------------------------------------------*/
 
 #include "rawstr4c.h"
@@ -33,9 +33,13 @@ pl_haskell_setsrc (char *option)
 {
   chsrc_yield_source_and_confirm (pl_haskell);
 
-  char *file = xy_strjoin (3, "repository mirror\n"
-                              "  url: ", source.url,
-                            "\n  secure: True");
+  char *file = R"(
+repository mirror
+  url: @url@
+  secure: True
+)";
+
+  file = xy_str_gsub (file, "@url@", source.url);
 
   char *config = NULL;
   if (xy_on_windows)
@@ -48,7 +52,7 @@ pl_haskell_setsrc (char *option)
     }
 
   chsrc_note2 (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
-  println (file); br();
+  println (file);
 
   config = xy_normalize_path ("~/.stack/config.yaml");
   file = xy_str_gsub (RAWSTR_pl_haskell_stackage_yaml, "@url@", source.url);

@@ -19,7 +19,7 @@ pl_nodejs_check_cmd (bool *npm_exist, bool *yarn_exist, bool *pnpm_exist)
   if (!*npm_exist && !*yarn_exist && !*pnpm_exist)
     {
       char *msg = ENGLISH ? "No npm, yarn or pnpm command found, check if at least one is present"
-                                   : "未找到 npm 或 yarn 或 pnpm 命令，请检查是否存在其一";
+                          : "未找到 npm 或 yarn 或 pnpm 命令，请检查是否存在其一";
       chsrc_error (msg);
       exit (Exit_UserCause);
     }

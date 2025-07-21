@@ -84,15 +84,19 @@ pl_rust_cargo_setsrc (char *option)
 {
   chsrc_yield_source_and_confirm (pl_rust_cargo);
 
-  const char* file = xy_strjoin (3,
-    "[source.crates-io]\n"
-    "replace-with = 'mirror'\n\n"
+  const char *file =
+R"toml(
+[source.crates-io]
+replace-with = 'mirror'
 
-    "[source.mirror]\n"
-    "registry = \"sparse+", source.url, "\"");
+[source.mirror]
+registry = "sparse+@url@"
+)toml";
+
+  file = xy_str_gsub (file, "@url@", source.url);
 
   chsrc_note2 (xy_strjoin (3, "请手动写入以下内容到 ", xy_normalize_path ("~/.cargo/config.toml"), " 文件中:"));
-  p(file);
+  println (file);
 
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
