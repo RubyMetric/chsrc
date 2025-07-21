@@ -7,7 +7,7 @@
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2024-12-13>
- ! Last Modified : <2025-07-14>
+ ! Last Modified : <2025-07-21>
  ! ---------------------------------------------------------- -->
 
 # 贡献说明
@@ -15,7 +15,6 @@
 ## 分支
 
 - `gh-build`：仅仅在发布版本时由 `@ccmywish` 推送，触发编译到 GitHub Releases 中
-- `gh-site`：`chsrc.run` 的工作分支，由 `@ccmywish` 推送
 - `main`: stable，代码一定是可以编译运行的，我们假设 end users 在其他条件都得不到二进制时，会自己编译这个分支来运行 `chsrc`
 - `dev`：开发分支，工作分支，在此分支上解决冲突
 
