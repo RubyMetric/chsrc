@@ -14,7 +14,7 @@
   <img alt="chsrc logo" src="doc/image/chsrc.png"/>
 </div>
 
-全平台通用换源工具与框架 `chsrc`，**目标支持 Linux, Windows (MSYS2, Cygwin), macOS, BSD 等尽可能多的操作系统环境，龙芯、飞腾、RISC-V 等尽可能多的 CPU**。
+全平台通用换源工具与框架 `chsrc`，**目标支持 Linux, Windows (native, MSYS2, Cygwin), macOS, BSD, Android 等尽可能多的操作系统环境，龙芯、飞腾、RISC-V 等尽可能多的 CPU**。
 
 我们使用 **C11** 来完成上述目标。我们并不使用 Python 或 JS 等解释语言，因为一个简单的换源工具，不应该强行塞给用户一个庞大的解释器和数十、数百 MB 其他文件。
 
@@ -38,7 +38,7 @@
 ## 🤝 协作与贡献
 
 > [!TIP]
-> **`chsrc` 不仅是一个命令行工具，同时也是一个体现了 Ruby on Rails 思想的 MVC 换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法(recipe)。** [Write A Recipe Even If You Don't Know C](./doc/02-Write-A-Recipe-Even-If-You-Dont-Know-C.md)
+> **`chsrc` 不仅是一个命令行工具，同时也是一个体现了 Ruby on Rails 思想的 MVC 换源框架，它甚至使你能够在不了解C语言的情况下编写出新的换源方法 (recipe)。** 配合使用 [rawstr4c], 这将比写 shell 脚本更加轻松。 [Write A Recipe Even If You Don't Know C](./doc/02-Write-A-Recipe-Even-If-You-Dont-Know-C.md)
 
 ---
 
@@ -518,13 +518,15 @@ chsrc set conda  | anaconda
 
 ## 🚀 赞赏支持
 
-你是否因为使用 `chsrc` 而节省了时间和精力 or whatever?
+你是否因为 `chsrc` 而受到启发、节省了时间精力 or whatever?
 
 爱发电主页: <https://afdian.com/a/ccmywish>
 
-<img src="https://raw.githubusercontent.com/ccmywish/support-my-oss-work/main/wechat.png" alt="wechat-reward" style="width:300px;"/>
+<img src="https://raw.githubusercontent.com/ccmywish/support-my-oss-work/main/wechat-reward.png" alt="wechat-reward" style="width:300px;"/>
 
 <br>
+
+[rawstr4c]:        https://github.com/RubyMetric/rawstr4c
 
 [@Aaron-212]:      https://github.com/Aaron-212
 [@chenrui333]:     https://github.com/chenrui333

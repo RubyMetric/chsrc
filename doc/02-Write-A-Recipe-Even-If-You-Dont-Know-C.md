@@ -7,7 +7,7 @@
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2024-08-19>
- ! Last Modified : <2025-07-15>
+ ! Last Modified : <2025-07-21>
  ! ---------------------------------------------------------- -->
 
 # Write A Recipe Even If You Don't Know C
@@ -18,15 +18,15 @@
 
 <br>
 
-我鼓励你为新的软件添加换源支持，因为通过 `chsrc` 这将非常简单，你的贡献也将非常有价值。理论上每一个 `recipe` 都需要有专人长时间维护 ([招募](https://github.com/RubyMetric/chsrc/issues/130))。
+我鼓励你为新的软件添加换源支持，因为通过 `chsrc` 框架，这将比写 shell 脚本更加轻松，你的贡献也将非常有价值。理论上每一个 `recipe` 都需要有专人长时间维护 ([招募](https://github.com/RubyMetric/chsrc/issues/130))。
 
 - 本项目采用 `GPLv3+` 协议，是真正的**自由软件**，而非仅仅是开源软件
 - 代码规范灵活遵循 `GNU` 标准（若标准干扰了可维护性，则并不采纳）
 - 高度模块化，目录结构清晰易懂
-- 极小依赖，极易构建，只需要 `GCC` 或 `Clang` 即可编译 (`make` 和 `just`可简化，但不是必需的)
+- 极小依赖，极易构建，只需要 `GCC` 或 `Clang` 即可编译 (`make` 和 `just`可简化编译，但不是必需的)
 - 易于将 `shell` 脚本转换为等价的 `recipe`
 - 已有大量 `recipe` 可提供参考，并提供了 [recipe template] 供直接使用
-- [rawstr4c] 帮助你在C语言中维护复杂的字符串
+- 本仓库外的子项目 [rawstr4c] 帮助你在C语言中维护复杂的字符串
 - [chsrc-bootstrap] 帮助你在没有预编译 `chsrc` 的平台上 bootstrap 自己
 
 <br>
