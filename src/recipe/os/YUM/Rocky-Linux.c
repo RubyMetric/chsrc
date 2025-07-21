@@ -5,7 +5,7 @@
  * Contributors  : happy game <happygame1024@gmail.com>
  *               |
  * Created On    : <2023-09-24>
- * Last Modified : <2025-06-20>
+ * Last Modified : <2025-07-21>
  * ------------------------------------------------------------*/
 
 /**
@@ -13,16 +13,19 @@
  */
 static Source_t os_rockylinux_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/rocky"},
-  {&Ali,              "https://mirrors.aliyun.com/rockylinux"},
-  {&Volcengine,       "https://mirrors.volces.com/rockylinux"},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/rocky"},
-  {&Sustech,          "https://mirrors.sustech.edu.cn/rocky-linux"},
-  {&Zju,              "https://mirrors.zju.edu.cn/rocky"},
-  {&Lzuoss,           "https://mirror.lzu.edu.cn/rocky"},
-  // {&Netease,          "https://mirrors.163.com/rocky"},  /* 不启用原因：过慢 */
-  // {&Sohu,             "https://mirrors.sohu.com/Rocky"}  /* 不启用原因：过慢 */
+  {&UpstreamProvider,  NULL, NULL},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/rocky",  DelegateToMirror},
+  {&Ali,              "https://mirrors.aliyun.com/rockylinux", DelegateToMirror},
+  {&Volcengine,       "https://mirrors.volces.com/rockylinux", DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/rocky",      DelegateToMirror},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/rocky-linux", DelegateToMirror},
+  {&Zju,              "https://mirrors.zju.edu.cn/rocky",      DelegateToMirror},
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/rocky",       DelegateToMirror},
+
+  /* 不启用原因：过慢 */
+  // {&Netease,          "https://mirrors.163.com/rocky",      DelegateToMirror},
+   /* 不启用原因：过慢 */
+  // {&Sohu,             "https://mirrors.sohu.com/Rocky",     DelegateToMirror}
 };
 def_sources_n(os_rockylinux);
 
@@ -72,4 +75,21 @@ os_rockylinux_setsrc (char *option)
 }
 
 
-def_target_s(os_rockylinux);
+Feature_t
+os_rockylinux_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = false;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NULL;
+  f.can_english = true;
+  f.can_user_define = false;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_sf(os_rockylinux);

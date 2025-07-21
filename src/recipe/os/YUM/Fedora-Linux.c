@@ -6,7 +6,7 @@
  * Contributors  : Aoran Zeng <ccmywish@qq.com>
  *               |
  * Created On    : <2023-09-26>
- * Last Modified : <2025-06-20>
+ * Last Modified : <2025-07-21>
  *
  * 名称为 Fedora Linux
  * ------------------------------------------------------------*/
@@ -16,15 +16,18 @@
  */
 static Source_t os_fedora_sources[] =
 {
-  {&UpstreamProvider, "http://download.example/pub/fedora/linux"},
-  {&Ali,              "https://mirrors.aliyun.com/fedora"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/fedora"},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/fedora"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/fedora"},
-  {&Tencent,          "https://mirrors.tencent.com/fedora"},
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/fedora"},
-  // {&Netease,          "https://mirrors.163.com/fedora"}, /* 不启用原因：过慢 */
-  // {&Sohu,             "https://mirrors.sohu.com/fedora"} /* 不启用原因：过慢 */
+  {&UpstreamProvider, "http://download.example/pub/fedora/linux", DelegateToUpstream},
+  {&Ali,              "https://mirrors.aliyun.com/fedora",        DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/fedora",       DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/fedora",       DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/fedora", DelegateToMirror},
+  {&Tencent,          "https://mirrors.tencent.com/fedora",       DelegateToMirror},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/fedora",    DelegateToMirror},
+
+  /* 不启用原因：过慢 */
+  // {&Netease,          "https://mirrors.163.com/fedora",        DelegateToMirror},
+  /* 不启用原因：过慢 */
+  // {&Sohu,             "https://mirrors.sohu.com/fedora",        DelegateToMirror}"
 };
 def_sources_n(os_fedora);
 
@@ -99,4 +102,4 @@ os_fedora_feat (char *option)
   return f;
 }
 
-def_target_sf(os_fedora);
+def_target_srf(os_fedora);

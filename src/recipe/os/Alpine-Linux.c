@@ -5,7 +5,7 @@
  * Contributors  : Yangmoooo <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-09-24>
- * Last Modified : <2024-12-18>
+ * Last Modified : <2025-07-21>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t os_alpine_upstream =
@@ -20,16 +20,16 @@ static SourceProvider_t os_alpine_upstream =
  */
 static Source_t os_alpine_sources[] =
 {
-  {&os_alpine_upstream, "http://dl-cdn.alpinelinux.org/alpine"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/alpine"},
-  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/alpine"},
-  {&Sustech,          "https://mirrors.sustech.edu.cn/alpine"},
-  {&Zju,              "https://mirrors.zju.edu.cn/alpine"},
-  {&Lzuoss,           "https://mirror.lzu.edu.cn/alpine"},
-  {&Ali,              "https://mirrors.aliyun.com/alpine"},
-  {&Tencent,          "https://mirrors.cloud.tencent.com/alpine"},
-  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/alpine"},
-  {&Huawei,           "https://mirrors.huaweicloud.com/alpine"}
+  {&os_alpine_upstream, "http://dl-cdn.alpinelinux.org/alpine",      DelegateToUpstream},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/alpine", DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/alpine",     DelegateToMirror},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/alpine",       DelegateToMirror},
+  {&Zju,              "https://mirrors.zju.edu.cn/alpine",           DelegateToMirror},
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/alpine",            DelegateToMirror},
+  {&Ali,              "https://mirrors.aliyun.com/alpine",           DelegateToMirror},
+  {&Tencent,          "https://mirrors.cloud.tencent.com/alpine",    DelegateToMirror},
+  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/alpine", DelegateToMirror},
+  {&Huawei,           "https://mirrors.huaweicloud.com/alpine",      DelegateToMirror}
 };
 def_sources_n(os_alpine);
 
@@ -39,6 +39,7 @@ os_alpine_getsrc (char *option)
 {
   chsrc_view_file ("/etc/apk/repositories");
 }
+
 
 /**
  * @consult https://help.mirrors.cernet.edu.cn/alpine/
@@ -61,4 +62,22 @@ os_alpine_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target(os_alpine);
+
+Feature_t
+os_alpine_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = true;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NULL;
+  f.can_english = true;
+  f.can_user_define = false;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_gsf(os_alpine);

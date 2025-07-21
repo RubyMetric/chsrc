@@ -6,7 +6,7 @@
  *               | happy game <happygame1024@gmail.com>
  *               |
  * Created On    : <2024-08-08>
- * Last Modified : <2024-12-18>
+ * Last Modified : <2025-07-21>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t os_openwrt_upstream =
@@ -20,16 +20,16 @@ static SourceProvider_t os_openwrt_upstream =
  */
 static Source_t os_openwrt_sources[] =
 {
-  {&os_openwrt_upstream, "https://downloads.openwrt.org"},
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/openwrt"},
-  {&Ali,              "https://mirrors.aliyun.com/openwrt"},
-  {&Tencent,          "https://mirrors.cloud.tencent.com/openwrt"},
-  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/openwrt"},
-  {&Tuna,             "https://mirror.tuna.tsinghua.edu.cn/openwrt"},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/openwrt"},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/openwrt"},
-  {&Pku,              "https://mirrors.pku.edu.cn/openwrt"},
-  {&Sustech,          "https://mirrors.sustech.edu.cn/openwrt"},
+  {&os_openwrt_upstream, "https://downloads.openwrt.org",             DelegateToUpstream},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/openwrt",        DelegateToMirror},
+  {&Ali,              "https://mirrors.aliyun.com/openwrt",           DelegateToMirror},
+  {&Tencent,          "https://mirrors.cloud.tencent.com/openwrt",    DelegateToMirror},
+  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/openwrt", DelegateToMirror},
+  {&Tuna,             "https://mirror.tuna.tsinghua.edu.cn/openwrt",  DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/openwrt",            DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/openwrt",          DelegateToMirror},
+  {&Pku,              "https://mirrors.pku.edu.cn/openwrt",           DelegateToMirror},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/openwrt",       DelegateToMirror},
 };
 
 def_sources_n(os_openwrt);

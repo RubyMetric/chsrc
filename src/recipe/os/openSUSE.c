@@ -4,7 +4,7 @@
  * File Authors  : Heng Guo <2085471348@qq.com>
  * Contributors  : Aoran Zeng <ccmywish@qq.com>
  * Created On    : <2023-09-17>
- * Last Modified : <2025-06-20>
+ * Last Modified : <2025-07-21>
  * ------------------------------------------------------------*/
 
 /**
@@ -12,16 +12,19 @@
  */
 static Source_t os_opensuse_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&Ali,              "https://mirrors.aliyun.com/opensuse"},
-  {&Volcengine,       "https://mirrors.volces.com/opensuse"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/opensuse"},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/opensuse"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/opensuse"},
-  {&Tencent,          "https://mirrors.tencent.com/opensuse"},
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/opensuse"},
-  // {&Netease,          "https://mirrors.163.com/opensuse"}, /* 不启用原因：过慢 */
-  // {&Sohu,             "https://mirrors.sohu.com/opensuse"} /* 不启用原因：过慢 */
+  {&UpstreamProvider,  NULL, NULL},
+  {&Ali,              "https://mirrors.aliyun.com/opensuse",  DelegateToMirror},
+  {&Volcengine,       "https://mirrors.volces.com/opensuse",  DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/opensuse", DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/opensuse", DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/opensuse", DelegateToMirror},
+  {&Tencent,          "https://mirrors.tencent.com/opensuse", DelegateToMirror},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/opensuse", DelegateToMirror},
+
+  /* 不启用原因：过慢 */
+  // {&Netease,          "https://mirrors.163.com/opensuse",   DelegateToMirror},
+  /* 不启用原因：过慢 */
+  // {&Sohu,             "https://mirrors.sohu.com/opensuse",  DelegateToMirror}
 };
 def_sources_n(os_opensuse);
 
@@ -80,4 +83,23 @@ os_opensuse_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target_s(os_opensuse);
+
+Feature_t
+os_opensuse_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = false;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NULL;
+  f.can_english = false;
+  f.can_user_define = false;
+
+  f.note = NULL;
+  return f;
+}
+
+
+def_target_sf(os_opensuse);

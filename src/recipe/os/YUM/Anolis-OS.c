@@ -14,15 +14,15 @@
  */
 static Source_t os_anolis_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&Ali,              "https://mirrors.aliyun.com/anolis"},
-  {&Hust,             "https://mirrors.hust.edu.cn/anolis"}
+  {&UpstreamProvider,  NULL, NULL},
+  {&Ali,              "https://mirrors.aliyun.com/anolis",  DelegateToMirror},
+  {&Hust,             "https://mirrors.hust.edu.cn/anolis", DelegateToMirror}
 };
 def_sources_n(os_anolis);
 
 
 /**
- * 参考: https://mirrors.hust.edu.cn/docs/anolis
+ * @consult: https://mirrors.hust.edu.cn/docs/anolis
  */
 void
 os_anolis_setsrc (char *option)
@@ -41,4 +41,22 @@ os_anolis_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target_s(os_anolis);
+
+Feature_t
+os_anolis_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = false;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NULL;
+  f.can_english = true;
+  f.can_user_define = false;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_sf(os_anolis);

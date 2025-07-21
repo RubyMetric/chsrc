@@ -4,7 +4,7 @@
  * File Authors  : Heng Guo <2085471348@qq.com>
  * Contributors  : Aoran Zeng <ccmywish@qq.com>
  * Created On    : <2023-09-05>
- * Last Modified : <2025-06-20>
+ * Last Modified : <2025-07-21>
  * ------------------------------------------------------------*/
 
 /**
@@ -13,14 +13,17 @@
 static Source_t os_gentoo_sources[] =
 {
   {&UpstreamProvider,  NULL},
-  {&Ali,              "mirrors.aliyun.com"},
-  {&Bfsu,             "mirrors.bfsu.edu.cn"},
-  {&Ustc,             "mirrors.ustc.edu.cn"},
-  {&Tuna,             "mirrors.tuna.tsinghua.edu.cn"},
-  {&Tencent,          "mirrors.tencent.com"},
-  // {&Tencent_Intra, "mirrors.tencentyun.com"},
-  // {&Netease,          "mirrors.163.com"}, /* 不启用原因：过慢 */
-  // {&Sohu,             "mirrors.sohu.com"} /* 不启用原因：过慢 */
+  {&Ali,              "mirrors.aliyun.com",  DelegateToMirror },
+  {&Bfsu,             "mirrors.bfsu.edu.cn", DelegateToMirror},
+  {&Ustc,             "mirrors.ustc.edu.cn", DelegateToMirror},
+  {&Tuna,             "mirrors.tuna.tsinghua.edu.cn", DelegateToMirror},
+  {&Tencent,          "mirrors.tencent.com", DelegateToMirror},
+  // {&Tencent_Intra, "mirrors.tencentyun.com", DelegateToMirror},
+
+  /* 不启用原因：过慢 */
+  // {&Netease,          "mirrors.163.com", DelegateToMirror},
+  /* 不启用原因：过慢 */
+  // {&Sohu,             "mirrors.sohu.com", DelegateToMirror}
 };
 def_sources_n(os_gentoo);
 
@@ -50,4 +53,23 @@ os_gentoo_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target_s(os_gentoo);
+
+Feature_t
+os_gentoo_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = false;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NULL;
+  f.can_english = true;
+  f.can_user_define = false;
+
+  f.note = NULL;
+  return f;
+}
+
+
+def_target_sf(os_gentoo);

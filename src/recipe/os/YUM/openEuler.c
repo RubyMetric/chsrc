@@ -7,7 +7,7 @@
  *               | happy game <happygame1024@gmail.com>
  *               |
  * Created On    : <2023-09-06>
- * Last Modified : <2025-06-20>
+ * Last Modified : <2025-07-21>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t os_openEuler_upstream =
@@ -22,15 +22,18 @@ static SourceProvider_t os_openEuler_upstream =
  */
 static Source_t os_openeuler_sources[] =
 {
-  {&os_openEuler_upstream, "https://repo.openeuler.org/"},
-  {&Ali,              "https://mirrors.aliyun.com/openeuler/"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/openeuler/"},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/openeuler/"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/openeuler/"},
-  {&Tencent,          "https://mirrors.tencent.com/openeuler/"},
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/openeuler/"},
-  // {&Netease,          "https://mirrors.163.com/openeuler/"}   /* 不启用原因：过慢 */
-  // {&Sohu,             "https://mirrors.sohu.com/openeuler/"}  /* 不启用原因：过慢 */
+  {&os_openEuler_upstream, "https://repo.openeuler.org/",         DelegateToUpstream},
+  {&Ali,              "https://mirrors.aliyun.com/openeuler/",     DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/openeuler/",    DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/openeuler/",    DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/openeuler/", DelegateToMirror},
+  {&Tencent,          "https://mirrors.tencent.com/openeuler/",    DelegateToMirror},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/openeuler/", DelegateToMirror},
+
+  /* 不启用原因：过慢 */
+  // {&Netease,          "https://mirrors.163.com/openeuler/",  DelegateToMirror}
+  /* 不启用原因：过慢 */
+  // {&Sohu,             "https://mirrors.sohu.com/openeuler/", DelegateToMirror}
 };
 def_sources_n(os_openeuler);
 
