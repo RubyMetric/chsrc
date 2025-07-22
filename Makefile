@@ -36,7 +36,7 @@ endif
 
 #======== Default Tooling ============
 ifeq ($(On-Windows), 1)
-	# MSYS2 环境
+  # MSYS2 环境
 	CC = cc
 else ifeq ($(On-macOS), 1)
 	CC = clang
@@ -101,10 +101,14 @@ ifeq ($(MAKECMDGOALS), build-in-ci-release-mode)
 	endif
 
   ifeq ($(On-macOS), 1)
-    # 太糟糕了，到现在 (2025-07-22) GitHub Actions 的 macOS (13、15) 中的 LLVM 版本还太低
-    # 我们代码里有 raw string literal 扩展的用法，所以只能切到 GCC 去
-    # 但是用户自己编译等情况下，依旧让他们用 Clang，因为他们环境的 LLVM 版本可能比较新
-    CC = gcc
+    ifeq ($(CC), clang)
+      CFLAGS += -fraw-string-literals
+    endif
+  endif
+
+  # 在 Windows 上交叉编译 Android 时，用的是 clang
+  ifdef CROSS_BUILD_WINDOWS_FOR_ANDROID
+    CFLAGS += -fraw-string-literals
   endif
 
 endif

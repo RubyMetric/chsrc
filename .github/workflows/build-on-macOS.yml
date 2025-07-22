@@ -4,7 +4,7 @@
 # Contributors  :   Nul None  <nul@none.org>
 #               |
 # Created On    : <2023-09-15>
-# Last Modified : <2025-06-20>
+# Last Modified : <2025-07-22>
 #
 # Build chsrc on macOS and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
@@ -21,6 +21,11 @@ jobs:
     steps:
     - name: 检出代码
       uses: actions/checkout@v4
+
+    - name: 检查编译器版本
+      run: |
+        clang --version
+        gcc --version
 
     - name: 为 arm64 (AArch64) 构建
       run: |
@@ -46,6 +51,11 @@ jobs:
     steps:
     - name: 检出代码
       uses: actions/checkout@v4
+
+    - name: 检查编译器版本
+      run: |
+        clang --version
+        gcc --version
 
     - name: 为 x64 构建
       run: |

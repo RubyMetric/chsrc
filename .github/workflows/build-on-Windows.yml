@@ -51,7 +51,12 @@ jobs:
 
     - name: 为 Android 构建
       run: |
-        mingw32-make.exe build-in-ci-release-mode CC=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/windows-x86_64/bin/aarch64-linux-android21-clang
+        compiler=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/windows-x86_64/bin/aarch64-linux-android21-clang
+
+        # 检查编译器版本
+        $compiler --version
+
+        mingw32-make.exe build-in-ci-release-mode CC=$compiler CROSS_BUILD_WINDOWS_FOR_ANDROID=1
         mv chsrc-ci-release.exe chsrc-arm64-android
 
     - name: List files
