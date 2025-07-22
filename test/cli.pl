@@ -3,7 +3,7 @@
 # Test File     : cli.pl
 # Test Authors  : Aoran Zeng <ccmywish@qq.com>
 # Created On    : <2024-06-05>
-# Last Modified : <2024-09-05>
+# Last Modified : <2025-07-22>
 #
 #   测试 chsrc 可执行文件
 # ---------------------------------------------------------------
@@ -16,7 +16,7 @@ like `./chsrc -v`,         $version_str,  'chsrc -v';
 like `./chsrc --version`,  $version_str,  'chsrc --version';
 like `./chsrc version`,    $version_str,  'chsrc version';
 
-my $help_str = qr/^(help|list|get|set)/m;
+my $help_str = qr/^   (help|list|get|set|reset)/m;
 like `./chsrc -h`,     $help_str,    'chsrc -h';
 like `./chsrc --help`, $help_str,    'chsrc --help';
 like `./chsrc help`,   $help_str,    'chsrc help';
@@ -42,7 +42,7 @@ my $fake_target_name = qr/暂不支持的换源目标/;
 like `./chsrc get fake_target_name 2>&1`,  $fake_target_name, 'chsrc get fake_target_name';
 
 
-if ($ARGV[0] eq 'fastcheck') {
+if ((defined $ARGV[0]) && ($ARGV[0] eq 'fastcheck')) {
   say "Fast checking, done testing.";
   done_testing;
   exit 0;
@@ -64,7 +64,7 @@ like `./chsrc get ruby`,   $get_ruby,  'chsrc get ruby';
 =begin
 测试 chsrc measure
 =cut
-my $measure_ruby = qr/  - Ruby China/;
+my $measure_ruby = qr/Ruby China 社区/;
 like `./chsrc measure ruby`,  $measure_ruby,  'chsrc measure ruby';
 
 
@@ -75,7 +75,7 @@ like `./chsrc measure ruby`,  $measure_ruby,  'chsrc measure ruby';
 my $set_ruby_abcd      = qr/镜像站.*不存在/;
 my $set_ruby_first     = qr/全自动换源完成, 感谢镜像提供方/;
 my $set_ruby           = qr/全自动换源完成, 感谢镜像提供方/;
-my $reset_ruby         = qr/将重置为上游默认源.*Upstream/s;
+my $reset_ruby         = qr/选中镜像站.*Upstream.*已重置为上游默认源/s;
 my $set_ruby_rubychina = qr/Ruby China 社区/;
 my $set_ruby_locally   = qr/bundle config --local/;
 
