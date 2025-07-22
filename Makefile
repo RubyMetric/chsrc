@@ -101,8 +101,10 @@ ifeq ($(MAKECMDGOALS), build-in-ci-release-mode)
 	endif
 
   # GitHub Actions 上的 macOS 中的 LLVM 太老了
+  # 而且 gcc 被重命名为了 clang
+  # 需要直接指定版本
   ifeq ($(On-macOS), 1)
-    CC = gcc
+    CC = gcc-14
   endif
 
 endif

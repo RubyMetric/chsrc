@@ -22,13 +22,13 @@ jobs:
     - name: 检出代码
       uses: actions/checkout@v4
 
-    - name: 检查 Clang 版本
+    - name: 检查编译器版本
       run: |
         clang --version
-
-    - name: 检查 GCC 版本
-      run: |
+        echo
         gcc --version
+        echo
+        gcc-14 --version
 
     - name: 为 arm64 (AArch64) 构建
       run: |
@@ -55,13 +55,13 @@ jobs:
     - name: 检出代码
       uses: actions/checkout@v4
 
-    - name: 检查 Clang 版本
+    - name: 检查编译器版本
       run: |
         clang --version
-
-    - name: 检查 GCC 版本
-      run: |
+        echo
         gcc --version
+        echo
+        gcc-14 --version
 
     - name: 为 x64 构建
       run: |
