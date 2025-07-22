@@ -5,10 +5,8 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2023-08-31>
- * Last Modified : <2025-07-16>
+ * Last Modified : <2025-07-22>
  * ------------------------------------------------------------*/
-
-#include "rawstr4c.h"
 
 static SourceProvider_t pl_java_upstream =
 {
