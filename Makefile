@@ -8,7 +8,7 @@
 #								| sanchuanhehe <wyihe5520@gmail.com>
 #								|
 # Created On    : <2023-08-28>
-# Last Modified : <2025-07-21>
+# Last Modified : <2025-07-22>
 #
 # 请阅读 ./doc/01-Develop.md 来使用
 # --------------------------------------------------------------
@@ -92,11 +92,21 @@ endif
 
 #====== CI release mode 的配置 =======
 ifeq ($(MAKECMDGOALS), build-in-ci-release-mode)
+
 	CFLAGS += $(CFLAGS_optimization)
-	# 仅在 Linux 上使用静态链接
+
+  # 仅在 Linux 上使用静态链接
 	ifeq ($(On-Linux), 1)
 		CFLAGS += $(CFLAGS_static)
 	endif
+
+  ifeq ($(On-macOS), 1)
+    # 太糟糕了，到现在 (2025-07-22) GitHub Actions 的 macOS (13、15) 中的 LLVM 版本还太低
+    # 我们代码里有 raw string literal 扩展的用法，所以只能切到 GCC 去
+    # 但是用户自己编译等情况下，依旧让他们用 Clang，因为他们环境的 LLVM 版本可能比较新
+    CC = gcc
+  endif
+
 endif
 #=====================================
 
