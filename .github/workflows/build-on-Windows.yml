@@ -55,9 +55,16 @@ jobs:
 
         # 检查编译器版本
         $compiler --version
+        echo
 
         mingw32-make.exe build-in-ci-release-mode CC=$compiler CROSS_BUILD_WINDOWS_FOR_ANDROID=1
-        mv chsrc-ci-release.exe chsrc-arm64-android
+        echo
+
+        # 让我们看看里面有啥
+        ls
+        echo
+
+        mv chsrc-ci-release chsrc-arm64-android
 
     - name: List files
       run: ls *.exe
