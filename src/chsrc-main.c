@@ -139,92 +139,7 @@
 
 #include "recipe/menu.c"
 
-
-static const char *
-USAGE_CHINESE =
-R"(名称:
-   chsrc - Change Source - (GPLv3+) - Developed by RubyMetric
-
-版本:
-   @ver@
-
-使用:
-   chsrc <command> [options] [target] [mirror]
-
-命令:
-   help, h                    打印此帮助，或 -h, --help
-   issue                      查看相关issue
-
-   list, ls, l                列出可用镜像站和可换源目标
-   list  mirror|target        列出支持的: 镜像站/换源目标
-   list  os|lang|ware         列出支持的: 操作系统/编程语言/软件
-   list   <target>            查看该目标可用源与支持功能
-
-   measure, m, cesu <target>  对该目标所有源测速
-
-   get, g <target>            查看该目标当前源的使用情况
-
-   set, s <target>            换源，自动测速后挑选最快源
-   set    <target>  first     换源，使用维护团队测速第一的源
-   set    <target> <mirror>   换源，指定使用某镜像站 (通过list <target>查看)
-   set    <target>  <URL>     换源，用户自定义源URL
-   reset  <target>            重置，使用上游默认使用的源
-
-选项:
-   -dry                       Dry Run，模拟换源过程，命令仅打印并不运行
-   -local                     仅对本项目而非全局换源 (通过ls <target>查看支持情况)
-   -ipv6                      使用IPv6测速
-   -en(glish)                 使用英文输出
-   -no-color                  无颜色输出
-
-维护:
-   邀请您担任 Chef, 为用户把关您熟悉的 recipe
-   源代码地址: @url@
-   成为维护者: https://github.com/RubyMetric/chsrc/issues/130)";
-
-
-static const char *
-USAGE_ENGLISH =
-R"(NAME:
-   chsrc - Change Source - (GPLv3+) - Developed by RubyMetric
-
-VERSION:
-   @ver@
-
-USAGE:
-   chsrc <command> [options] [target] [mirror]
-
-COMMANDS:
-   help, h                    Print this help, or -h, --help
-   issue                      See related issues
-
-   list, ls, l                List available mirror sites and supported targets
-   list  mirror|target        List supported:  mirror sites/supported targets
-   list  os|lang|ware         List supported: OSes/Programming Languages/Softwares
-   list   <target>            View available sources and supporting features for <target>
-
-   measure, m, cesu <target>  Measure velocity of all sources of <target>
-
-   get, g <target>            View the current source state for <target>
-
-   set, s <target>            Change source, select the fastest source by automatic speed measurement
-   set    <target>  first     Change source, select the fastest source measured by the maintainers team
-   set    <target> <mirror>   Change source, specify a mirror site (Via `list <target>`)
-   set    <target>  <URL>     Change source, using user-defined source URL
-   reset  <target>            Reset  source to the upstream's default
-
-OPTIONS:
-   -dry                       Dry Run. Simulate the source changing process, command only prints, not run
-   -local                     Change source only for this project rather than globally (Via `ls <target>`)
-   -ipv6                      Speed measurement using IPv6
-   -en(glish)                 Output in English
-   -no-color                  Output without color
-
-MAINTAIN:
-   We invite you to become a Chef to ensure the quality of recipes you are familiar with for users:
-
-   Source Code:         @url@,
-   Become a Maintainer: https://github.com/RubyMetric/chsrc/issues/130)";
+#include "rawstr4c.h"
 
 
 
@@ -425,13 +340,8 @@ cli_print_target_features (Feature_t f, const char *input_target_name)
 void
 cli_print_version ()
 {
-  say ("chsrc " Chsrc_Version);
-  say (R"(Copyright (C) 2025 Aoran Zeng, Heng Guo
-License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-
-Written by Aoran Zeng, Heng Guo and contributors. (See chsrc-main.c))");
+  char *str = xy_str_gsub (RAWSTR_chsrc_for_v, "@ver@", Chsrc_Version);
+  print (str);
 }
 
 
@@ -440,27 +350,18 @@ cli_print_help ()
 {
   char *version_string = purple("v" Chsrc_Version "-" Chsrc_Release_Date);
 
-  const char *raw = CHINESE ? USAGE_CHINESE : USAGE_ENGLISH;
+  const char *raw = CHINESE ? RAWSTR_chsrc_USAGE_CHINESE : RAWSTR_chsrc_USAGE_ENGLISH;
 
   char *str = xy_str_gsub (raw, "@ver@", version_string);
         str = xy_str_gsub (str, "@url@", Chsrc_Maintain_URL);
-  println (str);
+  print (str);
 }
 
 
 void
 cli_print_issues ()
 {
-  say (R"(
-We accept issues both sides on Gitee and Github
-
-  - https://gitee.com/RubyMetric/chsrc/issues
-  - https://github.com/RubyMetric/chsrc/issues
-
-Latest Mirror site status wiki:
-
-  - https://github.com/RubyMetric/chsrc/wiki
-)");
+  print (RAWSTR_chsrc_for_issue);
 
   /*
   if (chsrc_check_program ("gh"))
