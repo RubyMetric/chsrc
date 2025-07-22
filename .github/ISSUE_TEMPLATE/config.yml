@@ -2,4 +2,5 @@ blank_issues_enabled: true
 contact_links:
   - name: ❤️ 赞赏支持 chsrc
     url: https://afdian.com/a/ccmywish
-    about: 你是否因为 `chsrc` 而受到启发、节省了时间精力 or whatever?
+    # about 不支持 Markdown 语法
+    about: 你是否因为 chsrc 而受到启发、节省了时间精力 or whatever?
