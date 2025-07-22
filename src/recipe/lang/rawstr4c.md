@@ -51,6 +51,23 @@ allprojects {
 
 
 
+## Rust
+
+- namespace = `rust`
+- name = `cargo_config`
+
+```toml
+[source.crates-io]
+replace-with = 'mirror'
+
+[source.mirror]
+registry = "sparse+@url@"
+```
+
+<br>
+
+
+
 ## Haskell
 
 - namespace = `haskell`

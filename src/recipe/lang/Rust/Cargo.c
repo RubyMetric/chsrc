@@ -5,7 +5,7 @@
  * Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2025-07-11>
+ * Last Modified : <2025-07-22>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t pl_rust_cargo_upstream =
@@ -21,44 +21,33 @@ static SourceProvider_t pl_rust_cargo_upstream =
  *
  * @note 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`
  * @note 链接末尾的 `/` 不能缺少
- *
- * @note 2025-06-17: 经验证，南京大学、华中科大的镜像同步失败，实际情况下多数包都不可用
  */
 static Source_t pl_rust_cargo_sources[] =
 {
-  {&pl_rust_cargo_upstream,  "https://github.com/rust-lang/crates.io-index/",
-                              NULL},
+  {&pl_rust_cargo_upstream,  "https://github.com/rust-lang/crates.io-index/", DelegateToUpstream},
 
-  {&MirrorZ,       "https://mirrors.cernet.edu.cn/crates.io-index/",
-                    NULL},
-  {&RsProxyCN,     "https://rsproxy.cn/index/",
-                    NULL},
+  {&MirrorZ,       "https://mirrors.cernet.edu.cn/crates.io-index/",  DelegateToMirror},
+  {&RsProxyCN,     "https://rsproxy.cn/index/",                       DelegateToMirror},
+
   {&Ali,           "https://mirrors.aliyun.com/crates.io-index/",
                    "https://mirrors.aliyun.com/crates/api/v1/crates/windows/0.58.0/download"},
 
-  {&Zju,           "https://mirrors.zju.edu.cn/crates.io-index/",
-                    NULL},
+  {&Zju,           "https://mirrors.zju.edu.cn/crates.io-index/", DelegateToMirror},
 
-  // {&Nju,        "https://mirror.nju.edu.cn/git/crates.io-index.git/",
-  //                NULL},
+  /* 注释原因: (2025-06-17) 镜像同步失败，多数包都不可用 */
+  // {&Nju,        "https://mirror.nju.edu.cn/git/crates.io-index.git/",   DelegateToMirror},
 
-  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/",
-                    NULL},
-
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/",
-                    NULL},
-
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/",
-                    NULL},
+  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/",    DelegateToMirror},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/", DelegateToMirror},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/",          DelegateToMirror},
 
   {&Ustc,          "https://mirrors.ustc.edu.cn/crates.io-index/",
                    "https://crates-io.proxy.ustclug.org/api/v1/crates/windows/0.58.0/download"},
 
-  // {&Hust,       "https://mirrors.hust.edu.cn/crates.io-index/",
-  //                NULL},
+  /* 注释原因: (2025-06-17) 镜像同步失败，多数包都不可用 */
+  // {&Hust,       "https://mirrors.hust.edu.cn/crates.io-index/", DelegateToMirror},
 
-  {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/",
-                    NULL}
+  {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/",  DelegateToMirror}
 };
 def_sources_n(pl_rust_cargo);
 
@@ -84,19 +73,12 @@ pl_rust_cargo_setsrc (char *option)
 {
   chsrc_yield_source_and_confirm (pl_rust_cargo);
 
-  const char *file =
-R"toml(
-[source.crates-io]
-replace-with = 'mirror'
+  char *content = RAWSTR_pl_rust_cargo_config;
 
-[source.mirror]
-registry = "sparse+@url@"
-)toml";
-
-  file = xy_str_gsub (file, "@url@", source.url);
+  content = xy_str_gsub (content, "@url@", source.url);
 
   chsrc_note2 (xy_strjoin (3, "请手动写入以下内容到 ", xy_normalize_path ("~/.cargo/config.toml"), " 文件中:"));
-  println (file);
+  print (content);
 
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);

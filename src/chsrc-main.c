@@ -43,6 +43,8 @@
 
 #include "framework/core.c"
 
+#include "recipe/lang/rawstr4c.h"
+
 #include "recipe/lang/Ruby/Ruby.c"
 
 #include "recipe/lang/Python/common.h"
