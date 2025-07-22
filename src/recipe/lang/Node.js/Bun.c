@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  : Lontten  <lontten@163.com>
  * Created On    : <2024-09-29>
- * Last Modified : <2025-07-21>
+ * Last Modified : <2025-07-22>
  * ------------------------------------------------------------*/
 
 /**
@@ -30,13 +30,10 @@ pl_nodejs_bun_setsrc (char *option)
   // 用的是 npm Registry 的源
   chsrc_yield_source (pl_nodejs_group);
 
-  char *file =
-R"(
-[install]
-registry = "@url@"
-)";
+  char *content = "[install]\n"
+                  "registry = \"@url@\"\n";
 
-  file = xy_str_gsub (file, "@url@", source.url);
+  content = xy_str_gsub (content, "@url@", source.url);
 
   if (chsrc_in_local_mode())
     {
@@ -47,7 +44,7 @@ registry = "@url@"
       chsrc_note2 (xy_strjoin (3, "请手动写入以下内容到 ", xy_normalize_path ("~/.bunfig.toml"), " 文件中"));
     }
 
-  p(file);
+  print (content);
 
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
