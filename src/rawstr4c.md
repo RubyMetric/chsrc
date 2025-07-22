@@ -69,7 +69,8 @@
    -no-color                  无颜色输出
 
 维护:
-   邀请您担任 Chef, 为用户把关您熟悉的 recipe
+   邀请您担任  Chef, 为用户把关您熟悉的 recipe
+
    源代码地址: @url@
    成为维护者: https://github.com/RubyMetric/chsrc/issues/130
 ```
@@ -121,7 +122,7 @@ OPTIONS:
 MAINTAIN:
    We invite you to become a Chef to ensure the quality of recipes you are familiar with for users:
 
-   Source Code:               @url@,
+   Source Code:               @url@
    Become a Maintainer:       https://github.com/RubyMetric/chsrc/issues/130
 ```
 
