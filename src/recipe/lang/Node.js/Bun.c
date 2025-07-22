@@ -30,8 +30,7 @@ pl_nodejs_bun_setsrc (char *option)
   // 用的是 npm Registry 的源
   chsrc_yield_source (pl_nodejs_group);
 
-  char *content = "[install]\n"
-                  "registry = \"@url@\"\n";
+  char *content = RAWSTR_pl_nodejs_bun_config;
 
   content = xy_str_gsub (content, "@url@", source.url);
 

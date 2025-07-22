@@ -19,6 +19,23 @@
 
 
 
+## Node.js
+
+- namespace = `nodejs`
+
+### Bun
+
+- name = `bun_config`
+
+```toml
+[install]
+registry = "@url@"
+```
+
+<br>
+
+
+
 ## Java
 
 - namespace = `java`
