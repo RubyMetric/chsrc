@@ -5,7 +5,7 @@
  * Contributors   : Aoran Zeng <ccmywish@qq.com>
  * Created On     : <2023-09-17>
  * Major Revision :      1
- * Last Modified  : <2025-07-21>
+ * Last Modified  : <2025-07-22>
  * ------------------------------------------------------------*/
 
 #include "rawstr4c.h"
@@ -44,16 +44,16 @@ os_opensuse_setsrc (char *option)
 
   while (1) {
     chsrc_note2 ("请选择你的操作系统为:");
-    printf ("%s", R"(
-1. openSUSE Leap
-2. openSUSE Tumbleweed
-
-==> )");
+    printf ("%s",
+      "1. openSUSE Leap\n"
+      "2. openSUSE Tumbleweed\n"
+      "\n"
+      "==> ");
 
     int choice = 0;
 
     /* 接受到一个数字时返回1，非法为0，流结束为-1 */
-    if (scanf("%d", &choice) != 1)
+    if (scanf ("%d", &choice) != 1)
       {
         /* 清除输入缓冲区 */
         int ch;
