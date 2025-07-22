@@ -8,7 +8,7 @@
  ! Last Modified : <2025-07-22>
  ! ---------------------------------------------------------- -->
 
-# rawstr4c input for chsrc
+# [rawstr4c] input for chsrc
 
 `chsrc` 使用的 C标准 (最低要求) 是 `gnu11` (`c11` 的超集)，这也就是说，我们项目是可以，而且是 **推荐** 同时混用 `R"()"` 和 `rawstr4c` 的
 
@@ -43,8 +43,8 @@
    chsrc <command> [options] [target] [mirror]
 
 命令:
-   help,  h                  打印此帮助，或 -h, --help
-   issue, i                  查看相关issue
+   help,  h                   打印此帮助，或 -h, --help
+   issue, i                   查看相关issue
 
    list, ls, l                列出可用镜像站和可换源目标
    list  mirror|target        列出支持的: 镜像站/换源目标
@@ -93,8 +93,8 @@ USAGE:
    chsrc <command> [options] [target] [mirror]
 
 COMMANDS:
-   help,  h                  Print this help, or -h, --help
-   issue, i                  See related issues
+   help,  h                   Print this help, or -h, --help
+   issue, i                   See related issues
 
    list, ls, l                List available mirror sites and supported targets
    list  mirror|target        List supported:  mirror sites/supported targets
@@ -121,8 +121,8 @@ OPTIONS:
 MAINTAIN:
    We invite you to become a Chef to ensure the quality of recipes you are familiar with for users:
 
-   Source Code:         @url@,
-   Become a Maintainer: https://github.com/RubyMetric/chsrc/issues/130
+   Source Code:               @url@,
+   Become a Maintainer:       https://github.com/RubyMetric/chsrc/issues/130
 ```
 
 <br>
@@ -152,14 +152,33 @@ Written by Aoran Zeng, Heng Guo and contributors. (See chsrc-main.c)
 - name = `for_issue`
 
 ```
-We accept issues both sides on Gitee and Github
-
-  - https://gitee.com/RubyMetric/chsrc/issues
+我们同时在 GitHub 和 Gitee 接受 issue 和 Bug 报告:
   - https://github.com/RubyMetric/chsrc/issues
+  - https://gitee.com/RubyMetric/chsrc/issues
 
-Latest Mirror site status wiki:
 
+欢迎参与具体任务:
+
+   Shell auto-completion 终端命令自动补全:
+
+        https://github.com/RubyMetric/chsrc/issues/204
+
+   搜集上游默认源地址，帮助进行 chsrc reset:
+
+        https://github.com/RubyMetric/chsrc/issues/111
+
+   搜集测速地址，进行精准测速:
+
+        https://github.com/RubyMetric/chsrc/issues/205
+
+   帮助没有预编译的平台编写 shell 脚本:
+
+        https://github.com/RubyMetric/chsrc/issues/230
+
+
+支持的通用镜像站:
   - https://github.com/RubyMetric/chsrc/wiki
+
 ```
 
 <br>
@@ -176,3 +195,9 @@ Latest Mirror site status wiki:
    * 模糊测速: 仅代表该镜像站提供服务的一个可能速度。因而可能会出现测速数值较高，但实际使用体验不佳的现象。
 当你遇到模糊测速时，请尽可能向我们提交准确的测速链接: chsrc issue
 ```
+
+<br>
+
+
+
+[rawstr4c]: https://github.com/RubyMetric/rawstr4c
