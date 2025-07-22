@@ -31,7 +31,7 @@
  *                 |   Rui Yang     <techoc@foxmail.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2025-07-21>
+ * Last Modified   : <2025-07-22>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
@@ -141,39 +141,48 @@
 
 
 static const char *
-Chsrc_Usage[] = {
-  "使用: chsrc <command> [options] [target] [mirror]",
-  "help                      打印此帮助，或 h, -h, --help",
-  "issue                     查看相关issue\n",
+USAGE_CHINESE =
+R"(名称:
+   chsrc - Change Source - (GPLv3+) - Developed by RubyMetric
 
-  "list (或 ls, 或 l)        列出可用镜像源，和可换源目标",
-  "list mirror/target        列出可用镜像源，或可换源目标",
-  "list os/lang/ware         列出可换源的操作系统/编程语言/软件\n",
+版本:
+   @ver@
 
-  "measure <target>          对该目标所有源测速",
-  "cesu    <target>          \n",
+使用:
+   chsrc <command> [options] [target] [mirror]
 
-  "list <target>             查看该目标可用源与支持功能",
-  "get  <target>             查看该目标当前源的使用情况\n",
+命令:
+   help, h                    打印此帮助，或 -h, --help
+   issue                      查看相关issue
 
-  "set  <target>             换源，自动测速后挑选最快源",
-  "set  <target>  first      换源，使用维护团队测速第一的源",
-  "set  <target> <mirror>    换源，指定使用某镜像站 (通过list <target>查看)",
-  "set  <target> https://url 换源，用户自定义源URL",
-  "reset <target>            重置，使用上游默认使用的源\n",
+   list, ls, l                列出可用镜像站和可换源目标
+   list  mirror|target        列出支持的: 镜像站/换源目标
+   list  os|lang|ware         列出支持的: 操作系统/编程语言/软件
+   list   <target>            查看该目标可用源与支持功能
 
-  "选项:",
-  "-dry                      Dry Run，模拟换源过程，命令仅打印并不运行",
-  "-local                    仅对本项目而非全局换源 (通过ls <target>查看支持情况)",
-  "-ipv6                     使用IPv6测速",
-  "-en(glish)                使用英文输出",
-  "-no-color                 无颜色输出\n",
+   measure, m, cesu <target>  对该目标所有源测速
 
-  "镜像站状态: <https://github.com/RubyMetric/chsrc/wiki>",
-  "维护: <" Chsrc_Maintain_URL ">\n",
+   get, g <target>            查看该目标当前源的使用情况
 
-  "邀请您担任 Chef 或 Taster, 为用户把关您熟悉的秘制菜肴 (recipe): <https://github.com/RubyMetric/chsrc/issues/130>"
-};
+   set, s <target>            换源，自动测速后挑选最快源
+   set    <target>  first     换源，使用维护团队测速第一的源
+   set    <target> <mirror>   换源，指定使用某镜像站 (通过list <target>查看)
+   set    <target>  <URL>     换源，用户自定义源URL
+   reset  <target>            重置，使用上游默认使用的源
+
+选项:
+   -dry                       Dry Run，模拟换源过程，命令仅打印并不运行
+   -local                     仅对本项目而非全局换源 (通过ls <target>查看支持情况)
+   -ipv6                      使用IPv6测速
+   -en(glish)                 使用英文输出
+   -no-color                  无颜色输出
+
+维护:
+   邀请您担任 Chef, 为用户把关您熟悉的 recipe
+   源代码地址: <@url@>
+   成为维护者: <https://github.com/RubyMetric/chsrc/issues/130>
+)";
+
 
 static const char *
 Chsrc_Usage_English[] = {
@@ -422,9 +431,7 @@ cli_print_version ()
 void
 cli_print_help ()
 {
-  say (xy_strjoin (3, "chsrc: Change Source (GPLv3+) ",
-                   purple("v" Chsrc_Version "-" Chsrc_Release_Date), " by RubyMetric"));
-  br();
+  char *version_string = purple("v" Chsrc_Version "-" Chsrc_Release_Date);
 
   if (ENGLISH)
     {
@@ -433,8 +440,9 @@ cli_print_help ()
     }
   else
     {
-      for (int i=0; i<xy_arylen (Chsrc_Usage); i++)
-        say (Chsrc_Usage[i]);
+      char *str = xy_str_gsub (USAGE_CHINESE, "@ver@", version_string);
+            str = xy_str_gsub (str, "@url@", Chsrc_Maintain_URL);
+      println (str);
     }
 }
 
