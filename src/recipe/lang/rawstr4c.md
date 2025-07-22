@@ -5,15 +5,19 @@
  ! Config Authors: Aoran Zeng <ccmywish@qq.com>
  ! Contributors  :  Nil Null  <nil@null.org>
  ! Created On    : <2025-07-14>
- ! Last Modified : <2025-07-16>
+ ! Last Modified : <2025-07-22>
  ! ---------------------------------------------------------- -->
 
-# rawstr4c input
+# rawstr4c input for PL
 
 - prefix = `RAWSTR_pl`
 - output = `:global-variable-only-header`
 - translate = `:oct`
 - keep-postfix = `false`
+
+<br>
+
+
 
 ## Java
 
@@ -59,13 +63,10 @@ repository mirror
   secure: True
 ```
 
-<br>
 
+### stackage
 
-
-## stackage
-
-- name = `haskell_stackage`
+- name = `stackage`
 - keep-postfix = `true`
 - postfix = `yaml`
 
@@ -88,6 +89,8 @@ package-index:
     ignore-expiry: no
 ```
 
+<br>
+
 
 
 ## Clojar
@@ -106,7 +109,6 @@ package-index:
                         :url "@url@"}}
    :main leiningen.web)
 ```
-
 
 
 ### projfiles.clj
