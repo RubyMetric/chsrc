@@ -185,39 +185,48 @@ R"(名称:
 
 
 static const char *
-Chsrc_Usage_English[] = {
-  "Usage: chsrc <command> [options] [target] [mirror]",
-  "help                      Print this help, or h, -h, --help",
-  "issue                     See related issues\n",
+USAGE_ENGLISH =
+R"(NAME:
+   chsrc - Change Source - (GPLv3+) - Developed by RubyMetric
 
-  "list (or ls, or l)        List available mirror sites and supported targets",
-  "list mirror/target        List available mirror sites or  supported targets",
-  "list os/lang/ware         List supported OS/Programming Language/Software\n",
+VERSION:
+   @ver@
 
-  "measure <target>          Measure velocity of all sources of <target>",
-  "cesu    <target>          \n",
+USAGE:
+   chsrc <command> [options] [target] [mirror]
 
-  "list <target>             View available sources and supporting features for <target>",
-  "get  <target>             View the current source state for <target>\n",
+COMMANDS:
+   help, h                    Print this help, or -h, --help
+   issue                      See related issues
 
-  "set  <target>             Change source, select the fastest source by automatic speed measurement",
-  "set  <target>  first      Change source, select the fastest source measured by the maintainers team",
-  "set  <target> <mirror>    Change source, specify a mirror site (Via `list <target>`)",
-  "set  <target> https://url Change source, using user-defined source URL",
-  "reset <target>            Reset  source to the upstream's default\n",
+   list, ls, l                List available mirror sites and supported targets
+   list  mirror|target        List supported:  mirror sites/supported targets
+   list  os|lang|ware         List supported: OSes/Programming Languages/Softwares
+   list   <target>            View available sources and supporting features for <target>
 
-  "Options:",
-  "-dry                      Dry Run. Simulate the source changing process, command only prints, not run",
-  "-local                    Change source only for this project rather than globally (Via `ls <target>`)",
-  "-ipv6                     Speed measurement using IPv6",
-  "-en(glish)                Output in English",
-  "-no-color                 Output without color\n",
+   measure, m, cesu <target>  Measure velocity of all sources of <target>
 
-  "Mirror status: <https://github.com/RubyMetric/chsrc/wiki>",
-  "Maintain:      <" Chsrc_Maintain_URL ">\n",
+   get, g <target>            View the current source state for <target>
 
-  "We sincerely invite you to become a Chef or Taster to ensure the quality of recipes you are familiar with for users: <https://github.com/RubyMetric/chsrc/issues/130>"
-};
+   set, s <target>            Change source, select the fastest source by automatic speed measurement
+   set    <target>  first     Change source, select the fastest source measured by the maintainers team
+   set    <target> <mirror>   Change source, specify a mirror site (Via `list <target>`)
+   set    <target>  <URL>     Change source, using user-defined source URL
+   reset  <target>            Reset  source to the upstream's default
+
+OPTIONS:
+   -dry                       Dry Run. Simulate the source changing process, command only prints, not run
+   -local                     Change source only for this project rather than globally (Via `ls <target>`)
+   -ipv6                      Speed measurement using IPv6
+   -en(glish)                 Output in English
+   -no-color                  Output without color
+
+MAINTAIN:
+   We invite you to become a Chef to ensure the quality of recipes you are familiar with for users:
+
+   Source Code:         <@url@>,
+   Become a Maintainer: <https://github.com/RubyMetric/chsrc/issues/130>
+)";
 
 
 
@@ -433,18 +442,13 @@ cli_print_help ()
 {
   char *version_string = purple("v" Chsrc_Version "-" Chsrc_Release_Date);
 
-  if (ENGLISH)
-    {
-      for (int i=0; i<xy_arylen (Chsrc_Usage_English); i++)
-        say (Chsrc_Usage_English[i]);
-    }
-  else
-    {
-      char *str = xy_str_gsub (USAGE_CHINESE, "@ver@", version_string);
-            str = xy_str_gsub (str, "@url@", Chsrc_Maintain_URL);
-      println (str);
-    }
+  const char *raw = CHINESE ? USAGE_CHINESE : USAGE_ENGLISH;
+
+  char *str = xy_str_gsub (raw, "@ver@", version_string);
+        str = xy_str_gsub (str, "@url@", Chsrc_Maintain_URL);
+  println (str);
 }
+
 
 void
 cli_print_issues ()
