@@ -432,19 +432,9 @@ iterate_targets_ (const char ***array, size_t size, const char *input, const cha
 void
 cli_notify_lastly_for_users ()
 {
-  char *msg = "2025-07-15:\n\n"
-
-  "  * 精准测速: 能真实反映你未来使用该资源时的速度，因为它直接测量你关注的那个资源。\n"
-  "  * 模糊测速: 仅代表该镜像站提供服务的一个可能速度。因而可能会出现测速数值较高，但实际使用体验不佳的现象。\n\n"
-
-  "当你遇到模糊测速时，请尽可能向我们提交准确的测速链接。\n"
-  "邀请您担任 Chef 或 Taster, 为用户把关您熟悉的秘制菜肴 (recipe): <https://github.com/RubyMetric/chsrc/issues/130>\n";
-
-  br();br();
-
-  chsrc_note2 (msg);
+  br();
+  chsrc_note2 (RAWSTR_chsrc_last_message);
 }
-
 
 
 

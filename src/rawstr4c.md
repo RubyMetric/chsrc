@@ -43,8 +43,8 @@
    chsrc <command> [options] [target] [mirror]
 
 命令:
-   help, h                    打印此帮助，或 -h, --help
-   issue                      查看相关issue
+   help,  h                  打印此帮助，或 -h, --help
+   issue, i                  查看相关issue
 
    list, ls, l                列出可用镜像站和可换源目标
    list  mirror|target        列出支持的: 镜像站/换源目标
@@ -93,8 +93,8 @@ USAGE:
    chsrc <command> [options] [target] [mirror]
 
 COMMANDS:
-   help, h                    Print this help, or -h, --help
-   issue                      See related issues
+   help,  h                  Print this help, or -h, --help
+   issue, i                  See related issues
 
    list, ls, l                List available mirror sites and supported targets
    list  mirror|target        List supported:  mirror sites/supported targets
@@ -160,4 +160,19 @@ We accept issues both sides on Gitee and Github
 Latest Mirror site status wiki:
 
   - https://github.com/RubyMetric/chsrc/wiki
+```
+
+<br>
+
+
+
+## 最后告诉用户一些维护信息
+
+- name = `last_message`
+
+```
+
+   * 精准测速: 能真实反映你未来使用该资源时的速度，因为它直接测量你关注的那个资源。
+   * 模糊测速: 仅代表该镜像站提供服务的一个可能速度。因而可能会出现测速数值较高，但实际使用体验不佳的现象。
+当你遇到模糊测速时，请尽可能向我们提交准确的测速链接: chsrc issue
 ```
