@@ -4,7 +4,7 @@
 # Contributors  :   Nul None  <nul@none.org>
 #               |
 # Created On    : <2023-09-14>
-# Last Modified : <2025-06-20>
+# Last Modified : <2025-07-22>
 #
 # Build chsrc on Windows and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
@@ -49,6 +49,11 @@ jobs:
         mingw32-make.exe build-in-ci-release-mode
         mv chsrc-ci-release.exe chsrc-x86-windows.exe
 
+    - name: 为 Android 构建
+      run: |
+        mingw32-make.exe build-in-ci-release-mode CC=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/windows-x86_64/bin/aarch64-linux-android21-clang
+        mv chsrc-ci-release.exe chsrc-arm64-android
+
     - name: List files
       run: ls *.exe
 
@@ -60,4 +65,5 @@ jobs:
         files: |
           chsrc-x64-windows.exe
           chsrc-x86-windows.exe
+          chsrc-arm64-android
         token: ${{ secrets.UPLOAD_TO_GITHUB }}
