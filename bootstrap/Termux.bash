@@ -6,7 +6,7 @@
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
 # Contributors  : Nul None <nul@none.org>
 # Created On    : <2025-07-12>
-# Last Modified : <2025-07-12>
+# Last Modified : <2025-07-22>
 #
 # Termux:
 #
@@ -24,7 +24,10 @@ bs_echo() {
 if command -v termux-change-repo &>/dev/null; then
   termux-change-repo
 else
-  # HELP: $PREFIX 有值吗? 是 "/data/data/com.termux/files/usr" 吗?
+
+  # $PREFIX 的值为:  /data/data/com.termux/files/usr
+  # 用户主目录 ~ 为: /data/data/com.termux/files/home
+
   # 必要的
   sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.cernet.edu.cn/termux/apt/termux-main stable main@' $PREFIX/etc/apt/sources.list
   apt update

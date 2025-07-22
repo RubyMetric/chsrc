@@ -306,8 +306,17 @@ clang -Iinclude -Ilib src/chsrc-main.c -o chsrc
 <details>
 <summary>Android/Termux</summary>
 
+Termux 中默认无 `Wget`，我们都用 `cURL` 来下载安装
+
 ```bash
-wget -O - https://gitee.com/RubyMetric/chsrc/raw/main/bootstrap/Termux.bash | bash
+# arm64/aarch64
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-arm64-linux -o chsrc; chmod +x ./chsrc
+```
+
+如果你所在的处理器架构没有预编译版本，可以使用 [chsrc-bootstrap]:
+
+```bash
+curl -L https://gitee.com/RubyMetric/chsrc/raw/main/bootstrap/Termux.bash | bash
 ```
 
 </details>

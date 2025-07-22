@@ -7,14 +7,14 @@
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2025-07-12>
- ! Last Modified : <2025-07-12>
+ ! Last Modified : <2025-07-22>
  ! ---------------------------------------------------------- -->
 
 # Bootstrap
 
 ```ruby
 begin
-  download_binary_for_my_platform
+  download_prebuilt_chsrc_binary_for_my_platform
 rescue NoReadyMadeBinary => e
   bootstrap! e.my_platform
 end
@@ -24,7 +24,7 @@ end
 
 
 
-## 鸡蛋困境
+## 预编译产生的死锁问题
 
 我们支持预编译的操作系统目前只有 `Windows`, `Linux`, `macOS`，支持的架构请参考[项目 README](../README.md)
 
@@ -36,7 +36,7 @@ end
 2. C语言编译器
 3. `GNU make` 或 `just` (这二者非强制，但是有了更好)
 
-可是如果用户还没有换源，他/她又如何获得上述这些程序呢？**这是一把死锁，导致用户最终回到手动换源的原始农耕时代。这是一个 "鸡蛋问题"，到底是先有鸡还是先有蛋？**
+可是如果用户还没有换源，他/她又如何获得上述这些程序呢？**这是一把死锁，导致用户最终回到手动换源的原始农耕时代。**
 
 <br>
 
