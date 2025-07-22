@@ -100,15 +100,9 @@ ifeq ($(MAKECMDGOALS), build-in-ci-release-mode)
 		CFLAGS += $(CFLAGS_static)
 	endif
 
+  # GitHub Actions 上的 macOS 中的 LLVM 太老了
   ifeq ($(On-macOS), 1)
-    ifeq ($(CC), clang)
-      CFLAGS += -fraw-string-literals
-    endif
-  endif
-
-  # 在 Windows 上交叉编译 Android 时，用的是 clang
-  ifdef CROSS_BUILD_WINDOWS_FOR_ANDROID
-    CFLAGS += -fraw-string-literals
+    CC = gcc
   endif
 
 endif
