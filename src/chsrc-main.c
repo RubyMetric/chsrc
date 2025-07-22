@@ -179,9 +179,8 @@ R"(名称:
 
 维护:
    邀请您担任 Chef, 为用户把关您熟悉的 recipe
-   源代码地址: <@url@>
-   成为维护者: <https://github.com/RubyMetric/chsrc/issues/130>
-)";
+   源代码地址: @url@
+   成为维护者: https://github.com/RubyMetric/chsrc/issues/130)";
 
 
 static const char *
@@ -224,9 +223,8 @@ OPTIONS:
 MAINTAIN:
    We invite you to become a Chef to ensure the quality of recipes you are familiar with for users:
 
-   Source Code:         <@url@>,
-   Become a Maintainer: <https://github.com/RubyMetric/chsrc/issues/130>
-)";
+   Source Code:         @url@,
+   Become a Maintainer: https://github.com/RubyMetric/chsrc/issues/130)";
 
 
 
@@ -428,12 +426,12 @@ void
 cli_print_version ()
 {
   say ("chsrc " Chsrc_Version);
-  say ("Copyright (C) 2025 Aoran Zeng, Heng Guo");
-  say ("License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>");
-  say ("This is free software: you are free to change and redistribute it.");
-  say ("There is NO WARRANTY, to the extent permitted by law.");
-  br();
-  say ("Written by Aoran Zeng, Heng Guo and contributors. (See chsrc-main.c)");
+  say (R"(Copyright (C) 2025 Aoran Zeng, Heng Guo
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Aoran Zeng, Heng Guo and contributors. (See chsrc-main.c))");
 }
 
 
@@ -453,14 +451,16 @@ cli_print_help ()
 void
 cli_print_issues ()
 {
-  say (
-  "We accept issues both sides on Gitee and Github\n\n"
-  "- https://gitee.com/RubyMetric/chsrc/issues\n"
-  "- https://github.com/RubyMetric/chsrc/issues\n"
-  );
+  say (R"(
+We accept issues both sides on Gitee and Github
 
-  say ("Latest Mirror site status wiki:\n\n"
-       "- https://github.com/RubyMetric/chsrc/wiki\n");
+  - https://gitee.com/RubyMetric/chsrc/issues
+  - https://github.com/RubyMetric/chsrc/issues
+
+Latest Mirror site status wiki:
+
+  - https://github.com/RubyMetric/chsrc/wiki
+)");
 
   /*
   if (chsrc_check_program ("gh"))
