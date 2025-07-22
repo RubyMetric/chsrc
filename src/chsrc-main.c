@@ -43,6 +43,8 @@
 
 #include "framework/core.c"
 
+
+
 #include "recipe/lang/rawstr4c.h"
 
 #include "recipe/lang/Ruby/Ruby.c"
@@ -85,6 +87,8 @@
 #include "recipe/lang/Clojure.c"
 
 
+
+#include "recipe/os/rawstr4c.h"
 
 #include "recipe/os/APT/common.h"
 // Debian-based
