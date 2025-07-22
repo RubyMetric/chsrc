@@ -22,6 +22,8 @@
 
 <br>
 
+
+
 <table align="center">
   <tr>
   <td>
@@ -34,6 +36,8 @@
 </table>
 
 <br>
+
+
 
 ## 🤝 协作与贡献
 
@@ -100,13 +104,27 @@
 
 <br>
 
+
+
 ## 📌 示例
+
+桌面端:
 
 <div align="center">
   <img alt="chsrc set node" src="doc/image/example-set-nodejs.png"/>
 </div>
 
 <br>
+
+安卓:
+
+<div align="center">
+  <img alt="chsrc set python and chsrc set termux" src="doc/image/chsrc-on-Android-set-python-and-termux.jpg" width="300" height="750"/>
+</div>
+
+<br>
+
+
 
 ## 🚀 安装
 
