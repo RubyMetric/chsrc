@@ -43,6 +43,24 @@ allprojects {
 }
 ```
 
+<br>
+
+
+
+## Haskell
+
+- namespace = `haskell`
+
+### cabal config
+
+```
+repository mirror
+  url: @url@
+  secure: True
+```
+
+<br>
+
 
 
 ## stackage
