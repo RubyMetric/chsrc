@@ -161,6 +161,8 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windo
 
 </details>
 
+
+
 <details>
 <summary>Linux</summary>
 
@@ -235,7 +237,11 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-riscv64-l
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-armv7-linux -o chsrc; chmod +x ./chsrc
 ```
 
+如果你所在的处理器架构没有预编译版本，可以使用 [chsrc-bootstrap]
+
 </details>
+
+
 
 <details>
 <summary>macOS</summary>
@@ -285,6 +291,8 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-macos
 
 </details>
 
+
+
 <details>
 <summary>BSD</summary>
 
@@ -297,11 +305,13 @@ clang -Iinclude -Ilib src/chsrc-main.c -o chsrc
 
 **如果还不存在这些依赖，你将会被死锁住: 我还没有换源，我该如何安装这些依赖呢？**
 
-这就是 [chsrc-bootstrap](./bootstrap/) 起作用的时刻，你可使用BSD系统的原生脚本语言编写 `bootstrapper`，[并向我们提交](https://github.com/RubyMetric/chsrc/issues/230)
+这就是 [chsrc-bootstrap] 起作用的时刻，你可使用BSD系统的原生脚本语言编写 `bootstrapper`，[并向我们提交](https://github.com/RubyMetric/chsrc/issues/230)
 
 注: `chsrc` 实现的 `FreeBSD recipe` 长期存在问题，因此一个新的 `bootstrapper` 是相当必要的，请帮助你自己和大家!
 
 </details>
+
+
 
 <details>
 <summary>Android/Termux</summary>
@@ -310,7 +320,7 @@ Termux 中默认无 `Wget`，我们都用 `cURL` 来下载安装
 
 ```bash
 # arm64/aarch64
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-arm64-linux -o chsrc; chmod +x ./chsrc
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-arm64-android -o chsrc; chmod +x ./chsrc
 ```
 
 如果你所在的处理器架构没有预编译版本，可以使用 [chsrc-bootstrap]:
@@ -320,6 +330,8 @@ curl -L https://gitee.com/RubyMetric/chsrc/raw/main/bootstrap/Termux.bash | bash
 ```
 
 </details>
+
+
 
 <details>
 <summary>其他平台</summary>
@@ -332,7 +344,7 @@ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
 
 **如果还不存在这些依赖，你将会被死锁住: 我还没有换源，我该如何安装这些依赖呢？**
 
-这就是 [chsrc-bootstrap](./bootstrap/) 起作用的时刻，你可使用该平台原生脚本语言编写 `bootstrapper`，[并向我们提交](https://github.com/RubyMetric/chsrc/issues/230)
+这就是 [chsrc-bootstrap] 起作用的时刻，你可使用该平台原生脚本语言编写 `bootstrapper`，[并向我们提交](https://github.com/RubyMetric/chsrc/issues/230)
 
 </details>
 
@@ -542,6 +554,7 @@ chsrc set conda  | anaconda
 <br>
 
 [rawstr4c]:        https://github.com/RubyMetric/rawstr4c
+[chsrc-bootstrap]: ./bootstrap/
 
 [@Aaron-212]:      https://github.com/Aaron-212
 [@chenrui333]:     https://github.com/chenrui333
