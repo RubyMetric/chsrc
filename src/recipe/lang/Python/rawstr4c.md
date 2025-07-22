@@ -6,7 +6,7 @@
  !               | happy game <happygame1024@gmail.com>
  ! Contributors  :  Nil Null  <nil@null.org>
  ! Created On    : <2025-07-14>
- ! Last Modified : <2025-07-14>
+ ! Last Modified : <2025-07-22>
  ! ---------------------------------------------------------- -->
 
 # rawstr4c input for Python
@@ -16,7 +16,11 @@
 - translate = `:hex`
 - keep-postfix = `false`
 
+<br>
 
+
+
+## uv
 
 ### uv config source content
 
@@ -42,9 +46,22 @@ grep -A 2 'index' @f@ | sed -n 's/^url = "\(.*\)"/\1/p'
 ```
 
 
-
 ### Final uv cmd
 
 ```sh
 grep -q '^[[index]]$' @f@ && @ucmd@ || @acmd@
+```
+
+<br>
+
+
+
+## Rye
+
+- name = `rye_config`
+
+```toml
+[[sources]]
+name = "@1@"
+url  = "@2@"
 ```
