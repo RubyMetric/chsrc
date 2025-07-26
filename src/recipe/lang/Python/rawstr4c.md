@@ -46,10 +46,10 @@ grep -A 2 'index' @f@ | sed -n 's/^url = "\(.*\)"/\1/p'
 ```
 
 
-### Final uv cmd
+### Test uv if set source
 
 ```sh
-grep -q '^[[index]]$' @f@ && @ucmd@ || @acmd@
+grep -q '^\[\[index]]$' @f@
 ```
 
 <br>
