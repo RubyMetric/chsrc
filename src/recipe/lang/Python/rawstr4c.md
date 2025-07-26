@@ -6,7 +6,7 @@
  !               | happy game <happygame1024@gmail.com>
  ! Contributors  :  Nil Null  <nil@null.org>
  ! Created On    : <2025-07-14>
- ! Last Modified : <2025-07-22>
+ ! Last Modified : <2025-07-26>
  ! ---------------------------------------------------------- -->
 
 # rawstr4c input for Python
@@ -26,7 +26,7 @@
 
 ```toml
 [[index]]
-url = "@url"
+url = "@url@"
 default = true
 
 ```
