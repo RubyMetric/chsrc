@@ -1606,7 +1606,7 @@ chsrc_append_to_file (const char *str, const char *filename)
   if (ret != 1)
     {
       char *msg = ENGLISH ? xy_2strjoin ("Write failed to ", file)
-                                   : xy_2strjoin ("写入文件失败: ", file);
+                          : xy_2strjoin ("写入文件失败: ", file);
       chsrc_error2 (msg);
       exit (Exit_UserCause);
     }

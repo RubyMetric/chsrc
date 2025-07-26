@@ -7,7 +7,7 @@
  *               |
  * Created On    : <2024-12-11>
  * Major Revision :      1
- * Last Modified : <2025-07-14>
+ * Last Modified : <2025-07-26>
  * ------------------------------------------------------------*/
 
 /**
@@ -115,49 +115,34 @@ pl_python_uv_setsrc (char *option)
   /**
    * 将 [[index]] 到 default = true 之间的 url = ".*" 替换为 url = "source.url"
    */
-  char *update_source_cmd = xy_str_gsub (RAWSTR_pl_python_set_uv_config, "@sed@", sed_cmd);
-        update_source_cmd = xy_str_gsub (update_source_cmd, "@f@", uv_config);
-        update_source_cmd = xy_str_gsub (update_source_cmd, "@url@", source.url);
+  char *update_config_cmd = xy_str_gsub (RAWSTR_pl_python_set_uv_config, "@sed@", sed_cmd);
+        update_config_cmd = xy_str_gsub (update_config_cmd, "@f@", uv_config);
+        update_config_cmd = xy_str_gsub (update_config_cmd, "@url@", source.url);
 
-  char *append_source_cmd = xy_strjoin (4, "printf '", source_content, "' >> ", uv_config);
+  char *append_config_cmd = xy_strjoin (4, "printf '", source_content, "' >> ", uv_config);
 
-  char *cmd = NULL;
   if (!xy_file_exist (uv_config))
     {
-      /**
-       * uv_config 不存在，追加到新文件末尾
-       * run: append_source_cmd
-       */
-      cmd = append_source_cmd;
+      /* 当 uv_config 不存在，直接写入文件 */
+      chsrc_append_to_file (source_content, uv_config);
     }
   else
     {
-      if (xy_on_windows)
+      /* 当 uv_config 存在，如果存在 [[index]] 则更新，否则追加到文件末尾 */
+      char *cmd = xy_str_gsub (RAWSTR_pl_python_test_uv_if_set_source, "@f@", uv_config);
+      chsrc_ensure_program ("grep");
+      int status = system (cmd);
+      if (0==status)
         {
-          /* TODO: Windows 下替换源暂不支持 */
-          chsrc_note2 ("Windows 下暂不支持修改 uv.toml，请手动修改配置文件");
+          chsrc_run (update_config_cmd, RunOpt_Default);
         }
       else
         {
-          /**
-           * uv_config 存在，如果存在 [[index]] 则更新，否则追加到文件末尾
-           */
-          cmd = xy_str_gsub (RAWSTR_pl_python_final_uv_cmd, "@f@", uv_config);
-          cmd = xy_str_gsub (cmd, "@ucmd@", update_source_cmd);
-          cmd = xy_str_gsub (cmd, "@acmd@", append_source_cmd);
+          chsrc_append_to_file (source_content, uv_config);
         }
     }
-  if (NULL==cmd)
-    {
-      chsrc_note2 (xy_strjoin (4, "请手动为 ", uv_config, "添加或修改 [[index]] 配置项的 url = ", source.url));
-    }
-  else
-    {
-      chsrc_run (cmd, RunOpt_Default);
-    }
 
-
-  if(chsrc_in_standalone_mode())
+  if (chsrc_in_standalone_mode())
     {
       chsrc_determine_chgtype (ChgType_Auto);
       chsrc_conclude (&source);
