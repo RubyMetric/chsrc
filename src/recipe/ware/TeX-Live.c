@@ -1,28 +1,43 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
+ * File Authors  : Aoran Zeng  <ccmywish@qq.com>
+ * Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
  * Created On    : <2023-09-10>
- * Last Modified : <2025-07-13>
+ * Last Modified : <2025-07-28>
  *
  * MiKTeX 和 TeX Live 都是流行的 LaTeX 发行版，但它们是不同的实现
  * ------------------------------------------------------------*/
 
 /**
- * @update 2025-07-13
+ * @update 2025-07-28
  */
 static Source_t wr_tex_sources[] =
-    {
-        {&UpstreamProvider, NULL, NULL},
-        {&MirrorZ, "https://mirrors.cernet.edu.cn/CTAN/systems/texlive/tlnet", NULL},
-        {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/ctan/systems/texlive/tlnet", "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
-        {&Tuna, "https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet", "https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
-        {&Bfsu, "https://mirrors.bfsu.edu.cn/CTAN/systems/texlive/tlnet", "https://mirrors.bfsu.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
-        {&Bjtu, "https://mirror.bjtu.edu.cn/ctan/systems/texlive/tlnet", "https://mirror.bjtu.edu.cn/ctan/systems/texlive/tlnet/archive/fandol.tar.xz"},
-        {&Lzuoss, "https://mirror.lzu.edu.cn/CTAN/systems/texlive/tlnet", "https://mirror.lzu.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
-        {&Jlu, "https://mirrors.jlu.edu.cn/CTAN/systems/texlive/tlnet", "https://mirrors.jlu.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
-        {&Sustech, "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet", "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"}};
+{
+  {&UpstreamProvider, NULL, NULL},
+  {&MirrorZ,       "https://mirrors.cernet.edu.cn/CTAN/systems/texlive/tlnet", NULL},
+
+  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/ctan/systems/texlive/tlnet",
+                   "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
+
+  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet",
+                   "https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
+
+  {&Bfsu,           "https://mirrors.bfsu.edu.cn/CTAN/systems/texlive/tlnet",
+                    "https://mirrors.bfsu.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
+
+  {&Bjtu,           "https://mirror.bjtu.edu.cn/ctan/systems/texlive/tlnet",
+                    "https://mirror.bjtu.edu.cn/ctan/systems/texlive/tlnet/archive/fandol.tar.xz"},
+
+  {&Lzuoss,         "https://mirror.lzu.edu.cn/CTAN/systems/texlive/tlnet",
+                    "https://mirror.lzu.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
+
+  {&Jlu,            "https://mirrors.jlu.edu.cn/CTAN/systems/texlive/tlnet",
+                    "https://mirrors.jlu.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
+
+  {&Sustech,        "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet",
+                    "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"}
+};
 def_sources_n(wr_tex);
 
 
