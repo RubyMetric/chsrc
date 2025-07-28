@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-07-22>
+ * Last Modified : <2025-07-28>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -1347,7 +1347,7 @@ chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilename
   char *tmpfile = xy_strjoin (3, "chsrc_tmp_", filename, postfix);
   FILE *f = fopen (tmpfile, "w+");
 #else
-  char *tmpfile = xy_strjoin (4, "/tmp/", "chsrc_tmp_", filename, "_XXXXXX", postfix);
+  char *tmpfile = xy_strjoin (5, "/tmp/", "chsrc_tmp_", filename, "_XXXXXX", postfix);
   size_t postfix_len = strlen (postfix);
 
   /* 和 _mktemp_s() 参数不同，前者是整个缓存区大小，这里的长度是后缀长度 */
