@@ -19,7 +19,7 @@ static SourceProvider_t pl_java_upstream =
  */
 static Source_t pl_java_sources[] =
 {
-  {&pl_java_upstream,  NULL, NULL},
+  {&pl_java_upstream,  "https://repo1.maven.org/maven2/", NULL},
   {&Ali,              "https://maven.aliyun.com/repository/public/",       DelegateToMirror},
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/maven/", DelegateToMirror},
   /* 网易的24小时更新一次 */
