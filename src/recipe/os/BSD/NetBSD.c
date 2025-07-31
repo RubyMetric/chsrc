@@ -9,19 +9,21 @@
  * ------------------------------------------------------------*/
 
 /**
- * @update 2024-09-14
+ * @update 2025-07-31
  */
 static Source_t os_netbsd_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&Ali,              "https://mirrors.aliyun.com/pkgsrc/packages/NetBSD/"},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/pkgsrc/packages/NetBSD/"},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/pkgsrc/packages/NetBSD/"},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/pkgsrc/packages/NetBSD/"},
-  {&Tencent,          "https://mirrors.tencent.com/pkgsrc/packages/NetBSD/"},
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/pkgsrc/packages/NetBSD/"},
-  {&Netease,          "https://mirrors.163.com/pkgsrc/packages/NetBSD/"},
-  {&Sohu,             "https://mirrors.sohu.com/pkgsrc/packages/NetBSD/"}
+  {&UpstreamProvider,  NULL, NULL},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/pkgsrc/packages/NetBSD/", DelegateToMirror},
+  {&Ali,              "https://mirrors.aliyun.com/pkgsrc/packages/NetBSD/",  DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/pkgsrc/packages/NetBSD/", DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/pkgsrc/packages/NetBSD/", DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn/pkgsrc/packages/NetBSD/",    DelegateToMirror},
+  {&Iscas,            "https://mirror.iscas.ac.cn/pkgsrc/packages/NetBSD/",  DelegateToMirror},
+  {&Tencent,          "https://mirrors.tencent.com/pkgsrc/packages/NetBSD/", DelegateToMirror},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/pkgsrc/packages/NetBSD/", DelegateToMirror},
+  {&Netease,          "https://mirrors.163.com/pkgsrc/packages/NetBSD/",     DelegateToMirror},
+  {&Sohu,             "https://mirrors.sohu.com/pkgsrc/packages/NetBSD/",    DelegateToMirror}
 };
 def_sources_n(os_netbsd);
 
