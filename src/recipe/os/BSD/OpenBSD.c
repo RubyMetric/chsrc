@@ -37,6 +37,7 @@ os_openbsd_getsrc (char *option)
   chsrc_view_file ("/etc/installurl");
 }
 
+
 /**
  * @consult
  * 1. https://mirrors.tuna.tsinghua.edu.cn/help/openbsd/
@@ -56,4 +57,23 @@ os_openbsd_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target(os_openbsd);
+
+Feature_t
+os_openbsd_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = true;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NULL;
+  f.can_english = true;
+  f.can_user_define = true;
+
+  f.note = NULL;
+  return f;
+}
+
+
+def_target_gsf(os_openbsd);
