@@ -5,7 +5,7 @@
  * Contributors  : BingChunMoLi  <bingchunmoli@bingchunmoli.com>
  *               |
  * Created On    : <2023-08-31>
- * Last Modified : <2025-07-22>
+ * Last Modified : <2025-07-31>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t pl_java_upstream =
@@ -41,6 +41,7 @@ pl_java_check_cmd (bool *maven_exist, bool *gradle_exist)
     }
 }
 
+
 char *
 pl_java_find_maven_config ()
 {
@@ -52,6 +53,7 @@ pl_java_find_maven_config ()
   return maven_config;
 }
 
+
 void
 pl_java_getsrc (char *option)
 {
@@ -60,6 +62,7 @@ pl_java_getsrc (char *option)
   char *maven_config = pl_java_find_maven_config ();
   chsrc_note2 (xy_2strjoin ("请查看 ", maven_config));
 }
+
 
 /**
  * @consult https://developer.aliyun.com/mirror/maven
@@ -95,13 +98,20 @@ pl_java_setsrc (char *option)
 }
 
 
+void
+pl_java_resetsrc (char *option)
+{
+  pl_java_setsrc (option);
+}
+
+
 Feature_t
 pl_java_feat (char *option)
 {
   Feature_t f = {0};
 
   f.can_get = true;
-  f.can_reset = false;
+  f.can_reset = true;
 
   f.cap_locally = CanNot;
   f.cap_locally_explain = NA;
@@ -112,4 +122,4 @@ pl_java_feat (char *option)
   return f;
 }
 
-def_target_gsf(pl_java);
+def_target_gsrf(pl_java);
