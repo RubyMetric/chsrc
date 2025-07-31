@@ -5,7 +5,7 @@
  *               |  Heng Guo  <2085471348@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-05>
- * Last Modified : <2024-09-14>
+ * Last Modified : <2025-07-31>
  * ------------------------------------------------------------*/
 
 /**
@@ -34,20 +34,19 @@ os_netbsd_getsrc (char *option)
   chsrc_view_file ("/usr/pkg/etc/pkgin/repositories.conf");
 }
 
+
 /**
- * 参考:
+ * @consult
  * 1. https://mirrors.tuna.tsinghua.edu.cn/help/pkgsrc/
  * 2. https://book.bsdcn.org/di-27-zhang-netbsd/di-27.2-jie-huan-yuan-yu-bao-guan-li-qi.html
  *
- * 根据 @ykla (https://github.com/ykla)
+ * 根据 @ykla
  *    NetBSD 默认状态下没有 pkgsrc，用户可能安装了也可能没安装
- *
- * HELP: 未经测试
  */
 void
 os_netbsd_setsrc (char *option)
 {
-  chsrc_ensure_root (); // HELP: 不知道是否需要确保root权限
+  chsrc_ensure_root ();
 
   chsrc_yield_source_and_confirm (os_netbsd);
 
@@ -57,11 +56,29 @@ os_netbsd_setsrc (char *option)
   char *vercmd  = "cat /etc/os-release | grep \"VERSION=\" | grep -Po \"[8-9].[0-9]+\"";
   char *version = xy_run (vercmd, 0);
 
-  char *url = xy_strjoin (5, source.url, arch, "/", version, "/All");
+  char *url = xy_strjoin (5, chef_ensure_trailing_slash (source.url), arch, "/", version, "/All");
   chsrc_overwrite_file (url, "/usr/pkg/etc/pkgin/repositories.conf");
 
   chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);
 }
 
-def_target(os_netbsd);
+
+Feature_t
+os_netbsd_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = true;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NULL;
+  f.can_english = true;
+  f.can_user_define = false;
+
+  f.note = NULL;
+  return f;
+}
+
+def_target_gsf(os_netbsd);
