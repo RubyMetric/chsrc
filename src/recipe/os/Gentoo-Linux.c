@@ -4,7 +4,7 @@
  * File Authors  : Heng Guo <2085471348@qq.com>
  * Contributors  : Aoran Zeng <ccmywish@qq.com>
  * Created On    : <2023-09-05>
- * Last Modified : <2025-07-21>
+ * Last Modified : <2025-07-31>
  * ------------------------------------------------------------*/
 
 /**
@@ -12,7 +12,7 @@
  */
 static Source_t os_gentoo_sources[] =
 {
-  {&UpstreamProvider,  NULL},
+  {&UpstreamProvider,  NULL, NULL},
   {&Ali,              "mirrors.aliyun.com",  DelegateToMirror },
   {&Bfsu,             "mirrors.bfsu.edu.cn", DelegateToMirror},
   {&Ustc,             "mirrors.ustc.edu.cn", DelegateToMirror},

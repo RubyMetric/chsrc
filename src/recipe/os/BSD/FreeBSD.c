@@ -5,28 +5,27 @@
  *               |  Heng Guo  <2085471348@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-09-03>
- * Last Modified : <2024-08-16>
+ * Last Modified : <2025-07-31>
  * ------------------------------------------------------------*/
 
 /**
  * @update 2023-09-27
  *
- * @note {
+ * @note
  *   2023-09-24: 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports
  *   2023-09-27: 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数
- * }
  */
 static Source_t os_freebsd_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&Ustc,             "mirrors.ustc.edu.cn"},
-  {&Nju,              "mirror.nju.edu.cn"},
-  {&Netease,          "mirrors.163.com"},
+  {&UpstreamProvider,  NULL, NULL},
+  {&Ustc,             "mirrors.ustc.edu.cn", DelegateToMirror},
+  {&Nju,              "mirror.nju.edu.cn",   DelegateToMirror},
+  {&Netease,          "mirrors.163.com",     DelegateToMirror},
 };
 def_sources_n(os_freebsd);
 
 /**
- * 参考:
+ * @consult
  *  1. https://book.bsdcn.org/di-3-zhang-ruan-jian-yuan-ji-bao-guan-li-qi/di-3.2-jie-freebsd-huan-yuan-fang-shi.html
  *  2. https://help.mirrors.cernet.edu.cn/FreeBSD-ports/
  *
@@ -64,9 +63,9 @@ os_freebsd_setsrc (char *option)
   br();
 
   chsrc_log2 ("2. 修改 freebsd-ports 源");
-  // @ccmywish: [2023-09-27] 据 @ykla , NJU的freebsd-ports源没有设置 Git，
-  //                         但是我认为由于使用Git还是要比非Git方便许多，我们尽可能坚持使用Git
-  //                         而 gitup 又要额外修改它自己的配置，比较麻烦
+  // @ccmywish: 2023-09-27 据 @ykla , NJU的freebsd-ports源没有设置 Git，
+  //                       但是我认为由于使用Git还是要比非Git方便许多，我们尽可能坚持使用Git
+  //                       而 gitup 又要额外修改它自己的配置，比较麻烦
   bool git_exist = query_program_exist (xy_str_to_quietcmd ("git version"), "git", Noisy_When_Exist|Noisy_When_NonExist);
   if (git_exist)
     {
@@ -132,4 +131,23 @@ os_freebsd_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
-def_target_s(os_freebsd);
+
+Feature_t
+os_freebsd_feat (char *option)
+{
+  Feature_t f = {0};
+
+  f.can_get = false;
+  f.can_reset = false;
+
+  f.cap_locally = CanNot;
+  f.cap_locally_explain = NULL;
+  f.can_english = false;
+  f.can_user_define = false;
+
+  f.note = NULL;
+  return f;
+}
+
+
+def_target_sf(os_freebsd);

@@ -4,20 +4,19 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nil Null  <nil@null.org>
  * Created On    : <2023-08-30>
- * Last Modified : <2024-11-22>
+ * Last Modified : <2025-07-31>
  * ------------------------------------------------------------*/
 
 /**
  * @update 2024-09-14
- * @note 缺少教育网或开源社区软件源
  */
 static Source_t pl_php_sources[] =
 {
-  {&UpstreamProvider,  NULL},
-  {&Ali,              "https://mirrors.aliyun.com/composer/"},
-  {&Tencent,          "https://mirrors.tencent.com/composer/"},
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/composer/"},
-  {&Huawei,           "https://mirrors.huaweicloud.com/repository/php/"}
+  {&UpstreamProvider,  NULL, NULL},
+  {&Ali,              "https://mirrors.aliyun.com/composer/",     DelegateToMirror},
+  {&Tencent,          "https://mirrors.tencent.com/composer/",    DelegateToMirror},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/composer/", DelegateToMirror},
+  {&Huawei,           "https://mirrors.huaweicloud.com/repository/php/", DelegateToMirror}
 };
 def_sources_n(pl_php);
 
