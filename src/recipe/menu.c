@@ -36,7 +36,7 @@ static const char
 *pl_rust_cargo[] = {"rust",  "cargo",   "crate",  "crates", NULL, t(&pl_rust_cargo_target)},
 *pl_rust_rustup[]= {"rustup",                               NULL, t(&pl_rust_rustup_target)},
 
-*pl_java  [] = {"java",  "maven",   "mvn",    "gradle",  NULL, t(&pl_java_target)},
+*pl_java  [] = {"java",  "maven",   "mvn", "mvnd", "maven-daemon", "maven-mvnd", "gradle",     NULL, t(&pl_java_target)},
 *pl_clojure[]= {"clojure","clojars","cloj",   "lein",    NULL, t(&pl_clojure_target)},
 
 *pl_dart  [] =        {"dart", "pub",                    NULL, t(&pl_dart_target)},
