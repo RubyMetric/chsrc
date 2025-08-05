@@ -20,8 +20,11 @@ static SourceProvider_t pl_java_upstream =
 static Source_t pl_java_sources[] =
 {
   {&pl_java_upstream,  "https://repo1.maven.org/maven2/", NULL},
+  /* 阿里镜像旧地址 https://maven.aliyun.com/nexus/content/groups/public */
   {&Ali,              "https://maven.aliyun.com/repository/public/",       DelegateToMirror},
+  /* 华为镜像CDN地址 https://repo.huaweicloud.com/repository/maven/ */
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/maven/", DelegateToMirror},
+  {&Tencent,           "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/", DelegateToMirror},
   /* 网易的24小时更新一次 */
   {&Netease,          "http://mirrors.163.com/maven/repository/maven-public/", DelegateToMirror}
 };
