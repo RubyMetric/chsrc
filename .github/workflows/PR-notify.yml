@@ -4,7 +4,7 @@
 # Contributors  :  Nul None  <nul@none.org>
 #               |
 # Created On    : <2025-06-19>
-# Last Modified : <2025-06-28>
+# Last Modified : <2025-08-07>
 #
 # Notify PR
 # ---------------------------------------------------------------
@@ -40,15 +40,20 @@ jobs:
   welcome:
     name: 欢迎PR者
     runs-on: ubuntu-latest
-    if: github.event.pull_request.base.ref == 'dev'
+    # 仅在 opened 时欢迎，其他情况都不再重复欢迎了
+    if: github.event.pull_request.base.ref == 'dev' && github.event.action == 'opened'
     steps:
+      - name: 查看 GitHub Actions 环境
+        run: |
+          echo "Event 类型: ${{ github.event.action }}"
+          echo "Event 名: ${{ github.event_name }}"
       - name: 评论
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Hi @${{github.event.pull_request.user.login}},
+            Hi @${{github.event.pull_request.user.login}}
 
-            ❤️ 感谢你的贡献！我们将在5天内阅读此 PR 并回复你
+            ❤️ 感谢你的贡献！我们将在最少半小时，最多5天内阅读此 PR 并回复你
           edit-mode: replace
           reactions: heart
