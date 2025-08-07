@@ -23,11 +23,19 @@ main (int argc, char const *argv[])
   println (3);
   double dbl = 3.1415;
   println (dbl);
+
   say (xy_2strjoin ("Xi", "'an"));
-  say (xy_strjoin  (2, "Xi", "'an"));
+  say (xy_strjoin  (3, "Xi", "'an", " Ren"));
   say (xy_strjoin  (3, "屈身守分，", "以待天时，", "不可与命争也"));
   say (xy_strjoin  (4, "水落鱼梁浅，", "天寒梦泽深。", "羊公碑字在，", "读罢泪沾襟。"));
   say (xy_strjoin  (6, "楚山横地出，", "汉水接天回。", "冠盖非新里，", "章华即旧台。", "习池风景异，", "归路满尘埃。"));
+
+  say (xy_2pathjoin ("C:\\Users\\", "\\Documents\\"));
+  say (xy_2pathjoin ("/home/user a/", "/documents/"));
+  say (xy_2pathjoin ("C:\\\\Program Files\\\\", "\\\\Test\\\\"));
+  say (xy_pathjoin  (2, "./a", "b/"));
+  say (xy_pathjoin  (3, "X:\\a b", "c", "d"));
+  say (xy_pathjoin  (4, "E:\\", "\\a", "b\\c\\", "/d"));
 
   print (xy_str_to_bold      ("粗体"));
   print (xy_str_to_faint     ("浅体"));
@@ -58,7 +66,7 @@ main (int argc, char const *argv[])
   xy_error_brkt ("xy.h", "错误", "西安肉丸胡辣汤里没有肉丸");
 
   assert (xy_streql    ("abc", "abc"));
-  assert (xy_streql_ic ("abc", "abc"));
+  assert (xy_streql_ic ("AbC", "abc"));
   assert (false == xy_streql ("abc", "abC"));
   assert (true  == xy_streql_ic ("abc", "abC"));
 
@@ -100,6 +108,7 @@ main (int argc, char const *argv[])
       assert (xy_file_exist (xy_win_powershell_profile));
       assert (true == xy_file_exist (xy_win_powershellv5_profile));
       assert (xy_dir_exist ("C:\\Users"));
+      assert (xy_dir_exist ("C:\\Program Files\\"));
     }
   else
     {
@@ -114,7 +123,7 @@ main (int argc, char const *argv[])
       assert (xy_dir_exist ("/etc"));
     }
 
-  println (xy_normalize_path (" \n ~/haha/test/123 \n\r "));
+  println (xy_normalize_path (" \n ~/haha/test/1 2 3 \n\r "));
   assert_str (xy_normalize_path ("~/haha/test"), xy_parent_dir (" ~/haha/test/123"));
 
   xy_succ ("测试完成", "xy.h 测试全部通过");

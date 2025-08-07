@@ -9,7 +9,7 @@
  *               | Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-08-07>
+ * Last Modified : <2025-08-08>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C11 utilities for CLI applications in mixed
@@ -32,12 +32,14 @@
 #endif
 
 #include <assert.h>
+#include <ctype.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 #if defined(__STDC__) && __STDC_VERSION__ >= 202311
@@ -64,6 +66,7 @@ bool xy_enable_color = true;
   #define xy_on_bsd false
   #define xy_os_devnull "nul"
   #include <windows.h>
+  #include <shlobj.h>
   #define xy_useutf8() SetConsoleOutputCP (65001)
 
 #elif defined(__linux__) || defined(__linux)
@@ -156,16 +159,24 @@ xy_malloc0 (size_t size)
   return ptr;
 }
 
+// 部分路径函数需要提前声明
+static char *xy_pathjoin          (unsigned int count, ...);
+static char *xy_2pathjoin         (const char *pathstr1, const char *pathstr2);
+static bool xy_file_exist         (const char *path);
+static char *xy_normalize_path    (const char *path);
+static char *xy_str_remove_quotes (const char *str);
+static char *xy_str_add_quotes    (const char *str);
 
 /******************************************************
  *                      String
- ******************************************************/
+*******************************************************/
 
-/**
+/*
  * 将str中所有的pat字符串替换成replace，返回一个全新的字符串
- */
+**/
 static char *
-xy_str_gsub (const char *str, const char *pat, const char *replace)
+xy_str_gsub (const char *str, const char *pat,
+             const char *replace)
 {
   size_t replace_len = strlen (replace);
   size_t pat_len = strlen (pat);
@@ -380,15 +391,15 @@ xy_streql (const char *str1, const char *str2)
 }
 
 static bool
-xy_streql_ic(const char *str1, const char *str2)
+xy_streql_ic (const char *str1, const char *str2)
 {
   if (NULL == str1 || NULL == str2)
     {
       return false;
     }
 
-  size_t len1 = strlen(str1);
-  size_t len2 = strlen(str2);
+  size_t len1 = strlen (str1);
+  size_t len2 = strlen (str2);
   if (len1 != len2)
     {
       return false;
@@ -500,25 +511,37 @@ xy_str_delete_suffix (const char *str, const char *suffix)
 static char *
 xy_str_strip (const char *str)
 {
-  char *new = xy_strdup (str);
+  if (!str) return NULL;
 
-  while (strchr ("\n\r\v\t\f ", new[0]))
-    {
-      new += 1;
-    }
+  char *original = xy_strdup (str);
+  char *start = original;
 
-  size_t len = strlen (new);
+  while (*start && strchr ("\n\r\v\t\f ", *start))
+  {
+    start++;
+  }
 
-  char *last = new + len - 1;
+  if (*start == '\0')
+  {
+    free(original);
+    return xy_strdup ("");
+  }
 
-  while (strchr ("\n\r\v\t\f ", *last))
-    {
-      *last = '\0';
-      last -= 1;
-    }
-  return new;
+  char *end = start + strlen (start) - 1;
+  while (end > start && strchr ("\n\r\v\t\f ", *end))
+  {
+    end--;
+  }
+
+  size_t new_len = end - start + 1;
+
+  char *result = malloc (new_len + 1);
+  strncpy (result, start, new_len);
+  result[new_len] = '\0';
+
+  free (original);
+  return result;
 }
-
 
 /******************************************************
  *                      Logging
@@ -735,7 +758,7 @@ xy_run (const char *cmd, unsigned long n)
  *                      cross OS
  ******************************************************/
 
- /**
+/**
  * 该函数同 just 中的 os_family()，只区分 windows, unix
  *
  * @return 返回 "windows" 或 "unix"
@@ -750,7 +773,6 @@ _xy_os_family ()
     return "unix";
 }
 
-
 /**
  * 该函数返回所在 os family 的对应字符串
  */
@@ -762,7 +784,6 @@ xy_os_depend_str (const char *str_for_win, const char *str_for_unix)
   else
     return str_for_unix;
 }
-
 
 #define xy_os_home _xy_os_home ()
 static char *
@@ -776,147 +797,373 @@ _xy_os_home ()
   return home;
 }
 
+// 更新 PowerShell 配置文件路径函数，使用更好的路径处理
 #define xy_win_powershell_profile _xy_win_powershell_profile ()
 #define xy_win_powershellv5_profile _xy_win_powershellv5_profile ()
+/**
+ * 获取Windows用户文档目录的真实路径
+ * 使用 SHGetFolderPathA 获取正确的Documents目录位置
+ */
+static char *
+_xy_win_get_documents_dir ()
+{
+#ifdef _WIN32
+  char documents_path[MAX_PATH];
+  HRESULT result = SHGetFolderPathA (NULL, CSIDL_MYDOCUMENTS, NULL,
+                                     SHGFP_TYPE_CURRENT, documents_path);
+
+  if (SUCCEEDED (result))
+    return xy_strdup (documents_path);
+
+  return xy_2pathjoin (xy_os_home, "Documents");
+#else
+  return xy_2pathjoin (xy_os_home, "Documents");
+#endif
+}
+
+// 更新 PowerShell 配置文件路径函数
 static char *
 _xy_win_powershell_profile ()
 {
-  return xy_2strjoin (
-      xy_os_home, "\\Documents\\PowerShell\\Microsoft.PowerShell_profile.ps1");
+  if (xy_on_windows)
+  {
+    char *documents_dir = _xy_win_get_documents_dir ();
+    char *profile_path = xy_2pathjoin (documents_dir, "PowerShell/Microsoft.PowerShell_profile.ps1");
+    free (documents_dir);
+    return profile_path;
+  } else {
+    return NULL;
+  }
 }
 
-char *
+static char *
 _xy_win_powershellv5_profile ()
 {
-  return xy_2strjoin (
-      xy_os_home,
-      "\\Documents\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1");
+  if (xy_on_windows)
+  {
+    char *documents_dir = _xy_win_get_documents_dir ();
+    char *profile_path = xy_2pathjoin (documents_dir, "WindowsPowerShell/Microsoft.PowerShell_profile.ps1");
+    free (documents_dir);
+    return profile_path;
+  } else {
+    return NULL;
+  }
 }
 
-#define xy_zshrc  "~/.zshrc"
-#define xy_bashrc "~/.bashrc"
-#define xy_fishrc "~/.config/fish/config.fish"
-
 /**
- * @note Windows上，`path` 不要夹带变量名，因为最终 access() 不会帮你转换
+ * @note 现在使用标准化的路径处理，支持跨平台路径格式
+ * 改进了错误处理和内存管理
  */
 static bool
 xy_file_exist (const char *path)
 {
-  const char *new_path = path;
-  if (xy_str_start_with (path, "~"))
-    {
-      new_path = xy_2strjoin (xy_os_home, path + 1);
-    }
-  // 0 即 F_OK
-  return (0==access (new_path, 0)) ? true : false;
+  if (!path) return false;
+
+  char *normalized_path = xy_normalize_path (path);
+  if (!normalized_path) return false;
+
+  // 去除可能存在的引号
+  char *clean_path = xy_str_remove_quotes (normalized_path);
+
+  bool exists = (0 == access (clean_path, F_OK));
+
+  free (clean_path);
+  free (normalized_path);
+  return exists;
 }
 
 /**
- * @note xy_file_exist() 和 xy_dir_exist() 两个函数在所有平台默认都支持使用 '~'，
- *       但实现中都没有调用 xy_normalize_path()，以防万一，调用前可能需要用户手动调用它
+ * @note 现在使用标准化的路径处理，支持跨平台路径格式
+ * 改进了跨平台兼容性和错误处理
  */
 static bool
 xy_dir_exist (const char *path)
 {
-  const char *dir = path;
-  if (xy_on_windows)
-    {
-      if (xy_str_start_with (path, "~"))
-        {
-          dir = xy_2strjoin (xy_os_home, path + 1);
-        }
-    }
+  if (!path) return false;
 
-  if (xy_on_windows)
-    {
-#ifdef XY_On_Windows
-      // 也可以用 opendir() #include <dirent.h>
-      DWORD attr = GetFileAttributesA (dir);
+  char *normalized_path = xy_normalize_path (path);
+  if (!normalized_path) return false;
 
-      if (attr == INVALID_FILE_ATTRIBUTES)
-        {
-          // Q: 我们应该报错吗？
-          return false;
-        }
-      else if (attr & FILE_ATTRIBUTE_DIRECTORY)
-        {
-          return true;
-        }
-      else
-        {
-          return false;
-        }
+  char *clean_path = xy_str_remove_quotes (normalized_path);
+
+  bool exists = false;
+
+#ifdef _WIN32
+  DWORD attr = GetFileAttributesA (clean_path);
+  if (attr != INVALID_FILE_ATTRIBUTES && (attr & FILE_ATTRIBUTE_DIRECTORY))
+    exists = true;
+#else
+  // 使用 stat 系统调用，适用于Linux/macOS/BSD等Unix系统
+  struct stat st;
+  if (stat (clean_path, &st) == 0 && S_ISDIR (st.st_mode))
+    exists = true;
 #endif
-    }
-  else
-    {
-      int status = system (xy_2strjoin ("test -d ", dir));
 
-      if (0==status)
-        return true;
-      else
-        return false;
+  free (clean_path);
+  free (normalized_path);
+  return exists;
+}
+
+/******************************************************
+ *                      Path Operations
+ ******************************************************/
+
+#define xy_zshrc "~/.zshrc"
+#define xy_bashrc "~/.bashrc"
+#define xy_fishrc "~/.config/fish/config.fish"
+
+/**
+ * 去除字符串两端的单双引号
+ * @param str 输入字符串
+ * @return 去除引号后的新字符串，如果没有引号则返回原字符串的副本
+ */
+static char *
+xy_str_remove_quotes (const char *str)
+{
+  if (!str) return NULL;
+
+  size_t len = strlen (str);
+  if (len >= 2)
+  {
+    char first = str[0];
+    char last = str[len - 1];
+    if ((first == '"' && last == '"') || (first == '\'' && last == '\''))
+    {
+      // 移除首尾的引号
+      char *result = malloc (len - 1);
+      strncpy (result, str + 1, len - 2);
+      result[len - 2] = '\0';
+      return result;
     }
+  }
+  return xy_strdup (str);
 }
 
 /**
- * 1. 删除路径左右两边多出来的空白符
- * 2. 将 ~/ 转换为绝对路径
+ * 在字符串两端添加单引号
+ * @param str 输入字符串
+ * @return 添加单引号后的新字符串
+ */
+static char *
+xy_str_add_quotes (const char *str)
+{
+  if (!str) return NULL;
+  return xy_strjoin (3, "'", str, "'");
+}
+
+/**
+ * 路径规范化：
+ * 1. 将所有的反斜杠转换为正斜杠
+ * 2. 将 \\\\ 转换为 /
+ * 3. 处理重复的正斜杠 // -> /
+ * 4. 删除路径开头和结尾的多余斜杠（除根路径外）
+ * 5. 输出时两边加单引号
+ */
+static char *
+xy_path_canonicalize (const char *path)
+{
+  if (!path)
+    return NULL;
+
+  // 去除两边可能存在的单双引号
+  char *normalized = xy_str_remove_quotes (path);
+
+  // 将反斜杠转换为正斜杠
+  char *temp = xy_str_gsub (normalized, "\\\\", "/");
+  free (normalized);
+  normalized = xy_str_gsub (temp, "\\", "/");
+  free (temp);
+
+  // 处理重复的正斜杠
+  temp = normalized;
+  while (strstr (temp, "//"))
+  {
+    char *new_temp = xy_str_gsub (temp, "//", "/");
+    if (temp != normalized) free (temp);
+    temp = new_temp;
+  }
+  normalized = temp;
+
+  // 删除路径开头的斜杠（除非是根路径）
+  char *start = normalized;
+  while (*start == '/' && strlen (start) > 1)
+  {
+    start++;
+  }
+  if (start != normalized)
+  {
+    char *new_normalized = xy_strdup (start);
+    free (normalized);
+    normalized = new_normalized;
+  }
+
+  // 删除路径结尾的斜杠（除非是根路径）
+  size_t len = strlen (normalized);
+  if (len > 1 && normalized[len - 1] == '/')
+  {
+    normalized[len - 1] = '\0';
+  }
+
+  return xy_str_add_quotes (normalized);
+}
+
+/**
+ * 路径拼接：
+ * 自动处理路径分隔符，删除重复的斜杠
+ */
+static char *
+xy_2pathjoin (const char *pathstr1, const char *pathstr2)
+{
+  if (!pathstr1 || !pathstr2)
+  {
+    return NULL;
+  }
+
+  char *normalized1 = xy_path_canonicalize (pathstr1);
+  char *normalized2 = xy_path_canonicalize (pathstr2);
+
+  // 去除两边必定存在的单引号
+  char *clean1 = xy_str_remove_quotes (normalized1);
+  char *clean2 = xy_str_remove_quotes (normalized2);
+
+  // 拼接路径
+  char *result;
+  size_t clean_len1 = strlen (clean1);
+  size_t clean_len2 = strlen (clean2);
+
+  if (clean_len1 == 0)
+    {
+      result = xy_strdup (clean2);
+    }
+  else if (clean_len2 == 0)
+    {
+      result = xy_strdup (clean1);
+    }
+  else
+    {
+      result = xy_strjoin (3, clean1, "/", clean2);
+    }
+
+  free (clean1);
+  free (clean2);
+  free (normalized1);
+  free (normalized2);
+
+  return xy_strjoin (3, "'", result, "'");
+}
+
+/**
+ * 多路径拼接
+ */
+static char *
+xy_pathjoin (unsigned int count, ...)
+{
+  if (count == 0) return NULL;
+
+  va_list args;
+  va_start (args, count);
+
+  char *result = xy_strdup (va_arg (args, const char *));
+
+  for (unsigned int i = 1; i < count; i++)
+  {
+    const char *path = va_arg (args, const char *);
+    char *temp = xy_2pathjoin (result, path);
+    free (result);
+    result = temp;
+  }
+
+  va_end (args);
+  return result;
+}
+
+/**
+ * 系统路径规范化：
+ * 1. 删除路径左右两边的空白符
+ * 2. 将 ~ 或 ~/ 转换为绝对路径
  */
 static char *
 xy_normalize_path (const char *path)
 {
-  char *new = xy_str_strip (path); // 防止开发者多写了空白符
+  if (!path) return NULL;
 
-  if (xy_on_windows)
+  char *new = xy_str_strip (path);
+
+  // 处理 ~ 或 ~/ 开头的路径
+  if (xy_streql (new, "~"))
     {
-      if (xy_str_start_with (new, "~/"))
-        {
-          // 或 %USERPROFILE%
-          new = xy_strjoin (3, xy_os_home, "\\",
-                            xy_str_delete_prefix (new, "~/"));
-        }
-      new = xy_str_gsub (new, "/", "\\");
+      // 单独的 ~ 直接替换为 home 目录
+      free (new);
+      new = xy_strdup (xy_os_home);
     }
-  else
+  else if (xy_str_start_with (new, "~/"))
     {
-      if (xy_str_start_with (new, "~/"))
-        {
-          new = xy_strjoin (3, xy_os_home, "/",
-                            xy_str_delete_prefix (new, "~/"));
-        }
+      // ~/ 开头的路径
+      char *relative_part = xy_str_delete_prefix (new, "~/");
+      char *home_path = xy_2pathjoin (xy_os_home, relative_part);
+      free (new);
+      new = home_path;
     }
 
   return new;
 }
 
+/**
+ * 获取父目录路径
+ */
 static char *
 xy_parent_dir (const char *path)
 {
+  if (!path) return NULL;
+
   char *dir = xy_normalize_path (path);
-  char *last = NULL;
-  if (xy_on_windows)
-    {
-      last = strrchr (dir, '\\');
-      if (!last)
-        {
-          /* current dir */
-          return ".";
-        }
-      *last = '\0';
-    }
-  else
-    {
-      last = strrchr (dir, '/');
-      if (!last)
-        {
-          /* current dir */
-          return ".";
-        }
-      *last = '\0';
-    }
-  return dir;
+  if (!dir) return NULL;
+
+  // 去除两端的单引号
+  char *clean_dir = xy_str_remove_quotes (dir);
+
+  char *last = strrchr (clean_dir, '/');
+
+  if (!last)
+  {
+    free (clean_dir);
+    free (dir);
+    return xy_str_add_quotes (".");
+  }
+
+  *last = '\0';
+
+  free (dir);
+  return xy_str_add_quotes (clean_dir);
+}
+
+/**
+ * 删除路径末尾的斜杠
+ * @return 返回新字符串
+ */
+static char *
+xy_path_remove_trailing_slash (const char *path)
+{
+  char *normalized = xy_path_canonicalize (path);
+  return normalized;  // xy_path_canonicalize 已经处理了末尾斜杠
+}
+
+/**
+ * 确保路径末尾有斜杠
+ * @return 返回新字符串
+ */
+static char *
+xy_path_ensure_trailing_slash (const char *path)
+{
+  char *normalized = xy_path_canonicalize (path);
+  size_t len = strlen (normalized);
+
+  if (len == 0 || normalized[len - 1] == '/')
+    return normalized;
+
+  char *result = xy_2strjoin (normalized, "/");
+  free (normalized);
+  return result;
 }
 
 #endif
