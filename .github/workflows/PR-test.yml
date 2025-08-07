@@ -14,14 +14,6 @@ name: 测试PR
 
 on:
   push:
-  pull_request:
-    types: [
-        opened,
-        synchronize, # 后续提交
-        ready_for_review, # draft PR 转为正式 PR
-        review_requested,
-        reopened,
-      ]
     paths:
       - "src/**"
       - "lib/**"
@@ -31,7 +23,6 @@ jobs:
   test-on-ubuntu:
     name: 在Ubuntu上测试
     runs-on: ubuntu-latest
-    if: github.event.pull_request.base.ref == 'dev'
 
     steps:
       - name: 检出代码
@@ -48,7 +39,6 @@ jobs:
   test-on-windows:
     name: 在Windows上测试
     runs-on: windows-latest
-    if: github.event.pull_request.base.ref == 'dev'
 
     steps:
       - name: 检出代码
