@@ -25,6 +25,7 @@ on:
     paths:
       - "src/**"
       - "lib/**"
+  workflow_dispatch:
 
 jobs:
   test-on-ubuntu:
