@@ -1056,7 +1056,6 @@ xy_pathjoin(unsigned int count, ...) {
  * 系统路径规范化：
  * 1. 删除路径左右两边的空白符
  * 2. 将 ~ 或 ~/ 转换为绝对路径
- * 3. 在 Windows 上转换为反斜杠格式
  */
 static char *xy_normalize_path(const char *path) {
   if (!path) return NULL;
@@ -1074,13 +1073,6 @@ static char *xy_normalize_path(const char *path) {
     char *home_path = xy_2pathjoin(xy_os_home, relative_part);
     free(new);
     new = home_path;
-  }
-
-  // 在 Windows 上转换为反斜杠
-  if (xy_on_windows) {
-    char *windows_path = xy_str_gsub(new, "/", "\\");
-    free(new);
-    new = windows_path;
   }
 
   return new;
