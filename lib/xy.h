@@ -32,7 +32,6 @@
 #endif
 
 #include <assert.h>
-#include <shlobj.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -66,6 +65,7 @@ bool xy_enable_color = true;
   #define xy_on_bsd false
   #define xy_os_devnull "nul"
   #include <windows.h>
+  #include <shlobj.h>
   #define xy_useutf8() SetConsoleOutputCP (65001)
 
 #elif defined(__linux__) || defined(__linux)
