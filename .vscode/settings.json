@@ -1,11 +1,16 @@
 {
-    "C_Cpp.clang_format_fallbackStyle": "none",
-    "C_Cpp.default.browse.limitSymbolsToIncludedHeaders": false,
-    "C_Cpp.formatting": "disabled",
+    "editor.fontLigatures": false,
+
     "C_Cpp.intelliSenseEngine": "Tag Parser",
+    "C_Cpp.default.browse.limitSymbolsToIncludedHeaders": false,
+
+    "editor.formatOnSave": false,
+
+    "C_Cpp.clang_format_fallbackStyle": "GNU",
+    "C_Cpp.formatting": "disabled",
+
     "[c]": {
         "editor.defaultFormatter": null,
-        "editor.tabSize": 2
     },
     "[h]": {
         "editor.defaultFormatter": null
@@ -16,6 +21,6 @@
     "[yaml]": {
         "editor.defaultFormatter": "redhat.vscode-yaml"
     },
-    "editor.formatOnSave": false,
-    "vscode-just.formatOnSave": false
+
+    "vscode-just.formatOnSave": false,
 }
