@@ -3,21 +3,23 @@
  * SPDX-License-Identifier: MIT
  * -------------------------------------------------------------
  * Lib Name      :    xy.h
- * Lib Authors   : Aoran Zeng <ccmywish@qq.com>
- *               |  Heng Guo  <2085471348@qq.com>
- * Contributors  :   juzeon   <skyjuzheng@gmail.com>
+ * Lib Authors   : Aoran Zeng  <ccmywish@qq.com>
+ *               |  Heng Guo   <2085471348@qq.com>
+ * Contributors  :   juzeon    <skyjuzheng@gmail.com>
+ *               | Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-07-19>
+ * Last Modified : <2025-08-07>
  *
  * xy: 襄阳、咸阳
- * Corss-Platform C11 utilities for CLI applications in mixed flavor (mostly Ruby)
+ * Corss-Platform C11 utilities for CLI applications in mixed
+ * flavor (mostly Ruby)
  * ------------------------------------------------------------*/
 
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.1.5.2-2025/07/19"
+#define _XY_Version       "v0.1.5.3-2025/08/07"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -375,6 +377,25 @@ xy_streql (const char *str1, const char *str2)
       return false;
     }
   return strcmp (str1, str2) == 0 ? true : false;
+}
+
+static bool xy_streql_ic(const char *str1, const char *str2) {
+  if (NULL == str1 || NULL == str2) {
+    return false;
+  }
+
+  size_t len1 = strlen(str1);
+  size_t len2 = strlen(str2);
+  if (len1 != len2) {
+    return false;
+  }
+
+  for (size_t i = 0; i < len1; i++) {
+    if (tolower(str1[i]) != tolower(str2[i])) {
+      return false;
+    }
+  }
+  return true;
 }
 
 static char *
