@@ -477,7 +477,8 @@ xy_str_delete_suffix (const char *str, const char *suffix)
   return new;
 }
 
-static char *xy_str_strip(const char *str) {
+static char *
+xy_str_strip(const char *str) {
   if (!str) return NULL;
 
   char *original = xy_strdup(str);
@@ -768,7 +769,8 @@ _xy_os_home ()
  * 获取Windows用户文档目录的真实路径
  * 使用 SHGetFolderPathA 获取正确的Documents目录位置
  */
-static char *_xy_win_get_documents_dir() {
+static char *
+_xy_win_get_documents_dir() {
 #ifdef xy_on_windows
   char documents_path[MAX_PATH];
   HRESULT result = SHGetFolderPathA(NULL, CSIDL_MYDOCUMENTS, NULL,
@@ -783,7 +785,8 @@ static char *_xy_win_get_documents_dir() {
 }
 
 // 更新 PowerShell 配置文件路径函数
-static char *_xy_win_powershell_profile() {
+static char *
+_xy_win_powershell_profile() {
   if (xy_on_windows) {
     char *documents_dir = _xy_win_get_documents_dir();
     char *profile_path = xy_2pathjoin(
@@ -795,7 +798,8 @@ static char *_xy_win_powershell_profile() {
   }
 }
 
-static char *_xy_win_powershellv5_profile() {
+static char *
+_xy_win_powershellv5_profile() {
   if (xy_on_windows) {
     char *documents_dir = _xy_win_get_documents_dir();
     char *profile_path = xy_2pathjoin(
@@ -957,10 +961,11 @@ xy_find_executable (const char *exe_name)
 
 /**
  * 路径规范化：
- * 1. 将所有的反斜杠转换为正斜杠
- * 2. 将 \\\\ 转换为 /
- * 3. 处理重复的正斜杠 // -> /
- * 4. 删除路径开头和结尾的多余斜杠（除根路径外）
+ * 1. 去除两边可能存在的单双引号
+ * 2. 将所有的反斜杠转换为正斜杠
+ * 3. 将 \\\\ 转换为 /
+ * 4. 处理重复的正斜杠 // -> /
+ * 5. 删除路径开头和结尾的多余斜杠（除根路径外）
  */
 static char *
 xy_path_normalize(const char *path) {
@@ -969,6 +974,21 @@ xy_path_normalize(const char *path) {
   }
 
   char *normalized = xy_strdup(path);
+
+  // 去除两边可能存在的单双引号
+  size_t len = strlen(normalized);
+  if (len >= 2) {
+    char first = normalized[0];
+    char last = normalized[len - 1];
+    if ((first == '"' && last == '"') || (first == '\'' && last == '\'')) {
+      // 移除首尾的引号
+      char *temp = malloc(len - 1);
+      strncpy(temp, normalized + 1, len - 2);
+      temp[len - 2] = '\0';
+      free(normalized);
+      normalized = temp;
+    }
+  }
 
   // 将反斜杠转换为正斜杠
   char *temp = xy_str_gsub(normalized, "\\\\", "/");
