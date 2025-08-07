@@ -962,7 +962,7 @@ xy_str_add_quotes (const char *str)
  * 5. 输出时两边加单引号
  */
 static char *
-xy_path_normalize (const char *path)
+xy_path_canonicalize (const char *path)
 {
   if (!path)
     return NULL;
@@ -1021,8 +1021,8 @@ xy_2pathjoin (const char *pathstr1, const char *pathstr2)
     return NULL;
   }
 
-  char *normalized1 = xy_path_normalize (pathstr1);
-  char *normalized2 = xy_path_normalize (pathstr2);
+  char *normalized1 = xy_path_canonicalize (pathstr1);
+  char *normalized2 = xy_path_canonicalize (pathstr2);
 
   // 去除两边必定存在的单引号
   char *clean1 = xy_str_remove_quotes (normalized1);
@@ -1146,8 +1146,8 @@ xy_parent_dir (const char *path)
 static char *
 xy_path_remove_trailing_slash (const char *path)
 {
-  char *normalized = xy_path_normalize (path);
-  return normalized;  // xy_path_normalize 已经处理了末尾斜杠
+  char *normalized = xy_path_canonicalize (path);
+  return normalized;  // xy_path_canonicalize 已经处理了末尾斜杠
 }
 
 /**
@@ -1157,7 +1157,7 @@ xy_path_remove_trailing_slash (const char *path)
 static char *
 xy_path_ensure_trailing_slash (const char *path)
 {
-  char *normalized = xy_path_normalize (path);
+  char *normalized = xy_path_canonicalize (path);
   size_t len = strlen (normalized);
 
   if (len == 0 || normalized[len - 1] == '/')
