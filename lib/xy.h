@@ -477,26 +477,34 @@ xy_str_delete_suffix (const char *str, const char *suffix)
   return new;
 }
 
-static char *
-xy_str_strip (const char *str)
-{
-  char *new = xy_strdup (str);
+static char *xy_str_strip(const char *str) {
+  if (!str) return NULL;
 
-  while (strchr ("\n\r\v\t\f ", new[0]))
-    {
-      new += 1;
-    }
+  char *original = xy_strdup(str);
+  char *start = original;
 
-  size_t len = strlen (new);
+  while (*start && strchr("\n\r\v\t\f ", *start)) {
+    start++;
+  }
 
-  char *last = new + len - 1;
+  if (*start == '\0') {
+    free(original);
+    return xy_strdup("");
+  }
 
-  while (strchr ("\n\r\v\t\f ", *last))
-    {
-      *last = '\0';
-      last -= 1;
-    }
-  return new;
+  char *end = start + strlen(start) - 1;
+  while (end > start && strchr("\n\r\v\t\f ", *end)) {
+    end--;
+  }
+
+  size_t new_len = end - start + 1;
+
+  char *result = malloc(new_len + 1);
+  strncpy(result, start, new_len);
+  result[new_len] = '\0';
+
+  free(original);
+  return result;
 }
 
 /******************************************************
@@ -1082,14 +1090,12 @@ static char *xy_normalize_path(const char *path) {
  * 获取父目录路径
  */
 static char *xy_parent_dir(const char *path) {
-  char *dir = xy_normalize_path(path);
-  char *last = NULL;
+  if (!path) return NULL;
 
-  if (xy_on_windows) {
-    last = strrchr(dir, '\\');
-  } else {
-    last = strrchr(dir, '/');
-  }
+  char *dir = xy_normalize_path(path);
+  if (!dir) return NULL;
+
+  char *last = strrchr(dir, '/');
 
   if (!last) {
     free(dir);
