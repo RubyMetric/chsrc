@@ -156,22 +156,23 @@ xy_malloc0 (size_t size)
   return ptr;
 }
 
+// 部分路径函数需要提前声明
 static char *xy_pathjoin(unsigned int count, ...);
 static char *xy_2pathjoin(const char *pathstr1, const char *pathstr2);
 static bool xy_file_exist(const char *path);
 static char *xy_normalize_path(const char *path);
+static char *xy_str_remove_quotes(const char *str);
+static char *xy_str_add_quotes(const char *str);
 
+    /******************************************************
+     *                      String
+     ******************************************************/
 
-/******************************************************
- *                      String
- ******************************************************/
-
-/**
- * 将str中所有的pat字符串替换成replace，返回一个全新的字符串
- */
-static char *
-xy_str_gsub (const char *str, const char *pat, const char *replace)
-{
+    /**
+     * 将str中所有的pat字符串替换成replace，返回一个全新的字符串
+     */
+    static char *xy_str_gsub(const char *str, const char *pat,
+                             const char *replace) {
   size_t replace_len = strlen (replace);
   size_t pat_len = strlen (pat);
 
@@ -823,7 +824,12 @@ xy_file_exist (const char *path)
   char *normalized_path = xy_normalize_path(path);
   if (!normalized_path) return false;
 
-  bool exists = (0 == access(normalized_path, F_OK));
+  // 去除可能存在的引号
+  char *clean_path = xy_str_remove_quotes(normalized_path);
+
+  bool exists = (0 == access(clean_path, F_OK));
+
+  free(clean_path);
   free(normalized_path);
   return exists;
 }
@@ -840,12 +846,14 @@ xy_dir_exist (const char *path)
   char *normalized_path = xy_normalize_path(path);
   if (!normalized_path) return false;
 
+  char *clean_path = xy_str_remove_quotes(normalized_path);
+
   bool exists = false;
 
   if (xy_on_windows)
     {
 #ifdef XY_On_Windows
-      DWORD attr = GetFileAttributesA(normalized_path);
+      DWORD attr = GetFileAttributesA(clean_path);
       if (attr != INVALID_FILE_ATTRIBUTES && (attr & FILE_ATTRIBUTE_DIRECTORY))
         {
           exists = true;
@@ -856,12 +864,13 @@ xy_dir_exist (const char *path)
     {
       // 使用 stat 系统调用替代 test 命令，更加可靠
       struct stat st;
-      if (stat(normalized_path, &st) == 0 && S_ISDIR(st.st_mode))
+      if (stat(clean_path, &st) == 0 && S_ISDIR(st.st_mode))
         {
           exists = true;
         }
     }
 
+  free(clean_path);
   free(normalized_path);
   return exists;
 }
@@ -960,12 +969,47 @@ xy_find_executable (const char *exe_name)
 #define xy_fishrc "~/.config/fish/config.fish"
 
 /**
+ * 去除字符串两端的单双引号
+ * @param str 输入字符串
+ * @return 去除引号后的新字符串，如果没有引号则返回原字符串的副本
+ */
+static char *
+xy_str_remove_quotes(const char *str) {
+  if (!str) return NULL;
+
+  size_t len = strlen(str);
+  if (len >= 2) {
+    char first = str[0];
+    char last = str[len - 1];
+    if ((first == '"' && last == '"') || (first == '\'' && last == '\'')) {
+      // 移除首尾的引号
+      char *result = malloc(len - 1);
+      strncpy(result, str + 1, len - 2);
+      result[len - 2] = '\0';
+      return result;
+    }
+  }
+  return xy_strdup(str);
+}
+
+/**
+ * 在字符串两端添加单引号
+ * @param str 输入字符串
+ * @return 添加单引号后的新字符串
+ */
+static char *
+xy_str_add_quotes(const char *str) {
+  if (!str) return NULL;
+  return xy_strjoin(3, "'", str, "'");
+}
+
+/**
  * 路径规范化：
- * 1. 去除两边可能存在的单双引号
- * 2. 将所有的反斜杠转换为正斜杠
- * 3. 将 \\\\ 转换为 /
- * 4. 处理重复的正斜杠 // -> /
- * 5. 删除路径开头和结尾的多余斜杠（除根路径外）
+ * 1. 将所有的反斜杠转换为正斜杠
+ * 2. 将 \\\\ 转换为 /
+ * 3. 处理重复的正斜杠 // -> /
+ * 4. 删除路径开头和结尾的多余斜杠（除根路径外）
+ * 5. 输出时两边加单引号
  */
 static char *
 xy_path_normalize(const char *path) {
@@ -973,22 +1017,8 @@ xy_path_normalize(const char *path) {
     return NULL;
   }
 
-  char *normalized = xy_strdup(path);
-
   // 去除两边可能存在的单双引号
-  size_t len = strlen(normalized);
-  if (len >= 2) {
-    char first = normalized[0];
-    char last = normalized[len - 1];
-    if ((first == '"' && last == '"') || (first == '\'' && last == '\'')) {
-      // 移除首尾的引号
-      char *temp = malloc(len - 1);
-      strncpy(temp, normalized + 1, len - 2);
-      temp[len - 2] = '\0';
-      free(normalized);
-      normalized = temp;
-    }
-  }
+  char *normalized = xy_str_remove_quotes(path);
 
   // 将反斜杠转换为正斜杠
   char *temp = xy_str_gsub(normalized, "\\\\", "/");
@@ -1022,7 +1052,7 @@ xy_path_normalize(const char *path) {
     normalized[len - 1] = '\0';
   }
 
-  return normalized;
+  return xy_str_add_quotes(normalized);
 }
 
 /**
@@ -1038,23 +1068,30 @@ xy_2pathjoin(const char *pathstr1, const char *pathstr2) {
   char *normalized1 = xy_path_normalize(pathstr1);
   char *normalized2 = xy_path_normalize(pathstr2);
 
+  // 去除两边必定存在的单引号
+  char *clean1 = xy_str_remove_quotes(normalized1);
+  char *clean2 = xy_str_remove_quotes(normalized2);
+
   // 拼接路径
   char *result;
-  size_t len1 = strlen(normalized1);
-  size_t len2 = strlen(normalized2);
+  size_t clean_len1 = strlen(clean1);
+  size_t clean_len2 = strlen(clean2);
 
-  if (len1 == 0) {
-    result = xy_strdup(normalized2);
-  } else if (len2 == 0) {
-    result = xy_strdup(normalized1);
+  if (clean_len1 == 0) {
+    result = xy_strdup(clean2);
+  } else if (clean_len2 == 0) {
+    result = xy_strdup(clean1);
   } else {
-    result = xy_strjoin(3, normalized1, "/", normalized2);
+    result = xy_strjoin(3, clean1, "/", clean2);
   }
 
+  // 清理内存
+  free(clean1);
+  free(clean2);
   free(normalized1);
   free(normalized2);
 
-  return result;
+  return xy_strjoin(3, "'", result, "'");
 }
 
 /**
@@ -1115,15 +1152,21 @@ static char *xy_parent_dir(const char *path) {
   char *dir = xy_normalize_path(path);
   if (!dir) return NULL;
 
-  char *last = strrchr(dir, '/');
+  // 去除两端的单引号
+  char *clean_dir = xy_str_remove_quotes(dir);
+
+  char *last = strrchr(clean_dir, '/');
 
   if (!last) {
+    free(clean_dir);
     free(dir);
-    return xy_strdup(".");
+    return xy_str_add_quotes(".");
   }
 
   *last = '\0';
-  return dir;
+
+  free(dir);
+  return xy_str_add_quotes(clean_dir);
 }
 
 /**
