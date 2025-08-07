@@ -1,10 +1,11 @@
 # ---------------------------------------------------------------
 # Workflow File : PR-test.yml
-# File Authors  : Aoran Zeng <ccmywish@qq.com>
-# Contributors  :  Nul None  <nul@none.org>
+# File Authors  : Aoran Zeng  <ccmywish@qq.com>
+# Contributors  :   Nul None  <nul@none.org>
+#               | Mikachu2333 <mikachu2333@zohomail.com>
 #               |
 # Created On    : <2025-06-19>
-# Last Modified : <2025-06-19>
+# Last Modified : <2025-08-07>
 #
 # Test PR
 # ---------------------------------------------------------------
@@ -42,7 +43,7 @@ jobs:
 
   test-on-windows:
     name: 在Windows上测试
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     if: github.event.pull_request.base.ref == 'dev'
 
     steps:
