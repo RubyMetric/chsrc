@@ -27,8 +27,9 @@ main (int argc, char const *argv[])
   say (xy_2pathjoin("C:\\Users\\", "\\Documents\\"));
   say (xy_2pathjoin("/home/user/", "/documents/"));
   say (xy_2pathjoin("C:\\\\Program Files\\\\", "\\\\Test\\\\"));
-  say (xy_pathjoin(3, "C:\\a b", "c", "d"));
-  say (xy_pathjoin(3, "D:\\", "\\a", "b\\c\\"));
+  say (xy_pathjoin(3, "X:\\a b", "c", "d"));
+  say (xy_pathjoin(4, "E:\\", "\\a", "b\\c\\", "/d"));
+  say (xy_pathjoin(2, "./a", "b"));
   say (xy_strjoin(2, "Xi", "'an"));
   say (xy_strjoin  (3, "屈身守分，", "以待天时，", "不可与命争也"));
   say (xy_strjoin  (4, "水落鱼梁浅，", "天寒梦泽深。", "羊公碑字在，", "读罢泪沾襟。"));
@@ -63,7 +64,7 @@ main (int argc, char const *argv[])
   xy_error_brkt ("xy.h", "错误", "西安肉丸胡辣汤里没有肉丸");
 
   assert (xy_streql    ("abc", "abc"));
-  assert (xy_streql_ic ("abc", "abc"));
+  assert (xy_streql_ic ("AbC", "abc"));
   assert (false == xy_streql ("abc", "abC"));
   assert (true  == xy_streql_ic ("abc", "abC"));
 
