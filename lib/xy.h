@@ -383,24 +383,24 @@ static bool
 xy_streql_ic(const char *str1, const char *str2)
 {
   if (NULL == str1 || NULL == str2)
-  {
-    return false;
-  }
+    {
+      return false;
+    }
 
   size_t len1 = strlen(str1);
   size_t len2 = strlen(str2);
   if (len1 != len2)
-  {
-    return false;
-  }
-
-  for (size_t i = 0; i < len1; i++)
-  {
-    if (tolower(str1[i]) != tolower(str2[i]))
     {
       return false;
     }
-  }
+
+  for (size_t i = 0; i < len1; i++)
+    {
+      if (tolower(str1[i]) != tolower(str2[i]))
+        {
+          return false;
+        }
+    }
   return true;
 }
 
