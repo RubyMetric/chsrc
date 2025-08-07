@@ -32,6 +32,7 @@
 #endif
 
 #include <assert.h>
+#include <ctype.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -922,7 +923,6 @@ xy_dir_create (const char *path)
       char *cmd = xy_strjoin(2, "mkdir ", normalized_path);
       char *quiet_cmd = xy_str_to_quietcmd(cmd);
       success = (system(quiet_cmd) == 0);
-      free(quoted_path);
       free(cmd);
       free(quiet_cmd);
     }
@@ -931,7 +931,6 @@ xy_dir_create (const char *path)
       char *cmd = xy_strjoin(2, "mkdir -p ", normalized_path);
       char *quiet_cmd = xy_str_to_quietcmd(cmd);
       success = (system(quiet_cmd) == 0);
-      free(quoted_path);
       free(cmd);
       free(quiet_cmd);
     }
