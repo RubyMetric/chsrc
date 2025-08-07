@@ -10,7 +10,7 @@
  * ------------------------------------------------------------*/
 
 // Size: 20MB
-#define Rustup_Speed_URL_Suffix "/dist/2025-06-26/cargo-1.88.0-x86_64-unknown-illumos.tar.gz"
+#define PL_Rustup_Speed_URL_Suffix "/dist/2025-06-26/cargo-1.88.0-x86_64-unknown-illumos.tar.gz"
 
 static SourceProvider_t pl_rust_binary_upstream =
 {
@@ -22,16 +22,34 @@ static SourceProvider_t pl_rust_binary_upstream =
  * @update 2025-08-07
  */
 static Source_t pl_rust_rustup_sources[] = {
-    {&pl_rust_binary_upstream, "https://static.rust-lang.org", "https://static.rust-lang.org" Rustup_Speed_URL_Suffix},
-    {&MirrorZ, "https://mirrors.cernet.edu.cn/rustup", NULL},
-    {&Tuna, "https://mirrors.tuna.tsinghua.edu.cn/rustup", "https://mirrors.tuna.tsinghua.edu.cn/rustup" Rustup_Speed_URL_Suffix},
-    {&Ustc, "https://mirrors.ustc.edu.cn/rust-static", "https://mirrors.ustc.edu.cn/rust-static" Rustup_Speed_URL_Suffix},
-    {&Nju, "https://mirror.nju.edu.cn/rustup", "https://mirror.nju.edu.cn/rustup" Rustup_Speed_URL_Suffix},
-    {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/rust-static", "https://mirror.sjtu.edu.cn/rust-static" Rustup_Speed_URL_Suffix},
-    {&Zju, "https://mirrors.zju.edu.cn/rustup", "https://mirrors.zju.edu.cn/rustup" Rustup_Speed_URL_Suffix},
-    {&Iscas, "https://mirror.iscas.ac.cn/rustup", "https://mirror.iscas.ac.cn/rustup" Rustup_Speed_URL_Suffix},
-    {&Ali, "https://mirrors.aliyun.com/rustup", "https://mirrors.aliyun.com/rustup" Rustup_Speed_URL_Suffix},
-    {&RsProxyCN, "https://rsproxy.cn", "https://rsproxy.cn" Rustup_Speed_URL_Suffix}};
+  {&pl_rust_binary_upstream, "https://static.rust-lang.org",
+                             "https://static.rust-lang.org" PL_Rustup_Speed_URL_Suffix},
+
+  {&MirrorZ,                 "https://mirrors.cernet.edu.cn/rustup", NULL},
+
+  {&Tuna,                    "https://mirrors.tuna.tsinghua.edu.cn/rustup",
+                             "https://mirrors.tuna.tsinghua.edu.cn/rustup" PL_Rustup_Speed_URL_Suffix},
+
+  {&Ustc,                    "https://mirrors.ustc.edu.cn/rust-static",
+                             "https://mirrors.ustc.edu.cn/rust-static" PL_Rustup_Speed_URL_Suffix},
+
+  {&Nju,                     "https://mirror.nju.edu.cn/rustup",
+                             "https://mirror.nju.edu.cn/rustup" PL_Rustup_Speed_URL_Suffix},
+
+  {&Sjtug_Zhiyuan,           "https://mirror.sjtu.edu.cn/rust-static",
+                             "https://mirror.sjtu.edu.cn/rust-static" PL_Rustup_Speed_URL_Suffix},
+
+  {&Zju,                     "https://mirrors.zju.edu.cn/rustup",
+                             "https://mirrors.zju.edu.cn/rustup" PL_Rustup_Speed_URL_Suffix},
+
+  {&Iscas,                   "https://mirror.iscas.ac.cn/rustup",
+                             "https://mirror.iscas.ac.cn/rustup" PL_Rustup_Speed_URL_Suffix},
+
+  {&Ali,                     "https://mirrors.aliyun.com/rustup",
+                             "https://mirrors.aliyun.com/rustup" PL_Rustup_Speed_URL_Suffix},
+
+  {&RsProxyCN,               "https://rsproxy.cn",
+                             "https://rsproxy.cn" PL_Rustup_Speed_URL_Suffix}};
 def_sources_n(pl_rust_rustup);
 
 
