@@ -29,7 +29,7 @@ main (int argc, char const *argv[])
   say (xy_2pathjoin("C:\\\\Program Files\\\\", "\\\\Test\\\\"));
   say (xy_pathjoin(3, "X:\\a b", "c", "d"));
   say (xy_pathjoin(4, "E:\\", "\\a", "b\\c\\", "/d"));
-  say (xy_pathjoin(2, "./a", "b"));
+  say (xy_pathjoin(2, "./a", "b/"));
   say (xy_strjoin(2, "Xi", "'an"));
   say (xy_strjoin  (3, "屈身守分，", "以待天时，", "不可与命争也"));
   say (xy_strjoin  (4, "水落鱼梁浅，", "天寒梦泽深。", "羊公碑字在，", "读罢泪沾襟。"));
