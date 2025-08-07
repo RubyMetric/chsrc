@@ -174,8 +174,9 @@ static char *xy_str_add_quotes    (const char *str);
 /*
  * 将str中所有的pat字符串替换成replace，返回一个全新的字符串
 **/
-static char *xy_str_gsub (const char *str, const char *pat,
-                          const char *replace)
+static char *
+xy_str_gsub (const char *str, const char *pat,
+             const char *replace)
 {
   size_t replace_len = strlen (replace);
   size_t pat_len = strlen (pat);
