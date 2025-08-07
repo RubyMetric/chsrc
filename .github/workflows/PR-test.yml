@@ -22,6 +22,7 @@ on:
     paths:
       - "src/**"
       - "lib/**"
+      - "test/**"
   workflow_dispatch:
 
 jobs:
