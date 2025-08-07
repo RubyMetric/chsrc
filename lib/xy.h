@@ -904,8 +904,6 @@ xy_dir_exist (const char *path)
   return exists;
 }
 
-#endif
-
 /******************************************************
  *                      Path Operations
  ******************************************************/
@@ -1167,3 +1165,5 @@ xy_path_ensure_trailing_slash (const char *path)
   free (normalized);
   return result;
 }
+
+#endif
