@@ -25,17 +25,17 @@ main (int argc, char const *argv[])
   println (dbl);
 
   say (xy_2strjoin ("Xi", "'an"));
-  say (xy_strjoin(3, "Xi", "'an", " Ren"));
+  say (xy_strjoin  (3, "Xi", "'an", " Ren"));
   say (xy_strjoin  (3, "屈身守分，", "以待天时，", "不可与命争也"));
   say (xy_strjoin  (4, "水落鱼梁浅，", "天寒梦泽深。", "羊公碑字在，", "读罢泪沾襟。"));
   say (xy_strjoin  (6, "楚山横地出，", "汉水接天回。", "冠盖非新里，", "章华即旧台。", "习池风景异，", "归路满尘埃。"));
 
-  say (xy_2pathjoin("C:\\Users\\", "\\Documents\\"));
-  say (xy_2pathjoin("/home/user a/", "/documents/"));
-  say (xy_2pathjoin("C:\\\\Program Files\\\\", "\\\\Test\\\\"));
-    say (xy_pathjoin(2, "./a", "b/"));
-  say (xy_pathjoin(3, "X:\\a b", "c", "d"));
-  say (xy_pathjoin(4, "E:\\", "\\a", "b\\c\\", "/d"));
+  say (xy_2pathjoin ("C:\\Users\\", "\\Documents\\"));
+  say (xy_2pathjoin ("/home/user a/", "/documents/"));
+  say (xy_2pathjoin ("C:\\\\Program Files\\\\", "\\\\Test\\\\"));
+  say (xy_pathjoin  (2, "./a", "b/"));
+  say (xy_pathjoin  (3, "X:\\a b", "c", "d"));
+  say (xy_pathjoin  (4, "E:\\", "\\a", "b\\c\\", "/d"));
 
   print (xy_str_to_bold      ("粗体"));
   print (xy_str_to_faint     ("浅体"));
@@ -123,7 +123,7 @@ main (int argc, char const *argv[])
       assert (xy_dir_exist ("/etc"));
     }
 
-  println (xy_normalize_path (" \n ~/haha/test/123 \n\r "));
+  println (xy_normalize_path (" \n ~/haha/test/1 2 3 \n\r "));
   assert_str (xy_normalize_path ("~/haha/test"), xy_parent_dir (" ~/haha/test/123"));
 
   xy_succ ("测试完成", "xy.h 测试全部通过");
