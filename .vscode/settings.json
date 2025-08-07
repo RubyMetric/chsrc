@@ -4,7 +4,8 @@
     "C_Cpp.formatting": "disabled",
     "C_Cpp.intelliSenseEngine": "Tag Parser",
     "[c]": {
-        "editor.defaultFormatter": null
+        "editor.defaultFormatter": null,
+        "editor.tabSize": 2
     },
     "[h]": {
         "editor.defaultFormatter": null
@@ -16,6 +17,5 @@
         "editor.defaultFormatter": "redhat.vscode-yaml"
     },
     "editor.formatOnSave": false,
-    "editor.tabSize": 2,
     "vscode-just.formatOnSave": false
 }
