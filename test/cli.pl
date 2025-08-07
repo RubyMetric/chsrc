@@ -2,8 +2,9 @@
 # ---------------------------------------------------------------
 # Test File     : cli.pl
 # Test Authors  : Aoran Zeng <ccmywish@qq.com>
+# Contributors  :  Nil Null  <nil@null.org>
 # Created On    : <2024-06-05>
-# Last Modified : <2025-07-22>
+# Last Modified : <2025-08-07>
 #
 #   测试 chsrc 可执行文件
 # ---------------------------------------------------------------
@@ -43,18 +44,18 @@ like `./chsrc get fake_target_name 2>&1`,  $fake_target_name, 'chsrc get fake_ta
 
 
 if ((defined $ARGV[0]) && ($ARGV[0] eq 'fastcheck')) {
-  say "Fast checking, done testing.";
-  done_testing;
-  exit 0;
+    say "Fast checking, done testing.";
+    done_testing;
+    exit 0;
 }
 
 my $has_ruby = system 'ruby -v';
 if ($has_ruby == 0) {
-  say "Ruby exists. Go on testing.";
+    say "Ruby exists. Go on testing.";
 } else {
-  say "No Ruby. End testing.";
-  done_testing;
-  exit 0;
+    say "No Ruby. End testing.";
+    done_testing;
+    exit 0;
 }
 
 my $get_ruby = qr/gem sources/;
