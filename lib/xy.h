@@ -892,8 +892,7 @@ xy_dir_create (const char *path)
 
   if (xy_on_windows)
     {
-      char *quoted_path = xy_strjoin(3, "\"", normalized_path, "\"");
-      char *cmd = xy_strjoin(2, "mkdir ", quoted_path);
+      char *cmd = xy_strjoin(2, "mkdir ", normalized_path);
       char *quiet_cmd = xy_str_to_quietcmd(cmd);
       success = (system(quiet_cmd) == 0);
       free(quoted_path);
@@ -902,8 +901,7 @@ xy_dir_create (const char *path)
     }
   else
     {
-      char *quoted_path = xy_strjoin(3, "\"", normalized_path, "\"");
-      char *cmd = xy_strjoin(2, "mkdir -p ", quoted_path);
+      char *cmd = xy_strjoin(2, "mkdir -p ", normalized_path);
       char *quiet_cmd = xy_str_to_quietcmd(cmd);
       success = (system(quiet_cmd) == 0);
       free(quoted_path);
