@@ -215,6 +215,71 @@ xy_str_gsub (const char *str, const char *pat, const char *replace)
   return ret;
 }
 
+static char *xy_path_normalize(const char *path) {
+  if (!path) {
+    return NULL;
+  }
+
+  char *normalized = xy_strdup(path);
+
+  char *temp = xy_str_gsub(normalized, "\\\\", "\\");
+  free(normalized);
+  normalized = xy_str_gsub(temp, "\\", "/");
+  free(temp);
+
+  // 处理重复的正斜杠
+  temp = normalized;
+  while (strstr(temp, "//")) {
+    char *new_temp = xy_str_gsub(temp, "//", "/");
+    if (temp != normalized) free(temp);
+    temp = new_temp;
+  }
+  normalized = temp;
+
+  // 删除路径结尾的斜杠（除非是根路径）
+  size_t len = strlen(normalized);
+  if (len > 1 && normalized[len - 1] == '/') {
+    normalized[len - 1] = '\0';
+  }
+
+  return normalized;
+}
+
+static char *xy_2pathjoin(const char *pathstr1, const char *pathstr2) {
+  if (!pathstr1 || !pathstr2) {
+    return NULL;
+  }
+
+  char *normalized1 = xy_path_normalize(pathstr1);
+  char *normalized2 = xy_path_normalize(pathstr2);
+
+  // 删除第二个路径开头的斜杠
+  char *path2_start = normalized2;
+  while (*path2_start == '/') {
+    path2_start++;
+  }
+
+  // 拼接路径
+  char *result;
+  size_t len1 = strlen(normalized1);
+
+  if (len1 == 0) {
+    // 第一个路径为空
+    result = xy_strdup(path2_start);
+  } else if (*path2_start == '\0') {
+    // 第二个路径为空
+    result = xy_strdup(normalized1);
+  } else {
+    // 正常拼接
+    result = xy_strjoin(3, normalized1, "/", path2_start);
+  }
+
+  free(normalized1);
+  free(normalized2);
+
+  return result;
+}
+
 static char *
 xy_2strjoin (const char *str1, const char *str2)
 {
