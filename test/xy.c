@@ -6,7 +6,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2025-06-20>
+ * Last Modified : <2025-08-08>
  *
  * Test xy.h
  * ------------------------------------------------------------*/
@@ -61,6 +61,11 @@ main (int argc, char const *argv[])
   xy_info_brkt  ("xy.h", "信息", "襄阳牛肉面搭配黄酒更美味");
   xy_warn_brkt  ("xy.h", "警告", "兰州牛肉面，而非兰州拉面");
   xy_error_brkt ("xy.h", "错误", "西安肉丸胡辣汤里没有肉丸");
+
+  assert (xy_streql    ("abc", "abc"));
+  assert (xy_streql_ic ("abc", "abc"));
+  assert (false == xy_streql ("abc", "abC"));
+  assert (true  == xy_streql_ic ("abc", "abC"));
 
   assert (false == xy_str_end_with ("abcdef", "abcdefg"));
   assert (xy_str_end_with ("abcdef", "def"));

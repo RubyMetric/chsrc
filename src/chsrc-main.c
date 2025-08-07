@@ -402,7 +402,7 @@ iterate_targets_ (const char ***array, size_t size, const char *input, const cha
       alias = target[k];
       while (NULL!=alias)
         {
-          if (xy_streql (input, alias))
+          if (xy_streql_ic (input, alias))
             {
               matched = 1; break;
             }

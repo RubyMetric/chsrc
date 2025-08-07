@@ -12,11 +12,20 @@ insert_final_newline = false
 indent_style = space
 indent_size = 2
 
+[*.pl]
+indent_size = 4
+
+[*.{raku,rakumod,rakutest}]
+indent_size = 2
+
+[*.ps1]
+indent_size = 4
+
+[*.{sh,bash}]
+indent_size = 2
+
 [Makefile,makefile,*.{mk,make,makefile}]
 indent_style = tab
-
-[*.md]
-trim_trailing_whitespace = true
 
 # 使用 VS Code 生成文件的默认格式
 [*.json]
