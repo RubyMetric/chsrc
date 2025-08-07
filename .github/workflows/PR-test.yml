@@ -5,7 +5,7 @@
 #               | Mikachu2333 <mikachu2333@zohomail.com>
 #               |
 # Created On    : <2025-06-19>
-# Last Modified : <2025-08-07>
+# Last Modified : <2025-08-08>
 #
 # Test PR
 # ---------------------------------------------------------------
@@ -13,16 +13,21 @@
 name: 测试PR
 
 on:
-  push:
+  pull_request:
+    types: [opened,
+            synchronize,      # 后续提交
+            ready_for_review, # draft PR 转为正式 PR
+            review_requested,
+            reopened]
     paths:
       - "src/**"
       - "lib/**"
-  workflow_dispatch:
 
 jobs:
   test-on-ubuntu:
     name: 在Ubuntu上测试
     runs-on: ubuntu-latest
+    if: github.event.pull_request.base.ref == 'dev'
 
     steps:
       - name: 检出代码
@@ -39,10 +44,17 @@ jobs:
   test-on-windows:
     name: 在Windows上测试
     runs-on: windows-latest
+    if: github.event.pull_request.base.ref == 'dev'
 
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
+
+      - name: 创建测试文件
+        shell: powershell
+        run: |
+          New-Item -Path "$env:USERPROFILE\Documents\Powershell\Microsoft.PowerShell_profile.ps1" -ItemType File -Force
+          New-Item -Path "$env:USERPROFILE\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1" -ItemType File -Force
 
       - name: 安装依赖
         run: |
@@ -51,12 +63,6 @@ jobs:
       - name: 测试构建情况
         run: |
           just
-
-      - name: 创建测试文件
-        shell: powershell
-        run: |
-          New-Item -Path "$env:USERPROFILE\Documents\Powershell\Microsoft.PowerShell_profile.ps1" -ItemType File -Force
-          New-Item -Path "$env:USERPROFILE\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1" -ItemType File -Force
 
       - name: 测试test情况
         run: |
