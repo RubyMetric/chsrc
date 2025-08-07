@@ -30,12 +30,14 @@
 #endif
 
 #include <assert.h>
+#include <shlobj.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 #if defined(__STDC__) && __STDC_VERSION__ >= 202311
@@ -754,45 +756,47 @@ _xy_os_home ()
 // 更新 PowerShell 配置文件路径函数，使用更好的路径处理
 #define xy_win_powershell_profile _xy_win_powershell_profile ()
 #define xy_win_powershellv5_profile _xy_win_powershellv5_profile ()
-static char *
-_xy_win_powershell_profile ()
-{
-  return xy_pathjoin(3, xy_os_home, "Documents", "PowerShell/Microsoft.PowerShell_profile.ps1");
-}
-
-static char *
-_xy_win_powershellv5_profile ()
-{
-  return xy_pathjoin(3, xy_os_home, "Documents", "WindowsPowerShell/Microsoft.PowerShell_profile.ps1");
-}
-
 /**
- * 获取 shell 配置文件路径
- * 支持 bash, zsh, fish 等
+ * 获取Windows用户文档目录的真实路径
+ * 使用 SHGetFolderPathA 获取正确的Documents目录位置
  */
-static char *
-xy_unix_shell_profile (const char *shell_name)
-{
-  if (!shell_name) return NULL;
+static char *_xy_win_get_documents_dir() {
+#ifdef xy_on_windows
+  char documents_path[MAX_PATH];
+  HRESULT result = SHGetFolderPathA(NULL, CSIDL_MYDOCUMENTS, NULL,
+                                    SHGFP_TYPE_CURRENT, documents_path);
 
-  if (xy_streql(shell_name, "bash"))
-    {
-      char *bashrc = xy_2pathjoin(xy_os_home, ".bashrc");
-      if (xy_file_exist(bashrc))
-        return bashrc;
-      free(bashrc);
-      return xy_2pathjoin(xy_os_home, ".bash_profile");
-    }
-  else if (xy_streql(shell_name, "zsh"))
-    {
-      return xy_2pathjoin(xy_os_home, ".zshrc");
-    }
-  else if (xy_streql(shell_name, "fish"))
-    {
-      return xy_pathjoin(3, xy_os_config_dir, "fish", "config.fish");
-    }
+  if (SUCCEEDED(result)) {
+    return xy_strdup(documents_path);
+  }
+#endif
 
-  return NULL;
+  return xy_2pathjoin(xy_os_home, "Documents");
+}
+
+// 更新 PowerShell 配置文件路径函数
+static char *_xy_win_powershell_profile() {
+  if (xy_on_windows) {
+    char *documents_dir = _xy_win_get_documents_dir();
+    char *profile_path = xy_2pathjoin(
+        documents_dir, "PowerShell/Microsoft.PowerShell_profile.ps1");
+    free(documents_dir);
+    return profile_path;
+  } else {
+    return NULL;
+  }
+}
+
+static char *_xy_win_powershellv5_profile() {
+  if (xy_on_windows) {
+    char *documents_dir = _xy_win_get_documents_dir();
+    char *profile_path = xy_2pathjoin(
+        documents_dir, "WindowsPowerShell/Microsoft.PowerShell_profile.ps1");
+    free(documents_dir);
+    return profile_path;
+  } else {
+    return NULL;
+  }
 }
 
 /**
@@ -838,14 +842,12 @@ xy_dir_exist (const char *path)
     }
   else
     {
-      char *quoted_path = xy_strjoin(3, "\"", normalized_path, "\"");
-      char *test_cmd = xy_strjoin(2, "test -d ", quoted_path);
-      char *full_cmd = xy_str_to_quietcmd(test_cmd);
-      int status = system(full_cmd);
-      exists = (status == 0);
-      free(quoted_path);
-      free(test_cmd);
-      free(full_cmd);
+      // 使用 stat 系统调用替代 test 命令，更加可靠
+      struct stat st;
+      if (stat(normalized_path, &st) == 0 && S_ISDIR(st.st_mode))
+        {
+          exists = true;
+        }
     }
 
   free(normalized_path);
@@ -940,6 +942,10 @@ xy_find_executable (const char *exe_name)
 /******************************************************
  *                      Path Operations
  ******************************************************/
+
+#define xy_zshrc "~/.zshrc"
+#define xy_bashrc "~/.bashrc"
+#define xy_fishrc "~/.config/fish/config.fish"
 
 /**
  * 路径规范化：
@@ -1049,15 +1055,23 @@ xy_pathjoin(unsigned int count, ...) {
 /**
  * 系统路径规范化：
  * 1. 删除路径左右两边的空白符
- * 2. 将 ~/ 转换为绝对路径
+ * 2. 将 ~ 或 ~/ 转换为绝对路径
  * 3. 在 Windows 上转换为反斜杠格式
  */
 static char *xy_normalize_path(const char *path) {
+  if (!path) return NULL;
+
   char *new = xy_str_strip(path);  // 删除空白符
 
-  // 处理 ~/ 开头的路径
-  if (xy_str_start_with(new, "~/")) {
-    char *home_path = xy_2pathjoin(xy_os_home, xy_str_delete_prefix(new, "~/"));
+  // 处理 ~ 或 ~/ 开头的路径
+  if (xy_streql(new, "~")) {
+    // 单独的 ~ 直接替换为 home 目录
+    free(new);
+    new = xy_strdup(xy_os_home);
+  } else if (xy_str_start_with(new, "~/")) {
+    // ~/ 开头的路径
+    char *relative_part = xy_str_delete_prefix(new, "~/");
+    char *home_path = xy_2pathjoin(xy_os_home, relative_part);
     free(new);
     new = home_path;
   }
