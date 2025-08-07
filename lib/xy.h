@@ -577,6 +577,28 @@ static char *xy_2pathjoin(const char *pathstr1, const char *pathstr2) {
 }
 
 /**
+ * 多路径拼接
+ */
+static char *xy_pathjoin(unsigned int count, ...) {
+  if (count == 0) return NULL;
+
+  va_list args;
+  va_start(args, count);
+
+  char *result = xy_strdup(va_arg(args, const char *));
+
+  for (unsigned int i = 1; i < count; i++) {
+    const char *path = va_arg(args, const char *);
+    char *temp = xy_2pathjoin(result, path);
+    free(result);
+    result = temp;
+  }
+
+  va_end(args);
+  return result;
+}
+
+/**
  * 系统路径规范化：
  * 1. 删除路径左右两边的空白符
  * 2. 将 ~/ 转换为绝对路径
@@ -865,7 +887,7 @@ xy_run (const char *cmd, unsigned long n)
  *                      cross OS
  ******************************************************/
 
- /**
+/**
  * 该函数同 just 中的 os_family()，只区分 windows, unix
  *
  * @return 返回 "windows" 或 "unix"
@@ -880,7 +902,6 @@ _xy_os_family ()
     return "unix";
 }
 
-
 /**
  * 该函数返回所在 os family 的对应字符串
  */
@@ -892,7 +913,6 @@ xy_os_depend_str (const char *str_for_win, const char *str_for_unix)
   else
     return str_for_unix;
 }
-
 
 #define xy_os_home _xy_os_home ()
 static char *
@@ -906,86 +926,263 @@ _xy_os_home ()
   return home;
 }
 
+/**
+ * 获取用户配置目录
+ * Windows: %APPDATA%
+ * Unix-like: $XDG_CONFIG_HOME 或 $HOME/.config
+ */
+#define xy_os_config_dir _xy_os_config_dir ()
+static char *
+_xy_os_config_dir ()
+{
+  char *config_dir = NULL;
+  if (xy_on_windows)
+    {
+      config_dir = getenv ("APPDATA");
+      if (!config_dir)
+        config_dir = xy_2pathjoin(xy_os_home, "AppData/Roaming");
+    }
+  else
+    {
+      config_dir = getenv ("XDG_CONFIG_HOME");
+      if (!config_dir)
+        config_dir = xy_2pathjoin(xy_os_home, ".config");
+    }
+  return config_dir;
+}
+
+/**
+ * 获取用户数据目录
+ * Windows: %LOCALAPPDATA%
+ * Unix-like: $XDG_DATA_HOME 或 $HOME/.local/share
+ */
+#define xy_os_data_dir _xy_os_data_dir ()
+static char *
+_xy_os_data_dir ()
+{
+  char *data_dir = NULL;
+  if (xy_on_windows)
+    {
+      data_dir = getenv ("LOCALAPPDATA");
+      if (!data_dir)
+        data_dir = xy_2pathjoin(xy_os_home, "AppData/Local");
+    }
+  else
+    {
+      data_dir = getenv ("XDG_DATA_HOME");
+      if (!data_dir)
+        data_dir = xy_2pathjoin(xy_os_home, ".local/share");
+    }
+  return data_dir;
+}
+
+/**
+ * 获取用户缓存目录
+ * Windows: %TEMP%
+ * Unix-like: $XDG_CACHE_HOME 或 $HOME/.cache
+ */
+#define xy_os_cache_dir _xy_os_cache_dir ()
+static char *
+_xy_os_cache_dir ()
+{
+  char *cache_dir = NULL;
+  if (xy_on_windows)
+    {
+      cache_dir = getenv ("TEMP");
+      if (!cache_dir)
+        cache_dir = getenv ("TMP");
+    }
+  else
+    {
+      cache_dir = getenv ("XDG_CACHE_HOME");
+      if (!cache_dir)
+        cache_dir = xy_2pathjoin(xy_os_home, ".cache");
+    }
+  return cache_dir;
+}
+
+// 更新 PowerShell 配置文件路径函数，使用更好的路径处理
 #define xy_win_powershell_profile _xy_win_powershell_profile ()
 #define xy_win_powershellv5_profile _xy_win_powershellv5_profile ()
 static char *
 _xy_win_powershell_profile ()
 {
-  return xy_2pathjoin (
-      xy_os_home, "\\Documents\\PowerShell\\Microsoft.PowerShell_profile.ps1");
+  return xy_pathjoin(3, xy_os_home, "Documents", "PowerShell/Microsoft.PowerShell_profile.ps1");
 }
 
-char *
+static char *
 _xy_win_powershellv5_profile ()
 {
-  return xy_2pathjoin (
-      xy_os_home,
-      "\\Documents\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1");
+  return xy_pathjoin(3, xy_os_home, "Documents", "WindowsPowerShell/Microsoft.PowerShell_profile.ps1");
 }
 
-#define xy_zshrc  "~/.zshrc"
-#define xy_bashrc "~/.bashrc"
-#define xy_fishrc "~/.config/fish/config.fish"
+/**
+ * 获取 shell 配置文件路径
+ * 支持 bash, zsh, fish 等
+ */
+static char *
+xy_unix_shell_profile (const char *shell_name)
+{
+  if (!shell_name) return NULL;
+
+  if (xy_streql(shell_name, "bash"))
+    {
+      char *bashrc = xy_2pathjoin(xy_os_home, ".bashrc");
+      if (xy_file_exist(bashrc))
+        return bashrc;
+      free(bashrc);
+      return xy_2pathjoin(xy_os_home, ".bash_profile");
+    }
+  else if (xy_streql(shell_name, "zsh"))
+    {
+      return xy_2pathjoin(xy_os_home, ".zshrc");
+    }
+  else if (xy_streql(shell_name, "fish"))
+    {
+      return xy_pathjoin(4, xy_os_config_dir, "fish", "config.fish");
+    }
+
+  return NULL;
+}
 
 /**
- * @note Windows上，`path` 不要夹带变量名，因为最终 access() 不会帮你转换
+ * @note 现在使用标准化的路径处理，支持跨平台路径格式
+ * 改进了错误处理和内存管理
  */
 static bool
 xy_file_exist (const char *path)
 {
-  const char *new_path = path;
-  if (xy_str_start_with (path, "~"))
-    {
-      new_path = xy_2pathjoin (xy_os_home, path + 1);
-    }
-  // 0 即 F_OK
-  return (0==access (new_path, 0)) ? true : false;
+  if (!path) return false;
+
+  char *normalized_path = xy_normalize_path(path);
+  if (!normalized_path) return false;
+
+  bool exists = (0 == access(normalized_path, F_OK));
+  free(normalized_path);
+  return exists;
 }
 
 /**
- * @note xy_file_exist() 和 xy_dir_exist() 两个函数在所有平台默认都支持使用 '~'，
- *       但实现中都没有调用 xy_normalize_path()，以防万一，调用前可能需要用户手动调用它
+ * @note 现在使用标准化的路径处理，支持跨平台路径格式
+ * 改进了跨平台兼容性和错误处理
  */
 static bool
 xy_dir_exist (const char *path)
 {
-  const char *dir = path;
-  if (xy_on_windows)
-    {
-      if (xy_str_start_with (path, "~"))
-        {
-          dir = xy_2strjoin (xy_os_home, path + 1);
-        }
-    }
+  if (!path) return false;
+
+  char *normalized_path = xy_normalize_path(path);
+  if (!normalized_path) return false;
+
+  bool exists = false;
 
   if (xy_on_windows)
     {
 #ifdef XY_On_Windows
-      // 也可以用 opendir() #include <dirent.h>
-      DWORD attr = GetFileAttributesA (dir);
-
-      if (attr == INVALID_FILE_ATTRIBUTES)
+      DWORD attr = GetFileAttributesA(normalized_path);
+      if (attr != INVALID_FILE_ATTRIBUTES && (attr & FILE_ATTRIBUTE_DIRECTORY))
         {
-          // Q: 我们应该报错吗？
-          return false;
-        }
-      else if (attr & FILE_ATTRIBUTE_DIRECTORY)
-        {
-          return true;
-        }
-      else
-        {
-          return false;
+          exists = true;
         }
 #endif
     }
   else
     {
-      int status = system (xy_2strjoin ("test -d ", dir));
-
-      if (0==status)
-        return true;
-      else
-        return false;
+      char *quoted_path = xy_strjoin(3, "\"", normalized_path, "\"");
+      char *test_cmd = xy_strjoin(2, "test -d ", quoted_path);
+      char *full_cmd = xy_str_to_quietcmd(test_cmd);
+      int status = system(full_cmd);
+      exists = (status == 0);
+      free(quoted_path);
+      free(test_cmd);
+      free(full_cmd);
     }
+
+  free(normalized_path);
+  return exists;
 }
+
+/**
+ * 创建目录（递归创建）
+ * @return 成功返回 true，失败返回 false
+ */
+static bool
+xy_dir_create (const char *path)
+{
+  if (!path) return false;
+  if (xy_dir_exist(path)) return true;
+
+  char *normalized_path = xy_normalize_path(path);
+  if (!normalized_path) return false;
+
+  bool success = false;
+
+  if (xy_on_windows)
+    {
+      char *quoted_path = xy_strjoin(3, "\"", normalized_path, "\"");
+      char *cmd = xy_strjoin(2, "mkdir ", quoted_path);
+      char *quiet_cmd = xy_str_to_quietcmd(cmd);
+      success = (system(quiet_cmd) == 0);
+      free(quoted_path);
+      free(cmd);
+      free(quiet_cmd);
+    }
+  else
+    {
+      char *quoted_path = xy_strjoin(3, "\"", normalized_path, "\"");
+      char *cmd = xy_strjoin(2, "mkdir -p ", quoted_path);
+      char *quiet_cmd = xy_str_to_quietcmd(cmd);
+      success = (system(quiet_cmd) == 0);
+      free(quoted_path);
+      free(cmd);
+      free(quiet_cmd);
+    }
+
+  free(normalized_path);
+  return success;
+}
+
+/**
+ * 获取可执行文件路径
+ * @param exe_name 可执行文件名
+ * @return 返回完整路径，如果未找到返回 NULL
+ */
+static char *
+xy_find_executable (const char *exe_name)
+{
+  if (!exe_name) return NULL;
+
+  char *cmd;
+  if (xy_on_windows)
+    {
+      cmd = xy_strjoin(2, "where ", exe_name);
+    }
+  else
+    {
+      cmd = xy_strjoin(2, "which ", exe_name);
+    }
+
+  char *quiet_cmd = xy_str_to_quietcmd(cmd);
+  bool exists = (system(quiet_cmd) == 0);
+
+  free(quiet_cmd);
+
+  if (!exists)
+    {
+      free(cmd);
+      return NULL;
+    }
+
+  char *result = xy_run(cmd, 1);  // 获取第一行输出
+  free(cmd);
+
+  if (result)
+    {
+      char *stripped = xy_str_strip(result);
+      free(result);
+      return stripped;
+    }
+
+  return NULL;
+}
+#endif
