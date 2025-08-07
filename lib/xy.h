@@ -154,6 +154,11 @@ xy_malloc0 (size_t size)
   return ptr;
 }
 
+static char *xy_pathjoin(unsigned int count, ...);
+static char *xy_2pathjoin(const char *pathstr1, const char *pathstr2);
+static bool xy_file_exist(const char *path);
+static char *xy_normalize_path(const char *path);
+
 
 /******************************************************
  *                      String
@@ -493,186 +498,6 @@ xy_str_strip (const char *str)
 }
 
 /******************************************************
- *                      Path Operations
- ******************************************************/
-
-/**
- * 路径规范化：
- * 1. 将所有的反斜杠转换为正斜杠
- * 2. 将 \\\\ 转换为 /
- * 3. 处理重复的正斜杠 // -> /
- * 4. 删除路径开头和结尾的多余斜杠（除根路径外）
- */
-static char *xy_path_normalize(const char *path) {
-  if (!path) {
-    return NULL;
-  }
-
-  char *normalized = xy_strdup(path);
-
-  // 将反斜杠转换为正斜杠
-  char *temp = xy_str_gsub(normalized, "\\\\", "/");
-  free(normalized);
-  normalized = xy_str_gsub(temp, "\\", "/");
-  free(temp);
-
-  // 处理重复的正斜杠
-  temp = normalized;
-  while (strstr(temp, "//")) {
-    char *new_temp = xy_str_gsub(temp, "//", "/");
-    if (temp != normalized) free(temp);
-    temp = new_temp;
-  }
-  normalized = temp;
-
-  // 删除路径开头的斜杠（除非是根路径）
-  char *start = normalized;
-  while (*start == '/' && strlen(start) > 1) {
-    start++;
-  }
-  if (start != normalized) {
-    char *new_normalized = xy_strdup(start);
-    free(normalized);
-    normalized = new_normalized;
-  }
-
-  // 删除路径结尾的斜杠（除非是根路径）
-  size_t len = strlen(normalized);
-  if (len > 1 && normalized[len - 1] == '/') {
-    normalized[len - 1] = '\0';
-  }
-
-  return normalized;
-}
-
-/**
- * 路径拼接：
- * 自动处理路径分隔符，删除重复的斜杠
- */
-static char *xy_2pathjoin(const char *pathstr1, const char *pathstr2) {
-  if (!pathstr1 || !pathstr2) {
-    return NULL;
-  }
-
-  char *normalized1 = xy_path_normalize(pathstr1);
-  char *normalized2 = xy_path_normalize(pathstr2);
-
-  // 拼接路径
-  char *result;
-  size_t len1 = strlen(normalized1);
-  size_t len2 = strlen(normalized2);
-
-  if (len1 == 0) {
-    result = xy_strdup(normalized2);
-  } else if (len2 == 0) {
-    result = xy_strdup(normalized1);
-  } else {
-    result = xy_strjoin(3, normalized1, "/", normalized2);
-  }
-
-  free(normalized1);
-  free(normalized2);
-
-  return result;
-}
-
-/**
- * 多路径拼接
- */
-static char *xy_pathjoin(unsigned int count, ...) {
-  if (count == 0) return NULL;
-
-  va_list args;
-  va_start(args, count);
-
-  char *result = xy_strdup(va_arg(args, const char *));
-
-  for (unsigned int i = 1; i < count; i++) {
-    const char *path = va_arg(args, const char *);
-    char *temp = xy_2pathjoin(result, path);
-    free(result);
-    result = temp;
-  }
-
-  va_end(args);
-  return result;
-}
-
-/**
- * 系统路径规范化：
- * 1. 删除路径左右两边的空白符
- * 2. 将 ~/ 转换为绝对路径
- * 3. 在 Windows 上转换为反斜杠格式
- */
-static char *xy_normalize_path(const char *path) {
-  char *new = xy_str_strip(path);  // 删除空白符
-
-  // 处理 ~/ 开头的路径
-  if (xy_str_start_with(new, "~/")) {
-    char *home_path = xy_2pathjoin(xy_os_home, xy_str_delete_prefix(new, "~/"));
-    free(new);
-    new = home_path;
-  }
-
-  // 在 Windows 上转换为反斜杠
-  if (xy_on_windows) {
-    char *windows_path = xy_str_gsub(new, "/", "\\");
-    free(new);
-    new = windows_path;
-  }
-
-  return new;
-}
-
-/**
- * 获取父目录路径
- */
-static char *xy_parent_dir(const char *path) {
-  char *dir = xy_normalize_path(path);
-  char *last = NULL;
-
-  if (xy_on_windows) {
-    last = strrchr(dir, '\\');
-  } else {
-    last = strrchr(dir, '/');
-  }
-
-  if (!last) {
-    free(dir);
-    return xy_strdup(".");
-  }
-
-  *last = '\0';
-  return dir;
-}
-
-/**
- * 删除路径末尾的斜杠
- * @return 返回新字符串
- */
-static char *xy_path_remove_trailing_slash(const char *path) {
-  char *normalized = xy_path_normalize(path);
-  return normalized;  // xy_path_normalize 已经处理了末尾斜杠
-}
-
-/**
- * 确保路径末尾有斜杠
- * @return 返回新字符串
- */
-static char *xy_path_ensure_trailing_slash(const char *path) {
-  char *normalized = xy_path_normalize(path);
-  size_t len = strlen(normalized);
-
-  if (len == 0 || normalized[len - 1] == '/') {
-    return normalized;
-  }
-
-  char *result = xy_2strjoin(normalized, "/");
-  free(normalized);
-  return result;
-}
-
-/******************************************************
  *                      Logging
  ******************************************************/
 
@@ -926,81 +751,6 @@ _xy_os_home ()
   return home;
 }
 
-/**
- * 获取用户配置目录
- * Windows: %APPDATA%
- * Unix-like: $XDG_CONFIG_HOME 或 $HOME/.config
- */
-#define xy_os_config_dir _xy_os_config_dir ()
-static char *
-_xy_os_config_dir ()
-{
-  char *config_dir = NULL;
-  if (xy_on_windows)
-    {
-      config_dir = getenv ("APPDATA");
-      if (!config_dir)
-        config_dir = xy_2pathjoin(xy_os_home, "AppData/Roaming");
-    }
-  else
-    {
-      config_dir = getenv ("XDG_CONFIG_HOME");
-      if (!config_dir)
-        config_dir = xy_2pathjoin(xy_os_home, ".config");
-    }
-  return config_dir;
-}
-
-/**
- * 获取用户数据目录
- * Windows: %LOCALAPPDATA%
- * Unix-like: $XDG_DATA_HOME 或 $HOME/.local/share
- */
-#define xy_os_data_dir _xy_os_data_dir ()
-static char *
-_xy_os_data_dir ()
-{
-  char *data_dir = NULL;
-  if (xy_on_windows)
-    {
-      data_dir = getenv ("LOCALAPPDATA");
-      if (!data_dir)
-        data_dir = xy_2pathjoin(xy_os_home, "AppData/Local");
-    }
-  else
-    {
-      data_dir = getenv ("XDG_DATA_HOME");
-      if (!data_dir)
-        data_dir = xy_2pathjoin(xy_os_home, ".local/share");
-    }
-  return data_dir;
-}
-
-/**
- * 获取用户缓存目录
- * Windows: %TEMP%
- * Unix-like: $XDG_CACHE_HOME 或 $HOME/.cache
- */
-#define xy_os_cache_dir _xy_os_cache_dir ()
-static char *
-_xy_os_cache_dir ()
-{
-  char *cache_dir = NULL;
-  if (xy_on_windows)
-    {
-      cache_dir = getenv ("TEMP");
-      if (!cache_dir)
-        cache_dir = getenv ("TMP");
-    }
-  else
-    {
-      cache_dir = getenv ("XDG_CACHE_HOME");
-      if (!cache_dir)
-        cache_dir = xy_2pathjoin(xy_os_home, ".cache");
-    }
-  return cache_dir;
-}
-
 // 更新 PowerShell 配置文件路径函数，使用更好的路径处理
 #define xy_win_powershell_profile _xy_win_powershell_profile ()
 #define xy_win_powershellv5_profile _xy_win_powershellv5_profile ()
@@ -1039,7 +789,7 @@ xy_unix_shell_profile (const char *shell_name)
     }
   else if (xy_streql(shell_name, "fish"))
     {
-      return xy_pathjoin(4, xy_os_config_dir, "fish", "config.fish");
+      return xy_pathjoin(3, xy_os_config_dir, "fish", "config.fish");
     }
 
   return NULL;
@@ -1186,3 +936,186 @@ xy_find_executable (const char *exe_name)
   return NULL;
 }
 #endif
+
+/******************************************************
+ *                      Path Operations
+ ******************************************************/
+
+/**
+ * 路径规范化：
+ * 1. 将所有的反斜杠转换为正斜杠
+ * 2. 将 \\\\ 转换为 /
+ * 3. 处理重复的正斜杠 // -> /
+ * 4. 删除路径开头和结尾的多余斜杠（除根路径外）
+ */
+static char *
+xy_path_normalize(const char *path) {
+  if (!path) {
+    return NULL;
+  }
+
+  char *normalized = xy_strdup(path);
+
+  // 将反斜杠转换为正斜杠
+  char *temp = xy_str_gsub(normalized, "\\\\", "/");
+  free(normalized);
+  normalized = xy_str_gsub(temp, "\\", "/");
+  free(temp);
+
+  // 处理重复的正斜杠
+  temp = normalized;
+  while (strstr(temp, "//")) {
+    char *new_temp = xy_str_gsub(temp, "//", "/");
+    if (temp != normalized) free(temp);
+    temp = new_temp;
+  }
+  normalized = temp;
+
+  // 删除路径开头的斜杠（除非是根路径）
+  char *start = normalized;
+  while (*start == '/' && strlen(start) > 1) {
+    start++;
+  }
+  if (start != normalized) {
+    char *new_normalized = xy_strdup(start);
+    free(normalized);
+    normalized = new_normalized;
+  }
+
+  // 删除路径结尾的斜杠（除非是根路径）
+  size_t len = strlen(normalized);
+  if (len > 1 && normalized[len - 1] == '/') {
+    normalized[len - 1] = '\0';
+  }
+
+  return normalized;
+}
+
+/**
+ * 路径拼接：
+ * 自动处理路径分隔符，删除重复的斜杠
+ */
+static char *
+xy_2pathjoin(const char *pathstr1, const char *pathstr2) {
+  if (!pathstr1 || !pathstr2) {
+    return NULL;
+  }
+
+  char *normalized1 = xy_path_normalize(pathstr1);
+  char *normalized2 = xy_path_normalize(pathstr2);
+
+  // 拼接路径
+  char *result;
+  size_t len1 = strlen(normalized1);
+  size_t len2 = strlen(normalized2);
+
+  if (len1 == 0) {
+    result = xy_strdup(normalized2);
+  } else if (len2 == 0) {
+    result = xy_strdup(normalized1);
+  } else {
+    result = xy_strjoin(3, normalized1, "/", normalized2);
+  }
+
+  free(normalized1);
+  free(normalized2);
+
+  return result;
+}
+
+/**
+ * 多路径拼接
+ */
+static char *
+xy_pathjoin(unsigned int count, ...) {
+  if (count == 0) return NULL;
+
+  va_list args;
+  va_start(args, count);
+
+  char *result = xy_strdup(va_arg(args, const char *));
+
+  for (unsigned int i = 1; i < count; i++) {
+    const char *path = va_arg(args, const char *);
+    char *temp = xy_2pathjoin(result, path);
+    free(result);
+    result = temp;
+  }
+
+  va_end(args);
+  return result;
+}
+
+/**
+ * 系统路径规范化：
+ * 1. 删除路径左右两边的空白符
+ * 2. 将 ~/ 转换为绝对路径
+ * 3. 在 Windows 上转换为反斜杠格式
+ */
+static char *xy_normalize_path(const char *path) {
+  char *new = xy_str_strip(path);  // 删除空白符
+
+  // 处理 ~/ 开头的路径
+  if (xy_str_start_with(new, "~/")) {
+    char *home_path = xy_2pathjoin(xy_os_home, xy_str_delete_prefix(new, "~/"));
+    free(new);
+    new = home_path;
+  }
+
+  // 在 Windows 上转换为反斜杠
+  if (xy_on_windows) {
+    char *windows_path = xy_str_gsub(new, "/", "\\");
+    free(new);
+    new = windows_path;
+  }
+
+  return new;
+}
+
+/**
+ * 获取父目录路径
+ */
+static char *xy_parent_dir(const char *path) {
+  char *dir = xy_normalize_path(path);
+  char *last = NULL;
+
+  if (xy_on_windows) {
+    last = strrchr(dir, '\\');
+  } else {
+    last = strrchr(dir, '/');
+  }
+
+  if (!last) {
+    free(dir);
+    return xy_strdup(".");
+  }
+
+  *last = '\0';
+  return dir;
+}
+
+/**
+ * 删除路径末尾的斜杠
+ * @return 返回新字符串
+ */
+static char *xy_path_remove_trailing_slash(const char *path) {
+  char *normalized = xy_path_normalize(path);
+  return normalized;  // xy_path_normalize 已经处理了末尾斜杠
+}
+
+/**
+ * 确保路径末尾有斜杠
+ * @return 返回新字符串
+ */
+static char *xy_path_ensure_trailing_slash(const char *path) {
+  char *normalized = xy_path_normalize(path);
+  size_t len = strlen(normalized);
+
+  if (len == 0 || normalized[len - 1] == '/') {
+    return normalized;
+  }
+
+  char *result = xy_2strjoin(normalized, "/");
+  free(normalized);
+  return result;
+}
