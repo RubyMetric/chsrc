@@ -5,7 +5,7 @@
  ! Config Authors: Aoran Zeng <ccmywish@qq.com>
  ! Contributors  :  Word2VecT <tangzinan@bupt.edu.cn>
  ! Created On    : <2025-07-14>
- ! Last Modified : <2025-07-14>
+ ! Last Modified : <2025-08-08>
  ! ---------------------------------------------------------- -->
 
 # rawstr4c input
@@ -44,11 +44,11 @@ echo HOMEBREW_CORE_GIT_REMOTE=$HOMEBREW_CORE_GIT_REMOTE;
 
 ### Bash config
 
-- keep-prefix = `true`
-- keep-postfix = `false`
+- no-prefix = `false`
+- no-postfix = `true`
 - name = `config_in_bash`
 
-测试一下 keep-postfix 功能
+测试一下 no-postfix 功能
 
 ```bash
 # ------ chsrc BLOCK BEGIN for Homebrew ------
