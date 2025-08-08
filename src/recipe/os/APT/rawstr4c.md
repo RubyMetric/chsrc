@@ -5,7 +5,7 @@
  ! Config Authors: Aoran Zeng <ccmywish@qq.com>
  ! Contributors  :  Nil Null  <nil@null.org>
  ! Created On    : <2025-07-14>
- ! Last Modified : <2025-07-14>
+ ! Last Modified : <2025-08-08>
  ! ---------------------------------------------------------- -->
 
 # rawstr4c input
@@ -13,7 +13,7 @@
 - prefix = `RAWSTR_os_apt_based`
 - output = `:global-variable-only-header`
 - translate = `:hex`
-- keep-postfix = `false`
+- no-postfix = `true`
 
 
 

@@ -6,7 +6,7 @@
  !               | happy game <happygame1024@gmail.com>
  ! Contributors  :  Nil Null  <nil@null.org>
  ! Created On    : <2025-07-14>
- ! Last Modified : <2025-07-14>
+ ! Last Modified : <2025-08-08>
  ! ---------------------------------------------------------- -->
 
 # rawstr4c input
@@ -14,7 +14,7 @@
 - prefix = `RAWSTR_wr_dockerhub`
 - output = `:global-variable-only-header`
 - translate = `:hex`
-- keep-postfix = `false`
+- no-postfix = `true`
 
 
 

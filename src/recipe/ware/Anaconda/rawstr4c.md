@@ -5,7 +5,7 @@
  ! Config Authors: Aoran Zeng <ccmywish@qq.com>
  ! Contributors  :  Nil Null  <nil@null.org>
  ! Created On    : <2025-07-14>
- ! Last Modified : <2025-07-14>
+ ! Last Modified : <2025-08-08>
  ! ---------------------------------------------------------- -->
 
 # rawstr4c input
@@ -16,7 +16,7 @@
 ## Anaconda
 
 - prefix = `RAWSTR_wr_anaconda`
-- keep-postfix = `false`
+- no-postfix = `true`
 - name = `condarc`
 
 ```yaml

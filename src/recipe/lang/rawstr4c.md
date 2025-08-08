@@ -5,7 +5,7 @@
  ! Config Authors: Aoran Zeng <ccmywish@qq.com>
  ! Contributors  :  Nil Null  <nil@null.org>
  ! Created On    : <2025-07-14>
- ! Last Modified : <2025-07-22>
+ ! Last Modified : <2025-08-08>
  ! ---------------------------------------------------------- -->
 
 # rawstr4c input for PL
@@ -13,7 +13,7 @@
 - prefix = `RAWSTR_pl`
 - output = `:global-variable-only-header`
 - translate = `:oct`
-- keep-postfix = `false`
+- no-postfix = `true`
 
 <br>
 
@@ -101,7 +101,7 @@ repository mirror
 ### stackage
 
 - name = `stackage`
-- keep-postfix = `true`
+- no-postfix = `false`
 - postfix = `yaml`
 
 ```yaml
