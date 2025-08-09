@@ -1,24 +1,26 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  : Jialin Lyu <jialinlvcn@aliyun.com>
- *               |
- * Created On    : <2023-09-11>
- * Last Modified : <2025-08-09>
  * ------------------------------------------------------------*/
 
 define_target(wr_flathub);
-
-/**
- * @update 2025-05-27
- */
 
 void
 wr_flathub_prelude ()
 {
   use_this(wr_flathub);
 
+  chef_set_recipe_created_on_date    (this, "2023-09-11");
+  chef_set_recipe_last_updated_date  (this, "2025-08-09");
+
+
+  chef_add_recipe_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_current_chef (this, NULL, NULL);
+  chef_set_current_sous_chefs (this, 0);
+  chef_add_contributors (this, 1,
+    "Jialin Lyu", "jialinlvcn@aliyun.com");
+
+
+  chef_set_sources_last_updated_date (this, "2025-05-27");
   def_upstream_provider("https://flathub.org/repo");
 
   def_sources_begin()
@@ -26,6 +28,9 @@ wr_flathub_prelude ()
   {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn/flathub",        DelegateToMirror},
   {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/flathub", DelegateToMirror},
   def_sources_end()
+
+
+  chef_debug_target(this);
 
   /**
    * @note 下述上海交大两个镜像站都可使用，但实际使用时出现过无法访问的情况 (GitHub-#178)，
