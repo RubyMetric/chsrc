@@ -326,8 +326,9 @@ cli_print_target_available_sources (Source_t sources[], size_t size)
     }
 }
 
+
 void
-cli_print_target_features (Feature_t f, const char *input_target_name)
+cli_print_target_features (Target_t *target, const char *input_target_name)
 {
   {
   char *msg = ENGLISH ? "\nAvailable Features:\n" : "\n可用功能:\n";
@@ -337,31 +338,29 @@ cli_print_target_features (Feature_t f, const char *input_target_name)
   {
   char *msg = ENGLISH ? " Get: View the current source state " : " Get: 查看当前源状态 ";
   char *get_msg = xy_strjoin (3, msg, "| chsrc get ", input_target_name);
-  if (f.can_get) printf (" %s%s\n", bdgreen(YesMark), purple(get_msg));
+  if (target->getfn != NULL) printf (" %s%s\n", bdgreen(YesMark), purple(get_msg));
   else printf (" %s%s\n", bdred(NoMark), get_msg);br();
   }
 
   {
   char *msg = ENGLISH ? " Reset: Reset to the default source " : " Reset: 重置回默认源 ";
   char *reset_msg = xy_strjoin (3, msg, "| chsrc reset ", input_target_name);
-  if (f.can_reset) printf (" %s%s\n", bdgreen(YesMark), purple(reset_msg));
+  if (target->resetfn != NULL) printf (" %s%s\n", bdgreen(YesMark), purple(reset_msg));
   else printf (" %s%s\n", bdred(NoMark), reset_msg);br();
   }
-
 
   {
   char *msg = ENGLISH ? " UserDefine: using user-defined source URL " : " UserDefine: 用户自定义换源URL ";
   char *user_define_msg = xy_strjoin (5, msg, "| chsrc set ", input_target_name, " https://user-define-url.org/", input_target_name);
-  if (f.can_user_define) printf (" %s%s\n", bdgreen(YesMark), purple(user_define_msg));
+  if (target->can_user_define) printf (" %s%s\n", bdgreen(YesMark), purple(user_define_msg));
   else printf (" %s%s\n", bdred(NoMark), user_define_msg);br();
   }
-
 
   {
   char *msg = ENGLISH ? " Locally: Change source only for this project " : " Locally: 仅对本项目换源 ";
   char *locally_msg = xy_strjoin (3, msg, "| chsrc set -local ", input_target_name);
 
-  switch (f.cap_locally)
+  switch (target->cap_local)
     {
     case CanNot:
       printf (" %s%s\n", bdred(NoMark), locally_msg);br();
@@ -370,25 +369,127 @@ cli_print_target_features (Feature_t f, const char *input_target_name)
       printf (" %s%s\n", bdgreen(YesMark), purple(locally_msg));br();
       break;
     case PartiallyCan:
-      printf (" %s%s\n\n   %s\n", bdgreen(HalfYesMark), purple(locally_msg), f.cap_locally_explain);br();
+      printf (" %s%s\n\n   %s\n", bdgreen(HalfYesMark), purple(locally_msg),
+              target->cap_local_explain ? target->cap_local_explain : "");br();
       break;
     default:
       xy_unreached();
     }
   }
 
-
   {
   char *msg = ENGLISH ? " English: Output in English " : " English: 英文输出 ";
   char *english_msg = xy_strjoin (3, msg, "| chsrc set -en ", input_target_name);
-  if (f.can_english) printf (" %s%s\n", bdgreen(YesMark), purple(english_msg));
+  if (target->can_english) printf (" %s%s\n", bdgreen(YesMark), purple(english_msg));
   else printf (" %s%s\n", bdred(NoMark), english_msg);br();
   }
 
-  if (f.note)
+  if (target->note)
     {
       char *msg = ENGLISH ? "NOTE: " : "备注: ";
-      printf ("%s%s\n", bdyellow (msg), bdyellow (f.note));
+      printf ("%s%s\n", bdyellow (msg), bdyellow (target->note));
+    }
+}
+
+
+void
+cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
+{
+  {
+  char *msg = ENGLISH ? "\nMaintainer Information:\n" : "\n维护信息:\n";
+  say (bdblue(msg));
+  }
+
+  if (target->recipe_authors && target->recipe_authors_n > 0)
+    {
+      char *msg = ENGLISH ? "Recipe Authors: " : "配方作者: ";
+      printf ("%s", bdgreen(msg));
+      for (size_t i = 0; i < target->recipe_authors_n; i++)
+        {
+          if (i > 0) printf (", ");
+          printf ("%s <%s>",
+                  target->recipe_authors[i].name ? target->recipe_authors[i].name : "Unknown",
+                  target->recipe_authors[i].email ? target->recipe_authors[i].email : "unknown@example.com");
+        }
+      printf ("\n");
+    }
+
+
+  {
+    char *msg = ENGLISH ? "Chef: " : "主厨 Chef: ";
+    if (target->current_chef)
+      {
+        printf ("%s%s <%s>\n", bdgreen(msg),
+                 target->current_chef->name ? target->current_chef->name : "Unknown",
+                target->current_chef->email ? target->current_chef->email : "unknown@example.com");
+      }
+    else
+      {
+        char *msg1 = CHINESE ? "暂空缺, 欢迎担任!" : "Vacant, Welcome to hold the position";
+        printf ("%s%s\n", bdgreen(msg), bdgreen(msg1));
+      }
+  }
+
+
+  {
+    char *msg = ENGLISH ? "Sous Chefs: " : "副厨 Sous Chefs: ";
+    if (target->current_sous_chefs && target->current_sous_chefs_n > 0)
+      {
+        printf ("%s", bdgreen(msg));
+        for (size_t i = 0; i < target->current_sous_chefs_n; i++)
+          {
+            if (i > 0) printf (", ");
+            printf ("%s <%s>",
+                    target->current_sous_chefs[i].name ? target->current_sous_chefs[i].name : "Unknown",
+                    target->current_sous_chefs[i].email ? target->current_sous_chefs[i].email : "unknown@example.com");
+          }
+        printf ("\n");
+      }
+    else
+      {
+        char *msg1 = CHINESE ? "暂空缺, 欢迎担任!" : "Vacant, Welcome to hold the position!";
+        printf ("%s%s\n", bdgreen(msg), bdgreen(msg1));
+      }
+  }
+
+  {
+    char *msg = ENGLISH ? "Contributors: " : "贡献者: ";
+    if (target->contributors && target->contributors_n > 0)
+      {
+        printf ("%s", bdgreen(msg));
+        for (size_t i = 0; i < target->contributors_n; i++)
+          {
+            if (i > 0) printf (", ");
+            printf ("%s <%s>",
+                    target->contributors[i].name ? target->contributors[i].name : "Unknown",
+                    target->contributors[i].email ? target->contributors[i].email : "unknown@example.com");
+          }
+        printf ("\n");
+      }
+    else
+      {
+        char *msg1 = CHINESE ? "暂空缺, 欢迎参与贡献!" : "Vacant, Welcome to contribute!";
+        printf ("%s%s\n", bdgreen(msg), bdgreen(msg1));
+      }
+  }
+
+
+  if (target->recipe_created_on)
+    {
+      char *msg = ENGLISH ? "Recipe Created On: " : "配方创建时间: ";
+      printf ("%s%s\n", bdgreen(msg), target->recipe_created_on);
+    }
+
+  if (target->recipe_last_updated)
+    {
+      char *msg = ENGLISH ? "Recipe Last Updated: " : "配方最后更新: ";
+      printf ("%s%s\n", bdgreen(msg), target->recipe_last_updated);
+    }
+
+  if (target->sources_last_updated)
+    {
+      char *msg = ENGLISH ? "Sources Last Updated: " : "源列表最后更新: ";
+      printf ("%s%s\n", bdgreen(msg), target->sources_last_updated);
     }
 }
 
@@ -429,16 +530,6 @@ cli_print_issues ()
 
 
 /**
- * 查询用户输入 @param:input 是否与该 @param:registry 中的某个 target 匹配
- *
- * @param[in]  registry  registry
- * @param[in]  size      registry 大小
- * @param[in]  input     用户输入的目标名
- * @param[out] target    返回匹配到的 Target_t 指针
- *
- * @return 匹配到则返回true，未匹配到则返回false
- */
-/**
  * 用于 iterate_menu_ 的回调函数，检查别名是否匹配用户输入
  */
 bool
@@ -448,6 +539,18 @@ match_alias_callback (const char *alias, void *user_data)
   return xy_streql_ic (input, alias);
 }
 
+
+/**
+ * 查询用户输入 @param:input 是否与该 @param:registry 中的某个 target 匹配
+ * 若匹配将直接调用 prelude
+ *
+ * @param[in]  registry  registry
+ * @param[in]  size      registry 大小
+ * @param[in]  input     用户输入的目标名
+ * @param[out] target    返回匹配到的 Target_t 指针
+ *
+ * @return 匹配到则返回true，未匹配到则返回false
+ */
 #define iterate_menu(ary, input, target) iterate_menu_(ary, xy_arylen(ary), input, target)
 bool
 iterate_menu_ (TargetRegisterInfo_t registry[], size_t size, const char *input, Target_t **target)
@@ -556,12 +659,8 @@ get_target (const char *input, TargetOp code, char *option)
       }
 
       cli_print_target_available_sources (target->sources, target->sources_n);
-
-      if (target->featfn)
-        {
-          Feature_t f = target->featfn("");
-          cli_print_target_features (f, input);
-        }
+      cli_print_target_features (target, input);
+      cli_print_target_maintain_info (target, input);
     }
   else if (TargetOp_Measure_Source==code)
     {
