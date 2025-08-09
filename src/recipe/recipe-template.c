@@ -6,7 +6,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2024-08-09>
- * Last Modified : <2025-07-11>
+ * Last Modified : <2025-08-09>
  * -------------------------------------------------------------
  * 本文件作为一个通用模板：
  *
@@ -29,14 +29,9 @@
 
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Name     : <target>.c
- * File Authors  : Nil Null <nil@null.org> 尼尔闹先生
- * Contributors  : Nul None <nul@none.org> 怒了馕女士
- *               |
- * Created On    : <2025-01-01> https://www.yuque.com/ccmywish/blog/nil-null-and-nul-none
- * Last Modified : <2025-01-01> 请更新文件标头
  * ------------------------------------------------------------*/
+
+def_target(<category>_<target>);
 
 /**
  * 定义专服务于该target的镜像站，该例数据为虚拟填充
@@ -51,19 +46,40 @@ RubyMetric = {"rbmt",                   // 该镜像站的 code, 可以这么使
 
               ACCURATE};                // 是否为精准测速，若使用间接URL来测速，则填ROUGH
 
-/**
- * @update 2025-12-31
- * @note   该target的各个源地址，该例数据为虚拟填充
- */
-static Source_t
-<category>_<target>_sources[] = {
-  {&UpstreamProvider,      "上游地址，若维护者暂时未知，可填NULL，这个主要用于reset"},
-  {&RubyMetric,    "https://rubymetirc.com/target"},
-  {&RubyInstaller, "https://rubyinstaller.cn/target"},
-  {&Gitee,         "https://gitee.com/RubyMetric/chsrc"},
-  {&GitHub,        "https://github.com/RubyMetric/chsrc"}
-};
-def_sources_n(<category>_<target>);
+
+void
+<category>_<target>_prelude (void)
+{
+  use_this(<category>_<target>);
+
+  chef_set_created_on   (this, "2025-08-09");
+  chef_set_last_updated (this, "2025-08-12");
+  chef_set_sources_last_updated (this, "2025-08-10");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Nil Null", "nil@null.org");
+
+  chef_has_getfn();
+  chef_has_setfn();
+  chef_has_resetsrc();
+  this.cap_locally = PartiallyCan;
+  this.cap_locally_explain = "具体说明是否支持项目级换源...";
+  this.can_english = false;
+  this.can_user_define = false;
+  this.note = "备注说明...";
+
+  def_upstream("https://github.com/microsoft/winget-cli/");
+  def_sources_begin()
+  {&upstream,      "上游地址，若维护者暂时未知，可填NULL，这个主要用于reset", DelegateToUpstream}
+  {&RubyMetric,    "https://rubymetirc.com/target",       DelegateToMirror},
+  {&RubyInstaller, "https://rubyinstaller.cn/target",     DelegateToMirror},
+  {&Gitee,         "https://gitee.com/RubyMetric/chsrc",  DelegateToMirror},
+  {&GitHub,        "https://github.com/RubyMetric/chsrc", "https://一个精准测速链接"}
+  def_sources_end()
+}
 
 
 /**
@@ -109,36 +125,3 @@ void
   /* 往往统一在 _setsrc() 中实现，直接调用即可 */
   // <category>_<target>_setsrc (option);
 }
-
-
-/**
- * @required 非必需
- *
- * 用于 chsrc ls <target>
- */
-Feature_t
-<category>_<target>_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = PartiallyCan;
-  f.cap_locally_explain = "具体说明是否支持项目级换源...";
-
-  f.can_english = false;
-  f.can_user_define = false;
-
-  f.note = "备注说明...";
-  return f;
-}
-
-
-// 定义此 target，参考 @file:source.h
-// 下列情形多选1
-def_target(<category>_<target>);
-def_target_gsr(<category>_<target>);
-def_target_gsf(<category>_<target>);
-def_target_gsrf(<category>_<target>);
-def_target_s(<category>_<target>);
