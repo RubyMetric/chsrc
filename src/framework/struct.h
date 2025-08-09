@@ -137,13 +137,15 @@ Contributor_t;
 
 typedef struct Target_t
 {
+  char *name; /* 目标名称，该名称必须是 menu 中的 aliase 之一 */
+
   void (*getfn)   (char *option);
   void (*setfn)   (char *option);
   void (*resetfn) (char *option);
 
   Feature_t (*featfn) (char *option);
 
-  Source_t *sources;
+  Source_t  sources;
   size_t    sources_n;
 
   bool can_english;        /* 是否支持英文输出 */
