@@ -13,10 +13,10 @@ wr_flathub_prelude ()
   chef_set_recipe_last_updated_date  (this, "2025-08-09");
 
 
-  chef_add_recipe_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_recipe_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
   chef_set_current_chef (this, NULL, NULL);
   chef_set_current_sous_chefs (this, 0);
-  chef_add_contributors (this, 1,
+  chef_set_contributors (this, 1,
     "Jialin Lyu", "jialinlvcn@aliyun.com");
 
 
@@ -30,7 +30,9 @@ wr_flathub_prelude ()
   def_sources_end()
 
 
-  chef_debug_target(this);
+  chsrc_set_provider_speed_measure_url (&upstream, "https://flathub.org/repo/flathub.gpg");
+  /* upstream 默认是 ACCURATE 的，但是我们给了一个超小的文件，测速效果严重失真，所以改为 ROUGH */
+  chsrc_set_provider_speed_measure_accuracy (&upstream, ROUGH);
 
   /**
    * @note 下述上海交大两个镜像站都可使用，但实际使用时出现过无法访问的情况 (GitHub-#178)，
@@ -38,10 +40,6 @@ wr_flathub_prelude ()
    *       若无速度，则证明无法访问。
    *       注意，这会使得测速的效果严重失真。
    */
-  chsrc_set_provider_speed_measure_url (&upstream, "https://flathub.org/repo/flathub.gpg");
-  /* upstream 默认是 ACCURATE 的，但是我们给了一个超小的文件，测速效果严重失真，所以改为 ROUGH */
-  chsrc_set_provider_speed_measure_accuracy (&upstream, ROUGH);
-
   chsrc_set_provider_speed_measure_url (&Sjtug_Siyuan,  "https://mirror.sjtu.edu.cn/flathub/flathub.gpg");
   chsrc_set_provider_speed_measure_url (&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/flathub/flathub.gpg");
   /* 由于实在找不到其他可测文件，所以这也只能是 ROUGH */

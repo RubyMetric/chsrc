@@ -94,16 +94,19 @@ Source_t;
 #define NeedContribute      NULL
 /* 由 _sources_prepare 填充 */
 #define FeedBySourcesPrepare NULL
+/* 由 prelude() 修改 */
+#define ChangedByPrelude NULL
 
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
 
-enum Capability_t
+typedef enum Capability_t
 {
   CanNot,
   FullyCan,
   PartiallyCan
-};
+}
+Capability_t;
 
 
 /* Target Feature */
@@ -114,14 +117,22 @@ typedef struct Feature_t
 
   bool can_english;
 
-  bool can_user_define; /* 用户自定义换源URL */
+  bool can_user_define;
 
-  enum Capability_t cap_locally;
+  Capability_t cap_locally;
   char *cap_locally_explain;
 
   char *note;
 }
 Feature_t;
+
+
+typedef struct Contributor_t
+{
+  char *name;
+  char *email;
+}
+Contributor_t;
 
 
 typedef struct Target_t
@@ -134,6 +145,26 @@ typedef struct Target_t
 
   Source_t *sources;
   size_t    sources_n;
+
+  bool can_english;        /* 是否支持英文输出 */
+  bool can_user_define;    /* 是否支持用户自定义URL来换源 */
+  Capability_t cap_local;  /* 是否支持 local mode */
+  char *cap_local_explain; /* local mode 的说明 */
+  char *note;              /* 备注 */
+
+  Contributor_t *recipe_authors;
+  size_t         recipe_authors_n;
+
+  Contributor_t *contributors;
+  size_t         contributors_n;
+
+  Contributor_t *current_chef;        // 只有一个主维护者
+  Contributor_t *current_sous_chefs;  // 可以有多个副维护者
+  size_t         current_sous_chefs_n;
+
+  char *recipe_created_on;
+  char *recipe_last_updated;
+  char *sources_last_updated;
 }
 Target_t;
 
@@ -174,7 +205,7 @@ TargetRegisterInfo_t;
 /* 以下宏仅能放在 prelude() 中使用 */
 #define use_this(t) Target_t *this = &t##_target;
 
-#define def_sources_begin()  static Source_t sources[] = {
+#define def_sources_begin()  Source_t sources[] = {
 #define def_sources_end()    }; this->sources = sources; this->sources_n = xy_arylen(sources);
 
 #define def_upstream_provider(url) SourceProvider_t upstream = UpstreamProvider; upstream.site = url;

@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-07-28>
+ * Last Modified : <2025-08-09>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -1078,6 +1078,29 @@ confirm_source (Source_t *source)
 }
 
 #define chsrc_yield_source_and_confirm(for_what) chsrc_yield_source(for_what);chsrc_confirm_source()
+
+
+/**
+ * @brief 修改 Provider 的测速地址
+ */
+void
+chsrc_set_provider_speed_measure_url (SourceProvider_t *provider, char *url)
+{
+  provider->psmi.skip = NotSkip;
+  provider->psmi.url = xy_strdup (url);
+  chsrc_debug ("m", xy_strjoin (4, "recipe 重新为 ", provider->code, " 设置测速链接: ", url));
+}
+
+
+/**
+ * @brief 修改 Provider 的测速精度
+ */
+void
+chsrc_set_provider_speed_measure_accuracy (SourceProvider_t *provider, bool accuracy)
+{
+  provider->psmi.accurate = accuracy;
+  chsrc_debug ("m", xy_strjoin (4, "recipe 重新为 ", provider->code, " 设置测速精度: ", accuracy ? "精准" : "粗略"));
+}
 
 
 void

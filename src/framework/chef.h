@@ -47,7 +47,7 @@ chef_ensure_trailing_slash (char *str)
 
 
 void
-chef_add_contributors (Target_t *target, uint32_t count, ...)
+chef_set_contributors (Target_t *target, uint32_t count, ...)
 {
   if (!target || count==0)
     return;
@@ -70,7 +70,7 @@ chef_add_contributors (Target_t *target, uint32_t count, ...)
 
 
 void
-chef_add_recipe_authors (Target_t *target, size_t count, ...)
+chef_set_recipe_authors (Target_t *target, size_t count, ...)
 {
   if (!target || count == 0)
     return;
