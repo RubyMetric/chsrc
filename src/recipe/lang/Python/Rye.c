@@ -4,7 +4,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nul None  <nul@none.org>
  * Created On    : <2024-12-06>
- * Last Modified : <2025-07-22>
+ * Last Modified : <2025-08-09>
  *
  * 由于Rye已经有后继uv了，所以我们不把该管理器纳入Python group中
  * ------------------------------------------------------------*/
@@ -48,7 +48,7 @@ pl_python_rye_setsrc (char *option)
 
   char *rye_config = pl_python_find_rye_config ();
   chsrc_note2 (xy_strjoin (3, "请在配置文件 ", rye_config, " 中添加:"));
-  print (content);
+  println (content);
 
   chsrc_determine_chgtype (ChgType_Manual);
   chsrc_conclude (&source);

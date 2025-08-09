@@ -7,7 +7,7 @@
  *               |
  * Created On    : <2024-12-11>
  * Major Revision :      1
- * Last Modified : <2025-07-26>
+ * Last Modified : <2025-08-09>
  * ------------------------------------------------------------*/
 
 /**
@@ -118,8 +118,6 @@ pl_python_uv_setsrc (char *option)
   char *update_config_cmd = xy_str_gsub (RAWSTR_pl_python_set_uv_config, "@sed@", sed_cmd);
         update_config_cmd = xy_str_gsub (update_config_cmd, "@f@", uv_config);
         update_config_cmd = xy_str_gsub (update_config_cmd, "@url@", source.url);
-
-  char *append_config_cmd = xy_strjoin (4, "printf '", source_content, "' >> ", uv_config);
 
   if (!xy_file_exist (uv_config))
     {
