@@ -5,7 +5,7 @@
  * Contributors   : Aoran Zeng <ccmywish@qq.com>
  * Created On     : <2023-09-17>
  * Major Revision :      1
- * Last Modified  : <2025-07-22>
+ * Last Modified  : <2025-08-09>
  * ------------------------------------------------------------*/
 
 /**
@@ -36,7 +36,7 @@ def_sources_n(os_opensuse);
 void
 os_opensuse_setsrc (char *option)
 {
-  chsrc_ensure_root ();
+  // chsrc_ensure_root ();
 
   chsrc_yield_source_and_confirm (os_opensuse);
 
@@ -61,12 +61,14 @@ os_opensuse_setsrc (char *option)
       }
     if (choice == 1)
       {
-        chsrc_run_as_bash_file (RAWSTR_os_openSUSE_leap_in_bash);
+        char *script = xy_str_gsub (RAWSTR_os_openSUSE_leap_in_bash, "@url@", source.url);
+        chsrc_run_as_bash_file (script);
         break;
       }
     if (choice == 2)
       {
-        chsrc_run_as_bash_file (RAWSTR_os_openSUSE_tumbleweed_in_bash);
+        char *script = xy_str_gsub (RAWSTR_os_openSUSE_tumbleweed_in_bash, "@url@", source.url);
+        chsrc_run_as_bash_file (script);
         break;
       }
     else

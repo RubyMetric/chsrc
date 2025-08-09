@@ -5,7 +5,7 @@
  ! Config Authors: Aoran Zeng <ccmywish@qq.com>
  ! Contributors  :  Nil Null  <nil@null.org>
  ! Created On    : <2025-07-21>
- ! Last Modified : <2025-07-21>
+ ! Last Modified : <2025-08-09>
  ! ---------------------------------------------------------- -->
 
 # rawstr4c input for OS
@@ -43,8 +43,8 @@ zypper ar -cfg '@url@/update/leap/$releasever/backports/' mirror-backports-updat
 # 首先禁用官方软件源
 zypper mr -da
 
-zypper ar -cfg 'https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/oss/' mirror-oss
-zypper ar -cfg 'https://mirrors.tuna.tsinghua.edu.cn/opensuse/tumbleweed/repo/non-oss/' mirror-non-oss
+zypper ar -cfg '@url@/tumbleweed/repo/oss/' mirror-oss
+zypper ar -cfg '@url@/tumbleweed/repo/non-oss/' mirror-non-oss
 
 # 刷新软件源
 zypper ref
