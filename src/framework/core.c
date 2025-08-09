@@ -1092,9 +1092,9 @@ chsrc_confirm_source (Source_t *source)
 
 
 Source_t
-chsrc_yield_source_and_confirm (Target_t t)
+chsrc_yield_source_and_confirm (Target_t *t, char *option)
 {
-  Source_t source = chsrc_yield_source(&t);
+  Source_t source = chsrc_yield_source(t, option);
   chsrc_confirm_source(&source);
   return source;
 }
