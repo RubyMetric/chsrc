@@ -380,56 +380,63 @@ cli_print_issues ()
 
 
 /**
- * 遍历我们内置的targets列表，查询用户输入`input`是否与我们支持的某个target匹配
+ * 查询用户输入 @param:input 是否与该 @param:registry 中的某个 target 匹配
  *
- * @param[out] target_info 如果匹配到，则返回内置targets列表中最后的target_info信息
+ * @param[in]  registry  registry
+ * @param[in]  size      registry 大小
+ * @param[in]  input     用户输入的目标名
+ * @param[out] target    返回匹配到的 Target_t 指针
  *
  * @return 匹配到则返回true，未匹配到则返回false
  */
+#define iterate_registry(ary, input, target) iterate_registry_(ary, xy_arylen(ary), input, target)
 bool
-iterate_targets_ (const char ***array, size_t size, const char *input, const char ***target_info)
+iterate_registry_ (TargetRegisterInfo_t registry[], size_t size, const char *input, Target_t **target)
 {
-  int matched = 0;
-
-  const char **target = NULL;
-  int k = 0;
-  const char *alias = NULL;
-
-  for (int i=0; i<size; i++)
+  for (int i = 0; i < size; i++)
     {
-      target = array[i];
-      alias = target[k];
-      while (NULL!=alias)
+      TargetRegisterInfo_t *entry = &registry[i];
+
+      char *aliases = entry->aliases;
+      char *aliases_copy = xy_strdup (aliases);
+      char *tok_start = aliases_copy;
+      char *cursor;
+
+      while (*tok_start != '\0')
         {
-          if (xy_streql_ic (input, alias))
+          cursor = tok_start;
+          while (*cursor != ' ' && *cursor != '\0') cursor++;
+
+          // 结束当前token
+          char space_or_eos = *cursor;
+          *cursor = '\0';
+
+          if (xy_streql_ic (input, tok_start))
             {
-              matched = 1; break;
+              if (entry->prelude)
+                {
+                  chsrc_log ("该target已定义 prelude()");
+                  entry->prelude();
+                }
+              else
+                {
+                  chsrc_warn ("该target未定义 prelude()");
+                }
+
+              *target = entry->target;
+              return true;
             }
-          k++;
-          alias = target[k];
+
+          *cursor = space_or_eos;
+          if (space_or_eos == '\0') { break; }
+          tok_start = cursor+1;
         }
-      if (!matched) k = 0;
-      if (matched) break;
     }
 
-  if (!matched)
-    {
-      *target_info = NULL;
-      return false;
-    }
-
-  do
-    {
-      k++;
-      alias = target[k];
-    }
-  while (NULL!=alias);
-
-  *target_info = target + k + 1;
-  return true;
+  *target = NULL;
+  return false;
 }
 
-#define iterate_targets(ary, input, target) iterate_targets_(ary, xy_arylen(ary), input, target)
 
 
 /**
@@ -464,15 +471,13 @@ typedef enum {
 bool
 get_target (const char *input, TargetOp code, char *option)
 {
-  const char **target_tmp = NULL;
+  Target_t *target = NULL;
 
-           bool matched = iterate_targets(pl_packagers, input, &target_tmp);
-  if (!matched) matched = iterate_targets(os_systems,   input, &target_tmp);
-  if (!matched) matched = iterate_targets(wr_softwares, input, &target_tmp);
+           bool matched = iterate_registry (chsrc_programming_languages_registry, input, &target);
+  if (!matched) matched = iterate_registry (chsrc_operating_systems_registry, input, &target);
+  if (!matched) matched = iterate_registry (chsrc_softwares_registry, input, &target);
 
   if (!matched) return false;
-
-  Target_t *target = (Target_t*) *target_tmp;
 
   if (TargetOp_Set_Source==code)
     {
