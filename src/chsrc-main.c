@@ -525,7 +525,6 @@ get_target (const char *input, TargetOp code, char *option)
     }
 
   if (TargetOp_Set_Source==code
-      || TargetOp_Reset_Source==code
       || TargetOp_Measure_Source==code)
     {
       cli_notify_lastly_for_users();
@@ -622,7 +621,7 @@ main (int argc, char const *argv[])
       char *dry_msg = ENGLISH ? "Enable [Dry Run] mode. " \
                                          "Simulate the source changing process (skipping speed measurement). " \
                                          "Commands only print but don't run\n"
-                                       : "开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行\n";
+                              : "开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行\n";
       chsrc_log (bdyellow(dry_msg));
     }
 
@@ -703,7 +702,7 @@ main (int argc, char const *argv[])
       if (argc < cli_arg_Target_pos)
         {
           char *msg = ENGLISH ? "Please provide the target name you want to measure. " MSG_EN_USE_LIST_TARGETS
-                                       : "请提供想要测速源的目标名。" MSG_CN_USE_LIST_TARGETS;
+                              : "请提供想要测速源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
           return Exit_Unknown;
         }
@@ -722,7 +721,7 @@ main (int argc, char const *argv[])
       if (argc < cli_arg_Target_pos)
         {
           char *msg = ENGLISH ? "Please provide the target name you want to view the source. " MSG_EN_USE_LIST_TARGETS
-                                       : "请提供想要查看源的目标名。" MSG_CN_USE_LIST_TARGETS;
+                              : "请提供想要查看源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
           return Exit_Unknown;
         }
@@ -739,7 +738,7 @@ main (int argc, char const *argv[])
       if (argc < cli_arg_Target_pos)
         {
           char *msg = ENGLISH ? "Please provide the target name you want to set the source. " MSG_EN_USE_LIST_TARGETS
-                                       : "请提供想要设置源的目标名。" MSG_CN_USE_LIST_TARGETS;
+                              : "请提供想要设置源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
           return Exit_Unknown;
         }
@@ -764,7 +763,7 @@ main (int argc, char const *argv[])
       if (argc < cli_arg_Target_pos)
         {
           char *msg = ENGLISH ? "Please provide the target name you want to reset the source. " MSG_EN_USE_LIST_TARGETS
-                                       : "请提供想要重置源的目标名。" MSG_CN_USE_LIST_TARGETS;
+                              : "请提供想要重置源的目标名。" MSG_CN_USE_LIST_TARGETS;
           chsrc_error (msg);
           return Exit_Unknown;
         }
@@ -798,7 +797,7 @@ not_matched:
   if (!matched)
     {
       char *msg = ENGLISH ? "Unknown target. "  MSG_EN_USE_LIST_TARGETS
-                                   : "暂不支持的换源目标。" MSG_CN_USE_LIST_TARGETS;
+                          : "暂不支持的换源目标。" MSG_CN_USE_LIST_TARGETS;
       chsrc_error (msg);
       return Exit_Unknown;
     }
