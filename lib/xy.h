@@ -287,6 +287,12 @@ xy_strjoin (unsigned int count, ...)
 static char *
 xy_strdup (const char *str)
 {
+  if (!str)
+    {
+      fprintf (stderr, "xy.h: xy_strdup() called with NULL!");
+      return NULL;
+    }
+
   size_t len = strlen (str);
   char *new = xy_malloc0 (len + 1);
   strcpy (new, str);
