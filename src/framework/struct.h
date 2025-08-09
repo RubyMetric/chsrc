@@ -138,6 +138,15 @@ typedef struct Target_t
 Target_t;
 
 
+typedef struct TargetRegisterInfo_t
+{
+  Target_t *target;           /* target 本身 */
+  void     (*prelude) (void); /* 填充 target 信息等预置操作 */
+  char     *aliases;          /* 以空格分隔的 alias 字符串 */
+}
+TargetRegisterInfo_t;
+
+
 #define def_target_inner_s(t)    NULL,       t##_setsrc, NULL,         NULL
 #define def_target_inner_sr(t)   NULL,       t##_setsrc, t##_resetsrc, NULL
 #define def_target_inner_sf(t)   NULL,       t##_setsrc, NULL,         t##_feat
