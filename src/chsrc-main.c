@@ -172,29 +172,78 @@ cli_print_available_mirrors ()
   say    ("---------    --------------    -------------------------------------     ---------------------");
   }
 
-  for (int i = 0; i < xy_arylen (available_mirrors); i++)
+  for (int i = 0; i < xy_arylen (chsrc_available_mirrors); i++)
     {
-      MirrorSite_t *mir = available_mirrors[i];
+      MirrorSite_t *mir = chsrc_available_mirrors[i];
       printf ("%-14s%-18s%-41s ", mir->code, mir->abbr, mir->site); say (mir->name);
     }
 }
 
 
-void
-cli_print_supported_targets_ (const char ***array, size_t size)
+/**
+ * 遍历以空格分隔的别名字符串，对每个别名调用回调函数
+ *
+ * @param aliases   空格分隔的 alias 字符串
+ * @param callback  对每个 alias 调用的回调函数
+ * @param user_data 传递给回调函数的用户数据
+ * @return          如果回调函数返回true则停止遍历并返回true，否则返回false
+ */
+bool
+iterate_aliases (const char *aliases, bool (*callback)(const char *alias, void *user_data), void *user_data)
 {
-  for (int i=0; i<size; i++)
+  char *aliases_copy = xy_strdup (aliases);
+  char *tok_start = aliases_copy;
+  char *cursor;
+  bool result = false;
+
+  while (*tok_start != '\0')
     {
-      const char **target = array[i];
-      const char *alias = target[0];
-      for (int k=1; alias!=NULL; k++)
+      cursor = tok_start;
+      while (*cursor != ' ' && *cursor != '\0') cursor++;
+
+      // 结束当前token
+      char space_or_eos = *cursor;
+      *cursor = '\0';
+
+      // 调用回调函数
+      if (callback(tok_start, user_data))
         {
-          printf ("%s\t", alias);
-          alias = target[k];
+          result = true;
+          break;
         }
-      br();
+
+      *cursor = space_or_eos;
+      if (space_or_eos == '\0') { break; }
+      tok_start = cursor+1;
     }
-  br();
+
+  return result;
+}
+
+
+/**
+ * 用于 cli_print_supported_targets_ 的回调函数，打印每个别名
+ */
+bool
+print_alias_callback (const char *alias, void *user_data)
+{
+  printf ("%s  ", alias);
+  return false; // 继续遍历，不停止
+}
+
+void
+cli_print_supported_targets_ (TargetRegisterInfo_t registry[], size_t size)
+{
+  for (int i = 0; i < size; i++)
+    {
+      TargetRegisterInfo_t *entry = &registry[i];
+
+      // 使用通用的别名遍历函数打印所有别名
+      iterate_aliases (entry->aliases, print_alias_callback, NULL);
+
+      br(); // 每个target换行
+    }
+  br(); // 最后额外换行
 }
 
 void
@@ -210,21 +259,21 @@ cli_print_supported_targets ()
   char *msg = ENGLISH ? "Programming Languages" : "编程语言";
   say (bdgreen(msg));
   say ("-------------------------");
-  cli_print_supported_targets_ (pl_packagers, xy_arylen(pl_packagers));
+  cli_print_supported_targets_ (chsrc_pl_menu, xy_arylen(chsrc_pl_menu));
   }
 
   {
   char *msg = ENGLISH ? "Operating Systems" : "操作系统";
   say (bdgreen(msg));
   say ("-------------------------");
-  cli_print_supported_targets_ (os_systems,   xy_arylen(os_systems));
+  cli_print_supported_targets_ (chsrc_os_menu, xy_arylen(chsrc_os_menu));
   }
 
   {
   char *msg = ENGLISH ? "Softwares" : "软件";
   say (bdgreen(msg));
   say ("-------------------------");
-  cli_print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
+  cli_print_supported_targets_ (chsrc_wr_menu, xy_arylen(chsrc_wr_menu));
   }
 }
 
@@ -235,7 +284,7 @@ cli_print_supported_pl ()
                       : "支持对以下编程语言生态换源 (同一行表示这几个目标兼容)\n";
   say (bdgreen(msg));
 
-  cli_print_supported_targets_ (pl_packagers,   xy_arylen(pl_packagers));
+  cli_print_supported_targets_ (chsrc_pl_menu,   xy_arylen(chsrc_pl_menu));
 }
 
 void
@@ -244,7 +293,7 @@ cli_print_supported_os ()
   char *msg = ENGLISH ? "Support following Operating Systems (same line indicates these targets are compatible)\n"
                       : "支持对以下操作系统换源 (同一行表示这几个目标兼容)\n";
   say (bdgreen(msg));
-  cli_print_supported_targets_ (os_systems, xy_arylen(os_systems));
+  cli_print_supported_targets_ (chsrc_os_menu, xy_arylen(chsrc_os_menu));
 }
 
 void
@@ -253,7 +302,7 @@ cli_print_supported_wr ()
   char *msg = ENGLISH ? "Support following Softwares (same line indicates these targets are compatible)\n"
                       : "支持对以下软件换源 (同一行表示这几个目标兼容)\n";
   say (bdgreen(msg));
-  cli_print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
+  cli_print_supported_targets_ (chsrc_wr_menu, xy_arylen(chsrc_wr_menu));
 }
 
 
@@ -389,47 +438,38 @@ cli_print_issues ()
  *
  * @return 匹配到则返回true，未匹配到则返回false
  */
-#define iterate_registry(ary, input, target) iterate_registry_(ary, xy_arylen(ary), input, target)
+/**
+ * 用于 iterate_menu_ 的回调函数，检查别名是否匹配用户输入
+ */
 bool
-iterate_registry_ (TargetRegisterInfo_t registry[], size_t size, const char *input, Target_t **target)
+match_alias_callback (const char *alias, void *user_data)
+{
+  const char *input = (const char *)user_data;
+  return xy_streql_ic (input, alias);
+}
+
+#define iterate_menu(ary, input, target) iterate_menu_(ary, xy_arylen(ary), input, target)
+bool
+iterate_menu_ (TargetRegisterInfo_t registry[], size_t size, const char *input, Target_t **target)
 {
   for (int i = 0; i < size; i++)
     {
       TargetRegisterInfo_t *entry = &registry[i];
 
-      char *aliases = entry->aliases;
-      char *aliases_copy = xy_strdup (aliases);
-      char *tok_start = aliases_copy;
-      char *cursor;
-
-      while (*tok_start != '\0')
+      if (iterate_aliases (entry->aliases, match_alias_callback, (void *)input))
         {
-          cursor = tok_start;
-          while (*cursor != ' ' && *cursor != '\0') cursor++;
-
-          // 结束当前token
-          char space_or_eos = *cursor;
-          *cursor = '\0';
-
-          if (xy_streql_ic (input, tok_start))
+          if (entry->prelude)
             {
-              if (entry->prelude)
-                {
-                  chsrc_log ("该target已定义 prelude()");
-                  entry->prelude();
-                }
-              else
-                {
-                  chsrc_warn ("该target未定义 prelude()");
-                }
-
-              *target = entry->target;
-              return true;
+              chsrc_log ("该target已定义 prelude()");
+              entry->prelude();
+            }
+          else
+            {
+              chsrc_warn ("该target未定义 prelude()");
             }
 
-          *cursor = space_or_eos;
-          if (space_or_eos == '\0') { break; }
-          tok_start = cursor+1;
+          *target = entry->target;
+          return true;
         }
     }
 
@@ -473,9 +513,9 @@ get_target (const char *input, TargetOp code, char *option)
 {
   Target_t *target = NULL;
 
-           bool matched = iterate_registry (chsrc_programming_languages_registry, input, &target);
-  if (!matched) matched = iterate_registry (chsrc_operating_systems_registry, input, &target);
-  if (!matched) matched = iterate_registry (chsrc_softwares_registry, input, &target);
+           bool matched = iterate_menu (chsrc_pl_menu, input, &target);
+  if (!matched) matched = iterate_menu (chsrc_os_menu, input, &target);
+  if (!matched) matched = iterate_menu (chsrc_wr_menu, input, &target);
 
   if (!matched) return false;
 
