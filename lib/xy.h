@@ -9,7 +9,7 @@
  *               | Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-08-07>
+ * Last Modified : <2025-08-09>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C11 utilities for CLI applications in mixed
@@ -19,7 +19,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.1.5.3-2025/08/07"
+#define _XY_Version       "v0.1.5.4-2025/08/09"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -32,6 +32,7 @@
 #endif
 
 #include <assert.h>
+#include <ctype.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
