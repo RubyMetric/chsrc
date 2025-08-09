@@ -5,46 +5,44 @@
  * Contributors  : Jialin Lyu <jialinlvcn@aliyun.com>
  *               |
  * Created On    : <2023-09-11>
- * Last Modified : <2025-05-27>
+ * Last Modified : <2025-08-09>
  * ------------------------------------------------------------*/
+
+define_target(wr_flathub);
 
 /**
  * @update 2025-05-27
  */
-static SourceProvider_t wr_flathub_upstream =
-{
-  def_upstream, "https://flathub.org/repo",
-  {NotSkip, NA, NA, "https://flathub.org/repo/flathub.gpg", ROUGH}
-},
 
-/**
- * @note 下述上海交大两个镜像站都可使用，但实际使用时出现过无法访问的情况 (GitHub-#178)，
- *       所以额外定义两个镜像站以更改测速链接为一个很小的文件: flathub.gpg
- *       若无速度，则证明无法访问。
- *       注意，这会使得测速的效果严重失真。
- */
-
-wr_flathub_siyuan =
+void
+wr_flathub_prelude ()
 {
-  IS_DedicatedMirrorSite,
-  "sjtu-sy", "SJTUG-siyuan", "上海交通大学思源镜像站Flathub", "https://mirror.sjtu.edu.cn/",
-  {NotSkip, NA, NA, "https://mirror.sjtu.edu.cn/flathub/flathub.gpg", ROUGH} /* 由于实在找不到其他可测文件，所以这也只能是 ROUGH */
-},
+  use_this(wr_flathub);
 
-wr_flathub_zhiyuan =
-{
-  IS_DedicatedMirrorSite,
-  "sjtu-zy", "SJTUG-zhiyuan", "上海交通大学致远镜像站Flathub", "https://mirrors.sjtug.sjtu.edu.cn/",
-  {NotSkip, NA, NA, "https://mirrors.sjtug.sjtu.edu.cn/flathub/flathub.gpg", ROUGH}
-};
+  def_upstream_provider("https://flathub.org/repo");
 
-static Source_t wr_flathub_sources[] =
-{
-  {&wr_flathub_upstream,  "https://flathub.org/repo", NULL},
-  {&wr_flathub_siyuan,    "https://mirror.sjtu.edu.cn/flathub", DelegateToMirror},
-  {&wr_flathub_zhiyuan,   "https://mirrors.sjtug.sjtu.edu.cn/flathub", DelegateToMirror},
-};
-def_sources_n(wr_flathub);
+  def_sources_begin()
+  {&upstream,         "https://flathub.org/repo",                  DelegateToUpstream},
+  {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn/flathub",        DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/flathub", DelegateToMirror},
+  def_sources_end()
+
+  /**
+   * @note 下述上海交大两个镜像站都可使用，但实际使用时出现过无法访问的情况 (GitHub-#178)，
+   *       所以额外定义两个镜像站以更改测速链接为一个很小的文件: flathub.gpg
+   *       若无速度，则证明无法访问。
+   *       注意，这会使得测速的效果严重失真。
+   */
+  chsrc_set_provider_speed_measure_url (&upstream, "https://flathub.org/repo/flathub.gpg");
+  /* upstream 默认是 ACCURATE 的，但是我们给了一个超小的文件，测速效果严重失真，所以改为 ROUGH */
+  chsrc_set_provider_speed_measure_accuracy (&upstream, ROUGH);
+
+  chsrc_set_provider_speed_measure_url (&Sjtug_Siyuan,  "https://mirror.sjtu.edu.cn/flathub/flathub.gpg");
+  chsrc_set_provider_speed_measure_url (&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/flathub/flathub.gpg");
+  /* 由于实在找不到其他可测文件，所以这也只能是 ROUGH */
+  chsrc_set_provider_speed_measure_accuracy (&Sjtug_Siyuan, ROUGH);
+  chsrc_set_provider_speed_measure_accuracy (&Sjtug_Zhiyuan, ROUGH);
+}
 
 
 /**
@@ -64,7 +62,8 @@ wr_flathub_getsrc (char *option)
 void
 wr_flathub_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (wr_flathub);
+  // chsrc_yield_source_and_confirm (wr_flathub);
+  Source_t source;
 
   chsrc_alert2 ("若出现问题，可先调用以下命令:");
   char *note = xy_strjoin (3,
@@ -117,4 +116,4 @@ wr_flathub_feat (char *option)
   return f;
 }
 
-def_target_gsrf (wr_flathub);
+// def_target_gsrf (wr_flathub);

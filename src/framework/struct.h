@@ -168,3 +168,13 @@ TargetRegisterInfo_t;
 #define def_target_gsr(t)  Target_t t##_target = {def_target_inner_gsr(t),def_target_sourcesn(t)}
 #define def_target_gsf(t)  Target_t t##_target = {def_target_inner_gsf(t),def_target_sourcesn(t)}
 #define def_target_gsrf(t) Target_t t##_target = {def_target_inner_gsrf(t),def_target_sourcesn(t)}
+
+#define define_target(t) void t##_getsrc(char *option);void t##_setsrc(char *option);void t##_resetsrc(char *option); Target_t t##_target={0};
+
+/* 以下宏仅能放在 prelude() 中使用 */
+#define use_this(t) Target_t *this = &t##_target;
+
+#define def_sources_begin()  static Source_t sources[] = {
+#define def_sources_end()    }; this->sources = sources; this->sources_n = xy_arylen(sources);
+
+#define def_upstream_provider(url) SourceProvider_t upstream = UpstreamProvider; upstream.site = url;
