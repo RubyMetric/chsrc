@@ -5,7 +5,7 @@
  ! Config Authors: Aoran Zeng <ccmywish@qq.com>
  ! Contributors  :  Nil Null  <nil@null.org>
  ! Created On    : <2025-07-22>
- ! Last Modified : <2025-08-08>
+ ! Last Modified : <2025-08-09>
  ! ---------------------------------------------------------- -->
 
 # [rawstr4c] input for chsrc
@@ -71,7 +71,7 @@
 维护:
    邀请您担任  Chef, 为用户把关您熟悉的 recipe
 
-   源代码地址: @url@
+   源代码地址: https://github.com/RubyMetric/chsrc
    成为维护者: https://github.com/RubyMetric/chsrc/issues/130
 ```
 
@@ -154,6 +154,7 @@ Written by Aoran Zeng, Heng Guo and contributors. (See chsrc-main.c)
 
 ```
 我们同时在 GitHub 和 Gitee 接受 issue 和 Bug 报告:
+
   - https://github.com/RubyMetric/chsrc/issues
   - https://gitee.com/RubyMetric/chsrc/issues
 

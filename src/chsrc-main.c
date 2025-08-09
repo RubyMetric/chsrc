@@ -348,7 +348,7 @@ void
 cli_print_version ()
 {
   char *str = xy_str_gsub (RAWSTR_chsrc_for_v, "@ver@", Chsrc_Version);
-  print (str);
+  println (str);
 }
 
 
@@ -360,15 +360,14 @@ cli_print_help ()
   const char *raw = CHINESE ? RAWSTR_chsrc_USAGE_CHINESE : RAWSTR_chsrc_USAGE_ENGLISH;
 
   char *str = xy_str_gsub (raw, "@ver@", version_string);
-        str = xy_str_gsub (str, "@url@", Chsrc_Maintain_URL);
-  print (str);
+  println (str);
 }
 
 
 void
 cli_print_issues ()
 {
-  print (RAWSTR_chsrc_for_issue);
+  println (RAWSTR_chsrc_for_issue);
 
   /*
   if (chsrc_check_program ("gh"))
