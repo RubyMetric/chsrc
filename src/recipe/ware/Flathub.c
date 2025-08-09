@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-define_target(wr_flathub);
+def_target(wr_flathub);
 
 void
 wr_flathub_prelude ()
@@ -11,7 +11,7 @@ wr_flathub_prelude ()
 
   chef_set_created_on   (this, "2023-09-11");
   chef_set_last_updated (this, "2025-08-09");
-
+  chef_set_sources_last_updated (this, "2025-05-27");
 
   chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
   chef_set_chef (this, NULL, NULL);
@@ -31,8 +31,8 @@ wr_flathub_prelude ()
 
 
 
-  chef_set_sources_last_updated (this, "2025-05-27");
-  def_upstream_provider("https://flathub.org/repo");
+
+  def_upstream("https://flathub.org/repo");
 
   def_sources_begin()
   {&upstream,         "https://flathub.org/repo",                  DelegateToUpstream},
