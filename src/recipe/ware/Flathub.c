@@ -9,18 +9,29 @@ wr_flathub_prelude ()
 {
   use_this(wr_flathub);
 
-  chef_set_recipe_created_on_date    (this, "2023-09-11");
-  chef_set_recipe_last_updated_date  (this, "2025-08-09");
+  chef_set_created_on   (this, "2023-09-11");
+  chef_set_last_updated (this, "2025-08-09");
 
 
-  chef_set_recipe_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_current_chef (this, NULL, NULL);
-  chef_set_current_sous_chefs (this, 0);
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 1,
     "Jialin Lyu", "jialinlvcn@aliyun.com");
 
 
-  chef_set_sources_last_updated_date (this, "2025-05-27");
+  chef_has_getfn();
+  chef_has_setfn();
+  chef_has_resetsrc();
+  this.cap_locally = CanNot;
+  this.cap_locally_explain = NULL;
+  this.can_english = false;
+  this.can_user_define = true;
+  this.note = "对Flathub目标进行测速的文件非常小，测速效果严重失真，若你知道可供测速的URL，欢迎参与贡献: chsrc issue";
+
+
+
+  chef_set_sources_last_updated (this, "2025-05-27");
   def_upstream_provider("https://flathub.org/repo");
 
   def_sources_begin()
@@ -48,9 +59,6 @@ wr_flathub_prelude ()
 }
 
 
-/**
- * chsrc get flathub
- */
 void
 wr_flathub_getsrc (char *option)
 {
@@ -88,35 +96,8 @@ wr_flathub_setsrc (char *option)
 }
 
 
-/**
- * chsrc reset flathub
- */
 void
 wr_flathub_resetsrc (char *option)
 {
   wr_flathub_setsrc (option);
 }
-
-
-/**
- * chsrc ls flathub
- */
-Feature_t
-wr_flathub_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = "对Flathub目标进行测速的文件非常小，测速效果严重失真，若你知道可供测速的URL，欢迎参与贡献: chsrc issue";
-
-  return f;
-}
-
-// def_target_gsrf (wr_flathub);

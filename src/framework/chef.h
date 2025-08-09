@@ -46,6 +46,11 @@ chef_ensure_trailing_slash (char *str)
 }
 
 
+#define chef_has_getfn() this->getfn = t##_getsrc;
+#define chef_has_setfn() this->setfn = t##_setsrc;
+#define chef_has_resetsrc() this->resetfn = t##_resetsrc;
+
+
 void
 chef_set_contributors (Target_t *target, uint32_t count, ...)
 {
@@ -70,7 +75,7 @@ chef_set_contributors (Target_t *target, uint32_t count, ...)
 
 
 void
-chef_set_recipe_authors (Target_t *target, size_t count, ...)
+chef_set_authors (Target_t *target, size_t count, ...)
 {
   if (!target || count == 0)
     return;
@@ -95,7 +100,7 @@ chef_set_recipe_authors (Target_t *target, size_t count, ...)
 
 
 void
-chef_set_current_chef (Target_t *target, char *name, char *email)
+chef_set_chef (Target_t *target, char *name, char *email)
 {
   if (!target || !name || !email)
     return;
@@ -107,7 +112,7 @@ chef_set_current_chef (Target_t *target, char *name, char *email)
 
 
 void
-chef_set_current_sous_chefs (Target_t *target, size_t count, ...)
+chef_set_sous_chefs (Target_t *target, size_t count, ...)
 {
   if (!target)
     return;
@@ -139,7 +144,7 @@ chef_set_current_sous_chefs (Target_t *target, size_t count, ...)
 
 
 void
-chef_set_recipe_created_on_date (Target_t *target, char *date)
+chef_set_created_on (Target_t *target, char *date)
 {
   if (!target)
     return;
@@ -149,7 +154,7 @@ chef_set_recipe_created_on_date (Target_t *target, char *date)
 
 
 void
-chef_set_recipe_last_updated_date (Target_t *target, char *date)
+chef_set_last_updated (Target_t *target, char *date)
 {
   if (!target)
     return;
@@ -159,7 +164,7 @@ chef_set_recipe_last_updated_date (Target_t *target, char *date)
 
 
 void
-chef_set_sources_last_updated_date (Target_t *target, char *date)
+chef_set_sources_last_updated (Target_t *target, char *date)
 {
   if (!target)
     return;
