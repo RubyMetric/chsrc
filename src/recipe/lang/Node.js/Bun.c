@@ -43,7 +43,7 @@ pl_nodejs_bun_setsrc (char *option)
       chsrc_note2 (xy_strjoin (3, "请手动写入以下内容到 ", xy_normalize_path ("~/.bunfig.toml"), " 文件中"));
     }
 
-  print (content);
+  println (content);
 
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);

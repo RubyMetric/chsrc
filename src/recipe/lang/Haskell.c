@@ -44,12 +44,12 @@ pl_haskell_setsrc (char *option)
     }
 
   chsrc_note2 (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
-  print (content);
+  println (content);
 
   config = xy_normalize_path ("~/.stack/config.yaml");
   content = xy_str_gsub (RAWSTR_pl_haskell_stackage_yaml, "@url@", source.url);
   chsrc_note2 (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
-  print (content);
+  println (content);
 
   chsrc_determine_chgtype (ChgType_Manual);
   chsrc_conclude (&source);
