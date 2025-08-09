@@ -32,13 +32,13 @@
  *                 |  BingChunMoLi  <bingchunmoli@bingchunmoli.com>
  *                 |
  * Created On      : <2023-08-28>
- * Last Modified   : <2025-07-31>
+ * Last Modified   : See <Chsrc_Release_Date>
  *
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.2.1-dev2"
-#define Chsrc_Release_Date   "2025/07/31"
+#define Chsrc_Version        "0.2.2.2"
+#define Chsrc_Release_Date   "2025/08/09"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
