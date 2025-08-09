@@ -7,7 +7,7 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-07-11>
+ * Last Modified : <2025-08-09>
  *
  * chsrc struct
  * ------------------------------------------------------------*/
@@ -35,7 +35,7 @@ typedef enum ProviderType_t
   IS_GeneralMirrorSite,   /* 通用镜像站 */
   IS_DedicatedMirrorSite, /* 专用镜像站 */
   IS_UpstreamProvider,    /* 上游默认源 */
-  IS_VirtualProvider,     /* 用户提供   */
+  IS_UserDefinedProvider, /* 用户提供   */
 }
 ProviderType_t;
 
@@ -66,7 +66,7 @@ SourceProvider_t UpstreamProvider =
 
 SourceProvider_t UserDefinedProvider =
 {
-  IS_VirtualProvider,
+  IS_UserDefinedProvider,
   "user", "用户自定义", "用户自定义", NULL,
   {SKIP, "用户自定义源不测速", "SKIP for user-defined source", NULL, ACCURATE}
 };
