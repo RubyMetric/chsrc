@@ -28,17 +28,17 @@ wr_anaconda_prelude ()
   chef_forbid_user_define(this);
 
   def_sources_begin()
-  {&upstream,        "https://repo.anaconda.com", DelegateToUpstream},
-  {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn", DelegateToMirror},
-  {&Bjtu,            "https://mirror.bjtu.edu.cn", DelegateToMirror},
-  {&Nju,             "https://mirror.nju.edu.cn", DelegateToMirror},
-  {&Bfsu,            "https://mirrors.bfsu.edu.cn", DelegateToMirror},
-  {&Zju,             "https://mirrors.zju.edu.cn", DelegateToMirror},
-  {&Pku,             "https://mirrors.pku.edu.cn", DelegateToMirror},
-  {&NJTech,          "https://mirrors.njtech.edu.cn", DelegateToMirror},
-  {&Ustc,            "https://mirrors.ustc.edu.cn", DelegateToMirror},
-  {&Sjtug_Siyuan,    "https://mirror.sjtu.edu.cn", DelegateToMirror},
-  {&Lzuoss,          "https://mirror.lzu.edu.cn", DelegateToMirror}
+  {&UpstreamProvider, "https://repo.anaconda.com", DelegateToUpstream},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn", DelegateToMirror},
+  {&Bjtu,             "https://mirror.bjtu.edu.cn", DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn", DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn", DelegateToMirror},
+  {&Zju,              "https://mirrors.zju.edu.cn", DelegateToMirror},
+  {&Pku,              "https://mirrors.pku.edu.cn", DelegateToMirror},
+  {&NJTech,           "https://mirrors.njtech.edu.cn", DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn", DelegateToMirror},
+  {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn", DelegateToMirror},
+  {&Lzuoss,           "https://mirror.lzu.edu.cn", DelegateToMirror}
   def_sources_end()
 }
 

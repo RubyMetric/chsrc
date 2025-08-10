@@ -31,9 +31,9 @@ pl_ruby_prelude (void)
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&upstream,      "https://rubygems.org",  "https://rubygems.org/gems/nokogiri-1.15.0-java.gem"},
-  {&RubyChina,     "https://gems.ruby-china.com/", DelegateToMirror},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/rubygems/", DelegateToMirror}
+  {&UpstreamProvider,  "https://rubygems.org",  "https://rubygems.org/gems/nokogiri-1.15.0-java.gem"},
+  {&RubyChina,         "https://gems.ruby-china.com/", DelegateToMirror},
+  {&Ustc,              "https://mirrors.ustc.edu.cn/rubygems/", DelegateToMirror}
 
   // {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/", DelegateToMirror},
   // {&Bfsu,      "https://mirrors.bfsu.edu.cn/rubygems/",          DelegateToMirror},

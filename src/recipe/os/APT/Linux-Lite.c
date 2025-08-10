@@ -27,10 +27,10 @@ os_linuxlite_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,       "http://repo.linuxliteos.com/linuxlite/",    DelegateToUpstream},
-  {&MirrorZ,        "https://mirrors.cernet.edu.cn/linuxliteos/",    DelegateToMirror},
-  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/linuxliteos/", DelegateToMirror},
-  {&Nju,            "https://mirror.nju.edu.cn/linuxliteos/",         DelegateToMirror}
+  {&UpstreamProvider, "http://repo.linuxliteos.com/linuxlite/",    DelegateToUpstream},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/linuxliteos/",    DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/linuxliteos/", DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn/linuxliteos/",         DelegateToMirror}
   def_sources_end()
 }
 

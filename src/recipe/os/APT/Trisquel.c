@@ -28,12 +28,12 @@ os_trisquel_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,       "http://archive.trisquel.info/trisquel/", DelegateToUpstream},
-  {&MirrorZ,        "https://mirrors.cernet.edu.cn/trisquel/", DelegateToMirror},
-  {&Ali,            "https://mirrors.aliyun.com/trisquel/",    DelegateToMirror},
-  {&Nju,            "https://mirror.nju.edu.cn/trisquel/",     DelegateToMirror},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/trisquel/",   DelegateToMirror},
-  {&Iscas,          "https://mirror.iscas.ac.cn/trisquel/",    DelegateToMirror}
+  {&UpstreamProvider, "http://archive.trisquel.info/trisquel/", DelegateToUpstream},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/trisquel/", DelegateToMirror},
+  {&Ali,              "https://mirrors.aliyun.com/trisquel/",    DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn/trisquel/",     DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/trisquel/",   DelegateToMirror},
+  {&Iscas,            "https://mirror.iscas.ac.cn/trisquel/",    DelegateToMirror}
   def_sources_end()
 }
 

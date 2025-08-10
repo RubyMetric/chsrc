@@ -30,12 +30,12 @@ os_openeuler_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,  "https://repo.openeuler.org/",         FeedByPrelude},
-  {&Ali,       "https://mirrors.aliyun.com/openeuler/",     FeedByPrelude},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/openeuler/",    FeedByPrelude},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/openeuler/",    FeedByPrelude},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/openeuler/", FeedByPrelude},
-  {&Tencent,   "https://mirrors.tencent.com/openeuler/",    FeedByPrelude}
+  {&UpstreamProvider, "https://repo.openeuler.org/",               FeedByPrelude},
+  {&Ali,              "https://mirrors.aliyun.com/openeuler/",     FeedByPrelude},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/openeuler/",    FeedByPrelude},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/openeuler/",    FeedByPrelude},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/openeuler/", FeedByPrelude},
+  {&Tencent,          "https://mirrors.tencent.com/openeuler/",    FeedByPrelude}
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/openeuler/", FeedByPrelude},
 
   /* 不启用原因：过慢 */

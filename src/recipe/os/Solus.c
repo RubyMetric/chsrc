@@ -27,10 +27,10 @@ os_solus_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,  "https://packages.getsol.us/shannon/eopkg-index.xml.xz", DelegateToUpstream},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/solus/packages/shannon/eopkg-index.xml.xz", DelegateToMirror},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/solus/packages/shannon/eopkg-index.xml.xz", DelegateToMirror},
-  {&Nju,       "https://mirror.nju.edu.cn/solus/packages/shannon/eopkg-index.xml.xz", DelegateToMirror}
+  {&UpstreamProvider, "https://packages.getsol.us/shannon/eopkg-index.xml.xz", DelegateToUpstream},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/solus/packages/shannon/eopkg-index.xml.xz", DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/solus/packages/shannon/eopkg-index.xml.xz", DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn/solus/packages/shannon/eopkg-index.xml.xz", DelegateToMirror}
   def_sources_end()
 }
 

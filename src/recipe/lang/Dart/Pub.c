@@ -26,11 +26,11 @@ pl_dart_prelude (void)
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&upstream,      "https://pub.dev",           FeedByPrelude},
-  {&FlutterCN,     "https://pub.flutter-io.cn", FeedByPrelude},
-  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/dart-pub", FeedByPrelude},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/dart-pub", FeedByPrelude},
-  {&Nju,           "https://mirror.nju.edu.cn/dart-pub", FeedByPrelude}
+  {&UpstreamProvider, "https://pub.dev",           FeedByPrelude},
+  {&FlutterCN,        "https://pub.flutter-io.cn", FeedByPrelude},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/dart-pub", FeedByPrelude},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/dart-pub", FeedByPrelude},
+  {&Nju,              "https://mirror.nju.edu.cn/dart-pub", FeedByPrelude}
   def_sources_end()
 
   chsrc_set_sources_speed_measure_url_with_postfix (this, "/packages/flutter_vision/versions/1.1.4.tar.gz");

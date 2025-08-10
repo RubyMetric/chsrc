@@ -25,7 +25,7 @@ os_netbsd_prelude ()
   chef_forbid_user_define(this);
 
   def_sources_begin()
-  {&upstream,         NULL,                                                  DelegateToUpstream},
+  {&UpstreamProvider,  NULL,                                                 DelegateToUpstream},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/pkgsrc/packages/NetBSD/", DelegateToMirror},
   {&Ali,              "https://mirrors.aliyun.com/pkgsrc/packages/NetBSD/",  DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/pkgsrc/packages/NetBSD/", DelegateToMirror},

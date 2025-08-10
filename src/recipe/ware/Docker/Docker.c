@@ -43,9 +43,9 @@ wr_docker_prelude ()
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&upstream,   "https://hub.docker.com/", DelegateToUpstream},
-  {&DaoCloud,   "https://docker.m.daocloud.io", DelegateToMirror},
-  {&Fit2Cloud,  "https://docker.1panel.live", DelegateToMirror}
+  {&UpstreamProvider, "https://hub.docker.com/", DelegateToUpstream},
+  {&DaoCloud,         "https://docker.m.daocloud.io", DelegateToMirror},
+  {&Fit2Cloud,        "https://docker.1panel.live", DelegateToMirror}
   def_sources_end()
 }
 

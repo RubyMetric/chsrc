@@ -23,12 +23,12 @@ wr_winget_prelude ()
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&upstream, "https://cdn.winget.microsoft.com/cache",    NULL},
-  {&MirrorZ,  "https://mirrors.cernet.edu.cn/winget-source", NULL},
-  {&Ustc,     "https://mirrors.ustc.edu.cn/winget-source", NULL},
-  {&Nju,      "https://mirror.nju.edu.cn/winget-source",   NULL},
-  {&Nyist,    "https://mirror.nyist.edu.cn/winget-source", NULL},
-  {&Xjtu,     "https://mirrors.xjtu.edu.cn/winget-source", NULL}
+  {&UpstreamProvider, "https://cdn.winget.microsoft.com/cache",    NULL},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/winget-source", NULL},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/winget-source", NULL},
+  {&Nju,              "https://mirror.nju.edu.cn/winget-source",   NULL},
+  {&Nyist,            "https://mirror.nyist.edu.cn/winget-source", NULL},
+  {&Xjtu,             "https://mirrors.xjtu.edu.cn/winget-source", NULL}
   def_sources_end()
 }
 

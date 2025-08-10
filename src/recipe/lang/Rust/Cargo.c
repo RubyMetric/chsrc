@@ -28,13 +28,10 @@ pl_rust_cargo_prelude (void)
 
   // 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`。链接末尾的 `/` 不能缺少
   def_sources_begin()
-  {&upstream,      "https://crates.io/", "https://crates.io/api/v1/crates/windows/0.58.0/download"},
-  {&MirrorZ,       "https://mirrors.cernet.edu.cn/crates.io-index/",  DelegateToMirror},
-  {&RsProxyCN,     "https://rsproxy.cn/index/",                       DelegateToMirror},
-
-  {&Ali,           "https://mirrors.aliyun.com/crates.io-index/",
-                   "https://mirrors.aliyun.com/crates/api/v1/crates/windows/0.58.0/download"},
-
+  {&UpstreamProvider,  "https://crates.io/", "https://crates.io/api/v1/crates/windows/0.58.0/download"},
+  {&MirrorZ,           "https://mirrors.cernet.edu.cn/crates.io-index/",  DelegateToMirror},
+  {&RsProxyCN,         "https://rsproxy.cn/index/",                       DelegateToMirror},
+  {&Ali,               "https://mirrors.aliyun.com/crates.io-index/", FeedByPrelude},
   {&Zju,           "https://mirrors.zju.edu.cn/crates.io-index/", DelegateToMirror},
 
   /* 注释原因: (2025-06-17) 镜像同步失败，多数包都不可用 */

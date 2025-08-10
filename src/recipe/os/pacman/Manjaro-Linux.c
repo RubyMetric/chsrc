@@ -23,7 +23,7 @@ os_manjaro_prelude ()
   chef_forbid_user_define(this);
 
   def_sources_begin()
-  {&upstream, NULL, DelegateToUpstream}
+  {&UpstreamProvider, NULL, DelegateToUpstream}
   /* Manjaro uses GUI tool, no manual sources needed */
   def_sources_end()
 }

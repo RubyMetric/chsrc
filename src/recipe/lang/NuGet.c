@@ -24,7 +24,7 @@ pl_nuget_prelude ()
   chef_forbid_user_define(this);
 
   def_sources_begin()
-  {&upstream,         "https://www.nuget.org/api/v3/", DelegateToUpstream},
+  {&UpstreamProvider, "https://www.nuget.org/api/v3/", DelegateToUpstream},
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/nuget/v3", DelegateToMirror}
   def_sources_end()
 }

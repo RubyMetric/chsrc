@@ -29,12 +29,12 @@ os_fedora_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,  "http://download.example/pub/fedora/linux", DelegateToUpstream},
-  {&Ali,       "https://mirrors.aliyun.com/fedora",        DelegateToMirror},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/fedora",       DelegateToMirror},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/fedora",       DelegateToMirror},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/fedora", DelegateToMirror},
-  {&Tencent,   "https://mirrors.tencent.com/fedora",       DelegateToMirror}
+  {&UpstreamProvider, "http://download.example/pub/fedora/linux", DelegateToUpstream},
+  {&Ali,              "https://mirrors.aliyun.com/fedora",        DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/fedora",       DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/fedora",       DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/fedora", DelegateToMirror},
+  {&Tencent,          "https://mirrors.tencent.com/fedora",       DelegateToMirror}
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/fedora",    DelegateToMirror},
 
   /* 不启用原因：过慢 */

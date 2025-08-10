@@ -27,13 +27,13 @@ os_opensuse_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,     "https://download.opensuse.org/", DelegateToUpstream},
-  {&Ali,          "https://mirrors.aliyun.com/opensuse", DelegateToMirror},
-  {&Volcengine,   "https://mirrors.volces.com/opensuse", DelegateToMirror},
-  {&Bfsu,         "https://mirrors.bfsu.edu.cn/opensuse", DelegateToMirror},
-  {&Ustc,         "https://mirrors.ustc.edu.cn/opensuse", DelegateToMirror},
-  {&Tuna,         "https://mirrors.tuna.tsinghua.edu.cn/opensuse", DelegateToMirror},
-  {&Tencent,      "https://mirrors.tencent.com/opensuse", DelegateToMirror}
+  {&UpstreamProvider, "https://download.opensuse.org/", DelegateToUpstream},
+  {&Ali,              "https://mirrors.aliyun.com/opensuse", DelegateToMirror},
+  {&Volcengine,       "https://mirrors.volces.com/opensuse", DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/opensuse", DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/opensuse", DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/opensuse", DelegateToMirror},
+  {&Tencent,          "https://mirrors.tencent.com/opensuse", DelegateToMirror}
   def_sources_end()
 }
 

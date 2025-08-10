@@ -24,7 +24,7 @@ pl_php_prelude ()
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&upstream,         NULL, DelegateToUpstream},
+  {&UpstreamProvider,  NULL, DelegateToUpstream},
   {&Ali,              "https://mirrors.aliyun.com/composer/",     DelegateToMirror},
   {&Tencent,          "https://mirrors.tencent.com/composer/",    DelegateToMirror},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/composer/", DelegateToMirror},

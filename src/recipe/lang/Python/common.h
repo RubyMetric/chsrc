@@ -42,7 +42,7 @@ pl_python_group_prelude (void)
 
 
   def_sources_begin()
-  {&upstream,         "https://pypi.org/simple",                     FeedByPrelude},
+  {&UpstreamProvider, "https://pypi.org/simple",                     FeedByPrelude},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/pypi/web/simple",FeedByPrelude},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/pypi/web/simple", FeedByPrelude},
   /* 不要添加Zju，浙大的PyPI服务在校外访问会自动转向Tuna */

@@ -26,19 +26,19 @@ os_termux_prelude ()
   chef_set_note(this, "该 recipe 存在对应的 bootstrapper", "This recipe has a corresponding bootstrapper");
 
   def_sources_begin()
-  {&upstream,       "https://packages.termux.org/apt/termux-main/", DelegateToUpstream},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/termux/", DelegateToMirror},
-  {&Sjtug_Zhiyuan,  "https://mirror.sjtu.edu.cn/termux/",   DelegateToMirror},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/termux/", DelegateToMirror},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/termux/",  DelegateToMirror},
-  {&Pku,            "https://mirrors.pku.edu.cn/termux/",   DelegateToMirror},
-  {&Nyist,          "https://mirror.nyist.edu.cn/termux/",  DelegateToMirror},
-  {&Nju,            "https://mirror.nju.edu.cn/termux/",    DelegateToMirror},
-  {&Sustech,        "https://mirrors.sustech.edu.cn/termux/", DelegateToMirror},
-  {&Iscas,          "https://mirror.iscas.ac.cn/termux/",   DelegateToMirror},
-  {&Zju,            "https://mirrors.zju.edu.cn/termux/",   DelegateToMirror},
-  {&Sdu,            "https://mirrors.sdu.edu.cn/termux/",   DelegateToMirror},
-  {&Cqupt,          "https://mirrors.cqupt.edu.cn/termux/", DelegateToMirror}
+  {&UpstreamProvider, "https://packages.termux.org/apt/termux-main/", DelegateToUpstream},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/termux/", DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/termux/",   DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/termux/", DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/termux/",  DelegateToMirror},
+  {&Pku,              "https://mirrors.pku.edu.cn/termux/",   DelegateToMirror},
+  {&Nyist,            "https://mirror.nyist.edu.cn/termux/",  DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn/termux/",    DelegateToMirror},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/termux/", DelegateToMirror},
+  {&Iscas,            "https://mirror.iscas.ac.cn/termux/",   DelegateToMirror},
+  {&Zju,              "https://mirrors.zju.edu.cn/termux/",   DelegateToMirror},
+  {&Sdu,              "https://mirrors.sdu.edu.cn/termux/",   DelegateToMirror},
+  {&Cqupt,            "https://mirrors.cqupt.edu.cn/termux/", DelegateToMirror}
   def_sources_end()
 }
 

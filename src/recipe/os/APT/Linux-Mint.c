@@ -27,19 +27,19 @@ os_linuxmint_prelude ()
 
   /* @note 实际上镜像站里的内容和Ubuntu的不太一样 */
   def_sources_begin()
-  {&upstream,       "http://packages.linuxmint.com", DelegateToUpstream},
-  {&MirrorZ,        "https://mirrors.cernet.edu.cn/linuxmint/", DelegateToMirror},
-  {&Ali,            "http://mirrors.aliyun.com/linuxmint-packages/",   DelegateToMirror},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/linuxmint/", DelegateToMirror},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/linuxmint/",          DelegateToMirror},
-  {&Sjtug_Zhiyuan,  "https://mirror.sjtu.edu.cn/linuxmint/",            DelegateToMirror},
-  {&Jlu,            "https://mirrors.jlu.edu.cn/linuxmint/",            DelegateToMirror},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/linuxmint/",           DelegateToMirror},
-  {&Bjtu,           "https://mirror.bjtu.edu.cn/linuxmint/",             DelegateToMirror},
-  {&Zju,            "https://mirrors.zju.edu.cn/linuxmint/",             DelegateToMirror},
-  {&Sustech,        "https://mirrors.sustech.edu.cn/linuxmint/",         DelegateToMirror},
-  {&Iscas,          "https://mirror.iscas.ac.cn/linuxmint/",             DelegateToMirror},
-  {&Scau,           "https://mirrors.scau.edu.cn/linuxmint/",            DelegateToMirror}
+  {&UpstreamProvider, "http://packages.linuxmint.com",                   DelegateToUpstream},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/linuxmint/",        DelegateToMirror},
+  {&Ali,              "http://mirrors.aliyun.com/linuxmint-packages/",   DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/linuxmint/", DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/linuxmint/",          DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/linuxmint/",            DelegateToMirror},
+  {&Jlu,              "https://mirrors.jlu.edu.cn/linuxmint/",            DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/linuxmint/",           DelegateToMirror},
+  {&Bjtu,             "https://mirror.bjtu.edu.cn/linuxmint/",             DelegateToMirror},
+  {&Zju,              "https://mirrors.zju.edu.cn/linuxmint/",             DelegateToMirror},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/linuxmint/",         DelegateToMirror},
+  {&Iscas,            "https://mirror.iscas.ac.cn/linuxmint/",             DelegateToMirror},
+  {&Scau,             "https://mirrors.scau.edu.cn/linuxmint/",            DelegateToMirror}
   /* 不启用原因：过慢 */
   // {&Netease,     "https://mirrors.163.com/linuxmint/packages/",       DelegateToMirror}
   def_sources_end()

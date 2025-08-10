@@ -27,7 +27,7 @@ os_freebsd_prelude ()
   // 2023-09-24: 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports
   // 2023-09-27: 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数
   def_sources_begin()
-  {&upstream,         NULL,                  DelegateToUpstream},
+  {&UpstreamProvider, NULL,                  DelegateToUpstream},
   {&Ustc,             "mirrors.ustc.edu.cn", DelegateToMirror},
   {&Nju,              "mirror.nju.edu.cn",   DelegateToMirror},
   {&Netease,          "mirrors.163.com",     DelegateToMirror},

@@ -30,13 +30,13 @@ os_raspberrypi_prelude ()
 
   def_sources_begin()
   // https://archive.raspberrypi.org/ until Debian "bullseye" release
-  {&upstream,       "https://archive.raspberrypi.com/",              DelegateToUpstream},
-  {&MirrorZ,        "https://mirrors.cernet.edu.cn/raspberrypi/",    DelegateToMirror},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/raspberrypi/", DelegateToMirror},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/raspberrypi/",      DelegateToMirror},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/raspberrypi/",      DelegateToMirror},
-  {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/raspberrypi/", DelegateToMirror},
-  {&Sustech,        "https://mirrors.sustech.edu.cn/raspberrypi/",   DelegateToMirror}
+  {&UpstreamProvider, "https://archive.raspberrypi.com/",              DelegateToUpstream},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/raspberrypi/",    DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/raspberrypi/", DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/raspberrypi/",      DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/raspberrypi/",      DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/raspberrypi/", DelegateToMirror},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/raspberrypi/",   DelegateToMirror}
   def_sources_end()
 }
 

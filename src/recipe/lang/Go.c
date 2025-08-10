@@ -41,14 +41,14 @@ pl_go_prelude ()
 
 
   def_sources_begin()
-  {&upstream,       "https://proxy.golang.org", DelegateToUpstream},
-  {&GoProxyCN,      "https://goproxy.cn", DelegateToMirror},
-  {&Ali,            "https://mirrors.aliyun.com/goproxy/", DelegateToMirror},
+  {&UpstreamProvider, "https://proxy.golang.org", DelegateToUpstream},
+  {&GoProxyCN,        "https://goproxy.cn", DelegateToMirror},
+  {&Ali,              "https://mirrors.aliyun.com/goproxy/", DelegateToMirror},
 
   // 暂时停用华为镜像源, 详见 https://github.com/RubyMetric/chsrc/issues/227
-  // {&Huawei,      "https://mirrors.huaweicloud.com/goproxy/", DelegateToMirror},
+  // {&Huawei,        "https://mirrors.huaweicloud.com/goproxy/", DelegateToMirror},
 
-  {&GoProxyIO,      "https://goproxy.io", DelegateToMirror}
+  {&GoProxyIO,        "https://goproxy.io", DelegateToMirror}
   def_sources_end()
 }
 

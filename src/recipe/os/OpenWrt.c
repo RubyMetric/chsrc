@@ -28,18 +28,18 @@ os_openwrt_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,        "https://downloads.openwrt.org", DelegateToUpstream},
-  {&MirrorZ,         "https://mirrors.cernet.edu.cn/openwrt", DelegateToMirror},
-  {&Ali,             "https://mirrors.aliyun.com/openwrt", DelegateToMirror},
-  {&Tencent,         "https://mirrors.cloud.tencent.com/openwrt", DelegateToMirror},
-  {&Tuna,            "https://mirror.tuna.tsinghua.edu.cn/openwrt", DelegateToMirror},
-  {&Sjtug_Zhiyuan,   "https://mirror.sjtu.edu.cn/openwrt", DelegateToMirror},
-  {&Ustc,            "https://mirrors.ustc.edu.cn/openwrt", DelegateToMirror},
-  {&Pku,             "https://mirrors.pku.edu.cn/openwrt", DelegateToMirror},
-  {&Sustech,         "https://mirrors.sustech.edu.cn/openwrt", DelegateToMirror}
+  {&UpstreamProvider, "https://downloads.openwrt.org", DelegateToUpstream},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/openwrt", DelegateToMirror},
+  {&Ali,              "https://mirrors.aliyun.com/openwrt", DelegateToMirror},
+  {&Tencent,          "https://mirrors.cloud.tencent.com/openwrt", DelegateToMirror},
+  {&Tuna,             "https://mirror.tuna.tsinghua.edu.cn/openwrt", DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/openwrt", DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/openwrt", DelegateToMirror},
+  {&Pku,              "https://mirrors.pku.edu.cn/openwrt", DelegateToMirror},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/openwrt", DelegateToMirror}
   def_sources_end()
 
-  chsrc_set_provider_speed_measure_url (&upstream, "https://downloads.openwrt.org/releases/23.05.5/targets/x86/64/openwrt-sdk-23.05.5-x86-64_gcc-12.3.0_musl.Linux-x86_64.tar.xz");
+  chsrc_set_provider_speed_measure_url (&UpstreamProvider, "https://downloads.openwrt.org/releases/23.05.5/targets/x86/64/openwrt-sdk-23.05.5-x86-64_gcc-12.3.0_musl.Linux-x86_64.tar.xz");
 }
 
 

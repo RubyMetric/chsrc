@@ -25,7 +25,7 @@ pl_r_prelude ()
 
   // 以下注释的，是不含有bioconductor的镜像站，我们在换cran的同时，也直接帮助用户换bioconductor
   def_sources_begin()
-  {&upstream,         NULL, DelegateToUpstream},
+  {&UpstreamProvider, NULL, DelegateToUpstream},
   {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/cran/",    DelegateToMirror},
   // {&Ali,           "https://mirrors.aliyun.com/CRAN/",           DelegateToMirror},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CRAN/", DelegateToMirror},

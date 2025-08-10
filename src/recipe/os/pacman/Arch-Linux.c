@@ -36,7 +36,7 @@ os_arch_prelude ()
    * @note 不要给后面加 / ，因为ARM情况下，还要额外加一个 arm 后缀
    */
   def_sources_begin()
-  {&upstream,         "https://repo.archlinux.org",            DelegateToUpstream},
+  {&UpstreamProvider, "https://repo.archlinux.org",            DelegateToUpstream},
   {&Ali,              "https://mirrors.aliyun.com/archlinux",  DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/archlinux", DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/archlinux", DelegateToMirror},
@@ -139,7 +139,7 @@ os_archlinuxcn_prelude ()
 
 
   def_sources_begin()
-  {&upstream,         "https://repo.archlinuxcn.org/",            DelegateToUpstream},
+  {&UpstreamProvider,         "https://repo.archlinuxcn.org/",            DelegateToUpstream},
   {&Ali,              "https://mirrors.aliyun.com/archlinuxcn/",  DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/archlinuxcn/", DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/archlinuxcn/", DelegateToMirror},

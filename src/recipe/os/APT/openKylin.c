@@ -30,9 +30,9 @@ os_openkylin_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,       "https://archive.openkylin.top/openkylin/", DelegateToUpstream},
-  {&Ali,            "https://mirrors.aliyun.com/openkylin/",    DelegateToMirror},
-  {&Netease,        "https://mirrors.163.com/openkylin/",       DelegateToMirror}
+  {&UpstreamProvider, "https://archive.openkylin.top/openkylin/", DelegateToUpstream},
+  {&Ali,              "https://mirrors.aliyun.com/openkylin/",    DelegateToMirror},
+  {&Netease,          "https://mirrors.163.com/openkylin/",       DelegateToMirror}
   def_sources_end()
 }
 

@@ -27,12 +27,12 @@ os_deepin_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,       "https://community-packages.deepin.com/deepin", DelegateToUpstream},
-  {&Ali,            "https://mirrors.aliyun.com/deepin",            DelegateToMirror},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/deepin",          DelegateToMirror},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/deepin",          DelegateToMirror},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/deepin",  DelegateToMirror},
-  {&Tencent,        "https://mirrors.tencent.com/deepin",          DelegateToMirror}
+  {&UpstreamProvider, "https://community-packages.deepin.com/deepin", DelegateToUpstream},
+  {&Ali,              "https://mirrors.aliyun.com/deepin",            DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/deepin",          DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/deepin",          DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/deepin",  DelegateToMirror},
+  {&Tencent,          "https://mirrors.tencent.com/deepin",          DelegateToMirror}
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/deepin",     DelegateToMirror},
   /* 不启用原因：过慢 */
   // {&Netease,       "https://mirrors.163.com/deepin",             DelegateToMirror},

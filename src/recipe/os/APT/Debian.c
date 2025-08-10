@@ -29,14 +29,14 @@ os_debian_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,   "http://deb.debian.org/debian",          FeedByPrelude},
-  {&MirrorZ,    "https://mirrors.cernet.edu.cn/debian/", FeedByPrelude},
-  {&Ali,        "https://mirrors.aliyun.com/debian", FeedByPrelude},
-  {&Volcengine, "https://mirrors.volces.com/debian", FeedByPrelude},
-  {&Bfsu,       "https://mirrors.bfsu.edu.cn/debian", FeedByPrelude},
-  {&Ustc,       "https://mirrors.ustc.edu.cn/debian", FeedByPrelude},
-  {&Tuna,       "https://mirrors.tuna.tsinghua.edu.cn/debian", FeedByPrelude},
-  {&Tencent,    "https://mirrors.tencent.com/debian", FeedByPrelude}
+  {&UpstreamProvider, "http://deb.debian.org/debian",          FeedByPrelude},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/debian/", FeedByPrelude},
+  {&Ali,              "https://mirrors.aliyun.com/debian", FeedByPrelude},
+  {&Volcengine,       "https://mirrors.volces.com/debian", FeedByPrelude},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/debian", FeedByPrelude},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/debian", FeedByPrelude},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/debian", FeedByPrelude},
+  {&Tencent,          "https://mirrors.tencent.com/debian", FeedByPrelude}
 
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/debian", FeedByPrelude},
 

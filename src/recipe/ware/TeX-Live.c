@@ -27,22 +27,22 @@ wr_tex_prelude ()
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&upstream,        "https://ctan.org/tex-archive/systems/texlive/tlnet", DelegateToUpstream},
-  {&MirrorZ,         "https://mirrors.cernet.edu.cn/CTAN/systems/texlive/tlnet", DelegateToMirror},
-  {&Sjtug_Zhiyuan,   "https://mirrors.sjtug.sjtu.edu.cn/ctan/systems/texlive/tlnet",
-                     "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
-  {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet",
-                     "https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
-  {&Bfsu,            "https://mirrors.bfsu.edu.cn/CTAN/systems/texlive/tlnet",
-                     "https://mirrors.bfsu.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
-  {&Bjtu,            "https://mirror.bjtu.edu.cn/ctan/systems/texlive/tlnet",
-                     "https://mirror.bjtu.edu.cn/ctan/systems/texlive/tlnet/archive/fandol.tar.xz"},
-  {&Lzuoss,          "https://mirror.lzu.edu.cn/CTAN/systems/texlive/tlnet",
-                     "https://mirror.lzu.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
-  {&Jlu,             "https://mirrors.jlu.edu.cn/CTAN/systems/texlive/tlnet",
-                     "https://mirrors.jlu.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
-  {&Sustech,         "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet",
-                     "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"}
+  {&UpstreamProvider, "https://ctan.org/tex-archive/systems/texlive/tlnet", DelegateToUpstream},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/CTAN/systems/texlive/tlnet", DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/ctan/systems/texlive/tlnet",
+                      "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet",
+                      "https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/CTAN/systems/texlive/tlnet",
+                      "https://mirrors.bfsu.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
+  {&Bjtu,             "https://mirror.bjtu.edu.cn/ctan/systems/texlive/tlnet",
+                      "https://mirror.bjtu.edu.cn/ctan/systems/texlive/tlnet/archive/fandol.tar.xz"},
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/CTAN/systems/texlive/tlnet",
+                      "https://mirror.lzu.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
+  {&Jlu,              "https://mirrors.jlu.edu.cn/CTAN/systems/texlive/tlnet",
+                      "https://mirrors.jlu.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet",
+                      "https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet/archive/fandol.tar.xz"}
   def_sources_end()
 }
 

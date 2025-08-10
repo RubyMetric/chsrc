@@ -27,12 +27,12 @@ os_gentoo_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,  "rsync://rsync.gentoo.org/gentoo-portage", DelegateToUpstream},
-  {&Ali,       "mirrors.aliyun.com", DelegateToMirror},
-  {&Bfsu,      "mirrors.bfsu.edu.cn", DelegateToMirror},
-  {&Ustc,      "mirrors.ustc.edu.cn", DelegateToMirror},
-  {&Tuna,      "mirrors.tuna.tsinghua.edu.cn", DelegateToMirror},
-  {&Tencent,   "mirrors.tencent.com", DelegateToMirror}
+  {&UpstreamProvider, "rsync://rsync.gentoo.org/gentoo-portage", DelegateToUpstream},
+  {&Ali,              "mirrors.aliyun.com", DelegateToMirror},
+  {&Bfsu,             "mirrors.bfsu.edu.cn", DelegateToMirror},
+  {&Ustc,             "mirrors.ustc.edu.cn", DelegateToMirror},
+  {&Tuna,             "mirrors.tuna.tsinghua.edu.cn", DelegateToMirror},
+  {&Tencent,          "mirrors.tencent.com", DelegateToMirror}
   def_sources_end()
 }
 

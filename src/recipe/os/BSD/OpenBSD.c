@@ -24,7 +24,7 @@ os_openbsd_prelude ()
   chef_forbid_user_define(this);
 
   def_sources_begin()
-  {&upstream,         NULL,                                     DelegateToUpstream},
+  {&UpstreamProvider,  NULL,                                    DelegateToUpstream},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/OpenBSD/", DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/OpenBSD/",   DelegateToMirror},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/OpenBSD/", DelegateToMirror},

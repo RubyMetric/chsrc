@@ -25,11 +25,11 @@ wr_cocoapods_prelude ()
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&upstream, "https://github.com/CocoaPods/Specs.git", DelegateToUpstream},
-  {&Tuna,     "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git", DelegateToMirror},
-  {&Bfsu,     "https://mirrors.bfsu.edu.cn/git/CocoaPods/Specs.git", DelegateToMirror},
-  {&Nju,      "https://mirror.nju.edu.cn/git/CocoaPods/Specs.git", DelegateToMirror},
-  {&Nyist,    "https://mirror.nyist.edu.cn/git/CocoaPods/Specs.git", DelegateToMirror}
+  {&UpstreamProvider, "https://github.com/CocoaPods/Specs.git", DelegateToUpstream},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git", DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/git/CocoaPods/Specs.git", DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn/git/CocoaPods/Specs.git", DelegateToMirror},
+  {&Nyist,            "https://mirror.nyist.edu.cn/git/CocoaPods/Specs.git", DelegateToMirror}
   def_sources_end()
 }
 

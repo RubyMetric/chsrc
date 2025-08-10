@@ -172,7 +172,7 @@ TargetRegisterInfo_t;
 #define use_this(t) Target_t *this = &t##_target;
 #define use_this_source(t) use_this(t); Source_t source = chsrc_yield_source_and_confirm (this, option);
 
-#define def_sources_begin()  SourceProvider_t upstream = UpstreamProvider; Source_t sources[] = {
+#define def_sources_begin()  Source_t sources[] = {
 #define def_sources_end()    }; \
   this->sources_n = xy_arylen(sources); \
   char *_sources_storage = xy_malloc0 (sizeof(sources)); \

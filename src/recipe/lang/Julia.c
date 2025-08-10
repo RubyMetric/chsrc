@@ -24,7 +24,7 @@ pl_julia_prelude ()
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&upstream,         NULL, DelegateToUpstream},
+  {&UpstreamProvider,  NULL, DelegateToUpstream},
   {&Pku,              "https://mirrors.pku.edu.cn/julia", DelegateToMirror},
   {&Nju,              "https://mirror.nju.edu.cn/julia",   DelegateToMirror},
   {&Iscas,            "https://mirror.iscas.ac.cn/julia",  DelegateToMirror}

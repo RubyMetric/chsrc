@@ -30,7 +30,7 @@ os_ubuntu_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,         "http://archive.ubuntu.com/ubuntu/",  FeedByPrelude}, /* 不支持https */
+  {&UpstreamProvider, "http://archive.ubuntu.com/ubuntu/",  FeedByPrelude}, /* 不支持https */
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/ubuntu/",FeedByPrelude},
   {&Ali,              "https://mirrors.aliyun.com/ubuntu",FeedByPrelude},
   {&Volcengine,       "https://mirrors.volces.com/ubuntu",FeedByPrelude},

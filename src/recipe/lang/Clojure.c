@@ -24,7 +24,7 @@ pl_clojure_prelude ()
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&upstream,        NULL, DelegateToUpstream},
+  {&UpstreamProvider, NULL, DelegateToUpstream},
   {&MirrorZ,         "https://mirrors.cernet.edu.cn/clojars/",        DelegateToMirror},
   {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/clojars/", DelegateToMirror},
   {&Nju,             "https://mirror.nju.edu.cn/clojars/",             DelegateToMirror},

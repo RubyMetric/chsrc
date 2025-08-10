@@ -78,7 +78,7 @@ void
   chef_set_note ("备注说明...", "Note...");
 
   def_sources_begin()
-  {&upstream,      "上游地址，若维护者暂时未知，可填NULL，这个主要用于reset", DelegateToUpstream}
+  {&UpstreamProvider,      "上游地址，若维护者暂时未知，可填NULL，这个主要用于reset", DelegateToUpstream}
   {&RubyMetric,    "https://rubymetirc.com/target",       DelegateToMirror},
   {&RubyInstaller, "https://rubyinstaller.cn/target",     DelegateToMirror},
   {&Gitee,         "https://gitee.com/RubyMetric/chsrc",  DelegateToMirror},

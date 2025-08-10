@@ -28,13 +28,13 @@ os_kali_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,      "http://http.kali.org/kali",          DelegateToUpstream},
-  {&MirrorZ,       "https://mirrors.cernet.edu.cn/kali", DelegateToMirror},
-  {&Ali,           "https://mirrors.aliyun.com/kali",    DelegateToMirror},
-  {&Volcengine,    "https://mirrors.volces.com/kali",    DelegateToMirror},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/kali",   DelegateToMirror},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/kali",   DelegateToMirror},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/kali", DelegateToMirror}
+  {&UpstreamProvider, "http://http.kali.org/kali",          DelegateToUpstream},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/kali", DelegateToMirror},
+  {&Ali,              "https://mirrors.aliyun.com/kali",    DelegateToMirror},
+  {&Volcengine,       "https://mirrors.volces.com/kali",    DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/kali",   DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/kali",   DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/kali", DelegateToMirror}
   /* 不启用原因: 未与上游同步 */
   // {&Huawei,     "https://mirrors.huaweicloud.com/kali",   DelegateToMirror},
   def_sources_end()

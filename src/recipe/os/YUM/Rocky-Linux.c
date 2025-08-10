@@ -25,7 +25,7 @@ os_rockylinux_prelude ()
   chef_forbid_user_define(this);
 
   def_sources_begin()
-  {&upstream,         "https://dl.rockylinux.org",                 DelegateToUpstream},
+  {&UpstreamProvider, "https://dl.rockylinux.org",                 DelegateToUpstream},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/rocky",       DelegateToMirror},
   {&Ali,              "https://mirrors.aliyun.com/rockylinux",      DelegateToMirror},
   {&Volcengine,       "https://mirrors.volces.com/rockylinux",      DelegateToMirror},

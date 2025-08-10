@@ -24,8 +24,8 @@ pl_ocaml_prelude ()
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&upstream,        NULL, DelegateToUpstream},
-  {&Sjtug_Zhiyuan,   "https://mirrors.sjtug.sjtu.edu.cn/git/opam-repository.git", DelegateToMirror}
+  {&UpstreamProvider,  NULL, DelegateToUpstream},
+  {&Sjtug_Zhiyuan,     "https://mirrors.sjtug.sjtu.edu.cn/git/opam-repository.git", DelegateToMirror}
   def_sources_end()
 }
 

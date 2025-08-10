@@ -25,7 +25,7 @@ pl_java_prelude ()
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&upstream,         "https://repo1.maven.org/maven2/",                   DelegateToUpstream},
+  {&UpstreamProvider, "https://repo1.maven.org/maven2/",                   DelegateToUpstream},
   {&Ali,              "https://maven.aliyun.com/repository/public/",       DelegateToMirror},
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/maven/", DelegateToMirror},
 

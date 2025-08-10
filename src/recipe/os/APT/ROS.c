@@ -28,18 +28,18 @@ os_ros_prelude ()
   chef_set_note(this, "该换源方案中，URL存在拼凑，因此不能手动使用某URL来换源", "In this switching method, URLs are constructed, so manual URL specification is not supported");
 
   def_sources_begin()
-  {&upstream,       "http://packages.ros.org", DelegateToUpstream},
-  {&Ali,            "https://mirrors.aliyun.com",  DelegateToMirror},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn", DelegateToMirror},
-  {&Ustc,           "https://mirrors.ustc.edu.cn", DelegateToMirror},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn", DelegateToMirror},
-  {&Tencent,        "https://mirrors.tencent.com", DelegateToMirror},
+  {&UpstreamProvider, "http://packages.ros.org",     DelegateToUpstream},
+  {&Ali,              "https://mirrors.aliyun.com",  DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn", DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn", DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn", DelegateToMirror},
+  {&Tencent,          "https://mirrors.tencent.com", DelegateToMirror},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com", DelegateToMirror},
-  {&Huawei,         "https://mirrors.huaweicloud.com", DelegateToMirror}
+  {&Huawei,           "https://mirrors.huaweicloud.com", DelegateToMirror}
   /* 不启用原因：过慢 */
-  // {&Netease,     "https://mirrors.163.com", DelegateToMirror},
+  // {&Netease,       "https://mirrors.163.com", DelegateToMirror},
   /* 不启用原因：过慢 */
-  // {&Sohu,        "https://mirrors.sohu.com", DelegateToMirror}
+  // {&Sohu,          "https://mirrors.sohu.com", DelegateToMirror}
   def_sources_end()
 }
 

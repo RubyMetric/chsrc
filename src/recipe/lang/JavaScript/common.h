@@ -33,10 +33,10 @@ pl_js_group_prelude (void)
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&upstream,  "https://registry.npmjs.org/",    FeedByPrelude}, /* @note 根据 pnpm 官网，有最后的斜线 */
-  {&NpmMirror, "https://registry.npmmirror.com", FeedByPrelude},
-  {&Huawei,    "https://mirrors.huaweicloud.com/repository/npm/", FeedByPrelude},
-  {&Tencent,   "https://mirrors.cloud.tencent.com/npm/", FeedByPrelude}
+  {&UpstreamProvider,  "https://registry.npmjs.org/",    FeedByPrelude}, /* @note 根据 pnpm 官网，有最后的斜线 */
+  {&NpmMirror,         "https://registry.npmmirror.com", FeedByPrelude},
+  {&Huawei,            "https://mirrors.huaweicloud.com/repository/npm/", FeedByPrelude},
+  {&Tencent,           "https://mirrors.cloud.tencent.com/npm/", FeedByPrelude}
   def_sources_end()
 
   // 29MB 大小
@@ -67,7 +67,7 @@ pl_js_nodejs_binary_prelude (void)
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&upstream,  "https://nodejs.org/dist/", FeedByPrelude},
+  {&UpstreamProvider,  "https://nodejs.org/dist/", FeedByPrelude},
   {&NpmMirror, "https://npmmirror.com/mirrors", FeedByPrelude},
   {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/",FeedByPrelude},
   {&Bfsu,      "https://mirrors.bfsu.edu.cn/nodejs-release/",FeedByPrelude},

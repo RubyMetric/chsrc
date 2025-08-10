@@ -28,15 +28,15 @@ os_armbian_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,       "http://apt.armbian.com", DelegateToUpstream},
-  {&MirrorZ,        "https://mirrors.cernet.edu.cn/armbian",        DelegateToMirror},
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/armbian", DelegateToMirror},
-  {&Sjtug_Zhiyuan,  "https://mirror.sjtu.edu.cn/armbian",            DelegateToMirror},
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/armbian",           DelegateToMirror},
-  {&Sustech,        "https://mirrors.sustech.edu.cn/armbian",        DelegateToMirror},
-  {&Ustc,           "https://mirrors.ustc.edu.cn/armbian",           DelegateToMirror},
-  {&Nju,            "https://mirrors.nju.edu.cn/armbian",             DelegateToMirror},
-  {&Ali,            "https://mirrors.aliyun.com/armbian",             DelegateToMirror}
+  {&UpstreamProvider, "http://apt.armbian.com", DelegateToUpstream},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/armbian",        DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/armbian", DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/armbian",            DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/armbian",           DelegateToMirror},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/armbian",        DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/armbian",           DelegateToMirror},
+  {&Nju,              "https://mirrors.nju.edu.cn/armbian",             DelegateToMirror},
+  {&Ali,              "https://mirrors.aliyun.com/armbian",             DelegateToMirror}
   def_sources_end()
 }
 

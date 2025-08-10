@@ -30,11 +30,11 @@ wr_homebrew_prelude ()
                        "This source switching is implemented by writing environment variables. If switching sources multiple times, please manually clean the profile file");
 
   def_sources_begin()
-  {&upstream,  "https://github.com/Homebrew/brew.git", DelegateToUpstream},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/", DelegateToMirror},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/", DelegateToMirror},
-  {&Nju,       "https://mirror.nju.edu.cn/", DelegateToMirror},
-  {&Nyist,     "https://mirror.nyist.edu.cn/", DelegateToMirror}
+  {&UpstreamProvider, "https://github.com/Homebrew/brew.git", DelegateToUpstream},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/", DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/", DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn/", DelegateToMirror},
+  {&Nyist,            "https://mirror.nyist.edu.cn/", DelegateToMirror}
   def_sources_end()
 }
 

@@ -27,8 +27,8 @@ wr_guix_prelude ()
                        "Currently only one source available, guixcn source availability unknown");
 
   def_sources_begin()
-  {&upstream,        "https://git.savannah.gnu.org/git/guix.git", DelegateToUpstream},
-  {&Sjtug_Zhiyuan,   "https://mirror.sjtu.edu.cn/git/guix.git", DelegateToMirror}
+  {&UpstreamProvider, "https://git.savannah.gnu.org/git/guix.git", DelegateToUpstream},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/git/guix.git", DelegateToMirror}
   def_sources_end()
 }
 

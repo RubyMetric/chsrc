@@ -24,14 +24,14 @@ wr_nix_prelude ()
   chef_forbid_user_define(this);
 
   def_sources_begin()
-  {&upstream,        "https://channels.nixos.org/", DelegateToUpstream},
-  {&MirrorZ,         "https://mirrors.cernet.edu.cn/nix-channels/", DelegateToMirror},
-  {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/", DelegateToMirror},
-  {&Nju,             "https://mirror.nju.edu.cn/nix-channels/", DelegateToMirror},
-  {&Ustc,            "https://mirrors.ustc.edu.cn/nix-channels/", DelegateToMirror},
-  {&Sjtug_Siyuan,    "https://mirror.sjtu.edu.cn/nix-channels/", DelegateToMirror},
-  {&Bfsu,            "https://mirrors.bfsu.edu.cn/nix-channels/", DelegateToMirror},
-  {&Iscas,           "https://mirror.iscas.ac.cn/nix-channels/", DelegateToMirror}
+  {&UpstreamProvider, "https://channels.nixos.org/", DelegateToUpstream},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/nix-channels/", DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/", DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn/nix-channels/", DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/nix-channels/", DelegateToMirror},
+  {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn/nix-channels/", DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/nix-channels/", DelegateToMirror},
+  {&Iscas,            "https://mirror.iscas.ac.cn/nix-channels/", DelegateToMirror}
   def_sources_end()
 }
 

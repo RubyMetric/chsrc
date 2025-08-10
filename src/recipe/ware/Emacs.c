@@ -34,14 +34,14 @@ wr_emacs_prelude ()
                        "Emacs users typically only need to switch sources once and rarely call chsrc, so we only provide documentation to users");
 
   def_sources_begin()
-  {&upstream,        "https://elpa.gnu.org/", DelegateToUpstream},
-  {&MirrorZ,         "https://help.mirrors.cernet.edu.cn/elpa/", DelegateToMirror},
-  {&Sjtug_Zhiyuan,   "https://mirrors.sjtug.sjtu.edu.cn/docs/emacs-elpa", DelegateToMirror},
-  {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/help/elpa/", DelegateToMirror},
-  {&Bfsu,            "https://mirrors.bfsu.edu.cn/help/elpa/", DelegateToMirror},
-  {&Ustc,            "https://mirrors.ustc.edu.cn/help/elpa.html", DelegateToMirror},
-  {&Zju,             "https://mirrors.zju.edu.cn/docs/elpa/", DelegateToMirror},
-  {&EmacsChina,      "https://elpamirror.emacs-china.org/", DelegateToMirror}
+  {&UpstreamProvider, "https://elpa.gnu.org/", DelegateToUpstream},
+  {&MirrorZ,          "https://help.mirrors.cernet.edu.cn/elpa/", DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/docs/emacs-elpa", DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/help/elpa/", DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/help/elpa/", DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/help/elpa.html", DelegateToMirror},
+  {&Zju,              "https://mirrors.zju.edu.cn/docs/elpa/", DelegateToMirror},
+  {&EmacsChina,       "https://elpamirror.emacs-china.org/", DelegateToMirror}
   def_sources_end()
 }
 
