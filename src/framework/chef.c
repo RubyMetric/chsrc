@@ -5,7 +5,7 @@
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nul None  <nul@none.org>
  * Created On    : <2025-08-09>
- * Last Modified : <2025-08-10>
+ * Last Modified : <2025-08-11>
  *
  * chef DSL: for chefs (recipe makers) to define a target
  * ------------------------------------------------------------*/
@@ -223,8 +223,12 @@ chef_set_sources_last_updated (Target_t *target, char *date)
 void
 chef_debug_target (Target_t *target)
 {
+#ifdef XY_DEBUG
   if (!target)
-    return;
+    {
+      chsrc_debug2 ("t", "Target is NULL");
+      return;
+    }
 
   say ("Debug Target Information:");
   printf ("  Get Function: %p\n", target->getfn);
@@ -232,6 +236,13 @@ chef_debug_target (Target_t *target)
   printf ("  Reset Function: %p\n", target->resetfn);
   printf ("  Sources: %p\n", target->sources);
   printf ("  Sources Count: %lld\n", target->sources_n);
+
+  printf ("  Authors: %p\n", target->authors);
+  printf ("  Authors Count: %lld\n", target->authors_n);
+  printf ("  Chef: %p\n", target->chef);
+  printf ("  Cooks: %p\n", target->cooks);
+  printf ("  Cooks Count: %lld\n", target->cooks_n);
   printf ("  Contributors: %p\n", target->contributors);
   printf ("  Contributors Count: %lld\n", target->contributors_n);
+#endif
 }

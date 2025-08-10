@@ -38,7 +38,7 @@
  * ------------------------------------------------------------*/
 
 #define Chsrc_Version        "0.2.2.3"
-#define Chsrc_Release_Date   "2025/08/10"
+#define Chsrc_Release_Date   "2025/08/11"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
@@ -682,6 +682,8 @@ get_target (const char *input, TargetOp code, char *option)
     {
       cli_notify_lastly_for_users();
     }
+
+  chef_debug_target (target);
 
   return true;
 }
