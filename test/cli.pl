@@ -4,7 +4,7 @@
 # Test Authors  : Aoran Zeng <ccmywish@qq.com>
 # Contributors  :  Nil Null  <nil@null.org>
 # Created On    : <2024-06-05>
-# Last Modified : <2025-08-07>
+# Last Modified : <2025-08-11>
 #
 #   测试 chsrc 可执行文件
 # ---------------------------------------------------------------
@@ -29,7 +29,7 @@ like `./chsrc`,        $help_str,    'chsrc';
 my $list_str = qr/mirrorz\s*MirrorZ\s*.*\ntuna\s*TUNA/;
 like `./chsrc ls`,            $list_str,    'chsrc ls';
 like `./chsrc list mirrors`,  $list_str,    'chsrc list mirrors';
-like `./chsrc list os`,    qr/debian\s*ubuntu/,   'chsrc list os';
+like `./chsrc list os`,    qr/netbsd\s*openbsd/,   'chsrc list os';
 like `./chsrc list ware`,  qr/brew\s*homebrew/,   'chsrc list ware';
 
 
