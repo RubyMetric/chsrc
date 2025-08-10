@@ -7,7 +7,7 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-08-10>
+ * Last Modified : <2025-08-11>
  *
  * chsrc struct
  * ------------------------------------------------------------*/
@@ -91,7 +91,7 @@ Source_t;
 #define DelegateToMirror    NULL
 /* 看到该注释的贡献者，你可以帮忙寻找专用测速链接 */
 #define NeedContribute      NULL
-/* 由 _sources_prepare 填充 */
+/* 由 prelude() 填充 */
 #define FeedByPrelude NULL
 
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
