@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(pl_js_yarn);
+def_target(pl_js_yarn, "yarn");
 
 void
 pl_js_yarn_prelude (void)

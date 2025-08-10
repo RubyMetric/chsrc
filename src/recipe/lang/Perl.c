@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(pl_perl);
+def_target(pl_perl, "perl/cpan");
 
 void
 pl_perl_prelude ()

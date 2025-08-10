@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(pl_dart);
+def_target(pl_dart, "dart/pub");
 
 void
 pl_dart_prelude (void)

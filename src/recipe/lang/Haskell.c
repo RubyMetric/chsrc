@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(pl_haskell);
+def_target(pl_haskell, "haskell/cabal/stack/hackage");
 
 void
 pl_haskell_prelude ()

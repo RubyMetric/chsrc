@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(pl_r);
+def_target(pl_r, "r/cran");
 
 void
 pl_r_prelude ()

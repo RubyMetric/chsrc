@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(pl_python_uv);
+def_target(pl_python_uv, "uv");
 
 void
 pl_python_uv_prelude (void)

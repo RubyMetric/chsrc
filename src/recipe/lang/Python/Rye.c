@@ -4,7 +4,7 @@
  * 由于Rye已经有后继uv了，所以我们不把该管理器纳入Python group中
  * ------------------------------------------------------------*/
 
-def_target(pl_python_rye);
+def_target(pl_python_rye, "rye");
 
 void
 pl_python_rye_prelude (void)

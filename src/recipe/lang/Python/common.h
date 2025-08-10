@@ -4,7 +4,7 @@
 
 #include "rawstr4c.h"
 
-def_target(pl_python_group);
+def_target(pl_python_group, "python/pypi/py");
 
 /**
  * @note 测速链接的这个前缀是 ${host}/pipi/web/pacakges/56/e4....

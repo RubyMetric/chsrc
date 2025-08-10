@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(pl_php);
+def_target(pl_php, "php/composer");
 
 void
 pl_php_prelude ()

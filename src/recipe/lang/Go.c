@@ -16,7 +16,7 @@ GoProxyIO =
   {NotSkip, NA, NA, "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip", ACCURATE} // 30 MB
 };
 
-def_target(pl_go);
+def_target(pl_go, "go/golang/goproxy");
 
 void
 pl_go_prelude ()

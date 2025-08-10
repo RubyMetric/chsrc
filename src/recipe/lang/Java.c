@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(pl_java);
+def_target(pl_java, "java/maven/mvn/gradle");
 
 void
 pl_java_prelude ()

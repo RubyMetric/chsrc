@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(pl_js_bun);
+def_target(pl_js_bun, "bun");
 
 void
 pl_js_bun_prelude (void)

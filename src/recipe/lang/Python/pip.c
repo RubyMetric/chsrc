@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(pl_python_pip);
+def_target(pl_python_pip, "pip");
 
 void
 pl_python_pip_prelude (void)

@@ -9,7 +9,7 @@ static MirrorSite_t RubyChina =
   {NotSkip, NA, NA, "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem", ACCURATE} // 9.9 MB
 };
 
-def_target(pl_ruby);
+def_target(pl_ruby, "gem/ruby/rb/rubygem/rubygems/bundler");
 
 void
 pl_ruby_prelude (void)

@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(pl_python_poetry);
+def_target(pl_python_poetry, "poetry");
 
 void
 pl_python_poetry_prelude (void)

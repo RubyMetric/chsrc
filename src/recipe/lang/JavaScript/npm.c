@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(pl_js_npm);
+def_target(pl_js_npm, "npm");
 
 void
 pl_js_npm_prelude (void)

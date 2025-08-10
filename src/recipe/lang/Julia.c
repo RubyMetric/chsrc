@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(pl_julia);
+def_target(pl_julia, "julia");
 
 void
 pl_julia_prelude ()

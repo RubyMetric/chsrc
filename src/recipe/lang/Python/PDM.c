@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(pl_python_pdm);
+def_target(pl_python_pdm, "pdm");
 
 void
 pl_python_pdm_prelude (void)

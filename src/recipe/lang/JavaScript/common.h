@@ -9,7 +9,7 @@ static MirrorSite_t NpmMirror =
   {SKIP, NULL, NULL, NULL, ACCURATE}
 };
 
-def_target(pl_js_group);
+def_target(pl_js_group, "js/javascript/node/nodejs");
 
 void
 pl_js_group_prelude (void)
