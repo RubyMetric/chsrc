@@ -1,6 +1,6 @@
 # chsrc Project Rules for AI Assistants
 
-## Project Overview
+## 项目概述
 
 这是 chsrc 项目，一个用 C 语言编写的跨平台命令行换源工具，帮助用户在不同的镜像之间切换，适用于编程语言、操作系统、其他软件。它的最强大之处在于它是一个框架，能够帮助用户轻松地为不同的目标换源。
 
@@ -19,9 +19,9 @@
   - `ware/` - 软件工具和应用 (Docker, Homebrew, 等等)
 
 
-## Current State: chef DSL Migration
+## 项目当前状态: chef DSL 迁移
 
-The project is currently undergoing a major modernization to the "chef DSL" pattern:
+项目正在进行现代化改造，从旧模式迁移到新的 "chef DSL" 模式。
 
 ### Recipe 新模式
 
@@ -37,29 +37,37 @@ The project is currently undergoing a major modernization to the "chef DSL" patt
 
 ### Recipe 旧模式 (To Be Removed):
 
-- File header comments with author/contributor info
-- `static Source_t target_sources[]` arrays
-- `def_sources_n(target)` macros
-- `Feature_t target_feat()` functions
-- `def_target_gsf()` style macros
+- 文件头的注释信息
+- `static Source_t target_sources[]` 数组
+- `def_sources_n(target)` 宏
+- `Feature_t target_feat()` 函数
+- `def_target_gsf()` 宏
 
 ## Coding Guidelines
 
 ### When Modernizing Files:
-1. **Always preserve important technical comments** - comments about URLs, implementation notes, etc.
-2. **Convert metadata properly**:
-   - Extract author/contributor info from old headers
-   - Preserve creation dates and important update dates
-   - Keep technical notes and warnings
-3. **Use proper DSL structure**:
-   - `def_target()` at top
-   - `prelude()` function with all metadata
-   - `def_sources_begin/end` for source definitions
+
+1. **保持重要的技术注释** - 如对 URLs 的注释，实现备注等等
+
+2. **正确转换元数据**:
+
+   - 提取旧头文件中的作者/贡献者信息
+   - 保留创建日期和重要更新日期
+   - 保留技术备注和警告
+   - 请注意新的 Target_t 结构体
+
+3. **使用 chef DSL**:
+
+   - `def_target()` 在文件最开头
+   - `prelude()` 函数包含所有元数据
+   - `def_sources_begin/end` 用于源定义
+
 4. **Remove completely**:
-   - Old file headers with license/author blocks
-   - `Feature_t` function definitions
-   - `static Source_t` arrays
-   - Old macro calls at file end
+
+   - 旧的文件头部包含许可证/作者信息
+   - `Feature_t` 函数删除
+   - `static Source_t` 数组删除
+   - 旧的宏调用在文件末尾删除
 
 ### C Coding Style:
 
