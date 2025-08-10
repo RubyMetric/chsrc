@@ -170,6 +170,7 @@ TargetRegisterInfo_t;
 
 /* 以下宏仅能放在 prelude() 中使用 */
 #define use_this(t) Target_t *this = &t##_target;
+#define use_this_source(t) use_this(t); Source_t source = chsrc_yield_source_and_confirm (this, option);
 
 #define def_sources_begin()  SourceProvider_t upstream = UpstreamProvider; Source_t sources[] = {
 #define def_sources_end()    }; \

@@ -4,16 +4,16 @@
 
 static MirrorSite_t GoProxyCN =
 {
+  IS_DedicatedMirrorSite,
   "goproxy.cn", "Goproxy.cn", "Goproxy.cn (七牛云)", "https://goproxy.cn/",
-  "https://goproxy.cn/github.com/aws/aws-sdk-go/@v/v1.45.2.zip", // 30 MB
-  ACCURATE
+  {NotSkip, NA, NA, "https://goproxy.cn/github.com/aws/aws-sdk-go/@v/v1.45.2.zip", ACCURATE} // 30 MB
 },
 
 GoProxyIO =
 {
+  IS_DedicatedMirrorSite,
   "goproxy.io", "GOPROXY.IO", "GOPROXY.IO", "https://goproxy.io/",
-  "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip", // 30 MB
-  ACCURATE
+  {NotSkip, NA, NA, "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip", ACCURATE} // 30 MB
 };
 
 def_target(pl_go);
@@ -84,7 +84,7 @@ pl_go_setsrc (char *option)
 {
   pl_go_check_cmd ();
 
-  chsrc_yield_source_and_confirm (pl_go);
+  use_this_source(pl_go);
 
   char *cmd = "go env -w GO111MODULE=on";
   chsrc_run (cmd, RunOpt_Default);

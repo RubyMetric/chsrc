@@ -65,6 +65,11 @@
 #include "recipe/lang/JavaScript/Bun.c"
 #include "recipe/lang/JavaScript/nvm.c"
 
+#include "recipe/lang/Perl.c"
+#include "recipe/lang/PHP.c"
+#include "recipe/lang/Lua.c"
+#include "recipe/lang/Go.c"
+#include "recipe/lang/Java.c"
 
 
 

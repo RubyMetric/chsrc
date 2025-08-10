@@ -48,7 +48,7 @@ pl_js_nvm_getsrc (char *option)
 void
 pl_js_nvm_setsrc (char *option)
 {
-  Source_t source = chsrc_yield_source_and_confirm (&pl_js_nodejs_binary_target);
+  Source_t source = chsrc_yield_source_and_confirm (&pl_js_nodejs_binary_target, option);
 
   char *w = xy_strjoin (3, "export NVM_NODEJS_ORG_MIRROR=", source.url, "\n");
 

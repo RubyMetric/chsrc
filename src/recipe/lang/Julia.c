@@ -56,7 +56,7 @@ pl_julia_getsrc (char *option)
 void
 pl_julia_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (pl_julia);
+  use_this_source(pl_julia);
 
   char *w = xy_strjoin (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
 

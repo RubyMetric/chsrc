@@ -19,7 +19,7 @@ pl_php_prelude ()
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 0);
 
-  chef_allow_local_mode (this, Can, NULL, NULL);
+  chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_forbid_english(this);
   chef_allow_user_define(this);
 
@@ -57,7 +57,8 @@ pl_php_setsrc (char *option)
 {
   pl_php_check_cmd ();
 
-  chsrc_yield_source_and_confirm (pl_php);
+  use_this(pl_php);
+  Source_t source = chsrc_yield_source_and_confirm (this, option);
 
   char *where = " -g ";
   if (chsrc_in_local_mode())

@@ -70,7 +70,7 @@ pl_rust_cargo_getsrc (char *option)
 void
 pl_rust_cargo_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (pl_rust_cargo);
+  use_this_source(pl_rust_cargo);
 
   char *content = RAWSTR_pl_rust_cargo_config;
 

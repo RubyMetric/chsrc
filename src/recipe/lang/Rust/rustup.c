@@ -60,7 +60,7 @@ pl_rust_rustup_getsrc (char *option)
 void
 pl_rust_rustup_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (pl_rust_rustup);
+  use_this_source(pl_rust_rustup);
 
 #ifdef XY_On_Windows
 

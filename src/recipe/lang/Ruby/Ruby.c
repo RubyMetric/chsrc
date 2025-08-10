@@ -72,8 +72,7 @@ pl_ruby_setsrc (char *option)
 {
   chsrc_ensure_program ("gem");
 
-  use_this(pl_ruby);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+  use_this_source(pl_ruby);
 
   char *cmd = NULL;
 

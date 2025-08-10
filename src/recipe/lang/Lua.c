@@ -4,9 +4,9 @@
 
 static MirrorSite_t Api7 =
 {
+  IS_DedicatedMirrorSite,
   "api7", "api7.ai", "深圳支流科技有限公司", "https://www.apiseven.com/",
-  NULL, // no measure URL
-  ROUGH
+  {SKIP, ToFill, ToFill, NULL, ROUGH}
 };
 
 def_target(pl_lua);
@@ -30,8 +30,6 @@ pl_lua_prelude ()
   chef_forbid_english(this);
   chef_allow_user_define(this);
 
-  chef_set_note ("目前只有一个源", NULL);
-
   def_sources_begin()
   {&upstream,         NULL, DelegateToUpstream},
   {&Api7,             "https://luarocks.cn", DelegateToMirror}
@@ -52,7 +50,8 @@ pl_lua_getsrc (char *option)
 void
 pl_lua_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (pl_lua);
+  use_this(pl_lua);
+  Source_t source = chsrc_yield_source_and_confirm (this, option);
 
   char *config = xy_strjoin (3, "rocks_servers = {\n"
                                 "  \"", source.url, "\"\n"

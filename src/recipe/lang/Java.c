@@ -80,7 +80,7 @@ pl_java_setsrc (char *option)
   bool maven_exist, gradle_exist;
   pl_java_check_cmd (&maven_exist, &gradle_exist);
 
-  chsrc_yield_source_and_confirm (pl_java);
+  use_this_source(pl_java);
 
   if (maven_exist)
     {

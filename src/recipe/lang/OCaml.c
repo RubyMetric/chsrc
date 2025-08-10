@@ -53,7 +53,7 @@ pl_ocaml_setsrc (char *option)
 {
   pl_ocaml_check_cmd ();
 
-  chsrc_yield_source_and_confirm (pl_ocaml);
+  use_this_source(pl_ocaml);
 
   char *cmd = xy_strjoin (3, "opam repo set-url default ",
                               source.url,
