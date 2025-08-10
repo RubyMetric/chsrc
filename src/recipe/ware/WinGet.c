@@ -8,6 +8,7 @@ void
 wr_winget_prelude ()
 {
   use_this(wr_winget);
+  chef_allow_gsr(wr_winget);
 
   chef_set_created_on   (this, "2024-06-07");
   chef_set_last_updated (this, "2025-07-13");
@@ -17,10 +18,6 @@ wr_winget_prelude ()
   chef_set_chef (this, NULL, NULL);
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 0);
-
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
 
   chef_forbid_english(this);
   chef_allow_user_define(this);

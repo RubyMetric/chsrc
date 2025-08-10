@@ -25,6 +25,7 @@ void
 wr_dockerhub_prelude ()
 {
   use_this(wr_dockerhub);
+  chef_allow_gs(wr_dockerhub);
 
   chef_set_created_on   (this, "2024-06-08");
   chef_set_last_updated (this, "2025-08-09");
@@ -36,10 +37,6 @@ wr_dockerhub_prelude ()
   chef_set_chef (this, NULL, NULL);
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 0);
-
-  chef_allow_get();
-  chef_allow_set();
-  // chef_allow_reset();
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);

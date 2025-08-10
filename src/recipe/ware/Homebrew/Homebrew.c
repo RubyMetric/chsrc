@@ -10,6 +10,7 @@ void
 wr_homebrew_prelude ()
 {
   use_this(wr_homebrew);
+  chef_allow_gs(wr_homebrew);
 
   chef_set_created_on   (this, "2023-09-10");
   chef_set_last_updated (this, "2025-08-09");
@@ -20,10 +21,6 @@ wr_homebrew_prelude ()
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 1,
     "Word2VecT", "tangzinan@bupt.edu.cn");
-
-  chef_allow_get();
-  chef_allow_set();
-  // chef_allow_reset();
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);
