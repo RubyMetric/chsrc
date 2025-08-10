@@ -142,8 +142,6 @@ typedef struct Target_t
   void (*setfn)   (char *option);
   void (*resetfn) (char *option);
 
-  Feature_t (*featfn) (char *option);
-
   Source_t  sources;
   size_t    sources_n;
 

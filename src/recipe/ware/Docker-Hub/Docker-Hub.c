@@ -1,13 +1,5 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors   : happy game <happygame1024@gmail.com>
- *                | Aoran Zeng <ccmywish@qq.com>
- * Contributors   : Nil Null <nil@null.org>
- *                |
- * Created On     : <2024-06-08>
- * Major Revision :      2
- * Last Modified  : <2025-07-14>
  * ------------------------------------------------------------*/
 
 #include "rawstr4c.h"
@@ -27,22 +19,41 @@ Fit2Cloud =
   {SKIP, ToFill, ToFill, NULL, ROUGH}
 };
 
-/**
- * @update 2025-07-14
- *
- * @consult https://gist.github.com/y0ngb1n/7e8f16af3242c7815e7ca2f0833d3ea6
- */
-static Source_t wr_dockerhub_sources[] =
+def_target(wr_dockerhub);
+
+void
+wr_dockerhub_prelude ()
 {
-  {&UpstreamProvider,  NULL, NULL},
-  // {&Ustc,          "https://docker.mirrors.ustc.edu.cn/", NULL},
+  use_this(wr_dockerhub);
 
-  // https://github.com/DaoCloud/public-image-mirror
-  {&DaoCloud,         "https://docker.m.daocloud.io", NULL},
-  {&Fit2Cloud,        "https://docker.1panel.live",   NULL}
-};
+  chef_set_created_on   (this, "2024-06-08");
+  chef_set_last_updated (this, "2025-08-09");
+  chef_set_sources_last_updated (this, "2025-07-14");
 
-def_sources_n(wr_dockerhub);
+  chef_set_authors (this, 2,
+    "happy game", "happygame1024@gmail.com",
+    "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Nil Null", "nil@null.org");
+
+  chef_has_getfn();
+  chef_has_setfn();
+  // chef_has_resetsrc();
+  this.cap_locally = CanNot;
+  this.cap_locally_explain = NULL;
+  this.can_english = false;
+  this.can_user_define = true;
+  this.note = NULL;
+
+  def_upstream("https://hub.docker.com/");
+  def_sources_begin()
+  {&upstream,   "https://hub.docker.com/", DelegateToUpstream},
+  {&DaoCloud,   "https://docker.m.daocloud.io", DelegateToMirror},
+  {&Fit2Cloud,  "https://docker.1panel.live", DelegateToMirror}
+  def_sources_end()
+}
 
 #define WR_DockerHub_ConfigFile "/etc/docker/daemon.json"
 
@@ -69,7 +80,8 @@ void
 wr_dockerhub_setsrc (char *option)
 {
   chsrc_ensure_root ();
-  chsrc_yield_source_and_confirm (wr_dockerhub);
+  use_this(wr_dockerhub);
+  Source_t source = chsrc_yield_source_and_confirm (this, option);
 
   if (xy_on_linux || xy_on_bsd)
     {
@@ -138,25 +150,3 @@ wr_dockerhub_setsrc (char *option)
   chsrc_determine_chgtype (ChgType_SemiAuto);
   chsrc_conclude (&source);
 }
-
-
-Feature_t
-wr_dockerhub_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = false;
-
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-
-def_target_gsf(wr_dockerhub);

@@ -18,12 +18,13 @@ wr_winget_prelude ()
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 0);
 
+  chef_has_getfn();
+  chef_has_setfn();
+  chef_has_resetsrc();
   this.can_english = false;
   this.can_user_define = true;
 
-
   def_upstream("https://github.com/microsoft/winget-cli/");
-
   def_sources_begin()
   {&upstream, "https://cdn.winget.microsoft.com/cache",    NULL},
   {&MirrorZ,  "https://mirrors.cernet.edu.cn/winget-source", NULL},

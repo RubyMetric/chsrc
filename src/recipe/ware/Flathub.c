@@ -19,7 +19,6 @@ wr_flathub_prelude ()
   chef_set_contributors (this, 1,
     "Jialin Lyu", "jialinlvcn@aliyun.com");
 
-
   chef_has_getfn();
   chef_has_setfn();
   chef_has_resetsrc();
@@ -29,11 +28,7 @@ wr_flathub_prelude ()
   this.can_user_define = true;
   this.note = "对Flathub目标进行测速的文件非常小，测速效果严重失真，若你知道可供测速的URL，欢迎参与贡献: chsrc issue";
 
-
-
-
   def_upstream("https://flathub.org/repo");
-
   def_sources_begin()
   {&upstream,         "https://flathub.org/repo",                  DelegateToUpstream},
   {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn/flathub",        DelegateToMirror},
