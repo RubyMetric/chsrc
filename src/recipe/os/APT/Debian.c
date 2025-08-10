@@ -8,6 +8,7 @@ void
 os_debian_prelude ()
 {
   use_this(os_debian);
+  chef_allow_gsr(os_debian);
 
   chef_set_created_on   (this, "2023-09-02");
   chef_set_last_updated (this, "2025-08-10");
@@ -21,10 +22,6 @@ os_debian_prelude ()
   chef_set_contributors (this, 2,
     "Yangmoooo", "yangmoooo@outlook.com",
     "GitHub Copilot", "https://github.com/copilot");
-
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);

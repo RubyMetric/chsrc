@@ -8,6 +8,7 @@ void
 os_voidlinux_prelude ()
 {
   use_this(os_voidlinux);
+  chef_allow_gsr(os_voidlinux);
 
   chef_set_created_on   (this, "2023-09-24");
   chef_set_last_updated (this, "2025-08-10");
@@ -18,10 +19,6 @@ os_voidlinux_prelude ()
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 1,
     "Yangmoooo", "yangmoooo@outlook.com");
-
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);

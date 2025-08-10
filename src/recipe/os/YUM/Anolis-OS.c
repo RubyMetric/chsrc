@@ -8,6 +8,7 @@ void
 os_anolis_prelude ()
 {
   use_this(os_anolis);
+  chef_allow_s(os_anolis);
 
   chef_set_created_on   (this, "2023-09-24");
   chef_set_last_updated (this, "2025-08-10");
@@ -17,8 +18,6 @@ os_anolis_prelude ()
   chef_set_chef (this, NULL, NULL);
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 0);
-
-  chef_allow_set();
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
