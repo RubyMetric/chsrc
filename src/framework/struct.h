@@ -108,23 +108,6 @@ typedef enum Capability_t
 Capability_t;
 
 
-/* Target Feature */
-typedef struct Feature_t
-{
-  bool can_get;
-  bool can_reset;       /* 有的reset不是暂时没有实现，而是现在的实现根本就无法重置 */
-
-  bool can_english;
-
-  bool can_user_define;
-
-  Capability_t cap_locally;
-  char *cap_locally_explain;
-
-  char *note;
-}
-Feature_t;
-
 
 typedef struct Contributor_t
 {
@@ -145,25 +128,33 @@ typedef struct Target_t
   Source_t  sources;
   size_t    sources_n;
 
-  bool can_english;        /* 是否支持英文输出 */
-  bool can_user_define;    /* 是否支持用户自定义URL来换源 */
+
+  /* Features */
+  bool  can_english;        /* 是否支持英文输出 */
+
+  bool  can_user_define;    /* 是否支持用户自定义URL来换源 */
+  char *can_user_define_explain; /* 用户自定义URL的说明 */
+
   Capability_t cap_local;  /* 是否支持 local mode */
   char *cap_local_explain; /* local mode 的说明 */
+
   char *note;              /* 备注 */
 
-  Contributor_t *recipe_authors;
-  size_t         recipe_authors_n;
+
+  /* Recipe maintain info */
+  char *created_on;
+  char *last_updated;
+  char *sources_last_updated;
+
+  Contributor_t *authors;
+  size_t         authors_n;
 
   Contributor_t *contributors;
   size_t         contributors_n;
 
-  Contributor_t *current_chef;        // 只有一个主维护者
-  Contributor_t *current_sous_chefs;  // 可以有多个副维护者
-  size_t         current_sous_chefs_n;
-
-  char *recipe_created_on;
-  char *recipe_last_updated;
-  char *sources_last_updated;
+  Contributor_t *chef;        /* Chef 仅有一个 */
+  Contributor_t *sous_chefs;  /* Sous Chef 可以有多个 */
+  size_t         sous_chefs_n;
 }
 Target_t;
 
@@ -176,28 +167,6 @@ typedef struct TargetRegisterInfo_t
 }
 TargetRegisterInfo_t;
 
-
-// #define def_target_inner_s(t)    NULL,       t##_setsrc, NULL,         NULL
-// #define def_target_inner_sr(t)   NULL,       t##_setsrc, t##_resetsrc, NULL
-// #define def_target_inner_sf(t)   NULL,       t##_setsrc, NULL,         t##_feat
-// #define def_target_inner_srf(t)  NULL,       t##_setsrc, t##_resetsrc, t##_feat
-// #define def_target_inner_gs(t)   t##_getsrc, t##_setsrc, NULL,         NULL
-// #define def_target_inner_gsr(t)  t##_getsrc, t##_setsrc, t##_resetsrc, NULL
-// #define def_target_inner_gsf(t)  t##_getsrc, t##_setsrc, NULL,         t##_feat
-// #define def_target_inner_gsrf(t) t##_getsrc, t##_setsrc, t##_resetsrc, t##_feat
-
-#define def_target_sourcesn(t)   t##_sources, t##_sources_n
-
-/* 大部分target还不支持reset，所以暂时先默认设置为NULL来过渡 */
-// #define def_target(t)      Target_t t##_target = {def_target_inner_gs(t),def_target_sourcesn(t)}
-// #define def_target_s(t)    Target_t t##_target = {def_target_inner_s(t),def_target_sourcesn(t)}
-// #define def_target_sr(t)   Target_t t##_target = {def_target_inner_sr(t),def_target_sourcesn(t)}
-// #define def_target_sf(t)   Target_t t##_target = {def_target_inner_sf(t),def_target_sourcesn(t)}
-// #define def_target_srf(t)  Target_t t##_target = {def_target_inner_srf(t),def_target_sourcesn(t)}
-// #define def_target_gs(t)   Target_t t##_target = {def_target_inner_gs(t),def_target_sourcesn(t)}
-// #define def_target_gsr(t)  Target_t t##_target = {def_target_inner_gsr(t),def_target_sourcesn(t)}
-// #define def_target_gsf(t)  Target_t t##_target = {def_target_inner_gsf(t),def_target_sourcesn(t)}
-// #define def_target_gsrf(t) Target_t t##_target = {def_target_inner_gsrf(t),def_target_sourcesn(t)}
 
 #define def_target(t) void t##_getsrc(char *option);void t##_setsrc(char *option);void t##_resetsrc(char *option); Target_t t##_target={0};
 
