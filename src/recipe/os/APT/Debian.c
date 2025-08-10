@@ -19,9 +19,8 @@ os_debian_prelude ()
     "Heng Guo",   "2085471348@qq.com");
   chef_set_chef (this, NULL, NULL);
   chef_set_cooks (this, 0);
-  chef_set_contributors (this, 2,
-    "Yangmoooo", "yangmoooo@outlook.com",
-    "GitHub Copilot", "https://github.com/copilot");
+  chef_set_contributors (this, 1,
+    "Yangmoooo", "yangmoooo@outlook.com");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
