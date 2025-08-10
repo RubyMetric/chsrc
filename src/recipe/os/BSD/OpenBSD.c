@@ -59,7 +59,7 @@ os_openbsd_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  chsrc_yield_source_and_confirm (os_openbsd);
+  use_this_source(os_openbsd);
 
   chsrc_backup ("/etc/installurl");
   chsrc_overwrite_file (source.url, "/etc/installurl");

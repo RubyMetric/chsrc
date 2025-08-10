@@ -23,8 +23,9 @@ os_freebsd_prelude ()
   chef_forbid_english(this);
   chef_forbid_user_define(this);
 
-  chef_set_note ("2023-09-24: 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports\n2023-09-27: 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数", NULL);
 
+  // 2023-09-24: 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports
+  // 2023-09-27: 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数
   def_sources_begin()
   {&upstream,         NULL,                  DelegateToUpstream},
   {&Ustc,             "mirrors.ustc.edu.cn", DelegateToMirror},
@@ -47,10 +48,11 @@ os_freebsd_setsrc (char *option)
   // 据 @ykla，FreeBSD不自带sudo，但是我们依然要保证是root权限
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_freebsd);
+  use_this(os_freebsd);
+  int index = use_specific_mirror_or_auto_select (option, this);
 
-  Source_t source = os_freebsd_sources[index];
-  chsrc_confirm_source();
+  Source_t source = this->sources[index];
+  chsrc_confirm_source(&source);
 
   chsrc_log2 ("1. 添加 freebsd-pkg 源 (二进制安装包)");
   chsrc_ensure_dir ("/usr/local/etc/pkg/repos");
@@ -80,11 +82,11 @@ os_freebsd_setsrc (char *option)
     {
       if (xy_streql("nju",source.mirror->code))
         {
-          source = os_freebsd_sources[index-1]; // 使用NJU的前一个源，即USTC源
+          source = this->sources[index-1]; // 使用NJU的前一个源，即USTC源
         }
       char *git_cmd = xy_strjoin (3, "git clone --depth 1 https://", source.url, "/freebsd-ports/ports.git /usr/ports");
       chsrc_run (git_cmd, RunOpt_Default);
-      source = os_freebsd_sources[index]; // 恢复至选中的源
+      source = this->sources[index]; // 恢复至选中的源
       chsrc_alert2 ("下次更新请使用 git -C /usr/ports pull 而非使用 gitup");
     }
   else

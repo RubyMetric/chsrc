@@ -79,7 +79,7 @@ os_ubuntu_getsrc (char *option)
 void
 os_ubuntu_setsrc_for_deb822 (char *option)
 {
-  chsrc_yield_source_and_confirm (os_ubuntu);
+  use_this_source(os_ubuntu);
 
   chsrc_backup (OS_Ubuntu_SourceList_DEB822);
 
@@ -122,7 +122,7 @@ os_ubuntu_setsrc (char *option)
 
   bool sourcelist_exist = ensure_debian_or_ubuntu_old_sourcelist (OS_Is_Ubuntu);
 
-  chsrc_yield_source_and_confirm (os_ubuntu);
+  use_this_source(os_ubuntu);
 
   /* 不存在的时候，用的是我们生成的无效文件，不要备份 */
   if (sourcelist_exist)

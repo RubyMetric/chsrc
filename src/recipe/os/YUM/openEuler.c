@@ -66,8 +66,7 @@ os_openeuler_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this(os_openeuler);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+  use_this_source(os_openeuler);
 
   chsrc_backup (OS_openEuler_SourceList);
 
@@ -97,11 +96,3 @@ os_openeuler_resetsrc (char *option)
 {
   os_openeuler_setsrc (option);
 }
-
-
-/**
- * chsrc ls openeuler
- */
-chef_allow_get();
-chef_allow_reset();
-def_target(os_openeuler);

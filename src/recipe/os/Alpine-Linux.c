@@ -57,8 +57,7 @@ os_alpine_setsrc (char *option)
 {
   // chsrc_ensure_root(); // HELP: 不确定是否需要root
 
-  use_this(os_alpine);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+  use_this_source(os_alpine);
 
   char* cmd = xy_strjoin (3,
             "sed -i 's#https\\?://dl-cdn.alpinelinux.org/alpine#", source.url, "#g' /etc/apk/repositories"

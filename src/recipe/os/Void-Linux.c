@@ -52,8 +52,7 @@ os_voidlinux_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this(os_voidlinux);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+  use_this_source(os_voidlinux);
 
   chsrc_ensure_dir ("/etc/xbps.d");
   char *cmd = "cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/";

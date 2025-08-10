@@ -53,7 +53,7 @@ os_trisquel_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  chsrc_yield_source_and_confirm (os_trisquel);
+  use_this_source(os_trisquel);
 
   chsrc_backup (OS_Apt_SourceList);
 

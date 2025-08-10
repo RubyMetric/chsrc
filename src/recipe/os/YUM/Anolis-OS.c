@@ -41,8 +41,7 @@ os_anolis_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this(os_anolis);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+  use_this_source(os_anolis);
 
   char *cmd = xy_strjoin (3, "sed -i.bak -E 's|https?://(mirrors\\.openanolis\\.cn/anolis)|", source.url, "|g' /etc/yum.repos.d/*.repo");
   chsrc_run (cmd, RunOpt_Default);

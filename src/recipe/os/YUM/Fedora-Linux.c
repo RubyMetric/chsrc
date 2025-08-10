@@ -55,8 +55,7 @@ os_fedora_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this(os_fedora);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+  use_this_source(os_fedora);
 
   chsrc_alert2 ("Fedora 38 及以下版本暂不支持");
 

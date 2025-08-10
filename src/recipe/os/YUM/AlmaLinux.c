@@ -46,8 +46,7 @@ os_almalinux_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this(os_almalinux);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+  use_this_source(os_almalinux);
 
   char *cmd = xy_strjoin (3,
     "sed -e 's|^mirrorlist=|#mirrorlist=|g' -e 's|^#\\s*baseurl=https://repo.almalinux.org/almalinux|baseurl=", source.url, "|g'  -i.bak  /etc/yum.repos.d/almalinux*.repo");

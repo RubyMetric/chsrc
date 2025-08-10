@@ -24,8 +24,6 @@ os_netbsd_prelude ()
   chef_forbid_english(this);
   chef_forbid_user_define(this);
 
-  chef_set_note ("根据 @ykla: NetBSD 默认状态下没有 pkgsrc，用户可能安装了也可能没安装", NULL);
-
   def_sources_begin()
   {&upstream,         NULL,                                                  DelegateToUpstream},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/pkgsrc/packages/NetBSD/", DelegateToMirror},
@@ -62,7 +60,7 @@ os_netbsd_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  chsrc_yield_source_and_confirm (os_netbsd);
+  use_this_source(os_netbsd);
 
   chsrc_backup ("/usr/pkg/etc/pkgin/repositories.conf");
 

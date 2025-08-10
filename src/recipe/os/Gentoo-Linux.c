@@ -45,8 +45,7 @@ os_gentoo_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this(os_gentoo);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+  use_this_source(os_gentoo);
 
   chsrc_backup ("/etc/portage/repos.conf/gentoo.conf");
 

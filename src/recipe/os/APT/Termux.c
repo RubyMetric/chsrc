@@ -61,7 +61,7 @@ os_termux_setsrc (char *option)
 
   // chsrc_ensure_root (); Termux下禁止使用root
 
-  chsrc_yield_source_and_confirm (os_termux);
+  use_this_source(os_termux);
 
   char *cmd = xy_strjoin (3, "sed -i 's@^\\(deb.*stable main\\)$@#\\1\\ndeb ",
                               source.url, "apt/termux-main stable main@' " OS_Termux_SourceList);

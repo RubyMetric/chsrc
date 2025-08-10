@@ -28,7 +28,9 @@ os_arch_prelude ()
   chef_forbid_english(this);
   chef_forbid_user_define(this);
 
-  chef_set_note ("可额外使用 chsrc set archlinuxcn 来更换 Arch Linux CN Repository 源", "You can additionally use chsrc set archlinuxcn to change Arch Linux CN Repository source");
+  chef_set_note (this,
+    "可额外使用 chsrc set archlinuxcn 来更换 Arch Linux CN Repository 源",
+    "You can additionally use chsrc set archlinuxcn to change Arch Linux CN Repository source");
 
   /**
    * @note 不要给后面加 / ，因为ARM情况下，还要额外加一个 arm 后缀
@@ -68,7 +70,7 @@ os_arch_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  chsrc_yield_source_and_confirm (os_arch);
+  use_this_source(os_arch);
 
   chsrc_backup (OS_Pacman_MirrorList);
 
@@ -115,6 +117,7 @@ void
 os_archlinuxcn_prelude ()
 {
   use_this(os_archlinuxcn);
+  chef_allow_gs(os_archlinuxcn);
 
   chef_set_created_on   (this, "2023-09-05");
   chef_set_last_updated (this, "2025-08-10");
@@ -126,14 +129,13 @@ os_archlinuxcn_prelude ()
   chef_set_contributors (this, 1,
     "happy game", "happygame1024@gmail.com");
 
-  chef_allow_get();
-  chef_allow_set();
-
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
   chef_forbid_user_define(this);
 
-  chef_set_note ("可额外使用 chsrc set arch 来更换 Arch Linux 源", "You can additionally use chsrc set arch to change Arch Linux source");
+  chef_set_note (this,
+    "可额外使用 chsrc set arch 来更换 Arch Linux 源",
+    "You can additionally use chsrc set arch to change Arch Linux source");
 
 
   def_sources_begin()
@@ -167,7 +169,7 @@ os_archlinuxcn_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  chsrc_yield_source_and_confirm (os_archlinuxcn);
+  use_this_source(os_archlinuxcn);
 
   chsrc_backup (OS_Pacman_ArchLinuxCN_MirrorList);
 
