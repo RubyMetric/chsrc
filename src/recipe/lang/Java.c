@@ -42,12 +42,25 @@ pl_java_check_cmd (bool *maven_exist, bool *gradle_exist, bool *maven_daemon_exi
     }
 }
 
+bool
+chef_is_home (const char *str)
+{
+  return (xy_str_start_with (str, "Maven home:"));
+}
+
+char*
+pl_java_find_maven_home (const char *source)
+{
+  if(chef_is_home(source))
+    {
+      char *maven_home = xy_str_delete_prefix (source, "Maven home: ");
+    }
+}
 
 char *
 pl_java_find_maven_config ()
 {
-  char *buf = xy_run ("mvn -v", 2);
-  char *maven_home = xy_str_delete_prefix (buf, "Maven home: ");
+  char *maven_home = xy_run_iter ("mvn -v", 0, pl_java_find_maven_home);
   maven_home = xy_str_strip (maven_home);
 
   char *maven_config = xy_normalize_path (xy_2strjoin (maven_home, "/conf/settings.xml"));
@@ -58,7 +71,7 @@ pl_java_find_maven_config ()
 char *
 pl_java_find_maven_daemon_config ()
 {
-  char *buf = xy_run ("mvnd -v", 2);
+  char *buf = xy_run_iter ("mvnd -v", 0, pl_java_find_maven_home);
   char *maven_home = xy_str_delete_prefix (buf, "Maven daemon home: ");
   maven_home = xy_str_strip (maven_home);
 
