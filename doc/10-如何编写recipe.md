@@ -52,6 +52,9 @@
 - `source`: 该 `target` 所能换的具体的源，由 `mirror` 提供服务，往往一个 `mirror` 会提供许多 `source`
 - `recipe`: 是为一个 `target` 定义的具体换源方法，请参考 `src` 目录中的 `recipe` 目录
 
+- **换源 URL**: 指镜像站所提供的某一个具体的换源使用的URL
+- **测速 URL**: 用来测速的URL，与 "换源 URL" 不同，可分为 **精准测速** 和 **模糊测速**
+
 - **镜像源**: 为了方便，**偶尔**我们将直接称`mirror`和/或`source`为**镜像源**，这只是一种方便性的称呼，可以统称二者，也可以根据上下文指代二者之一
 
 <br>
@@ -78,7 +81,9 @@
 
     该函数将填充 target 所有的必要信息，包括维护信息、换源信息
 
-7. 按需实现 `_setsrc()` `_getsrc()` `_resetsrc()`， 可以使用这些函数:
+7. [设置/修改 "换源 URL" 和 "测速 URL" (how?)](./11-如何修改URL.md)
+
+8. 按需实现 `_setsrc()` `_getsrc()` `_resetsrc()`， 可以使用这些函数:
 
     1. `framework/core.c` 中以 `chsrc_` 开头的所有函数或宏
     2. `xy.h` 中以 `xy_` 开头的所有函数或宏
@@ -86,9 +91,9 @@
 
     一个简单的方法是，在 VS Code 中按快捷键 `Ctrl-T` 搜索上述三种前缀
 
-8. 在 `recipe/menu.c` 中登记此 target
+9. 在 `recipe/menu.c` 中登记此 target
 
-9. [编译、运行、测试 (how?)](./01-Develop.md)，若无问题可提交 Pull Request
+10. [编译、运行、测试 (how?)](./01-Develop.md)，若无问题可提交 Pull Request
 
 <br>
 
