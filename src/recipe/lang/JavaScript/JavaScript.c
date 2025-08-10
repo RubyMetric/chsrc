@@ -69,7 +69,9 @@ pl_js_group_setsrc (char *option)
   pl_js_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
   chsrc_set_target_group_mode ();
-  chsrc_yield_source_and_confirm (pl_js_group);
+
+  use_this(pl_js_group);
+  Source_t source = chsrc_yield_source_and_confirm (this, option);
 
   if (npm_exist)
     {

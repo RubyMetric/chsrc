@@ -6,8 +6,7 @@ static MirrorSite_t RubyChina =
 {
   IS_DedicatedMirrorSite,
   "rubychina", "RubyChina", "Ruby China 社区", "https://gems.ruby-china.com/",
-  "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem", // 9.9 MB
-  ACCURATE
+  {NotSkip, NA, NA, "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem", ACCURATE} // 9.9 MB
 };
 
 def_target(pl_ruby);
@@ -27,7 +26,7 @@ pl_ruby_prelude (void)
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 0);
 
-  chef_allow_local_mode (this, PartiallyCan, "Support `bundler`. No support for `gem`", "Support `bundler`. No support for `gem`");
+  chef_allow_local_mode (this, PartiallyCan, "支持 bundler. 不支持 gem", "Support bundler. Not support gem");
   chef_allow_english(this);
   chef_allow_user_define(this);
 

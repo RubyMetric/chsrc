@@ -54,6 +54,7 @@ chef_allow_local_mode (Target_t *target, Capability_t cap, const char *explain_z
   target->cap_local_explain = xy_strdup (CHINESE ? explain_zh : explain_en);
 }
 
+void
 chef_forbid_local_mode (Target_t *target)
 {
   if (!target)

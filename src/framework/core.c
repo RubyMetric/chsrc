@@ -1094,20 +1094,21 @@ chsrc_set_provider_speed_measure_accuracy (SourceProvider_t *provider, bool accu
 static void
 chsrc_set_sources_speed_measure_url_with_func (
   Target_t *target,
-  SpeedUrlConstructor_t func,
+  char *(*func)(const char *url, const char *user_data),
   char *user_data)
 {
-  Source_t *sources = &target->sources;
-
+  Source_t *sources = target->sources;
+  int n = target->sources_n;
   for (int i=0; i<n; i++)
     {
+      Source_t *src = &sources[i];
       ProviderType_t type = src->provider->type;
       if (src->url)
         {
           /* 为空时才修改 或者里面是脏数据 */
           if (NULL==src->speed_measure_url || !chef_is_url (src->speed_measure_url))
             {
-              src->speed_measure_url = func (src->url, postfix);
+              src->speed_measure_url = func (src->url, user_data);
             }
         }
     }
@@ -1121,7 +1122,6 @@ chsrc_set_sources_speed_measure_url_with_func (
 static void
 chsrc_set_sources_speed_measure_url_with_postfix (Target_t *target, char *postfix)
 {
-  xy_2strjoin (src->url, postfix);
   chsrc_set_sources_speed_measure_url_with_func (target, xy_2strjoin, postfix);
 }
 

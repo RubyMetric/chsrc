@@ -57,7 +57,9 @@ pl_python_group_setsrc (char *option)
   pl_python_check_unofficial_pkger (&poetry_exist, &pdm_exist, &uv_exist);
 
   chsrc_set_target_group_mode ();
-  chsrc_yield_source_and_confirm (pl_python_group);
+
+  use_this(pl_python_group);
+  Source_t source =  chsrc_yield_source_and_confirm (this, option);
 
 
   // 交给后面检查命令的存在性

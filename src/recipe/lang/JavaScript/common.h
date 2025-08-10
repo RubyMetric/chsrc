@@ -27,7 +27,7 @@ pl_js_group_prelude (void)
   chef_set_contributors (this,0);
 
   chef_allow_local_mode (this, PartiallyCan,
-    "支持 npm, yarn v2, pnpm, 不支持 yarn v1"
+    "支持 npm, yarn v2, pnpm, 不支持 yarn v1",
     "Support npm, yarn v2, pnpm, not yarn v1");
   chef_allow_english(this);
   chef_allow_user_define(this);

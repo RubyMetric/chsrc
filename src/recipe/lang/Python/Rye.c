@@ -1,5 +1,7 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
+ * -------------------------------------------------------------
+ * 由于Rye已经有后继uv了，所以我们不把该管理器纳入Python group中
  * ------------------------------------------------------------*/
 
 def_target(pl_python_rye);
@@ -22,9 +24,6 @@ pl_python_rye_prelude (void)
   chef_allow_local_mode (this, FullyCan, "支持项目级配置", "Supports project-level configuration");
   chef_allow_english(this);
   chef_allow_user_define(this);
-
-  chef_set_note ("由于Rye已经有后继uv了，所以我们不把该管理器纳入Python group中",
-                 "Since Rye has successor uv, we don't include this manager in Python group");
 
   // 使用 pl_python_group 的源
   this->sources = pl_python_group_target.sources;

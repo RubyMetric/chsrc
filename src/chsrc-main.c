@@ -49,9 +49,8 @@
 #include "recipe/lang/rawstr4c.h"
 
 #include "recipe/lang/Ruby/Ruby.c"
-
 #include "recipe/lang/Python/common.h"
-  #include "recipe/lang/Python/pip.c"
+ #include "recipe/lang/Python/pip.c"
   #include "recipe/lang/Python/Poetry.c"
   #include "recipe/lang/Python/PDM.c"
   #include "recipe/lang/Python/Rye.c"
@@ -66,85 +65,8 @@
 #include "recipe/lang/JavaScript/Bun.c"
 #include "recipe/lang/JavaScript/nvm.c"
 
-#include "recipe/lang/Perl.c"
-#include "recipe/lang/PHP.c"
-#include "recipe/lang/Lua.c"
-#include "recipe/lang/Go.c"
-#include "recipe/lang/Java.c"
-
-#include "recipe/lang/Rust/common.h"
-  #include "recipe/lang/Rust/rustup.c"
-  #include "recipe/lang/Rust/Cargo.c"
-
-#include "recipe/lang/Dart/common.h"
-#include "recipe/lang/Dart/Pub.c"
-#include "recipe/lang/Dart/Flutter.c"
-
-#include "recipe/lang/Haskell.c"
-#include "recipe/lang/OCaml.c"
-#include "recipe/lang/R.c"
-#include "recipe/lang/Julia.c"
-#include "recipe/lang/NuGet.c"
-#include "recipe/lang/Clojure.c"
 
 
-
-#include "recipe/os/rawstr4c.h"
-
-#include "recipe/os/APT/common.h"
-// Debian-based
-#include "recipe/os/APT/Debian.c"
-#include "recipe/os/APT/Ubuntu.c"
-#include "recipe/os/APT/Kali-Linux.c"
-#include "recipe/os/APT/Raspberry-Pi-OS.c"
-// Ubuntu-based
-#include "recipe/os/APT/Linux-Mint.c"
-#include "recipe/os/APT/Trisquel.c"
-#include "recipe/os/APT/Linux-Lite.c"
-// Debian-based and Ubuntu-based
-#include "recipe/os/APT/Armbian.c"
-// Independent
-#include "recipe/os/APT/ROS.c"
-#include "recipe/os/APT/Termux.c"
-#include "recipe/os/APT/openKylin.c"
-#include "recipe/os/APT/deepin.c"
-
-#include "recipe/os/YUM/common.h"
-#include "recipe/os/YUM/Fedora-Linux.c"
-#include "recipe/os/YUM/AlmaLinux.c"
-#include "recipe/os/YUM/Rocky-Linux.c"
-#include "recipe/os/YUM/openEuler.c"
-#include "recipe/os/YUM/Anolis-OS.c"
-
-#include "recipe/os/pacman/Arch-Linux.c"
-#include "recipe/os/pacman/Manjaro-Linux.c"
-#include "recipe/os/pacman/MSYS2.c"
-
-#include "recipe/os/openSUSE.c"
-#include "recipe/os/Alpine-Linux.c"
-#include "recipe/os/Gentoo-Linux.c"
-#include "recipe/os/Void-Linux.c"
-#include "recipe/os/Solus.c"
-#include "recipe/os/OpenWrt.c"
-
-#include "recipe/os/BSD/FreeBSD.c"
-#include "recipe/os/BSD/NetBSD.c"
-#include "recipe/os/BSD/OpenBSD.c"
-
-
-
-#include "recipe/ware/TeX-Live.c"
-#include "recipe/ware/Emacs.c"
-#include "recipe/ware/WinGet.c"
-#include "recipe/ware/Homebrew/Homebrew.c"
-#include "recipe/ware/CocoaPods.c"
-#include "recipe/ware/Nix.c"
-#include "recipe/ware/Guix.c"
-#include "recipe/ware/Flathub.c"
-#include "recipe/ware/Docker-Hub/Docker-Hub.c"
-#include "recipe/ware/Anaconda/Anaconda.c"
-
-#include "recipe/menu.c"
 
 #include "rawstr4c.h"
 

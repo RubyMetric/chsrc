@@ -11,7 +11,7 @@ def_target(pl_python_group);
  * 下面有几个镜像站微调了这个路径，我们只要确认能找到 packages 目录就好
  */
 static char *
-pl_python_speed_url_constructor (char *url, char *user_data)
+pl_python_speed_url_constructor (const char *url, const char *user_data)
 {
   char *str = xy_str_delete_suffix (url, "/simple");
   str = xy_2strjoin (str, "/packages/56/e4/55aaac2b15af4dad079e5af329a79d961e5206589d0e02b1e8da221472ed/tensorflow-2.18.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl");
@@ -49,7 +49,7 @@ pl_python_group_prelude (void)
   /* 不要添加Zju，浙大的PyPI服务在校外访问会自动转向Tuna */
   {&Lzuoss,           "https://mirror.lzu.edu.cn/pypi/web/simple",FeedByPrelude},
   {&Jlu,              "https://mirrors.jlu.edu.cn/pypi/web/simple",FeedByPrelude},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/pypi/web/simple",FeedByPrelude,
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/pypi/web/simple",FeedByPrelude},
   {&Tuna,             "https://pypi.tuna.tsinghua.edu.cn/simple", FeedByPrelude},
   {&Ali,              "https://mirrors.aliyun.com/pypi/simple/", FeedByPrelude},
   {&Nju,              "https://mirror.nju.edu.cn/pypi/web/simple",FeedByPrelude},
