@@ -1,30 +1,47 @@
-chef_set_created_on ("2023-09-24");
-chef_set_authors ("Aoran Zeng <ccmywish@qq.com>");
-chef_set_contributors ("happy game <happygame1024@gmail.com>");
-chef_allow_set();
-chef_allow_reset();
-use_this;
+/** ------------------------------------------------------------
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * ------------------------------------------------------------*/
 
-/**
- * @update 2025-06-20
- */
-static Source_t os_rockylinux_sources[] =
+def_target(os_rockylinux);
+
+void
+os_rockylinux_prelude ()
 {
-  {&UpstreamProvider,  NULL, NULL},
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/rocky",  DelegateToMirror},
-  {&Ali,              "https://mirrors.aliyun.com/rockylinux", DelegateToMirror},
-  {&Volcengine,       "https://mirrors.volces.com/rockylinux", DelegateToMirror},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/rocky",      DelegateToMirror},
-  {&Sustech,          "https://mirrors.sustech.edu.cn/rocky-linux", DelegateToMirror},
-  {&Zju,              "https://mirrors.zju.edu.cn/rocky",      DelegateToMirror},
-  {&Lzuoss,           "https://mirror.lzu.edu.cn/rocky",       DelegateToMirror},
+  use_this(os_rockylinux);
 
+  chef_set_created_on   (this, "2023-09-24");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2025-06-20");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "happy game", "happygame1024@gmail.com");
+
+  chef_allow_set();
+  chef_allow_reset();
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  def_upstream ("https://dl.rockylinux.org/");
+  def_sources_begin()
+  {&upstream,         "https://dl.rockylinux.org",                 DelegateToUpstream},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/rocky",       DelegateToMirror},
+  {&Ali,              "https://mirrors.aliyun.com/rockylinux",      DelegateToMirror},
+  {&Volcengine,       "https://mirrors.volces.com/rockylinux",      DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/rocky",          DelegateToMirror},
+  {&Sustech,          "https://mirrors.sustech.edu.cn/rocky-linux", DelegateToMirror},
+  {&Zju,              "https://mirrors.zju.edu.cn/rocky",          DelegateToMirror},
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/rocky",           DelegateToMirror},
   /* 不启用原因：过慢 */
   // {&Netease,          "https://mirrors.163.com/rocky",      DelegateToMirror},
-   /* 不启用原因：过慢 */
+  /* 不启用原因：过慢 */
   // {&Sohu,             "https://mirrors.sohu.com/Rocky",     DelegateToMirror}
-};
-def_sources_n(os_rockylinux);
+  def_sources_end()
+}
 
 
 /**
@@ -67,9 +84,12 @@ os_rockylinux_setsrc (char *option)
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("dnf makecache", RunOpt_No_Last_New_Line);
 
-  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
 
 
-def_target(os_rockylinux);
+void
+os_rockylinux_resetsrc (char *option)
+{
+  os_rockylinux_setsrc (option);
+}

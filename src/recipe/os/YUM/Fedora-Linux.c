@@ -1,29 +1,51 @@
-chef_set_created_on ("2023-09-26");
-chef_set_authors ("Heng Guo <2085471348@qq.com>", "happy game <happygame1024@gmail.com>");
-chef_set_contributors ("Aoran Zeng <ccmywish@qq.com>");
-chef_allow_set();
-chef_allow_reset();
-use_this;
+/** ------------------------------------------------------------
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * ------------------------------------------------------------*/
 
-/**
- * @update 2025-06-20
- */
-static Source_t os_fedora_sources[] =
+def_target(os_fedora);
+
+void
+os_fedora_prelude ()
 {
-  {&UpstreamProvider, "http://download.example/pub/fedora/linux", DelegateToUpstream},
-  {&Ali,              "https://mirrors.aliyun.com/fedora",        DelegateToMirror},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/fedora",       DelegateToMirror},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/fedora",       DelegateToMirror},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/fedora", DelegateToMirror},
-  {&Tencent,          "https://mirrors.tencent.com/fedora",       DelegateToMirror},
+  use_this(os_fedora);
+
+  chef_set_created_on   (this, "2023-09-26");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2025-06-20");
+
+  chef_set_authors (this, 2,
+    "Heng Guo", "2085471348@qq.com",
+    "happy game", "happygame1024@gmail.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Aoran Zeng", "ccmywish@qq.com");
+
+  chef_allow_set();
+  chef_allow_reset();
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
+
+  def_upstream("http://download.example/pub/fedora/linux");
+  def_sources_begin()
+  {&upstream,  "http://download.example/pub/fedora/linux", DelegateToUpstream},
+  {&Ali,       "https://mirrors.aliyun.com/fedora",        DelegateToMirror},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/fedora",       DelegateToMirror},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/fedora",       DelegateToMirror},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/fedora", DelegateToMirror},
+  {&Tencent,   "https://mirrors.tencent.com/fedora",       DelegateToMirror}
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/fedora",    DelegateToMirror},
 
   /* 不启用原因：过慢 */
   // {&Netease,          "https://mirrors.163.com/fedora",        DelegateToMirror},
   /* 不启用原因：过慢 */
   // {&Sohu,             "https://mirrors.sohu.com/fedora",        DelegateToMirror}"
-};
-def_sources_n(os_fedora);
+  def_sources_end()
+}
 
 
 /**
@@ -36,7 +58,8 @@ os_fedora_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  chsrc_yield_source_and_confirm (os_fedora);
+  use_this(os_fedora);
+  Source_t source = chsrc_yield_source_and_confirm (this, option);
 
   chsrc_alert2 ("Fedora 38 及以下版本暂不支持");
 
@@ -79,6 +102,3 @@ os_fedora_resetsrc (char *option)
 {
   os_fedora_setsrc (option);
 }
-
-
-def_target(os_fedora);
