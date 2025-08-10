@@ -19,13 +19,13 @@ Fit2Cloud =
   {SKIP, ToFill, ToFill, NULL, ROUGH}
 };
 
-def_target(wr_dockerhub);
+def_target(wr_docker);
 
 void
-wr_dockerhub_prelude ()
+wr_docker_prelude ()
 {
-  use_this(wr_dockerhub);
-  chef_allow_gs(wr_dockerhub);
+  use_this(wr_docker);
+  chef_allow_gs(wr_docker);
 
   chef_set_created_on   (this, "2024-06-08");
   chef_set_last_updated (this, "2025-08-09");
@@ -49,14 +49,14 @@ wr_dockerhub_prelude ()
   def_sources_end()
 }
 
-#define WR_DockerHub_ConfigFile "/etc/docker/daemon.json"
+#define WR_Docker_ConfigFile "/etc/docker/daemon.json"
 
 void
-wr_dockerhub_getsrc (char *option)
+wr_docker_getsrc (char *option)
 {
   if (xy_on_linux || xy_on_bsd)
     {
-      chsrc_view_file (WR_DockerHub_ConfigFile);
+      chsrc_view_file (WR_Docker_ConfigFile);
     }
   else
     {
@@ -71,26 +71,26 @@ wr_dockerhub_getsrc (char *option)
  *  2. https://www.cnblogs.com/yuzhihui/p/17461781.html
  */
 void
-wr_dockerhub_setsrc (char *option)
+wr_docker_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(wr_dockerhub);
+  use_this_source(wr_docker);
 
   if (xy_on_linux || xy_on_bsd)
     {
-      char *to_add = xy_str_gsub (RAWSTR_wr_dockerhub_insert_content, "@1@", source.url);
+      char *to_add = xy_str_gsub (RAWSTR_wr_docker_insert_content, "@1@", source.url);
 
-      if (chsrc_check_file (WR_DockerHub_ConfigFile))
+      if (chsrc_check_file (WR_Docker_ConfigFile))
         {
           chsrc_note2 ("已找到Docker配置文件，将自动换源");
-          chsrc_backup (WR_DockerHub_ConfigFile);
+          chsrc_backup (WR_Docker_ConfigFile);
 
           if (chsrc_check_program_quietly ("jq"))
             {
               /* 检查是否已经存在 source.url */
-              char *cmd = xy_str_gsub (RAWSTR_wr_dockerhub_check_cmd, "@1@", source.url);
-                    cmd = xy_str_gsub (cmd, "@2@", WR_DockerHub_ConfigFile);
+              char *cmd = xy_str_gsub (RAWSTR_wr_docker_check_cmd, "@1@", source.url);
+                    cmd = xy_str_gsub (cmd, "@2@", WR_Docker_ConfigFile);
 
               char *result = xy_run (cmd, 0);
               if (result && !xy_streql (result, "null"))
@@ -99,8 +99,8 @@ wr_dockerhub_setsrc (char *option)
                 }
               else
                 {
-                  cmd = xy_str_gsub (RAWSTR_wr_dockerhub_insert_cmd, "@1@", source.url);
-                  cmd = xy_str_gsub (cmd, "@2@", WR_DockerHub_ConfigFile);
+                  cmd = xy_str_gsub (RAWSTR_wr_docker_insert_cmd, "@1@", source.url);
+                  cmd = xy_str_gsub (cmd, "@2@", WR_Docker_ConfigFile);
                   chsrc_run (cmd, RunOpt_Default);
                   chsrc_succ2 ("源已添加");
                 }
@@ -108,8 +108,8 @@ wr_dockerhub_setsrc (char *option)
           else
             {
               chsrc_alert2 ("未找到 jq 命令, 将使用 sed 换源");
-              char *cmd = xy_str_gsub (RAWSTR_wr_dockerhub_sed_command, "@1@", source.url);
-                    cmd = xy_str_gsub (cmd, "@2@", WR_DockerHub_ConfigFile);
+              char *cmd = xy_str_gsub (RAWSTR_wr_docker_sed_command, "@1@", source.url);
+                    cmd = xy_str_gsub (cmd, "@2@", WR_Docker_ConfigFile);
               chsrc_run (cmd, RunOpt_Default);
             }
         }
@@ -118,9 +118,9 @@ wr_dockerhub_setsrc (char *option)
           /* 不存在 /etc/docker/daemon.json 时可以直接写入文件 */
           chsrc_alert2 ("未找到Docker配置文件, 将自动创建");
           chsrc_ensure_dir ("/etc/docker");
-          chsrc_run ( xy_2strjoin ("touch ", WR_DockerHub_ConfigFile), RunOpt_Default);
+          chsrc_run ( xy_2strjoin ("touch ", WR_Docker_ConfigFile), RunOpt_Default);
 
-          chsrc_append_to_file (to_add, WR_DockerHub_ConfigFile);
+          chsrc_append_to_file (to_add, WR_Docker_ConfigFile);
         }
 
       if (xy_on_linux)

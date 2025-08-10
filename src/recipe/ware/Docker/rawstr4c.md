@@ -6,12 +6,12 @@
  !               | happy game <happygame1024@gmail.com>
  ! Contributors  :  Nil Null  <nil@null.org>
  ! Created On    : <2025-07-14>
- ! Last Modified : <2025-08-09>
+ ! Last Modified : <2025-08-10>
  ! ---------------------------------------------------------- -->
 
 # rawstr4c input
 
-- prefix = `RAWSTR_wr_dockerhub`
+- prefix = `RAWSTR_wr_docker`
 - output = `:global-variable-only-header`
 - translate = `:hex`
 - no-postfix = `true`
