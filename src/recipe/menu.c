@@ -85,16 +85,16 @@ chsrc_os_menu[] =
 TargetRegisterInfo_t
 chsrc_wr_menu[] =
 {
-  {t(wr_winget),    "winget"},
-  {t(wr_homebrew),  "brew homebrew"},
-  {t(wr_cocoapods), "cocoa cocoapods cocoapod"},
-  {t(wr_docker),    "docker dockerhub"},
-  {t(wr_flatpak),   "flatpak flathub"},
-  {t(wr_nix),       "nix"},
-  {t(wr_guix),      "guix"},
-  {t(wr_emacs),     "emacs elpa"},
-  {t(wr_tex),       "latex ctan tex texlive miktex tlmgr mpm"},
-  {t(wr_anaconda),  "conda anaconda"},
+  {t(wr_winget)},
+  {t(wr_homebrew)},
+  {t(wr_cocoapods)},
+  {t(wr_docker)},
+  {t(wr_flatpak)},
+  {t(wr_nix)},
+  {t(wr_guix)},
+  {t(wr_emacs)},
+  {t(wr_tex)},
+  {t(wr_anaconda)},
 };
 #undef t
 

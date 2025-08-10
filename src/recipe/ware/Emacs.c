@@ -9,7 +9,7 @@ static MirrorSite_t EmacsChina =
   {SKIP, ToFill, ToFill, NULL, ROUGH}
 };
 
-def_target(wr_emacs);
+def_target(wr_emacs, "emacs/elpa");
 
 void
 wr_emacs_prelude ()

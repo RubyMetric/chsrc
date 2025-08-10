@@ -4,7 +4,7 @@
 
 #include "rawstr4c.h"
 
-def_target(wr_anaconda);
+def_target(wr_anaconda, "conda/anaconda");
 
 void
 wr_anaconda_prelude ()

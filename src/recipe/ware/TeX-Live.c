@@ -4,7 +4,7 @@
  * MiKTeX 和 TeX Live 都是流行的 LaTeX 发行版，但它们是不同的实现
  * ------------------------------------------------------------*/
 
-def_target(wr_tex);
+def_target(wr_tex, "latex/ctan/tex/texlive/miktex/tlmgr/mpm");
 
 void
 wr_tex_prelude ()

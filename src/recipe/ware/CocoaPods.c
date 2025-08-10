@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(wr_cocoapods);
+def_target(wr_cocoapods, "cocoa/cocoapods/cocoapod");
 
 void
 wr_cocoapods_prelude ()

@@ -19,7 +19,7 @@ Fit2Cloud =
   {SKIP, ToFill, ToFill, NULL, ROUGH}
 };
 
-def_target(wr_docker);
+def_target(wr_docker, "docker/dockerhub");
 
 void
 wr_docker_prelude ()

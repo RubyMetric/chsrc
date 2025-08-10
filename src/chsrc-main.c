@@ -136,8 +136,8 @@
 #include "recipe/ware/CocoaPods.c"
 #include "recipe/ware/Nix.c"
 #include "recipe/ware/Guix.c"
-#include "recipe/ware/Flathub.c"
-#include "recipe/ware/Docker-Hub/Docker-Hub.c"
+#include "recipe/ware/Flatpak.c"
+#include "recipe/ware/Docker/Docker.c"
 #include "recipe/ware/Anaconda/Anaconda.c"
 
 
@@ -178,7 +178,7 @@ cli_print_available_mirrors ()
 
 
 /**
- * 遍历以空格分隔的别名字符串，对每个别名调用回调函数
+ * 遍历以 / 为分隔符的别名字符串，对每个别名调用回调函数
  *
  * @param aliases   空格分隔的 alias 字符串
  * @param callback  对每个 alias 调用的回调函数
@@ -196,7 +196,7 @@ iterate_aliases (const char *aliases, bool (*callback)(const char *alias, void *
   while (*tok_start != '\0')
     {
       cursor = tok_start;
-      while (*cursor != ' ' && *cursor != '\0') cursor++;
+      while (*cursor != '/' && *cursor != '\0') cursor++;
 
       // 结束当前token
       char space_or_eos = *cursor;
@@ -229,14 +229,14 @@ print_alias_callback (const char *alias, void *user_data)
 }
 
 void
-cli_print_supported_targets_ (TargetRegisterInfo_t registry[], size_t size)
+cli_print_supported_targets_ (TargetRegisterInfo_t menu[], size_t size)
 {
   for (int i = 0; i < size; i++)
     {
-      TargetRegisterInfo_t *entry = &registry[i];
+      TargetRegisterInfo_t *entry = &menu[i];
 
       // 使用通用的别名遍历函数打印所有别名
-      iterate_aliases (entry->aliases, print_alias_callback, NULL);
+      iterate_aliases (entry->target->aliases, print_alias_callback, NULL);
 
       br(); // 每个target换行
     }

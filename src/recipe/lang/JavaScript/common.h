@@ -45,7 +45,7 @@ pl_js_group_prelude (void)
 
 
 
-def_target(pl_js_nodejs_binary);
+def_target(pl_js_nodejs_binary, "__internal_use_nodejs_binary__");
 
 void
 pl_js_nodejs_binary_prelude (void)

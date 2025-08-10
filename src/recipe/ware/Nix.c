@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(wr_nix);
+def_target(wr_nix, "nix");
 
 void
 wr_nix_prelude ()

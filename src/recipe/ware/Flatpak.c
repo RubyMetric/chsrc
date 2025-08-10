@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(wr_flatpak);
+def_target(wr_flatpak, "flatpak/flathub");
 
 void
 wr_flatpak_prelude ()

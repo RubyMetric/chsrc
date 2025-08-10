@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(wr_guix);
+def_target(wr_guix, "guix");
 
 void
 wr_guix_prelude ()

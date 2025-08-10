@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(wr_winget);
+def_target(wr_winget, "winget");
 
 void
 wr_winget_prelude ()
