@@ -23,7 +23,7 @@ pl_js_nvm_prelude (void)
   chef_allow_english(this);
   chef_allow_user_define(this);
 
-  chef_set_note ("nvm does not support Fish", "nvm 不支持 Fish shell");
+  chef_set_note (this, "nvm 不支持 Fish shell", "nvm does not support Fish");
 
   // 使用 pl_js_nodejs_binary 的源
   this->sources = pl_js_nodejs_binary_target.sources;
@@ -48,7 +48,7 @@ pl_js_nvm_getsrc (char *option)
 void
 pl_js_nvm_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (pl_js_binary_release);
+  Source_t source = chsrc_yield_source_and_confirm (&pl_js_binary_release);
 
   char *w = xy_strjoin (3, "export NVM_NODEJS_ORG_MIRROR=", source.url, "\n");
 

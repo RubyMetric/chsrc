@@ -111,7 +111,7 @@ pl_python_uv_setsrc (char *option)
 {
   chsrc_ensure_program ("uv");
 
-  Source_t source = chsrc_yield_source (pl_python_group_target, option);
+  Source_t source = chsrc_yield_source (&pl_python_group_target, option);
   if (chsrc_in_standalone_mode())
     chsrc_confirm_source(&source);
 

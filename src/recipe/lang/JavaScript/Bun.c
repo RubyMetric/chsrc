@@ -50,7 +50,7 @@ void
 pl_js_bun_setsrc (char *option)
 {
   // 用的是 npm Registry 的源
-  Source_t source = chsrc_yield_source_and_confirm (pl_js_group_target, option);
+  Source_t source = chsrc_yield_source_and_confirm (&pl_js_group_target, option);
 
   char *content = RAWSTR_pl_js_bun_config;
 

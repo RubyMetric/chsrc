@@ -43,7 +43,7 @@ pl_js_pnpm_getsrc (char *option)
 void
 pl_js_pnpm_setsrc (char *option)
 {
-  Source_t source = chsrc_yield_source (pl_js_group_target, option);
+  Source_t source = chsrc_yield_source (&pl_js_group_target, option);
   if (chsrc_in_standalone_mode())
     chsrc_confirm_source(&source);
 
