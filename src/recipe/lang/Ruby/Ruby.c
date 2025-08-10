@@ -23,7 +23,7 @@ pl_ruby_prelude (void)
 
   chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
   chef_set_chef (this, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_sous_chefs (this, 0);
+  chef_set_cooks (this, 0);
   chef_set_contributors (this, 0);
 
   chef_allow_local_mode (this, PartiallyCan, "支持 bundler. 不支持 gem", "Support bundler. Not support gem");

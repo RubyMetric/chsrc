@@ -151,9 +151,9 @@ typedef struct Target_t
   Contributor_t *contributors;
   size_t         contributors_n;
 
-  Contributor_t *chef;        /* Chef 仅有一个 */
-  Contributor_t *sous_chefs;  /* Sous Chef 可以有多个 */
-  size_t         sous_chefs_n;
+  Contributor_t *chef;   /* Chef 仅有一个 */
+  Contributor_t *cooks;  /* Cook 可以有多个 */
+  size_t         cooks_n;
 }
 Target_t;
 

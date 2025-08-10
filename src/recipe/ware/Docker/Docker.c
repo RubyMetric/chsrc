@@ -35,7 +35,7 @@ wr_docker_prelude ()
     "happy game", "happygame1024@gmail.com",
     "Aoran Zeng", "ccmywish@qq.com");
   chef_set_chef (this, NULL, NULL);
-  chef_set_sous_chefs (this, 0);
+  chef_set_cooks (this, 1, "happy game", "happygame1024@gmail.com");
   chef_set_contributors (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);

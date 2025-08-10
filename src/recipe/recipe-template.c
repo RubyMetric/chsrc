@@ -62,7 +62,7 @@ void
 
   chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
   chef_set_chef (this, NULL, NULL);
-  chef_set_sous_chefs (this, 0);
+  chef_set_cooks (this, 0);
   chef_set_contributors (this, 1,
     "Nil Null", "nil@null.org");
 

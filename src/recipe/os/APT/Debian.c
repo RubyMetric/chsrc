@@ -18,7 +18,7 @@ os_debian_prelude ()
     "Aoran Zeng", "ccmywish@qq.com",
     "Heng Guo",   "2085471348@qq.com");
   chef_set_chef (this, NULL, NULL);
-  chef_set_sous_chefs (this, 0);
+  chef_set_cooks (this, 0);
   chef_set_contributors (this, 2,
     "Yangmoooo", "yangmoooo@outlook.com",
     "GitHub Copilot", "https://github.com/copilot");

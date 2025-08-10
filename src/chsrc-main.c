@@ -392,11 +392,6 @@ cli_print_target_features (Target_t *target, const char *input_target_name)
 void
 cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
 {
-  {
-  char *msg = ENGLISH ? "Maintainer Information:\n" : "维护信息:\n";
-  say (bdgreen(msg));
-  }
-
   if (target->authors && target->authors_n > 0)
     {
       char *msg = ENGLISH ? "Recipe Original Authors: " : "食谱原始作者: ";
@@ -429,16 +424,16 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
 
 
   {
-    char *msg = ENGLISH ? "Current Sous Chefs: " : "当前副厨: ";
-    if (target->sous_chefs && target->sous_chefs_n > 0)
+    char *msg = ENGLISH ? "Current Cooks: " : "当前副厨: ";
+    if (target->cooks && target->cooks_n > 0)
       {
         printf ("%s", bdblue(msg));
-        for (size_t i = 0; i < target->sous_chefs_n; i++)
+        for (size_t i = 0; i < target->cooks_n; i++)
           {
             if (i > 0) printf (", ");
             printf ("%s <%s>",
-                    target->sous_chefs[i].name  ? target->sous_chefs[i].name : "Unknown",
-                    target->sous_chefs[i].email ? target->sous_chefs[i].email : "unknown@example.com");
+                    target->cooks[i].name  ? target->cooks[i].name : "Unknown",
+                    target->cooks[i].email ? target->cooks[i].email : "unknown@example.com");
           }
         printf ("\n");
       }
@@ -622,7 +617,6 @@ get_target (const char *input, TargetOp code, char *option)
       if (target->setfn)
         {
           target->setfn(option);
-          cli_print_target_maintain_info (target, input);
         }
       else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 set 功能，邀您帮助: chsrc issue"));
     }
@@ -631,7 +625,6 @@ get_target (const char *input, TargetOp code, char *option)
       if (target->resetfn)
         {
           target->resetfn(option);
-          cli_print_target_maintain_info (target, input);
         }
       else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 reset 功能，邀您帮助: chsrc issue"));
     }
@@ -640,7 +633,6 @@ get_target (const char *input, TargetOp code, char *option)
       if (target->getfn)
         {
           target->getfn("");
-          cli_print_target_maintain_info (target, input);
         }
       else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 get 功能，邀您帮助: chsrc issue"));
     }
@@ -667,12 +659,23 @@ get_target (const char *input, TargetOp code, char *option)
 
       cli_print_target_available_sources (target->sources, target->sources_n);
       cli_print_target_features (target, input);
+
+      {
+      char *msg = ENGLISH ? "Maintainer Information:\n" : "维护信息:\n";
+      say (bdgreen(msg));
       cli_print_target_maintain_info (target, input);
+      }
     }
   else if (TargetOp_Measure_Source==code)
     {
       auto_select_mirror (target->sources, target->sources_n, input);
       return true;
+    }
+
+  if (TargetOp_Get_Source==code || TargetOp_Set_Source==code || TargetOp_Reset_Source==code)
+    {
+      br();
+      cli_print_target_maintain_info (target, input);
     }
 
   if (TargetOp_Set_Source==code || TargetOp_Measure_Source==code)

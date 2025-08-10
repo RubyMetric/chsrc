@@ -161,31 +161,31 @@ chef_set_chef (Target_t *target, char *name, char *email)
 
 
 void
-chef_set_sous_chefs (Target_t *target, size_t count, ...)
+chef_set_cooks (Target_t *target, size_t count, ...)
 {
   if (!target)
     return;
 
   if (count == 0)
     {
-      target->sous_chefs = NULL;
-      target->sous_chefs_n = 0;
+      target->cooks = NULL;
+      target->cooks_n = 0;
       return;
     }
 
   va_list args;
   va_start(args, count);
 
-  target->sous_chefs = xy_malloc0 (count * sizeof(Contributor_t));
-  target->sous_chefs_n = count;
+  target->cooks = xy_malloc0 (count * sizeof(Contributor_t));
+  target->cooks_n = count;
 
   for (size_t i = 0; i < count; i++)
     {
       char *name = va_arg(args, char*);
       char *email = va_arg(args, char*);
 
-      target->sous_chefs[i].name = xy_strdup(name);
-      target->sous_chefs[i].email = xy_strdup(email);
+      target->cooks[i].name = xy_strdup(name);
+      target->cooks[i].email = xy_strdup(email);
     }
 
   va_end(args);

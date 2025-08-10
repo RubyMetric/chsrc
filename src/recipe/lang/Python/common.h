@@ -31,10 +31,9 @@ pl_python_group_prelude (void)
 
   chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
   chef_set_chef (this, NULL, NULL);
-  chef_set_sous_chefs (this, 0);
-  chef_set_contributors (this, 2,
-    "yongxiang", "1926885268@qq.com",
-    "happy game", "happygame1024@gmail.com");
+  chef_set_cooks (this, 1, "happy game", "happygame1024@gmail.com");
+  chef_set_contributors (this, 1,
+    "yongxiang", "1926885268@qq.com");
 
 
   chef_allow_local_mode (this, PartiallyCan, "部分包管理器支持项目级换源", "Some package managers support project-level source changing");

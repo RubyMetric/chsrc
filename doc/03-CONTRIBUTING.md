@@ -35,14 +35,14 @@
 （1）
 
 1. **如果你是 recipe Chef，则你完全负责这个 recipe，如果你拥有写权限，你可以直接推送代码到 `dev` 分支**
-2. 如果你是 recipe Sous Chef，则你需要参考 [04-MAINTAINERS.md](./04-MAINTAINERS.md)，如果只有你一个人，且你拥有写权限，你可以直接推送代码。如果有多人，则需要提一个 issue，介绍方案，然后 @ 所有 Sous Chef 来 review
+2. 如果你是 recipe Cook，则你需要参考 [04-MAINTAINERS.md](./04-MAINTAINERS.md)，如果只有你一个人，且你拥有写权限，你可以直接推送代码。如果有多人，则需要提一个 issue，介绍方案，然后 @ 所有 Cook 来 review
 
 ---
 
 （2）
 
-1. 需要先搜索你修改的部分涉及到的 recipe，然后提 issue @ 所有相关的 recipe Sous Chef 来 review
-2. 如果涉及了所有 recipe，则 @ framework Sous Chef，而无需把所有 recipe 的 Sous Chef 都喊过来，但是如果觉得有必要，可以 @ 任意你觉得有能力 review 和能给出建议的人来 review
+1. 需要先搜索你修改的部分涉及到的 recipe，然后提 issue @ 所有相关的 recipe Cook 来 review
+2. 如果涉及了所有 recipe，则 @ framework Cook，而无需把所有 recipe 的 Cook 都喊过来，但是如果觉得有必要，可以 @ 任意你觉得有能力 review 和能给出建议的人来 review
 
 <br>
 
