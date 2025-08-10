@@ -52,6 +52,29 @@ chef_ensure_trailing_slash (char *str)
 
 
 void
+chef_allow_user_define (Target_t *target)
+{
+  if (!target)
+    return;
+
+  target->can_user_define = true;
+  target->can_user_define_explain = NULL;
+}
+
+void
+chef_forbid_user_define (Target_t *target)
+{
+  if (!target)
+    return;
+
+  target->can_user_define = false;
+
+  char *reason = CHINESE ? "URL将会根据内部实现重写,因此不能自定义" : "The URL will be rewritten based on internal implementation, so it cannot be customized";
+  target->can_user_define_explain = reason;
+}
+
+
+void
 chef_set_contributors (Target_t *target, uint32_t count, ...)
 {
   if (!target || count==0)

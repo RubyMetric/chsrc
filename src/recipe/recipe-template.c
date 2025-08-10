@@ -52,7 +52,7 @@ void
 {
   use_this(<category>_<target>);
 
-  chef_set_created_on   (this, "2025-08-09");
+  chef_set_created_on   (this, "2024-08-09");
   chef_set_last_updated (this, "2025-08-12");
   chef_set_sources_last_updated (this, "2025-08-10");
 
@@ -62,13 +62,17 @@ void
   chef_set_contributors (this, 1,
     "Nil Null", "nil@null.org");
 
-  chef_has_getfn();
-  chef_has_setfn();
-  chef_has_resetsrc();
-  this.cap_locally = PartiallyCan;
-  this.cap_locally_explain = "具体说明是否支持项目级换源...";
+  chef_has_get();
+  chef_has_set();
+  chef_has_reset();
+  this.cap_local = PartiallyCan;
+  this.cap_local_explain = "具体说明是否支持项目级换源...";
+
   this.can_english = false;
   this.can_user_define = false;
+  // chef_allow_user_define(this);
+  chef_forbid_user_define(this);
+
   this.note = "备注说明...";
 
   def_upstream("https://github.com/microsoft/winget-cli/");
