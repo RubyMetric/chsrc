@@ -6,7 +6,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2024-08-09>
- * Last Modified : <2025-08-10>
+ * Last Modified : <2025-08-11>
  * -------------------------------------------------------------
  * 本文件作为一个通用模板：
  *
@@ -37,14 +37,22 @@ def_target(<category>_<target>);
  * 定义专服务于该target的镜像站，该例数据为虚拟填充
  */
 static MirrorSite_t
-RubyMetric = {"rbmt",                   // 该镜像站的 code, 可以这么使用: chsrc set <target> rbmt
-              "RubyMetric",             // 该镜像站的缩写
-              "RubyMetric.com",         // 该镜像站的全名
-              "https://rubymetirc.com", // 镜像站首页
-                                        // 镜像站某个较大的可下载物的下载链接，用于测速
-              "https://rubymetirc.com/target/aws/aws-sdk-go/@v/v1.45.2.zip",
+RubyMetric = {
+  IS_DedicatedMirrorSite, /* 镜像站类型 */
+  "rbmt",                 /* 该镜像站的 code, 可以这么使用: chsrc set <target> rbmt */
 
-              ACCURATE};                // 是否为精准测速，若使用间接URL来测速，则填ROUGH
+  /* 该镜像站的英文缩写 |   该镜像站的全名    |     镜像站首页  */
+  "RubyMetric",           "RubyMetric 镜像站",  "https://rubymetirc.com",
+
+  /* 是否跳过测速 | 跳过原因(中文) | 跳过原因(英文) */
+  {NotSkip,             NA,                NA,
+  /* 镜像站某个较大的可下载物的下载链接，用于测速 */
+  "https://rubymetirc.com/target/aws/aws-sdk-go/@v/v1.45.2.zip",
+  /* 是否为精准测速，若使用间接URL来测速，则填ROUGH */
+   ACCURATE
+  };
+}
+
 
 
 void
@@ -58,7 +66,7 @@ void
 
   chef_set_created_on   (this, "2024-08-09");
   chef_set_last_updated (this, "2025-08-12");
-  chef_set_sources_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2025-08-11");
 
   chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
   chef_set_chef (this, NULL, NULL);
@@ -75,14 +83,14 @@ void
   // chef_allow_user_define(this);
   chef_forbid_user_define(this);
 
-  chef_set_note ("备注说明...", "Note...");
+  chef_set_note ("中文备注说明...", "English note...");
 
   def_sources_begin()
-  {&UpstreamProvider,      "上游地址，若维护者暂时未知，可填NULL，这个主要用于reset", DelegateToUpstream}
-  {&RubyMetric,    "https://rubymetirc.com/target",       DelegateToMirror},
-  {&RubyInstaller, "https://rubyinstaller.cn/target",     DelegateToMirror},
-  {&Gitee,         "https://gitee.com/RubyMetric/chsrc",  DelegateToMirror},
-  {&GitHub,        "https://github.com/RubyMetric/chsrc", "https://一个精准测速链接"}
+  {&UpstreamProvider, "上游默认源链接, 若维护者暂时未知, 可填NULL, 这个主要用于reset", DelegateToUpstream}
+  {&RubyMetric,       "https://rubymetirc.com/target",       DelegateToMirror},
+  {&RubyInstaller,    "https://rubyinstaller.cn/target",     DelegateToMirror},
+  {&Gitee,            "https://gitee.com/RubyMetric/chsrc",  DelegateToMirror},
+  {&GitHub,           "https://github.com/RubyMetric/chsrc", "https://一个精准测速链接"}
   def_sources_end()
 }
 
@@ -108,8 +116,11 @@ void
 void
 <category>_<target>_setsrc (char *option)
 {
-  /* 下面这行是必须的，注入source变量 */
-  chsrc_yield_source_and_confirm (<category>_<target>);
+  /* 下面这行是必须的，注入 source 变量 */
+  use_this_source(<category>_<target>);
+
+  /* 如果是 target group，你可能想要指定不同的 target 来使用它的源 */
+  // Source_t source = chsrc_yield_source_and_confirm (&pl_js_group_target, option);
 
   /* 具体的换源步骤，如调用第三方命令... */
 
