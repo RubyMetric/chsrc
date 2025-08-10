@@ -1,54 +1,50 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Name     : chef.h
+ * File Name     : chef.c
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nul None  <nul@none.org>
- * Created On    : <2025-07-14>
- * Last Modified : <2025-08-09>
+ * Created On    : <2025-08-09>
+ * Last Modified : <2025-08-10>
  *
- * For chefs (recipe makers) and sometimes framewoker
- * to do some work not releated to OS operations
+ * For chefs (recipe makers) to define a target
  * ------------------------------------------------------------*/
 
 #pragma once
 
-bool
-chef_is_url (const char *str)
-{
-  return (xy_str_start_with (str, "http://") || xy_str_start_with (str, "https://"));
-}
-
-/**
- * @return 一律返回新字符串
- */
-char *
-chef_remove_trailing_slash (char *str)
-{
-  char *newstr = xy_strdup (str);
-  size_t len = strlen (newstr);
-  if (len > 0 && newstr[len - 1] == '/')
-    newstr[len - 1] = '\0';
-  return newstr;
-}
-
-/**
- * @return 一律返回新字符串
- */
-char *
-chef_ensure_trailing_slash (char *str)
-{
-  size_t len = strlen (str);
-  if (len == 0 || str[len - 1] == '/')
-    return xy_strdup (str);
-
-  return xy_2strjoin (str, "/");
-}
-
-
 #define chef_allow_get() this->getfn = t##_getsrc;
 #define chef_allow_set() this->setfn = t##_setsrc;
 #define chef_allow_reset() this->resetfn = t##_resetsrc;
+
+
+void
+chef_allow_english (Target_t *target)
+{
+  if (!target)
+    return;
+
+  target->can_english = true;
+}
+
+void
+chef_forbid_english (Target_t *target)
+{
+  if (!target)
+    return;
+
+  target->can_english = false;
+}
+
+
+void
+chef_allow_local_mode (Target_t *target, Capability_t cap, const char *explain_zh, const char *explain_en)
+{
+  if (!target)
+    return;
+
+  target->cap_local = cap;
+  target->cap_local_explain = xy_strdup (CHINESE ? explain_zh : explain_en);
+}
 
 
 void
@@ -69,7 +65,8 @@ chef_forbid_user_define (Target_t *target)
 
   target->can_user_define = false;
 
-  char *reason = CHINESE ? "URL将会根据内部实现重写,因此不能自定义" : "The URL will be rewritten based on internal implementation, so it cannot be customized";
+  char *reason = CHINESE ? "URL将会根据内部实现重写,因此不能自定义"
+                         : "The URL will be rewritten based on internal implementation, so it cannot be customized";
   target->can_user_define_explain = reason;
 }
 
