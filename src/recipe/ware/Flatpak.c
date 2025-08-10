@@ -2,13 +2,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(wr_flathub);
+def_target(wr_flatpak);
 
 void
-wr_flathub_prelude ()
+wr_flatpak_prelude ()
 {
-  use_this(wr_flathub);
-  chef_allow_gsr(wr_flathub);
+  use_this(wr_flatpak);
+  chef_allow_gsr(wr_flatpak);
 
   chef_set_created_on   (this, "2023-09-11");
   chef_set_last_updated (this, "2025-08-09");
@@ -53,7 +53,7 @@ wr_flathub_prelude ()
 
 
 void
-wr_flathub_getsrc (char *option)
+wr_flatpak_getsrc (char *option)
 {
   chsrc_run ("flatpak remotes", RunOpt_Default);
   chsrc_run ("flatpak remote-info flathub", RunOpt_Default);
@@ -64,9 +64,9 @@ wr_flathub_getsrc (char *option)
  * @consult https://mirrors.sjtug.sjtu.edu.cn/docs/flathub
  */
 void
-wr_flathub_setsrc (char *option)
+wr_flatpak_setsrc (char *option)
 {
-  use_this_source(wr_flathub);
+  use_this_source(wr_flatpak);
 
   chsrc_alert2 ("若出现问题，可先调用以下命令:");
   char *note = xy_strjoin (3,
@@ -89,7 +89,7 @@ wr_flathub_setsrc (char *option)
 
 
 void
-wr_flathub_resetsrc (char *option)
+wr_flatpak_resetsrc (char *option)
 {
-  wr_flathub_setsrc (option);
+  wr_flatpak_setsrc (option);
 }

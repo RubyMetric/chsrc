@@ -7,7 +7,7 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-08-09>
+ * Last Modified : <2025-08-10>
  *
  * chsrc struct
  * ------------------------------------------------------------*/
@@ -117,8 +117,6 @@ Contributor_t;
 
 typedef struct Target_t
 {
-  char *name; /* 目标名称，该名称必须是 menu 中的 aliase 之一 */
-
   void (*getfn)   (char *option);
   void (*setfn)   (char *option);
   void (*resetfn) (char *option);
@@ -166,7 +164,7 @@ typedef struct TargetRegisterInfo_t
 TargetRegisterInfo_t;
 
 
-#define def_target(t) void t##_getsrc(char *option);void t##_setsrc(char *option);void t##_resetsrc(char *option); Target_t t##_target={0};
+#define def_target(t) void t##_getsrc(char *option);void t##_setsrc(char *option);void t##_resetsrc(char *option); Target_t t##_target={name};
 
 /* 以下宏仅能放在 prelude() 中使用 */
 #define use_this(t) Target_t *this = &t##_target;

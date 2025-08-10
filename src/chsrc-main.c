@@ -560,7 +560,6 @@ iterate_menu_ (TargetRegisterInfo_t registry[], size_t size, const char *input, 
         {
           if (entry->prelude)
             {
-              chsrc_log ("该target已定义 prelude()");
               entry->prelude();
             }
           else
@@ -769,9 +768,9 @@ main (int argc, char const *argv[])
 
   if (in_dry_run_mode())
     {
-      char *dry_msg = ENGLISH ? "Enable [Dry Run] mode. " \
-                                         "Simulate the source changing process (skipping speed measurement). " \
-                                         "Commands only print but don't run\n"
+      char *dry_msg = ENGLISH ? "Enable [Dry Run] mode. "
+                                "Simulate the source changing process (skipping speed measurement). "
+                                "Commands only print but don't run\n"
                               : "开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行\n";
       chsrc_log (bdyellow(dry_msg));
     }

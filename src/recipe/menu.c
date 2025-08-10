@@ -90,7 +90,7 @@ chsrc_wr_menu[] =
   {t(wr_homebrew),  "brew homebrew"},
   {t(wr_cocoapods), "cocoa cocoapods cocoapod"},
   {t(wr_dockerhub), "dockerhub docker"},
-  {t(wr_flathub),   "flathub flatpak"},
+  {t(wr_flatpak),   "flatpak flathub"},
   {t(wr_nix),       "nix"},
   {t(wr_guix),      "guix"},
   {t(wr_emacs),     "emacs elpa"},

@@ -458,11 +458,11 @@ chsrc_check_file (char *path)
  *
  * @note 一个源Source必定来自于一个Provider，所以该函数名叫 query_mirror_exist
  *
- * @param  target  目标名
- * @param  input   如果用户输入 default 或者 def，则选择第一个源
+ * @param  target_name  目标名
+ * @param  input        如果用户输入 default 或者 def，则选择第一个源
  */
 int
-query_mirror_exist (Source_t *sources, size_t size, char *target, char *input)
+query_mirror_exist (Source_t *sources, size_t size, char *target_name, char *input)
 {
   if (chef_is_url (input))
     {
@@ -475,7 +475,7 @@ query_mirror_exist (Source_t *sources, size_t size, char *target, char *input)
     {
       char *msg1 = ENGLISH ? "Currently " : "当前 ";
       char *msg2 = ENGLISH ? " doesn't have any source available. Please contact the maintainers" : " 无任何可用源，请联系维护者";
-      chsrc_error (xy_strjoin (3, msg1, target, msg2));
+      chsrc_error (xy_strjoin (3, msg1, target_name, msg2));
       exit (Exit_MaintainerCause);
     }
 
@@ -483,7 +483,7 @@ query_mirror_exist (Source_t *sources, size_t size, char *target, char *input)
     {
       char *msg1 = ENGLISH ? "Currently " : "当前 ";
       char *msg2 = ENGLISH ? " only the upstream source exists. Please contact the maintainers" : " 仅存在上游默认源，请联系维护者";
-      chsrc_error (xy_strjoin (3, msg1, target, msg2));
+      chsrc_error (xy_strjoin (3, msg1, target_name, msg2));
       exit (Exit_MaintainerCause);
     }
 
@@ -502,7 +502,7 @@ query_mirror_exist (Source_t *sources, size_t size, char *target, char *input)
                            : " 目前唯一可用镜像站，感谢他们的慷慨支持";
       const char *name = ENGLISH ? sources[1].mirror->abbr
                                  : sources[1].mirror->name;
-      chsrc_succ (xy_strjoin (4, name, msg1, target, msg2));
+      chsrc_succ (xy_strjoin (4, name, msg1, target_name, msg2));
     }
 
   if (xy_streql ("first", input))
@@ -535,7 +535,7 @@ query_mirror_exist (Source_t *sources, size_t size, char *target, char *input)
       }
 
       char *msg = ENGLISH ? "To see available sources, use chsrc list " : "查看可使用源，请使用 chsrc list ";
-      chsrc_error (xy_2strjoin (msg, target));
+      chsrc_error (xy_2strjoin (msg, target_name));
       exit (Exit_UserCause);
     }
   return idx;
