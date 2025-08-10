@@ -1,12 +1,36 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors   : Aoran Zeng <ccmywish@qq.com>
- * Contributors   :  Mr. Will  <mr.will.com@outlook.com>
- * Created On     : <2023-09-09>
- * Major Reviison :      3
- * Last Modified  : <2025-07-11>
  * ------------------------------------------------------------*/
+
+def_target(pl_js_yarn);
+
+void
+pl_js_yarn_prelude (void)
+{
+  use_this(pl_js_yarn);
+
+  chef_set_created_on   (this, "2023-09-09");
+  chef_set_last_updated (this, "2025-07-11");
+  chef_set_sources_last_updated (this, "2025-07-11");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Mr. Will", "mr.will.com@outlook.com");
+
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
+
+  chef_allow_local_mode (this, FullyCan, "支持项目级配置", "Supports project-level configuration");
+  chef_allow_english(this);
+  chef_allow_user_define(this);
+
+  // 使用 pl_js_group 的源
+  this->sources = pl_js_group_target.sources;
+  this->sources_n = pl_js_group_target.sources_n;
+}
 
 static double
 pl_js_yarn_get_yarn_version ()
@@ -17,9 +41,6 @@ pl_js_yarn_get_yarn_version ()
 }
 
 
-/**
- * chsrc get yarn
- */
 void
 pl_js_yarn_getsrc (char *option)
 {
@@ -78,35 +99,8 @@ pl_js_yarn_setsrc (char *option)
 }
 
 
-/**
- * chsrc reset yarn
- */
 void
 pl_js_yarn_resetsrc (char *option)
 {
   pl_js_yarn_setsrc (option);
 }
-
-
-/**
- * chsrc ls yarn
- */
-Feature_t
-pl_js_yarn_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = FullyCan;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-// def_target_gsrf(pl_js_yarn);
-Target_t pl_js_yarn_target = {def_target_inner_gsrf(pl_js_yarn),def_target_sourcesn(pl_js_group)};

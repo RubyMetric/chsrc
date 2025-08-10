@@ -1,14 +1,40 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : happy game <happygame1024@gmail.com>
- * Contributors  :    ccy     <icuichengyi@gmail.com>
- *               | Aoran Zeng <ccmywish@qq.com>
- *               |
- * Created On    : <2024-12-11>
- * Major Revision :      1
- * Last Modified : <2025-08-09>
  * ------------------------------------------------------------*/
+
+def_target(pl_python_uv);
+
+void
+pl_python_uv_prelude (void)
+{
+  use_this(pl_python_uv);
+
+  chef_set_created_on   (this, "2024-12-11");
+  chef_set_last_updated (this, "2025-08-09");
+  chef_set_sources_last_updated (this, "2025-08-09");
+
+  chef_set_authors (this, 1, "happy game", "happygame1024@gmail.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 2,
+    "ccy", "icuichengyi@gmail.com",
+    "Aoran Zeng", "ccmywish@qq.com");
+
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
+
+  chef_allow_local_mode (this, FullyCan, "支持项目级配置", "Supports project-level configuration");
+  chef_allow_english(this);
+  chef_allow_user_define(this);
+
+  chef_set_note ("uv的配置优先级顺序: $workspaces/uv.toml > $workspaces/pyproject.toml > ~/.config/uv/uv.toml > /etc/uv/uv.toml",
+                 "uv config priority order: $workspaces/uv.toml > $workspaces/pyproject.toml > ~/.config/uv/uv.toml > /etc/uv/uv.toml");
+
+  // 使用 pl_python_group 的源
+  this->sources = pl_python_group_target.sources;
+  this->sources_n = pl_python_group_target.sources_n;
+}
 
 /**
  * chsrc get uv
@@ -84,8 +110,6 @@ pl_python_uv_getsrc (char *option)
 /**
  * @consult https://docs.astral.sh/uv/configuration/files/
  *          https://github.com/RubyMetric/chsrc/issues/139
- *
- * chsrc set uv
  */
 void
 pl_python_uv_setsrc (char *option)
@@ -148,36 +172,8 @@ pl_python_uv_setsrc (char *option)
 }
 
 
-/**
- * chsrc reset uv
- */
 void
 pl_python_uv_resetsrc (char *option)
 {
   pl_python_uv_setsrc (option);
 }
-
-
-/**
- * chsrc ls uv
- */
-Feature_t
-pl_python_uv_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = true;
-  f.cap_locally_explain = NULL;
-
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-// def_target_gsrf(pl_python_uv);
-Target_t pl_python_uv_target = {def_target_inner_gsrf(pl_python_uv),def_target_sourcesn(pl_python_group)};

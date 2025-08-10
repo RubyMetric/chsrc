@@ -1,16 +1,40 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nul None   <nul@none.org>
- *               |
- * Created On    : <2024-09-23>
- * Last Modified : <2025-06-19>
  * ------------------------------------------------------------*/
 
-/**
- * chsrc get nvm
- */
+def_target(pl_js_nvm);
+
+void
+pl_js_nvm_prelude (void)
+{
+  use_this(pl_js_nvm);
+
+  chef_set_created_on   (this, "2024-09-23");
+  chef_set_last_updated (this, "2025-06-19");
+  chef_set_sources_last_updated (this, "2025-06-19");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Nul None", "nul@none.org");
+
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
+
+  chef_forbid_local_mode (this);
+  chef_allow_english(this);
+  chef_allow_user_define(this);
+
+  chef_set_note ("nvm does not support Fish", "nvm 不支持 Fish shell");
+
+  // 使用 pl_js_binary_release 的源
+  this->sources = pl_js_binary_release_target.sources;
+  this->sources_n = pl_js_binary_release_target.sources_n;
+}
+
+
 void
 pl_js_nvm_getsrc (char *option)
 {
@@ -23,9 +47,7 @@ pl_js_nvm_getsrc (char *option)
  * @consult https://mirrors.tuna.tsinghua.edu.cn/help/nodejs-release/
  * @issue   https://github.com/RubyMetric/chsrc/issues/81
  *
- * chsrc set nvm
- *
- * @note nvm does not support Fish
+ * @note nvm 不支持 Fish
  */
 void
 pl_js_nvm_setsrc (char *option)
@@ -47,9 +69,6 @@ pl_js_nvm_setsrc (char *option)
 }
 
 
-/**
- * chsrc reset nvm
- */
 void
 pl_js_nvm_resetsrc (char *option)
 {
@@ -57,27 +76,3 @@ pl_js_nvm_resetsrc (char *option)
   chsrc_error ("暂不支持对 nvm 重置");
   exit (Exit_Unsupported);
 }
-
-
-/**
- * chsrc ls nvm
- */
-Feature_t
-pl_js_nvm_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = "";
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-// def_target_gsrf(pl_js_nvm);
-Target_t pl_js_nvm_target = {def_target_inner_gsrf(pl_js_nvm),def_target_sourcesn(pl_js_binary_release)};

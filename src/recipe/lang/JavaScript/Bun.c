@@ -1,11 +1,36 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  : Lontten  <lontten@163.com>
- * Created On    : <2024-09-29>
- * Last Modified : <2025-07-22>
  * ------------------------------------------------------------*/
+
+def_target(pl_js_bun);
+
+void
+pl_js_bun_prelude (void)
+{
+  use_this(pl_js_bun);
+
+  chef_set_created_on   (this, "2024-09-29");
+  chef_set_last_updated (this, "2025-07-22");
+  chef_set_sources_last_updated (this, "2025-07-22");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Lontten", "lontten@163.com");
+
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
+
+  chef_allow_local_mode (this, FullyCan, "支持项目级配置", "Supports project-level configuration");
+  chef_allow_english(this);
+  chef_allow_user_define(this);
+
+  // 用的是 npm Registry 的源，所以使用 pl_js_group 的源
+  this->sources = pl_js_group_target.sources;
+  this->sources_n = pl_js_group_target.sources_n;
+}
 
 /**
  * chsrc get bun
@@ -58,27 +83,3 @@ pl_js_bun_resetsrc (char *option)
 {
   pl_js_bun_setsrc (option);
 }
-
-
-/**
- * chsrc ls bun
- */
-Feature_t
-pl_js_bun_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = FullyCan;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-// def_target_gsrf(pl_js_bun);
-Target_t pl_js_bun_target = {def_target_inner_gsrf(pl_js_bun),def_target_sourcesn(pl_js_group)};

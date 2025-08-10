@@ -1,17 +1,37 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- * Created On    : <2024-08-08>
- * Last Modified : <2025-07-11>
  * ------------------------------------------------------------*/
 
-// @note Poetry 默认使用项目级换源
+def_target(pl_python_poetry);
 
-/**
- * chsrc get poetry
- */
+void
+pl_python_poetry_prelude (void)
+{
+  use_this(pl_python_poetry);
+
+  chef_set_created_on   (this, "2024-08-08");
+  chef_set_last_updated (this, "2025-07-11");
+  chef_set_sources_last_updated (this, "2025-07-11");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Nil Null", "nil@null.org");
+
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
+
+  chef_allow_local_mode (this, FullyCan, "Poetry 默认使用项目级换源", "Poetry uses project-level source changing by default");
+  chef_allow_english(this);
+  chef_allow_user_define(this);
+
+  // 使用 pl_python_group 的源
+  this->sources = pl_python_group_target.sources;
+  this->sources_n = pl_python_group_target.sources_n;
+}
+
 void
 pl_python_poetry_getsrc (char *option)
 {
@@ -21,8 +41,6 @@ pl_python_poetry_getsrc (char *option)
 
 /**
  * @consult https://python-poetry.org/docs/repositories/#project-configuration
- *
- * chsrc set poetry
  */
 void
 pl_python_poetry_setsrc (char *option)
@@ -47,35 +65,8 @@ pl_python_poetry_setsrc (char *option)
 }
 
 
-/**
- * chsrc reset poetry
- */
 void
 pl_python_poetry_resetsrc (char *option)
 {
   pl_python_poetry_setsrc (option);
 }
-
-
-/**
- * chsrc ls poetry
- */
-Feature_t
-pl_python_poetry_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = FullyCan;
-  f.cap_locally_explain = NULL;
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-// def_target_gsrf(pl_python_poetry);
-Target_t pl_python_poetry_target = {def_target_inner_gsrf(pl_python_poetry),def_target_sourcesn(pl_python_group)};

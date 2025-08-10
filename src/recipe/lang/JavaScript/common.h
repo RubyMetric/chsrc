@@ -1,86 +1,85 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors   : Aoran Zeng <ccmywish@qq.com>
- * Contributors   :  Nul None  <nul@none.org>
- *                |
- * Created On     : <2023-09-09>
- * Major Revision :      1
- * Last Modified  : <2025-07-11>
  * ------------------------------------------------------------*/
-
-#define PL_JS_Group_Speed_URL_Postfix "/@tensorflow/tfjs/-/tfjs-4.22.0.tgz"
-
-static SourceProvider_t pl_js_npm_upstream =
-{
-  def_upstream, "https://www.npmjs.com/",
-  {NotSkip, NA, NA, "https://registry.npmjs.org/@tensorflow/tfjs/-/tfjs-4.22.0.tgz", ACCURATE}
-};
 
 static MirrorSite_t NpmMirror =
 {
   IS_DedicatedMirrorSite,
   "npmmirror", "npmmirror", "npmmirror (阿里云赞助)", "https://npmmirror.com/",
-  // 注意，下面这个是跳转后的地址，不确定未来会不会改变
-  {NotSkip, NA, NA, "https://cdn.npmmirror.com/packages/%40tensorflow/tfjs/4.22.0/tfjs-4.22.0.tgz", ACCURATE} // 29MB
+  {SKIP, NULL, NULL, NULL, ACCURATE}
 };
 
-/**
- * @update 2025-07-11
- * @sync https://github.com/RubyMetric/chsrc/wiki/Node.js-MirrorSite
- * @sync https://github.com/RubyMetric/chsrc/discussions/85
- *
- * @note
- *   Sjtug, Tuna, Lzuoss, Jlu, Bfsu, 网易，搜狐 都没有
- */
-static Source_t pl_js_group_sources[] =
+def_target(pl_js_group);
+
+void
+pl_js_group_prelude (void)
 {
-  {&pl_js_npm_upstream,  "https://registry.npmjs.org/", DelegateToUpstream}, /* @note 根据 pnpm 官网，有最后的斜线 */
-  {&NpmMirror,    "https://registry.npmmirror.com", DelegateToMirror},
+  use_this(pl_js_group);
 
-  {&Huawei,       "https://mirrors.huaweicloud.com/repository/npm/",
-                  "https://mirrors.huaweicloud.com/repository/npm/" PL_JS_Group_Speed_URL_Postfix},
+  chef_set_created_on   (this, "2023-09-09");
+  chef_set_last_updated (this, "2025-07-11");
+  chef_set_sources_last_updated (this, "2025-07-11");
 
-  {&Tencent,      "https://mirrors.cloud.tencent.com/npm/",
-                  "https://mirrors.cloud.tencent.com/npm/" PL_JS_Group_Speed_URL_Postfix},
-};
-def_sources_n(pl_js_group);
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this,0);
+
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
+
+  chef_allow_local_mode (this, PartiallyCan, "部分包管理器支持项目级换源", "Some package managers support project-level source changing");
+  chef_allow_english(this);
+  chef_allow_user_define(this);
+
+  def_sources_begin()
+  {&upstream,     "https://registry.npmjs.org/",    FeedByPrelude}, /* @note 根据 pnpm 官网，有最后的斜线 */
+  {&NpmMirror,    "https://registry.npmmirror.com", FeedByPrelude},
+  {&Huawei,       "https://mirrors.huaweicloud.com/repository/npm/", FeedByPrelude},
+  {&Tencent,      "https://mirrors.cloud.tencent.com/npm/", FeedByPrelude}
+  def_sources_end()
+
+  // 29MB 大小
+  chsrc_set_sources_speed_measure_url_with_postfix (this, "/@tensorflow/tfjs/-/tfjs-4.22.0.tgz");
+}
 
 
-#define PL_Nodejs_Binary_Speed_URL_Postfix "/v23.4.0/node-v23.4.0-linux-x64.tar.xz"
 
-static SourceProvider_t pl_js_binary_release_upstream =
+def_target(pl_js_binary_release);
+
+void
+pl_js_binary_release_prelude (void)
 {
-  def_upstream, "https://nodejs.org/",
-  {NotSkip, NA, NA, "https://nodejs.org/dist/v23.4.0/node-v23.4.0.tar.gz", ACCURATE} // 100MB
-};
+  use_this(pl_js_binary_release);
 
-/**
- * @update 2025-07-11
- * @sync https://github.com/RubyMetric/chsrc/wiki/Node.js-BinaryRelease-MirrorSite
- * @sync https://github.com/RubyMetric/chsrc/discussions/85
- *
- */
-static Source_t pl_js_binary_release_sources[] =
-{
-  {&pl_js_binary_release_upstream,  "https://nodejs.org/dist/", DelegateToUpstream},
+  chef_set_created_on   (this, "2023-09-09");
+  chef_set_last_updated (this, "2025-07-11");
+  chef_set_sources_last_updated (this, "2025-07-11");
 
-  {&NpmMirror,          "https://npmmirror.com/mirrors",
-                        "https://registry.npmmirror.com/-/binary/node/v23.4.0/node-v23.4.0.tar.gz"},
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Nul None", "nul@none.org");
 
-  {&Tuna,               "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/",
-                        "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/" PL_Nodejs_Binary_Speed_URL_Postfix},
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
 
-  {&Bfsu,               "https://mirrors.bfsu.edu.cn/nodejs-release/",
-                        "https://mirrors.bfsu.edu.cn/nodejs-release/" PL_Nodejs_Binary_Speed_URL_Postfix},
+  chef_forbid_local_mode (this);
+  chef_allow_english(this);
+  chef_allow_user_define(this);
 
-  {&Ustc,               "https://mirrors.ustc.edu.cn/node/",
-                        "https://mirrors.ustc.edu.cn/node/" PL_Nodejs_Binary_Speed_URL_Postfix},
+  def_sources_begin()
+  {&upstream,    "https://nodejs.org/dist/", FeedByPrelude},
+  {&NpmMirror,   "https://npmmirror.com/mirrors", FeedByPrelude},
+  {&Tuna,        "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/",FeedByPrelude},
+  {&Bfsu,        "https://mirrors.bfsu.edu.cn/nodejs-release/",FeedByPrelude},
+  {&Ustc,        "https://mirrors.ustc.edu.cn/node/",FeedByPrelude},
+  {&Huawei,      "https://mirrors.huaweicloud.com/nodejs/",FeedByPrelude},
+  {&Tencent,     "https://mirrors.cloud.tencent.com/nodejs-release/", FeedByPrelude}
+  def_sources_end()
 
-  {&Huawei,             "https://mirrors.huaweicloud.com/nodejs/",
-                        "https://mirrors.huaweicloud.com/nodejs/" PL_Nodejs_Binary_Speed_URL_Postfix},
-
-  {&Tencent,            "https://mirrors.cloud.tencent.com/nodejs-release/",
-                        "https://mirrors.cloud.tencent.com/nodejs-release/" PL_Nodejs_Binary_Speed_URL_Postfix}
-};
-def_sources_n(pl_js_binary_release);
+  chsrc_set_sources_speed_measure_url_with_postfix (this, "/v23.4.0/node-v23.4.0-linux-x64.tar.xz");
+}

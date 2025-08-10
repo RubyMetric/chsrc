@@ -1,16 +1,38 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors   : Aoran Zeng <ccmywish@qq.com>
- * Contributors   :  Mr. Will  <mr.will.com@outlook.com>
- * Created On     : <2023-08-30>
- * Major Revision :      2
- * Last Modified  : <2025-07-11>
  * ------------------------------------------------------------*/
 
-/**
- * chsrc get npm
- */
+def_target(pl_js_npm);
+
+void
+pl_js_npm_prelude (void)
+{
+  use_this(pl_js_npm);
+
+  chef_set_created_on   (this, "2023-08-30");
+  chef_set_last_updated (this, "2025-07-11");
+  chef_set_sources_last_updated (this, "2025-07-11");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Mr. Will", "mr.will.com@outlook.com");
+
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
+
+  chef_allow_local_mode (this, FullyCan, "支持项目级配置", "Supports project-level configuration");
+  chef_allow_english(this);
+  chef_allow_user_define(this);
+
+  // 使用 pl_js_group 的源
+  this->sources = pl_js_group_target.sources;
+  this->sources_n = pl_js_group_target.sources_n;
+}
+
+
 void
 pl_js_npm_getsrc (char *option)
 {
@@ -20,8 +42,6 @@ pl_js_npm_getsrc (char *option)
 
 /**
  * @consult https://npmmirror.com/
- *
- * chsrc set npm
  */
 void
 pl_js_npm_setsrc (char *option)
@@ -47,35 +67,8 @@ pl_js_npm_setsrc (char *option)
 }
 
 
-/**
- * chsrc reset npm
- */
 void
 pl_js_npm_resetsrc (char *option)
 {
   pl_js_npm_setsrc (option);
 }
-
-
-/**
- * chsrc ls npm
- */
-Feature_t
-pl_js_npm_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = FullyCan;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-// def_target_gsrf(pl_js_npm);
-Target_t pl_js_npm_target = {def_target_inner_gsrf(pl_js_npm),def_target_sourcesn(pl_js_group)};

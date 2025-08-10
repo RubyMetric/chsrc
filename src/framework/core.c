@@ -1088,18 +1088,20 @@ chsrc_set_provider_speed_measure_accuracy (SourceProvider_t *provider, bool accu
 }
 
 
+
 /**
- * @brief 填充专用测速链接
+ * @brief 提供一个函数，这个函数基于 "换源 URL" 和用户提供的数据来构造和填充精准测速链接
  */
 static void
-chsrc_set_sources_speed_measure_url_with_postfix (Target_t *target, char *postfix)
+chsrc_set_sources_speed_measure_url_with_func (
+  Target_t *target,
+  SpeedUrlConstructor_t func,
+  char *user_data)
 {
   Source_t *sources = &target->sources;
 
   for (int i=0; i<n; i++)
     {
-      Source_t *src = &sources[i];
-
       ProviderType_t type = src->provider->type;
 
       if (IS_DedicatedMirrorSite==type)
@@ -1112,9 +1114,23 @@ chsrc_set_sources_speed_measure_url_with_postfix (Target_t *target, char *postfi
         {
           /* 为空时才修改 或者里面是脏数据 */
           if (NULL==src->speed_measure_url || !chef_is_url (src->speed_measure_url))
-            src->speed_measure_url = xy_2strjoin (src->url, postfix);
+            {
+              src->speed_measure_url = func (src->url, postfix);
+            }
         }
     }
+}
+
+
+
+/**
+ * @brief 给 "换源 URL" 增加一个后缀来构造和填充专用测速链接
+ */
+static void
+chsrc_set_sources_speed_measure_url_with_postfix (Target_t *target, char *postfix)
+{
+  xy_2strjoin (src->url, postfix);
+  chsrc_set_sources_speed_measure_url_with_func (target, xy_2strjoin, postfix);
 }
 
 

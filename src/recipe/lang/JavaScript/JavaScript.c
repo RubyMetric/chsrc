@@ -26,9 +26,6 @@ pl_js_check_cmd (bool *npm_exist, bool *yarn_exist, bool *pnpm_exist)
 }
 
 
-/**
- * chsrc get nodejs
- */
 void
 pl_js_group_getsrc (char *option)
 {
@@ -57,9 +54,6 @@ pl_js_group_getsrc (char *option)
 }
 
 
-/**
- * chsrc set nodejs
- */
 void
 pl_js_group_setsrc (char *option)
 {
@@ -99,33 +93,8 @@ pl_js_group_setsrc (char *option)
 }
 
 
-/**
- * chsrc reset nodejs
- */
 void
 pl_js_group_resetsrc (char *option)
 {
   pl_js_group_setsrc (option);
 }
-
-
-/**
- * chsrc ls nodejs
- */
-Feature_t
-pl_js_group_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = FullyCan;
-  f.cap_locally_explain = "Support `npm` & `yarn v2` & `pnpm`. No support for `yarn v1`";
-  f.can_english = true;
-  f.can_user_define = true;
-
-  return f;
-}
-
-def_target_gsrf (pl_js_group);
