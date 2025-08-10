@@ -1,24 +1,41 @@
-chef_set_created_on ("2023-09-03");
-chef_set_authors ("Aoran Zeng <ccmywish@qq.com>", "Heng Guo <2085471348@qq.com>");
-chef_set_contributors ("Nil Null <nil@null.org>");
-chef_allow_set();
-use_this;
+/** ------------------------------------------------------------
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * ------------------------------------------------------------*/
 
-/**
- * @update 2023-09-27
- *
- * @note
- *   2023-09-24: 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports
- *   2023-09-27: 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数
- */
-static Source_t os_freebsd_sources[] =
+def_target(os_freebsd);
+
+void
+os_freebsd_prelude ()
 {
-  {&UpstreamProvider,  NULL, NULL},
+  use_this(os_freebsd);
+
+  chef_set_created_on   (this, "2023-09-03");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2023-09-27");
+
+  chef_set_authors (this, 2, "Aoran Zeng", "ccmywish@qq.com", "Heng Guo", "2085471348@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Nil Null", "nil@null.org");
+
+  chef_allow_set();
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note ("2023-09-24: 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports\n2023-09-27: 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数", NULL);
+
+  def_upstream (NULL);
+
+  def_sources_begin()
+  {&upstream,         NULL,                  DelegateToUpstream},
   {&Ustc,             "mirrors.ustc.edu.cn", DelegateToMirror},
   {&Nju,              "mirror.nju.edu.cn",   DelegateToMirror},
   {&Netease,          "mirrors.163.com",     DelegateToMirror},
-};
-def_sources_n(os_freebsd);
+  def_sources_end()
+}
 
 /**
  * @consult
@@ -123,9 +140,5 @@ os_freebsd_setsrc (char *option)
     chsrc_overwrite_file (update, "/etc/freebsd-update.conf");
   */
 
-  chsrc_determine_chgtype (ChgType_SemiAuto);
   chsrc_conclude (&source);
 }
-
-
-def_target(os_freebsd);

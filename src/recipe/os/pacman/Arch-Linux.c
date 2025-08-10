@@ -1,18 +1,42 @@
-chef_set_created_on ("2023-09-05");
-chef_set_authors ("Aoran Zeng <ccmywish@qq.com>", "Heng Guo <2085471348@qq.com>");
-chef_set_contributors ("happy game <happygame1024@gmail.com>");
-chef_allow_get();
-chef_allow_set();
-chef_note("可额外使用 chsrc set archlinuxcn 来更换 Arch Linux CN Repository 源");
-use_this;
+/** ------------------------------------------------------------
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * ------------------------------------------------------------*/
 
-/**
- * @update 2025-06-20
- * @note 不要给后面加 / ，因为ARM情况下，还要额外加一个 arm 后缀
- */
-static Source_t os_arch_sources[] =
+def_target(os_arch);
+
+#define OS_Pacman_MirrorList "/etc/pacman.d/mirrorlist"
+#define OS_Pacman_ArchLinuxCN_MirrorList "/etc/pacman.conf"
+
+void
+os_arch_prelude ()
 {
-  {&UpstreamProvider,  NULL, NULL},
+  use_this(os_arch);
+
+  chef_set_created_on   (this, "2023-09-05");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2025-06-20");
+
+  chef_set_authors (this, 2, "Aoran Zeng", "ccmywish@qq.com",
+                             "Heng Guo",   "2085471348@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "happy game", "happygame1024@gmail.com");
+
+  chef_allow_get();
+  chef_allow_set();
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note ("可额外使用 chsrc set archlinuxcn 来更换 Arch Linux CN Repository 源", "You can additionally use chsrc set archlinuxcn to change Arch Linux CN Repository source");
+
+  def_upstream (NULL);
+  /**
+   * @note 不要给后面加 / ，因为ARM情况下，还要额外加一个 arm 后缀
+   */
+  def_sources_begin()
   {&Ali,              "https://mirrors.aliyun.com/archlinux",  DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/archlinux", DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/archlinux", DelegateToMirror},
@@ -25,36 +49,16 @@ static Source_t os_arch_sources[] =
   // {&Netease,          "https://mirrors.163.com/archlinux", DelegateToMirror},
   /* 不启用原因：过慢 */
   // {&Sohu,          "https://mirrors.sohu.com/archlinux",   DelegateToMirror}
-},
-
-/**
- * @update 2024-07-03
- * @note 根据 @zheng7fu2 建议，拆分 archlinuxcn 出来
- */
-os_archlinuxcn_sources[] =
-{
-  {&UpstreamProvider, "https://repo.archlinuxcn.org/",            DelegateToUpstream},
-  {&Ali,              "https://mirrors.aliyun.com/archlinuxcn/",  DelegateToMirror},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/archlinuxcn/", DelegateToMirror},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/archlinuxcn/", DelegateToMirror},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/", DelegateToMirror},
-  {&Tencent,          "https://mirrors.cloud.tencent.com/archlinuxcn/",    DelegateToMirror},
-  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/archlinuxcn/", DelegateToMirror},
-
-  /* 不启用原因：过慢 */
-  // {&Netease,          "https://mirrors.163.com/archlinux-cn/", DelegateToMirror}
-};
-def_sources_n(os_arch);
-def_sources_n(os_archlinuxcn);
+  def_sources_end()
+}
 
 
-#define OS_Pacman_MirrorList "/etc/pacman.d/mirrorlist"
-#define OS_Pacman_ArchLinuxCN_MirrorList "/etc/pacman.conf"
 void
 os_arch_getsrc (char *option)
 {
   chsrc_view_file (OS_Pacman_MirrorList);
 }
+
 
 /**
  * @consult
@@ -102,6 +106,56 @@ os_arch_setsrc (char *option)
 }
 
 
+
+/** ------------------------------------------------------------
+ * archlinuxcn target
+ * ------------------------------------------------------------*/
+
+def_target(os_archlinuxcn);
+
+void
+os_archlinuxcn_prelude ()
+{
+  use_this(os_archlinuxcn);
+
+  chef_set_created_on   (this, "2023-09-05");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2024-07-03");
+
+  chef_set_authors (this, 2, "Aoran Zeng", "ccmywish@qq.com", "Heng Guo", "2085471348@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "happy game", "happygame1024@gmail.com");
+
+  chef_allow_get();
+  chef_allow_set();
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note ("可额外使用 chsrc set arch 来更换 Arch Linux 源", "You can additionally use chsrc set arch to change Arch Linux source");
+
+  def_upstream ("https://repo.archlinuxcn.org/");
+
+  /**
+   * @note 根据 @zheng7fu2 建议，拆分 archlinuxcn 出来
+   */
+  def_sources_begin()
+  {&upstream,         NULL,                                       DelegateToUpstream},
+  {&Ali,              "https://mirrors.aliyun.com/archlinuxcn/",  DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/archlinuxcn/", DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/archlinuxcn/", DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/", DelegateToMirror},
+  {&Tencent,          "https://mirrors.cloud.tencent.com/archlinuxcn/",    DelegateToMirror},
+  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/archlinuxcn/", DelegateToMirror},
+
+  /* 不启用原因：过慢 */
+  // {&Netease,          "https://mirrors.163.com/archlinux-cn/", DelegateToMirror}
+  def_sources_end()
+}
+
 void
 os_archlinuxcn_getsrc (char *option)
 {
@@ -147,17 +201,3 @@ os_archlinuxcn_setsrc (char *option)
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
-#undef OS_Pacman_MirrorList
-#undef OS_Pacman_ArchLinuxCN_MirrorList
-
-
-def_target_has_note("可额外使用 chsrc set arch 来更换 Arch Linux 源");
-def_target(os_arch);
-
-chef_set_created_on ("2023-09-05");
-chef_set_authors ("Aoran Zeng <ccmywish@qq.com>", "Heng Guo <2085471348@qq.com>");
-chef_set_contributors ("happy game <happygame1024@gmail.com>");
-chef_allow_get();
-chef_allow_set();
-chef_note("可额外使用 chsrc set arch 来更换 Arch Linux 源");
-def_target(os_archlinuxcn);
