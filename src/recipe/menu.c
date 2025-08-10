@@ -5,41 +5,43 @@
  * Contributors   : Mikachu2333 <mikachu.23333@zohomail.com>
  *                |
  * Created On     : <2023-09-01>
- * Major Revision :      2
- * Last Modified  : <2025-08-09>
+ * Major Revision :      3
+ * Last Modified  : <2025-08-10>
  * ------------------------------------------------------------*/
+
+#define t(o) &o##_target, &o##_prelude
 
 TargetRegisterInfo_t
 chsrc_pl_menu[] =
 {
-  {&pl_ruby_target,  NULL,  "gem ruby rb rubygem rubygems bundler"},
-  {&pl_python_group_target, NULL,  "python pypi py"},
-  {&pl_python_pip_target, NULL,  "pip"},
-  {&pl_python_poetry_target, NULL,  "poetry"},
-  {&pl_python_pdm_target, NULL,  "pdm"},
-  {&pl_python_rye_target, NULL,  "rye"},
-  {&pl_python_uv_target, NULL,  "uv"},
-  {&pl_js_group_target, NULL,  "node nodejs"},
-  {&pl_js_bun_target, NULL,  "bun"},
-  {&pl_js_npm_target, NULL,  "npm"},
-  {&pl_js_yarn_target, NULL,  "yarn"},
-  {&pl_js_pnpm_target, NULL,  "pnpm"},
-  {&pl_js_nvm_target, NULL,  "nvm"},
-  {&pl_perl_target, NULL,  "perl cpan"},
-  {&pl_php_target, NULL,  "php composer"},
-  {&pl_lua_target, NULL,  "lua luarocks"},
-  {&pl_go_target, NULL,  "go golang goproxy"},
-  {&pl_rust_cargo_target, NULL,  "rust cargo crate crates"},
-  {&pl_rust_rustup_target, NULL,  "rustup"},
-  {&pl_java_target, NULL,  "java maven mvn gradle"},
-  {&pl_clojure_target, NULL,  "clojure clojars cloj lein"},
-  {&pl_dart_target, NULL,  "dart pub"},
-  {&pl_dart_flutter_target, NULL,  "flutter"},
-  {&pl_nuget_target, NULL,  "nuget net .net dotnet"},
-  {&pl_haskell_target, NULL,  "haskell cabal stack hackage"},
-  {&pl_ocaml_target, NULL,  "ocaml opam"},
-  {&pl_r_target, NULL,  "cran r"},
-  {&pl_julia_target, NULL,  "julia"},
+  {t(pl_ruby),           "gem ruby rb rubygem rubygems bundler"},
+  {t(pl_python_group),   "python pypi py"},
+  {t(pl_python_pip),     "pip"},
+  {t(pl_python_poetry),  "poetry"},
+  {t(pl_python_pdm),     "pdm"},
+  {t(pl_python_rye),     "rye"},
+  {t(pl_python_uv),      "uv"},
+  {t(pl_js_group),       "node nodejs"},
+  {t(pl_js_bun),         "bun"},
+  {t(pl_js_npm),         "npm"},
+  {t(pl_js_yarn),        "yarn"},
+  {t(pl_js_pnpm),        "pnpm"},
+  {t(pl_js_nvm),         "nvm"},
+  {t(pl_perl),           "perl cpan"},
+  {t(pl_php),            "php composer"},
+  {t(pl_lua),            "lua luarocks"},
+  {t(pl_go),             "go golang goproxy"},
+  {t(pl_rust_cargo),     "rust cargo crate crates"},
+  {t(pl_rust_rustup),    "rustup"},
+  {t(pl_java),           "java maven mvn gradle"},
+  {t(pl_clojure),        "clojure clojars cloj lein"},
+  {t(pl_dart),           "dart pub"},
+  {t(pl_dart_flutter),   "flutter"},
+  {t(pl_nuget),          "nuget net .net dotnet"},
+  {t(pl_haskell),        "haskell cabal stack hackage"},
+  {t(pl_ocaml),          "ocaml opam"},
+  {t(pl_r),              "cran r"},
+  {t(pl_julia),          "julia"},
 };
 
 
@@ -48,53 +50,54 @@ TargetRegisterInfo_t
 chsrc_os_menu[] =
 {
   /* Zorin OS 完全使用 Ubuntu 的换源方法，二者兼容 */
-  {&os_ubuntu_target,  NULL,  "ubuntu zorinos"},
-  {&os_linuxmint_target, NULL,  "linuxmint"},
-  {&os_debian_target,  NULL,  "debian"},
-  {&os_fedora_target,  NULL,  "fedora"},
-  {&os_opensuse_target, NULL,  "opensuse opensuse-leap opensuse-tumbleweed"},
-  {&os_kali_target,    NULL,  "kali"},
-  {&os_msys2_target,   NULL,  "msys2 msys"},
-  {&os_arch_target,    NULL,  "arch archlinux"},
-  {&os_archlinuxcn_target, NULL,  "archlinuxcn archcn"},
-  {&os_manjaro_target, NULL,  "manjaro"},
-  {&os_gentoo_target,  NULL,  "gentoo"},
-  {&os_rockylinux_target, NULL,  "rocky rockylinux"},
-  {&os_almalinux_target, NULL,  "alma almalinux"},
-  {&os_alpine_target,  NULL,  "alpine"},
-  {&os_voidlinux_target, NULL,  "voidlinux"},
-  {&os_solus_target,  NULL,  "solus"},
-  {&os_trisquel_target, NULL,  "trisquel"},
-  {&os_linuxlite_target, NULL,  "linuxlite"},
-  {&os_ros_target,    NULL,  "ros ros2"},
-  {&os_raspberrypi_target, NULL,  "raspi raspberrypi"},
-  {&os_armbian_target, NULL,  "armbian"},
-  {&os_openwrt_target, NULL,  "openwrt opkg LEDE"},
-  {&os_termux_target, NULL,  "termux"},
-  {&os_openkylin_target, NULL,  "openkylin"},
-  {&os_openeuler_target, NULL,  "openeuler"},
-  {&os_anolis_target, NULL,  "openanolis anolis"},
-  {&os_deepin_target, NULL,  "deepin"},
-  {&os_freebsd_target, NULL,  "freebsd"},
-  {&os_netbsd_target, NULL,  "netbsd"},
-  {&os_openbsd_target, NULL,  "openbsd"},
+  {t(os_ubuntu),     "ubuntu zorinos"},
+  {t(os_linuxmint),  "linuxmint"},
+  {t(os_debian),     "debian"},
+  {t(os_fedora),     "fedora"},
+  {t(os_opensuse),   "opensuse opensuse-leap opensuse-tumbleweed"},
+  {t(os_kali),       "kali"},
+  {t(os_msys2),      "msys2 msys"},
+  {t(os_arch),       "arch archlinux"},
+  {t(os_archlinuxcn),"archlinuxcn archcn"},
+  {t(os_manjaro),    "manjaro"},
+  {t(os_gentoo),     "gentoo"},
+  {t(os_rockylinux), "rocky rockylinux"},
+  {t(os_almalinux),  "alma almalinux"},
+  {t(os_alpine),     "alpine"},
+  {t(os_voidlinux),  "voidlinux"},
+  {t(os_solus),      "solus"},
+  {t(os_trisquel),   "trisquel"},
+  {t(os_linuxlite),  "linuxlite"},
+  {t(os_ros),        "ros ros2"},
+  {t(os_raspberrypi),"raspi raspberrypi"},
+  {t(os_armbian),    "armbian"},
+  {t(os_openwrt),    "openwrt opkg LEDE"},
+  {t(os_termux),     "termux"},
+  {t(os_openkylin),  "openkylin"},
+  {t(os_openeuler),  "openeuler"},
+  {t(os_anolis),     "openanolis anolis"},
+  {t(os_deepin),     "deepin"},
+  {t(os_freebsd),    "freebsd"},
+  {t(os_netbsd),     "netbsd"},
+  {t(os_openbsd),    "openbsd"},
 };
 
 
 TargetRegisterInfo_t
 chsrc_wr_menu[] =
 {
-  {&wr_winget_target,    NULL,  "winget"},
-  {&wr_homebrew_target,  NULL,  "brew homebrew"},
-  {&wr_cocoapods_target, NULL,  "cocoa cocoapods cocoapod"},
-  {&wr_dockerhub_target, NULL,  "dockerhub docker"},
-  {&wr_flathub_target,   wr_flathub_prelude,  "flathub flatpak"},
-  {&wr_nix_target,       NULL,  "nix"},
-  {&wr_guix_target,      NULL,  "guix"},
-  {&wr_emacs_target,     NULL,  "emacs elpa"},
-  {&wr_tex_target,       NULL,  "latex ctan tex texlive miktex tlmgr mpm"},
-  {&wr_anaconda_target,  NULL,  "conda anaconda"},
+  {t(wr_winget),    "winget"},
+  {t(wr_homebrew),  "brew homebrew"},
+  {t(wr_cocoapods), "cocoa cocoapods cocoapod"},
+  {t(wr_dockerhub), "dockerhub docker"},
+  {t(wr_flathub),   "flathub flatpak"},
+  {t(wr_nix),       "nix"},
+  {t(wr_guix),      "guix"},
+  {t(wr_emacs),     "emacs elpa"},
+  {t(wr_tex),       "latex ctan tex texlive miktex tlmgr mpm"},
+  {t(wr_anaconda),  "conda anaconda"},
 };
+#undef t
 
 
 
@@ -112,8 +115,6 @@ chsrc_available_mirrors[] = {
   &Cqupt,  &Cqu,   &Neosoft,
 
 
-
-
   /* ------------------------ 商业公司(通用镜像站) ------------------------ */
   &Ali,     // &Ali_ECS_VPC, &Ali_ECS_classic,
   &Tencent, // &Tencent_Intra,
@@ -125,16 +126,11 @@ chsrc_available_mirrors[] = {
   &Api7, &Fit2Cloud, &DaoCloud,
 
 
-
-
   /* ------------------------ 专用镜像站 ------------------------ */
   &RubyChina, &EmacsChina, &NpmMirror, &GoProxyIO, &GoProxyCN, &RsProxyCN, &FlutterCN,
   /* 暂不支持 &NugetOrg */
 
 
-
-
   /* ------------------------ chsrc 内部实现 ------------------------ */
   /* 不要列出 &UpstreamProvider 和 &UserDefinedProvider */
-
 };

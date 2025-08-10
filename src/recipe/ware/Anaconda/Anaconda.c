@@ -56,8 +56,7 @@ wr_anaconda_getsrc (char *option)
 void
 wr_anaconda_setsrc (char *option)
 {
-  use_this(wr_anaconda);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+  use_this_source(wr_anaconda);
 
   char *w = xy_str_gsub (RAWSTR_wr_anaconda_condarc, "@1@", source.url);
 

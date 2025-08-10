@@ -52,8 +52,7 @@ wr_nix_setsrc (char *option)
 {
   wr_nix_check_cmd ();
 
-  use_this(wr_nix);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+  use_this_source(wr_nix);
 
   char *cmd = xy_strjoin (3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
   chsrc_run (cmd, RunOpt_Default);

@@ -39,8 +39,7 @@ wr_guix_prelude ()
 void
 wr_guix_setsrc (char *option)
 {
-  use_this(wr_guix);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+  use_this_source(wr_guix);
 
   char *file =  xy_strjoin (3, "(list (channel\n"
                                "       (inherit (car %default-channels))\n"

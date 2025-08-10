@@ -8,7 +8,7 @@ void
 pl_perl_prelude ()
 {
   use_this(pl_perl);
-  chef_allow_gsr(pl_perl);
+  chef_allow_gs(pl_perl);
 
   chef_set_created_on   (this, "2023-09-31");
   chef_set_last_updated (this, "2025-08-10");

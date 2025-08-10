@@ -74,8 +74,8 @@ void
 wr_dockerhub_setsrc (char *option)
 {
   chsrc_ensure_root ();
-  use_this(wr_dockerhub);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+
+  use_this_source(wr_dockerhub);
 
   if (xy_on_linux || xy_on_bsd)
     {

@@ -66,8 +66,7 @@ wr_flathub_getsrc (char *option)
 void
 wr_flathub_setsrc (char *option)
 {
-  use_this(wr_flathub);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+  use_this_source(wr_flathub);
 
   chsrc_alert2 ("若出现问题，可先调用以下命令:");
   char *note = xy_strjoin (3,

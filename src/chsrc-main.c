@@ -37,8 +37,8 @@
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.2.2"
-#define Chsrc_Release_Date   "2025/08/09"
+#define Chsrc_Version        "0.2.2.3"
+#define Chsrc_Release_Date   "2025/08/10"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
@@ -86,6 +86,7 @@
 #include "recipe/lang/NuGet.c"
 #include "recipe/lang/Clojure.c"
 
+
 #include "recipe/os/rawstr4c.h"
 #include "recipe/os/APT/common.h"
 // Debian-based
@@ -126,6 +127,21 @@
 #include "recipe/os/BSD/FreeBSD.c"
 #include "recipe/os/BSD/NetBSD.c"
 #include "recipe/os/BSD/OpenBSD.c"
+
+
+#include "recipe/ware/TeX-Live.c"
+#include "recipe/ware/Emacs.c"
+#include "recipe/ware/WinGet.c"
+#include "recipe/ware/Homebrew/Homebrew.c"
+#include "recipe/ware/CocoaPods.c"
+#include "recipe/ware/Nix.c"
+#include "recipe/ware/Guix.c"
+#include "recipe/ware/Flathub.c"
+#include "recipe/ware/Docker-Hub/Docker-Hub.c"
+#include "recipe/ware/Anaconda/Anaconda.c"
+
+
+#include "recipe/menu.c"
 
 #include "rawstr4c.h"
 

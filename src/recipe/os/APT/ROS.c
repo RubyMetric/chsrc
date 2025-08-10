@@ -8,7 +8,7 @@ void
 os_ros_prelude ()
 {
   use_this(os_ros);
-  chef_allow_gsr(os_ros);
+  chef_allow_gs(os_ros);
 
   chef_set_created_on   (this, "2023-09-03");
   chef_set_last_updated (this, "2025-08-10");

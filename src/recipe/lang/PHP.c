@@ -8,7 +8,7 @@ void
 pl_php_prelude ()
 {
   use_this(pl_php);
-  chef_allow_gsr(pl_php);
+  chef_allow_gs(pl_php);
 
   chef_set_created_on   (this, "2023-08-30");
   chef_set_last_updated (this, "2025-08-10");

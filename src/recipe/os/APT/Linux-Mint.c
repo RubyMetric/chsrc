@@ -8,7 +8,7 @@ void
 os_linuxmint_prelude ()
 {
   use_this(os_linuxmint);
-  chef_allow_gsr(os_linuxmint);
+  chef_allow_gs(os_linuxmint);
 
   chef_set_created_on   (this, "2023-09-29");
   chef_set_last_updated (this, "2025-08-10");

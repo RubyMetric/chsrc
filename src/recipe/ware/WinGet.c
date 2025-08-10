@@ -46,8 +46,7 @@ wr_winget_getsrc (char *option)
 void
 wr_winget_setsrc (char *option)
 {
-  use_this(wr_winget);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+  use_this_source(wr_winget);
 
   chsrc_run ("winget source remove winget", RunOpt_Default);
   chsrc_run (xy_strjoin (3, "winget source add winget ", source.url, " --trust-level trusted"), RunOpt_Default);
