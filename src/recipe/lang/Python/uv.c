@@ -8,6 +8,7 @@ void
 pl_python_uv_prelude (void)
 {
   use_this(pl_python_uv);
+  chef_allow_gsr(pl_python_uv);
 
   chef_set_created_on   (this, "2024-12-11");
   chef_set_last_updated (this, "2025-08-09");
@@ -19,10 +20,6 @@ pl_python_uv_prelude (void)
   chef_set_contributors (this, 2,
     "ccy", "icuichengyi@gmail.com",
     "Aoran Zeng", "ccmywish@qq.com");
-
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
 
   chef_allow_local_mode (this, FullyCan, "支持项目级配置", "Supports project-level configuration");
   chef_allow_english(this);

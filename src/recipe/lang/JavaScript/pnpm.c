@@ -8,6 +8,7 @@ void
 pl_js_pnpm_prelude (void)
 {
   use_this(pl_js_pnpm);
+  chef_allow_gsr(pl_js_pnpm);
 
   chef_set_created_on   (this, "2024-04-18");
   chef_set_last_updated (this, "2025-07-11");
@@ -16,12 +17,7 @@ pl_js_pnpm_prelude (void)
   chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
   chef_set_chef (this, NULL, NULL);
   chef_set_sous_chefs (this, 0);
-  chef_set_contributors (this, 1,
-    "Nul None", "nul@none.org");
-
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
+  chef_set_contributors (this, 0);
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);

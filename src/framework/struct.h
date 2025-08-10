@@ -123,7 +123,7 @@ typedef struct Target_t
   void (*setfn)   (char *option);
   void (*resetfn) (char *option);
 
-  Source_t  sources;
+  Source_t  *sources;
   size_t    sources_n;
 
 
@@ -172,4 +172,8 @@ TargetRegisterInfo_t;
 #define use_this(t) Target_t *this = &t##_target;
 
 #define def_sources_begin()  SourceProvider_t upstream = UpstreamProvider; Source_t sources[] = {
-#define def_sources_end()    }; this->sources = sources; this->sources_n = xy_arylen(sources);
+#define def_sources_end()    }; \
+  this->sources_n = xy_arylen(sources); \
+  char *_sources_storage = xy_malloc0 (sizeof(sources)); \
+  memcpy (_sources_storage, sources, sizeof(sources)); \
+  this->sources = (Source_t *)_sources_storage;

@@ -8,6 +8,7 @@ void
 pl_rust_cargo_prelude (void)
 {
   use_this(pl_rust_cargo);
+  chef_allow_gsr(pl_rust_cargo);
 
   chef_set_created_on   (this, "2023-08-30");
   chef_set_last_updated (this, "2025-07-22");
@@ -19,9 +20,6 @@ pl_rust_cargo_prelude (void)
   chef_set_contributors (this, 1,
     "Mikachu2333", "mikachu.23333@zohomail.com");
 
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
 
   chef_allow_local_mode (this, PartiallyCan, "可以基于本项目换源吗？请帮助确认", "Can it change sources based on this project? Please help confirm");
   chef_forbid_english (this);

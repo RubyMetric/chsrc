@@ -8,6 +8,7 @@ void
 pl_java_prelude ()
 {
   use_this(pl_java);
+  chef_allow_gsr(pl_java);
 
   chef_set_created_on   (this, "2023-08-31");
   chef_set_last_updated (this, "2025-08-10");
@@ -18,10 +19,6 @@ pl_java_prelude ()
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 1,
     "BingChunMoLi", "bingchunmoli@bingchunmoli.com");
-
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);

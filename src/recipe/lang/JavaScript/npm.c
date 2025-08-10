@@ -8,6 +8,7 @@ void
 pl_js_npm_prelude (void)
 {
   use_this(pl_js_npm);
+  chef_allow_gsr(pl_js_npm);
 
   chef_set_created_on   (this, "2023-08-30");
   chef_set_last_updated (this, "2025-07-11");
@@ -18,10 +19,6 @@ pl_js_npm_prelude (void)
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 1,
     "Mr. Will", "mr.will.com@outlook.com");
-
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);

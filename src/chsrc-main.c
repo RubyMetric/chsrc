@@ -43,7 +43,7 @@
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
 #include "framework/core.c"
-
+#include "framework/chef.c"
 
 
 #include "recipe/lang/rawstr4c.h"
@@ -400,16 +400,16 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
   say (bdblue(msg));
   }
 
-  if (target->recipe_authors && target->recipe_authors_n > 0)
+  if (target->authors && target->authors_n > 0)
     {
       char *msg = ENGLISH ? "Recipe Authors: " : "配方作者: ";
       printf ("%s", bdgreen(msg));
-      for (size_t i = 0; i < target->recipe_authors_n; i++)
+      for (size_t i = 0; i < target->authors_n; i++)
         {
           if (i > 0) printf (", ");
           printf ("%s <%s>",
-                  target->recipe_authors[i].name ? target->recipe_authors[i].name : "Unknown",
-                  target->recipe_authors[i].email ? target->recipe_authors[i].email : "unknown@example.com");
+                  target->authors[i].name  ? target->authors[i].name : "Unknown",
+                  target->authors[i].email ? target->authors[i].email : "unknown@example.com");
         }
       printf ("\n");
     }
@@ -417,11 +417,11 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
 
   {
     char *msg = ENGLISH ? "Chef: " : "主厨 Chef: ";
-    if (target->current_chef)
+    if (target->chef)
       {
         printf ("%s%s <%s>\n", bdgreen(msg),
-                 target->current_chef->name ? target->current_chef->name : "Unknown",
-                target->current_chef->email ? target->current_chef->email : "unknown@example.com");
+                target->chef->name  ? target->chef->name  : "Unknown",
+                target->chef->email ? target->chef->email : "unknown@example.com");
       }
     else
       {
@@ -433,15 +433,15 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
 
   {
     char *msg = ENGLISH ? "Sous Chefs: " : "副厨 Sous Chefs: ";
-    if (target->current_sous_chefs && target->current_sous_chefs_n > 0)
+    if (target->sous_chefs && target->sous_chefs_n > 0)
       {
         printf ("%s", bdgreen(msg));
-        for (size_t i = 0; i < target->current_sous_chefs_n; i++)
+        for (size_t i = 0; i < target->sous_chefs_n; i++)
           {
             if (i > 0) printf (", ");
             printf ("%s <%s>",
-                    target->current_sous_chefs[i].name ? target->current_sous_chefs[i].name : "Unknown",
-                    target->current_sous_chefs[i].email ? target->current_sous_chefs[i].email : "unknown@example.com");
+                    target->sous_chefs[i].name  ? target->sous_chefs[i].name : "Unknown",
+                    target->sous_chefs[i].email ? target->sous_chefs[i].email : "unknown@example.com");
           }
         printf ("\n");
       }
@@ -474,16 +474,16 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
   }
 
 
-  if (target->recipe_created_on)
+  if (target->created_on)
     {
       char *msg = ENGLISH ? "Recipe Created On: " : "配方创建时间: ";
-      printf ("%s%s\n", bdgreen(msg), target->recipe_created_on);
+      printf ("%s%s\n", bdgreen(msg), target->created_on);
     }
 
-  if (target->recipe_last_updated)
+  if (target->last_updated)
     {
       char *msg = ENGLISH ? "Recipe Last Updated: " : "配方最后更新: ";
-      printf ("%s%s\n", bdgreen(msg), target->recipe_last_updated);
+      printf ("%s%s\n", bdgreen(msg), target->last_updated);
     }
 
   if (target->sources_last_updated)

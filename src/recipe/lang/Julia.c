@@ -8,6 +8,7 @@ void
 pl_julia_prelude ()
 {
   use_this(pl_julia);
+  chef_allow_gs(pl_julia);
 
   chef_set_created_on   (this, "2023-08-31");
   chef_set_last_updated (this, "2025-08-10");
@@ -17,9 +18,6 @@ pl_julia_prelude ()
   chef_set_chef (this, NULL, NULL);
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 0);
-
-  chef_allow_get();
-  chef_allow_set();
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);

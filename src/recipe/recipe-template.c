@@ -6,7 +6,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2024-08-09>
- * Last Modified : <2025-08-09>
+ * Last Modified : <2025-08-10>
  * -------------------------------------------------------------
  * 本文件作为一个通用模板：
  *
@@ -51,6 +51,10 @@ void
 <category>_<target>_prelude (void)
 {
   use_this(<category>_<target>);
+  chef_allow_gsr(<category>_<target>);
+  // chef_allow_s(<category>_<target>);
+  // chef_allow_gs(<category>_<target>);
+  // chef_allow_sr(<category>_<target>);
 
   chef_set_created_on   (this, "2024-08-09");
   chef_set_last_updated (this, "2025-08-12");
@@ -62,9 +66,6 @@ void
   chef_set_contributors (this, 1,
     "Nil Null", "nil@null.org");
 
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
 
   chef_allow_local_mode (this, PartiallyCan, "具体说明是否支持项目级换源...", "Tell users the local mode support");
 

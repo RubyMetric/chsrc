@@ -16,6 +16,7 @@ void
 pl_ruby_prelude (void)
 {
   use_this(pl_ruby);
+  chef_allow_gsr(pl_ruby);
 
   chef_set_created_on   (this, "2023-08-29");
   chef_set_last_updated (this, "2025-07-14");
@@ -25,10 +26,6 @@ pl_ruby_prelude (void)
   chef_set_chef (this, "Aoran Zeng", "ccmywish@qq.com");
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 0);
-
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
 
   chef_allow_local_mode (this, PartiallyCan, "Support `bundler`. No support for `gem`", "Support `bundler`. No support for `gem`");
   chef_allow_english(this);
@@ -76,7 +73,8 @@ pl_ruby_setsrc (char *option)
 {
   chsrc_ensure_program ("gem");
 
-  chsrc_yield_source_and_confirm (pl_ruby);
+  use_this(pl_ruby);
+  Source_t source = chsrc_yield_source_and_confirm (this, option);
 
   char *cmd = NULL;
 

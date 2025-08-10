@@ -26,7 +26,6 @@
 #include "struct.h"
 #include "mirror.c"
 #include "chef-helper.c"
-#include "chef.c"
 
 #define App_Name "chsrc"
 

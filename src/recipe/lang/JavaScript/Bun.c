@@ -8,6 +8,7 @@ void
 pl_js_bun_prelude (void)
 {
   use_this(pl_js_bun);
+  chef_allow_gsr(pl_js_bun);
 
   chef_set_created_on   (this, "2024-09-29");
   chef_set_last_updated (this, "2025-07-22");
@@ -18,10 +19,6 @@ pl_js_bun_prelude (void)
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 1,
     "Lontten", "lontten@163.com");
-
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);

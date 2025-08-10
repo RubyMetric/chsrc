@@ -11,6 +11,7 @@ void
 pl_rust_rustup_prelude (void)
 {
   use_this(pl_rust_rustup);
+  chef_allow_gsr(pl_rust_rustup);
 
   chef_set_created_on   (this, "2024-10-02");
   chef_set_last_updated (this, "2025-08-07");
@@ -22,10 +23,6 @@ pl_rust_rustup_prelude (void)
   chef_set_contributors (this, 2,
     "Yangmoooo", "yangmoooo@outlook.com",
     "Mikachu2333", "mikachu.23333@zohomail.com");
-
-  chef_allow_get();
-  chef_allow_set();
-  chef_forbid_reset();
 
   chef_forbid_local_mode (this);
   chef_forbid_english (this);

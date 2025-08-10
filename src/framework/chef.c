@@ -12,9 +12,10 @@
 
 #pragma once
 
-#define chef_allow_get() this->getfn = t##_getsrc;
-#define chef_allow_set() this->setfn = t##_setsrc;
-#define chef_allow_reset() this->resetfn = t##_resetsrc;
+#define chef_allow_gsr(t) this->getfn = t##_getsrc; this->setfn = t##_setsrc; this->resetfn = t##_resetsrc;
+#define chef_allow_s(t)   this->getfn = NULL;       this->setfn = t##_setsrc; this->resetfn = NULL;
+#define chef_allow_sr(t)  this->getfn = NULL;       this->setfn = t##_setsrc; this->resetfn = t##_resetsrc;
+#define chef_allow_gs(t)  this->getfn = t##_getsrc; this->setfn = t##_setsrc; this->resetfn = NULL;
 
 
 void
@@ -114,16 +115,16 @@ chef_set_authors (Target_t *target, size_t count, ...)
   va_list args;
   va_start(args, count);
 
-  target->recipe_authors = xy_malloc0 (count * sizeof(Contributor_t));
-  target->recipe_authors_n = count;
+  target->authors = xy_malloc0 (count * sizeof(Contributor_t));
+  target->authors_n = count;
 
   for (size_t i = 0; i < count; i++)
     {
       char *name = va_arg(args, char*);
       char *email = va_arg(args, char*);
 
-      target->recipe_authors[i].name = xy_strdup(name);
-      target->recipe_authors[i].email = xy_strdup(email);
+      target->authors[i].name = xy_strdup(name);
+      target->authors[i].email = xy_strdup(email);
     }
 
   va_end(args);
@@ -136,9 +137,9 @@ chef_set_chef (Target_t *target, char *name, char *email)
   if (!target || !name || !email)
     return;
 
-  target->current_chef = xy_malloc0 (sizeof(Contributor_t));
-  target->current_chef->name  = xy_strdup (name);
-  target->current_chef->email = xy_strdup (email);
+  target->chef = xy_malloc0 (sizeof(Contributor_t));
+  target->chef->name  = xy_strdup (name);
+  target->chef->email = xy_strdup (email);
 }
 
 
@@ -150,24 +151,24 @@ chef_set_sous_chefs (Target_t *target, size_t count, ...)
 
   if (count == 0)
     {
-      target->current_sous_chefs = NULL;
-      target->current_sous_chefs_n = 0;
+      target->sous_chefs = NULL;
+      target->sous_chefs_n = 0;
       return;
     }
 
   va_list args;
   va_start(args, count);
 
-  target->current_sous_chefs = xy_malloc0 (count * sizeof(Contributor_t));
-  target->current_sous_chefs_n = count;
+  target->sous_chefs = xy_malloc0 (count * sizeof(Contributor_t));
+  target->sous_chefs_n = count;
 
   for (size_t i = 0; i < count; i++)
     {
       char *name = va_arg(args, char*);
       char *email = va_arg(args, char*);
 
-      target->current_sous_chefs[i].name = xy_strdup(name);
-      target->current_sous_chefs[i].email = xy_strdup(email);
+      target->sous_chefs[i].name = xy_strdup(name);
+      target->sous_chefs[i].email = xy_strdup(email);
     }
 
   va_end(args);
@@ -180,7 +181,7 @@ chef_set_created_on (Target_t *target, char *date)
   if (!target)
     return;
 
-  target->recipe_created_on = xy_strdup (date);
+  target->created_on = xy_strdup (date);
 }
 
 
@@ -190,7 +191,7 @@ chef_set_last_updated (Target_t *target, char *date)
   if (!target)
     return;
 
-  target->recipe_last_updated = xy_strdup (date);
+  target->last_updated = xy_strdup (date);
 }
 
 
@@ -214,7 +215,6 @@ chef_debug_target (Target_t *target)
   printf ("  Get Function: %p\n", target->getfn);
   printf ("  Set Function: %p\n", target->setfn);
   printf ("  Reset Function: %p\n", target->resetfn);
-  printf ("  Feature Function: %p\n", target->featfn);
   printf ("  Sources: %p\n", target->sources);
   printf ("  Sources Count: %lld\n", target->sources_n);
   printf ("  Contributors: %p\n", target->contributors);

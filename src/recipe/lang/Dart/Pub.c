@@ -8,6 +8,7 @@ void
 pl_dart_prelude (void)
 {
   use_this(pl_dart);
+  chef_allow_gsr(pl_dart);
 
   chef_set_created_on   (this, "2023-09-10");
   chef_set_last_updated (this, "2025-07-11");
@@ -19,10 +20,6 @@ pl_dart_prelude (void)
   chef_set_contributors (this, 2,
     "czyt", "czyt.go@gmail.com",
     "MadDogOwner", "xiaoran@xrgzs.top");
-
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);

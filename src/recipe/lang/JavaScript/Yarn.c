@@ -8,6 +8,7 @@ void
 pl_js_yarn_prelude (void)
 {
   use_this(pl_js_yarn);
+  chef_allow_gsr(pl_js_yarn);
 
   chef_set_created_on   (this, "2023-09-09");
   chef_set_last_updated (this, "2025-07-11");
@@ -18,10 +19,6 @@ pl_js_yarn_prelude (void)
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 1,
     "Mr. Will", "mr.will.com@outlook.com");
-
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);

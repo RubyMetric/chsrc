@@ -8,6 +8,7 @@ void
 pl_python_pip_prelude (void)
 {
   use_this(pl_python_pip);
+  chef_allow_gsr(pl_python_pip);
 
   chef_set_created_on   (this, "2023-09-03");
   chef_set_last_updated (this, "2025-07-11");
@@ -17,10 +18,6 @@ pl_python_pip_prelude (void)
   chef_set_chef (this, NULL, NULL);
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 0);
-
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
 
   chef_forbid_local_mode (this);
   chef_allow_english(this);
