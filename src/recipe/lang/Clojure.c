@@ -19,7 +19,7 @@ pl_clojure_prelude ()
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 0);
 
-  chef_allow_local_mode (this, Can, NULL, NULL);
+  chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_forbid_english(this);
   chef_allow_user_define(this);
 

@@ -23,8 +23,6 @@ pl_julia_prelude ()
   chef_allow_english(this);
   chef_allow_user_define(this);
 
-  chef_set_note ("Julia的换源可以通过两种方式: 1. 写入 startup.jl 2. 使用环境变量。我们采用第一种", NULL);
-
   def_sources_begin()
   {&upstream,         NULL, DelegateToUpstream},
   {&Pku,              "https://mirrors.pku.edu.cn/julia", DelegateToMirror},

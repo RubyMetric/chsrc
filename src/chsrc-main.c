@@ -71,7 +71,20 @@
 #include "recipe/lang/Go.c"
 #include "recipe/lang/Java.c"
 
+#include "recipe/lang/Rust/common.h"
+  #include "recipe/lang/Rust/rustup.c"
+  #include "recipe/lang/Rust/Cargo.c"
 
+#include "recipe/lang/Dart/common.h"
+#include "recipe/lang/Dart/Pub.c"
+#include "recipe/lang/Dart/Flutter.c"
+
+#include "recipe/lang/Haskell.c"
+#include "recipe/lang/OCaml.c"
+#include "recipe/lang/R.c"
+#include "recipe/lang/Julia.c"
+#include "recipe/lang/NuGet.c"
+#include "recipe/lang/Clojure.c"
 
 #include "rawstr4c.h"
 

@@ -23,8 +23,6 @@ pl_nuget_prelude ()
   chef_forbid_english(this);
   chef_forbid_user_define(this);
 
-  chef_set_note ("暂时未实现该换源功能，可参照 https://mirrors.huaweicloud.com/mirrorDetail/5ebf85de07b41baf6d0882ab?mirrorName=nuget&catalog=language", NULL);
-
   def_sources_begin()
   {&upstream,         "https://www.nuget.org/api/v3/", DelegateToUpstream},
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/nuget/v3", DelegateToMirror}
@@ -39,6 +37,9 @@ pl_nuget_getsrc (char *option)
 }
 
 
+/**
+ * 暂时未实现该换源功能，可参照 https://mirrors.huaweicloud.com/mirrorDetail/5ebf85de07b41baf6d0882ab?mirrorName=nuget&catalog=language
+ */
 void
 pl_nuget_setsrc (char *option)
 {

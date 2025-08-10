@@ -29,7 +29,7 @@ pl_dart_prelude (void)
   {&upstream,      "https://pub.dev",           FeedByPrelude},
   {&FlutterCN,     "https://pub.flutter-io.cn", FeedByPrelude},
   {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/dart-pub", FeedByPrelude},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/dart-pub", FeedByPrelude,
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/dart-pub", FeedByPrelude},
   {&Nju,           "https://mirror.nju.edu.cn/dart-pub", FeedByPrelude}
   def_sources_end()
 
@@ -51,7 +51,7 @@ pl_dart_getsrc (char *option)
 void
 pl_dart_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (pl_dart);
+  use_this_source(pl_dart);
 
   char *w = NULL;
   char *cmd = NULL;

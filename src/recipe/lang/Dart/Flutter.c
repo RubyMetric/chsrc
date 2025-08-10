@@ -2,8 +2,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-#define PL_Dart_Flutter_Speed_URL_Postfix "/flutter_infra_release/releases/stable/linux/flutter_linux_v1.0.0-stable.tar.xz"
-
 def_target(pl_dart_flutter);
 
 void
@@ -27,20 +25,15 @@ pl_dart_flutter_prelude (void)
   chef_allow_english(this);
   chef_allow_user_define(this);
 
-  chef_set_note ("2024-09-14: 不得不将Dart和Flutter拆分为两个Target，因为3家教育网镜像站给出的 Dart 和 Flutter 换源URL模式都不一样",
-                 "2024-09-14: Had to split Dart and Flutter into two Targets, because the 3 educational network mirror sites have different URL patterns for Dart and Flutter source switching");
-
   def_sources_begin()
-  {&upstream,      "https://storage.googleapis.com", "https://storage.googleapis.com" PL_Dart_Flutter_Speed_URL_Postfix},
-  {&FlutterCN,     "https://storage.flutter-io.cn",  DelegateToMirror},
-  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn",     NULL }, /* 官方文档也没有给后缀，怀疑是否存在问题 */
-
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/flutter",
-                   "https://mirrors.tuna.tsinghua.edu.cn/flutter" PL_Dart_Flutter_Speed_URL_Postfix},
-
-  {&Nju,           "https://mirror.nju.edu.cn/flutter",
-                   "https://mirror.nju.edu.cn/flutter" PL_Dart_Flutter_Speed_URL_Postfix}
+  {&upstream,      "https://storage.googleapis.com", FeedByPrelude},
+  {&FlutterCN,     "https://storage.flutter-io.cn",  FeedByPrelude},
+  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn",     FeedByPrelude }, /* 官方文档也没有给后缀，怀疑是否存在问题 */
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/flutter", FeedByPrelude},
+  {&Nju,           "https://mirror.nju.edu.cn/flutter", FeedByPrelude}
   def_sources_end()
+
+  chsrc_set_sources_speed_measure_url_with_postfix (this, "/flutter_infra_release/releases/stable/linux/flutter_linux_v1.0.0-stable.tar.xz");
 }
 
 
@@ -62,7 +55,7 @@ pl_dart_flutter_getsrc (char *option)
 void
 pl_dart_flutter_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (pl_dart_flutter);
+  use_this_source(pl_dart_flutter);
 
   char *w = NULL;
   char *cmd = NULL;

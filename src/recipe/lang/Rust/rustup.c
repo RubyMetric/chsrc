@@ -42,7 +42,7 @@ pl_rust_rustup_prelude (void)
   def_sources_end()
 
   // 20MB大小
-  chsrc_set_sources_speed_measure_url_with_postfix (this, "/dist/2025-06-26/cargo-1.88.0-x86_64-unknown-illumos.tar.gz")
+  chsrc_set_sources_speed_measure_url_with_postfix (this, "/dist/2025-06-26/cargo-1.88.0-x86_64-unknown-illumos.tar.gz");
 }
 
 

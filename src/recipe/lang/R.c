@@ -23,8 +23,7 @@ pl_r_prelude ()
   chef_forbid_english(this);
   chef_allow_user_define(this);
 
-  chef_set_note ("以下注释的，是不含有bioconductor的镜像站，我们在换cran的同时，也直接帮助用户换bioconductor", NULL);
-
+  // 以下注释的，是不含有bioconductor的镜像站，我们在换cran的同时，也直接帮助用户换bioconductor
   def_sources_begin()
   {&upstream,         NULL, DelegateToUpstream},
   {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/cran/",    DelegateToMirror},
@@ -65,7 +64,7 @@ pl_r_getsrc (char *option)
 void
 pl_r_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (pl_r);
+  use_this_source(pl_r);
 
   char *bioconductor_url = xy_str_delete_suffix (xy_str_delete_suffix (source.url, "cran/"), "CRAN/");
   bioconductor_url = xy_2strjoin(bioconductor_url, "bioconductor");

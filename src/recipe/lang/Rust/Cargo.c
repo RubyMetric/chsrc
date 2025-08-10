@@ -25,9 +25,8 @@ pl_rust_cargo_prelude (void)
   chef_forbid_english (this);
   chef_allow_user_define(this);
 
-  chef_set_note ("以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`。链接末尾的 `/` 不能缺少",
-                 "All sources support sparse index, we will add `sparse+` by default when changing sources. The trailing `/` in URLs cannot be missing");
 
+  // 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`。链接末尾的 `/` 不能缺少
   def_sources_begin()
   {&upstream,      "https://crates.io/", "https://crates.io/api/v1/crates/windows/0.58.0/download"},
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/crates.io-index/",  DelegateToMirror},
