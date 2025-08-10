@@ -20,9 +20,9 @@ os_kali_prelude ()
     "Yangmoooo", "yangmoooo@outlook.com",
     "Happy Game", "happygame1024@gmail.com");
 
-  chef_has_getfn();
-  chef_has_setfn();
-  chef_has_resetsrc();
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
 
   def_upstream("http://http.kali.org/kali");
   def_sources_begin(os_kali)

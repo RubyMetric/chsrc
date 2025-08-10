@@ -19,9 +19,9 @@ os_openkylin_prelude ()
   chef_set_contributors (this, 1,
     "Aoran Zeng", "ccmywish@qq.com");
 
-  chef_has_getfn();
-  chef_has_setfn();
-  chef_has_resetfn();
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
 
   /* openKylin直接基于Linux内核开发，属于和Debian、openSUSE、Fedora、Arch
    * 同一级别的、根社区发布的系统 */

@@ -1,7 +1,7 @@
 chef_set_created_on ("2023-09-06");
 chef_set_authors ("Heng Guo <2085471348@qq.com>");
 chef_set_contributors ("Aoran Zeng <ccmywish@qq.com>", "Yangmoooo <yangmoooo@outlook.com>", "happy game <happygame1024@gmail.com>");
-chef_has_setfn;
+chef_allow_set();
 use_this;
 
 static SourceProvider_t os_openEuler_upstream =
@@ -85,6 +85,6 @@ os_openeuler_resetsrc (char *option)
 /**
  * chsrc ls openeuler
  */
-chef_has_getfn;
-chef_has_resetsrc;
+chef_allow_get();
+chef_allow_reset();
 def_target(os_openeuler);

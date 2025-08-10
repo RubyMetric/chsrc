@@ -21,9 +21,9 @@ os_ubuntu_prelude ()
   chef_set_contributors (this, 1,
     "Zhao", "1792582687@qq.com");
 
-  chef_has_getfn;
-  chef_has_setfn;
-  chef_has_resetsrc;
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
 
 #define OS_Ubuntu_Speed_URL_Postfix "/dists/noble/Contents-amd64.gz"
 

@@ -19,9 +19,9 @@ os_raspberrypi_prelude ()
   chef_set_contributors (this, 1,
     "Yangmoooo", "yangmoooo@outlook.com");
 
-  chef_has_getfn();
-  chef_has_setfn();
-  chef_has_resetfn();
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
 
   /* Raspberry Pi OS 树莓派操作系统，以前称为 Raspbian */
   def_upstream("https://archive.raspberrypi.com/");

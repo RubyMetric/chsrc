@@ -19,9 +19,9 @@ os_termux_prelude ()
   chef_set_contributors (this, 1,
     "Nul None", "nul@none.org");
 
-  chef_has_get();
-  chef_has_set();
-  chef_has_reset();
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
   this.note = "该 recipe 存在对应的 bootstrapper";
 
   def_upstream("https://packages.termux.org/apt/termux-main/");

@@ -1,8 +1,8 @@
 chef_set_created_on ("2023-09-26");
 chef_set_authors ("Heng Guo <2085471348@qq.com>", "happy game <happygame1024@gmail.com>");
 chef_set_contributors ("Aoran Zeng <ccmywish@qq.com>");
-chef_has_setfn;
-chef_has_resetsrc;
+chef_allow_set();
+chef_allow_reset();
 use_this;
 
 /**

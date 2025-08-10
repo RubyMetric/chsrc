@@ -26,9 +26,9 @@ os_openwrt_prelude ()
     "Yangmoooo", "yangmoooo@outlook.com",
     "happy game", "happygame1024@gmail.com");
 
-  chef_has_getfn();
-  chef_has_setfn();
-  chef_has_resetsrc();
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
   this.cap_locally = CanNot;
   this.cap_locally_explain = NULL;
   this.can_english = true;

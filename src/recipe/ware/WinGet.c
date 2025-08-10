@@ -18,9 +18,9 @@ wr_winget_prelude ()
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 0);
 
-  chef_has_getfn();
-  chef_has_setfn();
-  chef_has_resetsrc();
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
   this.can_english = false;
   this.can_user_define = true;
 

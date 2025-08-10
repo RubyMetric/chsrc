@@ -1,8 +1,8 @@
 chef_set_created_on ("2023-09-03");
 chef_set_authors ("Heng Guo <2085471348@qq.com>", "Aoran Zeng <ccmywish@qq.com>");
 chef_set_contributors ("Nil Null <nil@null.org>");
-chef_has_getfn;
-chef_has_setfn;
+chef_allow_get();
+chef_allow_set();
 use_this;
 
 /**

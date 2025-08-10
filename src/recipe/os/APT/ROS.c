@@ -20,9 +20,9 @@ os_ros_prelude ()
     "Aoran Zeng", "ccmywish@qq.com",
     "zouri", "guoshuaisun@outlook.com");
 
-  chef_has_get();
-  chef_has_set();
-  chef_has_reset();
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
 
   this.note = "该换源方案中，URL存在拼凑，因此不能手动使用某URL来换源";
 

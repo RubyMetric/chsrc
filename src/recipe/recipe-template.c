@@ -62,9 +62,9 @@ void
   chef_set_contributors (this, 1,
     "Nil Null", "nil@null.org");
 
-  chef_has_get();
-  chef_has_set();
-  chef_has_reset();
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
   this.cap_local = PartiallyCan;
   this.cap_local_explain = "具体说明是否支持项目级换源...";
 

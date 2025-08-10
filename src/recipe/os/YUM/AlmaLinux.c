@@ -1,7 +1,7 @@
 chef_set_created_on ("2024-06-12");
 chef_set_authors ("Aoran Zeng <ccmywish@qq.com>");
 chef_set_contributors ("Yangmoooo <yangmoooo@outlook.com>");
-chef_has_setfn;
+chef_allow_set();
 use_this;
 
 static SourceProvider_t os_almalinux_upstream =

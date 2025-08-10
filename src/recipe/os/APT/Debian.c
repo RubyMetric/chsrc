@@ -24,9 +24,9 @@ os_debian_prelude ()
     "Yangmoooo", "yangmoooo@outlook.com",
     "GitHub Copilot", "https://github.com/copilot");
 
-  chef_has_getfn();
-  chef_has_setfn();
-  chef_has_resetsrc();
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
 
   def_upstream("http://deb.debian.org/debian");
   def_sources_begin(os_debian)

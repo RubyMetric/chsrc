@@ -1,8 +1,8 @@
 chef_set_created_on ("2023-09-05");
 chef_set_authors ("Aoran Zeng <ccmywish@qq.com>", "Heng Guo <2085471348@qq.com>");
 chef_set_contributors ("happy game <happygame1024@gmail.com>");
-chef_has_getfn;
-chef_has_setfn;
+chef_allow_get();
+chef_allow_set();
 chef_note("可额外使用 chsrc set archlinuxcn 来更换 Arch Linux CN Repository 源");
 use_this;
 
@@ -157,7 +157,7 @@ def_target(os_arch);
 chef_set_created_on ("2023-09-05");
 chef_set_authors ("Aoran Zeng <ccmywish@qq.com>", "Heng Guo <2085471348@qq.com>");
 chef_set_contributors ("happy game <happygame1024@gmail.com>");
-chef_has_getfn;
-chef_has_setfn;
+chef_allow_get();
+chef_allow_set();
 chef_note("可额外使用 chsrc set arch 来更换 Arch Linux 源");
 def_target(os_archlinuxcn);

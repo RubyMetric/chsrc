@@ -19,9 +19,9 @@ os_trisquel_prelude ()
   chef_set_contributors (this, 1,
     "Nil Null", "nil@null.org");
 
-  chef_has_get();
-  chef_has_set();
-  chef_has_reset();
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
 
   /* Trisquel基于Ubuntu开发，不含任何专有软件及专有固件，内核使用 Linux-libre */
   def_upstream("http://archive.trisquel.info/trisquel/");

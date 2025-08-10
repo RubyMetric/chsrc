@@ -19,9 +19,9 @@ os_deepin_prelude ()
   chef_set_contributors (this, 1,
     "Yangmoooo", "yangmoooo@outlook.com");
 
-  chef_has_getfn();
-  chef_has_setfn();
-  chef_has_resetsrc();
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
 
   def_upstream("https://community-packages.deepin.com/deepin");
   def_sources_begin(os_deepin)

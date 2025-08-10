@@ -19,9 +19,9 @@ os_linuxmint_prelude ()
   chef_set_contributors (this, 1,
     "Happy Game", "happygame1024@gmail.com");
 
-  chef_has_getfn();
-  chef_has_setfn();
-  chef_has_resetsrc();
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
 
   /* @note 实际上镜像站里的内容和Ubuntu的不太一样 */
   def_upstream("http://packages.linuxmint.com");
