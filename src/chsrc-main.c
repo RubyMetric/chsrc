@@ -538,11 +538,11 @@ match_alias_callback (const char *alias, void *user_data)
 
 
 /**
- * 查询用户输入 @param:input 是否与该 @param:registry 中的某个 target 匹配
+ * 查询用户输入 @param:input 是否与该 @param:menu 中的某个 target 匹配
  * 若匹配将直接调用 prelude
  *
- * @param[in]  registry  registry
- * @param[in]  size      registry 大小
+ * @param[in]  menu      menu
+ * @param[in]  size      menu 大小
  * @param[in]  input     用户输入的目标名
  * @param[out] target    返回匹配到的 Target_t 指针
  *
@@ -550,13 +550,13 @@ match_alias_callback (const char *alias, void *user_data)
  */
 #define iterate_menu(ary, input, target) iterate_menu_(ary, xy_arylen(ary), input, target)
 bool
-iterate_menu_ (TargetRegisterInfo_t registry[], size_t size, const char *input, Target_t **target)
+iterate_menu_ (TargetRegisterInfo_t menu[], size_t size, const char *input, Target_t **target)
 {
   for (int i = 0; i < size; i++)
     {
-      TargetRegisterInfo_t *entry = &registry[i];
+      TargetRegisterInfo_t *entry = &menu[i];
 
-      if (iterate_aliases (entry->aliases, match_alias_callback, (void *)input))
+      if (iterate_aliases (entry->target->aliases, match_alias_callback, (void *)input))
         {
           if (entry->prelude)
             {
@@ -564,7 +564,7 @@ iterate_menu_ (TargetRegisterInfo_t registry[], size_t size, const char *input, 
             }
           else
             {
-              chsrc_warn ("该target未定义 prelude()");
+              chsrc_error ("该target未定义 prelude()");
             }
 
           *target = entry->target;

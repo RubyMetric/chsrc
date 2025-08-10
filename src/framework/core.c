@@ -935,17 +935,25 @@ auto_select_mirror (Source_t *sources, size_t size, const char *target_name)
 }
 
 
+/**
+ * 从 menu 中反向找到该 target 的 alias
+ */
+char *get_first_alias_of_target (Target_t *t)
+{
+
+}
+
 
 int
 use_specific_mirror_or_auto_select (char *input, Target_t *t)
 {
   if (input)
     {
-      return query_mirror_exist (t->sources, t->sources_n, t->name, input);
+      return query_mirror_exist (t->sources, t->sources_n, t->aliases, input);
     }
   else
     {
-      return auto_select_mirror (t->sources, t->sources_n, t->name);
+      return auto_select_mirror (t->sources, t->sources_n, t->aliases);
     }
 }
 

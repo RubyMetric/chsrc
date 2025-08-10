@@ -117,6 +117,9 @@ Contributor_t;
 
 typedef struct Target_t
 {
+  /* 以 / 为分隔符的多个目标别名 */
+  char *aliases;
+
   void (*getfn)   (char *option);
   void (*setfn)   (char *option);
   void (*resetfn) (char *option);
@@ -159,12 +162,11 @@ typedef struct TargetRegisterInfo_t
 {
   Target_t *target;           /* target 本身 */
   void     (*prelude) (void); /* 填充 target 信息等预置操作 */
-  char     *aliases;          /* 以空格分隔的 alias 字符串 */
 }
 TargetRegisterInfo_t;
 
 
-#define def_target(t) void t##_getsrc(char *option);void t##_setsrc(char *option);void t##_resetsrc(char *option); Target_t t##_target={name};
+#define def_target(t, aliases) void t##_getsrc(char *option);void t##_setsrc(char *option);void t##_resetsrc(char *option); Target_t t##_target={aliases};
 
 /* 以下宏仅能放在 prelude() 中使用 */
 #define use_this(t) Target_t *this = &t##_target;
