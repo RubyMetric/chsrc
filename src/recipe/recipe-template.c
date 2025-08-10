@@ -65,17 +65,18 @@ void
   chef_allow_get();
   chef_allow_set();
   chef_allow_reset();
-  this.cap_local = PartiallyCan;
-  this.cap_local_explain = "具体说明是否支持项目级换源...";
 
-  this.can_english = false;
-  this.can_user_define = false;
+  chef_allow_local_mode (this, PartiallyCan, "具体说明是否支持项目级换源...", "Tell users the local mode support");
+
+  // chef_allow_english(this);
+  chef_forbid_english(this);
+
   // chef_allow_user_define(this);
   chef_forbid_user_define(this);
 
-  this.note = "备注说明...";
+  chef_set_note ("备注说明...", "Note...");
 
-  def_upstream("https://github.com/microsoft/winget-cli/");
+  def_upstream("https://github.com/RubyMetric/chsrc");
   def_sources_begin()
   {&upstream,      "上游地址，若维护者暂时未知，可填NULL，这个主要用于reset", DelegateToUpstream}
   {&RubyMetric,    "https://rubymetirc.com/target",       DelegateToMirror},

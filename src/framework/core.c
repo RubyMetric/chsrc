@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-08-09>
+ * Last Modified : <2025-08-10>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -25,7 +25,8 @@
 #include "xy.h"
 #include "struct.h"
 #include "mirror.c"
-#include "chef.h"
+#include "chef-helper.c"
+#include "chef.c"
 
 #define App_Name "chsrc"
 
