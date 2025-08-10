@@ -581,7 +581,6 @@ iterate_menu_ (TargetRegisterInfo_t registry[], size_t size, const char *input, 
 }
 
 
-
 /**
  * 我们总是最后告诉用户一些维护信息
  */
@@ -624,17 +623,29 @@ get_target (const char *input, TargetOp code, char *option)
 
   if (TargetOp_Set_Source==code)
     {
-      if (target->setfn) target->setfn(option);
+      if (target->setfn)
+        {
+          target->setfn(option);
+          cli_print_target_maintain_info (target, input);
+        }
       else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 set 功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_Reset_Source==code)
     {
-      if (target->resetfn) target->resetfn(option);
+      if (target->resetfn)
+        {
+          target->resetfn(option);
+          cli_print_target_maintain_info (target, input);
+        }
       else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 reset 功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_Get_Source==code)
     {
-      if (target->getfn) target->getfn("");
+      if (target->getfn)
+        {
+          target->getfn("");
+          cli_print_target_maintain_info (target, input);
+        }
       else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 get 功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_List_Config==code)
@@ -668,8 +679,7 @@ get_target (const char *input, TargetOp code, char *option)
       return true;
     }
 
-  if (TargetOp_Set_Source==code
-      || TargetOp_Measure_Source==code)
+  if (TargetOp_Set_Source==code || TargetOp_Measure_Source==code)
     {
       cli_notify_lastly_for_users();
     }
