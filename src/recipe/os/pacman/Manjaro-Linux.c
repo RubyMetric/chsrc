@@ -1,13 +1,8 @@
-/** ------------------------------------------------------------
- * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Heng Guo <2085471348@qq.com>
- * Contributors  : Nil Null <nil@null.org>
- * Created On    : <2023-09-06>
- * Last Modified : <2024-08-16>
- *
- * Manjaro Linux（或简称Manjaro）基于Arch Linux
- * ------------------------------------------------------------*/
+chef_set_created_on ("2023-09-06");
+chef_set_authors ("Heng Guo <2085471348@qq.com>");
+chef_set_contributors ("Nil Null <nil@null.org>");
+chef_has_setfn;
+use_this;
 
 /**
  * 似乎会弹出GUI，待确定
@@ -25,4 +20,4 @@ os_manjaro_setsrc (char *option)
   chsrc_conclude (NULL);
 }
 
-Target_t os_manjaro_target = {NULL, os_manjaro_setsrc, NULL, NULL, 0};
+def_target(os_manjaro);

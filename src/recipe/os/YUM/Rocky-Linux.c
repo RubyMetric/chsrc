@@ -1,12 +1,9 @@
-/** ------------------------------------------------------------
- * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  : happy game <happygame1024@gmail.com>
- *               |
- * Created On    : <2023-09-24>
- * Last Modified : <2025-07-21>
- * ------------------------------------------------------------*/
+chef_set_created_on ("2023-09-24");
+chef_set_authors ("Aoran Zeng <ccmywish@qq.com>");
+chef_set_contributors ("happy game <happygame1024@gmail.com>");
+chef_has_setfn;
+chef_has_resetsrc;
+use_this;
 
 /**
  * @update 2025-06-20
@@ -75,21 +72,4 @@ os_rockylinux_setsrc (char *option)
 }
 
 
-Feature_t
-os_rockylinux_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = false;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-  f.can_user_define = false;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_sf(os_rockylinux);
+def_target(os_rockylinux);

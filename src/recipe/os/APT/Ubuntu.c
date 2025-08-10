@@ -1,13 +1,29 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- *               |  Heng Guo  <2085471348@qq.com>
- * Contributors  :    Zhao    <1792582687@qq.com>
- *               |
- * Created On    : <2023-08-30>
- * Last Modified : <2025-07-11>
  * ------------------------------------------------------------*/
+
+def_target(os_ubuntu);
+
+void
+os_ubuntu_prelude ()
+{
+  use_this(os_ubuntu);
+
+  chef_set_created_on   (this, "2023-08-30");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2025-07-11");
+
+  chef_set_authors (this, 2,
+    "Aoran Zeng", "ccmywish@qq.com",
+    "Heng Guo", "2085471348@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Zhao", "1792582687@qq.com");
+
+  chef_has_getfn;
+  chef_has_setfn;
+  chef_has_resetsrc;
 
 #define OS_Ubuntu_Speed_URL_Postfix "/dists/noble/Contents-amd64.gz"
 
@@ -167,23 +183,3 @@ os_ubuntu_resetsrc (char *option)
 {
   os_ubuntu_setsrc (option);
 }
-
-
-Feature_t
-os_ubuntu_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_gsrf(os_ubuntu);

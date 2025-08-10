@@ -1,12 +1,9 @@
-/** ------------------------------------------------------------
- * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- *               |  Heng Guo  <2085471348@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- * Created On    : <2023-09-05>
- * Last Modified : <2025-07-31>
- * ------------------------------------------------------------*/
+chef_set_created_on ("2023-09-05");
+chef_set_authors ("Aoran Zeng <ccmywish@qq.com>", "Heng Guo <2085471348@qq.com>");
+chef_set_contributors ("Nil Null <nil@null.org>");
+chef_has_getfn;
+chef_has_setfn;
+use_this;
 
 /**
  * @update 2025-07-31
@@ -64,21 +61,4 @@ os_netbsd_setsrc (char *option)
 }
 
 
-Feature_t
-os_netbsd_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-  f.can_user_define = false;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_gsf(os_netbsd);
+def_target(os_netbsd);

@@ -1,63 +1,68 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors   :   Aoran Zeng   <ccmywish@qq.com>
- *                |    Heng Guo    <2085471348@qq.com>
- * Contributors   :    Yangmoooo   <yangmoooo@outlook.com>
- *                | GitHub Copilot <https://github.com/copilot>
- *                |
- * Created On     : <2023-09-02>
- * Major Revision :      3
- * Last Modified  : <2025-07-21>
  * ------------------------------------------------------------*/
 
 #define OS_Debian_Speed_URL_Postfix "/dists/bookworm/main/Contents-all.gz"
 
-static SourceProvider_t os_debian_upstream =
-{
-  def_upstream, "https://ftp.debian.org/debian/",
-  {NotSkip, NA, NA, "https://ftp.debian.org/debian/dists/bookworm/main/Contents-all.gz", ACCURATE} // 32MB
-};
+def_target(os_debian);
 
-
-/**
- * @update 2025-07-11
- */
-static Source_t os_debian_sources[] =
+void
+os_debian_prelude ()
 {
-  {&os_debian_upstream, "http://deb.debian.org/debian", DelegateToUpstream},
+  use_this(os_debian);
+
+  chef_set_created_on   (this, "2023-09-02");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2025-07-11");
+
+  chef_set_authors (this, 2,
+    "Aoran Zeng", "ccmywish@qq.com",
+    "Heng Guo",   "2085471348@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 2,
+    "Yangmoooo", "yangmoooo@outlook.com",
+    "GitHub Copilot", "https://github.com/copilot");
+
+  chef_has_getfn();
+  chef_has_setfn();
+  chef_has_resetsrc();
+
+  def_upstream("http://deb.debian.org/debian");
+  def_sources_begin(os_debian)
+  {&upstream,       "http://deb.debian.org/debian", DelegateToUpstream},
 
   /* MirrorZ 的速度这么测也是可以的 */
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/debian/",
-                      "https://mirrors.cernet.edu.cn/debian/" OS_Debian_Speed_URL_Postfix},
+  {&MirrorZ,        "https://mirrors.cernet.edu.cn/debian/",
+                    "https://mirrors.cernet.edu.cn/debian/" OS_Debian_Speed_URL_Postfix},
 
-  {&Ali,              "https://mirrors.aliyun.com/debian",
-                      "https://mirrors.aliyun.com/debian"    OS_Debian_Speed_URL_Postfix},
+  {&Ali,            "https://mirrors.aliyun.com/debian",
+                    "https://mirrors.aliyun.com/debian"    OS_Debian_Speed_URL_Postfix},
 
-  {&Volcengine,       "https://mirrors.volces.com/debian",
-                      "https://mirrors.volces.com/debian" OS_Debian_Speed_URL_Postfix},
+  {&Volcengine,     "https://mirrors.volces.com/debian",
+                    "https://mirrors.volces.com/debian" OS_Debian_Speed_URL_Postfix},
 
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/debian",
-                      "https://mirrors.bfsu.edu.cn/debian" OS_Debian_Speed_URL_Postfix},
+  {&Bfsu,           "https://mirrors.bfsu.edu.cn/debian",
+                    "https://mirrors.bfsu.edu.cn/debian" OS_Debian_Speed_URL_Postfix},
 
-  {&Ustc,             "https://mirrors.ustc.edu.cn/debian",
-                      "https://mirrors.ustc.edu.cn/debian" OS_Debian_Speed_URL_Postfix},
+  {&Ustc,           "https://mirrors.ustc.edu.cn/debian",
+                    "https://mirrors.ustc.edu.cn/debian" OS_Debian_Speed_URL_Postfix},
 
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/debian",
-                      "https://mirrors.tuna.tsinghua.edu.cn/debian" OS_Debian_Speed_URL_Postfix},
+  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/debian",
+                    "https://mirrors.tuna.tsinghua.edu.cn/debian" OS_Debian_Speed_URL_Postfix},
 
-  {&Tencent,          "https://mirrors.tencent.com/debian",
-                      "https://mirrors.tencent.com/debian" OS_Debian_Speed_URL_Postfix},
+  {&Tencent,        "https://mirrors.tencent.com/debian",
+                    "https://mirrors.tencent.com/debian" OS_Debian_Speed_URL_Postfix}
 
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/debian", FeedBySourcesPrepare},
 
   /* 不启用原因：过慢 */
-  // {&Netease,       "https://mirrors.163.com/debian", FeedBySourcesPrepare},
+  // {&Netease,     "https://mirrors.163.com/debian", FeedBySourcesPrepare},
 
   /* 不启用原因：过慢 */
-  // {&Sohu,          "https://mirrors.sohu.com/debian", FeedBySourcesPrepare}
-};
-def_sources_n(os_debian);
+  // {&Sohu,        "https://mirrors.sohu.com/debian", FeedBySourcesPrepare}
+  def_sources_end()
+}
 
 
 void
@@ -191,23 +196,3 @@ os_debian_resetsrc (char* option)
 {
   os_debian_setsrc (option);
 }
-
-
-Feature_t
-os_debian_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_gsrf(os_debian);

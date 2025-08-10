@@ -1,33 +1,44 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors   : Heng Guo <2085471348@qq.com>
- * Contributors   : Aoran Zeng <ccmywish@qq.com>
- * Created On     : <2023-09-17>
- * Major Revision :      1
- * Last Modified  : <2025-08-09>
  * ------------------------------------------------------------*/
 
-/**
- * @update 2025-06-20
- */
-static Source_t os_opensuse_sources[] =
-{
-  {&UpstreamProvider,  NULL, NULL},
-  {&Ali,              "https://mirrors.aliyun.com/opensuse",  DelegateToMirror},
-  {&Volcengine,       "https://mirrors.volces.com/opensuse",  DelegateToMirror},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/opensuse", DelegateToMirror},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/opensuse", DelegateToMirror},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/opensuse", DelegateToMirror},
-  {&Tencent,          "https://mirrors.tencent.com/opensuse", DelegateToMirror},
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/opensuse", DelegateToMirror},
+def_target(os_opensuse);
 
-  /* 不启用原因：过慢 */
-  // {&Netease,          "https://mirrors.163.com/opensuse",   DelegateToMirror},
-  /* 不启用原因：过慢 */
-  // {&Sohu,             "https://mirrors.sohu.com/opensuse",  DelegateToMirror}
-};
-def_sources_n(os_opensuse);
+void
+os_opensuse_prelude ()
+{
+  use_this(os_opensuse);
+
+  chef_set_created_on   (this, "2023-09-17");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2025-06-20");
+
+  chef_set_authors (this, 1, "Heng Guo", "2085471348@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Aoran Zeng", "ccmywish@qq.com");
+
+  // chef_has_getfn();
+  chef_has_setfn();
+  // chef_has_resetsrc();
+  this.cap_locally = CanNot;
+  this.cap_locally_explain = NULL;
+  this.can_english = false;
+  this.can_user_define = false;
+  this.note = NULL;
+
+  def_upstream("https://download.opensuse.org/");
+  def_sources_begin()
+  {&upstream,     "https://download.opensuse.org/", DelegateToUpstream},
+  {&Ali,          "https://mirrors.aliyun.com/opensuse", DelegateToMirror},
+  {&Volcengine,   "https://mirrors.volces.com/opensuse", DelegateToMirror},
+  {&Bfsu,         "https://mirrors.bfsu.edu.cn/opensuse", DelegateToMirror},
+  {&Ustc,         "https://mirrors.ustc.edu.cn/opensuse", DelegateToMirror},
+  {&Tuna,         "https://mirrors.tuna.tsinghua.edu.cn/opensuse", DelegateToMirror},
+  {&Tencent,      "https://mirrors.tencent.com/opensuse", DelegateToMirror}
+  def_sources_end()
+}
 
 
 /**
@@ -38,7 +49,8 @@ os_opensuse_setsrc (char *option)
 {
   // chsrc_ensure_root ();
 
-  chsrc_yield_source_and_confirm (os_opensuse);
+  use_this(os_opensuse);
+  Source_t source = chsrc_yield_source_and_confirm (this, option);
 
   while (1) {
     chsrc_note2 ("请选择你的操作系统为:");
@@ -80,24 +92,3 @@ os_opensuse_setsrc (char *option)
   chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);
 }
-
-
-Feature_t
-os_opensuse_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = false;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = false;
-  f.can_user_define = false;
-
-  f.note = NULL;
-  return f;
-}
-
-
-def_target_sf(os_opensuse);

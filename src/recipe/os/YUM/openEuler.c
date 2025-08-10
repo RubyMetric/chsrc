@@ -1,14 +1,8 @@
-/** ------------------------------------------------------------
- * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  :  Heng Guo  <2085471348@qq.com>
- * Contributors  : Aoran Zeng <ccmywish@qq.com>
- *               | Yangmoooo <yangmoooo@outlook.com>
- *               | happy game <happygame1024@gmail.com>
- *               |
- * Created On    : <2023-09-06>
- * Last Modified : <2025-07-21>
- * ------------------------------------------------------------*/
+chef_set_created_on ("2023-09-06");
+chef_set_authors ("Heng Guo <2085471348@qq.com>");
+chef_set_contributors ("Aoran Zeng <ccmywish@qq.com>", "Yangmoooo <yangmoooo@outlook.com>", "happy game <happygame1024@gmail.com>");
+chef_has_setfn;
+use_this;
 
 static SourceProvider_t os_openEuler_upstream =
 {
@@ -91,22 +85,6 @@ os_openeuler_resetsrc (char *option)
 /**
  * chsrc ls openeuler
  */
-Feature_t
-os_openeuler_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-  f.can_user_define = true;
-
-  f.note = NULL;
-
-  return f;
-}
-
-def_target_gsrf(os_openeuler);
+chef_has_getfn;
+chef_has_resetsrc;
+def_target(os_openeuler);

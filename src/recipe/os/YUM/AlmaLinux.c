@@ -1,12 +1,8 @@
-/** ------------------------------------------------------------
- * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  : Yangmoooo <yangmoooo@outlook.com>
- *               |
- * Created On    : <2024-06-12>
- * Last Modified : <2025-07-21>
- * ------------------------------------------------------------*/
+chef_set_created_on ("2024-06-12");
+chef_set_authors ("Aoran Zeng <ccmywish@qq.com>");
+chef_set_contributors ("Yangmoooo <yangmoooo@outlook.com>");
+chef_has_setfn;
+use_this;
 
 static SourceProvider_t os_almalinux_upstream =
 {
@@ -49,21 +45,4 @@ os_almalinux_setsrc (char *option)
 }
 
 
-Feature_t
-os_almalinux_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = false;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-  f.can_user_define = false;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_sf(os_almalinux);
+def_target(os_almalinux);

@@ -1,15 +1,9 @@
-/** ------------------------------------------------------------
- * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  :  Heng Guo  <2085471348@qq.com>
- *               | happy game <happygame1024@gmail.com>
- * Contributors  : Aoran Zeng <ccmywish@qq.com>
- *               |
- * Created On    : <2023-09-26>
- * Last Modified : <2025-07-21>
- *
- * 名称为 Fedora Linux
- * ------------------------------------------------------------*/
+chef_set_created_on ("2023-09-26");
+chef_set_authors ("Heng Guo <2085471348@qq.com>", "happy game <happygame1024@gmail.com>");
+chef_set_contributors ("Aoran Zeng <ccmywish@qq.com>");
+chef_has_setfn;
+chef_has_resetsrc;
+use_this;
 
 /**
  * @update 2025-06-20
@@ -87,19 +81,4 @@ os_fedora_resetsrc (char *option)
 }
 
 
-Feature_t
-os_fedora_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = false;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.can_english = false;
-  f.can_user_define = true;
-
-  return f;
-}
-
-def_target_srf(os_fedora);
+def_target(os_fedora);

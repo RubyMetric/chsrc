@@ -46,9 +46,9 @@ chef_ensure_trailing_slash (char *str)
 }
 
 
-#define chef_has_getfn() this->getfn = t##_getsrc;
-#define chef_has_setfn() this->setfn = t##_setsrc;
-#define chef_has_resetsrc() this->resetfn = t##_resetsrc;
+#define chef_has_get() this->getfn = t##_getsrc;
+#define chef_has_set() this->setfn = t##_setsrc;
+#define chef_has_reset() this->resetfn = t##_resetsrc;
 
 
 void

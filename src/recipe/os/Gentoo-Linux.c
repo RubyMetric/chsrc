@@ -1,31 +1,43 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Heng Guo <2085471348@qq.com>
- * Contributors  : Aoran Zeng <ccmywish@qq.com>
- * Created On    : <2023-09-05>
- * Last Modified : <2025-07-31>
  * ------------------------------------------------------------*/
 
-/**
- * @update 2025-06-20
- */
-static Source_t os_gentoo_sources[] =
-{
-  {&UpstreamProvider,  NULL, NULL},
-  {&Ali,              "mirrors.aliyun.com",  DelegateToMirror },
-  {&Bfsu,             "mirrors.bfsu.edu.cn", DelegateToMirror},
-  {&Ustc,             "mirrors.ustc.edu.cn", DelegateToMirror},
-  {&Tuna,             "mirrors.tuna.tsinghua.edu.cn", DelegateToMirror},
-  {&Tencent,          "mirrors.tencent.com", DelegateToMirror},
-  // {&Tencent_Intra, "mirrors.tencentyun.com", DelegateToMirror},
+def_target(os_gentoo);
 
-  /* 不启用原因：过慢 */
-  // {&Netease,          "mirrors.163.com", DelegateToMirror},
-  /* 不启用原因：过慢 */
-  // {&Sohu,             "mirrors.sohu.com", DelegateToMirror}
-};
-def_sources_n(os_gentoo);
+void
+os_gentoo_prelude ()
+{
+  use_this(os_gentoo);
+
+  chef_set_created_on   (this, "2023-09-05");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2025-06-20");
+
+  chef_set_authors (this, 1, "Heng Guo", "2085471348@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Aoran Zeng", "ccmywish@qq.com");
+
+  // chef_has_getfn();
+  chef_has_setfn();
+  // chef_has_resetsrc();
+  this.cap_locally = CanNot;
+  this.cap_locally_explain = NULL;
+  this.can_english = true;
+  this.can_user_define = false;
+  this.note = NULL;
+
+  def_upstream("https://www.gentoo.org/downloads/mirrors/");
+  def_sources_begin()
+  {&upstream,  "rsync://rsync.gentoo.org/gentoo-portage", DelegateToUpstream},
+  {&Ali,       "mirrors.aliyun.com", DelegateToMirror},
+  {&Bfsu,      "mirrors.bfsu.edu.cn", DelegateToMirror},
+  {&Ustc,      "mirrors.ustc.edu.cn", DelegateToMirror},
+  {&Tuna,      "mirrors.tuna.tsinghua.edu.cn", DelegateToMirror},
+  {&Tencent,   "mirrors.tencent.com", DelegateToMirror}
+  def_sources_end()
+}
 
 
 /**
@@ -36,7 +48,8 @@ os_gentoo_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  chsrc_yield_source_and_confirm (os_gentoo);
+  use_this(os_gentoo);
+  Source_t source = chsrc_yield_source_and_confirm (this, option);
 
   chsrc_backup ("/etc/portage/repos.conf/gentoo.conf");
 
@@ -52,24 +65,3 @@ os_gentoo_setsrc (char *option)
   chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);
 }
-
-
-Feature_t
-os_gentoo_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = false;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-  f.can_user_define = false;
-
-  f.note = NULL;
-  return f;
-}
-
-
-def_target_sf(os_gentoo);

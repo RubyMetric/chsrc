@@ -1,30 +1,42 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Shengwei Chen <414685209@qq.com>
- * Contributors  :  Aoran Zeng   <ccmywish@qq.com>
- *               |  Yangmoooo <yangmoooo@outlook.com>
- *               |
- * Created On    : <2024-06-14>
- * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
-/**
- * @update 2024-11-21
- */
-static Source_t os_armbian_sources[] =
+def_target(os_armbian);
+
+void
+os_armbian_prelude ()
 {
-  {&UpstreamProvider, "http://apt.armbian.com", NULL},
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/armbian",        DelegateToMirror},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/armbian", DelegateToMirror},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/armbian",            DelegateToMirror},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/armbian",           DelegateToMirror},
-  {&Sustech,          "https://mirrors.sustech.edu.cn/armbian",        DelegateToMirror},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/armbian",           DelegateToMirror},
-  {&Nju,              "https://mirrors.nju.edu.cn/armbian",             DelegateToMirror},
-  {&Ali,              "https://mirrors.aliyun.com/armbian",             DelegateToMirror},
-};
-def_sources_n(os_armbian);
+  use_this(os_armbian);
+
+  chef_set_created_on   (this, "2024-06-14");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2024-11-21");
+
+  chef_set_authors (this, 1, "Shengwei Chen", "414685209@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 2,
+    "Aoran Zeng", "ccmywish@qq.com",
+    "Yangmoooo",  "yangmoooo@outlook.com");
+
+  chef_has_getfn();
+  chef_has_setfn();
+  chef_has_resetsrc();
+
+  def_upstream("http://apt.armbian.com");
+  def_sources_begin(os_armbian)
+  {&upstream,       "http://apt.armbian.com", DelegateToUpstream},
+  {&MirrorZ,        "https://mirrors.cernet.edu.cn/armbian",        DelegateToMirror},
+  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/armbian", DelegateToMirror},
+  {&Sjtug_Zhiyuan,  "https://mirror.sjtu.edu.cn/armbian",            DelegateToMirror},
+  {&Bfsu,           "https://mirrors.bfsu.edu.cn/armbian",           DelegateToMirror},
+  {&Sustech,        "https://mirrors.sustech.edu.cn/armbian",        DelegateToMirror},
+  {&Ustc,           "https://mirrors.ustc.edu.cn/armbian",           DelegateToMirror},
+  {&Nju,            "https://mirrors.nju.edu.cn/armbian",             DelegateToMirror},
+  {&Ali,            "https://mirrors.aliyun.com/armbian",             DelegateToMirror}
+  def_sources_end()
+}
 
 
 void
@@ -70,21 +82,3 @@ os_armbian_resetsrc (char *option)
 {
   os_armbian_setsrc (option);
 }
-
-
-Feature_t
-os_armbian_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.can_english = true;
-  f.can_user_define = true;
-
-  return f;
-}
-
-def_target_gsrf(os_armbian);

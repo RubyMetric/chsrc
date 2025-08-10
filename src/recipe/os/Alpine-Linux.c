@@ -1,11 +1,5 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  : Yangmoooo <yangmoooo@outlook.com>
- *               |
- * Created On    : <2023-09-24>
- * Last Modified : <2025-07-21>
  * ------------------------------------------------------------*/
 
 static SourceProvider_t os_alpine_upstream =
@@ -14,24 +8,45 @@ static SourceProvider_t os_alpine_upstream =
   {NotSkip, NA, NA, "https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64/alpine-standard-3.21.0-x86_64.iso", ACCURATE}
 };
 
+def_target(os_alpine);
 
-/**
- * @update 2024-09-14
- */
-static Source_t os_alpine_sources[] =
+void
+os_alpine_prelude ()
 {
-  {&os_alpine_upstream, "http://dl-cdn.alpinelinux.org/alpine",      DelegateToUpstream},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/alpine", DelegateToMirror},
-  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/alpine",     DelegateToMirror},
-  {&Sustech,          "https://mirrors.sustech.edu.cn/alpine",       DelegateToMirror},
-  {&Zju,              "https://mirrors.zju.edu.cn/alpine",           DelegateToMirror},
-  {&Lzuoss,           "https://mirror.lzu.edu.cn/alpine",            DelegateToMirror},
-  {&Ali,              "https://mirrors.aliyun.com/alpine",           DelegateToMirror},
-  {&Tencent,          "https://mirrors.cloud.tencent.com/alpine",    DelegateToMirror},
-  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/alpine", DelegateToMirror},
-  {&Huawei,           "https://mirrors.huaweicloud.com/alpine",      DelegateToMirror}
-};
-def_sources_n(os_alpine);
+  use_this(os_alpine);
+
+  chef_set_created_on   (this, "2023-09-24");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2024-09-14");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Yangmoooo", "yangmoooo@outlook.com");
+
+  chef_has_getfn();
+  chef_has_setfn();
+  // chef_has_resetsrc();
+  this.cap_locally = CanNot;
+  this.cap_locally_explain = NULL;
+  this.can_english = true;
+  this.can_user_define = false;
+  this.note = NULL;
+
+  def_upstream_provider(os_alpine_upstream);
+  def_sources_begin()
+  {&upstream,        "http://dl-cdn.alpinelinux.org/alpine", DelegateToUpstream},
+  {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/alpine", DelegateToMirror},
+  {&Sjtug_Zhiyuan,   "https://mirrors.sjtug.sjtu.edu.cn/alpine", DelegateToMirror},
+  {&Sustech,         "https://mirrors.sustech.edu.cn/alpine", DelegateToMirror},
+  {&Zju,             "https://mirrors.zju.edu.cn/alpine", DelegateToMirror},
+  {&Lzuoss,          "https://mirror.lzu.edu.cn/alpine", DelegateToMirror},
+  {&Ali,             "https://mirrors.aliyun.com/alpine", DelegateToMirror},
+  {&Tencent,         "https://mirrors.cloud.tencent.com/alpine", DelegateToMirror},
+  {&Huawei,          "https://mirrors.huaweicloud.com/alpine", DelegateToMirror}
+  def_sources_end()
+}
 
 
 void
@@ -49,7 +64,8 @@ os_alpine_setsrc (char *option)
 {
   // chsrc_ensure_root(); // HELP: 不确定是否需要root
 
-  chsrc_yield_source_and_confirm (os_alpine);
+  use_this(os_alpine);
+  Source_t source = chsrc_yield_source_and_confirm (this, option);
 
   char* cmd = xy_strjoin (3,
             "sed -i 's#https\\?://dl-cdn.alpinelinux.org/alpine#", source.url, "#g' /etc/apk/repositories"
@@ -61,23 +77,3 @@ os_alpine_setsrc (char *option)
   chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);
 }
-
-
-Feature_t
-os_alpine_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-  f.can_user_define = false;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_gsf(os_alpine);

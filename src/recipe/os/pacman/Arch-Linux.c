@@ -1,13 +1,10 @@
-/** ------------------------------------------------------------
- * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- *               |  Heng Guo  <2085471348@qq.com>
- * Contributors  : happy game <happygame1024@gmail.com>
- *               |
- * Created On    : <2023-09-05>
- * Last Modified : <2025-06-20>
- * ------------------------------------------------------------*/
+chef_set_created_on ("2023-09-05");
+chef_set_authors ("Aoran Zeng <ccmywish@qq.com>", "Heng Guo <2085471348@qq.com>");
+chef_set_contributors ("happy game <happygame1024@gmail.com>");
+chef_has_getfn;
+chef_has_setfn;
+chef_note("可额外使用 chsrc set archlinuxcn 来更换 Arch Linux CN Repository 源");
+use_this;
 
 /**
  * @update 2025-06-20
@@ -154,39 +151,13 @@ os_archlinuxcn_setsrc (char *option)
 #undef OS_Pacman_ArchLinuxCN_MirrorList
 
 
-Feature_t
-os_arch_feat (char *option)
-{
-  Feature_t f = {0};
+def_target_has_note("可额外使用 chsrc set arch 来更换 Arch Linux 源");
+def_target(os_arch);
 
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.can_english = true;
-  f.can_user_define = true;
-
-  f.note = "可额外使用 chsrc set archlinuxcn 来更换 Arch Linux CN Repository 源";
-  return f;
-}
-
-
-Feature_t
-os_archlinuxcn_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.can_english = true;
-  f.can_user_define = true;
-
-  f.note = "可额外使用 chsrc set arch 来更换 Arch Linux 源";
-  return f;
-}
-
-
-def_target_gsf(os_arch);
-def_target_gsf(os_archlinuxcn);
+chef_set_created_on ("2023-09-05");
+chef_set_authors ("Aoran Zeng <ccmywish@qq.com>", "Heng Guo <2085471348@qq.com>");
+chef_set_contributors ("happy game <happygame1024@gmail.com>");
+chef_has_getfn;
+chef_has_setfn;
+chef_note("可额外使用 chsrc set arch 来更换 Arch Linux 源");
+def_target(os_archlinuxcn);

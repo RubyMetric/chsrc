@@ -1,33 +1,43 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  :  Heng Guo  <2085471348@qq.com>
- * Contributors  :  Yangmoooo <yangmoooo@outlook.com>
- * Created On    : <2023-09-26>
- * Last Modified : <2025-07-21>
- *
- * 名称为小写deepin，而非Deepin
  * ------------------------------------------------------------*/
 
-/**
- * @update 2024-09-14
- */
-static Source_t os_deepin_sources[] =
-{
-  {&UpstreamProvider, "https://community-packages.deepin.com/deepin", DelegateToUpstream},
-  {&Ali,              "https://mirrors.aliyun.com/deepin",            DelegateToMirror},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/deepin",          DelegateToMirror},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/deepin",          DelegateToMirror},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/deepin",  DelegateToMirror},
-  {&Tencent,          "https://mirrors.tencent.com/deepin",          DelegateToMirror},
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/deepin",       DelegateToMirror},
+def_target(os_deepin);
 
+void
+os_deepin_prelude ()
+{
+  use_this(os_deepin);
+
+  chef_set_created_on   (this, "2023-09-26");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2024-09-14");
+
+  chef_set_authors (this, 1, "Heng Guo", "2085471348@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Yangmoooo", "yangmoooo@outlook.com");
+
+  chef_has_getfn();
+  chef_has_setfn();
+  chef_has_resetsrc();
+
+  def_upstream("https://community-packages.deepin.com/deepin");
+  def_sources_begin(os_deepin)
+  {&upstream,       "https://community-packages.deepin.com/deepin", DelegateToUpstream},
+  {&Ali,            "https://mirrors.aliyun.com/deepin",            DelegateToMirror},
+  {&Bfsu,           "https://mirrors.bfsu.edu.cn/deepin",          DelegateToMirror},
+  {&Ustc,           "https://mirrors.ustc.edu.cn/deepin",          DelegateToMirror},
+  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/deepin",  DelegateToMirror},
+  {&Tencent,        "https://mirrors.tencent.com/deepin",          DelegateToMirror}
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/deepin",     DelegateToMirror},
   /* 不启用原因：过慢 */
-  // {&Netease,          "https://mirrors.163.com/deepin",           DelegateToMirror},
+  // {&Netease,       "https://mirrors.163.com/deepin",             DelegateToMirror},
   /* 不启用原因：过慢 */
-  // {&Sohu,             "https://mirrors.sohu.com/deepin",          DelegateToMirror}
-};
-def_sources_n(os_deepin);
+  // {&Sohu,          "https://mirrors.sohu.com/deepin",            DelegateToMirror}
+  def_sources_end()
+}
 
 
 void
@@ -65,24 +75,3 @@ os_deepin_resetsrc (char *option)
 {
   os_deepin_setsrc (option);
 }
-
-
-Feature_t
-os_deepin_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-
-  f.can_english = true;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_gsrf(os_deepin);

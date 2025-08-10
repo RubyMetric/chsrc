@@ -1,11 +1,8 @@
-/** ------------------------------------------------------------
- * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  :  Heng Guo  <2085471348@qq.com>
- * Contributors  : Aoran Zeng <ccmywish@qq.com>
- * Created On    : <2023-09-06>
- * Last Modified : <2025-06-20>
- * ------------------------------------------------------------*/
+chef_set_created_on ("2023-09-06");
+chef_set_authors ("Heng Guo <2085471348@qq.com>");
+chef_set_contributors ("Aoran Zeng <ccmywish@qq.com>");
+chef_has_setfn;
+use_this;
 
 /**
  * @update 2025-06-20
@@ -55,20 +52,4 @@ os_msys2_setsrc (char *option)
 }
 
 
-Feature_t
-os_msys2_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = false;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_sf(os_msys2);
+def_target(os_msys2);
