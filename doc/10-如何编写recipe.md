@@ -2,7 +2,7 @@
  ! SPDX-License-Identifier: GFDL-1.3-or-later
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
- ! Doc Name      : 10-Write-A-Recipe-Even-If-You-Dont-Know-C.md
+ ! Doc Name      : 10-如何编写recipe.md
  ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
