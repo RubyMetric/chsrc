@@ -2,8 +2,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-#define OS_Debian_Speed_URL_Postfix "/dists/bookworm/main/Contents-all.gz"
-
 def_target(os_debian);
 
 void
@@ -35,45 +33,25 @@ os_debian_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,       "http://deb.debian.org/debian", DelegateToUpstream},
+  {&upstream,   "http://deb.debian.org/debian",          FeedByPrelude},
+  {&MirrorZ,    "https://mirrors.cernet.edu.cn/debian/", FeedByPrelude},
+  {&Ali,        "https://mirrors.aliyun.com/debian", FeedByPrelude},
+  {&Volcengine, "https://mirrors.volces.com/debian", FeedByPrelude},
+  {&Bfsu,       "https://mirrors.bfsu.edu.cn/debian", FeedByPrelude},
+  {&Ustc,       "https://mirrors.ustc.edu.cn/debian", FeedByPrelude},
+  {&Tuna,       "https://mirrors.tuna.tsinghua.edu.cn/debian", FeedByPrelude},
+  {&Tencent,    "https://mirrors.tencent.com/debian", FeedByPrelude}
 
-  /* MirrorZ 的速度这么测也是可以的 */
-  {&MirrorZ,        "https://mirrors.cernet.edu.cn/debian/",
-                    "https://mirrors.cernet.edu.cn/debian/" OS_Debian_Speed_URL_Postfix},
-
-  {&Ali,            "https://mirrors.aliyun.com/debian",
-                    "https://mirrors.aliyun.com/debian"    OS_Debian_Speed_URL_Postfix},
-
-  {&Volcengine,     "https://mirrors.volces.com/debian",
-                    "https://mirrors.volces.com/debian" OS_Debian_Speed_URL_Postfix},
-
-  {&Bfsu,           "https://mirrors.bfsu.edu.cn/debian",
-                    "https://mirrors.bfsu.edu.cn/debian" OS_Debian_Speed_URL_Postfix},
-
-  {&Ustc,           "https://mirrors.ustc.edu.cn/debian",
-                    "https://mirrors.ustc.edu.cn/debian" OS_Debian_Speed_URL_Postfix},
-
-  {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/debian",
-                    "https://mirrors.tuna.tsinghua.edu.cn/debian" OS_Debian_Speed_URL_Postfix},
-
-  {&Tencent,        "https://mirrors.tencent.com/debian",
-                    "https://mirrors.tencent.com/debian" OS_Debian_Speed_URL_Postfix}
-
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/debian", FeedBySourcesPrepare},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/debian", FeedByPrelude},
 
   /* 不启用原因：过慢 */
-  // {&Netease,     "https://mirrors.163.com/debian", FeedBySourcesPrepare},
+  // {&Netease,     "https://mirrors.163.com/debian", FeedByPrelude},
 
   /* 不启用原因：过慢 */
-  // {&Sohu,        "https://mirrors.sohu.com/debian", FeedBySourcesPrepare}
+  // {&Sohu,        "https://mirrors.sohu.com/debian", FeedByPrelude}
   def_sources_end()
-}
 
-
-void
-os_debian_sources_prepare ()
-{
-  chsrc_sources_prepare_speedurl_with_postfix (os_debian, OS_Debian_Speed_URL_Postfix);
+  chsrc_set_sources_speed_measure_url_with_postfix (this, "/dists/bookworm/main/Contents-all.gz");
 }
 
 

@@ -30,18 +30,18 @@ os_alpine_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,        "http://dl-cdn.alpinelinux.org/alpine", DelegateToUpstream},
-  {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/alpine", DelegateToMirror},
-  {&Sjtug_Zhiyuan,   "https://mirrors.sjtug.sjtu.edu.cn/alpine", DelegateToMirror},
-  {&Sustech,         "https://mirrors.sustech.edu.cn/alpine", DelegateToMirror},
-  {&Zju,             "https://mirrors.zju.edu.cn/alpine", DelegateToMirror},
-  {&Lzuoss,          "https://mirror.lzu.edu.cn/alpine", DelegateToMirror},
-  {&Ali,             "https://mirrors.aliyun.com/alpine", DelegateToMirror},
-  {&Tencent,         "https://mirrors.cloud.tencent.com/alpine", DelegateToMirror},
-  {&Huawei,          "https://mirrors.huaweicloud.com/alpine", DelegateToMirror}
+  {&upstream,        "http://dl-cdn.alpinelinux.org/alpine", FeedByPrelude},
+  {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/alpine", FeedByPrelude},
+  {&Sjtug_Zhiyuan,   "https://mirrors.sjtug.sjtu.edu.cn/alpine", FeedByPrelude},
+  {&Sustech,         "https://mirrors.sustech.edu.cn/alpine", FeedByPrelude},
+  {&Zju,             "https://mirrors.zju.edu.cn/alpine", FeedByPrelude},
+  {&Lzuoss,          "https://mirror.lzu.edu.cn/alpine", FeedByPrelude},
+  {&Ali,             "https://mirrors.aliyun.com/alpine", FeedByPrelude},
+  {&Tencent,         "https://mirrors.cloud.tencent.com/alpine", FeedByPrelude},
+  {&Huawei,          "https://mirrors.huaweicloud.com/alpine", FeedByPrelude}
   def_sources_end()
 
-  chsrc_set_provider_speed_measure_url (&upstream, "https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64/alpine-standard-3.21.0-x86_64.iso");
+  chsrc_set_sources_speed_measure_url_with_postfix (this, "/latest-stable/releases/x86_64/alpine-standard-3.21.0-x86_64.iso");
 }
 
 

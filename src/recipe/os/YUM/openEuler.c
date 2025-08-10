@@ -31,21 +31,21 @@ os_openeuler_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,  "https://repo.openeuler.org/",         DelegateToUpstream},
-  {&Ali,       "https://mirrors.aliyun.com/openeuler/",     DelegateToMirror},
-  {&Bfsu,      "https://mirrors.bfsu.edu.cn/openeuler/",    DelegateToMirror},
-  {&Ustc,      "https://mirrors.ustc.edu.cn/openeuler/",    DelegateToMirror},
-  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/openeuler/", DelegateToMirror},
-  {&Tencent,   "https://mirrors.tencent.com/openeuler/",    DelegateToMirror}
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/openeuler/", DelegateToMirror},
+  {&upstream,  "https://repo.openeuler.org/",         FeedByPrelude},
+  {&Ali,       "https://mirrors.aliyun.com/openeuler/",     FeedByPrelude},
+  {&Bfsu,      "https://mirrors.bfsu.edu.cn/openeuler/",    FeedByPrelude},
+  {&Ustc,      "https://mirrors.ustc.edu.cn/openeuler/",    FeedByPrelude},
+  {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/openeuler/", FeedByPrelude},
+  {&Tencent,   "https://mirrors.tencent.com/openeuler/",    FeedByPrelude}
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/openeuler/", FeedByPrelude},
 
   /* 不启用原因：过慢 */
-  // {&Netease,          "https://mirrors.163.com/openeuler/",  DelegateToMirror}
+  // {&Netease,          "https://mirrors.163.com/openeuler/",  FeedByPrelude}
   /* 不启用原因：过慢 */
-  // {&Sohu,             "https://mirrors.sohu.com/openeuler/", DelegateToMirror}
+  // {&Sohu,             "https://mirrors.sohu.com/openeuler/", FeedByPrelude}
   def_sources_end()
 
-  chsrc_set_provider_speed_measure_url (&upstream, "https://repo.openeuler.org/openEuler-24.03-LTS/ISO/x86_64/openEuler-24.03-LTS-netinst-x86_64-dvd.iso");
+  chsrc_set_sources_speed_measure_url_with_postfix (this, "https://repo.openeuler.org/openEuler-24.03-LTS/ISO/x86_64/openEuler-24.03-LTS-netinst-x86_64-dvd.iso");
 }
 
 

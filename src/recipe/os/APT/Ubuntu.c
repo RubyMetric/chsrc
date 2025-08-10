@@ -2,8 +2,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-#define OS_Ubuntu_Speed_URL_Postfix "/dists/noble/Contents-amd64.gz"
-
 def_target(os_ubuntu);
 
 void
@@ -34,47 +32,25 @@ os_ubuntu_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,         "http://archive.ubuntu.com/ubuntu/", /* 不支持https */
-                      DelegateToUpstream},
-
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/ubuntu/",
-                      "https://mirrors.cernet.edu.cn/ubuntu/" OS_Ubuntu_Speed_URL_Postfix },
-
-  {&Ali,              "https://mirrors.aliyun.com/ubuntu",
-                      "https://mirrors.aliyun.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
-
-  {&Volcengine,       "https://mirrors.volces.com/ubuntu",
-                      "https://mirrors.volces.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
-
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/ubuntu",
-                      "https://mirrors.bfsu.edu.cn/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
-
-  {&Ustc,             "https://mirrors.ustc.edu.cn/ubuntu",
-                      "https://mirrors.ustc.edu.cn/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
-
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/ubuntu",
-                      "https://mirrors.tuna.tsinghua.edu.cn/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
-
-  {&Tencent,          "https://mirrors.tencent.com/ubuntu",
-  {&Tencent,          "https://mirrors.tencent.com/ubuntu",
-                      "https://mirrors.tencent.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
-
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/ubuntu",
-  //                  "https://mirrors.tencentyun.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
-
-  {&Huawei,           "https://mirrors.huaweicloud.com/ubuntu",
-                      "https://mirrors.huaweicloud.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix}
+  {&upstream,         "http://archive.ubuntu.com/ubuntu/",  FeedByPrelude}, /* 不支持https */
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/ubuntu/",FeedByPrelude},
+  {&Ali,              "https://mirrors.aliyun.com/ubuntu",FeedByPrelude},
+  {&Volcengine,       "https://mirrors.volces.com/ubuntu",FeedByPrelude},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/ubuntu",FeedByPrelude},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/ubuntu",FeedByPrelude},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/ubuntu",FeedByPrelude},
+  {&Tencent,          "https://mirrors.tencent.com/ubuntu", FeedByPrelude},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/ubuntu",FeedByPrelude},
+  {&Huawei,           "https://mirrors.huaweicloud.com/ubuntu",FeedByPrelude}
 
   /* 不启用原因：过慢 */
-  // {&Netease,          "https://mirrors.163.com/ubuntu",
-  //                     "https://mirrors.163.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
+  // {&Netease,          "https://mirrors.163.com/ubuntu", FeedByPrelude},
 
   /* 不启用原因：过慢 */
-  // {&Sohu,             "https://mirrors.sohu.com/ubuntu",
-  //                     "https://mirrors.sohu.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix}
+  // {&Sohu,             "https://mirrors.sohu.com/ubuntu", FeedByPrelude}
   def_sources_end()
 
-  chsrc_set_provider_speed_measure_url (&upstream, "http://archive.ubuntu.com/ubuntu/dists/noble/Contents-amd64.gz");
+  chsrc_set_sources_speed_measure_url_with_postfix (this, "/dists/noble/Contents-amd64.gz");
 }
 
 

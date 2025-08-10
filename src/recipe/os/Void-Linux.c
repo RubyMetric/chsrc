@@ -30,13 +30,13 @@ os_voidlinux_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&upstream,        "https://repo-default.voidlinux.org", DelegateToUpstream},
-  {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/voidlinux", DelegateToMirror},
-  {&Sjtug_Zhiyuan,   "https://mirror.sjtu.edu.cn/voidlinux", DelegateToMirror},
-  {&Bfsu,            "https://mirrors.bfsu.edu.cn/voidlinux", DelegateToMirror}
+  {&upstream,        "https://repo-default.voidlinux.org", FeedByPrelude},
+  {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/voidlinux", FeedByPrelude},
+  {&Sjtug_Zhiyuan,   "https://mirror.sjtu.edu.cn/voidlinux", FeedByPrelude},
+  {&Bfsu,            "https://mirrors.bfsu.edu.cn/voidlinux", FeedByPrelude}
   def_sources_end()
 
-  chsrc_set_provider_speed_measure_url (&upstream, "https://repo-default.voidlinux.org/live/20240314/void-live-x86_64-musl-20240314-xfce.iso");
+  chsrc_set_sources_speed_measure_url_with_postfix (this, "/live/20240314/void-live-x86_64-musl-20240314-xfce.iso");
 }
 
 

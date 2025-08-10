@@ -2,8 +2,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-#define PL_Dart_Pub_Speed_URL_Postfix "/packages/flutter_vision/versions/1.1.4.tar.gz"
-
 def_target(pl_dart);
 
 void
@@ -26,24 +24,19 @@ pl_dart_prelude (void)
   chef_allow_set();
   chef_allow_reset();
 
-  chef_allow_local_mode (this, FullyCan, "Pub 支持项目级换源", "Pub supports project-level source changing");
+  chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&upstream,         "https://pub.dev", "https://pub.dev" PL_Dart_Pub_Speed_URL_Postfix},
-  {&FlutterCN,        "https://pub.flutter-io.cn",
-                      "https://pub.flutter-io.cn" PL_Dart_Pub_Speed_URL_Postfix},
-
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/dart-pub",
-                      "https://mirror.sjtu.edu.cn/dart-pub" PL_Dart_Pub_Speed_URL_Postfix},
-
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/dart-pub",
-                      "https://mirrors.tuna.tsinghua.edu.cn/dart-pub" PL_Dart_Pub_Speed_URL_Postfix},
-
-  {&Nju,              "https://mirror.nju.edu.cn/dart-pub",
-                      "https://mirror.nju.edu.cn/dart-pub" PL_Dart_Pub_Speed_URL_Postfix}
+  {&upstream,      "https://pub.dev",           FeedByPrelude},
+  {&FlutterCN,     "https://pub.flutter-io.cn", FeedByPrelude},
+  {&Sjtug_Zhiyuan, "https://mirror.sjtu.edu.cn/dart-pub", FeedByPrelude},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/dart-pub", FeedByPrelude,
+  {&Nju,           "https://mirror.nju.edu.cn/dart-pub", FeedByPrelude}
   def_sources_end()
+
+  chsrc_set_sources_speed_measure_url_with_postfix (this, "/packages/flutter_vision/versions/1.1.4.tar.gz");
 }
 
 
