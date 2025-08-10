@@ -24,8 +24,14 @@ os_armbian_prelude ()
   chef_allow_set();
   chef_allow_reset();
 
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
+
   def_upstream("http://apt.armbian.com");
-  def_sources_begin(os_armbian)
+  def_sources_begin()
   {&upstream,       "http://apt.armbian.com", DelegateToUpstream},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/armbian",        DelegateToMirror},
   {&Tuna,           "https://mirrors.tuna.tsinghua.edu.cn/armbian", DelegateToMirror},

@@ -23,8 +23,14 @@ os_deepin_prelude ()
   chef_allow_set();
   chef_allow_reset();
 
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
+
   def_upstream("https://community-packages.deepin.com/deepin");
-  def_sources_begin(os_deepin)
+  def_sources_begin()
   {&upstream,       "https://community-packages.deepin.com/deepin", DelegateToUpstream},
   {&Ali,            "https://mirrors.aliyun.com/deepin",            DelegateToMirror},
   {&Bfsu,           "https://mirrors.bfsu.edu.cn/deepin",          DelegateToMirror},

@@ -23,8 +23,14 @@ os_linuxlite_prelude ()
   chef_allow_set();
   chef_allow_reset();
 
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
+
   def_upstream("http://repo.linuxliteos.com/linuxlite/");
-  def_sources_begin(os_linuxlite)
+  def_sources_begin()
   {&upstream,       "http://repo.linuxliteos.com/linuxlite/",    DelegateToUpstream},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/linuxliteos/",    DelegateToMirror},
   {&Sjtug_Zhiyuan,  "https://mirrors.sjtug.sjtu.edu.cn/linuxliteos/", DelegateToMirror},

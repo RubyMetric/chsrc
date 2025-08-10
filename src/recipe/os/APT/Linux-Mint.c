@@ -23,9 +23,14 @@ os_linuxmint_prelude ()
   chef_allow_set();
   chef_allow_reset();
 
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+
   /* @note 实际上镜像站里的内容和Ubuntu的不太一样 */
   def_upstream("http://packages.linuxmint.com");
-  def_sources_begin(os_linuxmint)
+  def_sources_begin()
   {&upstream,       "http://packages.linuxmint.com", DelegateToUpstream},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/linuxmint/", DelegateToMirror},
   {&Ali,            "http://mirrors.aliyun.com/linuxmint-packages/",   DelegateToMirror},
@@ -50,6 +55,7 @@ os_linuxmint_getsrc (char *option)
 {
   chsrc_view_file (OS_LinuxMint_SourceList);
 }
+
 
 /**
  * @consult https://help.mirrors.cernet.edu.cn/linuxmint/
@@ -79,7 +85,3 @@ os_linuxmint_setsrc (char *option)
   chsrc_warn2 ("完成后请不要再使用 mintsources（自带的图形化软件源设置工具）进行任何操作，因为在操作后，无论是否有按“确定”，mintsources 均会覆写我们刚才换源的内容");
   chsrc_warn2 ("已自动更换mint主要源, 但mint也使用基于debian或ubuntu的基础源, 可参考对应的debian或ubuntu换源方法进行手动换源");
 }
-
-
-
-

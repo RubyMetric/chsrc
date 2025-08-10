@@ -24,8 +24,14 @@ os_kali_prelude ()
   chef_allow_set();
   chef_allow_reset();
 
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
+
   def_upstream("http://http.kali.org/kali");
-  def_sources_begin(os_kali)
+  def_sources_begin()
   {&upstream,      "http://http.kali.org/kali",          DelegateToUpstream},
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/kali", DelegateToMirror},
   {&Ali,           "https://mirrors.aliyun.com/kali",    DelegateToMirror},

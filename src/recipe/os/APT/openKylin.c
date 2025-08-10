@@ -1,5 +1,8 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
+ * -------------------------------------------------------------
+ * openKylin直接基于Linux内核开发，属于和Debian、openSUSE、Fedora、Arch
+ * 同一级别的、根社区发布的系统
  * ------------------------------------------------------------*/
 
 def_target(os_openkylin);
@@ -23,10 +26,14 @@ os_openkylin_prelude ()
   chef_allow_set();
   chef_allow_reset();
 
-  /* openKylin直接基于Linux内核开发，属于和Debian、openSUSE、Fedora、Arch
-   * 同一级别的、根社区发布的系统 */
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
+
   def_upstream("https://archive.openkylin.top/openkylin/");
-  def_sources_begin(os_openkylin)
+  def_sources_begin()
   {&upstream,       "https://archive.openkylin.top/openkylin/", DelegateToUpstream},
   {&Ali,            "https://mirrors.aliyun.com/openkylin/",    DelegateToMirror},
   {&Netease,        "https://mirrors.163.com/openkylin/",       DelegateToMirror}

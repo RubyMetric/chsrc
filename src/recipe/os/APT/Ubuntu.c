@@ -2,6 +2,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
+#define OS_Ubuntu_Speed_URL_Postfix "/dists/noble/Contents-amd64.gz"
+
 def_target(os_ubuntu);
 
 void
@@ -25,22 +27,16 @@ os_ubuntu_prelude ()
   chef_allow_set();
   chef_allow_reset();
 
-#define OS_Ubuntu_Speed_URL_Postfix "/dists/noble/Contents-amd64.gz"
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
 
-static SourceProvider_t os_ubuntu_upstream =
-{
-  def_upstream, "http://archive.ubuntu.com/",
-  // https://github.com/RubyMetric/chsrc/issues/121
-  {NotSkip, NA, NA, "http://archive.ubuntu.com/ubuntu/dists/noble/Contents-amd64.gz", /* 48.9 MB*/  ACCURATE}
-};
+  chef_set_note(this, NULL, NULL);
 
-/**
- * @update 2025-07-11
- */
-static Source_t os_ubuntu_sources[] =
-{
-  {&os_ubuntu_upstream, "http://archive.ubuntu.com/ubuntu/", /* 不支持https */
-                         DelegateToUpstream},
+  def_upstream("http://archive.ubuntu.com/ubuntu/");
+  def_sources_begin()
+  {&upstream,         "http://archive.ubuntu.com/ubuntu/", /* 不支持https */
+                      DelegateToUpstream},
 
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/ubuntu/",
                       "https://mirrors.cernet.edu.cn/ubuntu/" OS_Ubuntu_Speed_URL_Postfix },
@@ -61,13 +57,14 @@ static Source_t os_ubuntu_sources[] =
                       "https://mirrors.tuna.tsinghua.edu.cn/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
 
   {&Tencent,          "https://mirrors.tencent.com/ubuntu",
+  {&Tencent,          "https://mirrors.tencent.com/ubuntu",
                       "https://mirrors.tencent.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
 
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/ubuntu",
   //                  "https://mirrors.tencentyun.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
 
   {&Huawei,           "https://mirrors.huaweicloud.com/ubuntu",
-                      "https://mirrors.huaweicloud.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
+                      "https://mirrors.huaweicloud.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix}
 
   /* 不启用原因：过慢 */
   // {&Netease,          "https://mirrors.163.com/ubuntu",
@@ -76,8 +73,10 @@ static Source_t os_ubuntu_sources[] =
   /* 不启用原因：过慢 */
   // {&Sohu,             "https://mirrors.sohu.com/ubuntu",
   //                     "https://mirrors.sohu.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix}
-};
-def_sources_n(os_ubuntu);
+  def_sources_end()
+
+  chsrc_set_provider_speed_measure_url (&upstream, "http://archive.ubuntu.com/ubuntu/dists/noble/Contents-amd64.gz");
+}
 
 
 void

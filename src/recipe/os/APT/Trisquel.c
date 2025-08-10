@@ -1,5 +1,7 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
+ * -------------------------------------------------------------
+ * Trisquel基于Ubuntu开发，不含任何专有软件及专有固件，内核使用 Linux-libre
  * ------------------------------------------------------------*/
 
 def_target(os_trisquel);
@@ -23,9 +25,14 @@ os_trisquel_prelude ()
   chef_allow_set();
   chef_allow_reset();
 
-  /* Trisquel基于Ubuntu开发，不含任何专有软件及专有固件，内核使用 Linux-libre */
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
+
   def_upstream("http://archive.trisquel.info/trisquel/");
-  def_sources_begin(os_trisquel)
+  def_sources_begin()
   {&upstream,       "http://archive.trisquel.info/trisquel/", DelegateToUpstream},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/trisquel/", DelegateToMirror},
   {&Ali,            "https://mirrors.aliyun.com/trisquel/",    DelegateToMirror},
