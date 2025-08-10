@@ -62,7 +62,7 @@ pl_js_nodejs_binary_prelude (void)
   chef_set_cooks (this, 0);
   chef_set_contributors (this, 0);
 
-  chef_forbid_local_mode (this);
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);
   chef_allow_user_define(this);
 

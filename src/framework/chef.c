@@ -51,17 +51,13 @@ chef_allow_local_mode (Target_t *target, Capability_t cap, const char *explain_z
       return;
     }
 
+  if (cap == CanNot)
+    {
+      target->cap_local_explain = xy_strdup (CHINESE ? "无法进行项目级换源" : "Unable to perform project-level source switching");
+      return;
+    }
+
   target->cap_local_explain = xy_strdup (CHINESE ? explain_zh : explain_en);
-}
-
-void
-chef_forbid_local_mode (Target_t *target)
-{
-  if (!target)
-    return;
-
-  target->cap_local = CanNot;
-  target->cap_local_explain = xy_strdup (CHINESE ? "无法进行项目级换源" : "Unable to perform project-level source switching");
 }
 
 

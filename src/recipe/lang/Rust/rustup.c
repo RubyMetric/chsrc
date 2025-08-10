@@ -24,7 +24,7 @@ pl_rust_rustup_prelude (void)
     "Yangmoooo", "yangmoooo@outlook.com",
     "Mikachu2333", "mikachu.23333@zohomail.com");
 
-  chef_forbid_local_mode (this);
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english (this);
   chef_allow_user_define(this);
 

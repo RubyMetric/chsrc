@@ -21,7 +21,7 @@ pl_dart_flutter_prelude (void)
     "czyt", "czyt.go@gmail.com",
     "MadDogOwner", "xiaoran@xrgzs.top");
 
-  chef_forbid_local_mode (this);
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);
   chef_allow_user_define(this);
 
