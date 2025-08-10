@@ -393,14 +393,14 @@ void
 cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
 {
   {
-  char *msg = ENGLISH ? "\nMaintainer Information:\n" : "\n维护信息:\n";
-  say (bdblue(msg));
+  char *msg = ENGLISH ? "Maintainer Information:\n" : "维护信息:\n";
+  say (bdgreen(msg));
   }
 
   if (target->authors && target->authors_n > 0)
     {
-      char *msg = ENGLISH ? "Recipe Authors: " : "配方作者: ";
-      printf ("%s", bdgreen(msg));
+      char *msg = ENGLISH ? "Recipe Original Authors: " : "食谱原始作者: ";
+      printf ("%s", bdblue(msg));
       for (size_t i = 0; i < target->authors_n; i++)
         {
           if (i > 0) printf (", ");
@@ -413,26 +413,26 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
 
 
   {
-    char *msg = ENGLISH ? "Chef: " : "主厨 Chef: ";
+    char *msg = ENGLISH ? "Current Chef: " : "当前主厨: ";
     if (target->chef)
       {
-        printf ("%s%s <%s>\n", bdgreen(msg),
+        printf ("%s%s <%s>\n", bdblue(msg),
                 target->chef->name  ? target->chef->name  : "Unknown",
                 target->chef->email ? target->chef->email : "unknown@example.com");
       }
     else
       {
         char *msg1 = CHINESE ? "暂空缺, 欢迎担任!" : "Vacant, Welcome to hold the position";
-        printf ("%s%s\n", bdgreen(msg), bdgreen(msg1));
+        printf ("%s%s\n", bdblue(msg), bdgreen(msg1));
       }
   }
 
 
   {
-    char *msg = ENGLISH ? "Sous Chefs: " : "副厨 Sous Chefs: ";
+    char *msg = ENGLISH ? "Current Sous Chefs: " : "当前副厨: ";
     if (target->sous_chefs && target->sous_chefs_n > 0)
       {
-        printf ("%s", bdgreen(msg));
+        printf ("%s", bdblue(msg));
         for (size_t i = 0; i < target->sous_chefs_n; i++)
           {
             if (i > 0) printf (", ");
@@ -445,7 +445,7 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
     else
       {
         char *msg1 = CHINESE ? "暂空缺, 欢迎担任!" : "Vacant, Welcome to hold the position!";
-        printf ("%s%s\n", bdgreen(msg), bdgreen(msg1));
+        printf ("%s%s\n", bdblue(msg), bdgreen(msg1));
       }
   }
 
@@ -453,7 +453,7 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
     char *msg = ENGLISH ? "Contributors: " : "贡献者: ";
     if (target->contributors && target->contributors_n > 0)
       {
-        printf ("%s", bdgreen(msg));
+        printf ("%s", bdblue(msg));
         for (size_t i = 0; i < target->contributors_n; i++)
           {
             if (i > 0) printf (", ");
@@ -466,27 +466,27 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
     else
       {
         char *msg1 = CHINESE ? "暂空缺, 欢迎参与贡献!" : "Vacant, Welcome to contribute!";
-        printf ("%s%s\n", bdgreen(msg), bdgreen(msg1));
+        printf ("%s%s\n", bdblue(msg), bdgreen(msg1));
       }
   }
 
 
   if (target->created_on)
     {
-      char *msg = ENGLISH ? "Recipe Created On: " : "配方创建时间: ";
-      printf ("%s%s\n", bdgreen(msg), target->created_on);
+      char *msg = ENGLISH ? "Recipe Created On: " : "食谱创建时间: ";
+      printf ("%s%s\n", bdblue(msg), target->created_on);
     }
 
   if (target->last_updated)
     {
-      char *msg = ENGLISH ? "Recipe Last Updated: " : "配方最后更新: ";
-      printf ("%s%s\n", bdgreen(msg), target->last_updated);
+      char *msg = ENGLISH ? "Recipe Last Updated: " : "食谱更新时间: ";
+      printf ("%s%s\n", bdblue(msg), target->last_updated);
     }
 
   if (target->sources_last_updated)
     {
-      char *msg = ENGLISH ? "Sources Last Updated: " : "源列表最后更新: ";
-      printf ("%s%s\n", bdgreen(msg), target->sources_last_updated);
+      char *msg = ENGLISH ? "Ingredient(Sources) Last Updated: " : "食材(源)检查时间: ";
+      printf ("%s%s\n", bdblue(msg), target->sources_last_updated);
     }
 }
 
