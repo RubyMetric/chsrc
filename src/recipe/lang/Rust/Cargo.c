@@ -28,27 +28,27 @@ pl_rust_cargo_prelude (void)
 
   // 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`。链接末尾的 `/` 不能缺少
   def_sources_begin()
-  {&UpstreamProvider,  "https://crates.io/", "https://crates.io/api/v1/crates/windows/0.58.0/download"},
-  {&MirrorZ,           "https://mirrors.cernet.edu.cn/crates.io-index/",  DelegateToMirror},
-  {&RsProxyCN,         "https://rsproxy.cn/index/",                       DelegateToMirror},
-  {&Ali,               "https://mirrors.aliyun.com/crates.io-index/", FeedByPrelude},
-  {&Zju,           "https://mirrors.zju.edu.cn/crates.io-index/", DelegateToMirror},
+  {&UpstreamProvider, "https://crates.io/",                             FeedByPrelude},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/crates.io-index/", FeedByPrelude},
+  {&RsProxyCN,        "https://rsproxy.cn/index/",                      FeedByPrelude},
+  {&Ali,              "https://mirrors.aliyun.com/crates.io-index/",    FeedByPrelude},
+  {&Zju,              "https://mirrors.zju.edu.cn/crates.io-index/",    FeedByPrelude},
 
   /* 注释原因: (2025-06-17) 镜像同步失败，多数包都不可用 */
-  // {&Nju,        "https://mirror.nju.edu.cn/git/crates.io-index.git/",   DelegateToMirror},
+  // {&Nju,        "https://mirror.nju.edu.cn/git/crates.io-index.git/",   FeedByPrelude},
 
-  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/",    DelegateToMirror},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/", DelegateToMirror},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/",          DelegateToMirror},
-
-  {&Ustc,          "https://mirrors.ustc.edu.cn/crates.io-index/",
-                   "https://crates-io.proxy.ustclug.org/api/v1/crates/windows/0.58.0/download"},
+  {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/",   FeedByPrelude},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/",FeedByPrelude},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/",         FeedByPrelude},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/crates.io-index/",         FeedByPrelude},
 
   /* 注释原因: (2025-06-17) 镜像同步失败，多数包都不可用 */
-  // {&Hust,       "https://mirrors.hust.edu.cn/crates.io-index/", DelegateToMirror},
+  // {&Hust,       "https://mirrors.hust.edu.cn/crates.io-index/", FeedByPrelude},
 
-  {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/",  DelegateToMirror}
+  {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/",  FeedByPrelude}
   def_sources_end()
+
+  chsrc_set_sources_speed_measure_url_with_postfix (this, "api/v1/crates/windows/0.58.0/download");
 }
 
 
