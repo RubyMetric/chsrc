@@ -48,7 +48,7 @@ os_ubuntu_prelude ()
   // {&Sohu,             "https://mirrors.sohu.com/ubuntu", FeedByPrelude}
   def_sources_end()
 
-  chsrc_set_sources_speed_measure_url_with_postfix (this, "/dists/noble/Contents-amd64.gz");
+  chef_set_sources_speed_measure_url_with_postfix (this, "/dists/noble/Contents-amd64.gz");
 }
 
 

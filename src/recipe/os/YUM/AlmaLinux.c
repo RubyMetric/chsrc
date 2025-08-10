@@ -35,7 +35,7 @@ os_almalinux_prelude ()
   {&Nju,              "https://mirror.nju.edu.cn/almalinux",         FeedByPrelude}
   def_sources_end()
 
-  chsrc_set_provider_speed_measure_url (&UpstreamProvider, "https://raw.repo.almalinux.org/almalinux/9.5/isos/x86_64/AlmaLinux-9-latest-x86_64-minimal.iso");
+  chef_set_provider_speed_measure_url (&UpstreamProvider, "https://raw.repo.almalinux.org/almalinux/9.5/isos/x86_64/AlmaLinux-9-latest-x86_64-minimal.iso");
 }
 
 /**

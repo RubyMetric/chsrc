@@ -48,7 +48,7 @@ pl_rust_cargo_prelude (void)
   {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/",  FeedByPrelude}
   def_sources_end()
 
-  chsrc_set_sources_speed_measure_url_with_postfix (this, "api/v1/crates/windows/0.58.0/download");
+  chef_set_sources_speed_measure_url_with_postfix (this, "api/v1/crates/windows/0.58.0/download");
 }
 
 

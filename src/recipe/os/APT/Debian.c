@@ -47,7 +47,7 @@ os_debian_prelude ()
   // {&Sohu,        "https://mirrors.sohu.com/debian", FeedByPrelude}
   def_sources_end()
 
-  chsrc_set_sources_speed_measure_url_with_postfix (this, "/dists/bookworm/main/Contents-all.gz");
+  chef_set_sources_speed_measure_url_with_postfix (this, "/dists/bookworm/main/Contents-all.gz");
 }
 
 

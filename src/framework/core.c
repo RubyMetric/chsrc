@@ -1054,7 +1054,6 @@ chsrc_confirm_source (Source_t *source)
 }
 
 
-
 Source_t
 chsrc_yield_source_and_confirm (Target_t *t, char *option)
 {
@@ -1062,70 +1061,6 @@ chsrc_yield_source_and_confirm (Target_t *t, char *option)
   chsrc_confirm_source(&source);
   return source;
 }
-
-
-/**
- * @brief 修改 Provider 的测速地址
- */
-void
-chsrc_set_provider_speed_measure_url (SourceProvider_t *provider, char *url)
-{
-  provider->psmi.skip = NotSkip;
-  provider->psmi.url = xy_strdup (url);
-  chsrc_debug ("m", xy_strjoin (4, "recipe 重新为 ", provider->code, " 设置测速链接: ", url));
-}
-
-
-/**
- * @brief 修改 Provider 的测速精度
- */
-void
-chsrc_set_provider_speed_measure_accuracy (SourceProvider_t *provider, bool accuracy)
-{
-  provider->psmi.accurate = accuracy;
-  chsrc_debug ("m", xy_strjoin (4, "recipe 重新为 ", provider->code, " 设置测速精度: ", accuracy ? "精准" : "粗略"));
-}
-
-
-
-/**
- * @brief 提供一个函数，这个函数基于 "换源 URL" 和用户提供的数据来构造和填充精准测速链接
- */
-static void
-chsrc_set_sources_speed_measure_url_with_func (
-  Target_t *target,
-  char *(*func)(const char *url, const char *user_data),
-  char *user_data)
-{
-  Source_t *sources = target->sources;
-  int n = target->sources_n;
-  for (int i=0; i<n; i++)
-    {
-      Source_t *src = &sources[i];
-      ProviderType_t type = src->provider->type;
-      if (src->url)
-        {
-          /* 为空时才修改 或者里面是脏数据 */
-          if (NULL==src->speed_measure_url || !chef_is_url (src->speed_measure_url))
-            {
-              src->speed_measure_url = func (src->url, user_data);
-            }
-        }
-    }
-}
-
-
-
-/**
- * @brief 给 "换源 URL" 增加一个后缀来构造和填充专用测速链接
- */
-static void
-chsrc_set_sources_speed_measure_url_with_postfix (Target_t *target, char *postfix)
-{
-  chsrc_set_sources_speed_measure_url_with_func (target, xy_2strjoin, postfix);
-}
-
-
 
 
 void

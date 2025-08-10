@@ -40,7 +40,7 @@ pl_js_group_prelude (void)
   def_sources_end()
 
   // 29MB 大小
-  chsrc_set_sources_speed_measure_url_with_postfix (this, "/@tensorflow/tfjs/-/tfjs-4.22.0.tgz");
+  chef_set_sources_speed_measure_url_with_postfix (this, "/@tensorflow/tfjs/-/tfjs-4.22.0.tgz");
 }
 
 
@@ -76,5 +76,5 @@ pl_js_nodejs_binary_prelude (void)
   {&Tencent,   "https://mirrors.cloud.tencent.com/nodejs-release/", FeedByPrelude}
   def_sources_end()
 
-  chsrc_set_sources_speed_measure_url_with_postfix (this, "/v23.4.0/node-v23.4.0-linux-x64.tar.xz");
+  chef_set_sources_speed_measure_url_with_postfix (this, "/v23.4.0/node-v23.4.0-linux-x64.tar.xz");
 }

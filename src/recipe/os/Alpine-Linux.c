@@ -38,7 +38,7 @@ os_alpine_prelude ()
   {&Huawei,           "https://mirrors.huaweicloud.com/alpine", FeedByPrelude}
   def_sources_end()
 
-  chsrc_set_sources_speed_measure_url_with_postfix (this, "/latest-stable/releases/x86_64/alpine-standard-3.21.0-x86_64.iso");
+  chef_set_sources_speed_measure_url_with_postfix (this, "/latest-stable/releases/x86_64/alpine-standard-3.21.0-x86_64.iso");
 }
 
 

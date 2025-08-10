@@ -33,7 +33,7 @@ pl_dart_prelude (void)
   {&Nju,              "https://mirror.nju.edu.cn/dart-pub", FeedByPrelude}
   def_sources_end()
 
-  chsrc_set_sources_speed_measure_url_with_postfix (this, "/packages/flutter_vision/versions/1.1.4.tar.gz");
+  chef_set_sources_speed_measure_url_with_postfix (this, "/packages/flutter_vision/versions/1.1.4.tar.gz");
 }
 
 

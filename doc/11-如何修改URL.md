@@ -52,12 +52,12 @@ def_sources_begin()
 def_sources_end()
 
 // 把所有上述源的测速 URL 设置为 "换源 URL" + postfix
-chsrc_set_sources_speed_measure_url_with_postfix (this, "/dir/BigFile.tar.gz");
+chef_set_sources_speed_measure_url_with_postfix (this, "/dir/BigFile.tar.gz");
 // 基于 "换源 URL" 做更自定义的操作
-chsrc_set_sources_speed_measure_url_with_func (this, func, data);
+chef_set_sources_speed_measure_url_with_func (this, func, data);
 
 // 调整某一个镜像站(Provider)的测速 URL
-chsrc_set_provider_speed_measure_url (&Tencent, "https://mirrors.cloud.tencent.com/npm/BigFile.tar.gz")
+chef_set_provider_speed_measure_url (&Tencent, "https://mirrors.cloud.tencent.com/npm/BigFile.tar.gz")
 // 调整某一个镜像站(Provider)的测速精度
-chsrc_set_provider_speed_measure_accuracy (&UpstreamProvider, ROUGH);;
+chef_set_provider_speed_measure_accuracy (&UpstreamProvider, ROUGH);;
 ```
