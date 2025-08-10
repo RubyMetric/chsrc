@@ -792,7 +792,7 @@ _xy_win_documents ()
 
   return xy_2strjoin (xy_os_home, "\\Documents");
 #else
-  return xy_2strjoin (xy_os_home, "\\Documents");
+  return NULL
 #endif
 }
 
@@ -805,34 +805,24 @@ _xy_win_documents ()
 static char *
 _xy_win_powershell_profile ()
 {
-  if (xy_on_windows)
-    {
-      char *documents_dir = _xy_win_documents ();
-      char *profile_path = xy_2strjoin (documents_dir, "\\PowerShell\\Microsoft.PowerShell_profile.ps1");
-      free (documents_dir);
-      return profile_path;
-    }
-  else
-    {
-      return NULL;
-    }
+#ifdef _WIN32
+  char *documents_dir = _xy_win_documents ();
+  char *profile_path = xy_2strjoin (documents_dir, "\\PowerShell\\Microsoft.PowerShell_profile.ps1");
+  free (documents_dir);
+  return profile_path;
+#endif
 }
 
 
 static char *
 _xy_win_powershellv5_profile ()
 {
-  if (xy_on_windows)
-    {
-      char *documents_dir = _xy_win_documents ();
-      char *profile_path = xy_2strjoin (documents_dir, "\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1");
-      free (documents_dir);
-      return profile_path;
-    }
-    else
-    {
-      return NULL;
-    }
+#ifdef _WIN32
+  char *documents_dir = _xy_win_documents ();
+  char *profile_path = xy_2strjoin (documents_dir, "\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1");
+  free (documents_dir);
+  return profile_path;
+#endif
 }
 
 #define xy_zshrc  "~/.zshrc"
