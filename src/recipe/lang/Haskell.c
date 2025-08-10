@@ -16,8 +16,7 @@ pl_haskell_prelude ()
   chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
   chef_set_chef (this, NULL, NULL);
   chef_set_sous_chefs (this, 0);
-  chef_set_contributors (this, 1,
-    "Nil Null", "nil@null.org");
+  chef_set_contributors (this, 0);
 
   chef_allow_set();
 
@@ -26,7 +25,7 @@ pl_haskell_prelude ()
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&upstream,        NULL, DelegateToUpstream},
+  {&upstream,         NULL, DelegateToUpstream},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/hackage", DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/hackage",          DelegateToMirror},
   {&Nju,              "https://mirror.nju.edu.cn/hackage",             DelegateToMirror},

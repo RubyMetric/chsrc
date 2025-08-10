@@ -29,9 +29,9 @@ pl_js_nvm_prelude (void)
 
   chef_set_note ("nvm does not support Fish", "nvm 不支持 Fish shell");
 
-  // 使用 pl_js_binary_release 的源
-  this->sources = pl_js_binary_release_target.sources;
-  this->sources_n = pl_js_binary_release_target.sources_n;
+  // 使用 pl_js_nodejs_binary 的源
+  this->sources = pl_js_nodejs_binary_target.sources;
+  this->sources_n = pl_js_nodejs_binary_target.sources_n;
 }
 
 

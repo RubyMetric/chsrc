@@ -3,7 +3,7 @@
  * ------------------------------------------------------------*/
 
 // Size: 20MB
-#define PL_Rustup_Speed_URL_Suffix "/dist/2025-06-26/cargo-1.88.0-x86_64-unknown-illumos.tar.gz"
+#define PL_Rustup_Speed_URL_Suffix
 
 def_target(pl_rust_rustup);
 
@@ -32,34 +32,20 @@ pl_rust_rustup_prelude (void)
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&upstream,                "https://static.rust-lang.org",
-                             "https://static.rust-lang.org" PL_Rustup_Speed_URL_Suffix},
-  {&MirrorZ,                 "https://mirrors.cernet.edu.cn/rustup", NULL},
-
-  {&Tuna,                    "https://mirrors.tuna.tsinghua.edu.cn/rustup",
-                             "https://mirrors.tuna.tsinghua.edu.cn/rustup" PL_Rustup_Speed_URL_Suffix},
-
-  {&Ustc,                    "https://mirrors.ustc.edu.cn/rust-static",
-                             "https://mirrors.ustc.edu.cn/rust-static" PL_Rustup_Speed_URL_Suffix},
-
-  {&Nju,                     "https://mirror.nju.edu.cn/rustup",
-                             "https://mirror.nju.edu.cn/rustup" PL_Rustup_Speed_URL_Suffix},
-
-  {&Sjtug_Zhiyuan,           "https://mirror.sjtu.edu.cn/rust-static",
-                             "https://mirror.sjtu.edu.cn/rust-static" PL_Rustup_Speed_URL_Suffix},
-
-  {&Zju,                     "https://mirrors.zju.edu.cn/rustup",
-                             "https://mirrors.zju.edu.cn/rustup" PL_Rustup_Speed_URL_Suffix},
-
-  {&Iscas,                   "https://mirror.iscas.ac.cn/rustup",
-                             "https://mirror.iscas.ac.cn/rustup" PL_Rustup_Speed_URL_Suffix},
-
-  {&Ali,                     "https://mirrors.aliyun.com/rustup",
-                             "https://mirrors.aliyun.com/rustup" PL_Rustup_Speed_URL_Suffix},
-
-  {&RsProxyCN,               "https://rsproxy.cn",
-                             "https://rsproxy.cn" PL_Rustup_Speed_URL_Suffix}
+  {&upstream,                "https://static.rust-lang.org",         FeedByPrelude},
+  {&MirrorZ,                 "https://mirrors.cernet.edu.cn/rustup", FeedByPrelude},
+  {&Tuna,                    "https://mirrors.tuna.tsinghua.edu.cn/rustup", FeedByPrelude},
+  {&Ustc,                    "https://mirrors.ustc.edu.cn/rust-static", FeedByPrelude},
+  {&Nju,                     "https://mirror.nju.edu.cn/rustup", FeedByPrelude},
+  {&Sjtug_Zhiyuan,           "https://mirror.sjtu.edu.cn/rust-static", FeedByPrelude},
+  {&Zju,                     "https://mirrors.zju.edu.cn/rustup", FeedByPrelude},
+  {&Iscas,                   "https://mirror.iscas.ac.cn/rustup", FeedByPrelude},
+  {&Ali,                     "https://mirrors.aliyun.com/rustup", FeedByPrelude},
+  {&RsProxyCN,               "https://rsproxy.cn",                FeedByPrelude}
   def_sources_end()
+
+  // 20MB大小
+  chsrc_set_sources_speed_measure_url_with_postfix (this, "/dist/2025-06-26/cargo-1.88.0-x86_64-unknown-illumos.tar.gz")
 }
 
 

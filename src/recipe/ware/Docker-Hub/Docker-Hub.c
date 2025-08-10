@@ -35,8 +35,7 @@ wr_dockerhub_prelude ()
     "Aoran Zeng", "ccmywish@qq.com");
   chef_set_chef (this, NULL, NULL);
   chef_set_sous_chefs (this, 0);
-  chef_set_contributors (this, 1,
-    "Nil Null", "nil@null.org");
+  chef_set_contributors (this, 0);
 
   chef_allow_get();
   chef_allow_set();

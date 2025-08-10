@@ -23,7 +23,7 @@ pl_js_npm_prelude (void)
   chef_allow_set();
   chef_allow_reset();
 
-  chef_allow_local_mode (this, FullyCan, "支持项目级配置", "Supports project-level configuration");
+  chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);
   chef_allow_user_define(this);
 

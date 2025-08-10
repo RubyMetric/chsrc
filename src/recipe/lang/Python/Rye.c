@@ -16,8 +16,7 @@ pl_python_rye_prelude (void)
   chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
   chef_set_chef (this, NULL, NULL);
   chef_set_sous_chefs (this, 0);
-  chef_set_contributors (this, 1,
-    "Nul None", "nul@none.org");
+  chef_set_contributors (this, 0);
 
   chef_allow_get();
   chef_allow_set();

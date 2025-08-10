@@ -1103,13 +1103,6 @@ chsrc_set_sources_speed_measure_url_with_func (
   for (int i=0; i<n; i++)
     {
       ProviderType_t type = src->provider->type;
-
-      if (IS_DedicatedMirrorSite==type)
-        {
-          /* 这个不用填，因为定义它的时候如果给了整体测速URL，则就是ACCURATE的，我们直接会DelegateTo那里 */
-          continue;
-        }
-
       if (src->url)
         {
           /* 为空时才修改 或者里面是脏数据 */
