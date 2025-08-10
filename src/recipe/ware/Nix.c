@@ -22,11 +22,10 @@ wr_nix_prelude ()
   // chef_allow_get();
   chef_allow_set();
   // chef_allow_reset();
-  this.cap_locally = CanNot;
-  this.cap_locally_explain = NULL;
-  this.can_english = false;
-  this.can_user_define = false;
-  this.note = "不可自动换源，因为链接将会在setsrc函数中补充完整";
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
 
   def_upstream("https://channels.nixos.org/");
   def_sources_begin()

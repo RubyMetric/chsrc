@@ -25,11 +25,10 @@ wr_anaconda_prelude ()
   chef_allow_get();
   chef_allow_set();
   // chef_allow_reset();
-  this.cap_locally = CanNot;
-  this.cap_locally_explain = NULL;
-  this.can_english = false;
-  this.can_user_define = false;
-  this.note = "无法自定义源, 因为这些链接将会在setsrc函数中补充完整";
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
 
   def_upstream("https://repo.anaconda.com");
   def_sources_begin()

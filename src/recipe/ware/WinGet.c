@@ -21,8 +21,9 @@ wr_winget_prelude ()
   chef_allow_get();
   chef_allow_set();
   chef_allow_reset();
-  this.can_english = false;
-  this.can_user_define = true;
+
+  chef_forbid_english(this);
+  chef_allow_user_define(this);
 
   def_upstream("https://github.com/microsoft/winget-cli/");
   def_sources_begin()

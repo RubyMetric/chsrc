@@ -74,7 +74,7 @@ chef_forbid_user_define (Target_t *target)
 void
 chef_set_note (Target_t *target, const char *note_zh, const char *note_en)
 {
-  if (!target || !note)
+  if (!target)
     return;
 
   char *msg = CHINESE ? xy_strdup(note_zh) : xy_strdup(note_en);

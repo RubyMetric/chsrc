@@ -24,11 +24,10 @@ wr_tex_prelude ()
   chef_allow_get();
   chef_allow_set();
   // chef_allow_reset();
-  this.cap_locally = CanNot;
-  this.cap_locally_explain = NULL;
-  this.can_english = false;
-  this.can_user_define = true;
-  this.note = NULL;
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_allow_user_define(this);
 
   def_upstream("https://ctan.org/tex-archive/systems/texlive/tlnet");
   def_sources_begin()

@@ -22,11 +22,13 @@ wr_guix_prelude ()
   // chef_allow_get();
   chef_allow_set();
   // chef_allow_reset();
-  this.cap_locally = CanNot;
-  this.cap_locally_explain = NULL;
-  this.can_english = false;
-  this.can_user_define = false;
-  this.note = "目前只有一个源, guixcn 的源不知道是否可用";
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note (this, "目前只有一个源, guixcn 的源不知道是否可用",
+                       "Currently only one source available, guixcn source availability unknown");
 
   def_upstream("https://git.savannah.gnu.org/git/guix.git");
   def_sources_begin()

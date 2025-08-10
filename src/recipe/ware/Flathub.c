@@ -22,11 +22,13 @@ wr_flathub_prelude ()
   chef_allow_get();
   chef_allow_set();
   chef_allow_reset();
-  this.cap_locally = CanNot;
-  this.cap_locally_explain = NULL;
-  this.can_english = false;
-  this.can_user_define = true;
-  this.note = "对Flathub目标进行测速的文件非常小，测速效果严重失真，若你知道可供测速的URL，欢迎参与贡献: chsrc issue";
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_allow_user_define(this);
+
+  chef_set_note (this, "对Flathub目标进行测速的文件非常小，测速效果严重失真，若你知道可供测速的URL，欢迎参与贡献: chsrc issue",
+                       "The test file for Flathub is very small, causing inaccurate speed test results. If you know a URL suitable for speed testing, welcome to contribute: chsrc issue");
 
   def_upstream("https://flathub.org/repo");
   def_sources_begin()
