@@ -55,9 +55,9 @@ pl_python_pip_setsrc (char *option)
       return;
     }
 
-  chsrc_yield_source (pl_python_group);
+  Source_t source = chsrc_yield_source (pl_python_group_target, option);
   if (chsrc_in_standalone_mode())
-    chsrc_confirm_source();
+    chsrc_confirm_source(&source);
 
   char *py_prog_name = NULL;
   pl_python_get_py_program_name (&py_prog_name);

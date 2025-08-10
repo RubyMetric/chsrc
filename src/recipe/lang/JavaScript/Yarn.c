@@ -58,9 +58,9 @@ pl_js_yarn_getsrc (char *option)
 void
 pl_js_yarn_setsrc (char *option)
 {
-  chsrc_yield_source (pl_js_group);
+  Source_t source = chsrc_yield_source (pl_js_group_target, option);
   if (chsrc_in_standalone_mode())
-    chsrc_confirm_source();
+    chsrc_confirm_source(&source);
 
   char *cmd = NULL;
 

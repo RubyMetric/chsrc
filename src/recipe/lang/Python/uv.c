@@ -21,17 +21,15 @@ pl_python_uv_prelude (void)
     "ccy", "icuichengyi@gmail.com",
     "Aoran Zeng", "ccmywish@qq.com");
 
-  chef_allow_local_mode (this, FullyCan, "支持项目级配置", "Supports project-level configuration");
+  chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);
   chef_allow_user_define(this);
-
-  chef_set_note ("uv的配置优先级顺序: $workspaces/uv.toml > $workspaces/pyproject.toml > ~/.config/uv/uv.toml > /etc/uv/uv.toml",
-                 "uv config priority order: $workspaces/uv.toml > $workspaces/pyproject.toml > ~/.config/uv/uv.toml > /etc/uv/uv.toml");
 
   // 使用 pl_python_group 的源
   this->sources = pl_python_group_target.sources;
   this->sources_n = pl_python_group_target.sources_n;
 }
+
 
 /**
  * chsrc get uv
@@ -113,9 +111,9 @@ pl_python_uv_setsrc (char *option)
 {
   chsrc_ensure_program ("uv");
 
-  chsrc_yield_source (pl_python_group);
+  Source_t source = chsrc_yield_source (pl_python_group_target, option);
   if (chsrc_in_standalone_mode())
-    chsrc_confirm_source();
+    chsrc_confirm_source(&source);
 
   char *uv_config = pl_python_find_uv_config (true);
   if (NULL==uv_config)

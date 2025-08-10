@@ -15,6 +15,7 @@ void
 pl_js_group_prelude (void)
 {
   use_this(pl_js_group);
+  chef_allow_gsr(pl_js_group);
 
   chef_set_created_on   (this, "2023-09-09");
   chef_set_last_updated (this, "2025-07-11");
@@ -24,10 +25,6 @@ pl_js_group_prelude (void)
   chef_set_chef (this, NULL, NULL);
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this,0);
-
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
 
   chef_allow_local_mode (this, PartiallyCan,
     "支持 npm, yarn v2, pnpm, 不支持 yarn v1"
@@ -54,6 +51,7 @@ void
 pl_js_nodejs_binary_prelude (void)
 {
   use_this(pl_js_nodejs_binary);
+  chef_allow_gsr(pl_js_group);
 
   chef_set_created_on   (this, "2023-09-09");
   chef_set_last_updated (this, "2025-07-11");
@@ -63,10 +61,6 @@ pl_js_nodejs_binary_prelude (void)
   chef_set_chef (this, NULL, NULL);
   chef_set_sous_chefs (this, 0);
   chef_set_contributors (this, 0);
-
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
 
   chef_forbid_local_mode (this);
   chef_allow_english(this);

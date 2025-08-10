@@ -23,6 +23,7 @@ void
 pl_python_group_prelude (void)
 {
   use_this(pl_python_group);
+  chef_allow_gsr(pl_python_group);
 
   chef_set_created_on   (this, "2023-09-03");
   chef_set_last_updated (this, "2025-07-14");
@@ -35,9 +36,6 @@ pl_python_group_prelude (void)
     "yongxiang", "1926885268@qq.com",
     "happy game", "happygame1024@gmail.com");
 
-  chef_allow_get();
-  chef_allow_set();
-  chef_allow_reset();
 
   chef_allow_local_mode (this, PartiallyCan, "部分包管理器支持项目级换源", "Some package managers support project-level source changing");
   chef_allow_english(this);

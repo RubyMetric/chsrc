@@ -57,7 +57,7 @@ void
 pl_python_rye_setsrc (char *option)
 {
   /* 并不在 Python group 中，所以不考虑 target group 情况，仅使用 Python group 提供的源 */
-  chsrc_yield_source_and_confirm (pl_python_group);
+  Source_t source = chsrc_yield_source_and_confirm (pl_python_group_target, option);
 
   const char *content = RAWSTR_pl_python_rye_config;
 
