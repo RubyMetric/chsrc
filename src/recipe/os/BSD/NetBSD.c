@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(os_netbsd);
+def_target(os_netbsd, "netbsd");
 
 void
 os_netbsd_prelude ()

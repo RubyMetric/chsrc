@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(os_gentoo);
+def_target(os_gentoo, "gentoo");
 
 void
 os_gentoo_prelude ()

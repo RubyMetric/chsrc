@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(os_kali);
+def_target(os_kali, "kali");
 
 void
 os_kali_prelude ()

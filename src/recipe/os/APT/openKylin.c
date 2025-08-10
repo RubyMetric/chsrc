@@ -5,7 +5,7 @@
  * 同一级别的、根社区发布的系统
  * ------------------------------------------------------------*/
 
-def_target(os_openkylin);
+def_target(os_openkylin, "openkylin");
 
 void
 os_openkylin_prelude ()

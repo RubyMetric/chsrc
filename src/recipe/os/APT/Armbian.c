@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(os_armbian);
+def_target(os_armbian, "armbian");
 
 void
 os_armbian_prelude ()

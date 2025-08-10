@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(os_rockylinux);
+def_target(os_rockylinux, "rocky/rockylinux");
 
 void
 os_rockylinux_prelude ()

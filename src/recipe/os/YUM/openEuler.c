@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(os_openeuler);
+def_target(os_openeuler, "openeuler");
 
 void
 os_openeuler_prelude ()

@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(os_openwrt);
+def_target(os_openwrt, "openwrt/opkg/LEDE");
 
 void
 os_openwrt_prelude ()

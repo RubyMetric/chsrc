@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(os_manjaro);
+def_target(os_manjaro, "manjaro");
 
 void
 os_manjaro_prelude ()

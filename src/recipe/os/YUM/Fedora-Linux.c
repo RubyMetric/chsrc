@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(os_fedora);
+def_target(os_fedora, "fedora");
 
 void
 os_fedora_prelude ()

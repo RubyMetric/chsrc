@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(os_anolis);
+def_target(os_anolis, "anolis/openanolis");
 
 void
 os_anolis_prelude ()

@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(os_almalinux);
+def_target(os_almalinux, "alma/almalinux");
 
 void
 os_almalinux_prelude ()

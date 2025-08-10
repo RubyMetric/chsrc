@@ -4,7 +4,7 @@
  * Raspberry Pi OS 树莓派操作系统，以前称为 Raspbian
  * ------------------------------------------------------------*/
 
-def_target(os_raspberrypi);
+def_target(os_raspberrypi, "raspi/raspberrypi");
 
 void
 os_raspberrypi_prelude ()

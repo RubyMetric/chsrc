@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(os_debian);
+def_target(os_debian, "debian");
 
 void
 os_debian_prelude ()

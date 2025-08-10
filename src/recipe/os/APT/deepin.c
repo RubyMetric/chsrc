@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(os_deepin);
+def_target(os_deepin, "deepin");
 
 void
 os_deepin_prelude ()

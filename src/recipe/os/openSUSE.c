@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(os_opensuse);
+def_target(os_opensuse, "opensuse/opensuse-leap/opensuse-tumbleweed");
 
 void
 os_opensuse_prelude ()
