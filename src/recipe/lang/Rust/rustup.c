@@ -1,30 +1,39 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  :  Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Yangmoooo  <yangmoooo@outlook.com>
- *               | Mikachu2333 <mikachu.23333@zohomail.com>
- *               |
- * Created On    : <2024-10-02>
- * Last Modified : <2025-08-07>
  * ------------------------------------------------------------*/
 
 // Size: 20MB
 #define PL_Rustup_Speed_URL_Suffix "/dist/2025-06-26/cargo-1.88.0-x86_64-unknown-illumos.tar.gz"
 
-static SourceProvider_t pl_rust_binary_upstream =
+def_target(pl_rust_rustup);
+
+void
+pl_rust_rustup_prelude (void)
 {
-  def_upstream, "https://www.rust-lang.org/",
-  def_need_measure_info
-};
+  use_this(pl_rust_rustup);
 
-/**
- * @update 2025-08-07
- */
-static Source_t pl_rust_rustup_sources[] = {
-  {&pl_rust_binary_upstream, "https://static.rust-lang.org",
+  chef_set_created_on   (this, "2024-10-02");
+  chef_set_last_updated (this, "2025-08-07");
+  chef_set_sources_last_updated (this, "2025-08-07");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 2,
+    "Yangmoooo", "yangmoooo@outlook.com",
+    "Mikachu2333", "mikachu.23333@zohomail.com");
+
+  chef_allow_get();
+  chef_allow_set();
+  chef_forbid_reset();
+
+  chef_forbid_local_mode (this);
+  chef_forbid_english (this);
+  chef_allow_user_define(this);
+
+  def_sources_begin()
+  {&upstream,                "https://static.rust-lang.org",
                              "https://static.rust-lang.org" PL_Rustup_Speed_URL_Suffix},
-
   {&MirrorZ,                 "https://mirrors.cernet.edu.cn/rustup", NULL},
 
   {&Tuna,                    "https://mirrors.tuna.tsinghua.edu.cn/rustup",
@@ -49,13 +58,12 @@ static Source_t pl_rust_rustup_sources[] = {
                              "https://mirrors.aliyun.com/rustup" PL_Rustup_Speed_URL_Suffix},
 
   {&RsProxyCN,               "https://rsproxy.cn",
-                             "https://rsproxy.cn" PL_Rustup_Speed_URL_Suffix}};
-def_sources_n(pl_rust_rustup);
+                             "https://rsproxy.cn" PL_Rustup_Speed_URL_Suffix}
+  def_sources_end()
+}
 
 
-/**
- * chsrc get rustup
- */
+
 void
 pl_rust_rustup_getsrc (char *option)
 {
@@ -65,8 +73,6 @@ pl_rust_rustup_getsrc (char *option)
 
 /**
  * @consult https://mirrors.tuna.tsinghua.edu.cn/help/rustup/
- *
- * chsrc set rustup
  */
 void
 pl_rust_rustup_setsrc (char *option)
@@ -121,35 +127,9 @@ pl_rust_rustup_setsrc (char *option)
 }
 
 
-/**
- * chsrc reset rustup
- */
+
 void
 pl_rust_rustup_resetsrc (char *option)
 {
   pl_rust_rustup_setsrc (option);
 }
-
-
-/**
- * chsrc ls rustup
- */
-Feature_t
-pl_rust_rustup_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = "";
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-
-def_target_gsrf(pl_rust_rustup);

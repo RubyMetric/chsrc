@@ -1,31 +1,37 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng  <ccmywish@qq.com>
- * Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
- *               |
- * Created On    : <2023-08-30>
- * Last Modified : <2025-07-22>
  * ------------------------------------------------------------*/
 
-static SourceProvider_t pl_rust_cargo_upstream =
+def_target(pl_rust_cargo);
+
+void
+pl_rust_cargo_prelude (void)
 {
-  def_upstream, "https://crates.io/",
-  {NotSkip, NA, NA, "https://crates.io/api/v1/crates/windows/0.58.0/download", ACCURATE}
-  /* 跳转为: https://static.crates.io/crates/windows/windows-0.58.0.crate */
-};
+  use_this(pl_rust_cargo);
 
+  chef_set_created_on   (this, "2023-08-30");
+  chef_set_last_updated (this, "2025-07-22");
+  chef_set_sources_last_updated (this, "2025-06-18");
 
-/**
- * @update 2025-06-18
- *
- * @note 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`
- * @note 链接末尾的 `/` 不能缺少
- */
-static Source_t pl_rust_cargo_sources[] =
-{
-  {&pl_rust_cargo_upstream,  "https://github.com/rust-lang/crates.io-index/", DelegateToUpstream},
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Mikachu2333", "mikachu.23333@zohomail.com");
 
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
+
+  chef_allow_local_mode (this, PartiallyCan, "可以基于本项目换源吗？请帮助确认", "Can it change sources based on this project? Please help confirm");
+  chef_forbid_english (this);
+  chef_allow_user_define(this);
+
+  chef_set_note ("以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`。链接末尾的 `/` 不能缺少",
+                 "All sources support sparse index, we will add `sparse+` by default when changing sources. The trailing `/` in URLs cannot be missing");
+
+  def_sources_begin()
+  {&upstream,      "https://crates.io/", "https://crates.io/api/v1/crates/windows/0.58.0/download"},
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/crates.io-index/",  DelegateToMirror},
   {&RsProxyCN,     "https://rsproxy.cn/index/",                       DelegateToMirror},
 
@@ -48,13 +54,10 @@ static Source_t pl_rust_cargo_sources[] =
   // {&Hust,       "https://mirrors.hust.edu.cn/crates.io-index/", DelegateToMirror},
 
   {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/",  DelegateToMirror}
-};
-def_sources_n(pl_rust_cargo);
+  def_sources_end()
+}
 
 
-/**
- * chsrc get cargo
- */
 void
 pl_rust_cargo_getsrc (char *option)
 {
@@ -65,8 +68,6 @@ pl_rust_cargo_getsrc (char *option)
 /**
  * @consult https://mirrors.tuna.tsinghua.edu.cn/help/crates.io-index/
  * @consult https://help.mirrors.cernet.edu.cn/crates.io-index
- *
- * chsrc set cargo
  */
 void
 pl_rust_cargo_setsrc (char *option)
@@ -85,32 +86,8 @@ pl_rust_cargo_setsrc (char *option)
 }
 
 
-/**
- * chsrc reset cargo
- */
 void
 pl_rust_cargo_resetsrc (char *option)
 {
   pl_rust_cargo_setsrc (option);
 }
-
-
-Feature_t
-pl_rust_cargo_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = PartiallyCan;
-  f.cap_locally_explain = "可以基于本项目换源吗？请帮助确认";
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-
-def_target_gsrf(pl_rust_cargo);

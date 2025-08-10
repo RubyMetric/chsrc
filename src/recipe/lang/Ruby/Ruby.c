@@ -1,44 +1,54 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- *               |
- * Created On    : <2023-08-29>
- * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
-
-static SourceProvider_t pl_ruby_upstream =
-{
-  def_upstream, "https://rubygems.org",
-  {NotSkip, NA, NA, "https://rubygems.org/gems/nokogiri-1.15.0-java.gem", ACCURATE}
-};
 
 static MirrorSite_t RubyChina =
 {
   IS_DedicatedMirrorSite,
   "rubychina", "RubyChina", "Ruby China 社区", "https://gems.ruby-china.com/",
-  {NotSkip, NA, NA, "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem", ACCURATE} // 9.9 MB
+  "https://gems.ruby-china.com/rubygems/gems/nokogiri-1.15.0-java.gem", // 9.9 MB
+  ACCURATE
 };
 
-/**
- * @update 2024-12-18
- */
-static Source_t pl_ruby_sources[] =
+def_target(pl_ruby);
+
+void
+pl_ruby_prelude (void)
 {
-  {&pl_ruby_upstream, "https://rubygems.org",         NULL},
-  {&RubyChina,        "https://gems.ruby-china.com/", NULL},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/rubygems/", NULL}
+  use_this(pl_ruby);
 
-  // {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/", NULL},
-  // {&Bfsu,      "https://mirrors.bfsu.edu.cn/rubygems/",          NULL},
+  chef_set_created_on   (this, "2023-08-29");
+  chef_set_last_updated (this, "2025-07-14");
+  chef_set_sources_last_updated (this, "2024-12-18");
 
-  // {&Tencent,   "https://mirrors.tencent.com/rubygems/",          NULL},
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/rubygems/",   NULL},
-  // {&Ali,       "https://mirrors.aliyun.com/rubygems/",            NULL},
-  // {&Huawei,    "https://mirrors.huaweicloud.com/repository/rubygems/", NULL},
-};
-def_sources_n(pl_ruby);
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Nil Null", "nil@null.org");
+
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
+
+  chef_allow_local_mode (this, PartiallyCan, "Support `bundler`. No support for `gem`", "Support `bundler`. No support for `gem`");
+  chef_allow_english(this);
+  chef_allow_user_define(this);
+
+  def_sources_begin()
+  {&upstream,      "https://rubygems.org",  "https://rubygems.org/gems/nokogiri-1.15.0-java.gem"},
+  {&RubyChina,     "https://gems.ruby-china.com/", DelegateToMirror},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/rubygems/", DelegateToMirror}
+
+  // {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/", DelegateToMirror},
+  // {&Bfsu,      "https://mirrors.bfsu.edu.cn/rubygems/",          DelegateToMirror},
+
+  // {&Tencent,   "https://mirrors.tencent.com/rubygems/",          DelegateToMirror},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/rubygems/",   DelegateToMirror},
+  // {&Ali,       "https://mirrors.aliyun.com/rubygems/",            DelegateToMirror},
+  // {&Huawei,    "https://mirrors.huaweicloud.com/repository/rubygems/", DelegateToMirror},
+  def_sources_end()
+}
 
 
 void
@@ -97,24 +107,3 @@ pl_ruby_resetsrc (char *option)
 {
   pl_ruby_setsrc (option);
 }
-
-
-Feature_t
-pl_ruby_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = PartiallyCan;
-  f.cap_locally_explain = "Support `bundler`. No support for `gem`";
-  f.can_english = true;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-
-def_target_gsrf(pl_ruby);

@@ -1,32 +1,37 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors   : Aoran Zeng  <ccmywish@qq.com>
- * Contributors   :    czyt     <czyt.go@gmail.com>
- *                | MadDogOwner <xiaoran@xrgzs.top>
- *                |
- * Created On     : <2023-09-10>
- * Major Revision :      3
- * Last Modified  : <2025-07-11>
- *
- * Dart Pub 软件仓库
  * ------------------------------------------------------------*/
 
 #define PL_Dart_Pub_Speed_URL_Postfix "/packages/flutter_vision/versions/1.1.4.tar.gz"
 
-/**
- * @update 2025-04-15
- */
- static SourceProvider_t pl_dart_upstream =
-{
-  def_upstream, "https://pub.dev",
-  {NotSkip, NA, NA, "https://pub.dev/packages/flutter_vision/versions/1.1.4.tar.gz", ACCURATE} // 37.05 MB
-};
+def_target(pl_dart);
 
-static Source_t pl_dart_sources[] =
+void
+pl_dart_prelude (void)
 {
-  {&pl_dart_upstream, "https://pub.dev", DelegateToUpstream},
+  use_this(pl_dart);
 
+  chef_set_created_on   (this, "2023-09-10");
+  chef_set_last_updated (this, "2025-07-11");
+  chef_set_sources_last_updated (this, "2025-04-15");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 2,
+    "czyt", "czyt.go@gmail.com",
+    "MadDogOwner", "xiaoran@xrgzs.top");
+
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
+
+  chef_allow_local_mode (this, FullyCan, "Pub 支持项目级换源", "Pub supports project-level source changing");
+  chef_allow_english(this);
+  chef_allow_user_define(this);
+
+  def_sources_begin()
+  {&upstream,         "https://pub.dev", "https://pub.dev" PL_Dart_Pub_Speed_URL_Postfix},
   {&FlutterCN,        "https://pub.flutter-io.cn",
                       "https://pub.flutter-io.cn" PL_Dart_Pub_Speed_URL_Postfix},
 
@@ -38,8 +43,8 @@ static Source_t pl_dart_sources[] =
 
   {&Nju,              "https://mirror.nju.edu.cn/dart-pub",
                       "https://mirror.nju.edu.cn/dart-pub" PL_Dart_Pub_Speed_URL_Postfix}
-};
-def_sources_n(pl_dart);
+  def_sources_end()
+}
 
 
 void
@@ -92,24 +97,3 @@ pl_dart_resetsrc (char *option)
 {
   pl_dart_setsrc (option);
 }
-
-
-Feature_t
-pl_dart_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-
-  f.can_user_define = true;
-
-  f.note = "该换源通过写入环境变量实现，若多次换源，请手动清理profile文件";
-  return f;
-}
-
-def_target_gsrf(pl_dart);
