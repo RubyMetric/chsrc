@@ -19,14 +19,14 @@ static SourceProvider_t pl_java_upstream =
  */
 static Source_t pl_java_sources[] =
 {
-  {&pl_java_upstream,  "https://repo1.maven.org/maven2/", NULL},
+  {&pl_java_upstream, "https://repo1.maven.org/maven2/",                                  NULL},
   /* 阿里镜像旧地址 https://maven.aliyun.com/nexus/content/groups/public */
-  {&Ali,              "https://maven.aliyun.com/repository/public/",       DelegateToMirror},
-  /* 华为镜像CDN地址 https://repo.huaweicloud.com/repository/maven/ */
-  {&Huawei,           "https://mirrors.huaweicloud.com/repository/maven/", DelegateToMirror},
-  {&Tencent,           "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/", DelegateToMirror},
+  {&Ali,              "https://maven.aliyun.com/repository/public/",                      DelegateToMirror},
+  {&Huawei,           "https://mirrors.huaweicloud.com/repository/maven/",                "https://mirrors.huaweicloud.com/repository/maven/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"},
+  {&HuaweiCdn,        "https://repo.huaweicloud.com/repository/maven/",                   "https://repo.huaweicloud.com/repository/maven/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"},
+  {&Tencent,          "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/", "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"},
   /* 网易的24小时更新一次 */
-  {&Netease,          "http://mirrors.163.com/maven/repository/maven-public/", DelegateToMirror}
+  {&Netease,          "http://mirrors.163.com/maven/repository/maven-public/",            "https://mirrors.163.com/maven/repository/maven-public/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"}
 };
 def_sources_n(pl_java);
 
