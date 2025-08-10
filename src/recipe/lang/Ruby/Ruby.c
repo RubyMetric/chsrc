@@ -18,7 +18,7 @@ pl_ruby_prelude (void)
   chef_allow_gsr(pl_ruby);
 
   chef_set_created_on   (this, "2023-08-29");
-  chef_set_last_updated (this, "2025-07-14");
+  chef_set_last_updated (this, "2025-08-11");
   chef_set_sources_last_updated (this, "2024-12-18");
 
   chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
@@ -31,17 +31,16 @@ pl_ruby_prelude (void)
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&UpstreamProvider,  "https://rubygems.org",  "https://rubygems.org/gems/nokogiri-1.15.0-java.gem"},
-  {&RubyChina,         "https://gems.ruby-china.com/", DelegateToMirror},
-  {&Ustc,              "https://mirrors.ustc.edu.cn/rubygems/", DelegateToMirror}
+  {&UpstreamProvider, "https://rubygems.org/",        "https://rubygems.org/gems/nokogiri-1.15.0-java.gem"},
+  {&RubyChina,        "https://gems.ruby-china.com/",                   DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/rubygems/",          DelegateToMirror}
+  // {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/rubygems/", DelegateToMirror},
+  // {&Bfsu,          "https://mirrors.bfsu.edu.cn/rubygems/",          DelegateToMirror},
 
-  // {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/rubygems/", DelegateToMirror},
-  // {&Bfsu,      "https://mirrors.bfsu.edu.cn/rubygems/",          DelegateToMirror},
-
-  // {&Tencent,   "https://mirrors.tencent.com/rubygems/",          DelegateToMirror},
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/rubygems/",   DelegateToMirror},
-  // {&Ali,       "https://mirrors.aliyun.com/rubygems/",            DelegateToMirror},
-  // {&Huawei,    "https://mirrors.huaweicloud.com/repository/rubygems/", DelegateToMirror},
+  // {&Tencent,       "https://mirrors.tencent.com/rubygems/",                DelegateToMirror},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/rubygems/",             DelegateToMirror},
+  // {&Ali,           "https://mirrors.aliyun.com/rubygems/",                 DelegateToMirror},
+  // {&Huawei,        "https://mirrors.huaweicloud.com/repository/rubygems/", DelegateToMirror},
   def_sources_end()
 }
 
@@ -76,10 +75,15 @@ pl_ruby_setsrc (char *option)
 
   char *cmd = NULL;
 
+  // step1
   xy_run_iter ("gem sources -l", 0, pl_ruby_remove_gem_source);
 
   cmd = xy_2strjoin ("gem source -a ", source.url);
   chsrc_run (cmd, RunOpt_Default);
+
+  // 我们在 step1 中，把源全部清空了，但是现在 RubyGems 的行为是: 当清空会自动给你把默认源给加回来
+  // 所以我们在这一步，最后一次删除默认源，确保它不存在
+  pl_ruby_remove_gem_source (this->sources[0].url);
 
 
   chsrc_ensure_program ("bundle");
