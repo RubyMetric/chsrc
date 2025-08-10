@@ -9,7 +9,7 @@
  * ------------------------------------------------------------*/
 
 static double
-pl_nodejs_yarn_get_yarn_version ()
+pl_js_yarn_get_yarn_version ()
 {
   char *ver = xy_run ("yarn --version", 0);
   double version = atof (ver);
@@ -21,10 +21,10 @@ pl_nodejs_yarn_get_yarn_version ()
  * chsrc get yarn
  */
 void
-pl_nodejs_yarn_getsrc (char *option)
+pl_js_yarn_getsrc (char *option)
 {
   // 最后一个版本应该是 v1.22.22
-  if (pl_nodejs_yarn_get_yarn_version () >= 2)
+  if (pl_js_yarn_get_yarn_version () >= 2)
     // https://github.com/RubyMetric/chsrc/issues/53
     // 从 Yarn V2 开始，使用新的配置名
     chsrc_run ("yarn config get npmRegistryServer", RunOpt_No_Last_New_Line);
@@ -38,16 +38,16 @@ pl_nodejs_yarn_getsrc (char *option)
  * @consult https://yarnpkg.com/cli/config/set
  */
 void
-pl_nodejs_yarn_setsrc (char *option)
+pl_js_yarn_setsrc (char *option)
 {
-  chsrc_yield_source (pl_nodejs_group);
+  chsrc_yield_source (pl_js_group);
   if (chsrc_in_standalone_mode())
     chsrc_confirm_source();
 
   char *cmd = NULL;
 
   // 从 Yarn V2 开始，使用新的配置名
-  if (pl_nodejs_yarn_get_yarn_version () >= 2)
+  if (pl_js_yarn_get_yarn_version () >= 2)
     {
       if (chsrc_in_local_mode()) // Yarn 默认情况下就是基于本项目换源
         cmd = xy_2strjoin ("yarn config set npmRegistryServer ", source.url);
@@ -82,9 +82,9 @@ pl_nodejs_yarn_setsrc (char *option)
  * chsrc reset yarn
  */
 void
-pl_nodejs_yarn_resetsrc (char *option)
+pl_js_yarn_resetsrc (char *option)
 {
-  pl_nodejs_yarn_setsrc (option);
+  pl_js_yarn_setsrc (option);
 }
 
 
@@ -92,7 +92,7 @@ pl_nodejs_yarn_resetsrc (char *option)
  * chsrc ls yarn
  */
 Feature_t
-pl_nodejs_yarn_feat (char *option)
+pl_js_yarn_feat (char *option)
 {
   Feature_t f = {0};
 
@@ -108,5 +108,5 @@ pl_nodejs_yarn_feat (char *option)
   return f;
 }
 
-// def_target_gsrf(pl_nodejs_yarn);
-Target_t pl_nodejs_yarn_target = {def_target_inner_gsrf(pl_nodejs_yarn),def_target_sourcesn(pl_nodejs_group)};
+// def_target_gsrf(pl_js_yarn);
+Target_t pl_js_yarn_target = {def_target_inner_gsrf(pl_js_yarn),def_target_sourcesn(pl_js_group)};

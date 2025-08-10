@@ -11,7 +11,7 @@
  * chsrc get bun
  */
 void
-pl_nodejs_bun_getsrc (char *option)
+pl_js_bun_getsrc (char *option)
 {
   chsrc_view_file ("~/.bunfig.toml");
 }
@@ -25,12 +25,12 @@ pl_nodejs_bun_getsrc (char *option)
  * chsrc set bun
  */
 void
-pl_nodejs_bun_setsrc (char *option)
+pl_js_bun_setsrc (char *option)
 {
   // 用的是 npm Registry 的源
-  chsrc_yield_source (pl_nodejs_group);
+  chsrc_yield_source (pl_js_group);
 
-  char *content = RAWSTR_pl_nodejs_bun_config;
+  char *content = RAWSTR_pl_js_bun_config;
 
   content = xy_str_gsub (content, "@url@", source.url);
 
@@ -54,9 +54,9 @@ pl_nodejs_bun_setsrc (char *option)
  * chsrc reset bun
  */
 void
-pl_nodejs_bun_resetsrc (char *option)
+pl_js_bun_resetsrc (char *option)
 {
-  pl_nodejs_bun_setsrc (option);
+  pl_js_bun_setsrc (option);
 }
 
 
@@ -64,7 +64,7 @@ pl_nodejs_bun_resetsrc (char *option)
  * chsrc ls bun
  */
 Feature_t
-pl_nodejs_bun_feat (char *option)
+pl_js_bun_feat (char *option)
 {
   Feature_t f = {0};
 
@@ -80,5 +80,5 @@ pl_nodejs_bun_feat (char *option)
   return f;
 }
 
-// def_target_gsrf(pl_nodejs_bun);
-Target_t pl_nodejs_bun_target = {def_target_inner_gsrf(pl_nodejs_bun),def_target_sourcesn(pl_nodejs_group)};
+// def_target_gsrf(pl_js_bun);
+Target_t pl_js_bun_target = {def_target_inner_gsrf(pl_js_bun),def_target_sourcesn(pl_js_group)};

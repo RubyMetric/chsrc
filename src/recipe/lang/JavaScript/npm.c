@@ -12,7 +12,7 @@
  * chsrc get npm
  */
 void
-pl_nodejs_npm_getsrc (char *option)
+pl_js_npm_getsrc (char *option)
 {
   chsrc_run ("npm config get registry", RunOpt_No_Last_New_Line);
 }
@@ -24,9 +24,9 @@ pl_nodejs_npm_getsrc (char *option)
  * chsrc set npm
  */
 void
-pl_nodejs_npm_setsrc (char *option)
+pl_js_npm_setsrc (char *option)
 {
-  chsrc_yield_source (pl_nodejs_group);
+  chsrc_yield_source (pl_js_group);
   if (chsrc_in_standalone_mode())
     chsrc_confirm_source();
 
@@ -51,9 +51,9 @@ pl_nodejs_npm_setsrc (char *option)
  * chsrc reset npm
  */
 void
-pl_nodejs_npm_resetsrc (char *option)
+pl_js_npm_resetsrc (char *option)
 {
-  pl_nodejs_npm_setsrc (option);
+  pl_js_npm_setsrc (option);
 }
 
 
@@ -61,7 +61,7 @@ pl_nodejs_npm_resetsrc (char *option)
  * chsrc ls npm
  */
 Feature_t
-pl_nodejs_npm_feat (char *option)
+pl_js_npm_feat (char *option)
 {
   Feature_t f = {0};
 
@@ -77,5 +77,5 @@ pl_nodejs_npm_feat (char *option)
   return f;
 }
 
-// def_target_gsrf(pl_nodejs_npm);
-Target_t pl_nodejs_npm_target = {def_target_inner_gsrf(pl_nodejs_npm),def_target_sourcesn(pl_nodejs_group)};
+// def_target_gsrf(pl_js_npm);
+Target_t pl_js_npm_target = {def_target_inner_gsrf(pl_js_npm),def_target_sourcesn(pl_js_group)};

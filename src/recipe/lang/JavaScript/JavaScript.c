@@ -10,7 +10,7 @@
  * ------------------------------------------------------------*/
 
 void
-pl_nodejs_check_cmd (bool *npm_exist, bool *yarn_exist, bool *pnpm_exist)
+pl_js_check_cmd (bool *npm_exist, bool *yarn_exist, bool *pnpm_exist)
 {
   *npm_exist  = chsrc_check_program ("npm");
   *yarn_exist = chsrc_check_program ("yarn");
@@ -30,28 +30,28 @@ pl_nodejs_check_cmd (bool *npm_exist, bool *yarn_exist, bool *pnpm_exist)
  * chsrc get nodejs
  */
 void
-pl_nodejs_group_getsrc (char *option)
+pl_js_group_getsrc (char *option)
 {
   bool npm_exist, yarn_exist, pnpm_exist;
-  pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
+  pl_js_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
   hr();
 
   if (npm_exist)
     {
-      pl_nodejs_npm_getsrc (option);
+      pl_js_npm_getsrc (option);
       br();
     }
 
   if (yarn_exist)
     {
-      pl_nodejs_yarn_getsrc (option);
+      pl_js_yarn_getsrc (option);
       br();
     }
 
   if (pnpm_exist)
     {
-      pl_nodejs_pnpm_getsrc (option);
+      pl_js_pnpm_getsrc (option);
       br();
     }
 }
@@ -61,7 +61,7 @@ pl_nodejs_group_getsrc (char *option)
  * chsrc set nodejs
  */
 void
-pl_nodejs_group_setsrc (char *option)
+pl_js_group_setsrc (char *option)
 {
   {
     char *msg = ENGLISH ? "Three package managers will be replaced for you at the same time: "
@@ -72,26 +72,26 @@ pl_nodejs_group_setsrc (char *option)
   }
 
   bool npm_exist, yarn_exist, pnpm_exist;
-  pl_nodejs_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
+  pl_js_check_cmd (&npm_exist, &yarn_exist, &pnpm_exist);
 
   chsrc_set_target_group_mode ();
-  chsrc_yield_source_and_confirm (pl_nodejs_group);
+  chsrc_yield_source_and_confirm (pl_js_group);
 
   if (npm_exist)
     {
-      pl_nodejs_npm_setsrc (option);
+      pl_js_npm_setsrc (option);
       br();
     }
 
   if (yarn_exist)
     {
-      pl_nodejs_yarn_setsrc (option);
+      pl_js_yarn_setsrc (option);
       br();
     }
 
   if (pnpm_exist)
     {
-      pl_nodejs_pnpm_setsrc (option);
+      pl_js_pnpm_setsrc (option);
     }
 
   chsrc_determine_chgtype (ChgType_Auto);
@@ -103,9 +103,9 @@ pl_nodejs_group_setsrc (char *option)
  * chsrc reset nodejs
  */
 void
-pl_nodejs_group_resetsrc (char *option)
+pl_js_group_resetsrc (char *option)
 {
-  pl_nodejs_group_setsrc (option);
+  pl_js_group_setsrc (option);
 }
 
 
@@ -113,7 +113,7 @@ pl_nodejs_group_resetsrc (char *option)
  * chsrc ls nodejs
  */
 Feature_t
-pl_nodejs_group_feat (char *option)
+pl_js_group_feat (char *option)
 {
   Feature_t f = {0};
 
@@ -128,4 +128,4 @@ pl_nodejs_group_feat (char *option)
   return f;
 }
 
-def_target_gsrf (pl_nodejs_group);
+def_target_gsrf (pl_js_group);

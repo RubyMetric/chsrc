@@ -12,7 +12,7 @@
  * chsrc get nvm
  */
 void
-pl_nodejs_nvm_getsrc (char *option)
+pl_js_nvm_getsrc (char *option)
 {
   chsrc_view_env ("NVM_NODEJS_ORG_MIRROR", NULL);
 }
@@ -28,9 +28,9 @@ pl_nodejs_nvm_getsrc (char *option)
  * @note nvm does not support Fish
  */
 void
-pl_nodejs_nvm_setsrc (char *option)
+pl_js_nvm_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (pl_nodejs_binary_release);
+  chsrc_yield_source_and_confirm (pl_js_binary_release);
 
   char *w = xy_strjoin (3, "export NVM_NODEJS_ORG_MIRROR=", source.url, "\n");
 
@@ -51,9 +51,9 @@ pl_nodejs_nvm_setsrc (char *option)
  * chsrc reset nvm
  */
 void
-pl_nodejs_nvm_resetsrc (char *option)
+pl_js_nvm_resetsrc (char *option)
 {
-  // pl_nodejs_nvm_setsrc (ChgType_Reset);
+  // pl_js_nvm_setsrc (ChgType_Reset);
   chsrc_error ("暂不支持对 nvm 重置");
   exit (Exit_Unsupported);
 }
@@ -63,7 +63,7 @@ pl_nodejs_nvm_resetsrc (char *option)
  * chsrc ls nvm
  */
 Feature_t
-pl_nodejs_nvm_feat (char *option)
+pl_js_nvm_feat (char *option)
 {
   Feature_t f = {0};
 
@@ -79,5 +79,5 @@ pl_nodejs_nvm_feat (char *option)
   return f;
 }
 
-// def_target_gsrf(pl_nodejs_nvm);
-Target_t pl_nodejs_nvm_target = {def_target_inner_gsrf(pl_nodejs_nvm),def_target_sourcesn(pl_nodejs_binary_release)};
+// def_target_gsrf(pl_js_nvm);
+Target_t pl_js_nvm_target = {def_target_inner_gsrf(pl_js_nvm),def_target_sourcesn(pl_js_binary_release)};
