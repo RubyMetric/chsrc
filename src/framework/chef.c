@@ -91,8 +91,10 @@ chef_set_note (Target_t *target, const char *note_zh, const char *note_en)
   if (!target)
     return;
 
-  char *msg = CHINESE ? xy_strdup(note_zh) : xy_strdup(note_en);
-  target->note = msg;
+  const char *msg = CHINESE ? note_zh : note_en;
+
+  if (msg)
+    target->note = xy_strdup(msg);
 }
 
 
