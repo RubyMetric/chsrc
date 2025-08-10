@@ -2,12 +2,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-static SourceProvider_t os_voidlinux_upstream =
-{
-  def_upstream, "https://repo-default.voidlinux.org",
-  {NotSkip, NA, NA, "https://repo-default.voidlinux.org/live/20240314/void-live-x86_64-musl-20240314-xfce.iso", ACCURATE}
-};
-
 def_target(os_voidlinux);
 
 void
@@ -28,19 +22,22 @@ os_voidlinux_prelude ()
   chef_allow_get();
   chef_allow_set();
   chef_allow_reset();
-  this.cap_locally = CanNot;
-  this.cap_locally_explain = NULL;
-  this.can_english = false;
-  this.can_user_define = true;
-  this.note = NULL;
 
-  def_upstream_provider(os_voidlinux_upstream);
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+
+
+  chef_set_note(this, NULL, NULL);
+
+  def_upstream("https://repo-default.voidlinux.org");
   def_sources_begin()
   {&upstream,        "https://repo-default.voidlinux.org", DelegateToUpstream},
   {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/voidlinux", DelegateToMirror},
   {&Sjtug_Zhiyuan,   "https://mirror.sjtu.edu.cn/voidlinux", DelegateToMirror},
   {&Bfsu,            "https://mirrors.bfsu.edu.cn/voidlinux", DelegateToMirror}
   def_sources_end()
+
+  chsrc_set_provider_speed_measure_url (&upstream, "https://repo-default.voidlinux.org/live/20240314/void-live-x86_64-musl-20240314-xfce.iso");
 }
 
 

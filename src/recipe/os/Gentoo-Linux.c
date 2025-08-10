@@ -22,11 +22,12 @@ os_gentoo_prelude ()
   // chef_allow_get();
   chef_allow_set();
   // chef_allow_reset();
-  this.cap_locally = CanNot;
-  this.cap_locally_explain = NULL;
-  this.can_english = true;
-  this.can_user_define = false;
-  this.note = NULL;
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_allow_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
 
   def_upstream("https://www.gentoo.org/downloads/mirrors/");
   def_sources_begin()

@@ -28,8 +28,14 @@ os_debian_prelude ()
   chef_allow_set();
   chef_allow_reset();
 
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
+
   def_upstream("http://deb.debian.org/debian");
-  def_sources_begin(os_debian)
+  def_sources_begin()
   {&upstream,       "http://deb.debian.org/debian", DelegateToUpstream},
 
   /* MirrorZ 的速度这么测也是可以的 */

@@ -2,12 +2,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-static SourceProvider_t os_alpine_upstream =
-{
-  def_upstream, "http://dl-cdn.alpinelinux.org/alpine",
-  {NotSkip, NA, NA, "https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64/alpine-standard-3.21.0-x86_64.iso", ACCURATE}
-};
-
 def_target(os_alpine);
 
 void
@@ -28,13 +22,14 @@ os_alpine_prelude ()
   chef_allow_get();
   chef_allow_set();
   // chef_allow_reset();
-  this.cap_locally = CanNot;
-  this.cap_locally_explain = NULL;
-  this.can_english = true;
-  this.can_user_define = false;
-  this.note = NULL;
 
-  def_upstream_provider(os_alpine_upstream);
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_allow_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
+
+  def_upstream("http://dl-cdn.alpinelinux.org/alpine");
   def_sources_begin()
   {&upstream,        "http://dl-cdn.alpinelinux.org/alpine", DelegateToUpstream},
   {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/alpine", DelegateToMirror},
@@ -46,6 +41,8 @@ os_alpine_prelude ()
   {&Tencent,         "https://mirrors.cloud.tencent.com/alpine", DelegateToMirror},
   {&Huawei,          "https://mirrors.huaweicloud.com/alpine", DelegateToMirror}
   def_sources_end()
+
+  chsrc_set_provider_speed_measure_url (&upstream, "https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64/alpine-standard-3.21.0-x86_64.iso");
 }
 
 

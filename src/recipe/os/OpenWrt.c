@@ -2,12 +2,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-static SourceProvider_t os_openwrt_upstream =
-{
-  def_upstream, "https://downloads.openwrt.org",
-  {NotSkip, NA, NA, "https://downloads.openwrt.org/releases/23.05.5/targets/x86/64/openwrt-sdk-23.05.5-x86-64_gcc-12.3.0_musl.Linux-x86_64.tar.xz", ACCURATE}
-};
-
 def_target(os_openwrt);
 
 void
@@ -29,13 +23,14 @@ os_openwrt_prelude ()
   chef_allow_get();
   chef_allow_set();
   chef_allow_reset();
-  this.cap_locally = CanNot;
-  this.cap_locally_explain = NULL;
-  this.can_english = true;
-  this.can_user_define = true;
-  this.note = NULL;
 
-  def_upstream_provider(os_openwrt_upstream);
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_allow_english(this);
+  chef_allow_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
+
+  def_upstream("https://downloads.openwrt.org");
   def_sources_begin()
   {&upstream,        "https://downloads.openwrt.org", DelegateToUpstream},
   {&MirrorZ,         "https://mirrors.cernet.edu.cn/openwrt", DelegateToMirror},
@@ -47,6 +42,8 @@ os_openwrt_prelude ()
   {&Pku,             "https://mirrors.pku.edu.cn/openwrt", DelegateToMirror},
   {&Sustech,         "https://mirrors.sustech.edu.cn/openwrt", DelegateToMirror}
   def_sources_end()
+
+  chsrc_set_provider_speed_measure_url (&upstream, "https://downloads.openwrt.org/releases/23.05.5/targets/x86/64/openwrt-sdk-23.05.5-x86-64_gcc-12.3.0_musl.Linux-x86_64.tar.xz");
 }
 
 
