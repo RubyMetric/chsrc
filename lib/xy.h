@@ -289,7 +289,7 @@ xy_strdup (const char *str)
 {
   if (!str)
     {
-      fprintf (stderr, "xy.h: xy_strdup() called with NULL!");
+      fprintf (stderr, "xy.h: xy_strdup() called with NULL!\n");
       return NULL;
     }
 
