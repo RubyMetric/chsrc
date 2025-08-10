@@ -75,6 +75,6 @@
 
 ### Important Project Concepts:
 
-请阅读 `doc/02-Write-A-Recipe-Even-If-You-Dont-Know-C.md`
+请阅读 `doc/10-Write-A-Recipe-Even-If-You-Dont-Know-C.md`
 
 ## Important: 一定要保持注释，因为它记录了重要的维护信息
