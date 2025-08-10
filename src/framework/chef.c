@@ -7,7 +7,7 @@
  * Created On    : <2025-08-09>
  * Last Modified : <2025-08-10>
  *
- * For chefs (recipe makers) to define a target
+ * chef DSL: for chefs (recipe makers) to define a target
  * ------------------------------------------------------------*/
 
 #pragma once
@@ -68,6 +68,17 @@ chef_forbid_user_define (Target_t *target)
   char *reason = CHINESE ? "URL将会根据内部实现重写,因此不能自定义"
                          : "The URL will be rewritten based on internal implementation, so it cannot be customized";
   target->can_user_define_explain = reason;
+}
+
+
+void
+chef_set_note (Target_t *target, const char *note_zh, const char *note_en)
+{
+  if (!target || !note)
+    return;
+
+  char *msg = CHINESE ? xy_strdup(note_zh) : xy_strdup(note_en);
+  target->note = msg;
 }
 
 
