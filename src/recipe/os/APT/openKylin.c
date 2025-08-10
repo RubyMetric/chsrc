@@ -32,7 +32,6 @@ os_openkylin_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("https://archive.openkylin.top/openkylin/");
   def_sources_begin()
   {&upstream,       "https://archive.openkylin.top/openkylin/", DelegateToUpstream},
   {&Ali,            "https://mirrors.aliyun.com/openkylin/",    DelegateToMirror},

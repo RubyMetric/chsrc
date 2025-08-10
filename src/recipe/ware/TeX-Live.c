@@ -29,7 +29,6 @@ wr_tex_prelude ()
   chef_forbid_english(this);
   chef_allow_user_define(this);
 
-  def_upstream("https://ctan.org/tex-archive/systems/texlive/tlnet");
   def_sources_begin()
   {&upstream,        "https://ctan.org/tex-archive/systems/texlive/tlnet", DelegateToUpstream},
   {&MirrorZ,         "https://mirrors.cernet.edu.cn/CTAN/systems/texlive/tlnet", DelegateToMirror},

@@ -30,7 +30,6 @@ os_openeuler_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("https://repo.openeuler.org/");
   def_sources_begin()
   {&upstream,  "https://repo.openeuler.org/",         DelegateToUpstream},
   {&Ali,       "https://mirrors.aliyun.com/openeuler/",     DelegateToMirror},

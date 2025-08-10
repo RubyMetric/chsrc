@@ -27,7 +27,6 @@ wr_nix_prelude ()
   chef_forbid_english(this);
   chef_forbid_user_define(this);
 
-  def_upstream("https://channels.nixos.org/");
   def_sources_begin()
   {&upstream,        "https://channels.nixos.org/", DelegateToUpstream},
   {&MirrorZ,         "https://mirrors.cernet.edu.cn/nix-channels/", DelegateToMirror},

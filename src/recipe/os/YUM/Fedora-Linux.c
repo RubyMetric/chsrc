@@ -30,7 +30,6 @@ os_fedora_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("http://download.example/pub/fedora/linux");
   def_sources_begin()
   {&upstream,  "http://download.example/pub/fedora/linux", DelegateToUpstream},
   {&Ali,       "https://mirrors.aliyun.com/fedora",        DelegateToMirror},

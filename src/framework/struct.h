@@ -173,7 +173,5 @@ TargetRegisterInfo_t;
 /* 以下宏仅能放在 prelude() 中使用 */
 #define use_this(t) Target_t *this = &t##_target;
 
-#define def_sources_begin()  Source_t sources[] = {
+#define def_sources_begin()  SourceProvider_t upstream = UpstreamProvider; Source_t sources[] = {
 #define def_sources_end()    }; this->sources = sources; this->sources_n = xy_arylen(sources);
-
-#define def_upstream(url) SourceProvider_t upstream = UpstreamProvider; upstream.site = url;

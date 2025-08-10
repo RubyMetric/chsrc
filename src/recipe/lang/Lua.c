@@ -1,30 +1,45 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- * Created On    : <2023-09-27>
- * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
 static MirrorSite_t Api7 =
 {
-  IS_DedicatedMirrorSite,
   "api7", "api7.ai", "深圳支流科技有限公司", "https://www.apiseven.com/",
-  {SKIP, ToFill, ToFill, NULL, ROUGH}
+  NULL, // no measure URL
+  ROUGH
 };
 
+def_target(pl_lua);
 
-/**
- * @update 2025-07-14
- * @note 目前只有一个源
- */
-static Source_t pl_lua_sources[] =
+void
+pl_lua_prelude ()
 {
-  {&UpstreamProvider, NULL, NULL},
-  {&Api7,             "https://luarocks.cn", NULL},
-};
-def_sources_n(pl_lua);
+  use_this(pl_lua);
+
+  chef_set_created_on   (this, "2023-09-27");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2025-07-14");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Nil Null", "nil@null.org");
+
+  chef_allow_get();
+  chef_allow_set();
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_allow_user_define(this);
+
+  chef_set_note ("目前只有一个源", NULL);
+
+  def_sources_begin()
+  {&upstream,         NULL, DelegateToUpstream},
+  {&Api7,             "https://luarocks.cn", DelegateToMirror}
+  def_sources_end()
+}
 
 
 void
@@ -55,26 +70,5 @@ pl_lua_setsrc (char *option)
   chsrc_note2 ("请手动修改 ~/.luarocks/upload_config.lua 文件 (用于上传):");
   println (upload_config);
 
-  chsrc_determine_chgtype (ChgType_Manual);
   chsrc_conclude (&source);
 }
-
-
-Feature_t
-pl_lua_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NA;
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_gsf(pl_lua);

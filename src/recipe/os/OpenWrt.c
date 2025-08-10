@@ -30,7 +30,6 @@ os_openwrt_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("https://downloads.openwrt.org");
   def_sources_begin()
   {&upstream,        "https://downloads.openwrt.org", DelegateToUpstream},
   {&MirrorZ,         "https://mirrors.cernet.edu.cn/openwrt", DelegateToMirror},

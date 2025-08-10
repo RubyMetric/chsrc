@@ -33,7 +33,6 @@ os_ubuntu_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("http://archive.ubuntu.com/ubuntu/");
   def_sources_begin()
   {&upstream,         "http://archive.ubuntu.com/ubuntu/", /* 不支持https */
                       DelegateToUpstream},

@@ -27,7 +27,6 @@ os_anolis_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("https://mirrors.openanolis.cn/anolis");
   def_sources_begin()
   {&upstream,  "https://mirrors.openanolis.cn/anolis", DelegateToUpstream},
   {&Ali,       "https://mirrors.aliyun.com/anolis",  DelegateToMirror},

@@ -29,7 +29,6 @@ os_solus_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("https://packages.getsol.us/");
   def_sources_begin()
   {&upstream,  "https://packages.getsol.us/shannon/eopkg-index.xml.xz", DelegateToUpstream},
   {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/solus/packages/shannon/eopkg-index.xml.xz", DelegateToMirror},

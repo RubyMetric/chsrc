@@ -1,31 +1,41 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng    <ccmywish@qq.com>
- * Contributors  : BingChunMoLi  <bingchunmoli@bingchunmoli.com>
- *               |
- * Created On    : <2023-08-31>
- * Last Modified : <2025-07-31>
  * ------------------------------------------------------------*/
 
-static SourceProvider_t pl_java_upstream =
-{
-  def_upstream, "https://mvnrepository.com/",
-  def_need_measure_info
-};
+def_target(pl_java);
 
-/**
- * @update 2024-12-18
- */
-static Source_t pl_java_sources[] =
+void
+pl_java_prelude ()
 {
-  {&pl_java_upstream,  "https://repo1.maven.org/maven2/", NULL},
+  use_this(pl_java);
+
+  chef_set_created_on   (this, "2023-08-31");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2024-12-18");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "BingChunMoLi", "bingchunmoli@bingchunmoli.com");
+
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_allow_user_define(this);
+
+  def_sources_begin()
+  {&upstream,         "https://repo1.maven.org/maven2/",                   DelegateToUpstream},
   {&Ali,              "https://maven.aliyun.com/repository/public/",       DelegateToMirror},
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/maven/", DelegateToMirror},
-  /* 网易的24小时更新一次 */
+
+  // 网易的24小时更新一次
   {&Netease,          "http://mirrors.163.com/maven/repository/maven-public/", DelegateToMirror}
-};
-def_sources_n(pl_java);
+  def_sources_end()
+}
 
 
 void
@@ -93,7 +103,6 @@ pl_java_setsrc (char *option)
       println (file);
     }
 
-  chsrc_determine_chgtype (ChgType_Manual);
   chsrc_conclude (&source);
 }
 
@@ -103,23 +112,3 @@ pl_java_resetsrc (char *option)
 {
   pl_java_setsrc (option);
 }
-
-
-Feature_t
-pl_java_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NA;
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_gsrf(pl_java);

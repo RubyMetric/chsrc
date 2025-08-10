@@ -25,7 +25,6 @@ wr_winget_prelude ()
   chef_forbid_english(this);
   chef_allow_user_define(this);
 
-  def_upstream("https://github.com/microsoft/winget-cli/");
   def_sources_begin()
   {&upstream, "https://cdn.winget.microsoft.com/cache",    NULL},
   {&MirrorZ,  "https://mirrors.cernet.edu.cn/winget-source", NULL},

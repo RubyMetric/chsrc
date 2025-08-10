@@ -27,7 +27,6 @@ wr_cocoapods_prelude ()
   chef_forbid_english(this);
   chef_allow_user_define(this);
 
-  def_upstream("https://github.com/CocoaPods/Specs.git");
   def_sources_begin()
   {&upstream, "https://github.com/CocoaPods/Specs.git", DelegateToUpstream},
   {&Tuna,     "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git", DelegateToMirror},

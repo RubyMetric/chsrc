@@ -27,7 +27,6 @@ os_almalinux_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("http://repo.almalinux.org/almalinux");
   def_sources_begin()
   {&upstream,           "http://repo.almalinux.org/almalinux", DelegateToUpstream},
   {&Ali,                "https://mirrors.aliyun.com/almalinux", DelegateToMirror},

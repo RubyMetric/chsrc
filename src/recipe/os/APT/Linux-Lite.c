@@ -29,7 +29,6 @@ os_linuxlite_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("http://repo.linuxliteos.com/linuxlite/");
   def_sources_begin()
   {&upstream,       "http://repo.linuxliteos.com/linuxlite/",    DelegateToUpstream},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/linuxliteos/",    DelegateToMirror},

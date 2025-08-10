@@ -30,7 +30,6 @@ wr_anaconda_prelude ()
   chef_forbid_english(this);
   chef_forbid_user_define(this);
 
-  def_upstream("https://repo.anaconda.com");
   def_sources_begin()
   {&upstream,        "https://repo.anaconda.com", DelegateToUpstream},
   {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn", DelegateToMirror},

@@ -31,7 +31,6 @@ os_trisquel_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("http://archive.trisquel.info/trisquel/");
   def_sources_begin()
   {&upstream,       "http://archive.trisquel.info/trisquel/", DelegateToUpstream},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/trisquel/", DelegateToMirror},

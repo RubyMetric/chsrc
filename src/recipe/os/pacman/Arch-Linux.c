@@ -32,11 +32,11 @@ os_arch_prelude ()
 
   chef_set_note ("可额外使用 chsrc set archlinuxcn 来更换 Arch Linux CN Repository 源", "You can additionally use chsrc set archlinuxcn to change Arch Linux CN Repository source");
 
-  def_upstream (NULL);
   /**
    * @note 不要给后面加 / ，因为ARM情况下，还要额外加一个 arm 后缀
    */
   def_sources_begin()
+  {&upstream,         "https://repo.archlinux.org",            DelegateToUpstream},
   {&Ali,              "https://mirrors.aliyun.com/archlinux",  DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/archlinux", DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/archlinux", DelegateToMirror},
@@ -137,13 +137,9 @@ os_archlinuxcn_prelude ()
 
   chef_set_note ("可额外使用 chsrc set arch 来更换 Arch Linux 源", "You can additionally use chsrc set arch to change Arch Linux source");
 
-  def_upstream ("https://repo.archlinuxcn.org/");
 
-  /**
-   * @note 根据 @zheng7fu2 建议，拆分 archlinuxcn 出来
-   */
   def_sources_begin()
-  {&upstream,         NULL,                                       DelegateToUpstream},
+  {&upstream,         "https://repo.archlinuxcn.org/",            DelegateToUpstream},
   {&Ali,              "https://mirrors.aliyun.com/archlinuxcn/",  DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/archlinuxcn/", DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/archlinuxcn/", DelegateToMirror},
@@ -156,11 +152,13 @@ os_archlinuxcn_prelude ()
   def_sources_end()
 }
 
+
 void
 os_archlinuxcn_getsrc (char *option)
 {
   chsrc_view_file (OS_Pacman_MirrorList);
 }
+
 
 /**
  * @consult https://mirrors.tuna.tsinghua.edu.cn/help/archlinuxcn/

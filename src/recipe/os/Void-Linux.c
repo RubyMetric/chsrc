@@ -29,7 +29,6 @@ os_voidlinux_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("https://repo-default.voidlinux.org");
   def_sources_begin()
   {&upstream,        "https://repo-default.voidlinux.org", DelegateToUpstream},
   {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/voidlinux", DelegateToMirror},

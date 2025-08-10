@@ -31,7 +31,6 @@ os_raspberrypi_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("https://archive.raspberrypi.com/");
   def_sources_begin()
   // https://archive.raspberrypi.org/ until Debian "bullseye" release
   {&upstream,       "https://archive.raspberrypi.com/",              DelegateToUpstream},

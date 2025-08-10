@@ -29,7 +29,6 @@ os_termux_prelude ()
 
   chef_set_note(this, "该 recipe 存在对应的 bootstrapper", "This recipe has a corresponding bootstrapper");
 
-  def_upstream("https://packages.termux.org/apt/termux-main/");
   def_sources_begin()
   {&upstream,       "https://packages.termux.org/apt/termux-main/", DelegateToUpstream},
   {&Ustc,           "https://mirrors.ustc.edu.cn/termux/", DelegateToMirror},

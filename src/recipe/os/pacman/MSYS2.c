@@ -25,8 +25,6 @@ os_msys2_prelude ()
   chef_forbid_english(this);
   chef_forbid_user_define(this);
 
-  def_upstream (NULL);
-
   def_sources_begin()
   {&upstream,         NULL,                                DelegateToUpstream},
   {&Ali,              "https://mirrors.aliyun.com/msys2",  DelegateToMirror},

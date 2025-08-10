@@ -29,7 +29,6 @@ os_gentoo_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("https://www.gentoo.org/downloads/mirrors/");
   def_sources_begin()
   {&upstream,  "rsync://rsync.gentoo.org/gentoo-portage", DelegateToUpstream},
   {&Ali,       "mirrors.aliyun.com", DelegateToMirror},

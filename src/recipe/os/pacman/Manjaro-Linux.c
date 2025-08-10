@@ -24,8 +24,6 @@ os_manjaro_prelude ()
   chef_forbid_english(this);
   chef_forbid_user_define(this);
 
-  def_upstream (NULL);
-
   def_sources_begin()
   {&upstream, NULL, DelegateToUpstream}
   /* Manjaro uses GUI tool, no manual sources needed */

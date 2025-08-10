@@ -32,7 +32,6 @@ wr_homebrew_prelude ()
   chef_set_note (this, "该换源通过写入环境变量实现，若多次换源，请手动清理profile文件",
                        "This source switching is implemented by writing environment variables. If switching sources multiple times, please manually clean the profile file");
 
-  def_upstream("https://github.com/Homebrew/brew.git");
   def_sources_begin()
   {&upstream,  "https://github.com/Homebrew/brew.git", DelegateToUpstream},
   {&Tuna,      "https://mirrors.tuna.tsinghua.edu.cn/", DelegateToMirror},

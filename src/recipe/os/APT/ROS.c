@@ -30,7 +30,6 @@ os_ros_prelude ()
 
   chef_set_note(this, "该换源方案中，URL存在拼凑，因此不能手动使用某URL来换源", "In this switching method, URLs are constructed, so manual URL specification is not supported");
 
-  def_upstream("http://packages.ros.org");
   def_sources_begin()
   {&upstream,       "http://packages.ros.org", DelegateToUpstream},
   {&Ali,            "https://mirrors.aliyun.com",  DelegateToMirror},

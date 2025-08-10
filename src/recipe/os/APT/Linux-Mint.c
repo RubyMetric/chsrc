@@ -29,7 +29,6 @@ os_linuxmint_prelude ()
 
 
   /* @note 实际上镜像站里的内容和Ubuntu的不太一样 */
-  def_upstream("http://packages.linuxmint.com");
   def_sources_begin()
   {&upstream,       "http://packages.linuxmint.com", DelegateToUpstream},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/linuxmint/", DelegateToMirror},

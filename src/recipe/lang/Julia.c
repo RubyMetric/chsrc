@@ -1,23 +1,40 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- * Created On    : <2023-08-31>
- * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
-/**
- * @update 2025-07-14
- */
-static Source_t pl_julia_sources[] =
+def_target(pl_julia);
+
+void
+pl_julia_prelude ()
 {
-  {&UpstreamProvider,  NULL, NULL},
+  use_this(pl_julia);
+
+  chef_set_created_on   (this, "2023-08-31");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2025-07-14");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Nil Null", "nil@null.org");
+
+  chef_allow_get();
+  chef_allow_set();
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_allow_english(this);
+  chef_allow_user_define(this);
+
+  chef_set_note ("Julia的换源可以通过两种方式: 1. 写入 startup.jl 2. 使用环境变量。我们采用第一种", NULL);
+
+  def_sources_begin()
+  {&upstream,         NULL, DelegateToUpstream},
   {&Pku,              "https://mirrors.pku.edu.cn/julia", DelegateToMirror},
   {&Nju,              "https://mirror.nju.edu.cn/julia",   DelegateToMirror},
   {&Iscas,            "https://mirror.iscas.ac.cn/julia",  DelegateToMirror}
-};
-def_sources_n(pl_julia);
+  def_sources_end()
+}
 
 #define PL_Julia_Config "~/.julia/config/startup.jl"
 
@@ -48,26 +65,5 @@ pl_julia_setsrc (char *option)
 
   chsrc_append_to_file (w, PL_Julia_Config);
 
-  chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);
 }
-
-
-Feature_t
-pl_julia_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NA;
-  f.can_english = true;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_gsf(pl_julia);

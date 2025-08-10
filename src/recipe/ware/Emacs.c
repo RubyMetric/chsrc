@@ -37,7 +37,6 @@ wr_emacs_prelude ()
   chef_set_note (this, "Emacs用户往往只需要一次性换源，只会极少次调用 chsrc，我们只给用户提供文档",
                        "Emacs users typically only need to switch sources once and rarely call chsrc, so we only provide documentation to users");
 
-  def_upstream("https://elpa.gnu.org/");
   def_sources_begin()
   {&upstream,        "https://elpa.gnu.org/", DelegateToUpstream},
   {&MirrorZ,         "https://help.mirrors.cernet.edu.cn/elpa/", DelegateToMirror},

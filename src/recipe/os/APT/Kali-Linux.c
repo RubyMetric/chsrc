@@ -30,7 +30,6 @@ os_kali_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("http://http.kali.org/kali");
   def_sources_begin()
   {&upstream,      "http://http.kali.org/kali",          DelegateToUpstream},
   {&MirrorZ,       "https://mirrors.cernet.edu.cn/kali", DelegateToMirror},

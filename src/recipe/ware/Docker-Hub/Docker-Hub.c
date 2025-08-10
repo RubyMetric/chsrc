@@ -46,7 +46,6 @@ wr_dockerhub_prelude ()
   chef_forbid_english(this);
   chef_allow_user_define(this);
 
-  def_upstream("https://hub.docker.com/");
   def_sources_begin()
   {&upstream,   "https://hub.docker.com/", DelegateToUpstream},
   {&DaoCloud,   "https://docker.m.daocloud.io", DelegateToMirror},

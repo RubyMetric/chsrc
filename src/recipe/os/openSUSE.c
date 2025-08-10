@@ -29,7 +29,6 @@ os_opensuse_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("https://download.opensuse.org/");
   def_sources_begin()
   {&upstream,     "https://download.opensuse.org/", DelegateToUpstream},
   {&Ali,          "https://mirrors.aliyun.com/opensuse", DelegateToMirror},

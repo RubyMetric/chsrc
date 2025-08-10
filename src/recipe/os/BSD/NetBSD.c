@@ -28,8 +28,6 @@ os_netbsd_prelude ()
 
   chef_set_note ("根据 @ykla: NetBSD 默认状态下没有 pkgsrc，用户可能安装了也可能没安装", NULL);
 
-  def_upstream (NULL);
-
   def_sources_begin()
   {&upstream,         NULL,                                                  DelegateToUpstream},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/pkgsrc/packages/NetBSD/", DelegateToMirror},

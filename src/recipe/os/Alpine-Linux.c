@@ -29,7 +29,6 @@ os_alpine_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("http://dl-cdn.alpinelinux.org/alpine");
   def_sources_begin()
   {&upstream,        "http://dl-cdn.alpinelinux.org/alpine", DelegateToUpstream},
   {&Tuna,            "https://mirrors.tuna.tsinghua.edu.cn/alpine", DelegateToMirror},

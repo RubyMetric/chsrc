@@ -1,53 +1,59 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors   : Aoran Zeng <ccmywish@qq.com>
- * Contributors   :    czyt    <czyt.go@gmail.com>
-*                 |  Rui Yang  <techoc@foxmail.com>
- *                |
- * Created On     : <2023-08-30>
- * Major Revision :      1
- * Last Modified  : <2025-07-12>
  * ------------------------------------------------------------*/
-
-static SourceProvider_t pl_go_upstream =
-{
-  def_upstream, "https://pkg.go.dev/",
-  def_need_measure_info
-};
 
 static MirrorSite_t GoProxyCN =
 {
-  IS_DedicatedMirrorSite,
   "goproxy.cn", "Goproxy.cn", "Goproxy.cn (七牛云)", "https://goproxy.cn/",
-  {NotSkip, NA, NA, "https://goproxy.cn/github.com/aws/aws-sdk-go/@v/v1.45.2.zip", ACCURATE} // 30 MB
+  "https://goproxy.cn/github.com/aws/aws-sdk-go/@v/v1.45.2.zip", // 30 MB
+  ACCURATE
 },
 
 GoProxyIO =
 {
-  IS_DedicatedMirrorSite,
   "goproxy.io", "GOPROXY.IO", "GOPROXY.IO", "https://goproxy.io/",
-  {NotSkip, NA, NA, "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip", ACCURATE} // 30 MB
+  "https://goproxy.io/github.com/aws/aws-sdk-go/@v/v1.45.2.zip", // 30 MB
+  ACCURATE
 };
 
+def_target(pl_go);
 
-/**
- * @update 2025-07-12
- *
- * @note 缺少教育网软件源
- */
-static Source_t pl_go_sources[] =
+void
+pl_go_prelude ()
 {
-  {&pl_go_upstream, "https://proxy.golang.org", NULL},
+  use_this(pl_go);
+
+  chef_set_created_on   (this, "2023-08-30");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2025-07-12");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 2,
+    "czyt",     "czyt.go@gmail.com",
+    "Rui Yang", "techoc@foxmail.com");
+
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_allow_user_define(this);
+
+
+  def_sources_begin()
+  {&upstream,       "https://proxy.golang.org", DelegateToUpstream},
   {&GoProxyCN,      "https://goproxy.cn", DelegateToMirror},
-  {&Ali,            "https://mirrors.aliyun.com/goproxy/", NULL},
+  {&Ali,            "https://mirrors.aliyun.com/goproxy/", DelegateToMirror},
 
   // 暂时停用华为镜像源, 详见 https://github.com/RubyMetric/chsrc/issues/227
-  // {&Huawei,      "https://mirrors.huaweicloud.com/goproxy/", NULL},
+  // {&Huawei,      "https://mirrors.huaweicloud.com/goproxy/", DelegateToMirror},
 
   {&GoProxyIO,      "https://goproxy.io", DelegateToMirror}
-};
-def_sources_n(pl_go);
+  def_sources_end()
+}
 
 
 
@@ -74,8 +80,6 @@ pl_go_getsrc (char *option)
 
 
 /**
- * chsrc set go
- *
  * @consult https://goproxy.cn/
  */
 void
@@ -91,39 +95,12 @@ pl_go_setsrc (char *option)
   cmd = xy_strjoin (3, "go env -w GOPROXY=", source.url, ",direct");
   chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
 
-/**
- * chsrc reset go
- */
+
 void
 pl_go_resetsrc (char *option)
 {
   pl_go_setsrc (option);
 }
-
-
-/**
- * chsrc ls go
- */
-Feature_t
-pl_go_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = false;
-
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_gsrf(pl_go);

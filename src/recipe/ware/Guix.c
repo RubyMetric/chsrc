@@ -30,7 +30,6 @@ wr_guix_prelude ()
   chef_set_note (this, "目前只有一个源, guixcn 的源不知道是否可用",
                        "Currently only one source available, guixcn source availability unknown");
 
-  def_upstream("https://git.savannah.gnu.org/git/guix.git");
   def_sources_begin()
   {&upstream,        "https://git.savannah.gnu.org/git/guix.git", DelegateToUpstream},
   {&Sjtug_Zhiyuan,   "https://mirror.sjtu.edu.cn/git/guix.git", DelegateToMirror}

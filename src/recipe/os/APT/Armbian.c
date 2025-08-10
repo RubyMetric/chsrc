@@ -30,7 +30,6 @@ os_armbian_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("http://apt.armbian.com");
   def_sources_begin()
   {&upstream,       "http://apt.armbian.com", DelegateToUpstream},
   {&MirrorZ,        "https://mirrors.cernet.edu.cn/armbian",        DelegateToMirror},

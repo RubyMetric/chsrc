@@ -27,8 +27,6 @@ os_freebsd_prelude ()
 
   chef_set_note ("2023-09-24: 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports\n2023-09-27: 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数", NULL);
 
-  def_upstream (NULL);
-
   def_sources_begin()
   {&upstream,         NULL,                  DelegateToUpstream},
   {&Ustc,             "mirrors.ustc.edu.cn", DelegateToMirror},

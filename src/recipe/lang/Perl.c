@@ -1,33 +1,42 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- *               |
- * Created On    : <2023-09-31>
- * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
-static SourceProvider_t pl_perl_upstream =
-{
-  def_upstream, "https://metacpan.org/",
-  def_need_measure_info
-};
+def_target(pl_perl);
 
-/**
- * @update 2024-05-24
- */
-static Source_t pl_perl_sources[] =
+void
+pl_perl_prelude ()
 {
-  {&pl_perl_upstream,  NULL, NULL},
+  use_this(pl_perl);
+
+  chef_set_created_on   (this, "2023-09-31");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2024-05-24");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_sous_chefs (this, 0);
+  chef_set_contributors (this, 1,
+    "Nil Null", "nil@null.org");
+
+  chef_allow_get();
+  chef_allow_set();
+  chef_allow_reset();
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_allow_user_define(this);
+
+  def_sources_begin()
+  {&upstream,        NULL, DelegateToUpstream},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/CPAN/", DelegateToMirror},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CPAN/", DelegateToMirror},
   {&Bjtu,             "https://mirror.bjtu.edu.cn/cpan/",  DelegateToMirror},
   {&Hust,             "https://mirrors.hust.edu.cn/CPAN/", DelegateToMirror},
   {&Ali,              "https://mirrors.aliyun.com/CPAN/",  DelegateToMirror},
   {&Lzuoss,           "https://mirror.lzu.edu.cn/CPAN/",  DelegateToMirror}
-};
-def_sources_n(pl_perl);
+  def_sources_end()
+}
 
 
 void
@@ -63,27 +72,5 @@ pl_perl_setsrc (char *option)
   chsrc_alert2 ("请使用 perl -v 以及 cpan -v，若 Perl >= v5.36 或 CPAN >= 2.29，请额外手动调用下面的命令");
   p ("perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('pushy_https', 0);; CPAN::HandleConfig->commit()\"");
 
-  chsrc_determine_chgtype (ChgType_SemiAuto);
   chsrc_conclude (&source);
 }
-
-
-Feature_t
-pl_perl_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NA;
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-
-def_target_gsf(pl_perl);

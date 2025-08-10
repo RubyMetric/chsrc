@@ -34,7 +34,6 @@ os_debian_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("http://deb.debian.org/debian");
   def_sources_begin()
   {&upstream,       "http://deb.debian.org/debian", DelegateToUpstream},
 

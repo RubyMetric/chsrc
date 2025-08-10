@@ -29,7 +29,6 @@ os_deepin_prelude ()
 
   chef_set_note(this, NULL, NULL);
 
-  def_upstream("https://community-packages.deepin.com/deepin");
   def_sources_begin()
   {&upstream,       "https://community-packages.deepin.com/deepin", DelegateToUpstream},
   {&Ali,            "https://mirrors.aliyun.com/deepin",            DelegateToMirror},

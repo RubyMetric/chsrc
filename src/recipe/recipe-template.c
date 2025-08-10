@@ -76,7 +76,6 @@ void
 
   chef_set_note ("备注说明...", "Note...");
 
-  def_upstream("https://github.com/RubyMetric/chsrc");
   def_sources_begin()
   {&upstream,      "上游地址，若维护者暂时未知，可填NULL，这个主要用于reset", DelegateToUpstream}
   {&RubyMetric,    "https://rubymetirc.com/target",       DelegateToMirror},
