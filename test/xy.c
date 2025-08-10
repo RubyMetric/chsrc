@@ -97,6 +97,8 @@ main (int argc, char const *argv[])
   assert (xy_dir_exist ("~"));
   if (xy_on_windows)
     {
+      say (xy_win_powershell_profile);
+      say (xy_win_powershellv5_profile);
       assert (xy_file_exist (xy_win_powershell_profile));
       assert (true == xy_file_exist (xy_win_powershellv5_profile));
       assert (xy_dir_exist ("C:\\Users"));
