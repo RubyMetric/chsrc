@@ -5,7 +5,7 @@
 #               | Mikachu2333 <mikachu2333@zohomail.com>
 #               |
 # Created On    : <2025-06-19>
-# Last Modified : <2025-08-07>
+# Last Modified : <2025-08-11>
 #
 # Test PR
 # ---------------------------------------------------------------
@@ -14,11 +14,12 @@ name: 测试PR
 
 on:
   pull_request:
-    types: [opened,
-            synchronize,      # 后续提交
-            ready_for_review, # draft PR 转为正式 PR
-            review_requested,
-            reopened]
+    types: [
+        opened,
+        ready_for_review, # draft PR 转为正式 PR
+        review_requested,
+        reopened,
+      ]
     paths:
       - "src/**"
       - "lib/**"
@@ -49,6 +50,12 @@ jobs:
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
+
+      - name: 创建测试文件
+        shell: powershell
+        run: |
+          New-Item -Path "$env:USERPROFILE\Documents\Powershell\Microsoft.PowerShell_profile.ps1" -ItemType File -Force
+          New-Item -Path "$env:USERPROFILE\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1" -ItemType File -Force
 
       - name: 安装依赖
         run: |
