@@ -1,26 +1,38 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- * Created On    : <2023-09-10>
- * Last Modified : <2025-07-22>
  * ------------------------------------------------------------*/
 
-/**
- * @update 2023-09-10
- */
-static Source_t pl_haskell_sources[] =
+def_target(pl_haskell, "haskell/cabal/stack/hackage");
+
+void
+pl_haskell_prelude ()
 {
-  {&UpstreamProvider,  NULL, NULL},
+  use_this(pl_haskell);
+  chef_allow_s(pl_haskell);
+
+  chef_set_created_on   (this, "2023-09-10");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2023-09-10");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 0);
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_allow_user_define(this);
+
+  def_sources_begin()
+  {&UpstreamProvider, NULL, DelegateToUpstream},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/hackage", DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/hackage",          DelegateToMirror},
   {&Nju,              "https://mirror.nju.edu.cn/hackage",             DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/hackage",          DelegateToMirror},
   {&Iscas,            "https://mirror.iscas.ac.cn/hackage",           DelegateToMirror},
   {&Nyist,            "https://mirror.nyist.edu.cn/hackage",          DelegateToMirror}
-};
-def_sources_n(pl_haskell);
+  def_sources_end()
+}
 
 
 /**
@@ -29,7 +41,7 @@ def_sources_n(pl_haskell);
 void
 pl_haskell_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (pl_haskell);
+  use_this_source(pl_haskell);
 
   char *content = xy_str_gsub (RAWSTR_pl_haskell_cabal_config, "@url@", source.url);
 
@@ -51,26 +63,5 @@ pl_haskell_setsrc (char *option)
   chsrc_note2 (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
   println (content);
 
-  chsrc_determine_chgtype (ChgType_Manual);
   chsrc_conclude (&source);
 }
-
-
-Feature_t
-pl_haskell_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = false;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NA;
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_sf (pl_haskell);

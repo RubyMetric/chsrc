@@ -1,30 +1,40 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  : Yangmoooo <yangmoooo@outlook.com>
- *               |
- * Created On    : <2023-09-24>
- * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
-static SourceProvider_t os_voidlinux_upstream =
-{
-  def_upstream, "https://repo-default.voidlinux.org",
-  {NotSkip, NA, NA, "https://repo-default.voidlinux.org/live/20240314/void-live-x86_64-musl-20240314-xfce.iso", ACCURATE}
-};
+def_target(os_voidlinux, "voidlinux");
 
-/**
- * @update 2024-12-18
- */
-static Source_t os_voidlinux_sources[] =
+void
+os_voidlinux_prelude ()
 {
-  {&os_voidlinux_upstream, "https://repo-default.voidlinux.org",        DelegateToUpstream},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/voidlinux", DelegateToMirror},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/voidlinux",           DelegateToMirror},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/voidlinux",          DelegateToMirror}
-};
-def_sources_n(os_voidlinux);
+  use_this(os_voidlinux);
+  chef_allow_gsr(os_voidlinux);
+
+  chef_set_created_on   (this, "2023-09-24");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2024-12-18");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 1,
+    "Yangmoooo", "yangmoooo@outlook.com");
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+
+
+  chef_set_note(this, NULL, NULL);
+
+  def_sources_begin()
+  {&UpstreamProvider, "https://repo-default.voidlinux.org", FeedByPrelude},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/voidlinux", FeedByPrelude},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/voidlinux", FeedByPrelude},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/voidlinux", FeedByPrelude}
+  def_sources_end()
+
+  chef_set_sources_speed_measure_url_with_postfix (this, "/live/20240314/void-live-x86_64-musl-20240314-xfce.iso");
+}
 
 
 void
@@ -42,7 +52,7 @@ os_voidlinux_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  chsrc_yield_source_and_confirm (os_voidlinux);
+  use_this_source(os_voidlinux);
 
   chsrc_ensure_dir ("/etc/xbps.d");
   char *cmd = "cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/";
@@ -70,23 +80,3 @@ os_voidlinux_resetsrc (char *option)
 {
   os_voidlinux_setsrc (option);
 }
-
-
-Feature_t
-os_voidlinux_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_gsrf(os_voidlinux);

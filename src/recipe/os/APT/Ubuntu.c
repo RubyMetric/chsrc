@@ -1,67 +1,55 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- *               |  Heng Guo  <2085471348@qq.com>
- * Contributors  :    Zhao    <1792582687@qq.com>
- *               |
- * Created On    : <2023-08-30>
- * Last Modified : <2025-07-11>
  * ------------------------------------------------------------*/
 
-#define OS_Ubuntu_Speed_URL_Postfix "/dists/noble/Contents-amd64.gz"
+/* Zorin OS 完全使用 Ubuntu 的换源方法，二者兼容 */
+def_target(os_ubuntu, "ubuntu/zorinos");
 
-static SourceProvider_t os_ubuntu_upstream =
+void
+os_ubuntu_prelude ()
 {
-  def_upstream, "http://archive.ubuntu.com/",
-  // https://github.com/RubyMetric/chsrc/issues/121
-  {NotSkip, NA, NA, "http://archive.ubuntu.com/ubuntu/dists/noble/Contents-amd64.gz", /* 48.9 MB*/  ACCURATE}
-};
+  use_this(os_ubuntu);
+  chef_allow_gsr(os_ubuntu);
 
-/**
- * @update 2025-07-11
- */
-static Source_t os_ubuntu_sources[] =
-{
-  {&os_ubuntu_upstream, "http://archive.ubuntu.com/ubuntu/", /* 不支持https */
-                         DelegateToUpstream},
+  chef_set_created_on   (this, "2023-08-30");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2025-07-11");
 
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/ubuntu/",
-                      "https://mirrors.cernet.edu.cn/ubuntu/" OS_Ubuntu_Speed_URL_Postfix },
+  chef_set_authors (this, 2,
+    "Aoran Zeng", "ccmywish@qq.com",
+    "Heng Guo", "2085471348@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 1,
+    "Zhao", "1792582687@qq.com");
 
-  {&Ali,              "https://mirrors.aliyun.com/ubuntu",
-                      "https://mirrors.aliyun.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
 
-  {&Volcengine,       "https://mirrors.volces.com/ubuntu",
-                      "https://mirrors.volces.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
+  chef_set_note(this, NULL, NULL);
 
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/ubuntu",
-                      "https://mirrors.bfsu.edu.cn/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
-
-  {&Ustc,             "https://mirrors.ustc.edu.cn/ubuntu",
-                      "https://mirrors.ustc.edu.cn/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
-
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/ubuntu",
-                      "https://mirrors.tuna.tsinghua.edu.cn/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
-
-  {&Tencent,          "https://mirrors.tencent.com/ubuntu",
-                      "https://mirrors.tencent.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
-
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/ubuntu",
-  //                  "https://mirrors.tencentyun.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
-
-  {&Huawei,           "https://mirrors.huaweicloud.com/ubuntu",
-                      "https://mirrors.huaweicloud.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
+  def_sources_begin()
+  {&UpstreamProvider, "http://archive.ubuntu.com/ubuntu/",  FeedByPrelude}, /* 不支持https */
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/ubuntu/",FeedByPrelude},
+  {&Ali,              "https://mirrors.aliyun.com/ubuntu",FeedByPrelude},
+  {&Volcengine,       "https://mirrors.volces.com/ubuntu",FeedByPrelude},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/ubuntu",FeedByPrelude},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/ubuntu",FeedByPrelude},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/ubuntu",FeedByPrelude},
+  {&Tencent,          "https://mirrors.tencent.com/ubuntu", FeedByPrelude},
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/ubuntu",FeedByPrelude},
+  {&Huawei,           "https://mirrors.huaweicloud.com/ubuntu",FeedByPrelude}
 
   /* 不启用原因：过慢 */
-  // {&Netease,          "https://mirrors.163.com/ubuntu",
-  //                     "https://mirrors.163.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix},
+  // {&Netease,          "https://mirrors.163.com/ubuntu", FeedByPrelude},
 
   /* 不启用原因：过慢 */
-  // {&Sohu,             "https://mirrors.sohu.com/ubuntu",
-  //                     "https://mirrors.sohu.com/ubuntu" OS_Ubuntu_Speed_URL_Postfix}
-};
-def_sources_n(os_ubuntu);
+  // {&Sohu,             "https://mirrors.sohu.com/ubuntu", FeedByPrelude}
+  def_sources_end()
+
+  chef_set_sources_speed_measure_url_with_postfix (this, "/dists/noble/Contents-amd64.gz");
+}
 
 
 void
@@ -92,7 +80,7 @@ os_ubuntu_getsrc (char *option)
 void
 os_ubuntu_setsrc_for_deb822 (char *option)
 {
-  chsrc_yield_source_and_confirm (os_ubuntu);
+  use_this_source(os_ubuntu);
 
   chsrc_backup (OS_Ubuntu_SourceList_DEB822);
 
@@ -135,7 +123,7 @@ os_ubuntu_setsrc (char *option)
 
   bool sourcelist_exist = ensure_debian_or_ubuntu_old_sourcelist (OS_Is_Ubuntu);
 
-  chsrc_yield_source_and_confirm (os_ubuntu);
+  use_this_source(os_ubuntu);
 
   /* 不存在的时候，用的是我们生成的无效文件，不要备份 */
   if (sourcelist_exist)
@@ -167,23 +155,3 @@ os_ubuntu_resetsrc (char *option)
 {
   os_ubuntu_setsrc (option);
 }
-
-
-Feature_t
-os_ubuntu_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_gsrf(os_ubuntu);

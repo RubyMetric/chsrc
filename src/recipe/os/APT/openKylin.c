@@ -1,25 +1,40 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  :  Heng Guo  <2085471348@qq.com>
- * Contributors  : Aoran Zeng <ccmywish@qq.com>
- * Created On    : <2023-09-06>
- * Last Modified : <2025-07-21>
- *
  * openKylin直接基于Linux内核开发，属于和Debian、openSUSE、Fedora、Arch
  * 同一级别的、根社区发布的系统
  * ------------------------------------------------------------*/
 
-/**
- * @update 2023-09-29
- */
-static Source_t os_openkylin_sources[] =
+def_target(os_openkylin, "openkylin");
+
+void
+os_openkylin_prelude ()
 {
+  use_this(os_openkylin);
+  chef_allow_gsr(os_openkylin);
+
+  chef_set_created_on   (this, "2023-09-06");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2023-09-29");
+
+  chef_set_authors (this, 1, "Heng Guo", "2085471348@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 1,
+    "Aoran Zeng", "ccmywish@qq.com");
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
+
+  def_sources_begin()
   {&UpstreamProvider, "https://archive.openkylin.top/openkylin/", DelegateToUpstream},
   {&Ali,              "https://mirrors.aliyun.com/openkylin/",    DelegateToMirror},
-  {&Netease,          "https://mirrors.163.com/openkylin/",       DelegateToMirror},
-};
-def_sources_n(os_openkylin);
+  {&Netease,          "https://mirrors.163.com/openkylin/",       DelegateToMirror}
+  def_sources_end()
+}
 
 void
 os_openkylin_getsrc (char *option)
@@ -32,7 +47,7 @@ os_openkylin_setsrc (char *option)
 {
   chsrc_ensure_root();
 
-  chsrc_yield_source_and_confirm (os_openkylin);
+  use_this_source(os_openkylin);
 
   chsrc_backup (OS_Apt_SourceList);
 
@@ -50,24 +65,3 @@ os_openkylin_resetsrc (char *option)
 {
   os_openkylin_setsrc (option);
 }
-
-
-Feature_t
-os_openkylin_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-
-  f.can_english = true;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_gsrf(os_openkylin);

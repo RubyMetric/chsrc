@@ -1,13 +1,34 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nul None  <nul@none.org>
- * Created On    : <2024-12-06>
- * Last Modified : <2025-08-09>
- *
  * 由于Rye已经有后继uv了，所以我们不把该管理器纳入Python group中
  * ------------------------------------------------------------*/
+
+def_target(pl_python_rye, "rye");
+
+void
+pl_python_rye_prelude (void)
+{
+  use_this(pl_python_rye);
+  chef_allow_gsr(pl_python_rye);
+
+  chef_set_created_on   (this, "2024-12-06");
+  chef_set_last_updated (this, "2025-08-09");
+  chef_set_sources_last_updated (this, "2025-08-09");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 0);
+
+  chef_allow_local_mode (this, FullyCan, "支持项目级配置", "Supports project-level configuration");
+  chef_allow_english(this);
+  chef_allow_user_define(this);
+
+  // 使用 pl_python_group 的源
+  this->sources = pl_python_group_target.sources;
+  this->sources_n = pl_python_group_target.sources_n;
+}
 
 char *
 pl_python_find_rye_config ()
@@ -18,9 +39,8 @@ pl_python_find_rye_config ()
   return rye_config;
 }
 
-/**
- * chsrc get rye
- */
+
+
 void
 pl_python_rye_getsrc (char *option)
 {
@@ -31,15 +51,12 @@ pl_python_rye_getsrc (char *option)
 
 /**
  * @consult https://github.com/RubyMetric/chsrc/issues/127
- * @consult recipe Java
- *
- * chsrc set rye
  */
 void
 pl_python_rye_setsrc (char *option)
 {
   /* 并不在 Python group 中，所以不考虑 target group 情况，仅使用 Python group 提供的源 */
-  chsrc_yield_source_and_confirm (pl_python_group);
+  Source_t source = chsrc_yield_source_and_confirm (&pl_python_group_target, option);
 
   const char *content = RAWSTR_pl_python_rye_config;
 
@@ -55,36 +72,8 @@ pl_python_rye_setsrc (char *option)
 }
 
 
-/**
- * chsrc reset rye
- */
 void
 pl_python_rye_resetsrc (char *option)
 {
   pl_python_rye_setsrc (option);
 }
-
-
-/**
- * chsrc ls rye
- */
-Feature_t
-pl_python_rye_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = true;
-  f.cap_locally_explain = NULL;
-
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-// def_target_gsrf(pl_python_rye);
-Target_t pl_python_rye_target = {def_target_inner_gsrf(pl_python_rye),def_target_sourcesn(pl_python_group)};

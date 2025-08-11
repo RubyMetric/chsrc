@@ -1,15 +1,34 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nul None  <nul@none.org>
- * Created On    : <2024-06-05>
- * Last Modified : <2025-07-11>
  * ------------------------------------------------------------*/
 
-/**
- * chsrc get pdm
- */
+def_target(pl_python_pdm, "pdm");
+
+void
+pl_python_pdm_prelude (void)
+{
+  use_this(pl_python_pdm);
+  chef_allow_gsr(pl_python_pdm);
+
+  chef_set_created_on   (this, "2024-06-05");
+  chef_set_last_updated (this, "2025-07-11");
+  chef_set_sources_last_updated (this, "2025-07-11");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 0);
+
+  chef_allow_local_mode (this, FullyCan, "支持项目级配置", "Supports project-level configuration");
+  chef_allow_english(this);
+  chef_allow_user_define(this);
+
+  // 使用 pl_python_group 的源
+  this->sources = pl_python_group_target.sources;
+  this->sources_n = pl_python_group_target.sources_n;
+}
+
+
 void
 pl_python_pdm_getsrc (char *option)
 {
@@ -22,15 +41,13 @@ pl_python_pdm_getsrc (char *option)
 
 /**
  * @consult https://github.com/RubyMetric/chsrc/issues/19
- *
- * chsrc set pdm
  */
 void
 pl_python_pdm_setsrc (char *option)
 {
-  chsrc_yield_source (pl_python_group);
+  Source_t source = chsrc_yield_source (&pl_python_group_target, option);
   if (chsrc_in_standalone_mode())
-    chsrc_confirm_source();
+    chsrc_confirm_source(&source);
 
   char *cmd = NULL;
 
@@ -48,38 +65,8 @@ pl_python_pdm_setsrc (char *option)
     }
 }
 
-
-/**
- * chsrc reset pdm
- */
 void
 pl_python_pdm_resetsrc (char *option)
 {
   pl_python_pdm_setsrc (option);
 }
-
-
-/**
- * chsrc ls pdm
- */
-Feature_t
-pl_python_pdm_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  // PDM 完全支持项目级换源
-  f.cap_locally = FullyCan;
-  f.cap_locally_explain = NULL;
-
-  f.can_english = true;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-// def_target_gsrf(pl_python_pdm);
-Target_t pl_python_pdm_target = {def_target_inner_gsrf(pl_python_pdm),def_target_sourcesn(pl_python_group)};

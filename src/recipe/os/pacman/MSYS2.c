@@ -1,18 +1,31 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  :  Heng Guo  <2085471348@qq.com>
- * Contributors  : Aoran Zeng <ccmywish@qq.com>
- * Created On    : <2023-09-06>
- * Last Modified : <2025-06-20>
  * ------------------------------------------------------------*/
 
-/**
- * @update 2025-06-20
- */
-static Source_t os_msys2_sources[] =
+def_target(os_msys2, "msys2/msys");
+
+void
+os_msys2_prelude ()
 {
-  {&UpstreamProvider,  NULL, NULL},
+  use_this(os_msys2);
+  chef_allow_s(os_msys2);
+
+  chef_set_created_on   (this, "2023-09-06");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2025-06-20");
+
+  chef_set_authors (this, 1, "Heng Guo", "2085471348@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 1,
+    "Aoran Zeng", "ccmywish@qq.com");
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  def_sources_begin()
+  {&UpstreamProvider,  NULL,                               DelegateToUpstream},
   {&Ali,              "https://mirrors.aliyun.com/msys2",  DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/msys2", DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/msys2", DelegateToMirror},
@@ -23,8 +36,8 @@ static Source_t os_msys2_sources[] =
   // {&Netease,          "https://mirrors.163.com/msys2",  DelegateToMirror},
   /* 不启用原因：过慢 */
   // {&Sohu,             "https://mirrors.sohu.com/msys2", DelegateToMirror}
-};
-def_sources_n(os_msys2);
+  def_sources_end()
+}
 
 
 /**
@@ -33,7 +46,7 @@ def_sources_n(os_msys2);
 void
 os_msys2_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (os_msys2);
+  use_this_source(os_msys2);
 
   chsrc_backup ("/etc/pacman.d/mirrorlist.mingw32");
   chsrc_backup ("/etc/pacman.d/mirrorlist.mingw64");
@@ -50,25 +63,5 @@ os_msys2_setsrc (char *option)
 
   chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);
 }
-
-
-Feature_t
-os_msys2_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = false;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_sf(os_msys2);

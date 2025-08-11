@@ -2,12 +2,12 @@
  ! SPDX-License-Identifier: GFDL-1.3-or-later
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
- ! Doc Name      : 02-Write-A-Recipe-Even-If-You-Dont-Know-C.md
+ ! Doc Name      : 10-如何编写recipe.md
  ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2024-08-19>
- ! Last Modified : <2025-07-21>
+ ! Last Modified : <2025-08-11>
  ! ---------------------------------------------------------- -->
 
 # Write A Recipe Even If You Don't Know C
@@ -52,7 +52,8 @@
 - `source`: 该 `target` 所能换的具体的源，由 `mirror` 提供服务，往往一个 `mirror` 会提供许多 `source`
 - `recipe`: 是为一个 `target` 定义的具体换源方法，请参考 `src` 目录中的 `recipe` 目录
 
-- `feature`: 一个 `target` 可以支持的功能，比如能否重置回上游默认源等
+- **换源链接**: 指镜像站所提供的某一个具体的换源使用的URL
+- **测速链接**: 用来测速的URL，与 "换源链接" 不同，可分为 **精准测速** 和 **模糊测速**
 
 - **镜像源**: 为了方便，**偶尔**我们将直接称`mirror`和/或`source`为**镜像源**，这只是一种方便性的称呼，可以统称二者，也可以根据上下文指代二者之一
 
@@ -76,17 +77,23 @@
 
 5. 在 [Wiki] 中记录的镜像站中寻找可用源；可以额外补充镜像站
 
-6. 可以使用这些函数:
+6. 使用 chef DSL 定义 `_prelude()` 函数
+
+    该函数将填充 target 所有的必要信息，包括维护信息、换源信息
+
+7. [设置/修改 "换源 URL" 和 "测速 URL" (how?)](./11-如何设置换源链接与测速链接.md)
+
+8. 按需实现 `_setsrc()` `_getsrc()` `_resetsrc()`， 可以使用这些函数:
 
     1. `framework/core.c` 中以 `chsrc_` 开头的所有函数或宏
     2. `xy.h` 中以 `xy_` 开头的所有函数或宏
-    3. `chec.h` 中以 `chef_` 开头的所有函数或宏
+    3. `chec.c` `chef-helper.c` 中以 `chef_` 开头的所有函数或宏
 
     一个简单的方法是，在 VS Code 中按快捷键 `Ctrl-T` 搜索上述三种前缀
 
-7. 在 `recipe/menu.c` 中添加用户可以使用的 `target` 别名
+9. 在 `recipe/menu.c` 中登记此 target
 
-8. [编译、运行、测试 (how?)](./01-Develop.md)，若无问题可提交 Pull Request
+10. [编译、运行、测试 (how?)](./01-开发与构建.md)，若无问题可提交 Pull Request
 
 <br>
 

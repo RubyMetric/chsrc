@@ -1,29 +1,39 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- * Created On    : <2023-09-26>
- * Last Modified : <2025-07-13>
  * ------------------------------------------------------------*/
 
-/**
- * @update 2025-07-13
- *
- * @note 链接将会在setsrc函数中补充完整
- */
-static Source_t wr_nix_sources[] =
+def_target(wr_nix, "nix");
+
+void
+wr_nix_prelude ()
 {
-  {&UpstreamProvider,  NULL, NULL},
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/nix-channels/", NULL},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/", NULL},
-  {&Nju,              "https://mirror.nju.edu.cn/nix-channels/",   NULL},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/nix-channels/", NULL},
-  {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn/nix-channels/",   NULL},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/nix-channels/", NULL},
-  {&Iscas,            "https://mirror.iscas.ac.cn/nix-channels/",  NULL}
-};
-def_sources_n(wr_nix);
+  use_this(wr_nix);
+  chef_allow_s(wr_nix);
+
+  chef_set_created_on   (this, "2023-09-26");
+  chef_set_last_updated (this, "2025-08-09");
+  chef_set_sources_last_updated (this, "2025-07-13");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 0);
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  def_sources_begin()
+  {&UpstreamProvider, "https://channels.nixos.org/", DelegateToUpstream},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/nix-channels/", DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/", DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn/nix-channels/", DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/nix-channels/", DelegateToMirror},
+  {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn/nix-channels/", DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/nix-channels/", DelegateToMirror},
+  {&Iscas,            "https://mirror.iscas.ac.cn/nix-channels/", DelegateToMirror}
+  def_sources_end()
+}
 
 
 void
@@ -42,7 +52,7 @@ wr_nix_setsrc (char *option)
 {
   wr_nix_check_cmd ();
 
-  chsrc_yield_source_and_confirm (wr_nix);
+  use_this_source(wr_nix);
 
   char *cmd = xy_strjoin (3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
   chsrc_run (cmd, RunOpt_Default);
@@ -63,19 +73,3 @@ wr_nix_setsrc (char *option)
   chsrc_determine_chgtype (ChgType_SemiAuto);
   chsrc_conclude (&source);
 }
-
-Feature_t
-wr_nix_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = false;
-  f.can_reset = false;
-
-  f.can_english = false;
-  f.can_user_define = false;
-
-  return f;
-}
-
-def_target_sf (wr_nix);

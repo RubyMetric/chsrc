@@ -7,17 +7,27 @@
  ! Contributors  :  Nul None  <nul@none.org>
  !               |
  ! Created On    : <2024-12-27>
- ! Last Modified : <2025-03-06>
+ ! Last Modified : <2025-08-11>
  ! ---------------------------------------------------------- -->
 
 # 文档说明
 
 E2E (End-to-End) 开发文档:
 
-1. 开发环境准备，如何编译和测试，请参考 [./01-Develop.md](./01-Develop.md)
-2. 如何编写一个具体的 recipe，请参考 [./02-Write-A-Recipe-Even-If-You-Dont-Know-C.md](./02-Write-A-Recipe-Even-If-You-Dont-Know-C.md)
-3. 直接推送还是提交 PR，请参考 [./03-CONTRIBUTING.md](./03-CONTRIBUTING.md)
-4. 找谁来审阅 PR，请参考 [./04-MAINTAINERS.md](./04-MAINTAINERS.md)
+- 开发环境准备，如何编译和测试，请参考 [01-开发与构建.md](./01-开发与构建.md)
+- 直接推送还是提交 PR，请参考 [02-提交与贡献.md](./02-提交与贡献.md)
+- 代码风格，请参考 [03-为什么拒绝使用代码格式化工具.md](./03-为什么拒绝使用代码格式化工具.md)
+
+<br>
+
+具体 recipe 相关:
+
+- 如何编写一个具体的 recipe，请参考 [10-如何编写recipe.md](./10-如何编写recipe.md)
+- 如何修改换源URL、模糊/精准测速URL，请参考 [11-如何设置换源链接与测速链接.md](./11-如何设置换源链接与测速链接.md)
+
+<br>
+
+- 关于维护者身份的说明，请参考 [50-协作者与维护者.md](./50-协作者与维护者.md)
 
 <br>
 

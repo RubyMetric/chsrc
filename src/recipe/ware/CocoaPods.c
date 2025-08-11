@@ -1,24 +1,37 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- * Created On    : <2024-06-08>
- * Last Modified : <2025-07-13>
  * ------------------------------------------------------------*/
 
-/**
- * @update 2025-07-13
- */
-static Source_t wr_cocoapods_sources[] =
+def_target(wr_cocoapods, "cocoa/cocoapods/cocoapod");
+
+void
+wr_cocoapods_prelude ()
 {
-  {&UpstreamProvider,  NULL, NULL},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git", NULL},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/git/CocoaPods/Specs.git", NULL},
-  {&Nju,              "https://mirror.nju.edu.cn/git/CocoaPods/Specs.git",   NULL},
-  {&Nyist,            "https://mirror.nyist.edu.cn/git/CocoaPods/Specs.git", NULL}
-};
-def_sources_n(wr_cocoapods);
+  use_this(wr_cocoapods);
+  chef_allow_s(wr_cocoapods);
+
+  chef_set_created_on   (this, "2024-06-08");
+  chef_set_last_updated (this, "2025-08-09");
+  chef_set_sources_last_updated (this, "2025-07-13");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 0);
+
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_allow_user_define(this);
+
+  def_sources_begin()
+  {&UpstreamProvider, "https://github.com/CocoaPods/Specs.git", DelegateToUpstream},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git", DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/git/CocoaPods/Specs.git", DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn/git/CocoaPods/Specs.git", DelegateToMirror},
+  {&Nyist,            "https://mirror.nyist.edu.cn/git/CocoaPods/Specs.git", DelegateToMirror}
+  def_sources_end()
+}
 
 
 /**
@@ -27,7 +40,7 @@ def_sources_n(wr_cocoapods);
 void
 wr_cocoapods_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (wr_cocoapods);
+  use_this_source(wr_cocoapods);
 
   chsrc_note2 ("请手动执行以下命令:");
   p("cd ~/.cocoapods/repos");
@@ -43,20 +56,3 @@ wr_cocoapods_setsrc (char *option)
   chsrc_determine_chgtype (ChgType_Manual);
   chsrc_conclude (&source);
 }
-
-
-Feature_t
-wr_cocoapods_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = false;
-  f.can_reset = false;
-
-  f.can_english = false;
-  f.can_user_define = true;
-
-  return f;
-}
-
-def_target_sf (wr_cocoapods);

@@ -1,13 +1,32 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Heng Guo <2085471348@qq.com>
- * Contributors  : Nil Null <nil@null.org>
- * Created On    : <2023-09-06>
- * Last Modified : <2024-08-16>
- *
- * Manjaro Linux（或简称Manjaro）基于Arch Linux
  * ------------------------------------------------------------*/
+
+def_target(os_manjaro, "manjaro");
+
+void
+os_manjaro_prelude ()
+{
+  use_this(os_manjaro);
+  chef_allow_s(os_manjaro);
+
+  chef_set_created_on   (this, "2023-09-06");
+  chef_set_last_updated (this, "2025-08-10");
+
+  chef_set_authors (this, 1, "Heng Guo", "2085471348@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 0);
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  def_sources_begin()
+  {&UpstreamProvider, NULL, DelegateToUpstream}
+  /* Manjaro uses GUI tool, no manual sources needed */
+  def_sources_end()
+}
 
 /**
  * 似乎会弹出GUI，待确定
@@ -21,8 +40,5 @@ os_manjaro_setsrc (char *option)
 
   chsrc_run ("pacman -Syy", RunOpt_No_Last_New_Line);
 
-  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (NULL);
 }
-
-Target_t os_manjaro_target = {NULL, os_manjaro_setsrc, NULL, NULL, 0};

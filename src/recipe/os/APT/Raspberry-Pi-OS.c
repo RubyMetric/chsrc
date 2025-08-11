@@ -1,19 +1,34 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  : Yangmoooo <yangmoooo@outlook.com>
- * Created On    : <2023-09-29>
- * Last Modified : <2025-07-21>
- *
  * Raspberry Pi OS 树莓派操作系统，以前称为 Raspbian
  * ------------------------------------------------------------*/
 
-/**
- * @update 2023-09-29
- */
-static Source_t os_raspberrypi_sources[] =
+def_target(os_raspberrypi, "raspi/raspberrypi");
+
+void
+os_raspberrypi_prelude ()
 {
+  use_this(os_raspberrypi);
+  chef_allow_gsr(os_raspberrypi);
+
+  chef_set_created_on   (this, "2023-09-29");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2023-09-29");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 1,
+    "Yangmoooo", "yangmoooo@outlook.com");
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
+
+  def_sources_begin()
   // https://archive.raspberrypi.org/ until Debian "bullseye" release
   {&UpstreamProvider, "https://archive.raspberrypi.com/",              DelegateToUpstream},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/raspberrypi/",    DelegateToMirror},
@@ -22,8 +37,8 @@ static Source_t os_raspberrypi_sources[] =
   {&Ustc,             "https://mirrors.ustc.edu.cn/raspberrypi/",      DelegateToMirror},
   {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/raspberrypi/", DelegateToMirror},
   {&Sustech,          "https://mirrors.sustech.edu.cn/raspberrypi/",   DelegateToMirror}
-};
-def_sources_n(os_raspberrypi);
+  def_sources_end()
+}
 
 
 void
@@ -38,7 +53,7 @@ os_raspberrypi_setsrc (char *option)
 {
   chsrc_ensure_root(); // HELP: 不确定是否需要
 
-  chsrc_yield_source_and_confirm (os_raspberrypi);
+  use_this_source(os_raspberrypi);
 
   chsrc_backup (OS_RaspberryPi_SourceList);
 
@@ -58,24 +73,3 @@ os_raspberrypi_resetsrc (char *option)
 {
   os_raspberrypi_setsrc (option);
 }
-
-
-Feature_t
-os_raspberrypi_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_gsrf(os_raspberrypi);

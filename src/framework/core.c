@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-07-28>
+ * Last Modified : <2025-08-10>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -25,7 +25,7 @@
 #include "xy.h"
 #include "struct.h"
 #include "mirror.c"
-#include "chef.h"
+#include "chef-helper.c"
 
 #define App_Name "chsrc"
 
@@ -456,14 +456,13 @@ chsrc_check_file (char *path)
 /**
  * 用于 _setsrc 函数，检测用户输入的镜像站code，是否存在于该target可用源中
  *
- * @note 一个源Source必定来自于一个Provider，所以该函数名叫 query_provider_exist
+ * @note 一个源Source必定来自于一个Provider，所以该函数名叫 query_mirror_exist
  *
- * @param  target  目标名
- * @param  input   如果用户输入 default 或者 def，则选择第一个源
+ * @param  target_name  目标名
+ * @param  input        如果用户输入 default 或者 def，则选择第一个源
  */
-#define find_mirror(s, input) query_provider_exist(s##_sources, s##_sources_n, (char*)#s+3, input)
 int
-query_provider_exist (Source_t *sources, size_t size, char *target, char *input)
+query_mirror_exist (Source_t *sources, size_t size, char *target_name, char *input)
 {
   if (chef_is_url (input))
     {
@@ -476,7 +475,7 @@ query_provider_exist (Source_t *sources, size_t size, char *target, char *input)
     {
       char *msg1 = ENGLISH ? "Currently " : "当前 ";
       char *msg2 = ENGLISH ? " doesn't have any source available. Please contact the maintainers" : " 无任何可用源，请联系维护者";
-      chsrc_error (xy_strjoin (3, msg1, target, msg2));
+      chsrc_error (xy_strjoin (3, msg1, target_name, msg2));
       exit (Exit_MaintainerCause);
     }
 
@@ -484,7 +483,7 @@ query_provider_exist (Source_t *sources, size_t size, char *target, char *input)
     {
       char *msg1 = ENGLISH ? "Currently " : "当前 ";
       char *msg2 = ENGLISH ? " only the upstream source exists. Please contact the maintainers" : " 仅存在上游默认源，请联系维护者";
-      chsrc_error (xy_strjoin (3, msg1, target, msg2));
+      chsrc_error (xy_strjoin (3, msg1, target_name, msg2));
       exit (Exit_MaintainerCause);
     }
 
@@ -500,10 +499,10 @@ query_provider_exist (Source_t *sources, size_t size, char *target, char *input)
     {
       char *msg1 = ENGLISH ? " is " : " 是 ";
       char *msg2 = ENGLISH ? "'s ONLY mirror available currently, thanks for their generous support"
-                                    : " 目前唯一可用镜像站，感谢他们的慷慨支持";
+                           : " 目前唯一可用镜像站，感谢他们的慷慨支持";
       const char *name = ENGLISH ? sources[1].mirror->abbr
-                                          : sources[1].mirror->name;
-      chsrc_succ (xy_strjoin (4, name, msg1, target, msg2));
+                                 : sources[1].mirror->name;
+      chsrc_succ (xy_strjoin (4, name, msg1, target_name, msg2));
     }
 
   if (xy_streql ("first", input))
@@ -536,7 +535,7 @@ query_provider_exist (Source_t *sources, size_t size, char *target, char *input)
       }
 
       char *msg = ENGLISH ? "To see available sources, use chsrc list " : "查看可使用源，请使用 chsrc list ";
-      chsrc_error (xy_2strjoin (msg, target));
+      chsrc_error (xy_2strjoin (msg, target_name));
       exit (Exit_UserCause);
     }
   return idx;
@@ -830,47 +829,10 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
 
 
 /**
- * @brief 填充专用测速链接
- *
- * 该宏的作用是将某个 target 源的专用测速链接填充到 Source_t 中的 speed_url 字段中
- *
- * 即使不需要该宏也是可以的，但是代价就是维护者要维护比较重复的两个字段: url 和 speed_url
- *
- * @note 该宏仅当在 recipe 中使用， 由 <category>_<target>_sources_prepare() 调用
- */
-#define chsrc_sources_prepare_speedurl_with_postfix(target,str) sources_prepare_speedurl_with_postfix(target##_sources, target##_sources_n, str)
-static void
-sources_prepare_speedurl_with_postfix (Source_t sources[], int n, char *postfix)
-{
-  for (int i=0; i<n; i++)
-    {
-      Source_t *src = &sources[i];
-
-      ProviderType_t type = src->provider->type;
-
-      if (IS_DedicatedMirrorSite==type || IS_UpstreamProvider==type)
-        {
-          /* 这两个不用填，因为定义这二者的时候如果给了整体测速URL，则就是ACCURATE的，我们直接会DelegateTo那里 */
-          continue;
-        }
-
-      if (src->url)
-        {
-          /* 为空时才修改 或者里面是脏数据 */
-          if (NULL==src->speed_measure_url || !chef_is_url (src->speed_measure_url))
-            src->speed_measure_url = xy_2strjoin (src->url, postfix);
-        }
-    }
-}
-
-
-
-/**
  * 自动测速选择镜像站和源
  */
-#define auto_select_mirror(s) select_mirror_autoly(s##_sources, s##_sources_n, (char*)#s+3)
 int
-select_mirror_autoly (Source_t *sources, size_t size, const char *target_name)
+auto_select_mirror (Source_t *sources, size_t size, const char *target_name)
 {
   /* reset 时选择默认源 */
   if (chsrc_in_reset_mode())
@@ -951,14 +913,14 @@ select_mirror_autoly (Source_t *sources, size_t size, const char *target_name)
       char *msg2 = ENGLISH ? "'s ONLY mirror available currently, thanks for their generous support"
                            : " 目前唯一可用镜像站，感谢他们的慷慨支持";
       const char *name = ENGLISH ? sources[fast_idx].mirror->abbr
-                                          : sources[fast_idx].mirror->name;
+                                 : sources[fast_idx].mirror->name;
       say (xy_strjoin (5, msg1, bdgreen(name), green(is), green(target_name), green(msg2)));
     }
   else
     {
       char *msg = ENGLISH ? "FASTEST mirror site: " : "最快镜像站: ";
       const char *name = ENGLISH ? sources[fast_idx].mirror->abbr
-                                          : sources[fast_idx].mirror->name;
+                                 : sources[fast_idx].mirror->name;
       say (xy_2strjoin (msg, green(name)));
     }
 
@@ -973,9 +935,19 @@ select_mirror_autoly (Source_t *sources, size_t size, const char *target_name)
 }
 
 
-#define use_specific_mirror_or_auto_select(input, s) \
-  (NULL!=(input)) ? find_mirror(s, input) : auto_select_mirror(s)
 
+int
+use_specific_mirror_or_auto_select (char *input, Target_t *t)
+{
+  if (input)
+    {
+      return query_mirror_exist (t->sources, t->sources_n, t->aliases, input);
+    }
+  else
+    {
+      return auto_select_mirror (t->sources, t->sources_n, t->aliases);
+    }
+}
 
 
 bool
@@ -997,8 +969,9 @@ source_has_empty_url (Source_t *source)
 }
 
 
+
 /**
- * @brief 确定所换源的信息，存储在局部变量 @var:source 中
+ * @brief 为该 target 确定最终将使用的源
  *
  * 用户*只可能*通过下面5种方式来换源，无论哪一种都会返回一个 Source_t 出来
  *
@@ -1007,33 +980,37 @@ source_has_empty_url (Source_t *source)
  *   3. 用户什么都没指定，          即 chsrc set <target>
  *   4. 用户正在重置源，            即 chsrc reset <target>
  *
- * 如果处于 Target Group 模式下，leader target 已经测速过了，follower target 不能再次测速，而是直接选择 leader 测过的结果
+ * 如果处于 Target Group 模式下，leader target 已经测速过了，follower target
+ * 不能再次测速，而是直接选择 leader 测过的结果
  *
  *   5. leader target 测速出来的某个源
  *
- * @dependency 已存在的局部变量 @var:option
  */
-#define chsrc_yield_source(for_what) \
-  Source_t source; \
-  if (chsrc_in_target_group_mode() && ProgStatus.leader_selected_index==-1) \
-    { \
-      ProgStatus.leader_selected_index = use_specific_mirror_or_auto_select (option, for_what); \
-      source = for_what##_sources[ProgStatus.leader_selected_index]; \
-    } \
-  else if (chsrc_in_target_group_mode() && ProgStatus.leader_selected_index!=-1) \
-    { \
-      source = for_what##_sources[ProgStatus.leader_selected_index]; \
-    } \
-  else if (chef_is_url (option)) \
-    { \
-      Source_t __tmp = { &UserDefinedProvider, option }; \
-      source = __tmp; \
-    } \
-  else \
-    { \
-      int __index = use_specific_mirror_or_auto_select (option, for_what); \
-      source = for_what##_sources[__index]; \
+Source_t
+chsrc_yield_source (Target_t *t, char *option)
+{
+  Source_t source;
+  if (chsrc_in_target_group_mode() && ProgStatus.leader_selected_index==-1)
+    {
+      ProgStatus.leader_selected_index = use_specific_mirror_or_auto_select (option, t);
+      source = t->sources[ProgStatus.leader_selected_index];
     }
+  else if (chsrc_in_target_group_mode() && ProgStatus.leader_selected_index!=-1)
+    {
+      source = t->sources[ProgStatus.leader_selected_index];
+    }
+  else if (chef_is_url (option))
+    {
+      Source_t tmp = { &UserDefinedProvider, option };
+      source = tmp;
+    }
+  else
+    {
+      int index = use_specific_mirror_or_auto_select (option, t);
+      source = t->sources[index];
+    }
+  return source;
+}
 
 
 
@@ -1047,9 +1024,8 @@ source_has_empty_url (Source_t *source)
  * 1. 告知用户选择了什么源和镜像
  * 2. 对选择的源和镜像站进行一定的校验
  */
-#define chsrc_confirm_source() confirm_source(&source)
 void
-confirm_source (Source_t *source)
+chsrc_confirm_source (Source_t *source)
 {
   // 由于实现问题，我们把本应该独立出去的上游默认源，也放在了可以换源的数组中，而且放在第一个
   // chsrc 已经规避用户使用未实现的 `chsrc reset`
@@ -1077,7 +1053,14 @@ confirm_source (Source_t *source)
   hr();
 }
 
-#define chsrc_yield_source_and_confirm(for_what) chsrc_yield_source(for_what);chsrc_confirm_source()
+
+Source_t
+chsrc_yield_source_and_confirm (Target_t *t, char *option)
+{
+  Source_t source = chsrc_yield_source(t, option);
+  chsrc_confirm_source(&source);
+  return source;
+}
 
 
 void

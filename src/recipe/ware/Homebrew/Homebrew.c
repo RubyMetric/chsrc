@@ -1,36 +1,42 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors   : Aoran Zeng <ccmywish@qq.com>
- * Contributors   :  Word2VecT <tangzinan@bupt.edu.cn>
- * Created On     : <2023-09-10>
- * Major Revision :      3
- * Last Modified  : <2025-07-14>
  * ------------------------------------------------------------*/
 
 #include "rawstr4c.h"
 
-/**
- * @update 2025-07-13
- *
- * @note 这些链接将会在setsrc函数中补充完整
- */
-static Source_t wr_homebrew_sources[] =
+def_target(wr_homebrew, "brew/homebrew");
+
+void
+wr_homebrew_prelude ()
 {
-  {&UpstreamProvider,  NULL, NULL},
+  use_this(wr_homebrew);
+  chef_allow_gs(wr_homebrew);
+
+  chef_set_created_on   (this, "2023-09-10");
+  chef_set_last_updated (this, "2025-08-09");
+  chef_set_sources_last_updated (this, "2025-07-13");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 1,
+    "Word2VecT", "tangzinan@bupt.edu.cn");
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_allow_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note (this, "该换源通过写入环境变量实现，若多次换源，请手动清理profile文件",
+                       "This source switching is implemented by writing environment variables. If switching sources multiple times, please manually clean the profile file");
+
+  def_sources_begin()
+  {&UpstreamProvider, "https://github.com/Homebrew/brew.git", DelegateToUpstream},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/", DelegateToMirror},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/",          DelegateToMirror},
-  {&Nju,              "https://mirror.nju.edu.cn/",             DelegateToMirror},
-  {&Nyist,            "https://mirror.nyist.edu.cn/",           DelegateToMirror},
-
-  /* 注释原因: 这两者和其他镜像站URL补全结果不一样(2025-07-13)  */
-  // {&Zju,           "https://mirrors.zju.edu.cn/",            DelegateToMirror},
-  // {&Cqu,           "https://mirrors.cqu.edu.cn/",            DelegateToMirror},
-
-  /* 注释原因: 该源已不存在(2025-07-13) */
-  // {&Sustech,          "https://mirrors.sustech.edu.cn/", DelegateToMirror}
-};
-def_sources_n(wr_homebrew);
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/", DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn/", DelegateToMirror},
+  {&Nyist,            "https://mirror.nyist.edu.cn/", DelegateToMirror}
+  def_sources_end()
+}
 
 
 void
@@ -50,7 +56,7 @@ wr_homebrew_getsrc (char *option)
 void
 wr_homebrew_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (wr_homebrew);
+  use_this_source(wr_homebrew);
 
   char *w = xy_str_gsub (RAWSTR_wr_homebrew_config_in_bash, "@1@", source.url);
 
@@ -77,26 +83,3 @@ wr_homebrew_setsrc (char *option)
   chsrc_conclude (&source);
   chsrc_alert2 ("请重启终端使Homebrew环境变量生效");
 }
-
-
-Feature_t
-wr_homebrew_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-
-  /* 该换源方案中，URL存在拼凑，因此不能让用户手动使用某URL来换源 */
-  f.can_user_define = false;
-
-  f.note = "该换源通过写入环境变量实现，若多次换源，请手动清理profile文件";
-  return f;
-}
-
-
-def_target_gsf(wr_homebrew);

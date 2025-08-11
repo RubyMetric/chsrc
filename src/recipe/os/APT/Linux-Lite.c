@@ -1,30 +1,38 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  : Yangmoooo <yangmoooo@outlook.com>
- *               |
- * Created On    : <2023-09-29>
- * Last Modified : <2025-07-21>
  * ------------------------------------------------------------*/
 
-static SourceProvider_t os_linuxlite_upstream =
-{
-  def_upstream, "http://repo.linuxliteos.com/linuxlite/",
-  {NotSkip, NA, NA, "http://repo.linuxliteos.com/linuxlite/isos/7.2/linux-lite-7.2-64bit.iso", ACCURATE} // 2.9GB
-};
+def_target(os_linuxlite, "linuxlite");
 
-/**
- * @update 2024-11-21
- */
-static Source_t os_linuxlite_sources[] =
+void
+os_linuxlite_prelude ()
 {
-  {&os_linuxlite_upstream, "http://repo.linuxliteos.com/linuxlite/",    DelegateToUpstream},
+  use_this(os_linuxlite);
+  chef_allow_gsr(os_linuxlite);
+
+  chef_set_created_on   (this, "2023-09-29");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2024-11-21");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 1,
+    "Yangmoooo", "yangmoooo@outlook.com");
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
+
+  def_sources_begin()
+  {&UpstreamProvider, "http://repo.linuxliteos.com/linuxlite/",    DelegateToUpstream},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/linuxliteos/",    DelegateToMirror},
   {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/linuxliteos/", DelegateToMirror},
   {&Nju,              "https://mirror.nju.edu.cn/linuxliteos/",         DelegateToMirror}
-};
-def_sources_n(os_linuxlite);
+  def_sources_end()
+}
 
 
 void
@@ -41,7 +49,7 @@ os_linuxlite_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  chsrc_yield_source_and_confirm (os_linuxlite);
+  use_this_source(os_linuxlite);
 
   chsrc_backup (OS_Apt_SourceList);
 
@@ -59,24 +67,3 @@ os_linuxlite_resetsrc (char *option)
 {
   os_linuxlite_setsrc (option);
 }
-
-
-Feature_t
-os_linuxlite_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-
-  f.can_english = true;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_gsrf(os_linuxlite);

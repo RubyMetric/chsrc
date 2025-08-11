@@ -1,19 +1,31 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- *               |  Heng Guo  <2085471348@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- * Created On    : <2023-09-05>
- * Last Modified : <2025-07-31>
  * ------------------------------------------------------------*/
 
-/**
- * @update 2025-07-31
- */
-static Source_t os_netbsd_sources[] =
+def_target(os_netbsd, "netbsd");
+
+void
+os_netbsd_prelude ()
 {
-  {&UpstreamProvider,  NULL, NULL},
+  use_this(os_netbsd);
+  chef_allow_gs(os_netbsd);
+
+  chef_set_created_on   (this, "2023-09-05");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2025-07-31");
+
+  chef_set_authors (this, 2, "Aoran Zeng", "ccmywish@qq.com", "Heng Guo", "2085471348@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 0);
+
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  def_sources_begin()
+  {&UpstreamProvider,  NULL,                                                 DelegateToUpstream},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/pkgsrc/packages/NetBSD/", DelegateToMirror},
   {&Ali,              "https://mirrors.aliyun.com/pkgsrc/packages/NetBSD/",  DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/pkgsrc/packages/NetBSD/", DelegateToMirror},
@@ -24,8 +36,8 @@ static Source_t os_netbsd_sources[] =
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/pkgsrc/packages/NetBSD/", DelegateToMirror},
   {&Netease,          "https://mirrors.163.com/pkgsrc/packages/NetBSD/",     DelegateToMirror},
   {&Sohu,             "https://mirrors.sohu.com/pkgsrc/packages/NetBSD/",    DelegateToMirror}
-};
-def_sources_n(os_netbsd);
+  def_sources_end()
+}
 
 
 void
@@ -48,7 +60,7 @@ os_netbsd_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  chsrc_yield_source_and_confirm (os_netbsd);
+  use_this_source(os_netbsd);
 
   chsrc_backup ("/usr/pkg/etc/pkgin/repositories.conf");
 
@@ -59,26 +71,5 @@ os_netbsd_setsrc (char *option)
   char *url = xy_strjoin (5, chef_ensure_trailing_slash (source.url), arch, "/", version, "/All");
   chsrc_overwrite_file (url, "/usr/pkg/etc/pkgin/repositories.conf");
 
-  chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);
 }
-
-
-Feature_t
-os_netbsd_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-  f.can_user_define = false;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_gsf(os_netbsd);

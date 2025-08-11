@@ -1,35 +1,46 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  : Yangmoooo  <yangmoooo@outlook.com>
- *               | yongxiang  <1926885268@qq.com>
- *               |
- * Created On    : <2023-09-10>
- * Last Modified : <2025-07-14>
  * ------------------------------------------------------------*/
 
- #include "rawstr4c.h"
+#include "rawstr4c.h"
 
-/**
- * @update 2025-07-14
- * @note 这些链接将会在setsrc函数中补充完整
- */
-static Source_t wr_anaconda_sources[] =
+def_target(wr_anaconda, "conda/anaconda");
+
+void
+wr_anaconda_prelude ()
 {
-  {&UpstreamProvider, "https://repo.anaconda.com",    NULL},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn", NULL},
-  {&Bjtu,             "https://mirror.bjtu.edu.cn",    NULL},
-  {&Nju,              "https://mirror.nju.edu.cn",     NULL},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn",  NULL},
-  {&Zju,              "https://mirrors.zju.edu.cn",    NULL},
-  {&Pku,              "https://mirrors.pku.edu.cn",    NULL},
-  {&NJTech,           "https://mirrors.njtech.edu.cn", NULL},
-  {&Ustc,             "https://mirrors.ustc.edu.cn",   NULL},
-  {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn",    NULL},
-  {&Lzuoss,           "https://mirror.lzu.edu.cn",     NULL}
-};
-def_sources_n(wr_anaconda);
+  use_this(wr_anaconda);
+  chef_allow_gs(wr_anaconda);
+
+  chef_set_created_on   (this, "2023-09-10");
+  chef_set_last_updated (this, "2025-08-09");
+  chef_set_sources_last_updated (this, "2025-07-14");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 2,
+    "Yangmoooo", "yangmoooo@outlook.com",
+    "yongxiang", "1926885268@qq.com");
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  def_sources_begin()
+  {&UpstreamProvider, "https://repo.anaconda.com", DelegateToUpstream},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn", DelegateToMirror},
+  {&Bjtu,             "https://mirror.bjtu.edu.cn", DelegateToMirror},
+  {&Nju,              "https://mirror.nju.edu.cn", DelegateToMirror},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn", DelegateToMirror},
+  {&Zju,              "https://mirrors.zju.edu.cn", DelegateToMirror},
+  {&Pku,              "https://mirrors.pku.edu.cn", DelegateToMirror},
+  {&NJTech,           "https://mirrors.njtech.edu.cn", DelegateToMirror},
+  {&Ustc,             "https://mirrors.ustc.edu.cn", DelegateToMirror},
+  {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn", DelegateToMirror},
+  {&Lzuoss,           "https://mirror.lzu.edu.cn", DelegateToMirror}
+  def_sources_end()
+}
 
 
 void
@@ -45,7 +56,7 @@ wr_anaconda_getsrc (char *option)
 void
 wr_anaconda_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (wr_anaconda);
+  use_this_source(wr_anaconda);
 
   char *w = xy_str_gsub (RAWSTR_wr_anaconda_condarc, "@1@", source.url);
 
@@ -77,20 +88,3 @@ wr_anaconda_setsrc (char *option)
   chsrc_determine_chgtype (ChgType_SemiAuto);
   chsrc_conclude (&source);
 }
-
-
-Feature_t
-wr_anaconda_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.can_english = false;
-  f.can_user_define = false;
-
-  return f;
-}
-
-def_target_gsf (wr_anaconda);

@@ -1,27 +1,41 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- * Created On    : <2023-09-29>
- * Last Modified : <2025-07-21>
- *
  * Trisquel基于Ubuntu开发，不含任何专有软件及专有固件，内核使用 Linux-libre
  * ------------------------------------------------------------*/
 
-/**
- * @update 2024-11-21
- */
-static Source_t os_trisquel_sources[] =
+def_target(os_trisquel, "trisquel");
+
+void
+os_trisquel_prelude ()
 {
-  {&UpstreamProvider,  NULL, NULL},
+  use_this(os_trisquel);
+  chef_allow_gsr(os_trisquel);
+
+  chef_set_created_on   (this, "2023-09-29");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2024-11-21");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 0);
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
+
+  def_sources_begin()
+  {&UpstreamProvider, "http://archive.trisquel.info/trisquel/", DelegateToUpstream},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/trisquel/", DelegateToMirror},
   {&Ali,              "https://mirrors.aliyun.com/trisquel/",    DelegateToMirror},
   {&Nju,              "https://mirror.nju.edu.cn/trisquel/",     DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/trisquel/",   DelegateToMirror},
   {&Iscas,            "https://mirror.iscas.ac.cn/trisquel/",    DelegateToMirror}
-};
-def_sources_n(os_trisquel);
+  def_sources_end()
+}
 
 
 void
@@ -39,7 +53,7 @@ os_trisquel_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  chsrc_yield_source_and_confirm (os_trisquel);
+  use_this_source(os_trisquel);
 
   chsrc_backup (OS_Apt_SourceList);
 
@@ -53,22 +67,8 @@ os_trisquel_setsrc (char *option)
 }
 
 
-Feature_t
-os_trisquel_feat (char *option)
+void
+os_trisquel_resetsrc (char *option)
 {
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-
-  f.can_english = true;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
+  os_trisquel_setsrc (option);
 }
-
-def_target_gsf(os_trisquel);

@@ -1,24 +1,36 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- * Created On    : <2023-08-30>
- * Last Modified : <2025-07-31>
  * ------------------------------------------------------------*/
 
-/**
- * @update 2024-09-14
- */
-static Source_t pl_php_sources[] =
+def_target(pl_php, "php/composer");
+
+void
+pl_php_prelude ()
 {
-  {&UpstreamProvider,  NULL, NULL},
+  use_this(pl_php);
+  chef_allow_gs(pl_php);
+
+  chef_set_created_on   (this, "2023-08-30");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2024-09-14");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 0);
+
+  chef_allow_local_mode (this, FullyCan, NULL, NULL);
+  chef_forbid_english(this);
+  chef_allow_user_define(this);
+
+  def_sources_begin()
+  {&UpstreamProvider,  NULL, DelegateToUpstream},
   {&Ali,              "https://mirrors.aliyun.com/composer/",     DelegateToMirror},
   {&Tencent,          "https://mirrors.tencent.com/composer/",    DelegateToMirror},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/composer/", DelegateToMirror},
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/php/", DelegateToMirror}
-};
-def_sources_n(pl_php);
+  def_sources_end()
+}
 
 
 void
@@ -45,7 +57,8 @@ pl_php_setsrc (char *option)
 {
   pl_php_check_cmd ();
 
-  chsrc_yield_source_and_confirm (pl_php);
+  use_this(pl_php);
+  Source_t source = chsrc_yield_source_and_confirm (this, option);
 
   char *where = " -g ";
   if (chsrc_in_local_mode())
@@ -56,25 +69,5 @@ pl_php_setsrc (char *option)
   char *cmd = xy_strjoin (4, "composer config", where, "repo.packagist composer ", source.url);
   chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
-
-
-Feature_t
-pl_php_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = FullyCan;
-  f.cap_locally_explain = "Support `composer`";
-  f.can_english = false;
-  f.can_user_define = true;
-
-  return f;
-}
-
-def_target_gsf (pl_php);

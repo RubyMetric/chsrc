@@ -37,34 +37,33 @@
  * chsrc: Change Source —— 全平台通用命令行换源工具
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.2.2"
-#define Chsrc_Release_Date   "2025/08/09"
+#define Chsrc_Version        "0.2.2.3"
+#define Chsrc_Release_Date   "2025/08/11"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
 #include "framework/core.c"
-
+#include "framework/chef.c"
 
 
 #include "recipe/lang/rawstr4c.h"
 
 #include "recipe/lang/Ruby/Ruby.c"
-
 #include "recipe/lang/Python/common.h"
-  #include "recipe/lang/Python/pip.c"
+ #include "recipe/lang/Python/pip.c"
   #include "recipe/lang/Python/Poetry.c"
   #include "recipe/lang/Python/PDM.c"
   #include "recipe/lang/Python/Rye.c"
   #include "recipe/lang/Python/uv.c"
 #include "recipe/lang/Python/Python.c"
 
-#include "recipe/lang/Node.js/common.h"
-  #include "recipe/lang/Node.js/npm.c"
-  #include "recipe/lang/Node.js/pnpm.c"
-  #include "recipe/lang/Node.js/Yarn.c"
-#include "recipe/lang/Node.js/Node.js.c"
-#include "recipe/lang/Node.js/Bun.c"
-#include "recipe/lang/Node.js/nvm.c"
+#include "recipe/lang/JavaScript/common.h"
+  #include "recipe/lang/JavaScript/npm.c"
+  #include "recipe/lang/JavaScript/pnpm.c"
+  #include "recipe/lang/JavaScript/Yarn.c"
+#include "recipe/lang/JavaScript/JavaScript.c"
+#include "recipe/lang/JavaScript/Bun.c"
+#include "recipe/lang/JavaScript/nvm.c"
 
 #include "recipe/lang/Perl.c"
 #include "recipe/lang/PHP.c"
@@ -88,9 +87,7 @@
 #include "recipe/lang/Clojure.c"
 
 
-
 #include "recipe/os/rawstr4c.h"
-
 #include "recipe/os/APT/common.h"
 // Debian-based
 #include "recipe/os/APT/Debian.c"
@@ -132,7 +129,6 @@
 #include "recipe/os/BSD/OpenBSD.c"
 
 
-
 #include "recipe/ware/TeX-Live.c"
 #include "recipe/ware/Emacs.c"
 #include "recipe/ware/WinGet.c"
@@ -140,9 +136,10 @@
 #include "recipe/ware/CocoaPods.c"
 #include "recipe/ware/Nix.c"
 #include "recipe/ware/Guix.c"
-#include "recipe/ware/Flathub.c"
-#include "recipe/ware/Docker-Hub/Docker-Hub.c"
+#include "recipe/ware/Flatpak.c"
+#include "recipe/ware/Docker/Docker.c"
 #include "recipe/ware/Anaconda/Anaconda.c"
+
 
 #include "recipe/menu.c"
 
@@ -172,29 +169,78 @@ cli_print_available_mirrors ()
   say    ("---------    --------------    -------------------------------------     ---------------------");
   }
 
-  for (int i = 0; i < xy_arylen (available_mirrors); i++)
+  for (int i = 0; i < xy_arylen (chsrc_available_mirrors); i++)
     {
-      MirrorSite_t *mir = available_mirrors[i];
+      MirrorSite_t *mir = chsrc_available_mirrors[i];
       printf ("%-14s%-18s%-41s ", mir->code, mir->abbr, mir->site); say (mir->name);
     }
 }
 
 
-void
-cli_print_supported_targets_ (const char ***array, size_t size)
+/**
+ * 遍历以 / 为分隔符的别名字符串，对每个别名调用回调函数
+ *
+ * @param aliases   空格分隔的 alias 字符串
+ * @param callback  对每个 alias 调用的回调函数
+ * @param user_data 传递给回调函数的用户数据
+ * @return          如果回调函数返回true则停止遍历并返回true，否则返回false
+ */
+bool
+iterate_aliases (const char *aliases, bool (*callback)(const char *alias, void *user_data), void *user_data)
 {
-  for (int i=0; i<size; i++)
+  char *aliases_copy = xy_strdup (aliases);
+  char *tok_start = aliases_copy;
+  char *cursor;
+  bool result = false;
+
+  while (*tok_start != '\0')
     {
-      const char **target = array[i];
-      const char *alias = target[0];
-      for (int k=1; alias!=NULL; k++)
+      cursor = tok_start;
+      while (*cursor != '/' && *cursor != '\0') cursor++;
+
+      // 结束当前token
+      char space_or_eos = *cursor;
+      *cursor = '\0';
+
+      // 调用回调函数
+      if (callback(tok_start, user_data))
         {
-          printf ("%s\t", alias);
-          alias = target[k];
+          result = true;
+          break;
         }
-      br();
+
+      *cursor = space_or_eos;
+      if (space_or_eos == '\0') { break; }
+      tok_start = cursor+1;
     }
-  br();
+
+  return result;
+}
+
+
+/**
+ * 用于 cli_print_supported_targets_ 的回调函数，打印每个别名
+ */
+bool
+print_alias_callback (const char *alias, void *user_data)
+{
+  printf ("%s  ", alias);
+  return false; // 继续遍历，不停止
+}
+
+void
+cli_print_supported_targets_ (TargetRegisterInfo_t menu[], size_t size)
+{
+  for (int i = 0; i < size; i++)
+    {
+      TargetRegisterInfo_t *entry = &menu[i];
+
+      // 使用通用的别名遍历函数打印所有别名
+      iterate_aliases (entry->target->aliases, print_alias_callback, NULL);
+
+      br(); // 每个target换行
+    }
+  br(); // 最后额外换行
 }
 
 void
@@ -210,21 +256,21 @@ cli_print_supported_targets ()
   char *msg = ENGLISH ? "Programming Languages" : "编程语言";
   say (bdgreen(msg));
   say ("-------------------------");
-  cli_print_supported_targets_ (pl_packagers, xy_arylen(pl_packagers));
+  cli_print_supported_targets_ (chsrc_pl_menu, xy_arylen(chsrc_pl_menu));
   }
 
   {
   char *msg = ENGLISH ? "Operating Systems" : "操作系统";
   say (bdgreen(msg));
   say ("-------------------------");
-  cli_print_supported_targets_ (os_systems,   xy_arylen(os_systems));
+  cli_print_supported_targets_ (chsrc_os_menu, xy_arylen(chsrc_os_menu));
   }
 
   {
   char *msg = ENGLISH ? "Softwares" : "软件";
   say (bdgreen(msg));
   say ("-------------------------");
-  cli_print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
+  cli_print_supported_targets_ (chsrc_wr_menu, xy_arylen(chsrc_wr_menu));
   }
 }
 
@@ -235,7 +281,7 @@ cli_print_supported_pl ()
                       : "支持对以下编程语言生态换源 (同一行表示这几个目标兼容)\n";
   say (bdgreen(msg));
 
-  cli_print_supported_targets_ (pl_packagers,   xy_arylen(pl_packagers));
+  cli_print_supported_targets_ (chsrc_pl_menu,   xy_arylen(chsrc_pl_menu));
 }
 
 void
@@ -244,7 +290,7 @@ cli_print_supported_os ()
   char *msg = ENGLISH ? "Support following Operating Systems (same line indicates these targets are compatible)\n"
                       : "支持对以下操作系统换源 (同一行表示这几个目标兼容)\n";
   say (bdgreen(msg));
-  cli_print_supported_targets_ (os_systems, xy_arylen(os_systems));
+  cli_print_supported_targets_ (chsrc_os_menu, xy_arylen(chsrc_os_menu));
 }
 
 void
@@ -253,7 +299,7 @@ cli_print_supported_wr ()
   char *msg = ENGLISH ? "Support following Softwares (same line indicates these targets are compatible)\n"
                       : "支持对以下软件换源 (同一行表示这几个目标兼容)\n";
   say (bdgreen(msg));
-  cli_print_supported_targets_ (wr_softwares, xy_arylen(wr_softwares));
+  cli_print_supported_targets_ (chsrc_wr_menu, xy_arylen(chsrc_wr_menu));
 }
 
 
@@ -277,8 +323,9 @@ cli_print_target_available_sources (Source_t sources[], size_t size)
     }
 }
 
+
 void
-cli_print_target_features (Feature_t f, const char *input_target_name)
+cli_print_target_features (Target_t *target, const char *input_target_name)
 {
   {
   char *msg = ENGLISH ? "\nAvailable Features:\n" : "\n可用功能:\n";
@@ -288,31 +335,29 @@ cli_print_target_features (Feature_t f, const char *input_target_name)
   {
   char *msg = ENGLISH ? " Get: View the current source state " : " Get: 查看当前源状态 ";
   char *get_msg = xy_strjoin (3, msg, "| chsrc get ", input_target_name);
-  if (f.can_get) printf (" %s%s\n", bdgreen(YesMark), purple(get_msg));
+  if (target->getfn != NULL) printf (" %s%s\n", bdgreen(YesMark), purple(get_msg));
   else printf (" %s%s\n", bdred(NoMark), get_msg);br();
   }
 
   {
   char *msg = ENGLISH ? " Reset: Reset to the default source " : " Reset: 重置回默认源 ";
   char *reset_msg = xy_strjoin (3, msg, "| chsrc reset ", input_target_name);
-  if (f.can_reset) printf (" %s%s\n", bdgreen(YesMark), purple(reset_msg));
+  if (target->resetfn != NULL) printf (" %s%s\n", bdgreen(YesMark), purple(reset_msg));
   else printf (" %s%s\n", bdred(NoMark), reset_msg);br();
   }
-
 
   {
   char *msg = ENGLISH ? " UserDefine: using user-defined source URL " : " UserDefine: 用户自定义换源URL ";
   char *user_define_msg = xy_strjoin (5, msg, "| chsrc set ", input_target_name, " https://user-define-url.org/", input_target_name);
-  if (f.can_user_define) printf (" %s%s\n", bdgreen(YesMark), purple(user_define_msg));
+  if (target->can_user_define) printf (" %s%s\n", bdgreen(YesMark), purple(user_define_msg));
   else printf (" %s%s\n", bdred(NoMark), user_define_msg);br();
   }
-
 
   {
   char *msg = ENGLISH ? " Locally: Change source only for this project " : " Locally: 仅对本项目换源 ";
   char *locally_msg = xy_strjoin (3, msg, "| chsrc set -local ", input_target_name);
 
-  switch (f.cap_locally)
+  switch (target->cap_local)
     {
     case CanNot:
       printf (" %s%s\n", bdred(NoMark), locally_msg);br();
@@ -321,25 +366,121 @@ cli_print_target_features (Feature_t f, const char *input_target_name)
       printf (" %s%s\n", bdgreen(YesMark), purple(locally_msg));br();
       break;
     case PartiallyCan:
-      printf (" %s%s\n\n   %s\n", bdgreen(HalfYesMark), purple(locally_msg), f.cap_locally_explain);br();
+      printf (" %s%s\n\n   %s\n", bdgreen(HalfYesMark), purple(locally_msg),
+              target->cap_local_explain ? target->cap_local_explain : "");br();
       break;
     default:
       xy_unreached();
     }
   }
 
-
   {
   char *msg = ENGLISH ? " English: Output in English " : " English: 英文输出 ";
   char *english_msg = xy_strjoin (3, msg, "| chsrc set -en ", input_target_name);
-  if (f.can_english) printf (" %s%s\n", bdgreen(YesMark), purple(english_msg));
+  if (target->can_english) printf (" %s%s\n", bdgreen(YesMark), purple(english_msg));
   else printf (" %s%s\n", bdred(NoMark), english_msg);br();
   }
 
-  if (f.note)
+  if (target->note)
     {
       char *msg = ENGLISH ? "NOTE: " : "备注: ";
-      printf ("%s%s\n", bdyellow (msg), bdyellow (f.note));
+      printf ("%s%s\n", bdyellow (msg), bdyellow (target->note));
+    }
+}
+
+
+void
+cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
+{
+  if (target->authors && target->authors_n > 0)
+    {
+      char *msg = ENGLISH ? "Recipe Original Authors: " : "食谱原始作者: ";
+      printf ("%s", bdblue(msg));
+      for (size_t i = 0; i < target->authors_n; i++)
+        {
+          if (i > 0) printf (", ");
+          printf ("%s <%s>",
+                  target->authors[i].name  ? target->authors[i].name : "Unknown",
+                  target->authors[i].email ? target->authors[i].email : "unknown@example.com");
+        }
+      printf ("\n");
+    }
+
+  if (target->created_on)
+    {
+      char *msg = ENGLISH ? "Recipe Created On: " : "食谱创建时间: ";
+      printf ("%s%s\n", bdblue(msg), target->created_on);
+    }
+
+
+  {
+    char *msg = ENGLISH ? "Current Chef: " : "当前主厨: ";
+    if (target->chef)
+      {
+        printf ("%s%s <%s>\n", bdblue(msg),
+                target->chef->name  ? target->chef->name  : "Unknown",
+                target->chef->email ? target->chef->email : "unknown@example.com");
+      }
+    else
+      {
+        char *msg1 = CHINESE ? "暂空缺, 欢迎担任!" : "Vacant, Welcome to hold the position";
+        printf ("%s%s\n", bdblue(msg), bdgreen(msg1));
+      }
+  }
+
+
+  {
+    char *msg = ENGLISH ? "Current Cooks: " : "当前副厨: ";
+    if (target->cooks && target->cooks_n > 0)
+      {
+        printf ("%s", bdblue(msg));
+        for (size_t i = 0; i < target->cooks_n; i++)
+          {
+            if (i > 0) printf (", ");
+            printf ("%s <%s>",
+                    target->cooks[i].name  ? target->cooks[i].name : "Unknown",
+                    target->cooks[i].email ? target->cooks[i].email : "unknown@example.com");
+          }
+        printf ("\n");
+      }
+    else
+      {
+        char *msg1 = CHINESE ? "暂空缺, 欢迎担任!" : "Vacant, Welcome to hold the position!";
+        printf ("%s%s\n", bdblue(msg), bdgreen(msg1));
+      }
+  }
+
+  {
+    char *msg = ENGLISH ? "Contributors: " : "贡献者: ";
+    if (target->contributors && target->contributors_n > 0)
+      {
+        printf ("%s", bdblue(msg));
+        for (size_t i = 0; i < target->contributors_n; i++)
+          {
+            if (i > 0) printf (", ");
+            printf ("%s <%s>",
+                    target->contributors[i].name ? target->contributors[i].name : "Unknown",
+                    target->contributors[i].email ? target->contributors[i].email : "unknown@example.com");
+          }
+        printf ("\n");
+      }
+    else
+      {
+        char *msg1 = CHINESE ? "暂空缺, 欢迎参与贡献!" : "Vacant, Welcome to contribute!";
+        printf ("%s%s\n", bdblue(msg), bdgreen(msg1));
+      }
+  }
+
+  if (target->sources_last_updated)
+    {
+      char *msg = ENGLISH ? "Ingredient(Sources) Last Updated: " : "食源检查时间: ";
+      printf ("%s%s\n", bdblue(msg), target->sources_last_updated);
+    }
+
+  if (target->last_updated)
+    {
+      char *msg = ENGLISH ? "Recipe Last Updated: " : "食谱更新时间: ";
+      printf ("%s%s\n", bdblue(msg), target->last_updated);
     }
 }
 
@@ -380,56 +521,54 @@ cli_print_issues ()
 
 
 /**
- * 遍历我们内置的targets列表，查询用户输入`input`是否与我们支持的某个target匹配
+ * 用于 iterate_menu_ 的回调函数，检查别名是否匹配用户输入
+ */
+bool
+match_alias_callback (const char *alias, void *user_data)
+{
+  const char *input = (const char *)user_data;
+  return xy_streql_ic (input, alias);
+}
+
+
+/**
+ * 查询用户输入 @param:input 是否与该 @param:menu 中的某个 target 匹配
+ * 若匹配将直接调用 prelude
  *
- * @param[out] target_info 如果匹配到，则返回内置targets列表中最后的target_info信息
+ * @param[in]  menu      menu
+ * @param[in]  size      menu 大小
+ * @param[in]  input     用户输入的目标名
+ * @param[out] target    返回匹配到的 Target_t 指针
  *
  * @return 匹配到则返回true，未匹配到则返回false
  */
+#define iterate_menu(ary, input, target) iterate_menu_(ary, xy_arylen(ary), input, target)
 bool
-iterate_targets_ (const char ***array, size_t size, const char *input, const char ***target_info)
+iterate_menu_ (TargetRegisterInfo_t menu[], size_t size, const char *input, Target_t **target)
 {
-  int matched = 0;
-
-  const char **target = NULL;
-  int k = 0;
-  const char *alias = NULL;
-
-  for (int i=0; i<size; i++)
+  for (int i = 0; i < size; i++)
     {
-      target = array[i];
-      alias = target[k];
-      while (NULL!=alias)
+      TargetRegisterInfo_t *entry = &menu[i];
+
+      if (iterate_aliases (entry->target->aliases, match_alias_callback, (void *)input))
         {
-          if (xy_streql_ic (input, alias))
+          if (entry->prelude)
             {
-              matched = 1; break;
+              entry->prelude();
             }
-          k++;
-          alias = target[k];
+          else
+            {
+              chsrc_error ("该target未定义 prelude()");
+            }
+
+          *target = entry->target;
+          return true;
         }
-      if (!matched) k = 0;
-      if (matched) break;
     }
 
-  if (!matched)
-    {
-      *target_info = NULL;
-      return false;
-    }
-
-  do
-    {
-      k++;
-      alias = target[k];
-    }
-  while (NULL!=alias);
-
-  *target_info = target + k + 1;
-  return true;
+  *target = NULL;
+  return false;
 }
-
-#define iterate_targets(ary, input, target) iterate_targets_(ary, xy_arylen(ary), input, target)
 
 
 /**
@@ -464,29 +603,36 @@ typedef enum {
 bool
 get_target (const char *input, TargetOp code, char *option)
 {
-  const char **target_tmp = NULL;
+  Target_t *target = NULL;
 
-           bool matched = iterate_targets(pl_packagers, input, &target_tmp);
-  if (!matched) matched = iterate_targets(os_systems,   input, &target_tmp);
-  if (!matched) matched = iterate_targets(wr_softwares, input, &target_tmp);
+           bool matched = iterate_menu (chsrc_pl_menu, input, &target);
+  if (!matched) matched = iterate_menu (chsrc_os_menu, input, &target);
+  if (!matched) matched = iterate_menu (chsrc_wr_menu, input, &target);
 
   if (!matched) return false;
 
-  Target_t *target = (Target_t*) *target_tmp;
-
   if (TargetOp_Set_Source==code)
     {
-      if (target->setfn) target->setfn(option);
+      if (target->setfn)
+        {
+          target->setfn(option);
+        }
       else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 set 功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_Reset_Source==code)
     {
-      if (target->resetfn) target->resetfn(option);
+      if (target->resetfn)
+        {
+          target->resetfn(option);
+        }
       else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 reset 功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_Get_Source==code)
     {
-      if (target->getfn) target->getfn("");
+      if (target->getfn)
+        {
+          target->getfn("");
+        }
       else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 get 功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_List_Config==code)
@@ -511,24 +657,32 @@ get_target (const char *input, TargetOp code, char *option)
       }
 
       cli_print_target_available_sources (target->sources, target->sources_n);
+      cli_print_target_features (target, input);
 
-      if (target->featfn)
-        {
-          Feature_t f = target->featfn("");
-          cli_print_target_features (f, input);
-        }
+      {
+      char *msg = ENGLISH ? "Maintainer Information:\n" : "维护信息:\n";
+      say (bdgreen(msg));
+      cli_print_target_maintain_info (target, input);
+      }
     }
   else if (TargetOp_Measure_Source==code)
     {
-      select_mirror_autoly (target->sources, target->sources_n, input);
+      auto_select_mirror (target->sources, target->sources_n, input);
       return true;
     }
 
-  if (TargetOp_Set_Source==code
-      || TargetOp_Measure_Source==code)
+  if (TargetOp_Get_Source==code || TargetOp_Set_Source==code || TargetOp_Reset_Source==code)
+    {
+      br();
+      cli_print_target_maintain_info (target, input);
+    }
+
+  if (TargetOp_Set_Source==code || TargetOp_Measure_Source==code)
     {
       cli_notify_lastly_for_users();
     }
+
+  chef_debug_target (target);
 
   return true;
 }
@@ -618,9 +772,9 @@ main (int argc, char const *argv[])
 
   if (in_dry_run_mode())
     {
-      char *dry_msg = ENGLISH ? "Enable [Dry Run] mode. " \
-                                         "Simulate the source changing process (skipping speed measurement). " \
-                                         "Commands only print but don't run\n"
+      char *dry_msg = ENGLISH ? "Enable [Dry Run] mode. "
+                                "Simulate the source changing process (skipping speed measurement). "
+                                "Commands only print but don't run\n"
                               : "开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行\n";
       chsrc_log (bdyellow(dry_msg));
     }

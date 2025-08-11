@@ -6,7 +6,6 @@
  *               |
  * Created On    : <2023-09-03>
  * Last Modified : <2025-07-14>
- *
  * ------------------------------------------------------------*/
 
 void
@@ -58,7 +57,9 @@ pl_python_group_setsrc (char *option)
   pl_python_check_unofficial_pkger (&poetry_exist, &pdm_exist, &uv_exist);
 
   chsrc_set_target_group_mode ();
-  chsrc_yield_source_and_confirm (pl_python_group);
+
+  use_this(pl_python_group);
+  Source_t source =  chsrc_yield_source_and_confirm (this, option);
 
 
   // 交给后面检查命令的存在性
@@ -85,27 +86,9 @@ pl_python_group_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
+
 void
 pl_python_group_resetsrc (char *option)
 {
   pl_python_group_setsrc (option);
 }
-
-
-Feature_t
-pl_python_group_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = PartiallyCan;
-  f.cap_locally_explain = "Support Poetry, PDM, uv. No support for pip";
-  f.can_english = false;
-  f.can_user_define = true;
-
-  return f;
-}
-
-def_target_gsrf(pl_python_group);

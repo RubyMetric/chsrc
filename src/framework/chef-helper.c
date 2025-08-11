@@ -1,17 +1,15 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Name     : chef.h
+ * File Name     : chef-helper.c
  * File Authors  : Aoran Zeng <ccmywish@qq.com>
  * Contributors  :  Nul None  <nul@none.org>
  * Created On    : <2025-07-14>
- * Last Modified : <2025-07-14>
+ * Last Modified : <2025-08-09>
  *
  * For chefs (recipe makers) and sometimes framewoker
  * to do some work not releated to OS operations
  * ------------------------------------------------------------*/
-
-#pragma once
 
 bool
 chef_is_url (const char *str)

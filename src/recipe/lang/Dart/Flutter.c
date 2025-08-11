@@ -1,42 +1,40 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors   : Aoran Zeng  <ccmywish@qq.com>
- * Contributors   :    czyt     <czyt.go@gmail.com>
- *                | MadDogOwner <xiaoran@xrgzs.top>
- *                |
- * Created On     : <2023-09-10>
- * Major Revision :      2
- * Last Modified  : <2025-07-11>
- *
- * 2024-09-14: 不得不将Dart和Flutter拆分为两个Target，
- *             因为3家教育网镜像站给出的 Dart 和 Flutter 换源URL模式都不一样
  * ------------------------------------------------------------*/
 
-#define PL_Dart_Flutter_Speed_URL_Postfix "/flutter_infra_release/releases/stable/linux/flutter_linux_v1.0.0-stable.tar.xz"
+def_target(pl_dart_flutter, "flutter");
 
-/**
- * @update 2025-04-15
- */
-static SourceProvider_t pl_dart_flutter_upstream =
+void
+pl_dart_flutter_prelude (void)
 {
-  def_upstream, "https://storage.googleapis.com",
-  {NotSkip, NA, NA, "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_v1.0.0-stable.tar.xz", ACCURATE} // 231 MB
-};
+  use_this(pl_dart_flutter);
+  chef_allow_gsr(pl_dart_flutter);
 
-static Source_t pl_dart_flutter_sources[] =
-{
-  {&pl_dart_flutter_upstream, "https://storage.googleapis.com", DelegateToUpstream},
-  {&FlutterCN,                "https://storage.flutter-io.cn",  DelegateToMirror},
-  {&Sjtug_Zhiyuan,            "https://mirror.sjtu.edu.cn",     NULL }, /* 官方文档也没有给后缀，怀疑是否存在问题 */
+  chef_set_created_on   (this, "2023-09-10");
+  chef_set_last_updated (this, "2025-07-11");
+  chef_set_sources_last_updated (this, "2025-04-15");
 
-  {&Tuna,                     "https://mirrors.tuna.tsinghua.edu.cn/flutter",
-                              "https://mirrors.tuna.tsinghua.edu.cn/flutter" PL_Dart_Flutter_Speed_URL_Postfix},
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 2,
+    "czyt", "czyt.go@gmail.com",
+    "MadDogOwner", "xiaoran@xrgzs.top");
 
-  {&Nju,                      "https://mirror.nju.edu.cn/flutter",
-                              "https://mirror.nju.edu.cn/flutter" PL_Dart_Flutter_Speed_URL_Postfix}
-};
-def_sources_n(pl_dart_flutter);
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_allow_english(this);
+  chef_allow_user_define(this);
+
+  def_sources_begin()
+  {&UpstreamProvider, "https://storage.googleapis.com", FeedByPrelude},
+  {&FlutterCN,        "https://storage.flutter-io.cn",  FeedByPrelude},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn",     FeedByPrelude }, /* 官方文档也没有给后缀，怀疑是否存在问题 */
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/flutter", FeedByPrelude},
+  {&Nju,              "https://mirror.nju.edu.cn/flutter", FeedByPrelude}
+  def_sources_end()
+
+  chef_set_sources_speed_measure_url_with_postfix (this, "/flutter_infra_release/releases/stable/linux/flutter_linux_v1.0.0-stable.tar.xz");
+}
 
 
 /**
@@ -57,7 +55,7 @@ pl_dart_flutter_getsrc (char *option)
 void
 pl_dart_flutter_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (pl_dart_flutter);
+  use_this_source(pl_dart_flutter);
 
   char *w = NULL;
   char *cmd = NULL;
@@ -92,27 +90,3 @@ pl_dart_flutter_resetsrc (char *option)
 {
   pl_dart_flutter_setsrc (option);
 }
-
-
-/**
- * chsrc ls flutter
- */
-Feature_t
-pl_dart_flutter_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-
-  f.can_user_define = true;
-
-  f.note = "该换源通过写入环境变量实现，若多次换源，请手动清理profile文件";
-  return f;
-}
-
-def_target_gsrf(pl_dart_flutter);

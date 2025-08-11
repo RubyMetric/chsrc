@@ -1,61 +1,52 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  :  Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Yangmoooo  <yangmoooo@outlook.com>
- *               | Mikachu2333 <mikachu.23333@zohomail.com>
- *               |
- * Created On    : <2024-10-02>
- * Last Modified : <2025-08-07>
  * ------------------------------------------------------------*/
 
 // Size: 20MB
-#define PL_Rustup_Speed_URL_Suffix "/dist/2025-06-26/cargo-1.88.0-x86_64-unknown-illumos.tar.gz"
+#define PL_Rustup_Speed_URL_Suffix
 
-static SourceProvider_t pl_rust_binary_upstream =
+def_target(pl_rust_rustup, "rustup");
+
+void
+pl_rust_rustup_prelude (void)
 {
-  def_upstream, "https://www.rust-lang.org/",
-  def_need_measure_info
-};
+  use_this(pl_rust_rustup);
+  chef_allow_gsr(pl_rust_rustup);
 
-/**
- * @update 2025-08-07
- */
-static Source_t pl_rust_rustup_sources[] = {
-  {&pl_rust_binary_upstream, "https://static.rust-lang.org",
-                             "https://static.rust-lang.org" PL_Rustup_Speed_URL_Suffix},
+  chef_set_created_on   (this, "2024-10-02");
+  chef_set_last_updated (this, "2025-08-07");
+  chef_set_sources_last_updated (this, "2025-08-07");
 
-  {&MirrorZ,                 "https://mirrors.cernet.edu.cn/rustup", NULL},
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 2,
+    "Yangmoooo", "yangmoooo@outlook.com",
+    "Mikachu2333", "mikachu.23333@zohomail.com");
 
-  {&Tuna,                    "https://mirrors.tuna.tsinghua.edu.cn/rustup",
-                             "https://mirrors.tuna.tsinghua.edu.cn/rustup" PL_Rustup_Speed_URL_Suffix},
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english (this);
+  chef_allow_user_define(this);
 
-  {&Ustc,                    "https://mirrors.ustc.edu.cn/rust-static",
-                             "https://mirrors.ustc.edu.cn/rust-static" PL_Rustup_Speed_URL_Suffix},
+  def_sources_begin()
+  {&UpstreamProvider, "https://static.rust-lang.org",         FeedByPrelude},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/rustup", FeedByPrelude},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/rustup", FeedByPrelude},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/rust-static", FeedByPrelude},
+  {&Nju,              "https://mirror.nju.edu.cn/rustup", FeedByPrelude},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/rust-static", FeedByPrelude},
+  {&Zju,              "https://mirrors.zju.edu.cn/rustup", FeedByPrelude},
+  {&Iscas,            "https://mirror.iscas.ac.cn/rustup", FeedByPrelude},
+  {&Ali,              "https://mirrors.aliyun.com/rustup", FeedByPrelude},
+  {&RsProxyCN,        "https://rsproxy.cn",                FeedByPrelude}
+  def_sources_end()
 
-  {&Nju,                     "https://mirror.nju.edu.cn/rustup",
-                             "https://mirror.nju.edu.cn/rustup" PL_Rustup_Speed_URL_Suffix},
-
-  {&Sjtug_Zhiyuan,           "https://mirror.sjtu.edu.cn/rust-static",
-                             "https://mirror.sjtu.edu.cn/rust-static" PL_Rustup_Speed_URL_Suffix},
-
-  {&Zju,                     "https://mirrors.zju.edu.cn/rustup",
-                             "https://mirrors.zju.edu.cn/rustup" PL_Rustup_Speed_URL_Suffix},
-
-  {&Iscas,                   "https://mirror.iscas.ac.cn/rustup",
-                             "https://mirror.iscas.ac.cn/rustup" PL_Rustup_Speed_URL_Suffix},
-
-  {&Ali,                     "https://mirrors.aliyun.com/rustup",
-                             "https://mirrors.aliyun.com/rustup" PL_Rustup_Speed_URL_Suffix},
-
-  {&RsProxyCN,               "https://rsproxy.cn",
-                             "https://rsproxy.cn" PL_Rustup_Speed_URL_Suffix}};
-def_sources_n(pl_rust_rustup);
+  // 20MB大小
+  chef_set_sources_speed_measure_url_with_postfix (this, "/dist/2025-06-26/cargo-1.88.0-x86_64-unknown-illumos.tar.gz");
+}
 
 
-/**
- * chsrc get rustup
- */
+
 void
 pl_rust_rustup_getsrc (char *option)
 {
@@ -65,13 +56,11 @@ pl_rust_rustup_getsrc (char *option)
 
 /**
  * @consult https://mirrors.tuna.tsinghua.edu.cn/help/rustup/
- *
- * chsrc set rustup
  */
 void
 pl_rust_rustup_setsrc (char *option)
 {
-  chsrc_yield_source_and_confirm (pl_rust_rustup);
+  use_this_source(pl_rust_rustup);
 
 #ifdef XY_On_Windows
 
@@ -121,35 +110,9 @@ pl_rust_rustup_setsrc (char *option)
 }
 
 
-/**
- * chsrc reset rustup
- */
+
 void
 pl_rust_rustup_resetsrc (char *option)
 {
   pl_rust_rustup_setsrc (option);
 }
-
-
-/**
- * chsrc ls rustup
- */
-Feature_t
-pl_rust_rustup_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = "";
-  f.can_english = false;
-  f.can_user_define = true;
-
-  f.note = NULL;
-  return f;
-}
-
-
-def_target_gsrf(pl_rust_rustup);

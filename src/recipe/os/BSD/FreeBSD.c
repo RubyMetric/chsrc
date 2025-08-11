@@ -1,28 +1,38 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- *               |  Heng Guo  <2085471348@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
- * Created On    : <2023-09-03>
- * Last Modified : <2025-07-31>
  * ------------------------------------------------------------*/
 
-/**
- * @update 2023-09-27
- *
- * @note
- *   2023-09-24: 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports
- *   2023-09-27: 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数
- */
-static Source_t os_freebsd_sources[] =
+def_target(os_freebsd, "freebsd");
+
+void
+os_freebsd_prelude ()
 {
-  {&UpstreamProvider,  NULL, NULL},
+  use_this(os_freebsd);
+  chef_allow_s(os_freebsd);
+
+  chef_set_created_on   (this, "2023-09-03");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2023-09-27");
+
+  chef_set_authors (this, 2, "Aoran Zeng", "ccmywish@qq.com", "Heng Guo", "2085471348@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 0);
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+
+  // 2023-09-24: 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports
+  // 2023-09-27: 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数
+  def_sources_begin()
+  {&UpstreamProvider, NULL,                  DelegateToUpstream},
   {&Ustc,             "mirrors.ustc.edu.cn", DelegateToMirror},
   {&Nju,              "mirror.nju.edu.cn",   DelegateToMirror},
   {&Netease,          "mirrors.163.com",     DelegateToMirror},
-};
-def_sources_n(os_freebsd);
+  def_sources_end()
+}
 
 /**
  * @consult
@@ -38,10 +48,11 @@ os_freebsd_setsrc (char *option)
   // 据 @ykla，FreeBSD不自带sudo，但是我们依然要保证是root权限
   chsrc_ensure_root ();
 
-  int index = use_specific_mirror_or_auto_select (option, os_freebsd);
+  use_this(os_freebsd);
+  int index = use_specific_mirror_or_auto_select (option, this);
 
-  Source_t source = os_freebsd_sources[index];
-  chsrc_confirm_source();
+  Source_t source = this->sources[index];
+  chsrc_confirm_source(&source);
 
   chsrc_log2 ("1. 添加 freebsd-pkg 源 (二进制安装包)");
   chsrc_ensure_dir ("/usr/local/etc/pkg/repos");
@@ -71,11 +82,11 @@ os_freebsd_setsrc (char *option)
     {
       if (xy_streql("nju",source.mirror->code))
         {
-          source = os_freebsd_sources[index-1]; // 使用NJU的前一个源，即USTC源
+          source = this->sources[index-1]; // 使用NJU的前一个源，即USTC源
         }
       char *git_cmd = xy_strjoin (3, "git clone --depth 1 https://", source.url, "/freebsd-ports/ports.git /usr/ports");
       chsrc_run (git_cmd, RunOpt_Default);
-      source = os_freebsd_sources[index]; // 恢复至选中的源
+      source = this->sources[index]; // 恢复至选中的源
       chsrc_alert2 ("下次更新请使用 git -C /usr/ports pull 而非使用 gitup");
     }
   else
@@ -127,27 +138,5 @@ os_freebsd_setsrc (char *option)
     chsrc_overwrite_file (update, "/etc/freebsd-update.conf");
   */
 
-  chsrc_determine_chgtype (ChgType_SemiAuto);
   chsrc_conclude (&source);
 }
-
-
-Feature_t
-os_freebsd_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = false;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = false;
-  f.can_user_define = false;
-
-  f.note = NULL;
-  return f;
-}
-
-
-def_target_sf(os_freebsd);

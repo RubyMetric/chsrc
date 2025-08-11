@@ -1,32 +1,42 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  : Yangmoooo <yangmoooo@outlook.com>
- *               |
- * Created On    : <2024-06-12>
- * Last Modified : <2025-07-21>
  * ------------------------------------------------------------*/
 
-static SourceProvider_t os_almalinux_upstream =
-{
-  def_upstream, "http://repo.almalinux.org/almalinux",
-  {NotSkip, NA, NA, "https://raw.repo.almalinux.org/almalinux/9.5/isos/x86_64/AlmaLinux-9-latest-x86_64-minimal.iso", ACCURATE}
-};
+def_target(os_almalinux, "alma/almalinux");
 
-/**
- * @update 2024-12-18
- */
-static Source_t os_almalinux_sources[] =
+void
+os_almalinux_prelude ()
 {
-  {&os_almalinux_upstream , "http://repo.almalinux.org/almalinux", DelegateToUpstream},
-  {&Ali,                    "https://mirrors.aliyun.com/almalinux", DelegateToMirror},
-  {&Volcengine,             "https://mirrors.volces.com/almalinux", DelegateToMirror},
-  {&Sjtug_Zhiyuan,          "https://mirrors.sjtug.sjtu.edu.cn/almalinux", DelegateToMirror},
-  {&Zju,                    "https://mirrors.zju.edu.cn/almalinux",        DelegateToMirror},
-  {&Nju,                    "https://mirror.nju.edu.cn/almalinux",         DelegateToMirror},
-};
-def_sources_n(os_almalinux);
+  use_this(os_almalinux);
+  chef_allow_s(os_almalinux);
+
+  chef_set_created_on   (this, "2024-06-12");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2024-12-18");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 1,
+    "Yangmoooo", "yangmoooo@outlook.com");
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
+
+  def_sources_begin()
+  {&UpstreamProvider, "http://repo.almalinux.org/almalinux", FeedByPrelude},
+  {&Ali,              "https://mirrors.aliyun.com/almalinux", FeedByPrelude},
+  {&Volcengine,       "https://mirrors.volces.com/almalinux", FeedByPrelude},
+  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/almalinux", FeedByPrelude},
+  {&Zju,              "https://mirrors.zju.edu.cn/almalinux",        FeedByPrelude},
+  {&Nju,              "https://mirror.nju.edu.cn/almalinux",         FeedByPrelude}
+  def_sources_end()
+
+  chef_set_provider_speed_measure_url (&UpstreamProvider, "https://raw.repo.almalinux.org/almalinux/9.5/isos/x86_64/AlmaLinux-9-latest-x86_64-minimal.iso");
+}
 
 /**
  * @consult: https://developer.aliyun.com/mirror/almalinux
@@ -36,7 +46,7 @@ os_almalinux_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  chsrc_yield_source_and_confirm (os_almalinux);
+  use_this_source(os_almalinux);
 
   char *cmd = xy_strjoin (3,
     "sed -e 's|^mirrorlist=|#mirrorlist=|g' -e 's|^#\\s*baseurl=https://repo.almalinux.org/almalinux|baseurl=", source.url, "|g'  -i.bak  /etc/yum.repos.d/almalinux*.repo");
@@ -47,23 +57,3 @@ os_almalinux_setsrc (char *option)
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
-
-
-Feature_t
-os_almalinux_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = false;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-  f.can_user_define = false;
-
-  f.note = NULL;
-  return f;
-}
-
-def_target_sf(os_almalinux);

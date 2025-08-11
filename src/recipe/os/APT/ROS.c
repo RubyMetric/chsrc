@@ -1,34 +1,47 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  :  Heng Guo  <2085471348@qq.com>
- * Contributors  : Aoran Zeng <ccmywish@qq.com>
- *               |    zouri   <guoshuaisun@outlook.com>
- *               |
- * Created On    : <2023-09-03>
- * Last Modified : <2025-07-21>
  * ------------------------------------------------------------*/
 
-/**
- * @update 2024-04-18
- */
-static Source_t os_ros_sources[] =
-{
-  {&UpstreamProvider,  NULL, NULL},
+def_target(os_ros, "ros/ros2");
 
+void
+os_ros_prelude ()
+{
+  use_this(os_ros);
+  chef_allow_gs(os_ros);
+
+  chef_set_created_on   (this, "2023-09-03");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2024-04-18");
+
+  chef_set_authors (this, 1, "Heng Guo", "2085471348@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 2,
+    "Aoran Zeng", "ccmywish@qq.com",
+    "zouri", "guoshuaisun@outlook.com");
+
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, "该换源方案中，URL存在拼凑，因此不能手动使用某URL来换源", "In this switching method, URLs are constructed, so manual URL specification is not supported");
+
+  def_sources_begin()
+  {&UpstreamProvider, "http://packages.ros.org",     DelegateToUpstream},
   {&Ali,              "https://mirrors.aliyun.com",  DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn", DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn", DelegateToMirror},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn", DelegateToMirror},
   {&Tencent,          "https://mirrors.tencent.com", DelegateToMirror},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com", DelegateToMirror},
-  {&Huawei,           "https://mirrors.huaweicloud.com", DelegateToMirror},
+  {&Huawei,           "https://mirrors.huaweicloud.com", DelegateToMirror}
   /* 不启用原因：过慢 */
-  // {&Netease,          "https://mirrors.163.com", DelegateToMirror},
+  // {&Netease,       "https://mirrors.163.com", DelegateToMirror},
   /* 不启用原因：过慢 */
-  // {&Sohu,             "https://mirrors.sohu.com", DelegateToMirror}
-};
-def_sources_n(os_ros);
+  // {&Sohu,          "https://mirrors.sohu.com", DelegateToMirror}
+  def_sources_end()
+}
 
 
 void
@@ -46,7 +59,7 @@ os_ros_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  chsrc_yield_source_and_confirm (os_ros);
+  use_this_source(os_ros);
 
   chsrc_backup (OS_ROS_SourceList);
 
@@ -62,23 +75,3 @@ os_ros_setsrc (char *option)
   chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);
 }
-
-
-Feature_t
-os_ros_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-  f.can_user_define = false;
-
-  f.note = "该换源方案中，URL存在拼凑，因此不能手动使用某URL来换源";
-  return f;
-}
-
-def_target_gsf(os_ros);

@@ -1,80 +1,70 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors   : Aoran Zeng <ccmywish@qq.com>
- * Contributors   : yongxiang  <1926885268@qq.com>
- *                | happy game <happygame1024@gmail.com>
- *                |
- * Created On     : <2023-09-03>
- * Major Revision :      1
- * Last Modified  : <2025-07-14>
  * ------------------------------------------------------------*/
 
- #include "rawstr4c.h"
+#include "rawstr4c.h"
+
+def_target(pl_python_group, "python/pypi/py");
 
 /**
- * 注意这个前缀是 host/pipi/web/pacakges....
+ * @note 测速链接的这个前缀是 ${host}/pipi/web/pacakges/56/e4....
  * 下面有几个镜像站微调了这个路径，我们只要确认能找到 packages 目录就好
  */
-#define PL_Python_Group_Speed_URL_Postfix "/packages/56/e4/55aaac2b15af4dad079e5af329a79d961e5206589d0e02b1e8da221472ed/tensorflow-2.18.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"
-
-static SourceProvider_t pl_python_pypi_upstream =
+static char *
+pl_python_speed_url_constructor (const char *url, const char *user_data)
 {
-  def_upstream, "https://pypi.org/",
-  {NotSkip, NA, NA, "https://files.pythonhosted.org/packages/56/e4/55aaac2b15af4dad079e5af329a79d961e5206589d0e02b1e8da221472ed/tensorflow-2.18.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", ACCURATE} // 260MB
-};
+  char *str = xy_str_delete_suffix (url, "/simple");
+  str = xy_2strjoin (str, "/packages/56/e4/55aaac2b15af4dad079e5af329a79d961e5206589d0e02b1e8da221472ed/tensorflow-2.18.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl");
+  return str;
+}
 
-/**
- * @update 2025-07-11
- * @note 不要添加Zju，浙大的PyPI服务在校外访问会自动转向Tuna
- */
-static Source_t pl_python_group_sources[] =
+
+void
+pl_python_group_prelude (void)
 {
-  {&pl_python_pypi_upstream,   "https://pypi.org/simple", DelegateToUpstream},
+  use_this(pl_python_group);
+  chef_allow_gsr(pl_python_group);
 
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/pypi/web/simple",
-                      "https://mirrors.cernet.edu.cn/pypi/web" PL_Python_Group_Speed_URL_Postfix},
+  chef_set_created_on   (this, "2023-09-03");
+  chef_set_last_updated (this, "2025-07-14");
+  chef_set_sources_last_updated (this, "2025-07-11");
 
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/pypi/web/simple",
-                      "https://mirrors.bfsu.edu.cn/pypi/web" PL_Python_Group_Speed_URL_Postfix},
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 1, "happy game", "happygame1024@gmail.com");
+  chef_set_contributors (this, 1,
+    "yongxiang", "1926885268@qq.com");
 
-  {&Lzuoss,           "https://mirror.lzu.edu.cn/pypi/web/simple",
-                      "https://mirror.lzu.edu.cn/pypi/web"   PL_Python_Group_Speed_URL_Postfix},
 
-  {&Jlu,              "https://mirrors.jlu.edu.cn/pypi/web/simple",
-                      "https://mirrors.jlu.edu.cn/pypi/web"  PL_Python_Group_Speed_URL_Postfix},
+  chef_allow_local_mode (this, PartiallyCan, "部分包管理器支持项目级换源", "Some package managers support project-level source changing");
+  chef_allow_english(this);
+  chef_allow_user_define(this);
 
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/pypi/web/simple",
-                      "https://mirror.sjtu.edu.cn/pypi/web" PL_Python_Group_Speed_URL_Postfix},
 
-  {&Tuna,             "https://pypi.tuna.tsinghua.edu.cn/simple",
-                      "https://pypi.tuna.tsinghua.edu.cn" PL_Python_Group_Speed_URL_Postfix},
+  def_sources_begin()
+  {&UpstreamProvider, "https://pypi.org/simple",                     FeedByPrelude},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/pypi/web/simple",FeedByPrelude},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/pypi/web/simple", FeedByPrelude},
+  /* 不要添加Zju，浙大的PyPI服务在校外访问会自动转向Tuna */
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/pypi/web/simple",FeedByPrelude},
+  {&Jlu,              "https://mirrors.jlu.edu.cn/pypi/web/simple",FeedByPrelude},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/pypi/web/simple",FeedByPrelude},
+  {&Tuna,             "https://pypi.tuna.tsinghua.edu.cn/simple", FeedByPrelude},
+  {&Ali,              "https://mirrors.aliyun.com/pypi/simple/", FeedByPrelude},
+  {&Nju,              "https://mirror.nju.edu.cn/pypi/web/simple",FeedByPrelude},
+  {&Pku,              "https://mirrors.pku.edu.cn/pypi/web/simple",FeedByPrelude},
+  {&Tencent,          "https://mirrors.cloud.tencent.com/pypi/simple",FeedByPrelude},
 
-  {&Ali,              "https://mirrors.aliyun.com/pypi/simple/",
-                      "https://mirrors.aliyun.com/pypi" PL_Python_Group_Speed_URL_Postfix},
-
-  {&Nju,              "https://mirror.nju.edu.cn/pypi/web/simple",
-                      "https://mirror.nju.edu.cn/pypi/web" PL_Python_Group_Speed_URL_Postfix},
-
-  {&Pku,              "https://mirrors.pku.edu.cn/pypi/web/simple",
-                      "https://mirrors.pku.edu.cn/pypi/web" PL_Python_Group_Speed_URL_Postfix},
-
-  {&Tencent,          "https://mirrors.cloud.tencent.com/pypi/simple",
-                      "https://mirrors.cloud.tencent.com/pypi" PL_Python_Group_Speed_URL_Postfix},
-
-  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/pypi/simple",
-  //                  "https://mirrors.cloud.tencentyun.com/pypi" PL_Python_Group_Speed_URL_Postfix,
-
-  {&Huawei,           "https://mirrors.huaweicloud.com/repository/pypi/simple",
-                      "https://mirrors.huaweicloud.com/repository/pypi" PL_Python_Group_Speed_URL_Postfix},
-
-  {&Hust,             "https://mirrors.hust.edu.cn/pypi/web/simple",
-                      "https://mirrors.hust.edu.cn/pypi/web" PL_Python_Group_Speed_URL_Postfix},
+  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/pypi/simple",FeedByPrelude}
+  {&Huawei,           "https://mirrors.huaweicloud.com/repository/pypi/simple",FeedByPrelude},
+  {&Hust,             "https://mirrors.hust.edu.cn/pypi/web/simple",FeedByPrelude}
 
   /* 不启用原因：24小时更新一次 */
   // {&Netease,       "https://mirrors.163.com/.help/pypi.html", NULL}
-};
-def_sources_n(pl_python_group);
+  def_sources_end()
+
+  chef_set_sources_speed_measure_url_with_func (this, pl_python_speed_url_constructor, NULL);
+}
 
 void
 pl_python_check_unofficial_pkger (bool *poetry_exist, bool *pdm_exist, bool *uv_exist)

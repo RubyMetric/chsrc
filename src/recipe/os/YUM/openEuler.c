@@ -1,41 +1,51 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Authors  :  Heng Guo  <2085471348@qq.com>
- * Contributors  : Aoran Zeng <ccmywish@qq.com>
- *               | Yangmoooo <yangmoooo@outlook.com>
- *               | happy game <happygame1024@gmail.com>
- *               |
- * Created On    : <2023-09-06>
- * Last Modified : <2025-07-21>
  * ------------------------------------------------------------*/
 
-static SourceProvider_t os_openEuler_upstream =
+def_target(os_openeuler, "openeuler");
+
+void
+os_openeuler_prelude ()
 {
-  def_upstream, "https://repo.openeuler.org/",
-  {NotSkip, NA, NA, "https://repo.openeuler.org/openEuler-24.03-LTS/ISO/x86_64/openEuler-24.03-LTS-netinst-x86_64-dvd.iso", ACCURATE} // 896MB
-};
+  use_this(os_openeuler);
+  chef_allow_gs(os_openeuler);
+
+  chef_set_created_on   (this, "2023-09-06");
+  chef_set_last_updated (this, "2025-08-10");
+  chef_set_sources_last_updated (this, "2025-06-20");
+
+  chef_set_authors (this, 1, "Heng Guo", "2085471348@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 3,
+    "Aoran Zeng", "ccmywish@qq.com",
+    "Yangmoooo", "yangmoooo@outlook.com",
+    "happy game", "happygame1024@gmail.com");
 
 
-/**
- * @update 2025-06-20
- */
-static Source_t os_openeuler_sources[] =
-{
-  {&os_openEuler_upstream, "https://repo.openeuler.org/",         DelegateToUpstream},
-  {&Ali,              "https://mirrors.aliyun.com/openeuler/",     DelegateToMirror},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/openeuler/",    DelegateToMirror},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/openeuler/",    DelegateToMirror},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/openeuler/", DelegateToMirror},
-  {&Tencent,          "https://mirrors.tencent.com/openeuler/",    DelegateToMirror},
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/openeuler/", DelegateToMirror},
+  chef_allow_local_mode (this, CanNot, NULL, NULL);
+  chef_forbid_english(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note(this, NULL, NULL);
+
+  def_sources_begin()
+  {&UpstreamProvider, "https://repo.openeuler.org/",               FeedByPrelude},
+  {&Ali,              "https://mirrors.aliyun.com/openeuler/",     FeedByPrelude},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/openeuler/",    FeedByPrelude},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/openeuler/",    FeedByPrelude},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/openeuler/", FeedByPrelude},
+  {&Tencent,          "https://mirrors.tencent.com/openeuler/",    FeedByPrelude}
+  // {&Tencent_Intra, "https://mirrors.tencentyun.com/openeuler/", FeedByPrelude},
 
   /* 不启用原因：过慢 */
-  // {&Netease,          "https://mirrors.163.com/openeuler/",  DelegateToMirror}
+  // {&Netease,          "https://mirrors.163.com/openeuler/",  FeedByPrelude}
   /* 不启用原因：过慢 */
-  // {&Sohu,             "https://mirrors.sohu.com/openeuler/", DelegateToMirror}
-};
-def_sources_n(os_openeuler);
+  // {&Sohu,             "https://mirrors.sohu.com/openeuler/", FeedByPrelude}
+  def_sources_end()
+
+  chef_set_sources_speed_measure_url_with_postfix (this, "https://repo.openeuler.org/openEuler-24.03-LTS/ISO/x86_64/openEuler-24.03-LTS-netinst-x86_64-dvd.iso");
+}
 
 
 /**
@@ -56,7 +66,7 @@ os_openeuler_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  chsrc_yield_source_and_confirm (os_openeuler);
+  use_this_source(os_openeuler);
 
   chsrc_backup (OS_openEuler_SourceList);
 
@@ -86,27 +96,3 @@ os_openeuler_resetsrc (char *option)
 {
   os_openeuler_setsrc (option);
 }
-
-
-/**
- * chsrc ls openeuler
- */
-Feature_t
-os_openeuler_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = true;
-
-  f.cap_locally = CanNot;
-  f.cap_locally_explain = NULL;
-  f.can_english = true;
-  f.can_user_define = true;
-
-  f.note = NULL;
-
-  return f;
-}
-
-def_target_gsrf(os_openeuler);

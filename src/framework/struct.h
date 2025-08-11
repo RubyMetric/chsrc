@@ -7,7 +7,7 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-08-09>
+ * Last Modified : <2025-08-11>
  *
  * chsrc struct
  * ------------------------------------------------------------*/
@@ -55,13 +55,12 @@ typedef SourceProvider_t MirrorSite_t;
 SourceProvider_t UpstreamProvider =
 {
   IS_UpstreamProvider,
-  /* 引入新的上游默认源时，请使下面第一行的前三个字段保持不变，只添加第四个字段，可使用 def_upstream 宏 */
+  /* 引入新的上游默认源时，请使下面第一行的前三个字段保持不变，只添加第四个字段 */
   "upstream", "Upstream", "上游默认源", NULL,
   /* 引入新的上游默认源时，请完全修改下面这个结构体，可使用 def_need_measure_info 宏 */
   {SKIP, "URL未知，邀您参与贡献!", "URL unknown, welcome to contribute!", NULL, ACCURATE}
 };
 
-#define def_upstream            IS_UpstreamProvider, "upstream", "Upstream", "上游默认源"
 #define def_need_measure_info   {SKIP, "缺乏较大的测速对象，邀您参与贡献!", "Lack of large object URL, welcome to contribute!", NULL, ACCURATE}
 
 SourceProvider_t UserDefinedProvider =
@@ -92,70 +91,90 @@ Source_t;
 #define DelegateToMirror    NULL
 /* 看到该注释的贡献者，你可以帮忙寻找专用测速链接 */
 #define NeedContribute      NULL
-/* 由 _sources_prepare 填充 */
-#define FeedBySourcesPrepare NULL
+/* 由 prelude() 填充 */
+#define FeedByPrelude NULL
 
 #define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
 
 
-enum Capability_t
+typedef enum Capability_t
 {
   CanNot,
   FullyCan,
   PartiallyCan
-};
-
-
-/* Target Feature */
-typedef struct Feature_t
-{
-  bool can_get;
-  bool can_reset;       /* 有的reset不是暂时没有实现，而是现在的实现根本就无法重置 */
-
-  bool can_english;
-
-  bool can_user_define; /* 用户自定义换源URL */
-
-  enum Capability_t cap_locally;
-  char *cap_locally_explain;
-
-  char *note;
 }
-Feature_t;
+Capability_t;
+
+
+
+typedef struct Contributor_t
+{
+  char *name;
+  char *email;
+}
+Contributor_t;
 
 
 typedef struct Target_t
 {
+  /* 以 / 为分隔符的多个目标别名 */
+  char *aliases;
+
   void (*getfn)   (char *option);
   void (*setfn)   (char *option);
   void (*resetfn) (char *option);
 
-  Feature_t (*featfn) (char *option);
-
-  Source_t *sources;
+  Source_t  *sources;
   size_t    sources_n;
+
+
+  /* Features */
+  bool  can_english;        /* 是否支持英文输出 */
+
+  bool  can_user_define;    /* 是否支持用户自定义URL来换源 */
+  char *can_user_define_explain; /* 用户自定义URL的说明 */
+
+  Capability_t cap_local;  /* 是否支持 local mode */
+  char *cap_local_explain; /* local mode 的说明 */
+
+  char *note;              /* 备注 */
+
+
+  /* Recipe maintain info */
+  char *created_on;
+  char *last_updated;
+  char *sources_last_updated;
+
+  Contributor_t *authors;
+  size_t         authors_n;
+
+  Contributor_t *contributors;
+  size_t         contributors_n;
+
+  Contributor_t *chef;   /* Chef 仅有一个 */
+  Contributor_t *cooks;  /* Cook 可以有多个 */
+  size_t         cooks_n;
 }
 Target_t;
 
 
-#define def_target_inner_s(t)    NULL,       t##_setsrc, NULL,         NULL
-#define def_target_inner_sr(t)   NULL,       t##_setsrc, t##_resetsrc, NULL
-#define def_target_inner_sf(t)   NULL,       t##_setsrc, NULL,         t##_feat
-#define def_target_inner_srf(t)  NULL,       t##_setsrc, t##_resetsrc, t##_feat
-#define def_target_inner_gs(t)   t##_getsrc, t##_setsrc, NULL,         NULL
-#define def_target_inner_gsr(t)  t##_getsrc, t##_setsrc, t##_resetsrc, NULL
-#define def_target_inner_gsf(t)  t##_getsrc, t##_setsrc, NULL,         t##_feat
-#define def_target_inner_gsrf(t) t##_getsrc, t##_setsrc, t##_resetsrc, t##_feat
+typedef struct TargetRegisterInfo_t
+{
+  Target_t *target;           /* target 本身 */
+  void     (*prelude) (void); /* 填充 target 信息等预置操作 */
+}
+TargetRegisterInfo_t;
 
-#define def_target_sourcesn(t)   t##_sources, t##_sources_n
 
-/* 大部分target还不支持reset，所以暂时先默认设置为NULL来过渡 */
-#define def_target(t)      Target_t t##_target = {def_target_inner_gs(t),def_target_sourcesn(t)}
-#define def_target_s(t)    Target_t t##_target = {def_target_inner_s(t),def_target_sourcesn(t)}
-#define def_target_sr(t)   Target_t t##_target = {def_target_inner_sr(t),def_target_sourcesn(t)}
-#define def_target_sf(t)   Target_t t##_target = {def_target_inner_sf(t),def_target_sourcesn(t)}
-#define def_target_srf(t)  Target_t t##_target = {def_target_inner_srf(t),def_target_sourcesn(t)}
-#define def_target_gs(t)   Target_t t##_target = {def_target_inner_gs(t),def_target_sourcesn(t)}
-#define def_target_gsr(t)  Target_t t##_target = {def_target_inner_gsr(t),def_target_sourcesn(t)}
-#define def_target_gsf(t)  Target_t t##_target = {def_target_inner_gsf(t),def_target_sourcesn(t)}
-#define def_target_gsrf(t) Target_t t##_target = {def_target_inner_gsrf(t),def_target_sourcesn(t)}
+#define def_target(t, aliases) void t##_getsrc(char *option);void t##_setsrc(char *option);void t##_resetsrc(char *option); Target_t t##_target={aliases};
+
+/* 以下宏仅能放在 prelude() 中使用 */
+#define use_this(t) Target_t *this = &t##_target;
+#define use_this_source(t) use_this(t); Source_t source = chsrc_yield_source_and_confirm (this, option);
+
+#define def_sources_begin()  Source_t sources[] = {
+#define def_sources_end()    }; \
+  this->sources_n = xy_arylen(sources); \
+  char *_sources_storage = xy_malloc0 (sizeof(sources)); \
+  memcpy (_sources_storage, sources, sizeof(sources)); \
+  this->sources = (Source_t *)_sources_storage;

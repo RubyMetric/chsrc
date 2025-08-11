@@ -6,7 +6,7 @@
  * Contributors  :  Nil Null  <nil@null.org>
  *               |
  * Created On    : <2024-08-09>
- * Last Modified : <2025-07-11>
+ * Last Modified : <2025-08-11>
  * -------------------------------------------------------------
  * 本文件作为一个通用模板：
  *
@@ -29,41 +29,70 @@
 
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
- * -------------------------------------------------------------
- * File Name     : <target>.c
- * File Authors  : Nil Null <nil@null.org> 尼尔闹先生
- * Contributors  : Nul None <nul@none.org> 怒了馕女士
- *               |
- * Created On    : <2025-01-01> https://www.yuque.com/ccmywish/blog/nil-null-and-nul-none
- * Last Modified : <2025-01-01> 请更新文件标头
  * ------------------------------------------------------------*/
+
+def_target(<category>_<target>);
 
 /**
  * 定义专服务于该target的镜像站，该例数据为虚拟填充
  */
 static MirrorSite_t
-RubyMetric = {"rbmt",                   // 该镜像站的 code, 可以这么使用: chsrc set <target> rbmt
-              "RubyMetric",             // 该镜像站的缩写
-              "RubyMetric.com",         // 该镜像站的全名
-              "https://rubymetirc.com", // 镜像站首页
-                                        // 镜像站某个较大的可下载物的下载链接，用于测速
-              "https://rubymetirc.com/target/aws/aws-sdk-go/@v/v1.45.2.zip",
+RubyMetric = {
+  IS_DedicatedMirrorSite, /* 镜像站类型 */
+  "rbmt",                 /* 该镜像站的 code, 可以这么使用: chsrc set <target> rbmt */
 
-              ACCURATE};                // 是否为精准测速，若使用间接URL来测速，则填ROUGH
+  /* 该镜像站的英文缩写 |   该镜像站的全名    |     镜像站首页  */
+  "RubyMetric",           "RubyMetric 镜像站",  "https://rubymetirc.com",
 
-/**
- * @update 2025-12-31
- * @note   该target的各个源地址，该例数据为虚拟填充
- */
-static Source_t
-<category>_<target>_sources[] = {
-  {&UpstreamProvider,      "上游地址，若维护者暂时未知，可填NULL，这个主要用于reset"},
-  {&RubyMetric,    "https://rubymetirc.com/target"},
-  {&RubyInstaller, "https://rubyinstaller.cn/target"},
-  {&Gitee,         "https://gitee.com/RubyMetric/chsrc"},
-  {&GitHub,        "https://github.com/RubyMetric/chsrc"}
-};
-def_sources_n(<category>_<target>);
+  /* 是否跳过测速 | 跳过原因(中文) | 跳过原因(英文) */
+  {NotSkip,             NA,                NA,
+  /* 镜像站某个较大的可下载物的下载链接，用于测速 */
+  "https://rubymetirc.com/target/aws/aws-sdk-go/@v/v1.45.2.zip",
+  /* 是否为精准测速，若使用间接URL来测速，则填ROUGH */
+   ACCURATE
+  };
+}
+
+
+
+void
+<category>_<target>_prelude (void)
+{
+  use_this(<category>_<target>);
+  chef_allow_gsr(<category>_<target>);
+  // chef_allow_s(<category>_<target>);
+  // chef_allow_gs(<category>_<target>);
+  // chef_allow_sr(<category>_<target>);
+
+  chef_set_created_on   (this, "2024-08-09");
+  chef_set_last_updated (this, "2025-08-12");
+  chef_set_sources_last_updated (this, "2025-08-11");
+
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL, NULL);
+  chef_set_cooks (this, 0);
+  chef_set_contributors (this, 1,
+    "Nil Null", "nil@null.org");
+
+
+  chef_allow_local_mode (this, PartiallyCan, "具体说明是否支持项目级换源...", "Tell users the local mode support");
+
+  // chef_allow_english(this);
+  chef_forbid_english(this);
+
+  // chef_allow_user_define(this);
+  chef_forbid_user_define(this);
+
+  chef_set_note ("中文备注说明...", "English note...");
+
+  def_sources_begin()
+  {&UpstreamProvider, "上游默认源链接, 若维护者暂时未知, 可填NULL, 这个主要用于reset", DelegateToUpstream}
+  {&RubyMetric,       "https://rubymetirc.com/target",       DelegateToMirror},
+  {&RubyInstaller,    "https://rubyinstaller.cn/target",     DelegateToMirror},
+  {&Gitee,            "https://gitee.com/RubyMetric/chsrc",  DelegateToMirror},
+  {&GitHub,           "https://github.com/RubyMetric/chsrc", "https://一个精准测速链接"}
+  def_sources_end()
+}
 
 
 /**
@@ -87,8 +116,11 @@ void
 void
 <category>_<target>_setsrc (char *option)
 {
-  /* 下面这行是必须的，注入source变量 */
-  chsrc_yield_source_and_confirm (<category>_<target>);
+  /* 下面这行是必须的，注入 source 变量 */
+  use_this_source(<category>_<target>);
+
+  /* 如果是 target group，你可能想要指定不同的 target 来使用它的源 */
+  // Source_t source = chsrc_yield_source_and_confirm (&pl_js_group_target, option);
 
   /* 具体的换源步骤，如调用第三方命令... */
 
@@ -109,36 +141,3 @@ void
   /* 往往统一在 _setsrc() 中实现，直接调用即可 */
   // <category>_<target>_setsrc (option);
 }
-
-
-/**
- * @required 非必需
- *
- * 用于 chsrc ls <target>
- */
-Feature_t
-<category>_<target>_feat (char *option)
-{
-  Feature_t f = {0};
-
-  f.can_get = true;
-  f.can_reset = false;
-
-  f.cap_locally = PartiallyCan;
-  f.cap_locally_explain = "具体说明是否支持项目级换源...";
-
-  f.can_english = false;
-  f.can_user_define = false;
-
-  f.note = "备注说明...";
-  return f;
-}
-
-
-// 定义此 target，参考 @file:source.h
-// 下列情形多选1
-def_target(<category>_<target>);
-def_target_gsr(<category>_<target>);
-def_target_gsf(<category>_<target>);
-def_target_gsrf(<category>_<target>);
-def_target_s(<category>_<target>);
