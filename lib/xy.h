@@ -789,19 +789,18 @@ _xy_os_home ()
 static char *
 _xy_win_documents ()
 {
-  if (XY_On_Windows)
-    {
-      char documents_path[MAX_PATH];
-      HRESULT result = SHGetFolderPathA (NULL, CSIDL_MYDOCUMENTS, NULL,
-                                         SHGFP_TYPE_CURRENT, documents_path);
+#ifdef _WIN32
+  char documents_path[MAX_PATH];
+  HRESULT result = SHGetFolderPathA (NULL, CSIDL_MYDOCUMENTS, NULL,
+                                     SHGFP_TYPE_CURRENT, documents_path);
 
-      if (SUCCEEDED (result))
-        return xy_strdup (documents_path);
+  if (SUCCEEDED (result))
+    return xy_strdup (documents_path);
 
-      return xy_2strjoin (xy_os_home, "\\Documents");
-    }
-  else
-    return NULL;
+  return xy_2strjoin (xy_os_home, "\\Documents");
+#else
+  return NULL;
+#endif
 }
 
 #define xy_win_powershell_profile _xy_win_powershell_profile ()
@@ -811,7 +810,7 @@ _xy_win_documents ()
 static char *
 _xy_win_powershell_profile ()
 {
-  if (XY_On_Windows)
+  if (xy_on_windows)
     {
       char *documents_dir = _xy_win_documents ();
       char *profile_path = xy_2strjoin (documents_dir, "\\PowerShell\\Microsoft.PowerShell_profile.ps1");
