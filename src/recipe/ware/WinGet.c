@@ -48,10 +48,6 @@ wr_winget_setsrc (char *option)
 {
   use_this_source (wr_winget);
 
-  // TODO：此处需要增加管理员权限校验
-  char *msg = ENGLISH ? "This command needs ADMIN privilege" : "本命令需要管理员权限";
-  chsrc_warn (msg);
-
   // 2025.8.17 此前用户可能隐式使用默认源导致 remove 失败，故使用 Dont_Abort
   chsrc_run ("winget source remove winget", RunOpt_Dont_Abort_On_Failure);
   chsrc_run (xy_strjoin (3, "winget source add winget ", source.url, " --trust-level trusted"), RunOpt_Default);
