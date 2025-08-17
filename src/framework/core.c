@@ -1270,6 +1270,7 @@ chsrc_run (const char *cmd, int run_option)
     }
 
   int status = system (cmd);
+  br();
   if (0==status)
     {
       if (! (RunOpt_Dont_Notify_On_Success & run_option))
