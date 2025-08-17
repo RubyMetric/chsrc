@@ -9,7 +9,7 @@
  *               | Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-08-10>
+ * Last Modified : <2025-08-17>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C11 utilities for CLI applications in mixed
@@ -19,7 +19,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.1.5.5-2025/08/10"
+#define _XY_Version       "v0.1.5.5-2025/08/17"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -789,7 +789,7 @@ _xy_os_home ()
 static char *
 _xy_win_documents ()
 {
-#ifdef _WIN32
+#ifdef XY_On_Windows
   char documents_path[MAX_PATH];
   HRESULT result = SHGetFolderPathA (NULL, CSIDL_MYDOCUMENTS, NULL,
                                      SHGFP_TYPE_CURRENT, documents_path);
