@@ -9,7 +9,7 @@
  *               | Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-08-09>
+ * Last Modified : <2025-08-17>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C11 utilities for CLI applications in mixed
@@ -19,7 +19,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.1.5.5-2025/08/09"
+#define _XY_Version       "v0.1.5.5-2025/08/17"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -66,6 +66,7 @@ bool xy_enable_color = true;
   #define xy_on_bsd false
   #define xy_os_devnull "nul"
   #include <windows.h>
+  #include <shlobj.h>
   #define xy_useutf8() SetConsoleOutputCP (65001)
 
 #elif defined(__linux__) || defined(__linux)
@@ -784,21 +785,55 @@ _xy_os_home ()
   return home;
 }
 
+
+static char *
+_xy_win_documents ()
+{
+#ifdef XY_On_Windows
+  char documents_path[MAX_PATH];
+  HRESULT result = SHGetFolderPathA (NULL, CSIDL_MYDOCUMENTS, NULL,
+                                     SHGFP_TYPE_CURRENT, documents_path);
+
+  if (SUCCEEDED (result))
+    return xy_strdup (documents_path);
+
+  return xy_2strjoin (xy_os_home, "\\Documents");
+#else
+  return NULL;
+#endif
+}
+
 #define xy_win_powershell_profile _xy_win_powershell_profile ()
 #define xy_win_powershellv5_profile _xy_win_powershellv5_profile ()
+
+// 更新 PowerShell 配置文件路径函数
 static char *
 _xy_win_powershell_profile ()
 {
-  return xy_2strjoin (
-      xy_os_home, "\\Documents\\PowerShell\\Microsoft.PowerShell_profile.ps1");
+  if (xy_on_windows)
+    {
+      char *documents_dir = _xy_win_documents ();
+      char *profile_path = xy_2strjoin (documents_dir, "\\PowerShell\\Microsoft.PowerShell_profile.ps1");
+      free (documents_dir);
+      return profile_path;
+    }
+  else
+    return NULL;
 }
 
-char *
+
+static char *
 _xy_win_powershellv5_profile ()
 {
-  return xy_2strjoin (
-      xy_os_home,
-      "\\Documents\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1");
+  if (xy_on_windows)
+    {
+      char *documents_dir = _xy_win_documents ();
+      char *profile_path = xy_2strjoin (documents_dir, "\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1");
+      free (documents_dir);
+      return profile_path;
+    }
+  else
+    return NULL;
 }
 
 #define xy_zshrc  "~/.zshrc"
