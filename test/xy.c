@@ -2,11 +2,12 @@
  * SPDX-License-Identifier: MIT
  * -------------------------------------------------------------
  * File Name     : xy.c
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
+ * File Authors  : Aoran Zeng   <ccmywish@qq.com>
+ * Contributors  :   Nil Null   <nil@null.org>
+ *               | Mikachu2333  <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2025-08-08>
+ * Last Modified : <2025-08-11>
  *
  * Test xy.h
  * ------------------------------------------------------------*/
@@ -97,6 +98,8 @@ main (int argc, char const *argv[])
   assert (xy_dir_exist ("~"));
   if (xy_on_windows)
     {
+      say (xy_win_powershell_profile);
+      say (xy_win_powershellv5_profile);
       assert (xy_file_exist (xy_win_powershell_profile));
       assert (true == xy_file_exist (xy_win_powershellv5_profile));
       assert (xy_dir_exist ("C:\\Users"));
