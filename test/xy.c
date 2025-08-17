@@ -103,6 +103,13 @@ main (int argc, char const *argv[])
       assert (xy_file_exist (xy_win_powershell_profile));
       assert (true == xy_file_exist (xy_win_powershellv5_profile));
       assert (xy_dir_exist ("C:\\Users"));
+      assert_str (xy_normalize_path ("C:\\a bc\\def\\"), "C:\\a bc\\def\\");
+      assert_str (xy_normalize_path ("a/b c/d"), "a\\b c\\d");
+      assert_str (xy_normalize_path ("a/b c/d/"), "a\\b c\\d\\");
+      assert_str (xy_parent_dir ("a/b c/d"), "a\\b c");
+      assert_str (xy_parent_dir ("a/b c\\d/"), "a\\b c");
+      assert_str (xy_parent_dir (xy_normalize_path ("~/")), "C:\\Users");
+      assert_str (xy_parent_dir (xy_normalize_path ("~")), "C:\\Users");
     }
   else
     {
@@ -115,6 +122,8 @@ main (int argc, char const *argv[])
           assert (xy_file_exist (xy_bashrc));
         }
       assert (xy_dir_exist ("/etc"));
+      assert_str (xy_normalize_path ("a\\b c\\d"), "a/b c/d");
+      assert_str (xy_normalize_path ("a\\b c\\d\\"), "a/b c/d/");
     }
 
   println (xy_normalize_path (" \n ~/haha/test/123 \n\r "));
