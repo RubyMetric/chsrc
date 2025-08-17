@@ -912,26 +912,19 @@ xy_normalize_path (const char *path)
 {
   char *new = xy_str_strip (path); // 防止开发者多写了空白符
 
-  if (xy_on_windows)
+  if (xy_str_start_with (new, "~"))
     {
-      if (xy_str_start_with (new, "~/"))
-        {
-          // 或 %USERPROFILE%
-          new = xy_strjoin (3, xy_os_home, "\\",
-                            xy_str_delete_prefix (new, "~/"));
-        }
-      new = xy_str_gsub (new, "/", "\\");
-    }
-  else
-    {
-      if (xy_str_start_with (new, "~/"))
-        {
-          new = xy_strjoin (3, xy_os_home, "/",
-                            xy_str_delete_prefix (new, "~/"));
-        }
+      new = xy_strjoin (3, xy_os_home, "/",
+                           xy_str_delete_prefix (new, "~"));
     }
 
-  return new;
+  new = xy_str_gsub (new, "\\", "/");
+  new = xy_str_gsub (new, "//", "/");
+
+  if (xy_on_windows)
+    return xy_str_gsub (new, "/", "\\");
+  else
+    return new;
 }
 
 static char *
