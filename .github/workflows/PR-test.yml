@@ -5,7 +5,7 @@
 #               | Mikachu2333 <mikachu2333@zohomail.com>
 #               |
 # Created On    : <2025-06-19>
-# Last Modified : <2025-08-11>
+# Last Modified : <2025-08-17>
 #
 # Test PR
 # ---------------------------------------------------------------
@@ -14,8 +14,11 @@ name: 测试PR
 
 on:
   pull_request:
+    # 仅在开 pr、草稿转正式、手动要求 review、reopen的时候运行测试
     types: [
         opened,
+        # 因 synchronize 将导致 pr 的构建过于频繁而禁用
+        # synchronize, # 在 pr 者 push commit 时每次构建
         ready_for_review, # draft PR 转为正式 PR
         review_requested,
         reopened,
