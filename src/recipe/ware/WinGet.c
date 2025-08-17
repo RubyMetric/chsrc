@@ -11,13 +11,13 @@ wr_winget_prelude ()
   chef_allow_gsr(wr_winget);
 
   chef_set_created_on   (this, "2024-06-07");
-  chef_set_last_updated (this, "2025-07-13");
+  chef_set_last_updated (this, "2025-08-17");
   chef_set_sources_last_updated (this, "2025-07-13");
 
   chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
   chef_set_chef (this, NULL, NULL);
   chef_set_cooks (this, 0);
-  chef_set_contributors (this, 0);
+  chef_set_contributors (this, 1, "Mikachu2333", "mikachu.23333@zohomail.com");
 
   chef_forbid_english(this);
   chef_allow_user_define(this);
@@ -46,9 +46,14 @@ wr_winget_getsrc (char *option)
 void
 wr_winget_setsrc (char *option)
 {
-  use_this_source(wr_winget);
+  use_this_source (wr_winget);
 
-  chsrc_run ("winget source remove winget", RunOpt_Default);
+  // TODO：此处需要增加管理员权限校验
+  char *msg = ENGLISH ? "This command needs ADMIN privilege" : "本命令需要管理员权限";
+  chsrc_warn (msg);
+
+  // 2025.8.17 此前用户可能隐式使用默认源导致 remove 失败，故使用 Dont_Abort
+  chsrc_run ("winget source remove winget", RunOpt_Dont_Abort_On_Failure);
   chsrc_run (xy_strjoin (3, "winget source add winget ", source.url, " --trust-level trusted"), RunOpt_Default);
 
   chsrc_determine_chgtype (ChgType_Auto);
