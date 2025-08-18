@@ -912,54 +912,46 @@ xy_normalize_path (const char *path)
 {
   char *new = xy_str_strip (path); // 防止开发者多写了空白符
 
-  if (xy_on_windows)
+  if (xy_str_start_with (new, "~"))
     {
-      if (xy_str_start_with (new, "~/"))
-        {
-          // 或 %USERPROFILE%
-          new = xy_strjoin (3, xy_os_home, "\\",
-                            xy_str_delete_prefix (new, "~/"));
-        }
-      new = xy_str_gsub (new, "/", "\\");
-    }
-  else
-    {
-      if (xy_str_start_with (new, "~/"))
-        {
-          new = xy_strjoin (3, xy_os_home, "/",
-                            xy_str_delete_prefix (new, "~/"));
-        }
+      new = xy_strjoin (3, xy_os_home, "/",
+                           xy_str_delete_prefix (new, "~"));
     }
 
-  return new;
+  new = xy_str_gsub (new, "\\", "/");
+  new = xy_str_gsub (new, "//", "/");
+
+  if (xy_on_windows)
+    return xy_str_gsub (new, "/", "\\");
+  else
+    return new;
 }
 
+/**
+ * @note 总是返回不含末尾斜杠的父目录路径
+ */
 static char *
 xy_parent_dir (const char *path)
 {
   char *dir = xy_normalize_path (path);
+  dir = xy_str_gsub (dir, "\\", "/");
+  if (xy_str_end_with (dir, "/"))
+    dir = xy_str_delete_suffix (dir, "/");
+
   char *last = NULL;
+
+  last = strrchr (dir, '/');
+  if (!last)
+    {
+      /* current dir */
+      return ".";
+    }
+  *last = '\0';
+
   if (xy_on_windows)
-    {
-      last = strrchr (dir, '\\');
-      if (!last)
-        {
-          /* current dir */
-          return ".";
-        }
-      *last = '\0';
-    }
+    return xy_str_gsub (dir, "/", "\\");
   else
-    {
-      last = strrchr (dir, '/');
-      if (!last)
-        {
-          /* current dir */
-          return ".";
-        }
-      *last = '\0';
-    }
-  return dir;
+    return dir;
 }
 
 #endif
