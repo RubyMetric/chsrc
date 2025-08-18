@@ -80,7 +80,7 @@ bool chsrc_in_no_color_mode(){return ProgMode.NoColorMode;}
 static bool in_measure_mode(){return ProgMode.MeasureMode;}
 static bool in_ipv6_mode(){return ProgMode.Ipv6Mode;}
 static bool in_dry_run_mode(){return ProgMode.DryRunMode;}
-
+static bool in_custom_user_agent_mode(){return false;}
 
 /**
  * Target Group mode (相反则称为 standalone mode)
@@ -603,20 +603,26 @@ measure_speed_for_url (void *url)
       ipv6 = "--ipv6";
     }
 
+  char *user_agent = NULL;
+  if (in_custom_user_agent_mode())
+    {
+      user_agent = strdup("maven/3.9.11");
+    }else{
+      user_agent = xy_2strjoin("chsrc/", Chsrc_Version);
+    }
   char *os_devnull = xy_os_devnull;
 
   /**
    * @note 我们用 —L，因为部分链接会跳转到其他地方，比如: RubyChina, npmmirror
    */
-  char *curl_cmd = xy_strjoin (8, "curl -qsL ", ipv6,
-                                  " -o ", os_devnull,
-                                  " -w \"%{http_code} %{speed_download}\" -m", time_sec,
-                                  " -A chsrc/" Chsrc_Version "  ", url);
+  char *curl_cmd = xy_strjoin (10, "curl -qsL ", ipv6,
+                                    " -o ", os_devnull,
+                                    " -w \"%{http_code} %{speed_download}\" -m", time_sec,
+                                    " -A ", user_agent, " ", url);
 
   // chsrc_info (xy_2strjoin ("测速命令 ", curl_cmd));
-
   char *curl_buf = xy_run (curl_cmd, 0);
-
+  free(user_agent);
   return curl_buf;
 }
 
