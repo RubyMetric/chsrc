@@ -9,7 +9,7 @@
  *               | Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-08-17>
+ * Last Modified : <2025-08-18>
  *
  * xy: 襄阳、咸阳
  * Corss-Platform C11 utilities for CLI applications in mixed
@@ -19,7 +19,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.1.5.5-2025/08/17"
+#define _XY_Version       "v0.1.6.0-2025/08/18"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -904,22 +904,24 @@ xy_dir_exist (const char *path)
 }
 
 /**
- * 1. 删除路径左右两边多出来的空白符
- * 2. 将 ~/ 转换为绝对路径
+ * @brief 规范化路径
+ *
+ * @details
+ *   1. 删除路径左右两边多出来的空白符
+ *      - 防止通过间接方式得到的路径包含了空白字符 (如 grep 出来的结果)
+ *      - 防止维护者多写了空白字符
+ *   2. 将 ~ 转换为绝对路径
+ *   3. 在Windows上，使用标准的 \ 作为路径分隔符
  */
 static char *
 xy_normalize_path (const char *path)
 {
-  char *new = xy_str_strip (path); // 防止开发者多写了空白符
+  char *new = xy_str_strip (path);
 
   if (xy_str_start_with (new, "~"))
     {
-      new = xy_strjoin (3, xy_os_home, "/",
-                           xy_str_delete_prefix (new, "~"));
+      new = xy_2strjoin (xy_os_home, xy_str_delete_prefix (new, "~"));
     }
-
-  new = xy_str_gsub (new, "\\", "/");
-  new = xy_str_gsub (new, "//", "/");
 
   if (xy_on_windows)
     return xy_str_gsub (new, "/", "\\");
@@ -927,14 +929,22 @@ xy_normalize_path (const char *path)
     return new;
 }
 
+
 /**
- * @note 总是返回不含末尾斜杠的父目录路径
+ * @brief 返回一个路径的父目录名
+ *
+ * @note
+ *   - 返回的是真正的 "目录名" (就像文件名一样)，而不是 "路径"，所以一定是不含末尾斜杠的
+ *   - 在Windows上，使用标准的 \ 作为路径分隔符
  */
 static char *
 xy_parent_dir (const char *path)
 {
   char *dir = xy_normalize_path (path);
+
+  /* 不管是否为Windows，全部统一使用 / 作为路径分隔符，方便后续处理 */
   dir = xy_str_gsub (dir, "\\", "/");
+
   if (xy_str_end_with (dir, "/"))
     dir = xy_str_delete_suffix (dir, "/");
 
@@ -943,11 +953,12 @@ xy_parent_dir (const char *path)
   last = strrchr (dir, '/');
   if (!last)
     {
-      /* current dir */
+      /* 路径中没有一个 / 是很奇怪的，我们直接返回 . 作为当前目录 */
       return ".";
     }
   *last = '\0';
 
+  /* Windows上重新使用 \ 作为路径分隔符 */
   if (xy_on_windows)
     return xy_str_gsub (dir, "/", "\\");
   else
