@@ -49,8 +49,8 @@ wr_winget_setsrc (char *option)
   use_this_source (wr_winget);
 
   // 2025.8.17 此前用户可能隐式使用默认源导致 remove 失败，故使用 Dont_Abort
-  // 我也不知道为啥执行两次就可以了，但是确实是能用了……
   chsrc_run ("winget source remove winget", RunOpt_Dont_Abort_On_Failure);
+  // 2025.8.18 执行两次相同的命令后继续设置，无报错，换源成功。具体原因不明
   chsrc_run ("winget source remove winget", RunOpt_Dont_Abort_On_Failure);
   chsrc_run (xy_strjoin (3, "winget source add winget ", source.url, " --trust-level trusted"), RunOpt_Default);
 
