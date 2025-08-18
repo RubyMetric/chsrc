@@ -19,7 +19,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.1.6.1-2025/08/18"
+#define _XY_Version       "v0.1.6.0-2025/08/18"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -967,11 +967,6 @@ xy_normalize_path (const char *path)
     {
       new = xy_2strjoin (xy_os_home, xy_str_delete_prefix (new, "~"));
     }
-
-  // 在特殊情况下上面的替换最终可能导致形如 `/foo//bar/` 之类的东西
-  // 建议进行去重处理以防万一
-  //new = xy_str_gsub (new, "\\", "/");
-  //new = xy_str_gsub (new, "//", "/");
 
   if (xy_on_windows)
     return xy_str_gsub (new, "/", "\\");
