@@ -59,28 +59,28 @@ void
 <category>_<target>_prelude (void)
 {
   use_this(<category>_<target>);
-  chef_allow_gsr(<category>_<target>);
-  // chef_allow_s(<category>_<target>);
+  chef_allow_gsr(<category>_<target>); //代表支持 Get Set Reset 三种操作
+  // chef_allow_s(<category>_<target>); //以此类推
   // chef_allow_gs(<category>_<target>);
   // chef_allow_sr(<category>_<target>);
 
-  chef_set_created_on   (this, "2024-08-09");
-  chef_set_last_updated (this, "2025-08-12");
-  chef_set_sources_last_updated (this, "2025-08-11");
+  chef_set_created_on   (this, "2024-08-09"); //文件创建日期
+  chef_set_last_updated (this, "2025-08-12"); //文件最后一次更新日期
+  chef_set_sources_last_updated (this, "2025-08-11"); //镜像站点最后一次更新日期
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com"); //作者
   chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
+  chef_set_cooks (this, 0); //想一直为它贡献和更新？将自己加在这里！
+  chef_set_contributors (this, 1, //为它做了贡献？将自己的信息加在这里！
     "Nil Null", "nil@null.org");
 
 
   chef_allow_local_mode (this, PartiallyCan, "具体说明是否支持项目级换源...", "Tell users the local mode support");
 
-  // chef_allow_english(this);
+  // chef_allow_english(this); //项目是否支持英文
   chef_forbid_english(this);
 
-  // chef_allow_user_define(this);
+  // chef_allow_user_define(this); //是否支持用户自定义镜像源
   chef_forbid_user_define(this);
 
   chef_set_note ("中文备注说明...", "English note...");
@@ -141,3 +141,6 @@ void
   /* 往往统一在 _setsrc() 中实现，直接调用即可 */
   // <category>_<target>_setsrc (option);
 }
+
+
+//最后，别忘了将自己的文件加入 menu.c 和 chsrc-main.c 之中嗷～
