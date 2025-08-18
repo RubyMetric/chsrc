@@ -7,7 +7,7 @@
  *               | Mikachu2333  <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2025-08-11>
+ * Last Modified : <2025-08-18>
  *
  * Test xy.h
  * ------------------------------------------------------------*/
@@ -98,18 +98,23 @@ main (int argc, char const *argv[])
   assert (xy_dir_exist ("~"));
   if (xy_on_windows)
     {
+      say (xy_normalize_path ("~"));
+      say (xy_normalize_path ("~/"));
+      // xy_parent_dir() 得到的结果一定是不包含尾斜杠的目录名
+      assert_str (xy_parent_dir (xy_normalize_path ("~")), "C:\\Users");
+      assert_str (xy_parent_dir (xy_normalize_path ("~/")), "C:\\Users");
+      assert (xy_dir_exist ("C:\\Users"));
+
       say (xy_win_powershell_profile);
       say (xy_win_powershellv5_profile);
       assert (xy_file_exist (xy_win_powershell_profile));
       assert (true == xy_file_exist (xy_win_powershellv5_profile));
-      assert (xy_dir_exist ("C:\\Users"));
+
       assert_str (xy_normalize_path ("C:\\a bc\\def\\"), "C:\\a bc\\def\\");
       assert_str (xy_normalize_path ("a/b c/d"), "a\\b c\\d");
       assert_str (xy_normalize_path ("a/b c/d/"), "a\\b c\\d\\");
       assert_str (xy_parent_dir ("a/b c/d"), "a\\b c");
       assert_str (xy_parent_dir ("a/b c\\d/"), "a\\b c");
-      assert_str (xy_parent_dir (xy_normalize_path ("~/")), "C:\\Users");
-      assert_str (xy_parent_dir (xy_normalize_path ("~")), "C:\\Users");
     }
   else
     {
