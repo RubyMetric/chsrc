@@ -19,7 +19,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.1.6.0-2025/08/18"
+#define _XY_Version       "v0.1.6.1-2025/08/18"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -165,7 +165,13 @@ xy_malloc0 (size_t size)
  ******************************************************/
 
 /**
- * 将str中所有的pat字符串替换成replace，返回一个全新的字符串
+ * @brief 将 str 中所有的 pat 字符串替换成 replace，返回一个全新的字符串；也可用作删除、缩小、扩张
+ *
+ * @param str     原字符串
+ * @param pat     要替换的字符串
+ * @param replace 替换成的字符串
+ *
+ * @return 替换后的新字符串
  */
 static char *
 xy_str_gsub (const char *str, const char *pat, const char *replace)
@@ -231,6 +237,15 @@ xy_2strjoin (const char *str1, const char *str2)
   return ret;
 }
 
+
+/**
+ * @brief 将多个字符串连接成一个字符串
+ *
+ * @param count 连接的字符串数量
+ * @param ...   连接的字符串
+ *
+ * @return 拼接的新字符串
+ */
 static char *
 xy_strjoin (unsigned int count, ...)
 {
@@ -285,6 +300,14 @@ xy_strjoin (unsigned int count, ...)
   return ret;
 }
 
+
+/**
+ * @brief 复制一个字符串，返回复制的新字符串
+ *
+ * @param str 要复制的字符串
+ *
+ * @return 复制的新字符串
+ */
 static char *
 xy_strdup (const char *str)
 {
@@ -684,13 +707,15 @@ _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *c
 /******************************************************
  *                      System
  ******************************************************/
+
 /**
- * 执行cmd，返回某行输出结果，并对已经遍历过的行执行iter_func
+ * @brief 执行cmd，返回某行输出结果，并对已经遍历过的行执行iter_func
  *
  * @param  cmd        要执行的命令
  * @param   n         指定命令执行输出的结果行中的某一行，0 表示最后一行，n (n>0) 表示第n行
- *                    该函数会返回这一行的内容
  * @param  iter_func  对遍历时经过的行的内容，进行函数调用
+ *
+ * @return            该函数会返回 参数 n 指定的该行的内容
  *
  * @note 返回的字符串最后面一般有换行符号
  *
@@ -745,8 +770,7 @@ xy_run (const char *cmd, unsigned long n)
  ******************************************************/
 
  /**
- * 该函数同 just 中的 os_family()，只区分 windows, unix
- *
+ * @note 该函数同 just 中的 os_family()，只区分 windows, unix
  * @return 返回 "windows" 或 "unix"
  */
 #define xy_os_family _xy_os_family ()
@@ -761,7 +785,7 @@ _xy_os_family ()
 
 
 /**
- * 该函数返回所在 os family 的对应字符串
+ * @brief 该函数返回所在 os family 的对应字符串
  */
 static const char *
 xy_os_depend_str (const char *str_for_win, const char *str_for_unix)
@@ -773,6 +797,12 @@ xy_os_depend_str (const char *str_for_win, const char *str_for_unix)
 }
 
 
+/**
+ * @brief 返回当前操作系统的 HOME 目录
+ *
+ * @note  Windows 上返回 %USERPROFILE%，Linux 等返回 $HOME
+ * @warning Windows 上要警惕 Documents 等目录被移动位置的情况，避免使用本函数的 HOME 路径直接拼接 Documents，应参考 _xy_win_documents() 的实现
+ */
 #define xy_os_home _xy_os_home ()
 static char *
 _xy_os_home ()
@@ -786,6 +816,12 @@ _xy_os_home ()
 }
 
 
+/**
+ * @brief 返回 Windows 上的 Documents 目录
+ *
+ * @note 警告，不可使用 HOME 目录直接拼接，若用户移动了 Documents，将导致错误
+ * @warning 非 Windows 返回 NULL
+ */
 static char *
 _xy_win_documents ()
 {
@@ -806,7 +842,11 @@ _xy_win_documents ()
 #define xy_win_powershell_profile _xy_win_powershell_profile ()
 #define xy_win_powershellv5_profile _xy_win_powershellv5_profile ()
 
-// 更新 PowerShell 配置文件路径函数
+/**
+ * @brief 返回 Windows 上 pwsh (>=v5) 的配置文件路径
+ *
+ * @warning 非 Windows 返回 NULL
+ */
 static char *
 _xy_win_powershell_profile ()
 {
@@ -822,6 +862,11 @@ _xy_win_powershell_profile ()
 }
 
 
+/**
+ * @brief 返回 Windows 上自带的 powershell (v5) 的配置文件路径
+ *
+ * @warning 非 Windows 返回 NULL
+ */
 static char *
 _xy_win_powershellv5_profile ()
 {
@@ -856,8 +901,8 @@ xy_file_exist (const char *path)
 }
 
 /**
- * @note xy_file_exist() 和 xy_dir_exist() 两个函数在所有平台默认都支持使用 '~'，
- *       但实现中都没有调用 xy_normalize_path()，以防万一，调用前可能需要用户手动调用它
+ * @note `xy_file_exist()` 和 `xy_dir_exist()` 两个函数在所有平台默认都支持使用 '~'，
+ *       但实现中都没有调用 `xy_normalize_path()`，以防万一，调用前可能需要用户手动调用它
  */
 static bool
 xy_dir_exist (const char *path)
@@ -922,6 +967,11 @@ xy_normalize_path (const char *path)
     {
       new = xy_2strjoin (xy_os_home, xy_str_delete_prefix (new, "~"));
     }
+
+  // 在特殊情况下上面的替换最终可能导致形如 `/foo//bar/` 之类的东西
+  // 建议进行去重处理以防万一
+  //new = xy_str_gsub (new, "\\", "/");
+  //new = xy_str_gsub (new, "//", "/");
 
   if (xy_on_windows)
     return xy_str_gsub (new, "/", "\\");
