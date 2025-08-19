@@ -8,13 +8,15 @@
             "program": "${workspaceFolder}/chsrc-debug",
             "args": [
                 "get",
-                "python"
+                "nodejs"
             ],
             "preLaunchTask": "构建 debug 版 chsrc",
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
             "environment": [],
+            // 如果你发现你的调试输出结果可读性差，请改为 true
             "externalConsole": false,
+            // lldb 等请自行设置，不作额外说明
             "MIMode": "gdb",
             // "miDebuggerPath": "/path/to/gdb",
             "setupCommands": [

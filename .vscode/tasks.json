@@ -17,7 +17,8 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "使用 just build 编译"
+            "dependsOn": "停止程序",
+            "detail": "先停止原有程序，然后使用 just build 编译"
         },
         {
             "type": "shell",
@@ -36,7 +37,8 @@
                 "kind": "build",
                 "isDefault": false
             },
-            "detail": "使用 just build-in-debug-mode 编译 debug 版"
+            "dependsOn": "停止 debug 程序",
+            "detail": "先停止原有程序，然后使用 just build-in-debug-mode 编译 debug 版"
         },
         {
             "type": "shell",
@@ -94,6 +96,76 @@
                 "isDefault": false
             },
             "detail": "使用 just test-xy 测试 xy.h"
+        },
+        {
+            "type": "shell",
+            "label": "停止 debug 程序",
+            "windows": {
+                "command": "powershell",
+                "args": [
+                    "-c",
+                    "Get-Process -Name 'chsrc-debug' -ErrorAction SilentlyContinue | Stop-Process -Force; if ($?) { Write-Host 'chsrc-debug 程序已停止' } else { Write-Host '未找到运行中的 chsrc-debug 程序' }"
+                ]
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "if pgrep -f chsrc-debug > /dev/null; then pkill -f chsrc-debug && echo 'chsrc-debug 程序已停止'; else echo '未找到运行中的 chsrc-debug 程序'; fi"
+                ]
+            },
+            "osx": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "if pgrep -f chsrc-debug > /dev/null; then pkill -f chsrc-debug && echo 'chsrc-debug 程序已停止'; else echo '未找到运行中的 chsrc-debug 程序'; fi"
+                ]
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "detail": "停止 debug 版本的 chsrc"
+        },
+        {
+            "type": "shell",
+            "label": "停止程序",
+            "windows": {
+                "command": "powershell",
+                "args": [
+                    "-c",
+                    "Get-Process -Name 'chsrc' -ErrorAction SilentlyContinue | Stop-Process -Force; if ($?) { Write-Host 'chsrc 程序已停止' } else { Write-Host '未找到运行中的 chsrc 程序' }"
+                ]
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "if pgrep -f chsrc > /dev/null; then pkill -f chsrc && echo 'chsrc 程序已停止'; else echo '未找到运行中的 chsrc 程序'; fi"
+                ]
+            },
+            "osx": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "if pgrep -f chsrc > /dev/null; then pkill -f chsrc && echo 'chsrc 程序已停止'; else echo '未找到运行中的 chsrc 程序'; fi"
+                ]
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "detail": "跨平台停止 chsrc"
         }
     ],
     "version": "2.0.0"
