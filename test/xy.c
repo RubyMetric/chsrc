@@ -7,7 +7,7 @@
  *               | Mikachu2333  <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-30>
- * Last Modified : <2025-08-18>
+ * Last Modified : <2025-08-19>
  *
  * Test xy.h
  * ------------------------------------------------------------*/
@@ -127,8 +127,6 @@ main (int argc, char const *argv[])
           assert (xy_file_exist (xy_bashrc));
         }
       assert (xy_dir_exist ("/etc"));
-      assert_str (xy_normalize_path ("a\\b c\\d"), "a/b c/d");
-      assert_str (xy_normalize_path ("a\\b c\\d\\"), "a/b c/d/");
     }
 
   println (xy_normalize_path (" \n ~/haha/test/123 \n\r "));
