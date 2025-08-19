@@ -339,22 +339,24 @@ query_program_exist (char *check_cmd, char *prog_name, int mode)
 
 
 /**
- * @brief 生成用于 '检测一个程序是否存在' 的命令，该内部函数由 chsrc_check_program() 家族调用
+ * @brief 生成用于 '检测一个程序是否存在' 的命令，该内部函数由 `chsrc_check_program()` 家族调用
  *
- * 检查一个程序是否存在时，我们曾经使用 "调用 程序名 --version" 的方式 (即 cmd_to_check_program2())，
+ * @note Unix 中，`where` 仅在 zsh 中可以使用，sh 和 Bash 中均无法使用，因为其并非二进制程序
+ *       所以在 Unix 中，只能使用 `which` 或 `whereis`
+ * @warning 2025.8.19 部分linux系统没有 `which` 命令，故使用 `command -v` 代替
+ * 
+ * @deprecated 
+ * 曾使用 `调用程序名 --version` 的方式 (即 `cmd_to_check_program2()`)，
  * 但是该方式有三个问题：
- *
+ * 
  *  1. 该程序得到直接执行，可能不太安全 (虽然基本不可能)
  *  2. 有一些程序启动速度太慢，即使只调用 --version，也依旧会花费许多时间，比如 mvn
  *  3. 有些程序并不支持 --version 选项 (虽然基本不可能)
- *
- * @note Unix 中，where 仅在 zsh 中可以使用，sh 和 Bash 中均无法使用，因为其并非二进制程序
- *       所以在 Unix 中，只能使用 which 或 whereis
  */
 static char *
 cmd_to_check_program (char *prog_name)
 {
-  char *check_tool = xy_on_windows ?  "where " : "which ";
+  char *check_tool = xy_on_windows ?  "where " : "command -v ";
 
   char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (check_tool, prog_name));
 
