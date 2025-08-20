@@ -1236,4 +1236,79 @@ xy_seq_each (XySeq_t *seq, void (*func)(void *))
     }
 }
 
+
+#define _XY_Map_Buckets_Count 97
+
+struct _XyHashBucket_t
+{
+  struct _XyHashBucket_t *next;
+  char *key;
+  void *value;
+};
+
+typedef struct XyMap_t
+{
+  struct _XyHashBucket_t **buckets;
+
+  uint32_t length;
+}
+XyMap_t;
+
+
+XyMap_t *
+xy_map_new ()
+{
+  XyMap_t *map = xy_malloc0 (sizeof (XyMap_t));
+  map->buckets = xy_malloc0 (sizeof (struct _XyHashBucket_t *) * _XY_Map_Buckets_Count);
+
+  map->length = 0;
+
+  return map;
+}
+
+
+unsigned long
+xy_hash (const char* str)
+{
+  unsigned long h = 5381;
+  int c;
+  while ((c = *str++))
+    h = ((h << 5) + h) + c; /* h * 33 + c */
+  return h;
+}
+
+
+void
+xy_map_set (XyMap_t *map, const char *key, void *value)
+{
+  xy_cant_be_null (map);
+  xy_cant_be_null (key);
+
+  unsigned long hash = xy_hash (key);
+  uint32_t index = hash % _XY_Map_Buckets_Count;
+
+  // 若 key 已经存在
+  _XyHashBucket_t *maybe = map->buckets[index];
+  while (maybe)
+    {
+      if (xy_streql (maybe->key, key))
+        {
+          maybe->value = value;
+          return;
+        }
+      maybe = maybe->next;
+    }
+
+  // 若 key 不存在
+  _XyHashBucket_t *bucket = xy_malloc0 (sizeof (struct _XyHashBucket_t));
+
+  bucket->key = xy_strdup (key);
+  bucket->value = value;
+  bucket->next = map->buckets[index];
+  map->buckets[index] = bucket;
+
+  map->length++;
+}
+
+
 #endif
