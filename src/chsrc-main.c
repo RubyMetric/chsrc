@@ -1,42 +1,15 @@
 /** ------------------------------------------------------------
- * Copyright © 2023-2025 Aoran Zeng, Heng Guo
+ * Copyright © 2023-2025 曾奥然, 郭恒
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * Project Name    :     chsrc
- * Project Authors :   Aoran Zeng   <ccmywish@qq.com>
- *                 |    Heng Guo    <2085471348@qq.com>
- * Contributors    :   Aaron Ruan   <aaron212cn@outlook.com>
- *                 |    Rui Chen    <rui@chenrui.dev>
- *                 |  Shengwei Chen <414685209@qq.com>
- *                 |    BlockLune   <blocklune@gmail.com>
- *                 |    Mr. Will    <mr.will.com@outlook.com>
- *                 |    Terrasse    <terrasse@qq.com>
- *                 |    Lontten     <lontten@163.com>
- *                 |   happy game   <happygame1024@gmail.com>
- *                 |    Word2VecT   <tangzinan@bupt.edu.cn>
- *                 |     xuan       <wick.dynex@qq.com>
- *                 |    GnixAij     <gaojiaxing0220@gmail.com>
- *                 |    ChatGPT     <https://chatgpt.com>
- *                 |     czyt       <czyt.go@gmail.com>
- *                 |     zouri      <guoshuaisun@outlook.com>
- *                 |   yongxiang    <1926885268@qq.com>
- *                 |     YU-7       <2747046473@qq.com>
- *                 |    juzeon      <skyjuzheng@gmail.com>
- *                 |  Jialin Lyu    <jialinlvcn@aliyun.com>
- *                 | GitHub Copilot <https://github.com/copilot>
- *                 |     ccy        <icuichengyi@gmail.com>
- *                 |  MadDogOwner   <xiaoran@xrgzs.top>
- *                 |  sanchuanhehe  <wyihe5520@gmail.com>
- *                 |  Mikachu2333   <mikachu.23333@zohomail.com>
- *                 |   Rui Yang     <techoc@foxmail.com>
- *                 |  BingChunMoLi  <bingchunmoli@bingchunmoli.com>
- *                 |
- * Created On      : <2023-08-28>
- * Last Modified   : See <Chsrc_Release_Date>
  *
- * chsrc: Change Source —— 全平台通用命令行换源工具
+ *                chsrc: Change Source
+ *
+ *               全平台通用换源工具与框架
+ *
  * ------------------------------------------------------------*/
 
+#define Chsrc_Initial_Date   "2023-08-28"
 #define Chsrc_Version        "0.2.2.3"
 #define Chsrc_Release_Date   "2025/08/11"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
@@ -45,101 +18,39 @@
 #include "framework/core.c"
 #include "framework/chef.c"
 
-
-#include "recipe/lang/rawstr4c.h"
-
-#include "recipe/lang/Ruby/Ruby.c"
-#include "recipe/lang/Python/common.h"
- #include "recipe/lang/Python/pip.c"
-  #include "recipe/lang/Python/Poetry.c"
-  #include "recipe/lang/Python/PDM.c"
-  #include "recipe/lang/Python/Rye.c"
-  #include "recipe/lang/Python/uv.c"
-#include "recipe/lang/Python/Python.c"
-
-#include "recipe/lang/JavaScript/common.h"
-  #include "recipe/lang/JavaScript/npm.c"
-  #include "recipe/lang/JavaScript/pnpm.c"
-  #include "recipe/lang/JavaScript/Yarn.c"
-#include "recipe/lang/JavaScript/JavaScript.c"
-#include "recipe/lang/JavaScript/Bun.c"
-#include "recipe/lang/JavaScript/nvm.c"
-
-#include "recipe/lang/Perl.c"
-#include "recipe/lang/PHP.c"
-#include "recipe/lang/Lua.c"
-#include "recipe/lang/Go.c"
-#include "recipe/lang/Java.c"
-
-#include "recipe/lang/Rust/common.h"
-  #include "recipe/lang/Rust/rustup.c"
-  #include "recipe/lang/Rust/Cargo.c"
-
-#include "recipe/lang/Dart/common.h"
-#include "recipe/lang/Dart/Pub.c"
-#include "recipe/lang/Dart/Flutter.c"
-
-#include "recipe/lang/Haskell.c"
-#include "recipe/lang/OCaml.c"
-#include "recipe/lang/R.c"
-#include "recipe/lang/Julia.c"
-#include "recipe/lang/NuGet.c"
-#include "recipe/lang/Clojure.c"
-
-
-#include "recipe/os/rawstr4c.h"
-#include "recipe/os/APT/common.h"
-// Debian-based
-#include "recipe/os/APT/Debian.c"
-#include "recipe/os/APT/Ubuntu.c"
-#include "recipe/os/APT/Kali-Linux.c"
-#include "recipe/os/APT/Raspberry-Pi-OS.c"
-// Ubuntu-based
-#include "recipe/os/APT/Linux-Mint.c"
-#include "recipe/os/APT/Trisquel.c"
-#include "recipe/os/APT/Linux-Lite.c"
-// Debian-based and Ubuntu-based
-#include "recipe/os/APT/Armbian.c"
-// Independent
-#include "recipe/os/APT/ROS.c"
-#include "recipe/os/APT/Termux.c"
-#include "recipe/os/APT/openKylin.c"
-#include "recipe/os/APT/deepin.c"
-
-#include "recipe/os/YUM/common.h"
-#include "recipe/os/YUM/Fedora-Linux.c"
-#include "recipe/os/YUM/AlmaLinux.c"
-#include "recipe/os/YUM/Rocky-Linux.c"
-#include "recipe/os/YUM/openEuler.c"
-#include "recipe/os/YUM/Anolis-OS.c"
-
-#include "recipe/os/pacman/Arch-Linux.c"
-#include "recipe/os/pacman/Manjaro-Linux.c"
-#include "recipe/os/pacman/MSYS2.c"
-
-#include "recipe/os/openSUSE.c"
-#include "recipe/os/Alpine-Linux.c"
-#include "recipe/os/Gentoo-Linux.c"
-#include "recipe/os/Void-Linux.c"
-#include "recipe/os/Solus.c"
-#include "recipe/os/OpenWrt.c"
-
-#include "recipe/os/BSD/FreeBSD.c"
-#include "recipe/os/BSD/NetBSD.c"
-#include "recipe/os/BSD/OpenBSD.c"
-
-
-#include "recipe/ware/TeX-Live.c"
-#include "recipe/ware/Emacs.c"
-#include "recipe/ware/WinGet.c"
-#include "recipe/ware/Homebrew/Homebrew.c"
-#include "recipe/ware/CocoaPods.c"
-#include "recipe/ware/Nix.c"
-#include "recipe/ware/Guix.c"
-#include "recipe/ware/Flatpak.c"
-#include "recipe/ware/Docker/Docker.c"
-#include "recipe/ware/Anaconda/Anaconda.c"
-
+void
+chsrc_register_contributors ()
+{
+  /* 项目创建者 */
+  chef_register_contributor ("@ccmywish",       "曾奥然",         "ccmywish@qq.com",                NULL);
+  chef_register_contributor ("@G_I_Y",          "郭恒",           "2085471348@qq.com",              NULL);
+  /* 所有贡献者 (按参与贡献时间排序) */
+  chef_register_contributor ("@Aaron-212",      "Aaron Ruan",     "aaron212cn@outlook.com",         NULL);
+  chef_register_contributor ("@chenrui333",     "Rui Chen",       "rui@chenrui.dev",                NULL);
+  chef_register_contributor ("@livelycode36",   "Shengwei Chen",  "414685209@qq.com",               NULL);
+  chef_register_contributor ("@BlockLune",      "BlockLune",      "blocklune@gmail.com",            NULL);
+  chef_register_contributor ("@MrWillCom",      "Mr. Will",       "mr.will.com@outlook.com",        NULL);
+  chef_register_contributor ("@Jerry-Terrasse", "Terrasse",       "terrasse@qq.com",                NULL);
+  chef_register_contributor ("@lontten",        "Lontten",        "lontten@163.com",                NULL);
+  chef_register_contributor ("@happy-game",     "Happy Game",     "happygame1024@gmail.com",        NULL);
+  chef_register_contributor ("@Word2VecT",      "Word2VecT",      "tangzinan@bupt.edu.cn",          NULL);
+  chef_register_contributor ("@wickdynex",      "Xuan",           "wick.dynex@qq.com",              NULL);
+  chef_register_contributor ("@Efterklang",     "GnixAij",        "gaojiaxing0220@gmail.com",       NULL);
+  chef_register_contributor ("@ChatGPT",        "ChatGPT",        "chatgpt.com",                    NULL);
+  chef_register_contributor ("@czyt",           "czyt",           "czyt.go@gmail.com",              NULL);
+  chef_register_contributor ("@zouri",          "Zouri",          "guoshuaisun@outlook.com",        NULL);
+  chef_register_contributor ("@xyx1926885268",  "Yongxiang",      "1926885268@qq.com",              NULL);
+  chef_register_contributor ("@YU-7",           "YU-7",           "2747046473@qq.com",              NULL);
+  chef_register_contributor ("@juzeon",         "juzeon",         "skyjuzheng@gmail.com",           NULL);
+  chef_register_contributor ("@jialinlvcn",     "Jialin Lyu",     "jialinlvcn@aliyun.com",          NULL);
+  chef_register_contributor ("@GitHub Copilot", "GitHub Copilot", "github.com/copilot",             NULL);
+  chef_register_contributor ("@Kattos",         "ccy",            "icuichengyi@gmail.com",          NULL);
+  chef_register_contributor ("@xrgzs",          "MadDogOwner",    "xiaoran@xrgzs.top",              NULL);
+  chef_register_contributor ("@sanchuanhehe",   "sanchuanhehe",   "wyihe5520@gmail.com",            NULL);
+  chef_register_contributor ("@Mikachu2333",    "Mikachu2333",    "mikachu.23333@zohomail.com",     NULL);
+  chef_register_contributor ("@techoc",         "Rui Yang",       "techoc@foxmail.com",             NULL);
+  chef_register_contributor ("@BingChunMoLi",   "BingChunMoLi",   "bingchunmoli@bingchunmoli.com",  NULL);
+}
 
 #include "recipe/menu.c"
 
@@ -610,6 +521,8 @@ get_target (const char *input, TargetOp code, char *option)
   if (!matched) matched = iterate_menu (chsrc_wr_menu, input, &target);
 
   if (!matched) return false;
+
+  chsrc_register_contributors ();
 
   if (TargetOp_Set_Source==code)
     {
