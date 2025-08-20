@@ -39,7 +39,7 @@
  * ------------------------------------------------------------*/
 
 #define Chsrc_Version        "0.2.2.3-dev5"
-#define Chsrc_Release_Date   "2025/08/20"
+#define Chsrc_Release_Date   "2025/08/21"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
@@ -635,7 +635,7 @@ get_target (const char *input, TargetOp code, char *option)
 int
 main (int argc, char const *argv[])
 {
-  chsrc_framework_prelude ();
+  chsrc_framework_init ();
 
   argc -= 1;
 

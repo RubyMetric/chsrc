@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-08-20>
+ * Last Modified : <2025-08-21>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -210,9 +210,9 @@ chsrc_alert2 (const char *str)
 
 
 void
-chsrc_framework_prelude ()
+chsrc_framework_init ()
 {
-  xy_use_utf8 ();
+  xy_init ();
 
   ProgStatus.contributors = xy_map_new ();
 }
