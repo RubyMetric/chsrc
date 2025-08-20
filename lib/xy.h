@@ -8,7 +8,7 @@
  *               | Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-08-20>
+ * Last Modified : <2025-08-21>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -22,7 +22,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.1.7.0-2025/08/20"
+#define _XY_Version       "v0.1.7.0-2025/08/21"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <dirent.h> // opendir() closedir()
 
 #if defined(__STDC__) && __STDC_VERSION__ >= 202311
   #define XY_Deprecate_This(msg) [[deprecated(msg)]]
@@ -56,55 +57,37 @@
 #endif
 
 
-/* Global */
+/* 全局变量 */
 bool xy_enable_color = true;
+
+/* 由 xy_init() 赋值 */
+bool xy_on_windows = false;
+bool xy_on_linux = false;
+bool xy_on_macos = false;
+bool xy_on_bsd = false;
+bool xy_on_android = false;
+
+char *xy_os_devnull = NULL;
 
 // #define NDEBUG
 
 #ifdef _WIN32
   #define XY_Build_On_Windows 1
 
-  #define xy_on_windows true
-  #define xy_on_linux false
-  #define xy_on_macos false
-  #define xy_on_bsd false
-  #define xy_os_devnull "nul"
   #include <windows.h>
   #include <shlobj.h>
-  #define xy_use_utf8() SetConsoleOutputCP (65001)
 
 #elif defined(__linux__) || defined(__linux)
   #define XY_Build_On_Linux 1
   #define XY_Build_On_Unix  1
 
-  #define xy_on_windows false
-  #define xy_on_linux true
-  #define xy_on_macos false
-  #define xy_on_bsd false
-  #define xy_os_devnull "/dev/null"
-  #define xy_use_utf8()
-
 #elif defined(__APPLE__)
   #define XY_Build_On_macOS 1
   #define XY_Build_On_Unix  1
 
-  #define xy_on_windows false
-  #define xy_on_linux false
-  #define xy_on_macos true
-  #define xy_on_bsd false
-  #define xy_os_devnull "/dev/null"
-  #define xy_use_utf8()
-
 #elif defined(__OpenBSD__) || defined(__NetBSD__) || defined(__FreeBSD__)
   #define XY_Build_On_BSD  1
   #define XY_Build_On_Unix 1
-
-  #define xy_on_windows false
-  #define xy_on_linux false
-  #define xy_on_macos false
-  #define xy_on_bsd true
-  #define xy_os_devnull "/dev/null"
-  #define xy_use_utf8()
 #endif
 
 #define assert_str(a, b) assert (xy_streql ((a), (b)))
@@ -661,7 +644,7 @@ _xy_log (int level, const char *prompt, const char *content)
     }
   else
     {
-      // xy_assert ("CAN'T REACH!");
+      xy_unreached();
     }
 
   if (to_stderr)
@@ -747,7 +730,7 @@ _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *c
     }
   else
     {
-      // xy_assert ("CAN'T REACH!");
+      xy_unreached();
     }
 
   if (to_stderr)
@@ -1108,6 +1091,105 @@ xy_parent_dir (const char *path)
     return dir;
 }
 
+
+
+void
+xy_detect_os ()
+{
+  // C:
+  char *drive = getenv ("SystemDrive");
+  if (drive)
+    {
+      char path[256];
+      snprintf (path, sizeof (path), "%s\\Users", drive);
+      DIR *d = opendir (path);
+      if (d)
+        {
+          xy_on_windows = true;
+          closedir (d);
+          return;
+        }
+    }
+
+  FILE *fp = fopen ("/proc/version", "r");
+  if (fp)
+    {
+      char buf[256] = {0};
+      fread (buf, 1, sizeof(buf) - 1, fp);
+      fclose (fp);
+      if (strstr (buf, "Android"))
+        {
+          xy_on_android = true;
+          return;
+        }
+      else if (strstr (buf, "Linux"))
+        {
+          xy_on_linux = true;
+          return;
+        }
+    }
+
+  /* 判断 macOS */
+  DIR *d = opendir ("/System/Applications");
+  if (d)
+    {
+      closedir (d);
+      d = opendir ("/Library/Apple");
+      if (d)
+        {
+          xy_on_macos = true;
+          closedir (d);
+        }
+    }
+
+  /* 最后判断 BSD */
+  fp = popen ("uname -s", "r");
+  if (!fp)
+    {
+      if (opendir ("/etc/rc.d"))
+        {
+          closedir (d);
+          xy_on_bsd = true;
+          return;
+        }
+    }
+  else
+    {
+      char buf[256];
+      fgets (buf, sizeof (buf), fp);
+      pclose (fp);
+      if (strstr (buf, "BSD")  != NULL)
+        xy_on_bsd = true;
+    }
+
+  assert (xy_on_windows || xy_on_linux || xy_on_android || xy_on_macos || xy_on_bsd);
+}
+
+
+void
+xy_use_utf8 ()
+{
+#ifdef XY_Build_On_Windows
+  SetConsoleOutputCP (65001);
+#endif
+}
+
+
+/**
+ * @note 该函数必须被首先调用，方能使用各个跨操作系统的函数
+ */
+void
+xy_init ()
+{
+  xy_detect_os ();
+
+  if (xy_on_windows)
+    xy_os_devnull = "nul";
+  else
+    xy_os_devnull = "/dev/null";
+
+  xy_use_utf8 ();
+}
 
 
 /******************************************************
