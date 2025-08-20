@@ -125,7 +125,7 @@ pl_python_uv_setsrc (char *option)
 
   const char *source_content = xy_str_gsub (RAWSTR_pl_python_uv_config_source_content, "@url@", source.url);
 
-#if defined(XY_On_macOS) || defined(XY_On_BSD)
+#if defined(XY_Build_On_macOS) || defined(XY_Build_On_BSD)
   char *sed_cmd = "sed -i '' ";
 #else
   char *sed_cmd = "sed -i ";

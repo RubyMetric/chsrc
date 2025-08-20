@@ -62,7 +62,7 @@ pl_rust_rustup_setsrc (char *option)
 {
   use_this_source(pl_rust_rustup);
 
-#ifdef XY_On_Windows
+#ifdef XY_Build_On_Windows
 
   char *cmd1 = xy_strcat (3, "setx RUSTUP_DIST_SERVER \"", source.url, "\"");
   char *cmd2 = xy_strcat (3, "setx RUSTUP_UPDATE_ROOT \"", source.url, "/rustup\"");

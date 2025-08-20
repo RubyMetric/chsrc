@@ -1338,7 +1338,7 @@ chsrc_run_as_a_service (const char *cmd)
 FILE *
 chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilename)
 {
-#ifdef XY_On_Windows
+#ifdef XY_Build_On_Windows
   /**
    * Windows 上没有 mkstemps()，只有 mkstemp() 和 _mktemp_s()，这后两者效果是等价的，只不过传参不同，
    * 这意味着我们无法给一个文件名后缀（postfix），只能生成一个临时文件名
@@ -1489,7 +1489,7 @@ chsrc_view_env (const char *var1, ...)
   bool first = true;
   while (var)
     {
-#ifdef XY_On_Windows
+#ifdef XY_Build_On_Windows
       if (first)
         {
           cmd = xy_strcat (3, "set ", var, " ");
@@ -1757,7 +1757,7 @@ chsrc_get_cpuarch ()
   char *ret;
   char *msg;
 
-#if XY_On_Windows
+#if XY_Build_On_Windows
   SYSTEM_INFO info;
   GetSystemInfo (&info);
   WORD num = info.wProcessorArchitecture;
@@ -1810,7 +1810,7 @@ chsrc_get_cpucore ()
 {
   int cores = 2;
 
-#if XY_On_Windows
+#if XY_Build_On_Windows
   SYSTEM_INFO info;
   GetSystemInfo (&info);
   DWORD num = info.dwNumberOfProcessors;
