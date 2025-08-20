@@ -1,18 +1,23 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: MIT
  * -------------------------------------------------------------
- * File Name     : xy.c
- * File Authors  : Aoran Zeng   <ccmywish@qq.com>
- * Contributors  :   Nil Null   <nil@null.org>
- *               | Mikachu2333  <mikachu.23333@zohomail.com>
- *               |
+ * Test File     : xy.c
+ * Test Authors  : 曾奥然 <ccmywish@qq.com>
+ * Contributors  : Mikachu2333  <mikachu.23333@zohomail.com>
  * Created On    : <2023-08-30>
- * Last Modified : <2025-08-19>
+ * Last Modified : <2025-08-20>
  *
  * Test xy.h
  * ------------------------------------------------------------*/
 
 #include "xy.h"
+
+void
+print_str (void *str)
+{
+  print ((char *) str);
+}
+
 
 int
 main (int argc, char const *argv[])
@@ -131,6 +136,18 @@ main (int argc, char const *argv[])
 
   println (xy_normalize_path (" \n ~/haha/test/123 \n\r "));
   assert_str (xy_normalize_path ("~/haha/test"), xy_parent_dir (" ~/haha/test/123"));
+
+
+
+  XySeq_t *seq = xy_seq_new ();
+  xy_seq_push (seq, "Hello");
+  xy_seq_push (seq, "World");
+  assert_str ("Hello", xy_seq_at (seq, 1));
+  assert_str ("World", xy_seq_at (seq, 2));
+  xy_seq_each (seq, print_str);
+  xy_seq_pop (seq);
+  assert (1 == xy_seq_len (seq));
+
 
   xy_succ ("测试完成", "xy.h 测试全部通过");
 
