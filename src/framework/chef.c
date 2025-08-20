@@ -2,10 +2,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Name     : chef.c
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nul None  <nul@none.org>
+ * File Authors  : 曾奥然 <ccmywish@qq.com>
+ * Contributors  : Nul None <nul@none.org>
  * Created On    : <2025-08-09>
- * Last Modified : <2025-08-11>
+ * Last Modified : <2025-08-20>
  *
  * chef DSL: for chefs (recipe makers) to define a target
  * ------------------------------------------------------------*/
@@ -16,6 +16,31 @@
 #define chef_allow_s(t)   this->getfn = NULL;       this->setfn = t##_setsrc; this->resetfn = NULL;
 #define chef_allow_sr(t)  this->getfn = NULL;       this->setfn = t##_setsrc; this->resetfn = t##_resetsrc;
 #define chef_allow_gs(t)  this->getfn = t##_getsrc; this->setfn = t##_setsrc; this->resetfn = NULL;
+
+/**
+ * @brief 登记所有贡献者
+ *
+ * @param     id       贡献者 ID，这个ID最好是GitHub用户名，但也可以不是，只需要在 chsrc 内部进行区分即可
+ * @param display_name 如果没有提供该参数，则使用 name
+ */
+void
+chef_register_contributor (char *id, char *name, char *email, char *display_name)
+{
+  if (!id || !name || !email)
+    xy_unreached();
+
+  Contributor_t *contributor = xy_malloc0 (sizeof (Contributor_t));
+  contributor->id = xy_strdup (id);
+  contributor->name = xy_strdup (name);
+  contributor->email = xy_strdup (email);
+
+  if (!display_name)
+    contributor->display_name = xy_strdup (name);
+  else
+    contributor->display_name = xy_strdup (display_name);
+
+  xy_map_set (ProgStatus.contributors, id, contributor);
+}
 
 
 /**
