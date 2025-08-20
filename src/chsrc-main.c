@@ -51,6 +51,7 @@ chsrc_register_contributors ()
   chef_register_contributor ("@Mikachu2333",    "Mikachu2333",    "mikachu.23333@zohomail.com",     NULL);
   chef_register_contributor ("@techoc",         "Rui Yang",       "techoc@foxmail.com",             NULL);
   chef_register_contributor ("@BingChunMoLi",   "BingChunMoLi",   "bingchunmoli@bingchunmoli.com",  NULL);
+  chef_register_contributor ("@hezonglun",      "HeZongLun",      "hezonglun123456@outlook.com",    NULL);
 }
 
 #include "recipe/menu.c"
