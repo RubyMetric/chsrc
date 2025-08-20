@@ -2,7 +2,6 @@
  * Copyright © 2023-2025 Aoran Zeng, Heng Guo
  * SPDX-License-Identifier: MIT
  * -------------------------------------------------------------
- * Lib Name      :   xy.h
  * Lib Authors   :  曾奥然  <ccmywish@qq.com>
  *               |   郭恒   <2085471348@qq.com>
  * Contributors  :   juzeon <skyjuzheng@gmail.com>
@@ -23,7 +22,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.1.6.0-2025/08/18"
+#define _XY_Version       "v0.1.7.0-2025/08/20"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -71,7 +70,7 @@ bool xy_enable_color = true;
   #define xy_os_devnull "nul"
   #include <windows.h>
   #include <shlobj.h>
-  #define xy_useutf8() SetConsoleOutputCP (65001)
+  #define xy_use_utf8() SetConsoleOutputCP (65001)
 
 #elif defined(__linux__) || defined(__linux)
   #define XY_On_Linux 1
@@ -80,7 +79,7 @@ bool xy_enable_color = true;
   #define xy_on_macos false
   #define xy_on_bsd false
   #define xy_os_devnull "/dev/null"
-  #define xy_useutf8()
+  #define xy_use_utf8()
 
 #elif defined(__APPLE__)
   #define XY_On_macOS 1
@@ -89,7 +88,7 @@ bool xy_enable_color = true;
   #define xy_on_macos true
   #define xy_on_bsd false
   #define xy_os_devnull "/dev/null"
-  #define xy_useutf8()
+  #define xy_use_utf8()
 
 #elif defined(__OpenBSD__) || defined(__NetBSD__) || defined(__FreeBSD__)
   #define XY_On_BSD 1
@@ -98,7 +97,7 @@ bool xy_enable_color = true;
   #define xy_on_macos false
   #define xy_on_bsd true
   #define xy_os_devnull "/dev/null"
-  #define xy_useutf8()
+  #define xy_use_utf8()
 #endif
 
 #define assert_str(a, b) assert (xy_streql ((a), (b)))

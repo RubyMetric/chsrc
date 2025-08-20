@@ -2,14 +2,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Name     : core.c
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- *               |  Heng Guo  <2085471348@qq.com>
+ * File Authors  : 曾奥然 <ccmywish@qq.com>
+ *               |  郭恒  <2085471348@qq.com>
  * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
  *               | Happy Game <happygame10124@gmail.com>
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-08-10>
+ * Last Modified : <2025-08-20>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -212,7 +212,7 @@ chsrc_alert2 (const char *str)
 void
 chsrc_framework_prelude ()
 {
-  xy_useutf8 ();
+  xy_use_utf8 ();
 
   ProgStatus.contributors = xy_map_new ();
 }
