@@ -1237,6 +1237,7 @@ xy_seq_each (XySeq_t *seq, void (*func)(void *))
 }
 
 
+
 #define _XY_Map_Buckets_Count 97
 
 struct _XyHashBucket_t
@@ -1267,6 +1268,14 @@ xy_map_new ()
 }
 
 
+uint32_t
+xy_map_len (XyMap_t *map)
+{
+  xy_cant_be_null (map);
+  return map->length;
+}
+
+
 unsigned long
 xy_hash (const char* str)
 {
@@ -1278,6 +1287,9 @@ xy_hash (const char* str)
 }
 
 
+/**
+ * @flavor JavaScript: map.set
+ */
 void
 xy_map_set (XyMap_t *map, const char *key, void *value)
 {
@@ -1288,7 +1300,7 @@ xy_map_set (XyMap_t *map, const char *key, void *value)
   uint32_t index = hash % _XY_Map_Buckets_Count;
 
   // 若 key 已经存在
-  _XyHashBucket_t *maybe = map->buckets[index];
+  struct _XyHashBucket_t *maybe = map->buckets[index];
   while (maybe)
     {
       if (xy_streql (maybe->key, key))
@@ -1300,7 +1312,7 @@ xy_map_set (XyMap_t *map, const char *key, void *value)
     }
 
   // 若 key 不存在
-  _XyHashBucket_t *bucket = xy_malloc0 (sizeof (struct _XyHashBucket_t));
+  struct _XyHashBucket_t *bucket = xy_malloc0 (sizeof (struct _XyHashBucket_t));
 
   bucket->key = xy_strdup (key);
   bucket->value = value;
@@ -1308,6 +1320,53 @@ xy_map_set (XyMap_t *map, const char *key, void *value)
   map->buckets[index] = bucket;
 
   map->length++;
+}
+
+
+/**
+ * @flavor JavaScript: map.get
+ */
+void *
+xy_map_get (XyMap_t *map, const char *key)
+{
+  xy_cant_be_null (map);
+  xy_cant_be_null (key);
+
+  unsigned long hash = xy_hash (key);
+  uint32_t index = hash % _XY_Map_Buckets_Count;
+
+  struct _XyHashBucket_t *maybe = map->buckets[index];
+  while (maybe)
+    {
+      if (xy_streql (maybe->key, key))
+        {
+          return maybe->value;
+        }
+      maybe = maybe->next;
+    }
+
+  return NULL;
+}
+
+
+/**
+ * @flavor Ruby: Hash#each
+ */
+void
+xy_map_each (XyMap_t *map, void (*func)(const char *key, void *value))
+{
+  xy_cant_be_null (map);
+  xy_cant_be_null (func);
+
+  for (uint32_t i = 0; i < _XY_Map_Buckets_Count; i++)
+    {
+      struct _XyHashBucket_t *bucket = map->buckets[i];
+      while (bucket)
+        {
+          func (bucket->key, bucket->value);
+          bucket = bucket->next;
+        }
+    }
 }
 
 
