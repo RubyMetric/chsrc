@@ -10,8 +10,8 @@
  * ------------------------------------------------------------*/
 
 #define Chsrc_Initial_Date   "2023-08-28"
-#define Chsrc_Version        "0.2.2.3"
-#define Chsrc_Release_Date   "2025/08/11"
+#define Chsrc_Version        "0.2.2.3-dev5"
+#define Chsrc_Release_Date   "2025/08/20"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
@@ -28,6 +28,7 @@ chsrc_register_contributors ()
   chef_register_contributor ("@Aaron-212",      "Aaron Ruan",     "aaron212cn@outlook.com",         NULL);
   chef_register_contributor ("@chenrui333",     "Rui Chen",       "rui@chenrui.dev",                NULL);
   chef_register_contributor ("@livelycode36",   "Shengwei Chen",  "414685209@qq.com",               NULL);
+  chef_register_contributor ("@Gn3po4g",        "Peng Gao",       "gn3po4g@outlook.com",            NULL);
   chef_register_contributor ("@BlockLune",      "BlockLune",      "blocklune@gmail.com",            NULL);
   chef_register_contributor ("@MrWillCom",      "Mr. Will",       "mr.will.com@outlook.com",        NULL);
   chef_register_contributor ("@Jerry-Terrasse", "Terrasse",       "terrasse@qq.com",                NULL);
