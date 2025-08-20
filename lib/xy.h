@@ -1,10 +1,10 @@
 /** ------------------------------------------------------------
- * Copyright © 2023-2025 Aoran Zeng, Heng Guo
+ * Copyright © 2023-2025 曾奥然, 郭恒
  * SPDX-License-Identifier: MIT
  * -------------------------------------------------------------
- * Lib Authors   :  曾奥然  <ccmywish@qq.com>
- *               |   郭恒   <2085471348@qq.com>
- * Contributors  :   juzeon <skyjuzheng@gmail.com>
+ * Lib Authors   :  曾奥然 <ccmywish@qq.com>
+ *               |   郭恒  <2085471348@qq.com>
+ * Contributors  :  juzeon <skyjuzheng@gmail.com>
  *               | Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-28>
