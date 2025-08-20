@@ -24,7 +24,7 @@ pl_perl_prelude ()
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&UpstreamProvider,  NULL, DelegateToUpstream},
+  {&UpstreamProvider, "https://www.cpan.org/", DelegateToUpstream},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/CPAN/", DelegateToMirror},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CPAN/", DelegateToMirror},
   {&Bjtu,             "https://mirror.bjtu.edu.cn/cpan/",  DelegateToMirror},
