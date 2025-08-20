@@ -2,18 +2,22 @@
  * Copyright © 2023-2025 Aoran Zeng, Heng Guo
  * SPDX-License-Identifier: MIT
  * -------------------------------------------------------------
- * Lib Name      :    xy.h
- * Lib Authors   : Aoran Zeng  <ccmywish@qq.com>
- *               |  Heng Guo   <2085471348@qq.com>
- * Contributors  :   juzeon    <skyjuzheng@gmail.com>
+ * Lib Name      :   xy.h
+ * Lib Authors   :  曾奥然  <ccmywish@qq.com>
+ *               |   郭恒   <2085471348@qq.com>
+ * Contributors  :   juzeon <skyjuzheng@gmail.com>
  *               | Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-08-18>
+ * Last Modified : <2025-08-20>
  *
- * xy: 襄阳、咸阳
- * Corss-Platform C11 utilities for CLI applications in mixed
- * flavor (mostly Ruby)
+ *
+ *                     xy: 襄阳、咸阳
+ *
+ * 为跨平台命令行应用程序准备的 C11 实用函数和宏 (utilities)
+ *
+ * 该库的特点是混合多种编程语言风味 (绝大多数为 Ruby)，每个 API
+ * 均使用 @flavor 标注其参考依据
  * ------------------------------------------------------------*/
 
 #ifndef XY_H
@@ -145,8 +149,11 @@ static void _xy_println_const_str (const char *str) {printf ("%s\n", str);}
   const char *:   _xy_println_const_str, \
   default:   assert(!"Unsupported type for println()/say()!") \
 )(x)
+/* @flavor Perl/Raku */
 #define say println
-
+/* @flavor PHP */
+#define echo println
+/* @flavor HTML */
 void br ()                   { puts (""); }
 void p (const char *s)       { printf ("%s\n", s); }
 
