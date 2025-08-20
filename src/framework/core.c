@@ -1509,7 +1509,7 @@ chsrc_view_env (const char *var1, ...)
        */
       // chsrc_run (cmd, RunOpt_Dont_Notify_On_Success|RunOpt_No_Last_New_Line|RunOpt_Dont_Abort_On_Failure);
       int status = system (cmd);
-      if (status!=0) {/* NOOP */}
+      if (status!=0) { xy_noop(); }
     }
   else
     {

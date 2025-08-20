@@ -102,6 +102,7 @@ bool xy_enable_color = true;
 #define xy_unsupported()    assert(!"Unsuppoted")
 #define xy_unimplemented()  assert(!"Unimplemented temporarily")
 #define xy_unreached()      assert(!"This code shouldn't be reached")
+#define xy_noop()           (void)0
 
 static void _xy_print_int    (int n) {printf ("%d", n);}
 static void _xy_print_long   (long n) {printf ("%ld", n);}
