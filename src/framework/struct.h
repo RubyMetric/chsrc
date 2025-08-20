@@ -7,7 +7,7 @@
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-08-11>
+ * Last Modified : <2025-08-20>
  *
  * chsrc struct
  * ------------------------------------------------------------*/
@@ -109,8 +109,10 @@ Capability_t;
 
 typedef struct Contributor_t
 {
-  char *name;
+  char *id;     /* 全局唯一贡献者标识符，防止反复写信息，以 @ 开头 */
+  char *name;   /* 贡献者姓名; 鉴于该项目完全依赖于贡献者，建议留下真实姓名或者昵称 */
   char *email;
+  char *display_name; /* recipe 结束时会显示贡献者信息，如果你不愿显示真实姓名或者昵称，可以另外提供一个名字 */
 }
 Contributor_t;
 
