@@ -1094,7 +1094,7 @@ XySeqItem_t;
 
 
 XySeq_t*
-xy_new_seq (void)
+xy_seq_new (void)
 {
   XySeq_t *seq = xy_malloc0 (sizeof (XySeq_t));
   if (!seq) return NULL;
@@ -1104,6 +1104,35 @@ xy_new_seq (void)
   seq->length = 0;
 
   return seq;
+}
+
+/**
+ * @flavor Python: len()
+ */
+uint32_t
+xy_seq_len (XySeq_t *seq)
+{
+  return seq->length;
+}
+
+/**
+ * @flavor Ruby: Enumerable#first
+ */
+void *
+xy_seq_first (XySeq_t *seq)
+{
+  if (!seq) return NULL;
+  return seq->first_item ? seq->first_item->data : NULL;
+}
+
+/**
+ * @flavor Ruby: Enumerable#last
+ */
+void *
+xy_seq_last (XySeq_t *seq)
+{
+  if (!seq) return NULL;
+  return seq->last_item ? seq->last_item->data : NULL;
 }
 
 
@@ -1162,6 +1191,21 @@ xy_seq_pop (XySeq_t *seq)
   void *data = l->data;
   free (l);
   return data;
+}
+
+
+/**
+ * @flavor Ruby: Array#each
+ */
+void
+xy_seq_each (XySeq_t *seq, void (*func)(void *))
+{
+  if (!seq || !func) return;
+
+  for (XySeqItem_t *it = seq->first_item; it; it = it->next)
+    {
+      func (it->data);
+    }
 }
 
 #endif
