@@ -688,10 +688,13 @@ get_target (const char *input, TargetOp code, char *option)
 }
 
 
+
 int
 main (int argc, char const *argv[])
 {
-  xy_useutf8 (); argc -= 1;
+  chsrc_framework_prelude ();
+
+  argc -= 1;
 
   if (0==argc)
     {

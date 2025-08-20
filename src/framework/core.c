@@ -122,6 +122,8 @@ typedef enum ChgType_t
 /* Global Program Status */
 struct
 {
+  XyMap_t *contributors; /* 所有贡献者 */
+
   int leader_selected_index;   /* leader target 选中的索引 */
   ChgType_t chgtype;           /* 换源实现的类型 */
 
@@ -130,6 +132,7 @@ struct
 }
 ProgStatus =
 {
+  .contributors = NULL,
   .leader_selected_index = -1,
   .chgtype = ChgType_Auto,
   .chsrc_run_faas = false
@@ -203,6 +206,17 @@ chsrc_alert2 (const char *str)
   char *msg = ENGLISH ? "ALERT" : "提醒";
   xy_log_brkt (yellow(App_Name), bdyellow(msg), yellow(str));
 }
+
+
+
+void
+chsrc_framework_prelude ()
+{
+  xy_useutf8 ();
+
+  ProgStatus.contributors = xy_map_new ();
+}
+
 
 
 void
