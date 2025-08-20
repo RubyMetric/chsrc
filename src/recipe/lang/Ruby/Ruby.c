@@ -76,7 +76,7 @@ pl_ruby_setsrc (char *option)
   char *cmd = NULL;
 
   // step1
-  xy_run_iter ("gem sources -l", 0, pl_ruby_remove_gem_source);
+  xy_run_iter_lines ("gem sources -l", 0, pl_ruby_remove_gem_source);
 
   cmd = xy_2strcat ("gem source -a ", source.url);
   chsrc_run (cmd, RunOpt_Default);

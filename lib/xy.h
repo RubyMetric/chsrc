@@ -761,20 +761,20 @@ _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *c
  ******************************************************/
 
 /**
- * @brief 执行cmd，返回某行输出结果，并对已经遍历过的行执行iter_func
+ * @brief 执行 `cmd`，返回某行输出结果，并对已经遍历过的行执行 `func`
  *
- * @param  cmd        要执行的命令
- * @param   n         指定命令执行输出的结果行中的某一行，0 表示最后一行，n (n>0) 表示第n行
- * @param  iter_func  对遍历时经过的行的内容，进行函数调用
+ * @param  cmd   要执行的命令
+ * @param   n    指定命令执行输出的结果行中的某一行，0 表示最后一行，n (n>0) 表示第n行
+ * @param  func  对遍历时经过的行的内容，进行函数调用
  *
- * @return            该函数会返回 参数 n 指定的该行的内容
+ * @return 返回第 `n` 行的内容
  *
  * @note 返回的字符串最后面一般有换行符号
  *
- * 由于目标行会被返回出来，所以 iter_func() 并不执行目标行，只会执行遍历过的行
+ *   由于目标行会被返回出来，所以 `func` 并不执行目标行，只会执行遍历过的行
  */
 static char *
-xy_run_iter (const char *cmd,  unsigned long n,  void (*iter_func) (const char *))
+xy_run_iter_lines (const char *cmd,  unsigned long n,  void (*func) (const char *))
 {
   const int size = 512;
   char *buf = (char *) malloc (size);
@@ -798,9 +798,9 @@ xy_run_iter (const char *cmd,  unsigned long n,  void (*iter_func) (const char *
       count += 1;
       if (n == count)
         break;
-      if (iter_func)
+      if (func)
         {
-          iter_func (buf);
+          func (buf);
         }
     }
 
@@ -811,7 +811,7 @@ xy_run_iter (const char *cmd,  unsigned long n,  void (*iter_func) (const char *
 static char *
 xy_run (const char *cmd, unsigned long n)
 {
-  return xy_run_iter (cmd, n, NULL);
+  return xy_run_iter_lines (cmd, n, NULL);
 }
 
 
