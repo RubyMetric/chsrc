@@ -126,6 +126,9 @@ static void _xy_println_bool   (bool b) {printf("%s\n", (b) ? "true" : "false");
 static void _xy_println_str    (char *str) {printf ("%s\n", str);}
 static void _xy_println_const_str (const char *str) {printf ("%s\n", str);}
 
+/**
+ * @flavor Ruby, Python
+ */
 #define print(x) _Generic((x), \
   int:       _xy_print_int,  \
   long:      _xy_print_long, \
@@ -138,6 +141,9 @@ static void _xy_println_const_str (const char *str) {printf ("%s\n", str);}
   default:   assert(!"Unsupported type for print()!") \
 )(x)
 
+/**
+ * @flavor JVM family, Rust
+ */
 #define println(x) _Generic((x), \
   int:       _xy_println_int,  \
   long:      _xy_println_long, \
@@ -153,11 +159,15 @@ static void _xy_println_const_str (const char *str) {printf ("%s\n", str);}
 #define say println
 /* @flavor PHP */
 #define echo println
-/* @flavor HTML */
+/**
+ * @flavor HTML
+ */
 void br ()                   { puts (""); }
 void p (const char *s)       { printf ("%s\n", s); }
 
+
 #define xy_arylen(x) (sizeof (x) / sizeof (x[0]))
+
 
 static inline void *
 xy_malloc0 (size_t size)
@@ -174,6 +184,8 @@ xy_malloc0 (size_t size)
 
 /**
  * @brief 将 str 中所有的 pat 字符串替换成 replace，返回一个全新的字符串；也可用作删除、缩小、扩张
+ *
+ * @flavor Ruby: String#gsub
  *
  * @param str     原字符串
  * @param pat     要替换的字符串
@@ -409,6 +421,7 @@ new_str:
   return buf;
 }
 
+
 static bool
 xy_streql (const char *str1, const char *str2)
 {
@@ -444,6 +457,7 @@ xy_streql_ic(const char *str1, const char *str2)
   return true;
 }
 
+
 static char *
 xy_str_to_quietcmd (const char *cmd)
 {
@@ -456,6 +470,10 @@ xy_str_to_quietcmd (const char *cmd)
   return ret;
 }
 
+
+/**
+ * @flavor Ruby: String#end_with?
+ */
 static bool
 xy_str_end_with (const char *str, const char *suffix)
 {
@@ -480,6 +498,9 @@ xy_str_end_with (const char *str, const char *suffix)
   return true;
 }
 
+/**
+ * @flavor Ruby: String#start_with?
+ */
 static bool
 xy_str_start_with (const char *str, const char *prefix)
 {
@@ -509,6 +530,9 @@ xy_str_start_with (const char *str, const char *prefix)
   return true;
 }
 
+/**
+ * @flavor Ruby: String#delete_prefix
+ */
 static char *
 xy_str_delete_prefix (const char *str, const char *prefix)
 {
@@ -522,6 +546,9 @@ xy_str_delete_prefix (const char *str, const char *prefix)
   return cur;
 }
 
+/**
+ * @flavor Ruby: String#delete_suffix
+ */
 static char *
 xy_str_delete_suffix (const char *str, const char *suffix)
 {
@@ -537,6 +564,9 @@ xy_str_delete_suffix (const char *str, const char *suffix)
   return new;
 }
 
+/**
+ * @flavor Ruby: String#strip
+ */
 static char *
 xy_str_strip (const char *str)
 {
@@ -626,7 +656,7 @@ _xy_log (int level, const char *prompt, const char *content)
 
 
 /**
- * brkt 系列输出受 pip 启发，为了输出方便，使用 xy.h 的程序应该
+ * @flavor brkt 系列输出受 Python 的 pip 启发，为了输出方便，使用 xy.h 的程序应该
  *
  *  1.若想完全自定义颜色和输出位置：
  *
@@ -778,7 +808,8 @@ xy_run (const char *cmd, unsigned long n)
  ******************************************************/
 
  /**
- * @note 该函数同 just 中的 os_family()，只区分 windows, unix
+ * @flavor 该函数同 just 中的 os_family()，只区分 windows, unix
+ *
  * @return 返回 "windows" 或 "unix"
  */
 #define xy_os_family _xy_os_family ()
