@@ -1074,24 +1074,23 @@ xy_parent_dir (const char *path)
 /******************************************************
  *                      Container
  ******************************************************/
-
-typedef struct XySeq_t
-{
-  XySeqItem_t *first_item;
-  xySeqItem_t *last_item;
-
-  uint32_t length;
-}
-XySeq_t;
-
 typedef struct XySeqItem_t
 {
-  XySeqItem_t *prev;
-  XySeqItem_t *next;
+  struct XySeqItem_t *prev;
+  struct XySeqItem_t *next;
 
   void *data;
 }
 XySeqItem_t;
+
+typedef struct XySeq_t
+{
+  XySeqItem_t *first_item;
+  XySeqItem_t *last_item;
+
+  uint32_t length;
+}
+XySeq_t;
 
 
 XySeq_t*
@@ -1137,6 +1136,30 @@ xy_seq_last (XySeq_t *seq)
   return seq->last_item ? seq->last_item->data : NULL;
 }
 
+/**
+ * @flavor Ruby: Array#at
+ *
+ * @note 序号从1开始
+ *
+ * @return 如果seq中并没有第n个数据，则返回NULL
+ */
+void *
+xy_seq_at (XySeq_t *seq, int n)
+{
+  xy_cant_be_null (seq);
+
+  if (0 == n) assert (!"The index must begin from 1, not 0");
+
+  if (1 == n) return seq->first_item ? seq->first_item->data : NULL;
+
+  XySeqItem_t *it = seq->first_item;
+  for (uint32_t i = 1; i < n && it; i++)
+    {
+      it = it->next;
+    }
+  return it ? it->data : NULL;
+}
+
 
 /**
  * @flavor Perl: push
@@ -1146,15 +1169,15 @@ xy_seq_push (XySeq_t *seq, void *data)
 {
   xy_cant_be_null (seq);
 
-  XySeqItem_t *it = xy_malloc0 (sizeof (XySeqItem_t));
-  if (!it) return NULL;
+  XySeqItem_t *it = xy_malloc0 (sizeof (XySeqItem_t));;
 
   it->data = data;
   it->prev = NULL;
   it->next = NULL;
 
   // 更新 item 间关系
-  if (XySeqItem_t *l = seq->last_item;)
+  XySeqItem_t *l = seq->last_item;
+  if (l)
     {
       it->prev = l;
       l->next = it;
