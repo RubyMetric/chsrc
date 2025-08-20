@@ -52,7 +52,7 @@ wr_winget_setsrc (char *option)
   chsrc_run ("winget source remove winget", RunOpt_Dont_Abort_On_Failure);
   // 2025.8.18 执行两次相同的命令后继续设置，无报错，换源成功。具体原因不明
   chsrc_run ("winget source remove winget", RunOpt_Dont_Abort_On_Failure);
-  chsrc_run (xy_strjoin (3, "winget source add winget ", source.url, " --trust-level trusted"), RunOpt_Default);
+  chsrc_run (xy_strcat (3, "winget source add winget ", source.url, " --trust-level trusted"), RunOpt_Default);
 
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);

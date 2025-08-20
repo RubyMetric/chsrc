@@ -58,7 +58,7 @@ pl_ruby_remove_gem_source (const char *source)
   char *cmd = NULL;
   if (chef_is_url (source))
     {
-      cmd = xy_2strjoin ("gem sources -r ", source);
+      cmd = xy_2strcat ("gem sources -r ", source);
       chsrc_run (cmd, RunOpt_Default);
     }
 }
@@ -78,7 +78,7 @@ pl_ruby_setsrc (char *option)
   // step1
   xy_run_iter ("gem sources -l", 0, pl_ruby_remove_gem_source);
 
-  cmd = xy_2strjoin ("gem source -a ", source.url);
+  cmd = xy_2strcat ("gem source -a ", source.url);
   chsrc_run (cmd, RunOpt_Default);
 
   // 我们在 step1 中，把源全部清空了，但是现在 RubyGems 的行为是: 当清空会自动给你把默认源给加回来
@@ -94,7 +94,7 @@ pl_ruby_setsrc (char *option)
       where = " --local ";
     }
 
-  cmd = xy_strjoin (4, "bundle config", where, "'mirror.https://rubygems.org' ", source.url);
+  cmd = xy_strcat (4, "bundle config", where, "'mirror.https://rubygems.org' ", source.url);
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
   chsrc_determine_chgtype (ChgType_Auto);

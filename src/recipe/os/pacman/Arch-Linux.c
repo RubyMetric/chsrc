@@ -81,12 +81,12 @@ os_arch_setsrc (char *option)
   if (strncmp(arch, "x86_64", 6)==0)
     {
       is_x86 = true;
-      to_write = xy_strjoin (3, "Server = ", source.url, "/$repo/os/$arch");
+      to_write = xy_strcat (3, "Server = ", source.url, "/$repo/os/$arch");
     }
   else
     {
       is_x86 = false;
-      to_write = xy_strjoin (3, "Server = ", source.url, "arm/$arch/$repo");
+      to_write = xy_strcat (3, "Server = ", source.url, "arm/$arch/$repo");
     }
 
   /* 配置文件中，越前面的优先级越高 */
@@ -181,13 +181,13 @@ os_archlinuxcn_setsrc (char *option)
 
   if (ret == 0)
     {
-      char *sed_cmd = xy_strjoin (4, "sed -i '/\\[archlinuxcn\\]/{n;s|^Server = .*|Server = ",
+      char *sed_cmd = xy_strcat (4, "sed -i '/\\[archlinuxcn\\]/{n;s|^Server = .*|Server = ",
                                   source.url, "$arch|;}' ", OS_Pacman_ArchLinuxCN_MirrorList);
       chsrc_run (sed_cmd, RunOpt_Default);
     }
   else
     {
-      char *archlinuxcn_config = xy_strjoin (3, "\n[archlinuxcn]\nServer = ", source.url, "$arch\n");
+      char *archlinuxcn_config = xy_strcat (3, "\n[archlinuxcn]\nServer = ", source.url, "$arch\n");
       chsrc_append_to_file (archlinuxcn_config, OS_Pacman_ArchLinuxCN_MirrorList);
     }
 

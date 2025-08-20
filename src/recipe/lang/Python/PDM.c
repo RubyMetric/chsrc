@@ -52,9 +52,9 @@ pl_python_pdm_setsrc (char *option)
   char *cmd = NULL;
 
   if (chsrc_in_local_mode())
-    cmd = xy_2strjoin ("pdm config --local pypi.url ", source.url);
+    cmd = xy_2strcat ("pdm config --local pypi.url ", source.url);
   else
-    cmd = xy_2strjoin ("pdm config --global pypi.url ", source.url);
+    cmd = xy_2strcat ("pdm config --global pypi.url ", source.url);
 
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 

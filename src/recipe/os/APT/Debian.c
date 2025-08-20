@@ -77,7 +77,7 @@ static bool
 os_debian_does_old_sourcelist_use_cdrom (void)
 {
   /* 我们只检查旧版sourcelist，因为 common.h 中的填充只支持旧版 */
-  char *cmd = xy_2strjoin ("grep -q '^deb cdrom:' ", OS_Debian_old_SourceList);
+  char *cmd = xy_2strcat ("grep -q '^deb cdrom:' ", OS_Debian_old_SourceList);
   int ret = system (cmd);
   bool use_cdrom = ret == 0;
 
@@ -92,11 +92,11 @@ os_debian_setsrc_for_deb822 (char *option)
 
   chsrc_backup (OS_Debian_SourceList_DEB822);
 
-  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/debian/?@", source.url, "@g' " OS_Debian_SourceList_DEB822);
+  char *cmd = xy_strcat (3, "sed -E -i 's@https?://.*/debian/?@", source.url, "@g' " OS_Debian_SourceList_DEB822);
   chsrc_run (cmd, RunOpt_Default);
 
   /* debian-security 源和其他源不一样 */
-  cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/debian-security/?@", source.url, "-security@g' " OS_Debian_SourceList_DEB822);
+  cmd = xy_strcat (3, "sed -E -i 's@https?://.*/debian-security/?@", source.url, "-security@g' " OS_Debian_SourceList_DEB822);
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
@@ -160,7 +160,7 @@ os_debian_setsrc (char *option)
       chsrc_backup (OS_Debian_old_SourceList);
     }
 
-  char *cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/debian/?@", source.url, "@g\' " OS_Debian_old_SourceList);
+  char *cmd = xy_strcat (3, "sed -E -i \'s@https?://.*/debian/?@", source.url, "@g\' " OS_Debian_old_SourceList);
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);

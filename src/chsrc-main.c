@@ -64,7 +64,7 @@ cli_print_available_mirrors ()
 {
   {
   char *msg = ENGLISH ? "To specify a source, use chsrc set " : "指定使用某源，请使用 chsrc set ";
-  say (bdblue(xy_strjoin (3, msg, "<target>", " <code>\n")));
+  say (bdblue(xy_strcat (3, msg, "<target>", " <code>\n")));
   }
 
   {
@@ -246,28 +246,28 @@ cli_print_target_features (Target_t *target, const char *input_target_name)
 
   {
   char *msg = ENGLISH ? " Get: View the current source state " : " Get: 查看当前源状态 ";
-  char *get_msg = xy_strjoin (3, msg, "| chsrc get ", input_target_name);
+  char *get_msg = xy_strcat (3, msg, "| chsrc get ", input_target_name);
   if (target->getfn != NULL) printf (" %s%s\n", bdgreen(YesMark), purple(get_msg));
   else printf (" %s%s\n", bdred(NoMark), get_msg);br();
   }
 
   {
   char *msg = ENGLISH ? " Reset: Reset to the default source " : " Reset: 重置回默认源 ";
-  char *reset_msg = xy_strjoin (3, msg, "| chsrc reset ", input_target_name);
+  char *reset_msg = xy_strcat (3, msg, "| chsrc reset ", input_target_name);
   if (target->resetfn != NULL) printf (" %s%s\n", bdgreen(YesMark), purple(reset_msg));
   else printf (" %s%s\n", bdred(NoMark), reset_msg);br();
   }
 
   {
   char *msg = ENGLISH ? " UserDefine: using user-defined source URL " : " UserDefine: 用户自定义换源URL ";
-  char *user_define_msg = xy_strjoin (5, msg, "| chsrc set ", input_target_name, " https://user-define-url.org/", input_target_name);
+  char *user_define_msg = xy_strcat (5, msg, "| chsrc set ", input_target_name, " https://user-define-url.org/", input_target_name);
   if (target->can_user_define) printf (" %s%s\n", bdgreen(YesMark), purple(user_define_msg));
   else printf (" %s%s\n", bdred(NoMark), user_define_msg);br();
   }
 
   {
   char *msg = ENGLISH ? " Locally: Change source only for this project " : " Locally: 仅对本项目换源 ";
-  char *locally_msg = xy_strjoin (3, msg, "| chsrc set -local ", input_target_name);
+  char *locally_msg = xy_strcat (3, msg, "| chsrc set -local ", input_target_name);
 
   switch (target->cap_local)
     {
@@ -288,7 +288,7 @@ cli_print_target_features (Target_t *target, const char *input_target_name)
 
   {
   char *msg = ENGLISH ? " English: Output in English " : " English: 英文输出 ";
-  char *english_msg = xy_strjoin (3, msg, "| chsrc set -en ", input_target_name);
+  char *english_msg = xy_strcat (3, msg, "| chsrc set -en ", input_target_name);
   if (target->can_english) printf (" %s%s\n", bdgreen(YesMark), purple(english_msg));
   else printf (" %s%s\n", bdred(NoMark), english_msg);br();
   }
@@ -531,7 +531,7 @@ get_target (const char *input, TargetOp code, char *option)
         {
           target->setfn(option);
         }
-      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 set 功能，邀您帮助: chsrc issue"));
+      else chsrc_error (xy_strcat (3, "暂未对 ", input, " 实现 set 功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_Reset_Source==code)
     {
@@ -539,7 +539,7 @@ get_target (const char *input, TargetOp code, char *option)
         {
           target->resetfn(option);
         }
-      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 reset 功能，邀您帮助: chsrc issue"));
+      else chsrc_error (xy_strcat (3, "暂未对 ", input, " 实现 reset 功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_Get_Source==code)
     {
@@ -547,13 +547,13 @@ get_target (const char *input, TargetOp code, char *option)
         {
           target->getfn("");
         }
-      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 get 功能，邀您帮助: chsrc issue"));
+      else chsrc_error (xy_strcat (3, "暂未对 ", input, " 实现 get 功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_List_Config==code)
     {
       {
       char *msg = ENGLISH ? "To specify a source, use chsrc set " : "指定使用某源，请使用 chsrc set ";
-      say (bdblue(xy_strjoin (3, msg, input, " <code>\n")));
+      say (bdblue(xy_strcat (3, msg, input, " <code>\n")));
       }
 
       {
@@ -677,7 +677,7 @@ main (int argc, char const *argv[])
           else
             {
               char *msg = ENGLISH ? "Unknown option: " : "未识别的命令行选项 ";
-              chsrc_error (xy_2strjoin (msg, argv[i])); return Exit_Unknown;
+              chsrc_error (xy_2strcat (msg, argv[i])); return Exit_Unknown;
             }
           cli_arg_Target_pos++;
           cli_arg_Mirror_pos++;
@@ -860,7 +860,7 @@ main (int argc, char const *argv[])
     {
       char *msg1 = ENGLISH ? "Unknown command `" : "不支持的命令 ";
       char *msg2 = ENGLISH ? "`. Use `chsrc help` to view usage" : ". 请使用 chsrc help 查看使用方式";
-      chsrc_error (xy_strjoin (3, msg1, command, msg2));
+      chsrc_error (xy_strcat (3, msg1, command, msg2));
       return Exit_Unknown;
     }
 

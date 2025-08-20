@@ -45,7 +45,7 @@ void
 pl_python_rye_getsrc (char *option)
 {
   char *rye_config = pl_python_find_rye_config ();
-  chsrc_note2 (xy_strjoin (3, "请查看 ", rye_config, " 配置文件中的 [[sources]] 节内容"));
+  chsrc_note2 (xy_strcat (3, "请查看 ", rye_config, " 配置文件中的 [[sources]] 节内容"));
 }
 
 
@@ -64,7 +64,7 @@ pl_python_rye_setsrc (char *option)
   content = xy_str_gsub (content, "@2@", source.url);
 
   char *rye_config = pl_python_find_rye_config ();
-  chsrc_note2 (xy_strjoin (3, "请在配置文件 ", rye_config, " 中添加:"));
+  chsrc_note2 (xy_strcat (3, "请在配置文件 ", rye_config, " 中添加:"));
   println (content);
 
   chsrc_determine_chgtype (ChgType_Manual);

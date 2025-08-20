@@ -51,7 +51,7 @@ chef_set_provider_speed_measure_url (SourceProvider_t *provider, char *url)
 {
   provider->psmi.skip = NotSkip;
   provider->psmi.url = xy_strdup (url);
-  chsrc_debug ("m", xy_strjoin (4, "recipe 重新为 ", provider->code, " 设置测速链接: ", url));
+  chsrc_debug ("m", xy_strcat (4, "recipe 重新为 ", provider->code, " 设置测速链接: ", url));
 }
 
 
@@ -62,7 +62,7 @@ void
 chef_set_provider_speed_measure_accuracy (SourceProvider_t *provider, bool accuracy)
 {
   provider->psmi.accurate = accuracy;
-  chsrc_debug ("m", xy_strjoin (4, "recipe 重新为 ", provider->code, " 设置测速精度: ", accuracy ? "精准" : "粗略"));
+  chsrc_debug ("m", xy_strcat (4, "recipe 重新为 ", provider->code, " 设置测速精度: ", accuracy ? "精准" : "粗略"));
 }
 
 
@@ -99,7 +99,7 @@ chef_set_sources_speed_measure_url_with_func (
 void
 chef_set_sources_speed_measure_url_with_postfix (Target_t *target, char *postfix)
 {
-  chef_set_sources_speed_measure_url_with_func (target, xy_2strjoin, postfix);
+  chef_set_sources_speed_measure_url_with_func (target, xy_2strcat, postfix);
 }
 
 

@@ -89,7 +89,7 @@ pl_go_setsrc (char *option)
   char *cmd = "go env -w GO111MODULE=on";
   chsrc_run (cmd, RunOpt_Default);
 
-  cmd = xy_strjoin (3, "go env -w GOPROXY=", source.url, ",direct");
+  cmd = xy_strcat (3, "go env -w GOPROXY=", source.url, ",direct");
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_conclude (&source);

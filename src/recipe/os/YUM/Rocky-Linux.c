@@ -58,7 +58,7 @@ os_rockylinux_setsrc (char *option)
 
   if (version < 9)
     {
-      cmd = xy_strjoin (3,
+      cmd = xy_strcat (3,
                       "sed -e 's|^mirrorlist=|#mirrorlist=|g' "
                       "-e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=", source.url, "|g' "
                       "-i.bak /etc/yum.repos.d/Rocky-*.repo"
@@ -70,7 +70,7 @@ os_rockylinux_setsrc (char *option)
     }
   else
     {
-      cmd = xy_strjoin (3,
+      cmd = xy_strcat (3,
                       "sed -e 's|^mirrorlist=|#mirrorlist=|g' "
                       "-e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=", source.url, "|g' "
                       "-i.bak /etc/yum.repos.d/rocky-extras.repo /etc/yum.repos.d/rocky.repo"

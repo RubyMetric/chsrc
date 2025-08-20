@@ -64,7 +64,7 @@ os_ros_setsrc (char *option)
   chsrc_backup (OS_ROS_SourceList);
 
   char *cmd  = NULL;
-  cmd = xy_strjoin(3, "sed -E -i \'s@https?://.*/ros/ubuntu/?@", source.url, "/ros/ubuntu@g\' " OS_ROS_SourceList);
+  cmd = xy_strcat(3, "sed -E -i \'s@https?://.*/ros/ubuntu/?@", source.url, "/ros/ubuntu@g\' " OS_ROS_SourceList);
   chsrc_run(cmd, RunOpt_Default);
 
   cmd = "apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654";

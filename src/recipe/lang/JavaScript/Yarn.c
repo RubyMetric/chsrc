@@ -68,9 +68,9 @@ pl_js_yarn_setsrc (char *option)
   if (pl_js_yarn_get_yarn_version () >= 2)
     {
       if (chsrc_in_local_mode()) // Yarn 默认情况下就是基于本项目换源
-        cmd = xy_2strjoin ("yarn config set npmRegistryServer ", source.url);
+        cmd = xy_2strcat ("yarn config set npmRegistryServer ", source.url);
       else
-        cmd = xy_2strjoin ("yarn config set npmRegistryServer --home ", source.url);
+        cmd = xy_2strcat ("yarn config set npmRegistryServer --home ", source.url);
 
       chsrc_run (cmd, RunOpt_No_Last_New_Line);
     }
@@ -84,7 +84,7 @@ pl_js_yarn_setsrc (char *option)
           return;
         }
       // 不再阻止换源命令输出到终端，即不再调用 xy_str_to_quietcmd()
-      cmd = xy_2strjoin ("yarn config set registry ", source.url);
+      cmd = xy_2strcat ("yarn config set registry ", source.url);
       chsrc_run (cmd, RunOpt_No_Last_New_Line);
     }
 

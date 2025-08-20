@@ -58,12 +58,12 @@ os_voidlinux_setsrc (char *option)
   char *cmd = "cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/";
   chsrc_run (cmd, RunOpt_Default);
 
-  cmd = xy_strjoin (3,
+  cmd = xy_strcat (3,
             "sed -i 's|https://repo-default.voidlinux.org|", source.url, "|g' /etc/xbps.d/*-repository-*.conf"
             );
   chsrc_run (cmd, RunOpt_Default);
 
-  cmd = xy_strjoin (3,
+  cmd = xy_strcat (3,
             "sed -i 's|https://alpha.de.repo.voidlinux.org|", source.url, "|g' /etc/xbps.d/*-repository-*.conf"
             );
 

@@ -68,7 +68,7 @@ os_armbian_setsrc (char *option)
 
   chsrc_backup (OS_Armbian_SourceList);
 
-  char *cmd = xy_strjoin (3, "sed -E -i 's@https?[^ ]*armbian/?[^ ]*@", source.url,
+  char *cmd = xy_strcat (3, "sed -E -i 's@https?[^ ]*armbian/?[^ ]*@", source.url,
                              "@g' " OS_Armbian_SourceList);
 
   chsrc_run (cmd, RunOpt_Default);

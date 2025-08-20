@@ -69,7 +69,7 @@ wr_flatpak_setsrc (char *option)
   use_this_source(wr_flatpak);
 
   chsrc_alert2 ("若出现问题，可先调用以下命令:");
-  char *note = xy_strjoin (3,
+  char *note = xy_strcat (3,
     "wget ", source.url, "/flathub.gpg\n"
     "flatpak remote-modify --gpg-import=flathub.gpg flathub"
   );
@@ -80,7 +80,7 @@ wr_flatpak_setsrc (char *option)
     "尝试运行 flatpak remote-modify flathub --url=https://flathub.org/repo";
   say (repo_note);
 
-  char *cmd = xy_2strjoin ("flatpak remote-modify flathub --url=", source.url);
+  char *cmd = xy_2strcat ("flatpak remote-modify flathub --url=", source.url);
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_determine_chgtype (ChgType_Auto);

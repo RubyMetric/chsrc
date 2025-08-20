@@ -61,7 +61,7 @@ wr_anaconda_setsrc (char *option)
   char *w = xy_str_gsub (RAWSTR_wr_anaconda_condarc, "@1@", source.url);
 
   /* Windows 也是在这里 */
-  char *configfile = xy_2strjoin (xy_os_home, "/.condarc");
+  char *configfile = xy_2strcat (xy_os_home, "/.condarc");
 
   if (xy_on_windows)
     {
@@ -78,7 +78,7 @@ wr_anaconda_setsrc (char *option)
         }
     }
 
-  chsrc_note2 (xy_strjoin (3, "请向 ", configfile, " 中手动添加:"));
+  chsrc_note2 (xy_strcat (3, "请向 ", configfile, " 中手动添加:"));
   println (w);
 
   chsrc_note2 ("然后运行 conda clean -i 清除索引缓存，保证用的是镜像站提供的索引");

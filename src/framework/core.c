@@ -232,8 +232,8 @@ chsrc_log_backup (const char *filename)
 {
   char *msg = ENGLISH ? "BACKUP" : "备份";
 
-  char *bak = xy_2strjoin (filename, ".bak");
-  xy_log_brkt (blue(App_Name), bdblue(msg), xy_strjoin (3, bdyellow(filename), " -> ", bdgreen(bak)));
+  char *bak = xy_2strcat (filename, ".bak");
+  xy_log_brkt (blue(App_Name), bdblue(msg), xy_strcat (3, bdyellow(filename), " -> ", bdgreen(bak)));
 }
 
 #define YesMark "✓"
@@ -264,12 +264,12 @@ log_check_result (const char *check_what, const char *check_type, bool exist)
 
   if (!exist)
     {
-      xy_log_brkt (App_Name, bdred (chk_msg), xy_strjoin (5,
+      xy_log_brkt (App_Name, bdred (chk_msg), xy_strcat (5,
                    red (NoMark " "), check_type, " ", red (check_what), not_exist_msg));
     }
   else
     {
-      xy_log_brkt (App_Name, bdgreen (chk_msg), xy_strjoin (5,
+      xy_log_brkt (App_Name, bdgreen (chk_msg), xy_strcat (5,
                    green (YesMark " "), check_type, " ", green (check_what), exist_msg));
     }
 }
@@ -301,7 +301,7 @@ log_cmd_result (bool result, int exit_status)
     {
       char buf[8] = {0};
       sprintf (buf, "%d", exit_status);
-      char *log = xy_2strjoin (red (fail_msg), bdred (buf));
+      char *log = xy_2strcat (red (fail_msg), bdred (buf));
       xy_log_brkt (red (App_Name), bdred (run_msg), log);
     }
 }
@@ -338,7 +338,7 @@ query_program_exist (char *check_cmd, char *prog_name, int mode)
     {
       if (mode & Noisy_When_NonExist)
         {
-          // xy_warn (xy_strjoin(4, "× 命令 ", progname, " 不存在，", buf));
+          // xy_warn (xy_strcat(4, "× 命令 ", progname, " 不存在，", buf));
           log_check_result (prog_name, msg, false);
         }
       return false;
@@ -364,7 +364,7 @@ cmd_to_check_program (char *prog_name)
 {
   char *check_tool = xy_on_windows ?  "where " : "command -v ";
 
-  char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (check_tool, prog_name));
+  char *quiet_cmd = xy_str_to_quietcmd (xy_2strcat (check_tool, prog_name));
 
   return quiet_cmd;
 }
@@ -383,7 +383,7 @@ XY_Deprecate_This("Use cmd_to_check_program() instead")
 static char *
 cmd_to_check_program2 (char *prog_name)
 {
-  char *quiet_cmd = xy_str_to_quietcmd (xy_2strjoin (prog_name, " --version"));
+  char *quiet_cmd = xy_str_to_quietcmd (xy_2strcat (prog_name, " --version"));
   return quiet_cmd;
 }
 
@@ -448,7 +448,7 @@ chsrc_ensure_program (char *prog_name)
     {
       char *msg1 = ENGLISH ? "not found " : "未找到 ";
       char *msg2 = ENGLISH ? " command, please check for existence" : " 命令，请检查是否存在";
-      chsrc_error (xy_strjoin (3, msg1, prog_name, msg2));
+      chsrc_error (xy_strcat (3, msg1, prog_name, msg2));
       exit (Exit_UserCause);
     }
 }
@@ -493,7 +493,7 @@ query_mirror_exist (Source_t *sources, size_t size, char *target_name, char *inp
     {
       char *msg1 = ENGLISH ? "Currently " : "当前 ";
       char *msg2 = ENGLISH ? " doesn't have any source available. Please contact the maintainers" : " 无任何可用源，请联系维护者";
-      chsrc_error (xy_strjoin (3, msg1, target_name, msg2));
+      chsrc_error (xy_strcat (3, msg1, target_name, msg2));
       exit (Exit_MaintainerCause);
     }
 
@@ -501,7 +501,7 @@ query_mirror_exist (Source_t *sources, size_t size, char *target_name, char *inp
     {
       char *msg1 = ENGLISH ? "Currently " : "当前 ";
       char *msg2 = ENGLISH ? " only the upstream source exists. Please contact the maintainers" : " 仅存在上游默认源，请联系维护者";
-      chsrc_error (xy_strjoin (3, msg1, target_name, msg2));
+      chsrc_error (xy_strcat (3, msg1, target_name, msg2));
       exit (Exit_MaintainerCause);
     }
 
@@ -520,7 +520,7 @@ query_mirror_exist (Source_t *sources, size_t size, char *target_name, char *inp
                            : " 目前唯一可用镜像站，感谢他们的慷慨支持";
       const char *name = ENGLISH ? sources[1].mirror->abbr
                                  : sources[1].mirror->name;
-      chsrc_succ (xy_strjoin (4, name, msg1, target_name, msg2));
+      chsrc_succ (xy_strcat (4, name, msg1, target_name, msg2));
     }
 
   if (xy_streql ("first", input))
@@ -549,11 +549,11 @@ query_mirror_exist (Source_t *sources, size_t size, char *target_name, char *inp
       {
         char *msg1 = ENGLISH ? "Mirror site "   : "镜像站 ";
         char *msg2 = ENGLISH ? " doesn't exist" : " 不存在";
-        chsrc_error (xy_strjoin (3, msg1, input, msg2));
+        chsrc_error (xy_strcat (3, msg1, input, msg2));
       }
 
       char *msg = ENGLISH ? "To see available sources, use chsrc list " : "查看可使用源，请使用 chsrc list ";
-      chsrc_error (xy_2strjoin (msg, target_name));
+      chsrc_error (xy_2strcat (msg, target_name));
       exit (Exit_UserCause);
     }
   return idx;
@@ -626,12 +626,12 @@ measure_speed_for_url (void *url)
   /**
    * @note 我们用 —L，因为部分链接会跳转到其他地方，比如: RubyChina, npmmirror
    */
-  char *curl_cmd = xy_strjoin (8, "curl -qsL ", ipv6,
+  char *curl_cmd = xy_strcat (8, "curl -qsL ", ipv6,
                                   " -o ", os_devnull,
                                   " -w \"%{http_code} %{speed_download}\" -m", time_sec,
                                   " -A chsrc/" Chsrc_Version "  ", url);
 
-  // chsrc_info (xy_2strjoin ("测速命令 ", curl_cmd));
+  // chsrc_info (xy_2strcat ("测速命令 ", curl_cmd));
 
   char *curl_buf = xy_run (curl_cmd, 0);
 
@@ -656,8 +656,8 @@ parse_and_say_curl_result (char *curl_buf)
 
   if (200!=http_code)
     {
-      char *http_code_str = yellow (xy_2strjoin ("HTTP码 ", curl_buf));
-      say (xy_strjoin (3, speedstr, " | ",  http_code_str));
+      char *http_code_str = yellow (xy_2strcat ("HTTP码 ", curl_buf));
+      say (xy_strcat (3, speedstr, " | ",  http_code_str));
     }
   else
     {
@@ -728,7 +728,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
         {
           char *msg1 = ENGLISH ? "Maintainers don't offer " : "维护者未提供 ";
           char *msg2 = ENGLISH ? " mirror site's speed measure link, so skip it" : " 镜像站测速链接，跳过该站点（需修复）";
-          chsrc_warn (xy_strjoin (3, msg1, provider->code, msg2));
+          chsrc_warn (xy_strcat (3, msg1, provider->code, msg2));
           speed = 0;
 
           speed_records[i] = speed;
@@ -740,7 +740,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
           if (chef_is_url (provider_speed_url))
             {
               url = xy_strdup (provider_speed_url);
-              chsrc_debug ("m", xy_2strjoin ("使用镜像站整体测速链接: ", url));
+              chsrc_debug ("m", xy_2strcat ("使用镜像站整体测速链接: ", url));
             }
         }
       else if (provider_skip)
@@ -754,13 +754,13 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
             {
               url = xy_strdup (dedicated_speed_url);
               has_dedicated_speed_url = true;
-              chsrc_debug ("m", xy_2strjoin ("使用专用测速链接: ", url));
+              chsrc_debug ("m", xy_2strcat ("使用专用测速链接: ", url));
             }
           else
             {
               /* 防止维护者没填，这里有一些脏数据，我们软处理：假装该链接URL不存在 */
               has_dedicated_speed_url = false;
-              chsrc_debug ("m", xy_2strjoin ("专用测速链接为脏数据，请修复: ", provider->name));
+              chsrc_debug ("m", xy_2strcat ("专用测速链接为脏数据，请修复: ", provider->name));
             }
         }
 
@@ -796,7 +796,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
             {
               skip_reason = ENGLISH ? "SKIP for no reason" : "无理由跳过";
             }
-          measure_msgs[i] = xy_strjoin (4, faint("  x "), msg, " ", yellow(faint(skip_reason)));
+          measure_msgs[i] = xy_strcat (4, faint("  x "), msg, " ", yellow(faint(skip_reason)));
           println (measure_msgs[i]);
 
           /* 下一位 */
@@ -823,11 +823,11 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
 
           if (xy_streql ("upstream", provider->code))
             {
-              measure_msgs[i] = xy_strjoin (7, faint("  ^ "), msg, " (", src.url, ") ", accurate_msg, faint(" ... "));
+              measure_msgs[i] = xy_strcat (7, faint("  ^ "), msg, " (", src.url, ") ", accurate_msg, faint(" ... "));
             }
           else
             {
-              measure_msgs[i] = xy_strjoin (5, faint("  - "), msg, " ", accurate_msg, faint(" ... "));
+              measure_msgs[i] = xy_strcat (5, faint("  - "), msg, " ", accurate_msg, faint(" ... "));
             }
 
           print (measure_msgs[i]);
@@ -867,7 +867,7 @@ auto_select_mirror (Source_t *sources, size_t size, const char *target_name)
     {
       char *msg1 = ENGLISH ? "Currently " : "当前 ";
       char *msg2 = ENGLISH ? "No any source, please contact maintainers: chsrc issue" : " 无任何可用源，请联系维护者: chsrc issue";
-      chsrc_error (xy_strjoin (3, msg1, target_name, msg2));
+      chsrc_error (xy_strcat (3, msg1, target_name, msg2));
       exit (Exit_MaintainerCause);
     }
 
@@ -932,21 +932,21 @@ auto_select_mirror (Source_t *sources, size_t size, const char *target_name)
                            : " 目前唯一可用镜像站，感谢他们的慷慨支持";
       const char *name = ENGLISH ? sources[fast_idx].mirror->abbr
                                  : sources[fast_idx].mirror->name;
-      say (xy_strjoin (5, msg1, bdgreen(name), green(is), green(target_name), green(msg2)));
+      say (xy_strcat (5, msg1, bdgreen(name), green(is), green(target_name), green(msg2)));
     }
   else
     {
       char *msg = ENGLISH ? "FASTEST mirror site: " : "最快镜像站: ";
       const char *name = ENGLISH ? sources[fast_idx].mirror->abbr
                                  : sources[fast_idx].mirror->name;
-      say (xy_2strjoin (msg, green(name)));
+      say (xy_2strcat (msg, green(name)));
     }
 
   // https://github.com/RubyMetric/chsrc/pull/71
   if (in_measure_mode())
     {
       char *msg = ENGLISH ? "URL of above source: " : "镜像源地址: ";
-      say (xy_2strjoin (msg, green(sources[fast_idx].url)));
+      say (xy_2strcat (msg, green(sources[fast_idx].url)));
     }
 
   return fast_idx;
@@ -1065,7 +1065,7 @@ chsrc_confirm_source (Source_t *source)
   else
     {
       char *msg = ENGLISH ? "SELECT  mirror site: " : "选中镜像站: ";
-      say (xy_strjoin (5, msg, green (source->mirror->abbr), " (", green (source->mirror->code), ")"));
+      say (xy_strcat (5, msg, green (source->mirror->abbr), " (", green (source->mirror->code), ")"));
     }
 
   hr();
@@ -1110,7 +1110,7 @@ chsrc_determine_chgtype (ChgType_t type)
 #define MSG_EN_STILL      "Still need to operate manually according to the above prompts. "
 #define MSG_CN_STILL      "仍需按上述提示手工操作"
 
-#define thank_mirror(msg) chsrc_log(xy_2strjoin(msg,purple(ENGLISH?source->mirror->abbr:source->mirror->name)))
+#define thank_mirror(msg) chsrc_log(xy_2strcat(msg,purple(ENGLISH?source->mirror->abbr:source->mirror->name)))
 
 /**
  * @param source 可为NULL
@@ -1345,10 +1345,10 @@ chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilename
    * 然而 PowerShell 的执行，即使加了 -File 参数，也必须要求你拥有 .ps1 后缀
    * 这使得我们在 Windows 上只能创建一个假的临时文件
    */
-  char *tmpfile = xy_strjoin (3, "chsrc_tmp_", filename, postfix);
+  char *tmpfile = xy_strcat (3, "chsrc_tmp_", filename, postfix);
   FILE *f = fopen (tmpfile, "w+");
 #else
-  char *tmpfile = xy_strjoin (5, "/tmp/", "chsrc_tmp_", filename, "_XXXXXX", postfix);
+  char *tmpfile = xy_strcat (5, "/tmp/", "chsrc_tmp_", filename, "_XXXXXX", postfix);
   size_t postfix_len = strlen (postfix);
 
   /* 和 _mktemp_s() 参数不同，前者是整个缓存区大小，这里的长度是后缀长度 */
@@ -1359,14 +1359,14 @@ chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilename
   if (!f)
     {
       char *msg = CHINESE ? "无法创建临时文件: " : "Unable to create temporary file: ";
-            msg = xy_2strjoin (msg, tmpfile);
+            msg = xy_2strcat (msg, tmpfile);
       chsrc_error2 (msg);
       exit (Exit_ExternalError);
     }
   else if (loud)
     {
       char *msg = CHINESE ? "已创建临时文件: " : "Temporary file created: ";
-            msg = xy_2strjoin (msg, tmpfile);
+            msg = xy_2strcat (msg, tmpfile);
       chsrc_succ2 (msg);
     }
 
@@ -1404,7 +1404,7 @@ chsrc_run_as_bash_file (const char *script_content)
   char *msg = CHINESE ? "即将执行 Bash 脚本内容:" : "The Bash script content will be executed:";
   chsrc_note2 (msg);
   println (faint(script_content));
-  char *cmd = xy_2strjoin ("bash ", tmpfile);
+  char *cmd = xy_2strcat ("bash ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
   remove (tmpfile);
 }
@@ -1424,7 +1424,7 @@ chsrc_run_as_sh_file (const char *script_content)
   char *msg = CHINESE ? "即将执行 sh 脚本内容:" : "The sh script content will be executed:";
   chsrc_note2 (msg);
   println (faint(script_content));
-  char *cmd = xy_2strjoin ("sh ", tmpfile);
+  char *cmd = xy_2strcat ("sh ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
   remove (tmpfile);
 }
@@ -1443,7 +1443,7 @@ chsrc_run_as_pwsh_file (const char *script_content)
   char *msg = CHINESE ? "即将执行 PowerShell 脚本内容:" : "The PowerShell script content will be executed:";
   chsrc_note2 (msg);
   println (faint(script_content));
-  char *cmd = xy_2strjoin ("pwsh ", tmpfile);
+  char *cmd = xy_2strcat ("pwsh ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
   remove (tmpfile);
 }
@@ -1458,7 +1458,7 @@ XY_Deprecate_This("Don't use this function")
 void
 chsrc_run_in_inline_bash_shell (const char *cmdline)
 {
-  char *cmd = xy_strjoin (3, "bash -c '", cmdline, "'");
+  char *cmd = xy_strcat (3, "bash -c '", cmdline, "'");
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
 }
 
@@ -1472,7 +1472,7 @@ XY_Deprecate_This("Don't use this function")
 void
 chsrc_run_in_inline_pwsh_shell (const char *cmdline)
 {
-  char *cmd = xy_strjoin (3, "pwsh -Command '", cmdline, "'");
+  char *cmd = xy_strcat (3, "pwsh -Command '", cmdline, "'");
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
 }
 
@@ -1492,22 +1492,22 @@ chsrc_view_env (const char *var1, ...)
 #ifdef XY_On_Windows
       if (first)
         {
-          cmd = xy_strjoin (3, "set ", var, " ");
+          cmd = xy_strcat (3, "set ", var, " ");
           first = false;
         }
       else
         {
-          cmd = xy_strjoin (4, cmd, "& set ", var, " ");
+          cmd = xy_strcat (4, cmd, "& set ", var, " ");
         }
 #else
       if (first)
         {
-          cmd = xy_strjoin (5, "echo ", var, "=$", var, " ");
+          cmd = xy_strcat (5, "echo ", var, "=$", var, " ");
           first = false;
         }
       else
         {
-          cmd = xy_strjoin (6, cmd, "; echo ", var, "=$", var, " ");
+          cmd = xy_strcat (6, cmd, "; echo ", var, "=$", var, " ");
         }
 #endif
       var = va_arg (vars, const char *);
@@ -1540,11 +1540,11 @@ chsrc_view_file (const char *path)
   path = xy_normalize_path (path);
   if (xy_on_windows)
     {
-      cmd = xy_2strjoin ("type ", path);
+      cmd = xy_2strcat ("type ", path);
     }
   else
     {
-      cmd = xy_2strjoin ("cat ", path);
+      cmd = xy_2strcat ("cat ", path);
     }
 
   chsrc_run_as_a_service (cmd);
@@ -1570,13 +1570,13 @@ chsrc_ensure_dir (const char *dir)
     {
       mkdir_cmd = "mkdir -p ";
     }
-  char *cmd = xy_2strjoin (mkdir_cmd, dir);
+  char *cmd = xy_2strcat (mkdir_cmd, dir);
   cmd = xy_str_to_quietcmd (cmd);
 
   chsrc_run_as_a_service (cmd);
 
   char *msg = ENGLISH ? "Directory doesn't exist, created automatically " : "目录不存在，已自动创建 ";
-  chsrc_alert2 (xy_2strjoin (msg, dir));
+  chsrc_alert2 (xy_2strcat (msg, dir));
 }
 
 
@@ -1595,8 +1595,8 @@ chsrc_append_to_file (const char *str, const char *filename)
   FILE *f = fopen (file, "a");
   if (NULL==f)
     {
-      char *msg = ENGLISH ? xy_2strjoin ("Unable to open file to write: ", file)
-                          : xy_2strjoin ("无法打开文件以写入: ", file);
+      char *msg = ENGLISH ? xy_2strcat ("Unable to open file to write: ", file)
+                          : xy_2strcat ("无法打开文件以写入: ", file);
       chsrc_error2 (msg);
       exit (Exit_UserCause);
     }
@@ -1606,8 +1606,8 @@ chsrc_append_to_file (const char *str, const char *filename)
   size_t ret = fwrite (str, len, 1, f);
   if (ret != 1)
     {
-      char *msg = ENGLISH ? xy_2strjoin ("Write failed to ", file)
-                          : xy_2strjoin ("写入文件失败: ", file);
+      char *msg = ENGLISH ? xy_2strcat ("Write failed to ", file)
+                          : xy_2strcat ("写入文件失败: ", file);
       chsrc_error2 (msg);
       exit (Exit_UserCause);
     }
@@ -1622,11 +1622,11 @@ log_anyway:
   char *cmd = NULL;
   if (xy_on_windows)
     {
-      cmd = xy_strjoin (4, "echo ", str, " >> ", file);
+      cmd = xy_strcat (4, "echo ", str, " >> ", file);
     }
   else
     {
-      cmd = xy_strjoin (4, "echo '", str, "' >> ", file);
+      cmd = xy_strcat (4, "echo '", str, "' >> ", file);
     }
   chsrc_run_a_service (cmd);
   */
@@ -1651,7 +1651,7 @@ chsrc_prepend_to_file (const char *str, const char *filename)
     }
   else
     {
-      cmd = xy_strjoin (4, "sed -i '1i ", str, "' ", file);
+      cmd = xy_strcat (4, "sed -i '1i ", str, "' ", file);
     }
   chsrc_run_as_a_service (cmd);
 
@@ -1675,11 +1675,11 @@ chsrc_overwrite_file (const char *str, const char *filename)
   char *cmd = NULL;
   if (xy_on_windows)
     {
-      cmd = xy_strjoin (4, "echo ", str, " > ", file);
+      cmd = xy_strcat (4, "echo ", str, " > ", file);
     }
   else
     {
-      cmd = xy_strjoin (4, "echo '", str, "' > ", file);
+      cmd = xy_strcat (4, "echo '", str, "' > ", file);
     }
   chsrc_run_as_a_service (cmd);
 
@@ -1702,14 +1702,14 @@ chsrc_backup (const char *path)
   if (!exist)
     {
       char *msg = ENGLISH ? "File doesn't exist, skip backup: " : "文件不存在,跳过备份: ";
-      chsrc_alert2 (xy_2strjoin (msg, path));
+      chsrc_alert2 (xy_2strcat (msg, path));
       return;
     }
 
   if (xy_on_bsd || xy_on_macos)
     {
       /* BSD 和 macOS 的 cp 不支持 --backup 选项 */
-      cmd = xy_strjoin (5, "cp -f ", path, " ", path, ".bak");
+      cmd = xy_strcat (5, "cp -f ", path, " ", path, ".bak");
     }
   else if (xy_on_windows)
     {
@@ -1717,7 +1717,7 @@ chsrc_backup (const char *path)
        * @note /Y 表示覆盖
        * @note 默认情况下会输出一个 "已复制  1个文件"
        */
-      cmd = xy_strjoin (5, "copy /Y ", path, " ", path, ".bak 1>nul");
+      cmd = xy_strcat (5, "copy /Y ", path, " ", path, ".bak 1>nul");
     }
   else
     {
@@ -1732,12 +1732,12 @@ chsrc_backup (const char *path)
       /* cp (GNU coreutils) 9.4 */
       if (strstr (ver, "GNU coreutils"))
         {
-          cmd = xy_strjoin (5, "cp ", path, " ", path, ".bak --backup='t'");
+          cmd = xy_strcat (5, "cp ", path, " ", path, ".bak --backup='t'");
         }
       else
         {
           /* 非 GNU 的 cp 可能不支持 --backup ，如 busybox cp */
-          cmd = xy_strjoin (5, "cp -f ", path, " ", path, ".bak");
+          cmd = xy_strcat (5, "cp -f ", path, " ", path, ".bak");
         }
     }
 

@@ -65,7 +65,7 @@ os_openwrt_setsrc (char *option)
 
   chsrc_backup (OS_OpenWRT_SourceConfig);
 
-  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/releases@", source.url, "/releases@g' " OS_OpenWRT_SourceConfig);
+  char *cmd = xy_strcat (3, "sed -E -i 's@https?://.*/releases@", source.url, "/releases@g' " OS_OpenWRT_SourceConfig);
 
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
   chsrc_run ("opkg update", RunOpt_No_Last_New_Line);

@@ -55,14 +55,14 @@ pl_ocaml_setsrc (char *option)
 
   use_this_source(pl_ocaml);
 
-  char *cmd = xy_strjoin (3, "opam repo set-url default ",
+  char *cmd = xy_strcat (3, "opam repo set-url default ",
                               source.url,
                              " --all --set-default");
 
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_alert2 ("如果是首次使用 opam ，请使用以下命令进行初始化");
-  println (xy_2strjoin ("opam init default ", source.url));
+  println (xy_2strcat ("opam init default ", source.url));
 
   chsrc_conclude (&source);
 }

@@ -62,7 +62,7 @@ pl_js_bun_setsrc (char *option)
     }
   else
     {
-      chsrc_note2 (xy_strjoin (3, "请手动写入以下内容到 ", xy_normalize_path ("~/.bunfig.toml"), " 文件中"));
+      chsrc_note2 (xy_strcat (3, "请手动写入以下内容到 ", xy_normalize_path ("~/.bunfig.toml"), " 文件中"));
     }
 
   println (content);

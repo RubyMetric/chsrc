@@ -57,7 +57,7 @@ os_raspberrypi_setsrc (char *option)
 
   chsrc_backup (OS_RaspberryPi_SourceList);
 
-  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/.*/?@", source.url,
+  char *cmd = xy_strcat (3, "sed -E -i 's@https?://.*/.*/?@", source.url,
                             "@g' " OS_RaspberryPi_SourceList);
 
   chsrc_run (cmd, RunOpt_Default);

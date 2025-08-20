@@ -63,7 +63,7 @@ os_fedora_setsrc (char *option)
   chsrc_backup ("/etc/yum.repos.d/fedora-updates.repo");
 
   // 取消对 baseurl 的注释
-  char* cmd = xy_strjoin (5, "sed ",
+  char* cmd = xy_strcat (5, "sed ",
          "-i 's|^#baseurl=|baseurl=",
          "|g' ",
          "/etc/yum.repos.d/fedora.repo ",
@@ -73,7 +73,7 @@ os_fedora_setsrc (char *option)
   // 替换
   // (1) baseurl=<<URL>>/releases/...
   // (2) baseurl=<<URL>>/updates/...
-  cmd = xy_strjoin (7, "sed ",
+  cmd = xy_strcat (7, "sed ",
          "-i -E 's!^baseurl=.*?/(releases|updates)/!baseurl=",
          source.url,
          "/\\1/",

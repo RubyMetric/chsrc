@@ -51,7 +51,7 @@ pl_python_find_uv_config (bool mkdir)
 {
   if (chsrc_in_local_mode())
     {
-      return xy_2strjoin (PL_Python_uv_Local_ConfigPath, PL_Python_uv_ConfigFile);
+      return xy_2strcat (PL_Python_uv_Local_ConfigPath, PL_Python_uv_ConfigFile);
     }
   else
     {
@@ -66,12 +66,12 @@ pl_python_find_uv_config (bool mkdir)
               return NULL;
             }
 
-          char *config_dir = xy_2strjoin(appdata, "\\uv\\");
+          char *config_dir = xy_2strcat(appdata, "\\uv\\");
           if (mkdir)
             {
               chsrc_ensure_dir (config_dir);
             }
-          return xy_2strjoin (config_dir, PL_Python_uv_ConfigFile);
+          return xy_2strcat (config_dir, PL_Python_uv_ConfigFile);
         }
       else
         {
@@ -80,7 +80,7 @@ pl_python_find_uv_config (bool mkdir)
             {
               chsrc_ensure_dir (PL_Python_uv_User_ConfigPath);
             }
-          return xy_2strjoin (PL_Python_uv_User_ConfigPath, PL_Python_uv_ConfigFile);
+          return xy_2strcat (PL_Python_uv_User_ConfigPath, PL_Python_uv_ConfigFile);
         }
     }
 }

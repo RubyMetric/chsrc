@@ -69,7 +69,7 @@ os_linuxmint_setsrc (char *option)
   // 暂不实现自动替换基于debian或ubuntu的基础源
   char *version_codename = xy_run ("sed -nr 's/^VERSION_CODENAME=([^\"]+)/\1/p' " ETC_OS_RELEASE, 0);
   // sed -i '/<version_codename>/ s|http[^ ]*|<source.url>|g' OS_LinuxMint_SourceList
-  char* cmd = xy_strjoin (5, "sed -i '/",
+  char* cmd = xy_strcat (5, "sed -i '/",
                           version_codename, "/ s|http[^ ]*|",
                           source.url, "|g' "  OS_LinuxMint_SourceList);
 

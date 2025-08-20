@@ -61,7 +61,7 @@ pl_perl_setsrc (char *option)
 {
   use_this_source(pl_perl);
 
-  char *cmd = xy_strjoin (3,
+  char *cmd = xy_strcat (3,
   "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('urllist', 'unshift', '", source.url, "'); CPAN::HandleConfig->commit()\"");
   chsrc_run (cmd, RunOpt_Default);
 

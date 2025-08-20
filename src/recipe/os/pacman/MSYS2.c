@@ -52,12 +52,12 @@ os_msys2_setsrc (char *option)
   chsrc_backup ("/etc/pacman.d/mirrorlist.mingw64");
   chsrc_backup ("/etc/pacman.d/mirrorlist.msys");
 
-  char *prev = xy_strjoin (3, "请针对你的架构下载安装此目录下的文件:",
+  char *prev = xy_strcat (3, "请针对你的架构下载安装此目录下的文件:",
                               source.url,
                              "distrib/<架构>/");
   chsrc_note2 (prev);
 
-  char *cmd = xy_strjoin (3, "sed -i \"s#https\?://mirror.msys2.org/#",
+  char *cmd = xy_strcat (3, "sed -i \"s#https\?://mirror.msys2.org/#",
                               source.url,
                              "#g\" /etc/pacman.d/mirrorlist* ");
 

@@ -88,11 +88,11 @@ os_ubuntu_setsrc_for_deb822 (char *option)
   char *cmd  = NULL;
   if (strncmp (arch, "x86_64", 6)==0)
     {
-      cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu/?@", source.url, "@g\' " OS_Ubuntu_SourceList_DEB822);
+      cmd = xy_strcat (3, "sed -E -i \'s@https?://.*/ubuntu/?@", source.url, "@g\' " OS_Ubuntu_SourceList_DEB822);
     }
   else
     {
-      cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu-ports/?@", source.url, "-ports@g\' " OS_Ubuntu_SourceList_DEB822);
+      cmd = xy_strcat (3, "sed -E -i \'s@https?://.*/ubuntu-ports/?@", source.url, "-ports@g\' " OS_Ubuntu_SourceList_DEB822);
     }
 
   chsrc_run (cmd, RunOpt_Default);
@@ -135,11 +135,11 @@ os_ubuntu_setsrc (char *option)
   char *cmd  = NULL;
   if (0==strncmp (arch, "x86_64", 6))
     {
-      cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu/?@", source.url, "@g\' " OS_Ubuntu_old_SourceList);
+      cmd = xy_strcat (3, "sed -E -i \'s@https?://.*/ubuntu/?@", source.url, "@g\' " OS_Ubuntu_old_SourceList);
     }
   else
     {
-      cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/ubuntu-ports/?@", source.url, "-ports@g\' " OS_Ubuntu_old_SourceList);
+      cmd = xy_strcat (3, "sed -E -i \'s@https?://.*/ubuntu-ports/?@", source.url, "-ports@g\' " OS_Ubuntu_old_SourceList);
     }
 
   chsrc_run (cmd, RunOpt_Default);

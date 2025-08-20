@@ -59,7 +59,7 @@ os_alpine_setsrc (char *option)
 
   use_this_source(os_alpine);
 
-  char* cmd = xy_strjoin (3,
+  char* cmd = xy_strcat (3,
             "sed -i 's#https\\?://dl-cdn.alpinelinux.org/alpine#", source.url, "#g' /etc/apk/repositories"
             );
   chsrc_run (cmd, RunOpt_Default);

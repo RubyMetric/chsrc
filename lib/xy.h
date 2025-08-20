@@ -264,8 +264,6 @@ xy_2strcat (const char *str1, const char *str2)
   return ret;
 }
 
-/* @deprecated 应迁移到后者 */
-#define xy_2strjoin xy_2strcat
 
 /**
  * @brief 将多个字符串连接成一个字符串
@@ -335,9 +333,6 @@ xy_strcat (unsigned int count, ...)
   *cur = '\0';
   return ret;
 }
-
-/* @deprecated 应迁移到后者 */
-#define xy_strjoin xy_strcat
 
 
 /**
