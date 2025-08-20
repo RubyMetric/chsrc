@@ -166,7 +166,10 @@ void br ()                   { puts (""); }
 void p (const char *s)       { printf ("%s\n", s); }
 
 
-#define xy_arylen(x) (sizeof (x) / sizeof (x[0]))
+#define xy_c_array_len(arr) (sizeof (arr) / sizeof (arr[0]))
+
+/* @deprecated 应迁移到后者 */
+#define xy_arylen xy_c_array_len
 
 
 static inline void *
