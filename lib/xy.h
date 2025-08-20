@@ -483,9 +483,9 @@ xy_str_to_quietcmd (const char *cmd)
 {
   char *ret = NULL;
 #ifdef _WIN32
-  ret = xy_2strjoin (cmd, " >nul 2>nul ");
+  ret = xy_2strcat (cmd, " >nul 2>nul ");
 #else
-  ret = xy_2strjoin (cmd, " 1>/dev/null 2>&1 ");
+  ret = xy_2strcat (cmd, " 1>/dev/null 2>&1 ");
 #endif
   return ret;
 }
@@ -638,24 +638,24 @@ _xy_log (int level, const char *prompt, const char *content)
    */
   if (level & _XY_Log_Plain)
     {
-      str = xy_strjoin (3, prompt,  ": ", content);
+      str = xy_strcat (3, prompt,  ": ", content);
     }
   else if (level & _XY_Log_Success)
     {
-      str = xy_strjoin (3, prompt,  ": ", xy_str_to_green (content));
+      str = xy_strcat (3, prompt,  ": ", xy_str_to_green (content));
     }
   else if (level & _XY_Log_Info)
     {
-      str = xy_strjoin (3, prompt,  ": ", xy_str_to_blue (content));
+      str = xy_strcat (3, prompt,  ": ", xy_str_to_blue (content));
     }
   else if (level & _XY_Log_Warn)
     {
-      str = xy_strjoin (3, prompt,  ": ", xy_str_to_yellow (content));
+      str = xy_strcat (3, prompt,  ": ", xy_str_to_yellow (content));
       to_stderr = true;
     }
   else if (level & _XY_Log_Error)
     {
-      str = xy_strjoin (3, prompt,  ": ", xy_str_to_red (content));
+      str = xy_strcat (3, prompt,  ": ", xy_str_to_red (content));
       to_stderr = true;
     }
   else
@@ -694,7 +694,7 @@ _xy_log (int level, const char *prompt, const char *content)
 static void
 xy_log_brkt_to (const char *prompt, const char *content, FILE *stream)
 {
-  char *str = xy_strjoin (4, "[", prompt, "] ", content);
+  char *str = xy_strcat (4, "[", prompt, "] ", content);
   fprintf (stream, "%s\n", str);
   free (str);
 }
@@ -714,12 +714,12 @@ _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *c
 
   if (level & _XY_Log_Plain)
     {
-      str = xy_strjoin (6, "[", prompt1, " ", prompt2, "] ", content);
+      str = xy_strcat (6, "[", prompt1, " ", prompt2, "] ", content);
     }
   else if (level & _XY_Log_Success)
     {
       /* [app 成功]  [app success] */
-      str = xy_strjoin (6,
+      str = xy_strcat (6,
         "[", xy_str_to_green (prompt1), " ", xy_str_to_bold (xy_str_to_green (prompt2)), "] ", xy_str_to_green (content));
     }
   else if (level & _XY_Log_Info)
@@ -727,20 +727,20 @@ _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *c
       /* [app 信息]  [app info]
          [app 提示]  [app notice]
       */
-      str = xy_strjoin (6,
+      str = xy_strcat (6,
         "[", xy_str_to_blue (prompt1), " ", xy_str_to_bold (xy_str_to_blue (prompt2)), "] ", xy_str_to_blue (content));
     }
   else if (level & _XY_Log_Warn)
     {
       /* [app 警告]  [app warn] */
-      str = xy_strjoin (6,
+      str = xy_strcat (6,
         "[", xy_str_to_yellow (prompt1), " ", xy_str_to_bold (xy_str_to_yellow (prompt2)), "] ", xy_str_to_yellow (content));
       to_stderr = true;
     }
   else if (level & _XY_Log_Error)
     {
       /* [app 错误]  [app error] */
-      str = xy_strjoin (6,
+      str = xy_strcat (6,
         "[", xy_str_to_red (prompt1), " ", xy_str_to_bold (xy_str_to_red (prompt2)), "] ", xy_str_to_red (content));
       to_stderr = true;
     }
@@ -892,7 +892,7 @@ _xy_win_documents ()
   if (SUCCEEDED (result))
     return xy_strdup (documents_path);
 
-  return xy_2strjoin (xy_os_home, "\\Documents");
+  return xy_2strcat (xy_os_home, "\\Documents");
 #else
   return NULL;
 #endif
@@ -912,7 +912,7 @@ _xy_win_powershell_profile ()
   if (xy_on_windows)
     {
       char *documents_dir = _xy_win_documents ();
-      char *profile_path = xy_2strjoin (documents_dir, "\\PowerShell\\Microsoft.PowerShell_profile.ps1");
+      char *profile_path = xy_2strcat (documents_dir, "\\PowerShell\\Microsoft.PowerShell_profile.ps1");
       free (documents_dir);
       return profile_path;
     }
@@ -932,7 +932,7 @@ _xy_win_powershellv5_profile ()
   if (xy_on_windows)
     {
       char *documents_dir = _xy_win_documents ();
-      char *profile_path = xy_2strjoin (documents_dir, "\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1");
+      char *profile_path = xy_2strcat (documents_dir, "\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1");
       free (documents_dir);
       return profile_path;
     }
@@ -953,7 +953,7 @@ xy_file_exist (const char *path)
   const char *new_path = path;
   if (xy_str_start_with (path, "~"))
     {
-      new_path = xy_2strjoin (xy_os_home, path + 1);
+      new_path = xy_2strcat (xy_os_home, path + 1);
     }
   // 0 即 F_OK
   return (0==access (new_path, 0)) ? true : false;
@@ -971,7 +971,7 @@ xy_dir_exist (const char *path)
     {
       if (xy_str_start_with (path, "~"))
         {
-          dir = xy_2strjoin (xy_os_home, path + 1);
+          dir = xy_2strcat (xy_os_home, path + 1);
         }
     }
 
@@ -998,7 +998,7 @@ xy_dir_exist (const char *path)
     }
   else
     {
-      int status = system (xy_2strjoin ("test -d ", dir));
+      int status = system (xy_2strcat ("test -d ", dir));
 
       if (0==status)
         return true;
@@ -1024,7 +1024,7 @@ xy_normalize_path (const char *path)
 
   if (xy_str_start_with (new, "~"))
     {
-      new = xy_2strjoin (xy_os_home, xy_str_delete_prefix (new, "~"));
+      new = xy_2strcat (xy_os_home, xy_str_delete_prefix (new, "~"));
     }
 
   if (xy_on_windows)
