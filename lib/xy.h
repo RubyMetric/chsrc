@@ -107,6 +107,7 @@ bool xy_enable_color = true;
 #define xy_unimplemented()  assert(!"Unimplemented temporarily")
 #define xy_unreached()      assert(!"This code shouldn't be reached")
 #define xy_noop()           (void)0
+#define xy_cant_be_null(p)   if(!p) assert(!"This pointer can't be null")
 
 static void _xy_print_int    (int n) {printf ("%d", n);}
 static void _xy_print_long   (long n) {printf ("%ld", n);}
@@ -1112,6 +1113,7 @@ xy_seq_new (void)
 uint32_t
 xy_seq_len (XySeq_t *seq)
 {
+  xy_cant_be_null (seq);
   return seq->length;
 }
 
@@ -1121,7 +1123,7 @@ xy_seq_len (XySeq_t *seq)
 void *
 xy_seq_first (XySeq_t *seq)
 {
-  if (!seq) return NULL;
+  xy_cant_be_null (seq);
   return seq->first_item ? seq->first_item->data : NULL;
 }
 
@@ -1131,7 +1133,7 @@ xy_seq_first (XySeq_t *seq)
 void *
 xy_seq_last (XySeq_t *seq)
 {
-  if (!seq) return NULL;
+  xy_cant_be_null (seq);
   return seq->last_item ? seq->last_item->data : NULL;
 }
 
@@ -1142,7 +1144,7 @@ xy_seq_last (XySeq_t *seq)
 void
 xy_seq_push (XySeq_t *seq, void *data)
 {
-  if (!seq) return NULL;
+  xy_cant_be_null (seq);
 
   XySeqItem_t *it = xy_malloc0 (sizeof (XySeqItem_t));
   if (!it) return NULL;
@@ -1173,7 +1175,9 @@ xy_seq_push (XySeq_t *seq, void *data)
 void *
 xy_seq_pop (XySeq_t *seq)
 {
-  if (!seq || 0==seq->length) return NULL;
+  xy_cant_be_null (seq);
+
+  if (0==seq->length) return NULL;
 
   // 更新 item 间关系
   XySeqItem_t *l = seq->last_item;
@@ -1200,7 +1204,8 @@ xy_seq_pop (XySeq_t *seq)
 void
 xy_seq_each (XySeq_t *seq, void (*func)(void *))
 {
-  if (!seq || !func) return;
+  xy_cant_be_null (seq);
+  xy_cant_be_null (func);
 
   for (XySeqItem_t *it = seq->first_item; it; it = it->next)
     {
