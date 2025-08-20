@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(pl_java, "java/maven/mvn/gradle");
+def_target(pl_java, "java/maven/mvn/maven-daemon/mvnd/gradle");
 
 void
 pl_java_prelude ()
@@ -51,26 +51,26 @@ pl_java_check_cmd (bool *maven_exist, bool *gradle_exist, bool *maven_daemon_exi
 }
 
 bool
-chef_is_home (const char *str)
+pl_java_is_home (const char *str)
 {
   return (xy_str_start_with (str, "Maven home:"));
 }
 
-char*
-pl_java_find_maven_home (const char *source)
+bool
+pl_java_find_maven_home (const char *line)
 {
-  if(chef_is_home(source))
+  if(pl_java_is_home(line))
     {
-      char *maven_home = xy_str_delete_prefix (source, "Maven home: ");
+      return true;
     }
+  return false;
 }
 
 char *
 pl_java_find_maven_config ()
 {
-  char *maven_home = xy_run_iter ("mvn -v", 0, pl_java_find_maven_home);
-  maven_home = xy_str_strip (maven_home);
-
+  char *maven_home_line = xy_run_iter ("mvn -v", 0, pl_java_find_maven_home);
+  char *maven_home = xy_str_delete_prefix (maven_home_line, "Maven home: ");
   char *maven_config = xy_normalize_path (xy_2strjoin (maven_home, "/conf/settings.xml"));
   return maven_config;
 }
@@ -79,10 +79,8 @@ pl_java_find_maven_config ()
 char *
 pl_java_find_maven_daemon_config ()
 {
-  char *buf = xy_run_iter ("mvnd -v", 0, pl_java_find_maven_home);
-  char *maven_home = xy_str_delete_prefix (buf, "Maven daemon home: ");
-  maven_home = xy_str_strip (maven_home);
-
+  char *maven_home_line = xy_run_iter ("mvnd -v", 0, pl_java_find_maven_home);
+  char *maven_home = xy_str_delete_prefix (maven_home_line, "Maven home: ");
   char *maven_config = xy_normalize_path (xy_2strjoin (maven_home, "/conf/settings.xml"));
   return maven_config;
 }

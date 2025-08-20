@@ -461,7 +461,7 @@ chsrc set rust | cargo | crate
 chsrc set rustup
 
 chsrc set go
-chsrc set java    | maven | mvn | gradle
+chsrc set java    | maven | mvn | maven-daemon | mvnd | gradle
 chsrc set clojure | clojars
 chsrc set dart    | pub
 chsrc set flutter

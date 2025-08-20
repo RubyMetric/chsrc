@@ -607,7 +607,9 @@ measure_speed_for_url (void *url)
   if (in_custom_user_agent_mode())
     {
       user_agent = strdup("maven/3.9.11");
-    }else{
+    }
+  else
+    {
       user_agent = xy_2strjoin("chsrc/", Chsrc_Version);
     }
   char *os_devnull = xy_os_devnull;
