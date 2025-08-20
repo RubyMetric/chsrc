@@ -28,7 +28,7 @@ print_str_for_map (const char *key, void *value)
 int
 main (int argc, char const *argv[])
 {
-  xy_useutf8 ();
+  xy_use_utf8 ();
 
   println (xy_os_depend_str ("Hello, Windows!", "Hello, Unix!"));
 

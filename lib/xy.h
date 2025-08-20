@@ -815,6 +815,44 @@ xy_run (const char *cmd, unsigned long n)
 }
 
 
+/**
+ * @brief 捕获命令的输出
+ *
+ * @param[in]  cmd    要执行的命令
+ * @param[out] output 捕获的标准输出
+ *
+ * @return 返回命令的执行状态
+ */
+static int
+xy_run_capture (const char *cmd, char **output)
+{
+  int cap  = 8192; /* 假如1行100个字符，大约支持80行输出 */
+  char *buf = (char *) xy_malloc0 (cap);
+
+  FILE *stream = popen (cmd, "r");
+  if (stream == NULL)
+    {
+      fprintf (stderr, "xy: 命令执行失败\n");
+      return -1;
+    }
+
+  int size = 0;
+  size_t n;
+  while ((n = fread (buf + size, 1, cap - size, stream)) > 0) {
+    size += n;
+    if (size == cap)
+      {
+        cap *= 2;
+        char *new_buf = realloc (buf, cap);
+        buf = new_buf;
+      }
+    }
+  buf[size] = '\0';
+
+  int status = pclose (stream);
+  *output = buf;
+  return status;
+}
 
 
 /******************************************************
