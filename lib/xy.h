@@ -1068,4 +1068,75 @@ xy_parent_dir (const char *path)
     return dir;
 }
 
+
+
+/******************************************************
+ *                      Container
+ ******************************************************/
+
+typedef struct XySeq_t
+{
+  XySeqItem_t *first_item;
+  xySeqItem_t *last_item;
+
+  uint32_t length;
+}
+XySeq_t;
+
+typedef struct XySeqItem_t
+{
+  XySeqItem_t *next;
+
+  void *data;
+}
+XySeqItem_t;
+
+
+XySeq_t*
+xy_new_seq (void)
+{
+  XySeq_t *seq = xy_malloc0 (sizeof (XySeq_t));
+  if (!seq) return NULL;
+
+  seq->first_item = NULL;
+  seq->last_item = NULL;
+  seq->length = 0;
+
+  return seq;
+}
+
+
+/**
+ * @flavor Perl: push
+ */
+XySeq_t*
+xy_seq_push (XySeq_t *seq, void *data)
+{
+  if (!seq) return NULL;
+
+  XySeqItem_t *it = xy_malloc0 (sizeof (XySeqItem_t));
+  if (!it) return NULL;
+
+  it->data = data;
+  it->next = NULL;
+
+  if (seq->last)
+    {
+      // 旧的最后项成为倒数第二项
+      seq->last_item->next = it;
+    }
+  // it 成为新的最后一项
+  seq->last_item = it;
+
+  // 若 seq 为空，成为第一项
+  if (!seq->first_item)
+    {
+      seq->first_item = it;
+    }
+
+  seq->length++;
+
+  return seq;
+}
+
 #endif
