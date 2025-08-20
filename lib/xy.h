@@ -246,8 +246,12 @@ xy_str_gsub (const char *str, const char *pat, const char *replace)
   return ret;
 }
 
+
+/**
+ * @flavor 见 xy_strcat()
+ */
 static char *
-xy_2strjoin (const char *str1, const char *str2)
+xy_2strcat (const char *str1, const char *str2)
 {
   size_t len = strlen (str1);
   size_t size = len + strlen (str2) + 1;
@@ -257,9 +261,18 @@ xy_2strjoin (const char *str1, const char *str2)
   return ret;
 }
 
+/* @deprecated 应迁移到后者 */
+#define xy_2strjoin xy_2strcat
 
 /**
  * @brief 将多个字符串连接成一个字符串
+ *
+ * @flavor C语言存在 strcat()，然而限制比较大，我们重新实现
+
+ *   `concat` 这个API广泛应用于包括 Ruby、JavaScript、JVM family、C#
+ *
+ *   但由于 xy_str_concat() 显著长于 xy_strcat()，而这个 API 在 chsrc 中
+ *   又大量使用，所以我们选择后者这个更简短的形式
  *
  * @param count 连接的字符串数量
  * @param ...   连接的字符串
@@ -267,7 +280,7 @@ xy_2strjoin (const char *str1, const char *str2)
  * @return 拼接的新字符串
  */
 static char *
-xy_strjoin (unsigned int count, ...)
+xy_strcat (unsigned int count, ...)
 {
   size_t al_fixed = 256;
   char *ret = calloc (1, al_fixed);
@@ -319,6 +332,9 @@ xy_strjoin (unsigned int count, ...)
   *cur = '\0';
   return ret;
 }
+
+/* @deprecated 应迁移到后者 */
+#define xy_strjoin xy_strcat
 
 
 /**
