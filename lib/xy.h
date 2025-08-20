@@ -1085,6 +1085,7 @@ XySeq_t;
 
 typedef struct XySeqItem_t
 {
+  XySeqItem_t *prev;
   XySeqItem_t *next;
 
   void *data;
@@ -1109,7 +1110,7 @@ xy_new_seq (void)
 /**
  * @flavor Perl: push
  */
-XySeq_t*
+void
 xy_seq_push (XySeq_t *seq, void *data)
 {
   if (!seq) return NULL;
@@ -1118,25 +1119,49 @@ xy_seq_push (XySeq_t *seq, void *data)
   if (!it) return NULL;
 
   it->data = data;
+  it->prev = NULL;
   it->next = NULL;
 
-  if (seq->last)
+  // 更新 item 间关系
+  if (XySeqItem_t *l = seq->last_item;)
     {
-      // 旧的最后项成为倒数第二项
-      seq->last_item->next = it;
+      it->prev = l;
+      l->next = it;
     }
-  // it 成为新的最后一项
-  seq->last_item = it;
 
-  // 若 seq 为空，成为第一项
-  if (!seq->first_item)
-    {
-      seq->first_item = it;
-    }
+  // 更新 seq 信息
+  seq->last_item = it;
+  if (0==seq->length)
+    seq->first_item = it;
 
   seq->length++;
+}
 
-  return seq;
+
+/**
+ * @flavor Perl: pop
+ */
+void *
+xy_seq_pop (XySeq_t *seq)
+{
+  if (!seq || 0==seq->length) return NULL;
+
+  // 更新 item 间关系
+  XySeqItem_t *l = seq->last_item;
+  XySeqItem_t *p = l->prev;
+  // 考虑 seq 当前只有1项的情况
+  if (p) p->next = NULL;
+  l->prev = NULL;
+
+  // 更新 seq 信息
+  seq->last_item = p;
+  // 考虑 seq 当前只有1项的情况
+  if (!p) seq->first_item = NULL;
+  seq->length--;
+
+  void *data = l->data;
+  free (l);
+  return data;
 }
 
 #endif
