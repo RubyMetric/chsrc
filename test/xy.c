@@ -5,7 +5,7 @@
  * Test Authors  : 曾奥然 <ccmywish@qq.com>
  * Contributors  : Mikachu2333  <mikachu.23333@zohomail.com>
  * Created On    : <2023-08-30>
- * Last Modified : <2025-08-20>
+ * Last Modified : <2025-08-21>
  *
  * Test xy.h
  * ------------------------------------------------------------*/
@@ -28,7 +28,7 @@ print_str_for_map (const char *key, void *value)
 int
 main (int argc, char const *argv[])
 {
-  xy_use_utf8 ();
+  xy_init ();
 
   println (xy_os_depend_str ("Hello, Windows!", "Hello, Unix!"));
 
