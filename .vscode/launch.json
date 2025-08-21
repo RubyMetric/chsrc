@@ -14,8 +14,8 @@
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            // 如果你发现你的调试输出结果可读性差，请改为 true
-            "externalConsole": false,
+            // 如果你认为使用弹出窗口难以调试，可尝试设置为false
+            "externalConsole": true,
             // lldb 等请自行设置，不作额外说明
             "MIMode": "gdb",
             // "miDebuggerPath": "/path/to/gdb",
