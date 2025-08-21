@@ -96,7 +96,9 @@ char *xy_os_devnull = NULL;
 #define xy_unimplemented()  assert(!"Unimplemented temporarily")
 #define xy_unreached()      assert(!"This code shouldn't be reached")
 #define xy_noop()           (void)0
-#define xy_cant_be_null(p)   if(!p) assert(!"This pointer can't be null")
+#define xy_cant_be_null(p)  if(!p) assert(!"This pointer can't be null")
+#define xy_developer_mistake(reason) assert(!reason)
+
 
 static void _xy_print_int    (int n) {printf ("%d", n);}
 static void _xy_print_long   (long n) {printf ("%ld", n);}
