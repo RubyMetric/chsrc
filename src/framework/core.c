@@ -161,6 +161,7 @@ ProgStatus =
   #define chsrc_debug(dom,str)
 #endif
 #define chsrc_verbose(str) xy_info(App_Name "(VERBOSE)",str)
+#define chsrc_panic(reason) xy_error(App_Name "(PANIC)",reason); exit(Exit_MaintainerCause)
 
 #define faint(str)    xy_str_to_faint(str)
 #define red(str)      xy_str_to_red(str)
