@@ -69,7 +69,6 @@ bool xy_on_android = false;
 
 char *xy_os_devnull = NULL;
 
-// #define NDEBUG
 
 #ifdef _WIN32
   #define XY_Build_On_Windows 1
@@ -90,14 +89,22 @@ char *xy_os_devnull = NULL;
   #define XY_Build_On_Unix 1
 #endif
 
+
+
+/**
+ *  assert() 会被 NDEBUG 关闭，但我们也没有必要强制开启它，还是留给用户定义
+ */
+// #undef NDEBUG
+#define xy_noop() ((void)0)
+
 #define assert_str(a, b) assert (xy_streql ((a), (b)))
 
-#define xy_unsupported()    assert(!"Unsuppoted")
-#define xy_unimplemented()  assert(!"Unimplemented temporarily")
-#define xy_unreached()      assert(!"This code shouldn't be reached")
-#define xy_noop()           (void)0
-#define xy_cant_be_null(p)  if(!p) assert(!"This pointer can't be null")
-#define xy_developer_mistake(reason) assert(!reason)
+#define xy_panic(reason)    assert(!reason)
+#define xy_unsupported()    xy_panic("Unsuppoted")
+#define xy_unimplemented()  xy_panic("Unimplemented temporarily")
+#define xy_unreached()      xy_panic("This code shouldn't be reached")
+#define xy_cant_be_null(p)  if(!p) xy_panic("This pointer can't be null")
+
 
 
 static void _xy_print_int    (int n) {printf ("%d", n);}
@@ -130,7 +137,7 @@ static void _xy_println_const_str (const char *str) {printf ("%s\n", str);}
   bool:      _xy_print_bool, \
   char *:    _xy_print_str,  \
   const char *:   _xy_print_const_str, \
-  default:   assert(!"Unsupported type for print()!") \
+  default:   xy_panic("Unsupported type for print()!") \
 )(x)
 
 /**
@@ -145,7 +152,7 @@ static void _xy_println_const_str (const char *str) {printf ("%s\n", str);}
   bool:      _xy_println_bool, \
   char *:    _xy_println_str,  \
   const char *:   _xy_println_const_str, \
-  default:   assert(!"Unsupported type for println()/say()!") \
+  default:   xy_panic("Unsupported type for println()/say()!") \
 )(x)
 /* @flavor Perl/Raku */
 #define say println
@@ -1164,7 +1171,8 @@ xy_detect_os ()
         xy_on_bsd = true;
     }
 
-  assert (xy_on_windows || xy_on_linux || xy_on_android || xy_on_macos || xy_on_bsd);
+  if (!(xy_on_windows || xy_on_linux || xy_on_android || xy_on_macos || xy_on_bsd))
+    xy_panic ("Unknown operating system");
 }
 
 
@@ -1271,7 +1279,7 @@ xy_seq_at (XySeq_t *seq, int n)
 {
   xy_cant_be_null (seq);
 
-  if (0 == n) assert (!"The index must begin from 1, not 0");
+  if (0 == n) xy_panic ("The index must begin from 1, not 0");
 
   if (1 == n) return seq->first_item ? seq->first_item->data : NULL;
 
