@@ -41,7 +41,7 @@ wr_guix_setsrc (char *option)
 {
   use_this_source(wr_guix);
 
-  char *file =  xy_strjoin (3, "(list (channel\n"
+  char *file =  xy_strcat (3, "(list (channel\n"
                                "       (inherit (car %default-channels))\n"
                                "       (url \"", source.url, "\")))");
 

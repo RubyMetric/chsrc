@@ -53,14 +53,14 @@ pl_lua_setsrc (char *option)
   use_this(pl_lua);
   Source_t source = chsrc_yield_source_and_confirm (this, option);
 
-  char *config = xy_strjoin (3, "rocks_servers = {\n"
+  char *config = xy_strcat (3, "rocks_servers = {\n"
                                 "  \"", source.url, "\"\n"
                                 "}");
 
   chsrc_note2 ("请手动修改 ~/.luarocks/config.lua 文件 (用于下载):");
   println (config);
 
-  char *upload_config = xy_strjoin (3, "key = \"<Your API Key>\"\n"
+  char *upload_config = xy_strcat (3, "key = \"<Your API Key>\"\n"
                                       "server = \"", source.url, "\"");
 
   chsrc_note2 ("请手动修改 ~/.luarocks/upload_config.lua 文件 (用于上传):");

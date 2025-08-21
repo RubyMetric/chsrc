@@ -57,7 +57,7 @@ os_trisquel_setsrc (char *option)
 
   chsrc_backup (OS_Apt_SourceList);
 
-  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/trisquel/?@", source.url, "@g' /etc/apt/sources.list");
+  char *cmd = xy_strcat (3, "sed -E -i 's@https?://.*/trisquel/?@", source.url, "@g' /etc/apt/sources.list");
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);

@@ -35,7 +35,7 @@ pl_python_pip_getsrc (char *option)
   char *py_prog_name = NULL;
   pl_python_get_py_program_name (&py_prog_name);
 
-  char *cmd = xy_2strjoin (py_prog_name, " -m pip config get global.index-url");
+  char *cmd = xy_2strcat (py_prog_name, " -m pip config get global.index-url");
   chsrc_run (cmd, RunOpt_Default);
 }
 
@@ -65,7 +65,7 @@ pl_python_pip_setsrc (char *option)
   // 这里用的是 config --user，会写入用户目录（而不是项目目录）
   // https://github.com/RubyMetric/chsrc/issues/39
   // 经测试，Windows上调用换源命令，会写入 C:\Users\RubyMetric\AppData\Roaming\pip\pip.ini
-  char *cmd = xy_2strjoin (py_prog_name, xy_2strjoin (" -m pip config --user set global.index-url ", source.url));
+  char *cmd = xy_2strcat (py_prog_name, xy_2strcat (" -m pip config --user set global.index-url ", source.url));
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
   if (chsrc_in_standalone_mode())

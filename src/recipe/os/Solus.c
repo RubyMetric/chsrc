@@ -45,7 +45,7 @@ os_solus_setsrc (char *option)
 
   use_this_source(os_solus);
 
-  char *cmd = xy_2strjoin ("eopkg add-repo Solus ", source.url);
+  char *cmd = xy_2strcat ("eopkg add-repo Solus ", source.url);
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_determine_chgtype (ChgType_Auto);

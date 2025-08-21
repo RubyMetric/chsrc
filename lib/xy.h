@@ -1,25 +1,28 @@
 /** ------------------------------------------------------------
- * Copyright © 2023-2025 Aoran Zeng, Heng Guo
+ * Copyright © 2023-2025 曾奥然, 郭恒
  * SPDX-License-Identifier: MIT
  * -------------------------------------------------------------
- * Lib Name      :    xy.h
- * Lib Authors   : Aoran Zeng  <ccmywish@qq.com>
- *               |  Heng Guo   <2085471348@qq.com>
- * Contributors  :   juzeon    <skyjuzheng@gmail.com>
+ * Lib Authors   :  曾奥然 <ccmywish@qq.com>
+ *               |   郭恒  <2085471348@qq.com>
+ * Contributors  :  juzeon <skyjuzheng@gmail.com>
  *               | Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-08-18>
+ * Last Modified : <2025-08-21>
  *
- * xy: 襄阳、咸阳
- * Corss-Platform C11 utilities for CLI applications in mixed
- * flavor (mostly Ruby)
+ *
+ *                     xy: 襄阳、咸阳
+ *
+ * 为跨平台命令行应用程序准备的 C11 实用函数和宏 (utilities)
+ *
+ * 该库的特点是混合多种编程语言风味 (绝大多数为 Ruby)，每个 API
+ * 均使用 @flavor 标注其参考依据
  * ------------------------------------------------------------*/
 
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.1.6.0-2025/08/18"
+#define _XY_Version       "v0.1.7.0-2025/08/21"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -41,6 +44,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <dirent.h> // opendir() closedir()
 
 #if defined(__STDC__) && __STDC_VERSION__ >= 202311
   #define XY_Deprecate_This(msg) [[deprecated(msg)]]
@@ -53,48 +57,37 @@
 #endif
 
 
-/* Global */
+/* 全局变量 */
 bool xy_enable_color = true;
+
+/* 由 xy_init() 赋值 */
+bool xy_on_windows = false;
+bool xy_on_linux = false;
+bool xy_on_macos = false;
+bool xy_on_bsd = false;
+bool xy_on_android = false;
+
+char *xy_os_devnull = NULL;
 
 // #define NDEBUG
 
 #ifdef _WIN32
-  #define XY_On_Windows 1
-  #define xy_on_windows true
-  #define xy_on_linux false
-  #define xy_on_macos false
-  #define xy_on_bsd false
-  #define xy_os_devnull "nul"
+  #define XY_Build_On_Windows 1
+
   #include <windows.h>
   #include <shlobj.h>
-  #define xy_useutf8() SetConsoleOutputCP (65001)
 
 #elif defined(__linux__) || defined(__linux)
-  #define XY_On_Linux 1
-  #define xy_on_windows false
-  #define xy_on_linux true
-  #define xy_on_macos false
-  #define xy_on_bsd false
-  #define xy_os_devnull "/dev/null"
-  #define xy_useutf8()
+  #define XY_Build_On_Linux 1
+  #define XY_Build_On_Unix  1
 
 #elif defined(__APPLE__)
-  #define XY_On_macOS 1
-  #define xy_on_windows false
-  #define xy_on_linux false
-  #define xy_on_macos true
-  #define xy_on_bsd false
-  #define xy_os_devnull "/dev/null"
-  #define xy_useutf8()
+  #define XY_Build_On_macOS 1
+  #define XY_Build_On_Unix  1
 
 #elif defined(__OpenBSD__) || defined(__NetBSD__) || defined(__FreeBSD__)
-  #define XY_On_BSD 1
-  #define xy_on_windows false
-  #define xy_on_linux false
-  #define xy_on_macos false
-  #define xy_on_bsd true
-  #define xy_os_devnull "/dev/null"
-  #define xy_useutf8()
+  #define XY_Build_On_BSD  1
+  #define XY_Build_On_Unix 1
 #endif
 
 #define assert_str(a, b) assert (xy_streql ((a), (b)))
@@ -102,6 +95,8 @@ bool xy_enable_color = true;
 #define xy_unsupported()    assert(!"Unsuppoted")
 #define xy_unimplemented()  assert(!"Unimplemented temporarily")
 #define xy_unreached()      assert(!"This code shouldn't be reached")
+#define xy_noop()           (void)0
+#define xy_cant_be_null(p)   if(!p) assert(!"This pointer can't be null")
 
 static void _xy_print_int    (int n) {printf ("%d", n);}
 static void _xy_print_long   (long n) {printf ("%ld", n);}
@@ -121,6 +116,9 @@ static void _xy_println_bool   (bool b) {printf("%s\n", (b) ? "true" : "false");
 static void _xy_println_str    (char *str) {printf ("%s\n", str);}
 static void _xy_println_const_str (const char *str) {printf ("%s\n", str);}
 
+/**
+ * @flavor Ruby, Python
+ */
 #define print(x) _Generic((x), \
   int:       _xy_print_int,  \
   long:      _xy_print_long, \
@@ -133,6 +131,9 @@ static void _xy_println_const_str (const char *str) {printf ("%s\n", str);}
   default:   assert(!"Unsupported type for print()!") \
 )(x)
 
+/**
+ * @flavor JVM family, Rust
+ */
 #define println(x) _Generic((x), \
   int:       _xy_println_int,  \
   long:      _xy_println_long, \
@@ -144,12 +145,22 @@ static void _xy_println_const_str (const char *str) {printf ("%s\n", str);}
   const char *:   _xy_println_const_str, \
   default:   assert(!"Unsupported type for println()/say()!") \
 )(x)
+/* @flavor Perl/Raku */
 #define say println
-
+/* @flavor PHP */
+#define echo println
+/**
+ * @flavor HTML
+ */
 void br ()                   { puts (""); }
 void p (const char *s)       { printf ("%s\n", s); }
 
-#define xy_arylen(x) (sizeof (x) / sizeof (x[0]))
+
+#define xy_c_array_len(arr) (sizeof (arr) / sizeof (arr[0]))
+
+/* @deprecated 应迁移到后者 */
+#define xy_arylen xy_c_array_len
+
 
 static inline void *
 xy_malloc0 (size_t size)
@@ -166,6 +177,8 @@ xy_malloc0 (size_t size)
 
 /**
  * @brief 将 str 中所有的 pat 字符串替换成 replace，返回一个全新的字符串；也可用作删除、缩小、扩张
+ *
+ * @flavor Ruby: String#gsub
  *
  * @param str     原字符串
  * @param pat     要替换的字符串
@@ -226,8 +239,12 @@ xy_str_gsub (const char *str, const char *pat, const char *replace)
   return ret;
 }
 
+
+/**
+ * @flavor 见 xy_strcat()
+ */
 static char *
-xy_2strjoin (const char *str1, const char *str2)
+xy_2strcat (const char *str1, const char *str2)
 {
   size_t len = strlen (str1);
   size_t size = len + strlen (str2) + 1;
@@ -241,13 +258,20 @@ xy_2strjoin (const char *str1, const char *str2)
 /**
  * @brief 将多个字符串连接成一个字符串
  *
+ * @flavor C语言存在 strcat()，然而限制比较大，我们重新实现
+
+ *   `concat` 这个API广泛应用于包括 Ruby、JavaScript、JVM family、C#
+ *
+ *   但由于 xy_str_concat() 显著长于 xy_strcat()，而这个 API 在 chsrc 中
+ *   又大量使用，所以我们选择后者这个更简短的形式
+ *
  * @param count 连接的字符串数量
  * @param ...   连接的字符串
  *
  * @return 拼接的新字符串
  */
 static char *
-xy_strjoin (unsigned int count, ...)
+xy_strcat (unsigned int count, ...)
 {
   size_t al_fixed = 256;
   char *ret = calloc (1, al_fixed);
@@ -401,6 +425,7 @@ new_str:
   return buf;
 }
 
+
 static bool
 xy_streql (const char *str1, const char *str2)
 {
@@ -436,18 +461,23 @@ xy_streql_ic(const char *str1, const char *str2)
   return true;
 }
 
+
 static char *
 xy_str_to_quietcmd (const char *cmd)
 {
   char *ret = NULL;
 #ifdef _WIN32
-  ret = xy_2strjoin (cmd, " >nul 2>nul ");
+  ret = xy_2strcat (cmd, " >nul 2>nul ");
 #else
-  ret = xy_2strjoin (cmd, " 1>/dev/null 2>&1 ");
+  ret = xy_2strcat (cmd, " 1>/dev/null 2>&1 ");
 #endif
   return ret;
 }
 
+
+/**
+ * @flavor Ruby: String#end_with?
+ */
 static bool
 xy_str_end_with (const char *str, const char *suffix)
 {
@@ -472,6 +502,9 @@ xy_str_end_with (const char *str, const char *suffix)
   return true;
 }
 
+/**
+ * @flavor Ruby: String#start_with?
+ */
 static bool
 xy_str_start_with (const char *str, const char *prefix)
 {
@@ -501,6 +534,9 @@ xy_str_start_with (const char *str, const char *prefix)
   return true;
 }
 
+/**
+ * @flavor Ruby: String#delete_prefix
+ */
 static char *
 xy_str_delete_prefix (const char *str, const char *prefix)
 {
@@ -514,6 +550,9 @@ xy_str_delete_prefix (const char *str, const char *prefix)
   return cur;
 }
 
+/**
+ * @flavor Ruby: String#delete_suffix
+ */
 static char *
 xy_str_delete_suffix (const char *str, const char *suffix)
 {
@@ -529,6 +568,9 @@ xy_str_delete_suffix (const char *str, const char *suffix)
   return new;
 }
 
+/**
+ * @flavor Ruby: String#strip
+ */
 static char *
 xy_str_strip (const char *str)
 {
@@ -580,29 +622,29 @@ _xy_log (int level, const char *prompt, const char *content)
    */
   if (level & _XY_Log_Plain)
     {
-      str = xy_strjoin (3, prompt,  ": ", content);
+      str = xy_strcat (3, prompt,  ": ", content);
     }
   else if (level & _XY_Log_Success)
     {
-      str = xy_strjoin (3, prompt,  ": ", xy_str_to_green (content));
+      str = xy_strcat (3, prompt,  ": ", xy_str_to_green (content));
     }
   else if (level & _XY_Log_Info)
     {
-      str = xy_strjoin (3, prompt,  ": ", xy_str_to_blue (content));
+      str = xy_strcat (3, prompt,  ": ", xy_str_to_blue (content));
     }
   else if (level & _XY_Log_Warn)
     {
-      str = xy_strjoin (3, prompt,  ": ", xy_str_to_yellow (content));
+      str = xy_strcat (3, prompt,  ": ", xy_str_to_yellow (content));
       to_stderr = true;
     }
   else if (level & _XY_Log_Error)
     {
-      str = xy_strjoin (3, prompt,  ": ", xy_str_to_red (content));
+      str = xy_strcat (3, prompt,  ": ", xy_str_to_red (content));
       to_stderr = true;
     }
   else
     {
-      // xy_assert ("CAN'T REACH!");
+      xy_unreached();
     }
 
   if (to_stderr)
@@ -618,7 +660,7 @@ _xy_log (int level, const char *prompt, const char *content)
 
 
 /**
- * brkt 系列输出受 pip 启发，为了输出方便，使用 xy.h 的程序应该
+ * @flavor brkt 系列输出受 Python 的 pip 启发，为了输出方便，使用 xy.h 的程序应该
  *
  *  1.若想完全自定义颜色和输出位置：
  *
@@ -636,7 +678,7 @@ _xy_log (int level, const char *prompt, const char *content)
 static void
 xy_log_brkt_to (const char *prompt, const char *content, FILE *stream)
 {
-  char *str = xy_strjoin (4, "[", prompt, "] ", content);
+  char *str = xy_strcat (4, "[", prompt, "] ", content);
   fprintf (stream, "%s\n", str);
   free (str);
 }
@@ -656,12 +698,12 @@ _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *c
 
   if (level & _XY_Log_Plain)
     {
-      str = xy_strjoin (6, "[", prompt1, " ", prompt2, "] ", content);
+      str = xy_strcat (6, "[", prompt1, " ", prompt2, "] ", content);
     }
   else if (level & _XY_Log_Success)
     {
       /* [app 成功]  [app success] */
-      str = xy_strjoin (6,
+      str = xy_strcat (6,
         "[", xy_str_to_green (prompt1), " ", xy_str_to_bold (xy_str_to_green (prompt2)), "] ", xy_str_to_green (content));
     }
   else if (level & _XY_Log_Info)
@@ -669,26 +711,26 @@ _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *c
       /* [app 信息]  [app info]
          [app 提示]  [app notice]
       */
-      str = xy_strjoin (6,
+      str = xy_strcat (6,
         "[", xy_str_to_blue (prompt1), " ", xy_str_to_bold (xy_str_to_blue (prompt2)), "] ", xy_str_to_blue (content));
     }
   else if (level & _XY_Log_Warn)
     {
       /* [app 警告]  [app warn] */
-      str = xy_strjoin (6,
+      str = xy_strcat (6,
         "[", xy_str_to_yellow (prompt1), " ", xy_str_to_bold (xy_str_to_yellow (prompt2)), "] ", xy_str_to_yellow (content));
       to_stderr = true;
     }
   else if (level & _XY_Log_Error)
     {
       /* [app 错误]  [app error] */
-      str = xy_strjoin (6,
+      str = xy_strcat (6,
         "[", xy_str_to_red (prompt1), " ", xy_str_to_bold (xy_str_to_red (prompt2)), "] ", xy_str_to_red (content));
       to_stderr = true;
     }
   else
     {
-      // xy_assert ("CAN'T REACH!");
+      xy_unreached();
     }
 
   if (to_stderr)
@@ -709,20 +751,20 @@ _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *c
  ******************************************************/
 
 /**
- * @brief 执行cmd，返回某行输出结果，并对已经遍历过的行执行iter_func
+ * @brief 执行 `cmd`，返回某行输出结果，并对已经遍历过的行执行 `func`
  *
- * @param  cmd        要执行的命令
- * @param   n         指定命令执行输出的结果行中的某一行，0 表示最后一行，n (n>0) 表示第n行
- * @param  iter_func  对遍历时经过的行的内容，进行函数调用
+ * @param  cmd   要执行的命令
+ * @param   n    指定命令执行输出的结果行中的某一行，0 表示最后一行，n (n>0) 表示第n行
+ * @param  func  对遍历时经过的行的内容，进行函数调用
  *
- * @return            该函数会返回 参数 n 指定的该行的内容
+ * @return 返回第 `n` 行的内容
  *
  * @note 返回的字符串最后面一般有换行符号
  *
- * 由于目标行会被返回出来，所以 iter_func() 并不执行目标行，只会执行遍历过的行
+ *   由于目标行会被返回出来，所以 `func` 并不执行目标行，只会执行遍历过的行
  */
 static char *
-xy_run_iter (const char *cmd,  unsigned long n,  void (*iter_func) (const char *))
+xy_run_iter_lines (const char *cmd,  unsigned long n,  void (*func) (const char *))
 {
   const int size = 512;
   char *buf = (char *) malloc (size);
@@ -746,9 +788,9 @@ xy_run_iter (const char *cmd,  unsigned long n,  void (*iter_func) (const char *
       count += 1;
       if (n == count)
         break;
-      if (iter_func)
+      if (func)
         {
-          iter_func (buf);
+          func (buf);
         }
     }
 
@@ -759,10 +801,48 @@ xy_run_iter (const char *cmd,  unsigned long n,  void (*iter_func) (const char *
 static char *
 xy_run (const char *cmd, unsigned long n)
 {
-  return xy_run_iter (cmd, n, NULL);
+  return xy_run_iter_lines (cmd, n, NULL);
 }
 
 
+/**
+ * @brief 捕获命令的输出
+ *
+ * @param[in]  cmd    要执行的命令
+ * @param[out] output 捕获的标准输出
+ *
+ * @return 返回命令的执行状态
+ */
+static int
+xy_run_capture (const char *cmd, char **output)
+{
+  int cap  = 8192; /* 假如1行100个字符，大约支持80行输出 */
+  char *buf = (char *) xy_malloc0 (cap);
+
+  FILE *stream = popen (cmd, "r");
+  if (stream == NULL)
+    {
+      fprintf (stderr, "xy: 命令执行失败\n");
+      return -1;
+    }
+
+  int size = 0;
+  size_t n;
+  while ((n = fread (buf + size, 1, cap - size, stream)) > 0) {
+    size += n;
+    if (size == cap)
+      {
+        cap *= 2;
+        char *new_buf = realloc (buf, cap);
+        buf = new_buf;
+      }
+    }
+  buf[size] = '\0';
+
+  int status = pclose (stream);
+  *output = buf;
+  return status;
+}
 
 
 /******************************************************
@@ -770,7 +850,8 @@ xy_run (const char *cmd, unsigned long n)
  ******************************************************/
 
  /**
- * @note 该函数同 just 中的 os_family()，只区分 windows, unix
+ * @flavor 该函数同 just 中的 os_family()，只区分 windows, unix
+ *
  * @return 返回 "windows" 或 "unix"
  */
 #define xy_os_family _xy_os_family ()
@@ -825,7 +906,7 @@ _xy_os_home ()
 static char *
 _xy_win_documents ()
 {
-#ifdef XY_On_Windows
+#ifdef XY_Build_On_Windows
   char documents_path[MAX_PATH];
   HRESULT result = SHGetFolderPathA (NULL, CSIDL_MYDOCUMENTS, NULL,
                                      SHGFP_TYPE_CURRENT, documents_path);
@@ -833,7 +914,7 @@ _xy_win_documents ()
   if (SUCCEEDED (result))
     return xy_strdup (documents_path);
 
-  return xy_2strjoin (xy_os_home, "\\Documents");
+  return xy_2strcat (xy_os_home, "\\Documents");
 #else
   return NULL;
 #endif
@@ -853,7 +934,7 @@ _xy_win_powershell_profile ()
   if (xy_on_windows)
     {
       char *documents_dir = _xy_win_documents ();
-      char *profile_path = xy_2strjoin (documents_dir, "\\PowerShell\\Microsoft.PowerShell_profile.ps1");
+      char *profile_path = xy_2strcat (documents_dir, "\\PowerShell\\Microsoft.PowerShell_profile.ps1");
       free (documents_dir);
       return profile_path;
     }
@@ -873,7 +954,7 @@ _xy_win_powershellv5_profile ()
   if (xy_on_windows)
     {
       char *documents_dir = _xy_win_documents ();
-      char *profile_path = xy_2strjoin (documents_dir, "\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1");
+      char *profile_path = xy_2strcat (documents_dir, "\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1");
       free (documents_dir);
       return profile_path;
     }
@@ -894,7 +975,7 @@ xy_file_exist (const char *path)
   const char *new_path = path;
   if (xy_str_start_with (path, "~"))
     {
-      new_path = xy_2strjoin (xy_os_home, path + 1);
+      new_path = xy_2strcat (xy_os_home, path + 1);
     }
   // 0 即 F_OK
   return (0==access (new_path, 0)) ? true : false;
@@ -912,13 +993,13 @@ xy_dir_exist (const char *path)
     {
       if (xy_str_start_with (path, "~"))
         {
-          dir = xy_2strjoin (xy_os_home, path + 1);
+          dir = xy_2strcat (xy_os_home, path + 1);
         }
     }
 
   if (xy_on_windows)
     {
-#ifdef XY_On_Windows
+#ifdef XY_Build_On_Windows
       // 也可以用 opendir() #include <dirent.h>
       DWORD attr = GetFileAttributesA (dir);
 
@@ -939,7 +1020,7 @@ xy_dir_exist (const char *path)
     }
   else
     {
-      int status = system (xy_2strjoin ("test -d ", dir));
+      int status = system (xy_2strcat ("test -d ", dir));
 
       if (0==status)
         return true;
@@ -965,7 +1046,7 @@ xy_normalize_path (const char *path)
 
   if (xy_str_start_with (new, "~"))
     {
-      new = xy_2strjoin (xy_os_home, xy_str_delete_prefix (new, "~"));
+      new = xy_2strcat (xy_os_home, xy_str_delete_prefix (new, "~"));
     }
 
   if (xy_on_windows)
@@ -1009,5 +1090,405 @@ xy_parent_dir (const char *path)
   else
     return dir;
 }
+
+
+
+void
+xy_detect_os ()
+{
+  // C:
+  char *drive = getenv ("SystemDrive");
+  if (drive)
+    {
+      char path[256];
+      snprintf (path, sizeof (path), "%s\\Users", drive);
+      DIR *d = opendir (path);
+      if (d)
+        {
+          xy_on_windows = true;
+          closedir (d);
+          return;
+        }
+    }
+
+  FILE *fp = fopen ("/proc/version", "r");
+  if (fp)
+    {
+      char buf[256] = {0};
+      fread (buf, 1, sizeof(buf) - 1, fp);
+      fclose (fp);
+      if (strstr (buf, "Android"))
+        {
+          xy_on_android = true;
+          return;
+        }
+      else if (strstr (buf, "Linux"))
+        {
+          xy_on_linux = true;
+          return;
+        }
+    }
+
+  /* 判断 macOS */
+  DIR *d = opendir ("/System/Applications");
+  if (d)
+    {
+      closedir (d);
+      d = opendir ("/Library/Apple");
+      if (d)
+        {
+          xy_on_macos = true;
+          closedir (d);
+        }
+    }
+
+  /* 最后判断 BSD */
+  fp = popen ("uname -s", "r");
+  if (!fp)
+    {
+      if (opendir ("/etc/rc.d"))
+        {
+          closedir (d);
+          xy_on_bsd = true;
+          return;
+        }
+    }
+  else
+    {
+      char buf[256];
+      fgets (buf, sizeof (buf), fp);
+      pclose (fp);
+      if (strstr (buf, "BSD")  != NULL)
+        xy_on_bsd = true;
+    }
+
+  assert (xy_on_windows || xy_on_linux || xy_on_android || xy_on_macos || xy_on_bsd);
+}
+
+
+void
+xy_use_utf8 ()
+{
+#ifdef XY_Build_On_Windows
+  SetConsoleOutputCP (65001);
+#endif
+}
+
+
+/**
+ * @note 该函数必须被首先调用，方能使用各个跨操作系统的函数
+ */
+void
+xy_init ()
+{
+  xy_detect_os ();
+
+  if (xy_on_windows)
+    xy_os_devnull = "nul";
+  else
+    xy_os_devnull = "/dev/null";
+
+  xy_use_utf8 ();
+}
+
+
+/******************************************************
+ *                      Container
+ ******************************************************/
+typedef struct XySeqItem_t
+{
+  struct XySeqItem_t *prev;
+  struct XySeqItem_t *next;
+
+  void *data;
+}
+XySeqItem_t;
+
+typedef struct XySeq_t
+{
+  XySeqItem_t *first_item;
+  XySeqItem_t *last_item;
+
+  uint32_t length;
+}
+XySeq_t;
+
+
+XySeq_t*
+xy_seq_new (void)
+{
+  XySeq_t *seq = xy_malloc0 (sizeof (XySeq_t));
+  if (!seq) return NULL;
+
+  seq->first_item = NULL;
+  seq->last_item = NULL;
+  seq->length = 0;
+
+  return seq;
+}
+
+/**
+ * @flavor Python: len()
+ */
+uint32_t
+xy_seq_len (XySeq_t *seq)
+{
+  xy_cant_be_null (seq);
+  return seq->length;
+}
+
+/**
+ * @flavor Ruby: Enumerable#first
+ */
+void *
+xy_seq_first (XySeq_t *seq)
+{
+  xy_cant_be_null (seq);
+  return seq->first_item ? seq->first_item->data : NULL;
+}
+
+/**
+ * @flavor Ruby: Enumerable#last
+ */
+void *
+xy_seq_last (XySeq_t *seq)
+{
+  xy_cant_be_null (seq);
+  return seq->last_item ? seq->last_item->data : NULL;
+}
+
+/**
+ * @flavor Ruby: Array#at
+ *
+ * @note 序号从1开始
+ *
+ * @return 如果seq中并没有第n个数据，则返回NULL
+ */
+void *
+xy_seq_at (XySeq_t *seq, int n)
+{
+  xy_cant_be_null (seq);
+
+  if (0 == n) assert (!"The index must begin from 1, not 0");
+
+  if (1 == n) return seq->first_item ? seq->first_item->data : NULL;
+
+  XySeqItem_t *it = seq->first_item;
+  for (uint32_t i = 1; i < n && it; i++)
+    {
+      it = it->next;
+    }
+  return it ? it->data : NULL;
+}
+
+
+/**
+ * @flavor Perl: push
+ */
+void
+xy_seq_push (XySeq_t *seq, void *data)
+{
+  xy_cant_be_null (seq);
+
+  XySeqItem_t *it = xy_malloc0 (sizeof (XySeqItem_t));;
+
+  it->data = data;
+  it->prev = NULL;
+  it->next = NULL;
+
+  // 更新 item 间关系
+  XySeqItem_t *l = seq->last_item;
+  if (l)
+    {
+      it->prev = l;
+      l->next = it;
+    }
+
+  // 更新 seq 信息
+  seq->last_item = it;
+  if (0==seq->length)
+    seq->first_item = it;
+
+  seq->length++;
+}
+
+
+/**
+ * @flavor Perl: pop
+ */
+void *
+xy_seq_pop (XySeq_t *seq)
+{
+  xy_cant_be_null (seq);
+
+  if (0==seq->length) return NULL;
+
+  // 更新 item 间关系
+  XySeqItem_t *l = seq->last_item;
+  XySeqItem_t *p = l->prev;
+  // 考虑 seq 当前只有1项的情况
+  if (p) p->next = NULL;
+  l->prev = NULL;
+
+  // 更新 seq 信息
+  seq->last_item = p;
+  // 考虑 seq 当前只有1项的情况
+  if (!p) seq->first_item = NULL;
+  seq->length--;
+
+  void *data = l->data;
+  free (l);
+  return data;
+}
+
+
+/**
+ * @flavor Ruby: Array#each
+ */
+void
+xy_seq_each (XySeq_t *seq, void (*func)(void *))
+{
+  xy_cant_be_null (seq);
+  xy_cant_be_null (func);
+
+  for (XySeqItem_t *it = seq->first_item; it; it = it->next)
+    {
+      func (it->data);
+    }
+}
+
+
+
+#define _XY_Map_Buckets_Count 97
+
+struct _XyHashBucket_t
+{
+  struct _XyHashBucket_t *next;
+  char *key;
+  void *value;
+};
+
+typedef struct XyMap_t
+{
+  struct _XyHashBucket_t **buckets;
+
+  uint32_t length;
+}
+XyMap_t;
+
+
+XyMap_t *
+xy_map_new ()
+{
+  XyMap_t *map = xy_malloc0 (sizeof (XyMap_t));
+  map->buckets = xy_malloc0 (sizeof (struct _XyHashBucket_t *) * _XY_Map_Buckets_Count);
+
+  map->length = 0;
+
+  return map;
+}
+
+
+uint32_t
+xy_map_len (XyMap_t *map)
+{
+  xy_cant_be_null (map);
+  return map->length;
+}
+
+
+unsigned long
+xy_hash (const char* str)
+{
+  unsigned long h = 5381;
+  int c;
+  while ((c = *str++))
+    h = ((h << 5) + h) + c; /* h * 33 + c */
+  return h;
+}
+
+
+/**
+ * @flavor JavaScript: map.set
+ */
+void
+xy_map_set (XyMap_t *map, const char *key, void *value)
+{
+  xy_cant_be_null (map);
+  xy_cant_be_null (key);
+
+  unsigned long hash = xy_hash (key);
+  uint32_t index = hash % _XY_Map_Buckets_Count;
+
+  // 若 key 已经存在
+  struct _XyHashBucket_t *maybe = map->buckets[index];
+  while (maybe)
+    {
+      if (xy_streql (maybe->key, key))
+        {
+          maybe->value = value;
+          return;
+        }
+      maybe = maybe->next;
+    }
+
+  // 若 key 不存在
+  struct _XyHashBucket_t *bucket = xy_malloc0 (sizeof (struct _XyHashBucket_t));
+
+  bucket->key = xy_strdup (key);
+  bucket->value = value;
+  bucket->next = map->buckets[index];
+  map->buckets[index] = bucket;
+
+  map->length++;
+}
+
+
+/**
+ * @flavor JavaScript: map.get
+ */
+void *
+xy_map_get (XyMap_t *map, const char *key)
+{
+  xy_cant_be_null (map);
+  xy_cant_be_null (key);
+
+  unsigned long hash = xy_hash (key);
+  uint32_t index = hash % _XY_Map_Buckets_Count;
+
+  struct _XyHashBucket_t *maybe = map->buckets[index];
+  while (maybe)
+    {
+      if (xy_streql (maybe->key, key))
+        {
+          return maybe->value;
+        }
+      maybe = maybe->next;
+    }
+
+  return NULL;
+}
+
+
+/**
+ * @flavor Ruby: Hash#each
+ */
+void
+xy_map_each (XyMap_t *map, void (*func)(const char *key, void *value))
+{
+  xy_cant_be_null (map);
+  xy_cant_be_null (func);
+
+  for (uint32_t i = 0; i < _XY_Map_Buckets_Count; i++)
+    {
+      struct _XyHashBucket_t *bucket = map->buckets[i];
+      while (bucket)
+        {
+          func (bucket->key, bucket->value);
+          bucket = bucket->next;
+        }
+    }
+}
+
 
 #endif

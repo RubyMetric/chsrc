@@ -73,7 +73,7 @@ os_openeuler_setsrc (char *option)
   // 替换 baseurl=<<URL>>/openEuler-xx.xx/...
   // openEuler-xx.xx 为 openEuler 版本号
   // sed -E 's!^baseurl=.*?/openEuler-([^/]+)!baseurl=$(source.url)/openEuler-\1/!g' OS_openEuler_SourceList
-  char* cmd = xy_strjoin (6, "sed ",
+  char* cmd = xy_strcat (6, "sed ",
          "-i -E 's!^baseurl=.*?/openEuler-([^/]+)!baseurl=",
          source.url,
          "openEuler-\\1",

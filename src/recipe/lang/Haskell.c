@@ -55,12 +55,12 @@ pl_haskell_setsrc (char *option)
       config = "~/.cabal/config";
     }
 
-  chsrc_note2 (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
+  chsrc_note2 (xy_strcat (3, "请向 ", config, " 中手动添加:"));
   println (content);
 
   config = xy_normalize_path ("~/.stack/config.yaml");
   content = xy_str_gsub (RAWSTR_pl_haskell_stackage_yaml, "@url@", source.url);
-  chsrc_note2 (xy_strjoin (3, "请向 ", config, " 中手动添加:"));
+  chsrc_note2 (xy_strcat (3, "请向 ", config, " 中手动添加:"));
   println (content);
 
   chsrc_conclude (&source);

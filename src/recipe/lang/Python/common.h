@@ -14,7 +14,7 @@ static char *
 pl_python_speed_url_constructor (const char *url, const char *user_data)
 {
   char *str = xy_str_delete_suffix (url, "/simple");
-  str = xy_2strjoin (str, "/packages/56/e4/55aaac2b15af4dad079e5af329a79d961e5206589d0e02b1e8da221472ed/tensorflow-2.18.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl");
+  str = xy_2strcat (str, "/packages/56/e4/55aaac2b15af4dad079e5af329a79d961e5206589d0e02b1e8da221472ed/tensorflow-2.18.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl");
   return str;
 }
 

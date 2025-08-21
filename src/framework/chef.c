@@ -2,10 +2,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Name     : chef.c
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nul None  <nul@none.org>
+ * File Authors  : 曾奥然 <ccmywish@qq.com>
+ * Contributors  : Nul None <nul@none.org>
  * Created On    : <2025-08-09>
- * Last Modified : <2025-08-11>
+ * Last Modified : <2025-08-20>
  *
  * chef DSL: for chefs (recipe makers) to define a target
  * ------------------------------------------------------------*/
@@ -17,6 +17,31 @@
 #define chef_allow_sr(t)  this->getfn = NULL;       this->setfn = t##_setsrc; this->resetfn = t##_resetsrc;
 #define chef_allow_gs(t)  this->getfn = t##_getsrc; this->setfn = t##_setsrc; this->resetfn = NULL;
 
+/**
+ * @brief 登记所有贡献者
+ *
+ * @param     id       贡献者 ID，这个ID最好是GitHub用户名，但也可以不是，只需要在 chsrc 内部进行区分即可
+ * @param display_name 如果没有提供该参数，则使用 name
+ */
+void
+chef_register_contributor (char *id, char *name, char *email, char *display_name)
+{
+  if (!id || !name || !email)
+    xy_unreached();
+
+  Contributor_t *contributor = xy_malloc0 (sizeof (Contributor_t));
+  contributor->id = xy_strdup (id);
+  contributor->name = xy_strdup (name);
+  contributor->email = xy_strdup (email);
+
+  if (!display_name)
+    contributor->display_name = xy_strdup (name);
+  else
+    contributor->display_name = xy_strdup (display_name);
+
+  xy_map_set (ProgStatus.contributors, id, contributor);
+}
+
 
 /**
  * @brief 修改 Provider 的测速地址
@@ -26,7 +51,7 @@ chef_set_provider_speed_measure_url (SourceProvider_t *provider, char *url)
 {
   provider->psmi.skip = NotSkip;
   provider->psmi.url = xy_strdup (url);
-  chsrc_debug ("m", xy_strjoin (4, "recipe 重新为 ", provider->code, " 设置测速链接: ", url));
+  chsrc_debug ("m", xy_strcat (4, "recipe 重新为 ", provider->code, " 设置测速链接: ", url));
 }
 
 
@@ -37,7 +62,7 @@ void
 chef_set_provider_speed_measure_accuracy (SourceProvider_t *provider, bool accuracy)
 {
   provider->psmi.accurate = accuracy;
-  chsrc_debug ("m", xy_strjoin (4, "recipe 重新为 ", provider->code, " 设置测速精度: ", accuracy ? "精准" : "粗略"));
+  chsrc_debug ("m", xy_strcat (4, "recipe 重新为 ", provider->code, " 设置测速精度: ", accuracy ? "精准" : "粗略"));
 }
 
 
@@ -74,7 +99,7 @@ chef_set_sources_speed_measure_url_with_func (
 void
 chef_set_sources_speed_measure_url_with_postfix (Target_t *target, char *postfix)
 {
-  chef_set_sources_speed_measure_url_with_func (target, xy_2strjoin, postfix);
+  chef_set_sources_speed_measure_url_with_func (target, xy_2strcat, postfix);
 }
 
 

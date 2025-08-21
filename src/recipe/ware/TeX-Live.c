@@ -91,14 +91,14 @@ wr_tex_setsrc (char *option)
 
   if (tlmgr_exist)
     {
-      cmd = xy_2strjoin ("tlmgr option repository ", source.url);
+      cmd = xy_2strcat ("tlmgr option repository ", source.url);
       chsrc_run (cmd, RunOpt_Default);
     }
 
   if (mpm_exist)
     {
-      char *miktex_url = xy_2strjoin (xy_str_delete_suffix (source.url, "texlive/tlnet"), "win32/miktex/tm/packages/");
-      cmd = xy_2strjoin ("mpm --set-repository=", miktex_url);
+      char *miktex_url = xy_2strcat (xy_str_delete_suffix (source.url, "texlive/tlnet"), "win32/miktex/tm/packages/");
+      cmd = xy_2strcat ("mpm --set-repository=", miktex_url);
       chsrc_run (cmd, RunOpt_Default);
     }
 

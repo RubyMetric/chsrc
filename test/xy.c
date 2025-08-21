@@ -1,34 +1,45 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: MIT
  * -------------------------------------------------------------
- * File Name     : xy.c
- * File Authors  : Aoran Zeng   <ccmywish@qq.com>
- * Contributors  :   Nil Null   <nil@null.org>
- *               | Mikachu2333  <mikachu.23333@zohomail.com>
- *               |
+ * Test File     : xy.c
+ * Test Authors  : 曾奥然 <ccmywish@qq.com>
+ * Contributors  : Mikachu2333  <mikachu.23333@zohomail.com>
  * Created On    : <2023-08-30>
- * Last Modified : <2025-08-19>
+ * Last Modified : <2025-08-21>
  *
  * Test xy.h
  * ------------------------------------------------------------*/
 
 #include "xy.h"
 
+void
+print_str_for_seq (void *str)
+{
+  print ((char *) str);
+}
+
+void
+print_str_for_map (const char *key, void *value)
+{
+  println (xy_strcat (4, "  ", key, " => ", (char *) value));
+}
+
+
 int
 main (int argc, char const *argv[])
 {
-  xy_useutf8 ();
+  xy_init ();
 
   println (xy_os_depend_str ("Hello, Windows!", "Hello, Unix!"));
 
   println (3);
   double dbl = 3.1415;
   println (dbl);
-  say (xy_2strjoin ("Xi", "'an"));
-  say (xy_strjoin  (2, "Xi", "'an"));
-  say (xy_strjoin  (3, "屈身守分，", "以待天时，", "不可与命争也"));
-  say (xy_strjoin  (4, "水落鱼梁浅，", "天寒梦泽深。", "羊公碑字在，", "读罢泪沾襟。"));
-  say (xy_strjoin  (6, "楚山横地出，", "汉水接天回。", "冠盖非新里，", "章华即旧台。", "习池风景异，", "归路满尘埃。"));
+  say (xy_2strcat ("Xi", "'an"));
+  say (xy_strcat  (2, "Xi", "'an"));
+  say (xy_strcat  (3, "屈身守分，", "以待天时，", "不可与命争也"));
+  say (xy_strcat  (4, "水落鱼梁浅，", "天寒梦泽深。", "羊公碑字在，", "读罢泪沾襟。"));
+  say (xy_strcat  (6, "楚山横地出，", "汉水接天回。", "冠盖非新里，", "章华即旧台。", "习池风景异，", "归路满尘埃。"));
 
   print (xy_str_to_bold      ("粗体"));
   print (xy_str_to_faint     ("浅体"));
@@ -131,6 +142,30 @@ main (int argc, char const *argv[])
 
   println (xy_normalize_path (" \n ~/haha/test/123 \n\r "));
   assert_str (xy_normalize_path ("~/haha/test"), xy_parent_dir (" ~/haha/test/123"));
+
+
+
+  XySeq_t *seq = xy_seq_new ();
+  xy_seq_push (seq, "Hello");
+  xy_seq_push (seq, "World");
+  assert_str ("Hello", xy_seq_at (seq, 1));
+  assert_str ("World", xy_seq_at (seq, 2));
+  xy_seq_each (seq, print_str_for_seq); br();
+  xy_seq_pop (seq);
+  assert (1 == xy_seq_len (seq));
+
+
+  XyMap_t *map = xy_map_new ();
+  xy_map_set (map, "Hello", "World");
+  xy_map_set (map, "你好",  "世界");
+  assert_str ("World", xy_map_get (map, "Hello"));
+  assert_str ("世界", xy_map_get (map, "你好"));
+  xy_map_set (map, "Hello", "chsrc");
+  assert_str ("chsrc", xy_map_get (map, "Hello"));
+  assert (2 == xy_map_len (map));
+  echo ("{");
+    xy_map_each (map, print_str_for_map);
+  echo ("}");
 
   xy_succ ("测试完成", "xy.h 测试全部通过");
 

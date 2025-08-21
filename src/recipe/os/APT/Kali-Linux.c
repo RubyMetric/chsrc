@@ -55,7 +55,7 @@ os_kali_setsrc (char *option)
 
   chsrc_backup (OS_Apt_SourceList);
 
-  char *cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/kali/?@",
+  char *cmd = xy_strcat (3, "sed -E -i \'s@https?://.*/kali/?@",
                               source.url,
                              "@g\' " OS_Apt_SourceList);
 

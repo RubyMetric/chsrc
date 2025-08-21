@@ -66,7 +66,7 @@ pl_php_setsrc (char *option)
       where = " ";
     }
 
-  char *cmd = xy_strjoin (4, "composer config", where, "repo.packagist composer ", source.url);
+  char *cmd = xy_strcat (4, "composer config", where, "repo.packagist composer ", source.url);
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_conclude (&source);

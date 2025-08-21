@@ -49,12 +49,12 @@ os_gentoo_setsrc (char *option)
 
   chsrc_backup ("/etc/portage/repos.conf/gentoo.conf");
 
-  char *cmd = xy_strjoin (3, "sed -i \"s#rsync://.*/gentoo-portage#rsync://",
+  char *cmd = xy_strcat (3, "sed -i \"s#rsync://.*/gentoo-portage#rsync://",
                              source.url,
                             "gentoo-portage#g");
   chsrc_run (cmd, RunOpt_Default);
 
-  char *w = xy_strjoin (3, "GENTOO_MIRRORS=\"https://", source.url, "gentoo\"\n");
+  char *w = xy_strcat (3, "GENTOO_MIRRORS=\"https://", source.url, "gentoo\"\n");
 
   chsrc_append_to_file (w, "/etc/portage/make.conf");
 

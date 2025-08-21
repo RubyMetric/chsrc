@@ -1,145 +1,86 @@
 /** ------------------------------------------------------------
- * Copyright © 2023-2025 Aoran Zeng, Heng Guo
+ * Copyright © 2023-2025 曾奥然, 郭恒
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * Project Name    :     chsrc
- * Project Authors :   Aoran Zeng   <ccmywish@qq.com>
- *                 |    Heng Guo    <2085471348@qq.com>
- * Contributors    :   Aaron Ruan   <aaron212cn@outlook.com>
- *                 |    Rui Chen    <rui@chenrui.dev>
- *                 |  Shengwei Chen <414685209@qq.com>
- *                 |    BlockLune   <blocklune@gmail.com>
- *                 |    Mr. Will    <mr.will.com@outlook.com>
- *                 |    Terrasse    <terrasse@qq.com>
- *                 |    Lontten     <lontten@163.com>
- *                 |   happy game   <happygame1024@gmail.com>
- *                 |    Word2VecT   <tangzinan@bupt.edu.cn>
- *                 |     xuan       <wick.dynex@qq.com>
- *                 |    GnixAij     <gaojiaxing0220@gmail.com>
- *                 |    ChatGPT     <https://chatgpt.com>
- *                 |     czyt       <czyt.go@gmail.com>
- *                 |     zouri      <guoshuaisun@outlook.com>
- *                 |   yongxiang    <1926885268@qq.com>
- *                 |     YU-7       <2747046473@qq.com>
- *                 |    juzeon      <skyjuzheng@gmail.com>
- *                 |  Jialin Lyu    <jialinlvcn@aliyun.com>
- *                 | GitHub Copilot <https://github.com/copilot>
- *                 |     ccy        <icuichengyi@gmail.com>
- *                 |  MadDogOwner   <xiaoran@xrgzs.top>
- *                 |  sanchuanhehe  <wyihe5520@gmail.com>
- *                 |  Mikachu2333   <mikachu.23333@zohomail.com>
- *                 |   Rui Yang     <techoc@foxmail.com>
- *                 |  BingChunMoLi  <bingchunmoli@bingchunmoli.com>
- *                 |
- * Created On      : <2023-08-28>
- * Last Modified   : See <Chsrc_Release_Date>
  *
- * chsrc: Change Source —— 全平台通用命令行换源工具
+ *                  chsrc: Change Source
+ *
+ *                 全平台通用换源工具与框架
+ *
+ *         Change Source everywhere for every software
+ *
+ * 项目创建者: 曾奥然, 郭恒
+ * -------------------------------------------------------------
+ *
+ * 这是一个高度依靠贡献者的项目，我们直接把每一位贡献者写进了代码
+ * 里，这是比 Git commit 更加稳定的方式。但我们不满足于把大家写在
+ * 注释里，因为C语言在编译时会无情地把这些信息抹去。
+ *
+ *           所以，我们让每一位贡献者直接参与运行时！
+ *
+ * 想象一下，每一位贡献者都化作一串比特：
+ *   栖居在内蒙古与贵州的数据中心中；
+ *   穿梭于北京与上海的机房；
+ *   流淌在广东、浙江的云里；
+ *   散布于四川与重庆的算力集群；
+ *   潜藏在陕西、甘肃、宁夏的机架之间；
+ *   分身于全国各地的桌面电脑里，点亮在湖北、山东、河南的家庭宽带
+ * 上，跃动在江苏、安徽、湖南的手机与路由器中，乃至潜入那些无名的
+ * 小型嵌入式设备。
+ *
+ * 每当 chsrc 执行一次 recipe 相关的操作，这些比特便会复苏，贡献者
+ * 的信息随之浮现。它提醒着使用者：在你与开源世界的每一次交互背后，
+ * 都是无数人的心血，跨越省份与疆域，以代码相连，持续回响。
+ *
+ * 我们希望营造像 Richard Stallman 在创建 GNU 项目之前，在 MIT 时
+ * 那样的氛围 —— 写自己用得上的软件，与大家一起开发、维护，简单纯
+ * 粹，无关商业利益。就像小区、校园自发组建的足球篮球队，从一次偶
+ * 然的加入，逐渐成长为互相支持的伙伴。
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.2.3"
-#define Chsrc_Release_Date   "2025/08/11"
+#define Chsrc_Version        "0.2.2.3-dev5"
+#define Chsrc_Release_Date   "2025/08/21"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
 #include "framework/core.c"
 #include "framework/chef.c"
 
-
-#include "recipe/lang/rawstr4c.h"
-
-#include "recipe/lang/Ruby/Ruby.c"
-#include "recipe/lang/Python/common.h"
- #include "recipe/lang/Python/pip.c"
-  #include "recipe/lang/Python/Poetry.c"
-  #include "recipe/lang/Python/PDM.c"
-  #include "recipe/lang/Python/Rye.c"
-  #include "recipe/lang/Python/uv.c"
-#include "recipe/lang/Python/Python.c"
-
-#include "recipe/lang/JavaScript/common.h"
-  #include "recipe/lang/JavaScript/npm.c"
-  #include "recipe/lang/JavaScript/pnpm.c"
-  #include "recipe/lang/JavaScript/Yarn.c"
-#include "recipe/lang/JavaScript/JavaScript.c"
-#include "recipe/lang/JavaScript/Bun.c"
-#include "recipe/lang/JavaScript/nvm.c"
-
-#include "recipe/lang/Perl.c"
-#include "recipe/lang/PHP.c"
-#include "recipe/lang/Lua.c"
-#include "recipe/lang/Go.c"
-#include "recipe/lang/Java.c"
-
-#include "recipe/lang/Rust/common.h"
-  #include "recipe/lang/Rust/rustup.c"
-  #include "recipe/lang/Rust/Cargo.c"
-
-#include "recipe/lang/Dart/common.h"
-#include "recipe/lang/Dart/Pub.c"
-#include "recipe/lang/Dart/Flutter.c"
-
-#include "recipe/lang/Haskell.c"
-#include "recipe/lang/OCaml.c"
-#include "recipe/lang/R.c"
-#include "recipe/lang/Julia.c"
-#include "recipe/lang/NuGet.c"
-#include "recipe/lang/Clojure.c"
-
-
-#include "recipe/os/rawstr4c.h"
-#include "recipe/os/APT/common.h"
-// Debian-based
-#include "recipe/os/APT/Debian.c"
-#include "recipe/os/APT/Ubuntu.c"
-#include "recipe/os/APT/Kali-Linux.c"
-#include "recipe/os/APT/Raspberry-Pi-OS.c"
-// Ubuntu-based
-#include "recipe/os/APT/Linux-Mint.c"
-#include "recipe/os/APT/Trisquel.c"
-#include "recipe/os/APT/Linux-Lite.c"
-// Debian-based and Ubuntu-based
-#include "recipe/os/APT/Armbian.c"
-// Independent
-#include "recipe/os/APT/ROS.c"
-#include "recipe/os/APT/Termux.c"
-#include "recipe/os/APT/openKylin.c"
-#include "recipe/os/APT/deepin.c"
-
-#include "recipe/os/YUM/common.h"
-#include "recipe/os/YUM/Fedora-Linux.c"
-#include "recipe/os/YUM/AlmaLinux.c"
-#include "recipe/os/YUM/Rocky-Linux.c"
-#include "recipe/os/YUM/openEuler.c"
-#include "recipe/os/YUM/Anolis-OS.c"
-
-#include "recipe/os/pacman/Arch-Linux.c"
-#include "recipe/os/pacman/Manjaro-Linux.c"
-#include "recipe/os/pacman/MSYS2.c"
-
-#include "recipe/os/openSUSE.c"
-#include "recipe/os/Alpine-Linux.c"
-#include "recipe/os/Gentoo-Linux.c"
-#include "recipe/os/Void-Linux.c"
-#include "recipe/os/Solus.c"
-#include "recipe/os/OpenWrt.c"
-
-#include "recipe/os/BSD/FreeBSD.c"
-#include "recipe/os/BSD/NetBSD.c"
-#include "recipe/os/BSD/OpenBSD.c"
-
-
-#include "recipe/ware/TeX-Live.c"
-#include "recipe/ware/Emacs.c"
-#include "recipe/ware/WinGet.c"
-#include "recipe/ware/Homebrew/Homebrew.c"
-#include "recipe/ware/CocoaPods.c"
-#include "recipe/ware/Nix.c"
-#include "recipe/ware/Guix.c"
-#include "recipe/ware/Flatpak.c"
-#include "recipe/ware/Docker/Docker.c"
-#include "recipe/ware/Anaconda/Anaconda.c"
-
+void
+chsrc_register_contributors ()
+{
+  /* 项目创建者 */
+  chef_register_contributor ("@ccmywish",       "曾奥然",         "ccmywish@qq.com",                NULL);
+  chef_register_contributor ("@G_I_Y",          "郭恒",           "2085471348@qq.com",              NULL);
+  /* 所有贡献者 (按参与贡献时间排序) */
+  chef_register_contributor ("@Aaron-212",      "Aaron Ruan",     "aaron212cn@outlook.com",         NULL);
+  chef_register_contributor ("@chenrui333",     "Rui Chen",       "rui@chenrui.dev",                NULL);
+  chef_register_contributor ("@livelycode36",   "Shengwei Chen",  "414685209@qq.com",               NULL);
+  chef_register_contributor ("@Gn3po4g",        "Peng Gao",       "gn3po4g@outlook.com",            NULL);
+  chef_register_contributor ("@BlockLune",      "BlockLune",      "blocklune@gmail.com",            NULL);
+  chef_register_contributor ("@MrWillCom",      "Mr. Will",       "mr.will.com@outlook.com",        NULL);
+  chef_register_contributor ("@Jerry-Terrasse", "Terrasse",       "terrasse@qq.com",                NULL);
+  chef_register_contributor ("@lontten",        "Lontten",        "lontten@163.com",                NULL);
+  chef_register_contributor ("@happy-game",     "Happy Game",     "happygame1024@gmail.com",        NULL);
+  chef_register_contributor ("@Word2VecT",      "Word2VecT",      "tangzinan@bupt.edu.cn",          NULL);
+  chef_register_contributor ("@wickdynex",      "Xuan",           "wick.dynex@qq.com",              NULL);
+  chef_register_contributor ("@Efterklang",     "GnixAij",        "gaojiaxing0220@gmail.com",       NULL);
+  chef_register_contributor ("@ChatGPT",        "ChatGPT",        "chatgpt.com",                    NULL);
+  chef_register_contributor ("@czyt",           "czyt",           "czyt.go@gmail.com",              NULL);
+  chef_register_contributor ("@zouri",          "Zouri",          "guoshuaisun@outlook.com",        NULL);
+  chef_register_contributor ("@xyx1926885268",  "Yongxiang",      "1926885268@qq.com",              NULL);
+  chef_register_contributor ("@YU-7",           "YU-7",           "2747046473@qq.com",              NULL);
+  chef_register_contributor ("@juzeon",         "juzeon",         "skyjuzheng@gmail.com",           NULL);
+  chef_register_contributor ("@jialinlvcn",     "Jialin Lyu",     "jialinlvcn@aliyun.com",          NULL);
+  chef_register_contributor ("@GitHub Copilot", "GitHub Copilot", "github.com/copilot",             NULL);
+  chef_register_contributor ("@Kattos",         "ccy",            "icuichengyi@gmail.com",          NULL);
+  chef_register_contributor ("@xrgzs",          "MadDogOwner",    "xiaoran@xrgzs.top",              NULL);
+  chef_register_contributor ("@sanchuanhehe",   "sanchuanhehe",   "wyihe5520@gmail.com",            NULL);
+  chef_register_contributor ("@Mikachu2333",    "Mikachu2333",    "mikachu.23333@zohomail.com",     NULL);
+  chef_register_contributor ("@techoc",         "Rui Yang",       "techoc@foxmail.com",             NULL);
+  chef_register_contributor ("@BingChunMoLi",   "BingChunMoLi",   "bingchunmoli@bingchunmoli.com",  NULL);
+  chef_register_contributor ("@hezonglun",      "HeZongLun",      "hezonglun123456@outlook.com",    NULL);
+}
 
 #include "recipe/menu.c"
 
@@ -152,7 +93,7 @@ cli_print_available_mirrors ()
 {
   {
   char *msg = ENGLISH ? "To specify a source, use chsrc set " : "指定使用某源，请使用 chsrc set ";
-  say (bdblue(xy_strjoin (3, msg, "<target>", " <code>\n")));
+  say (bdblue(xy_strcat (3, msg, "<target>", " <code>\n")));
   }
 
   {
@@ -334,28 +275,28 @@ cli_print_target_features (Target_t *target, const char *input_target_name)
 
   {
   char *msg = ENGLISH ? " Get: View the current source state " : " Get: 查看当前源状态 ";
-  char *get_msg = xy_strjoin (3, msg, "| chsrc get ", input_target_name);
+  char *get_msg = xy_strcat (3, msg, "| chsrc get ", input_target_name);
   if (target->getfn != NULL) printf (" %s%s\n", bdgreen(YesMark), purple(get_msg));
   else printf (" %s%s\n", bdred(NoMark), get_msg);br();
   }
 
   {
   char *msg = ENGLISH ? " Reset: Reset to the default source " : " Reset: 重置回默认源 ";
-  char *reset_msg = xy_strjoin (3, msg, "| chsrc reset ", input_target_name);
+  char *reset_msg = xy_strcat (3, msg, "| chsrc reset ", input_target_name);
   if (target->resetfn != NULL) printf (" %s%s\n", bdgreen(YesMark), purple(reset_msg));
   else printf (" %s%s\n", bdred(NoMark), reset_msg);br();
   }
 
   {
   char *msg = ENGLISH ? " UserDefine: using user-defined source URL " : " UserDefine: 用户自定义换源URL ";
-  char *user_define_msg = xy_strjoin (5, msg, "| chsrc set ", input_target_name, " https://user-define-url.org/", input_target_name);
+  char *user_define_msg = xy_strcat (5, msg, "| chsrc set ", input_target_name, " https://user-define-url.org/", input_target_name);
   if (target->can_user_define) printf (" %s%s\n", bdgreen(YesMark), purple(user_define_msg));
   else printf (" %s%s\n", bdred(NoMark), user_define_msg);br();
   }
 
   {
   char *msg = ENGLISH ? " Locally: Change source only for this project " : " Locally: 仅对本项目换源 ";
-  char *locally_msg = xy_strjoin (3, msg, "| chsrc set -local ", input_target_name);
+  char *locally_msg = xy_strcat (3, msg, "| chsrc set -local ", input_target_name);
 
   switch (target->cap_local)
     {
@@ -376,7 +317,7 @@ cli_print_target_features (Target_t *target, const char *input_target_name)
 
   {
   char *msg = ENGLISH ? " English: Output in English " : " English: 英文输出 ";
-  char *english_msg = xy_strjoin (3, msg, "| chsrc set -en ", input_target_name);
+  char *english_msg = xy_strcat (3, msg, "| chsrc set -en ", input_target_name);
   if (target->can_english) printf (" %s%s\n", bdgreen(YesMark), purple(english_msg));
   else printf (" %s%s\n", bdred(NoMark), english_msg);br();
   }
@@ -611,13 +552,15 @@ get_target (const char *input, TargetOp code, char *option)
 
   if (!matched) return false;
 
+  chsrc_register_contributors ();
+
   if (TargetOp_Set_Source==code)
     {
       if (target->setfn)
         {
           target->setfn(option);
         }
-      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 set 功能，邀您帮助: chsrc issue"));
+      else chsrc_error (xy_strcat (3, "暂未对 ", input, " 实现 set 功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_Reset_Source==code)
     {
@@ -625,7 +568,7 @@ get_target (const char *input, TargetOp code, char *option)
         {
           target->resetfn(option);
         }
-      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 reset 功能，邀您帮助: chsrc issue"));
+      else chsrc_error (xy_strcat (3, "暂未对 ", input, " 实现 reset 功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_Get_Source==code)
     {
@@ -633,13 +576,13 @@ get_target (const char *input, TargetOp code, char *option)
         {
           target->getfn("");
         }
-      else chsrc_error (xy_strjoin (3, "暂未对 ", input, " 实现 get 功能，邀您帮助: chsrc issue"));
+      else chsrc_error (xy_strcat (3, "暂未对 ", input, " 实现 get 功能，邀您帮助: chsrc issue"));
     }
   else if (TargetOp_List_Config==code)
     {
       {
       char *msg = ENGLISH ? "To specify a source, use chsrc set " : "指定使用某源，请使用 chsrc set ";
-      say (bdblue(xy_strjoin (3, msg, input, " <code>\n")));
+      say (bdblue(xy_strcat (3, msg, input, " <code>\n")));
       }
 
       {
@@ -688,10 +631,13 @@ get_target (const char *input, TargetOp code, char *option)
 }
 
 
+
 int
 main (int argc, char const *argv[])
 {
-  xy_useutf8 (); argc -= 1;
+  chsrc_framework_init ();
+
+  argc -= 1;
 
   if (0==argc)
     {
@@ -760,7 +706,7 @@ main (int argc, char const *argv[])
           else
             {
               char *msg = ENGLISH ? "Unknown option: " : "未识别的命令行选项 ";
-              chsrc_error (xy_2strjoin (msg, argv[i])); return Exit_Unknown;
+              chsrc_error (xy_2strcat (msg, argv[i])); return Exit_Unknown;
             }
           cli_arg_Target_pos++;
           cli_arg_Mirror_pos++;
@@ -943,7 +889,7 @@ main (int argc, char const *argv[])
     {
       char *msg1 = ENGLISH ? "Unknown command `" : "不支持的命令 ";
       char *msg2 = ENGLISH ? "`. Use `chsrc help` to view usage" : ". 请使用 chsrc help 查看使用方式";
-      chsrc_error (xy_strjoin (3, msg1, command, msg2));
+      chsrc_error (xy_strcat (3, msg1, command, msg2));
       return Exit_Unknown;
     }
 

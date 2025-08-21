@@ -60,7 +60,7 @@ os_deepin_setsrc (char *option)
 
   chsrc_backup (OS_Apt_SourceList);
 
-  char *cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/deepin/?@",
+  char *cmd = xy_strcat (3, "sed -E -i \'s@https?://.*/deepin/?@",
                               source.url,
                               "@g\' " OS_Apt_SourceList);
 

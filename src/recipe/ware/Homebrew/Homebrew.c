@@ -43,7 +43,7 @@ void
 wr_homebrew_getsrc (char *option)
 {
   int status = system (RAWSTR_wr_homebrew_read_config_cmd);
-  if (status != 0) { /* NOOP */ }
+  if (status != 0) { xy_noop(); }
 }
 
 /**

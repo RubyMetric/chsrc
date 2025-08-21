@@ -61,7 +61,7 @@ pl_dart_flutter_setsrc (char *option)
   char *cmd = NULL;
   if (xy_on_windows)
     {
-      cmd = xy_strjoin (3, "setx FLUTTER_STORAGE_BASE_URL \"", source.url, "\"");
+      cmd = xy_strcat (3, "setx FLUTTER_STORAGE_BASE_URL \"", source.url, "\"");
       chsrc_run (cmd, RunOpt_No_Last_New_Line);
     }
   else
@@ -70,7 +70,7 @@ pl_dart_flutter_setsrc (char *option)
       char *bashrc = xy_bashrc;
 
       chsrc_backup (zshrc);
-      w = xy_strjoin (3, "export FLUTTER_STORAGE_BASE_URL=\"", source.url, "\"\n");
+      w = xy_strcat (3, "export FLUTTER_STORAGE_BASE_URL=\"", source.url, "\"\n");
       chsrc_append_to_file (w, zshrc);
 
       if (xy_file_exist (bashrc))

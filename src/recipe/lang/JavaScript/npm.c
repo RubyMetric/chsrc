@@ -50,9 +50,9 @@ pl_js_npm_setsrc (char *option)
   char *cmd = NULL;
 
   if (chsrc_in_local_mode())
-    cmd = xy_2strjoin ("npm config --location project set registry ", source.url);
+    cmd = xy_2strcat ("npm config --location project set registry ", source.url);
   else
-    cmd = xy_2strjoin ("npm config set registry ", source.url);
+    cmd = xy_2strcat ("npm config set registry ", source.url);
 
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 

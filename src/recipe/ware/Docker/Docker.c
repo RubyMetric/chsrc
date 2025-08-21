@@ -118,7 +118,7 @@ wr_docker_setsrc (char *option)
           /* 不存在 /etc/docker/daemon.json 时可以直接写入文件 */
           chsrc_alert2 ("未找到Docker配置文件, 将自动创建");
           chsrc_ensure_dir ("/etc/docker");
-          chsrc_run ( xy_2strjoin ("touch ", WR_Docker_ConfigFile), RunOpt_Default);
+          chsrc_run ( xy_2strcat ("touch ", WR_Docker_ConfigFile), RunOpt_Default);
 
           chsrc_append_to_file (to_add, WR_Docker_ConfigFile);
         }

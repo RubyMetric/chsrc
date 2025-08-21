@@ -57,9 +57,9 @@ os_freebsd_setsrc (char *option)
   chsrc_log2 ("1. 添加 freebsd-pkg 源 (二进制安装包)");
   chsrc_ensure_dir ("/usr/local/etc/pkg/repos");
 
-  char *conf = xy_strjoin (3, "/usr/local/etc/pkg/repos/", source.mirror->code, ".conf");
+  char *conf = xy_strcat (3, "/usr/local/etc/pkg/repos/", source.mirror->code, ".conf");
 
-  char *pkg_content = xy_strjoin (4,
+  char *pkg_content = xy_strcat (4,
                       source.mirror->code, ": { \n"
                       "  url: \"http://", source.url, "/freebsd-pkg/${ABI}/latest\",\n"
                       "}\n"
@@ -68,7 +68,7 @@ os_freebsd_setsrc (char *option)
 
   chsrc_overwrite_file (pkg_content, conf);
   chsrc_note2 (
-    xy_strjoin (3, "若要使用季度分支，请在", conf ,"中将latest改为quarterly"));
+    xy_strcat (3, "若要使用季度分支，请在", conf ,"中将latest改为quarterly"));
 
   chsrc_alert2 ("若要使用HTTPS源，请先安装securtiy/ca_root_ns，并将'http'改成'https'，最后使用'pkg update -f'刷新缓存即可\n");
   br();
@@ -84,14 +84,14 @@ os_freebsd_setsrc (char *option)
         {
           source = this->sources[index-1]; // 使用NJU的前一个源，即USTC源
         }
-      char *git_cmd = xy_strjoin (3, "git clone --depth 1 https://", source.url, "/freebsd-ports/ports.git /usr/ports");
+      char *git_cmd = xy_strcat (3, "git clone --depth 1 https://", source.url, "/freebsd-ports/ports.git /usr/ports");
       chsrc_run (git_cmd, RunOpt_Default);
       source = this->sources[index]; // 恢复至选中的源
       chsrc_alert2 ("下次更新请使用 git -C /usr/ports pull 而非使用 gitup");
     }
   else
     {
-      char *fetch  = xy_strjoin (3, "fetch https://", source.url, "/freebsd-ports/ports.tar.gz");  // 70多MB
+      char *fetch  = xy_strcat (3, "fetch https://", source.url, "/freebsd-ports/ports.tar.gz");  // 70多MB
       char *unzip  = "tar -zxvf ports.tar.gz -C /usr/ports";
       char *delete = "rm ports.tar.gz";
       chsrc_run (fetch, RunOpt_Default);
@@ -105,7 +105,7 @@ os_freebsd_setsrc (char *option)
   // https://help.mirrors.cernet.edu.cn/FreeBSD-ports/
   chsrc_backup ("/etc/make.conf");
 
-  char *ports = xy_strjoin (3, "MASTER_SITE_OVERRIDE?=http://", source.url, "/freebsd-ports/distfiles/${DIST_SUBDIR}/\n");
+  char *ports = xy_strcat (3, "MASTER_SITE_OVERRIDE?=http://", source.url, "/freebsd-ports/distfiles/${DIST_SUBDIR}/\n");
   chsrc_append_to_file (ports, "/etc/make.conf");
 
 
@@ -113,7 +113,7 @@ os_freebsd_setsrc (char *option)
   /*
     chsrc_backup ("/etc/portsnap.conf");
 
-    char *portsnap =xy_strjoin(3,"s@(.*)SERVERNAME=[\\.|a-z|A-Z]*@\\1SERVERNAME=", source.url,
+    char *portsnap =xy_strcat(3,"s@(.*)SERVERNAME=[\\.|a-z|A-Z]*@\\1SERVERNAME=", source.url,
                                 "@g < /etc/portsnap.conf.bak");
 
     chsrc_overwrite_file (portsnap, "/etc/portsnap.conf");
@@ -131,7 +131,7 @@ os_freebsd_setsrc (char *option)
     char *update_cp = "cp /etc/freebsd-update.conf /etc/freebsd-update.conf.bak";
     chsrc_run (update_cp, RunOpt_Default);
 
-    char *update =xy_strjoin (3,"s@(.*)SERVERNAME [\\.|a-z|A-Z]*@\\1SERVERNAME ",
+    char *update =xy_strcat (3,"s@(.*)SERVERNAME [\\.|a-z|A-Z]*@\\1SERVERNAME ",
                                  source.url,
                                 "@g < /etc/freebsd-update.conf.bak");
 
