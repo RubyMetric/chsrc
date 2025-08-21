@@ -340,7 +340,7 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
     }
 
   {
-    char *msg = ENGLISH ? "Current Chef: " : "当前主厨: ";
+    char *msg = ENGLISH ? "Current Chef: " : "品控: ";
     if (target->chef)
       {
         printf ("%s%s <%s>\n", bdblue(msg),
@@ -349,14 +349,14 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
       }
     else
       {
-        char *msg1 = CHINESE ? "暂空缺, 欢迎担任!" : "Vacant, Welcome to hold the position";
+        char *msg1 = CHINESE ? "该 recipe 的负责人暂空缺, 欢迎担任" : "Vacant, Welcome to hold the position";
         printf ("%s%s\n", bdblue(msg), bdgreen(msg1));
       }
   }
 
 
   {
-    char *msg = ENGLISH ? "Cooks: " : "掌勺厨师: ";
+    char *msg = ENGLISH ? "Cooks: " : "掌勺: ";
     if (target->cooks && target->cooks_n > 0)
       {
         printf ("%s", bdblue(msg));
@@ -371,13 +371,13 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
       }
     else
       {
-        char *msg1 = CHINESE ? "暂空缺, 欢迎担任!" : "Vacant, Welcome to hold the position!";
+        char *msg1 = CHINESE ? "暂空缺, 欢迎担任" : "Vacant, Welcome to hold the position";
         printf ("%s%s\n", bdblue(msg), bdgreen(msg1));
       }
   }
 
   {
-    char *msg = ENGLISH ? "Contributors: " : "贡献者: ";
+    char *msg = ENGLISH ? "Contributors: " : "调味: ";
     if (target->contributors && target->contributors_n > 0)
       {
         printf ("%s", bdblue(msg));
