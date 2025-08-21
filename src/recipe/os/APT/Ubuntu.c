@@ -17,7 +17,7 @@ os_ubuntu_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
-  chef_set_contributors (this, 1, "@Zhao");
+  chef_set_contributors (this, 1, "@XUANJI233");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
