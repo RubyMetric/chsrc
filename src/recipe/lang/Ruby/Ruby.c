@@ -21,9 +21,8 @@ pl_ruby_prelude (void)
   chef_set_last_updated (this, "2025-08-11");
   chef_set_sources_last_updated (this, "2024-12-18");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_cooks (this, 0);
+  chef_set_chef (this, "@ccmywish");
+  chef_set_cooks (this, 1, "@ccmywish");
   chef_set_contributors (this, 0);
 
   chef_allow_local_mode (this, PartiallyCan, "支持 bundler. 不支持 gem", "Support bundler. Not support gem");

@@ -17,11 +17,9 @@ os_arch_prelude ()
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2025-06-20");
 
-  chef_set_authors (this, 2, "Aoran Zeng", "ccmywish@qq.com",
-                             "Heng Guo",   "2085471348@qq.com");
   chef_set_chef (this, "@happy-game");
-  chef_set_contributors (this, 1,
-    "happy game", "happygame1024@gmail.com");
+  chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
+  chef_set_contributors (this, 1, "@happy-game");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);

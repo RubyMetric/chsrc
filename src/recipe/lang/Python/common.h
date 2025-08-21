@@ -29,12 +29,9 @@ pl_python_group_prelude (void)
   chef_set_last_updated (this, "2025-07-14");
   chef_set_sources_last_updated (this, "2025-07-11");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-
   chef_set_chef (this, "@happy-game");
-  chef_set_contributors (this, 1,
-    "yongxiang", "1926885268@qq.com");
-
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_contributors (this, 1, "@yongxiang");
 
   chef_allow_local_mode (this, PartiallyCan, "部分包管理器支持项目级换源", "Some package managers support project-level source changing");
   chef_allow_english(this);

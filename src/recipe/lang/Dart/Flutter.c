@@ -14,12 +14,9 @@ pl_dart_flutter_prelude (void)
   chef_set_last_updated (this, "2025-07-11");
   chef_set_sources_last_updated (this, "2025-04-15");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 2,
-    "czyt", "czyt.go@gmail.com",
-    "MadDogOwner", "xiaoran@xrgzs.top");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_contributors (this, 2, "@czyt", "@MadDogOwner");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);

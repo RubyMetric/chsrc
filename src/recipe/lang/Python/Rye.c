@@ -16,9 +16,8 @@ pl_python_rye_prelude (void)
   chef_set_last_updated (this, "2025-08-09");
   chef_set_sources_last_updated (this, "2025-08-09");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
   chef_set_contributors (this, 0);
 
   chef_allow_local_mode (this, FullyCan, "支持项目级配置", "Supports project-level configuration");
