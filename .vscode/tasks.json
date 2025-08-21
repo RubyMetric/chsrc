@@ -104,21 +104,21 @@
                 "command": "powershell",
                 "args": [
                     "-c",
-                    "Get-Process -Name 'chsrc-debug' -ErrorAction SilentlyContinue | Stop-Process -Force; if ($?) { Write-Host 'chsrc-debug 程序已停止' } else { Write-Host '未找到运行中的 chsrc-debug 程序' }"
+                    "$processes = @('chsrc-debug', 'gdb', 'WindowsDebugLauncher'); foreach($p in $processes) { Get-Process -Name $p -ErrorAction SilentlyContinue | Stop-Process -Force }"
                 ]
             },
             "linux": {
                 "command": "bash",
                 "args": [
                     "-c",
-                    "if pgrep -f chsrc-debug > /dev/null; then pkill -f chsrc-debug && echo 'chsrc-debug 程序已停止'; else echo '未找到运行中的 chsrc-debug 程序'; fi"
+                    "if pgrep -f chsrc-debug > /dev/null; then pkill -f chsrc-debug; fi"
                 ]
             },
             "osx": {
                 "command": "bash",
                 "args": [
                     "-c",
-                    "if pgrep -f chsrc-debug > /dev/null; then pkill -f chsrc-debug && echo 'chsrc-debug 程序已停止'; else echo '未找到运行中的 chsrc-debug 程序'; fi"
+                    "if pgrep -f chsrc-debug > /dev/null; then pkill -f chsrc-debug; fi"
                 ]
             },
             "group": "build",
@@ -139,21 +139,21 @@
                 "command": "powershell",
                 "args": [
                     "-c",
-                    "Get-Process -Name 'chsrc' -ErrorAction SilentlyContinue | Stop-Process -Force; if ($?) { Write-Host 'chsrc 程序已停止' } else { Write-Host '未找到运行中的 chsrc 程序' }"
+                    "$processes = @('chsrc', 'gdb', 'WindowsDebugLauncher'); foreach($p in $processes) { Get-Process -Name $p -ErrorAction SilentlyContinue | Stop-Process -Force }"
                 ]
             },
             "linux": {
                 "command": "bash",
                 "args": [
                     "-c",
-                    "if pgrep -f chsrc > /dev/null; then pkill -f chsrc && echo 'chsrc 程序已停止'; else echo '未找到运行中的 chsrc 程序'; fi"
+                    "if pgrep -f chsrc > /dev/null; then pkill -f chsrc; fi"
                 ]
             },
             "osx": {
                 "command": "bash",
                 "args": [
                     "-c",
-                    "if pgrep -f chsrc > /dev/null; then pkill -f chsrc && echo 'chsrc 程序已停止'; else echo '未找到运行中的 chsrc 程序'; fi"
+                    "if pgrep -f chsrc > /dev/null; then pkill -f chsrc; fi"
                 ]
             },
             "group": "build",
