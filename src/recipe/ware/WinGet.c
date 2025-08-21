@@ -14,10 +14,9 @@ wr_winget_prelude ()
   chef_set_last_updated (this, "2025-08-17");
   chef_set_sources_last_updated (this, "2025-07-13");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1, "Mikachu2333", "mikachu.23333@zohomail.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_contributors (this, 1, "@Mikachu2333");
 
   chef_forbid_english(this);
   chef_allow_user_define(this);

@@ -15,13 +15,9 @@ os_ubuntu_prelude ()
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2025-07-11");
 
-  chef_set_authors (this, 2,
-    "Aoran Zeng", "ccmywish@qq.com",
-    "Heng Guo", "2085471348@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "Zhao", "1792582687@qq.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
+  chef_set_contributors (this, 1, "@Zhao");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);

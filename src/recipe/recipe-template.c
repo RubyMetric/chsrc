@@ -2,11 +2,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Name     : recipe-template.c
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
+ * File Authors  : 曾奥然 <ccmywish@qq.com>
+ * Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2024-08-09>
- * Last Modified : <2025-08-11>
+ * Last Modified : <2025-08-21>
  * -------------------------------------------------------------
  * 本文件作为一个通用模板：
  *
@@ -66,14 +66,12 @@ void
 
   chef_set_created_on   (this, "2024-08-09"); // 文件创建日期
   chef_set_last_updated (this, "2025-08-12"); // 文件最后一次更新日期
-  chef_set_sources_last_updated (this, "2025-08-11"); // 镜像站点最后一次更新日期
+  chef_set_sources_last_updated (this, "2025-08-11"); // 镜像源最后一次更新日期
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com"); // 作者
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0); // 想一直为它贡献和更新？将自己加在这里！
-  chef_set_contributors (this, 1, // 为它做了贡献？将自己的信息加在这里！
-    "Nil Null", "nil@null.org");
-
+  chef_set_chef (this, "@ccmywish");                  // recipe 负责人
+  chef_set_cooks (this, 2, "@ccmywish", "@nilnull");  // recipe 核心作者
+  // 做了贡献？将自己的信息加在这里！
+  chef_set_contributors (this, 2, "@nulnone", "@someone");
 
   chef_allow_local_mode (this, PartiallyCan, "具体说明是否支持项目级换源...", "Tell users the local mode support");
 

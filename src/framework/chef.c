@@ -198,6 +198,9 @@ chef_verify_contributor (const char *id)
 }
 
 
+/**
+ * @brief 设置 Chef (recipe 负责人)
+ */
 void
 chef_set_chef (Target_t *target, const char *id)
 {
@@ -209,6 +212,9 @@ chef_set_chef (Target_t *target, const char *id)
 }
 
 
+/**
+ * @brief 设置 Cooks (recipe 核心作者)
+ */
 void
 chef_set_cooks (Target_t *target, size_t count, ...)
 {
