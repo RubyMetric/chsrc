@@ -102,9 +102,9 @@
                 "command": "powershell",
                 "args": [
                     "-c",
-                    "Get-Process -Name \"chsrc-debug\" -ErrorAction SilentlyContinue | Stop-Process -Force",
-                    "Get-Process -Name \"gdb\" -ErrorAction SilentlyContinue | Stop-Process -Force",
-                    "Get-Process -Name \"WindowsDebugLauncher\" -ErrorAction SilentlyContinue | Stop-Process -Force"
+                    "Get-Process -Name \"chsrc-debug\" -ErrorAction SilentlyContinue | Stop-Process -Force;",
+                    "Get-Process -Name \"gdb\" -ErrorAction SilentlyContinue | Stop-Process -Force;",
+                    "Get-Process -Name \"WindowsDebugLauncher\" -ErrorAction SilentlyContinue | Stop-Process -Force;"
                 ]
             },
             "linux": {
@@ -139,7 +139,7 @@
                 "command": "powershell",
                 "args": [
                     "-c",
-                    "Get-Process -Name \"chsrc\" -ErrorAction SilentlyContinue | Stop-Process -Force"
+                    "Get-Process -Name \"chsrc\" -ErrorAction SilentlyContinue | Stop-Process -Force;"
                 ]
             },
             "linux": {
