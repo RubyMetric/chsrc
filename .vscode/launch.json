@@ -30,7 +30,8 @@
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
                 }
-            ]
+            ],
+            "postDebugTask": "停止 debug 程序"
         },
 
         {

@@ -37,8 +37,6 @@
                 "kind": "build",
                 "isDefault": false
             },
-            "dependsOn": "停止 debug 程序",
-            "detail": "先停止原有程序，然后使用 just build-in-debug-mode 编译 debug 版"
         },
         {
             "type": "shell",
@@ -104,7 +102,9 @@
                 "command": "powershell",
                 "args": [
                     "-c",
-                    "$processes = @('chsrc-debug', 'gdb', 'WindowsDebugLauncher'); foreach($p in $processes) { Get-Process -Name $p -ErrorAction SilentlyContinue | Stop-Process -Force }"
+                    "Get-Process -Name \"chsrc-debug\" -ErrorAction SilentlyContinue | Stop-Process -Force",
+                    "Get-Process -Name \"gdb\" -ErrorAction SilentlyContinue | Stop-Process -Force",
+                    "Get-Process -Name \"WindowsDebugLauncher\" -ErrorAction SilentlyContinue | Stop-Process -Force"
                 ]
             },
             "linux": {
@@ -139,7 +139,7 @@
                 "command": "powershell",
                 "args": [
                     "-c",
-                    "$processes = @('chsrc', 'gdb', 'WindowsDebugLauncher'); foreach($p in $processes) { Get-Process -Name $p -ErrorAction SilentlyContinue | Stop-Process -Force }"
+                    "Get-Process -Name \"chsrc\" -ErrorAction SilentlyContinue | Stop-Process -Force"
                 ]
             },
             "linux": {
