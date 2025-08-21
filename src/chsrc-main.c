@@ -335,7 +335,7 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
 {
   if (target->created_on)
     {
-      char *msg = ENGLISH ? "Recipe Created On: " : "食谱诞生时间: ";
+      char *msg = ENGLISH ? "Recipe Created On: " : "食谱创建时间: ";
       printf ("%s%s\n", bdblue(msg), target->created_on);
     }
 
@@ -356,7 +356,7 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
 
 
   {
-    char *msg = ENGLISH ? "Current Cooks: " : "主要厨师: ";
+    char *msg = ENGLISH ? "Cooks: " : "掌勺厨师: ";
     if (target->cooks && target->cooks_n > 0)
       {
         printf ("%s", bdblue(msg));

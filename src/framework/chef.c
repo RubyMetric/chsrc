@@ -5,7 +5,7 @@
  * File Authors  : 曾奥然 <ccmywish@qq.com>
  * Contributors  : Nul None <nul@none.org>
  * Created On    : <2025-08-09>
- * Last Modified : <2025-08-20>
+ * Last Modified : <2025-08-21>
  *
  * chef DSL: for chefs (recipe makers) to define a target
  * ------------------------------------------------------------*/
@@ -191,7 +191,7 @@ chef_verify_contributor (const char *id)
   if (!c)
     {
       char error[256];
-      snprintf (error, sizeof (error), "贡献者不存在: %s, 是否写错？或者请在 chsrc-main.c 中登记该贡献者", id);
+      snprintf (error, sizeof (error), "贡献者 %s 不存在, 是否写错？或请在 chsrc-main.c 中登记该贡献者", id);
       chsrc_panic (error);
     }
   return c;
