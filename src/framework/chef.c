@@ -206,8 +206,14 @@ chef_set_chef (Target_t *target, const char *id)
 {
   xy_cant_be_null (target);
 
-  Contributor_t *c = chef_verify_contributor (id);
+  /* Chef 可为空 */
+  if (!id)
+    {
+      target->chef = NULL;
+      return;
+    }
 
+  Contributor_t *c = chef_verify_contributor (id);
   target->chef = c;
 }
 
@@ -222,8 +228,7 @@ chef_set_cooks (Target_t *target, size_t count, ...)
 
   if (count == 0)
     {
-      target->cooks = NULL;
-      target->cooks_n = 0;
+      chsrc_panic ("recipe 一定至少有1位作者(cooks)");
       return;
     }
 
