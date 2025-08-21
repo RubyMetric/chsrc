@@ -191,7 +191,7 @@ chef_verify_contributor (const char *id)
   if (!c)
     {
       char error[256];
-      snprintf (error, sizeof (error), "贡献者不存在: %s", id);
+      snprintf (error, sizeof (error), "贡献者不存在: %s, 是否写错？或者请在 chsrc-main.c 中登记该贡献者", id);
       chsrc_panic (error);
     }
   return c;

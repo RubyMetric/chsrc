@@ -333,26 +333,11 @@ cli_print_target_features (Target_t *target, const char *input_target_name)
 void
 cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
 {
-  if (target->authors && target->authors_n > 0)
-    {
-      char *msg = ENGLISH ? "Recipe Original Authors: " : "食谱原始作者: ";
-      printf ("%s", bdblue(msg));
-      for (size_t i = 0; i < target->authors_n; i++)
-        {
-          if (i > 0) printf (", ");
-          printf ("%s <%s>",
-                  target->authors[i].name  ? target->authors[i].name : "Unknown",
-                  target->authors[i].email ? target->authors[i].email : "unknown@example.com");
-        }
-      printf ("\n");
-    }
-
   if (target->created_on)
     {
-      char *msg = ENGLISH ? "Recipe Created On: " : "食谱创建时间: ";
+      char *msg = ENGLISH ? "Recipe Created On: " : "食谱诞生时间: ";
       printf ("%s%s\n", bdblue(msg), target->created_on);
     }
-
 
   {
     char *msg = ENGLISH ? "Current Chef: " : "当前主厨: ";
@@ -371,7 +356,7 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
 
 
   {
-    char *msg = ENGLISH ? "Current Cooks: " : "当前副厨: ";
+    char *msg = ENGLISH ? "Current Cooks: " : "主要厨师: ";
     if (target->cooks && target->cooks_n > 0)
       {
         printf ("%s", bdblue(msg));
@@ -379,8 +364,8 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
           {
             if (i > 0) printf (", ");
             printf ("%s <%s>",
-                    target->cooks[i].name  ? target->cooks[i].name : "Unknown",
-                    target->cooks[i].email ? target->cooks[i].email : "unknown@example.com");
+                    target->cooks[i]->name  ? target->cooks[i]->name : "Unknown",
+                    target->cooks[i]->email ? target->cooks[i]->email : "unknown@example.com");
           }
         printf ("\n");
       }
@@ -400,8 +385,8 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
           {
             if (i > 0) printf (", ");
             printf ("%s <%s>",
-                    target->contributors[i].name ? target->contributors[i].name : "Unknown",
-                    target->contributors[i].email ? target->contributors[i].email : "unknown@example.com");
+                    target->contributors[i]->name ? target->contributors[i]->name : "Unknown",
+                    target->contributors[i]->email ? target->contributors[i]->email : "unknown@example.com");
           }
         printf ("\n");
       }
