@@ -305,23 +305,40 @@ chef_debug_target (Target_t *target)
 #ifdef XY_DEBUG
   if (!target)
     {
-      chsrc_debug2 ("t", "Target is NULL");
+      chsrc_debug2 ("target", "Target is NULL");
       return;
     }
 
-  say ("Debug Target Information:");
+  say ("DEBUG Target Information:");
   printf ("  Get Function: %p\n", target->getfn);
   printf ("  Set Function: %p\n", target->setfn);
   printf ("  Reset Function: %p\n", target->resetfn);
   printf ("  Sources: %p\n", target->sources);
   printf ("  Sources Count: %lld\n", target->sources_n);
 
-  printf ("  Authors: %p\n", target->authors);
-  printf ("  Authors Count: %lld\n", target->authors_n);
   printf ("  Chef: %p\n", target->chef);
   printf ("  Cooks: %p\n", target->cooks);
   printf ("  Cooks Count: %lld\n", target->cooks_n);
   printf ("  Contributors: %p\n", target->contributors);
   printf ("  Contributors Count: %lld\n", target->contributors_n);
+#endif
+}
+
+
+void
+chef_debug_contributor (Contributor_t *contributor)
+{
+#ifdef XY_DEBUG
+  if (!contributor)
+    {
+      chsrc_debug2 ("contrib", "Contributor is NULL");
+      return;
+    }
+
+  say ("DEBUG Contributor Information:");
+  printf ("  ID:    %s\n", contributor->id);
+  printf ("  Name:  %s\n", contributor->name);
+  printf ("  Email: %s\n", contributor->email);
+  printf ("  DisplayName: %s\n", contributor->display_name);
 #endif
 }

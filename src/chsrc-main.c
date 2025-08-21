@@ -529,6 +529,8 @@ typedef enum {
 bool
 get_target (const char *input, TargetOp code, char *option)
 {
+  chsrc_register_contributors ();
+
   Target_t *target = NULL;
 
            bool matched = iterate_menu (chsrc_pl_menu, input, &target);
@@ -536,8 +538,6 @@ get_target (const char *input, TargetOp code, char *option)
   if (!matched) matched = iterate_menu (chsrc_wr_menu, input, &target);
 
   if (!matched) return false;
-
-  chsrc_register_contributors ();
 
   if (TargetOp_Set_Source==code)
     {
