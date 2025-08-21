@@ -231,15 +231,33 @@ chef_set_authors (Target_t *target, size_t count, ...)
 }
 
 
-void
-chef_set_chef (Target_t *target, char *name, char *email)
+/**
+ * @brief 验证该 `id` 所指的贡献者确有其人
+ */
+Contributor_t *
+chef_verify_contributor (const char *id)
 {
-  if (!target || !name || !email)
-    return;
+  xy_cant_be_null (id);
 
-  target->chef = xy_malloc0 (sizeof(Contributor_t));
-  target->chef->name  = xy_strdup (name);
-  target->chef->email = xy_strdup (email);
+  Contributor_t *c = xy_map_get (ProgStatus.contributors, id);
+  if (!c)
+    {
+      char error[256];
+      snprintf (error, sizeof (error), "贡献者不存在: %s", id);
+      chsrc_panic (error);
+    }
+  return c;
+}
+
+
+void
+chef_set_chef (Target_t *target, const char *id)
+{
+  xy_cant_be_null (target);
+
+  Contributor_t *c = chef_verify_contributor (id);
+
+  target->chef = c;
 }
 
 
