@@ -75,8 +75,11 @@ chef_set_sources_speed_measure_url_with_func (
   char *(*func)(const char *url, const char *user_data),
   char *user_data)
 {
+  xy_cant_be_null (target);
+
   Source_t *sources = target->sources;
   int n = target->sources_n;
+
   for (int i=0; i<n; i++)
     {
       Source_t *src = &sources[i];
@@ -106,18 +109,14 @@ chef_set_sources_speed_measure_url_with_postfix (Target_t *target, char *postfix
 void
 chef_allow_english (Target_t *target)
 {
-  if (!target)
-    return;
-
+  xy_cant_be_null (target);
   target->can_english = true;
 }
 
 void
 chef_forbid_english (Target_t *target)
 {
-  if (!target)
-    return;
-
+  xy_cant_be_null (target);
   target->can_english = false;
 }
 
@@ -125,8 +124,7 @@ chef_forbid_english (Target_t *target)
 void
 chef_allow_local_mode (Target_t *target, Capability_t cap, const char *explain_zh, const char *explain_en)
 {
-  if (!target)
-    return;
+  xy_cant_be_null (target);
 
   target->cap_local = cap;
 
@@ -149,8 +147,7 @@ chef_allow_local_mode (Target_t *target, Capability_t cap, const char *explain_z
 void
 chef_allow_user_define (Target_t *target)
 {
-  if (!target)
-    return;
+  xy_cant_be_null (target);
 
   target->can_user_define = true;
   target->can_user_define_explain = NULL;
@@ -159,8 +156,7 @@ chef_allow_user_define (Target_t *target)
 void
 chef_forbid_user_define (Target_t *target)
 {
-  if (!target)
-    return;
+  xy_cant_be_null (target);
 
   target->can_user_define = false;
 
@@ -173,62 +169,14 @@ chef_forbid_user_define (Target_t *target)
 void
 chef_set_note (Target_t *target, const char *note_zh, const char *note_en)
 {
-  if (!target)
-    return;
+  xy_cant_be_null (target);
 
   const char *msg = CHINESE ? note_zh : note_en;
 
   if (msg)
-    target->note = xy_strdup(msg);
+    target->note = xy_strdup (msg);
 }
 
-
-void
-chef_set_contributors (Target_t *target, uint32_t count, ...)
-{
-  if (!target || count==0)
-    return;
-
-  target->contributors_n = count;
-  target->contributors = xy_malloc0 (count * sizeof(Contributor_t));
-
-  va_list args;
-  va_start(args, count);
-
-  for (uint32_t i = 0; i < count; i++)
-    {
-      char *name  = va_arg(args, char*);
-      char *email = va_arg(args, char*);
-
-      target->contributors[i].name  = xy_strdup (name);
-      target->contributors[i].email = xy_strdup (email);
-    }
-}
-
-
-void
-chef_set_authors (Target_t *target, size_t count, ...)
-{
-  if (!target || count == 0)
-    return;
-
-  va_list args;
-  va_start(args, count);
-
-  target->authors = xy_malloc0 (count * sizeof(Contributor_t));
-  target->authors_n = count;
-
-  for (size_t i = 0; i < count; i++)
-    {
-      char *name = va_arg(args, char*);
-      char *email = va_arg(args, char*);
-
-      target->authors[i].name = xy_strdup(name);
-      target->authors[i].email = xy_strdup(email);
-    }
-
-  va_end(args);
-}
 
 
 /**
@@ -264,8 +212,7 @@ chef_set_chef (Target_t *target, const char *id)
 void
 chef_set_cooks (Target_t *target, size_t count, ...)
 {
-  if (!target)
-    return;
+  xy_cant_be_null (target);
 
   if (count == 0)
     {
@@ -275,29 +222,52 @@ chef_set_cooks (Target_t *target, size_t count, ...)
     }
 
   va_list args;
-  va_start(args, count);
+  va_start (args, count);
 
-  target->cooks = xy_malloc0 (count * sizeof(Contributor_t));
+  target->cooks = xy_malloc0 (count * sizeof (Contributor_t*));
   target->cooks_n = count;
 
   for (size_t i = 0; i < count; i++)
     {
-      char *name = va_arg(args, char*);
-      char *email = va_arg(args, char*);
-
-      target->cooks[i].name = xy_strdup(name);
-      target->cooks[i].email = xy_strdup(email);
+      char *id = va_arg (args, char*);
+      target->cooks[i] = chef_verify_contributor (id);
     }
 
-  va_end(args);
+  va_end (args);
 }
+
+void
+chef_set_contributors (Target_t *target, uint32_t count, ...)
+{
+  xy_cant_be_null (target);
+
+  if (count == 0)
+    {
+      target->contributors = NULL;
+      target->contributors_n = 0;
+      return;
+    }
+
+  va_list args;
+  va_start (args, count);
+
+  target->contributors = xy_malloc0 (count * sizeof (Contributor_t*));
+  target->contributors_n = count;
+
+  for (uint32_t i = 0; i < count; i++)
+    {
+      char *id = va_arg (args, char*);
+      target->contributors[i] = chef_verify_contributor (id);
+    }
+}
+
 
 
 void
 chef_set_created_on (Target_t *target, char *date)
 {
-  if (!target)
-    return;
+  xy_cant_be_null (target);
+  xy_cant_be_null (date);
 
   target->created_on = xy_strdup (date);
 }
@@ -306,8 +276,8 @@ chef_set_created_on (Target_t *target, char *date)
 void
 chef_set_last_updated (Target_t *target, char *date)
 {
-  if (!target)
-    return;
+  xy_cant_be_null (target);
+  xy_cant_be_null (date);
 
   target->last_updated = xy_strdup (date);
 }
@@ -316,8 +286,8 @@ chef_set_last_updated (Target_t *target, char *date)
 void
 chef_set_sources_last_updated (Target_t *target, char *date)
 {
-  if (!target)
-    return;
+  xy_cant_be_null (target);
+  xy_cant_be_null (date);
 
   target->sources_last_updated = xy_strdup (date);
 }

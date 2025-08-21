@@ -142,20 +142,17 @@ typedef struct Target_t
   char *note;              /* 备注 */
 
 
-  /* Recipe maintain info */
+  /* recipe 维护信息 */
   char *created_on;
   char *last_updated;
   char *sources_last_updated;
 
-  Contributor_t *authors;
-  size_t         authors_n;
+  Contributor_t  *chef;    /* 该 recipe 的负责人 */
+  Contributor_t **cooks;   /* 该 recipe 的核心作者 */
+  size_t          cooks_n;
 
-  Contributor_t *contributors;
-  size_t         contributors_n;
-
-  Contributor_t *chef;   /* Chef 仅有一个 */
-  Contributor_t *cooks;  /* Cook 可以有多个 */
-  size_t         cooks_n;
+  Contributor_t **contributors; /* 该 recipe 的所有贡献者(除核心作者外的其他人) */
+  size_t          contributors_n;
 }
 Target_t;
 
