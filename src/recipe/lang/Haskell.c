@@ -22,7 +22,7 @@ pl_haskell_prelude ()
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&UpstreamProvider, NULL, DelegateToUpstream},
+  {&UpstreamProvider, "https://hackage.haskell.org", DelegateToUpstream},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/hackage", DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/hackage",          DelegateToMirror},
   {&Nju,              "https://mirror.nju.edu.cn/hackage",             DelegateToMirror},

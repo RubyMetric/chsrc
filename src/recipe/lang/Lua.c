@@ -29,7 +29,7 @@ pl_lua_prelude ()
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&UpstreamProvider,  NULL, DelegateToUpstream},
+  {&UpstreamProvider, "https://luarocks.org", DelegateToUpstream},
   {&Api7,             "https://luarocks.cn", DelegateToMirror}
   def_sources_end()
 }
