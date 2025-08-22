@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-08-21>
+ * Last Modified : <2025-08-22>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -139,6 +139,19 @@ ProgStatus =
 };
 
 
+/* Global Program Store */
+struct
+{
+  XySeq_t *pl;
+  XySeq_t *os;
+  XySeq_t *wr;
+}
+ProgStore =
+{
+  .pl = NULL,
+  .os = NULL,
+  .wr = NULL
+};
 
 
 
@@ -216,6 +229,10 @@ chsrc_framework_init ()
   xy_init ();
 
   ProgStatus.contributors = xy_map_new ();
+
+  ProgStore.pl = xy_seq_new ();
+  ProgStore.os = xy_seq_new ();
+  ProgStore.wr = xy_seq_new ();
 }
 
 
