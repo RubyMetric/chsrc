@@ -44,7 +44,7 @@ wr_winget_getsrc (char *option)
 void
 wr_winget_setsrc (char *option)
 {
-  use_this_source (wr_winget);
+  chsrc_use_this_source (wr_winget);
 
   // 2025.8.17 此前用户可能隐式使用默认源导致 remove 失败，故使用 Dont_Abort
   chsrc_run ("winget source remove winget", RunOpt_Dont_Abort_On_Failure);

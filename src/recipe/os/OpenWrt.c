@@ -57,7 +57,7 @@ os_openwrt_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_openwrt);
+  chsrc_use_this_source (os_openwrt);
 
   chsrc_backup (OS_OpenWRT_SourceConfig);
 

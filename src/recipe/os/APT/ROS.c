@@ -55,7 +55,7 @@ os_ros_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_ros);
+  chsrc_use_this_source (os_ros);
 
   chsrc_backup (OS_ROS_SourceList);
 

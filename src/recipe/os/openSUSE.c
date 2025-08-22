@@ -43,7 +43,7 @@ os_opensuse_setsrc (char *option)
 {
   // chsrc_ensure_root ();
 
-  use_this_source(os_opensuse);
+  chsrc_use_this_source (os_opensuse);
 
   while (1) {
     chsrc_note2 ("请选择你的操作系统为:");

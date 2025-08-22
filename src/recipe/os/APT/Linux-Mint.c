@@ -58,7 +58,7 @@ os_linuxmint_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_linuxmint);
+  chsrc_use_this_source (os_linuxmint);
 
   chsrc_backup (OS_LinuxMint_SourceList);
 

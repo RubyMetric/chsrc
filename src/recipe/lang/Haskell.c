@@ -39,7 +39,7 @@ pl_haskell_prelude ()
 void
 pl_haskell_setsrc (char *option)
 {
-  use_this_source(pl_haskell);
+  chsrc_use_this_source (pl_haskell);
 
   char *content = xy_str_gsub (RAWSTR_pl_haskell_cabal_config, "@url@", source.url);
 

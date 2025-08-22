@@ -71,7 +71,7 @@ wr_docker_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(wr_docker);
+  chsrc_use_this_source (wr_docker);
 
   if (xy_on_linux || xy_on_bsd)
     {

@@ -47,7 +47,7 @@ wr_emacs_prelude ()
 void
 wr_emacs_setsrc (char *option)
 {
-  use_this_source(wr_emacs);
+  chsrc_use_this_source (wr_emacs);
 
   chsrc_note2 ("Emacs换源涉及Elisp, 需要手动查阅并换源:");
   p (source.url);

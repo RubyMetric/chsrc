@@ -56,7 +56,7 @@ pl_rust_rustup_getsrc (char *option)
 void
 pl_rust_rustup_setsrc (char *option)
 {
-  use_this_source(pl_rust_rustup);
+  chsrc_use_this_source (pl_rust_rustup);
 
 #ifdef XY_Build_On_Windows
 

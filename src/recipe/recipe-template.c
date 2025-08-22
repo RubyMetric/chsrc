@@ -112,7 +112,7 @@ void
 <category>_<target>_setsrc (char *option)
 {
   /* 下面这行是必须的，注入 source 变量 */
-  use_this_source(<category>_<target>);
+  chsrc_use_this_source (<category>_<target>);
 
   /* 如果是 target group，你可能想要指定不同的 target 来使用它的源 */
   // Source_t source = chsrc_yield_source_and_confirm (&pl_js_group_target, option);

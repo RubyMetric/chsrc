@@ -60,7 +60,7 @@ os_armbian_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_armbian);
+  chsrc_use_this_source (os_armbian);
 
   chsrc_backup (OS_Armbian_SourceList);
 

@@ -62,7 +62,7 @@ pl_r_getsrc (char *option)
 void
 pl_r_setsrc (char *option)
 {
-  use_this_source(pl_r);
+  chsrc_use_this_source (pl_r);
 
   char *bioconductor_url = xy_str_delete_suffix (xy_str_delete_suffix (source.url, "cran/"), "CRAN/");
   bioconductor_url = xy_2strcat(bioconductor_url, "bioconductor");

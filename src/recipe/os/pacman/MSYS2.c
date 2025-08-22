@@ -43,7 +43,7 @@ os_msys2_prelude ()
 void
 os_msys2_setsrc (char *option)
 {
-  use_this_source(os_msys2);
+  chsrc_use_this_source (os_msys2);
 
   chsrc_backup ("/etc/pacman.d/mirrorlist.mingw32");
   chsrc_backup ("/etc/pacman.d/mirrorlist.mingw64");

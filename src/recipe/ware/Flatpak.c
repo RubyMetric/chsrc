@@ -63,7 +63,7 @@ wr_flatpak_getsrc (char *option)
 void
 wr_flatpak_setsrc (char *option)
 {
-  use_this_source(wr_flatpak);
+  chsrc_use_this_source (wr_flatpak);
 
   chsrc_alert2 ("若出现问题，可先调用以下命令:");
   char *note = xy_strcat (3,

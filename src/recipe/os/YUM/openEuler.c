@@ -60,7 +60,7 @@ os_openeuler_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_openeuler);
+  chsrc_use_this_source (os_openeuler);
 
   chsrc_backup (OS_openEuler_SourceList);
 

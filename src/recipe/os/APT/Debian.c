@@ -83,7 +83,7 @@ os_debian_does_old_sourcelist_use_cdrom (void)
 void
 os_debian_setsrc_for_deb822 (char *option)
 {
-  use_this_source(os_debian);
+  chsrc_use_this_source (os_debian);
 
   chsrc_backup (OS_Debian_SourceList_DEB822);
 
@@ -144,7 +144,7 @@ os_debian_setsrc (char *option)
         }
     }
 
-  use_this_source(os_debian);
+  chsrc_use_this_source (os_debian);
 
   chsrc_alert2 ("如果遇到无法拉取 HTTPS 源的情况，请手动运行:");
   say ("apt install apt-transport-https ca-certificates");

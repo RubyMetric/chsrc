@@ -178,7 +178,7 @@ TargetRegisterInfo_t;
 #define chef_prep_this(t,op) Target_t *this = &t##_target; this->inited = true; chef_allow_##op(t);
 
 #define use_this(t) Target_t *this = &t##_target;
-#define use_this_source(t) Target_t *this = &t##_target; Source_t source = chsrc_yield_source_and_confirm (this, option);
+#define chsrc_use_this_source(t) Target_t *this = &t##_target; Source_t source = chsrc_yield_source_and_confirm (this, option);
 
 #define def_sources_begin()  Source_t sources[] = {
 #define def_sources_end()    }; \

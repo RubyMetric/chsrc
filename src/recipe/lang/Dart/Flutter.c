@@ -51,7 +51,7 @@ pl_dart_flutter_getsrc (char *option)
 void
 pl_dart_flutter_setsrc (char *option)
 {
-  use_this_source(pl_dart_flutter);
+  chsrc_use_this_source (pl_dart_flutter);
 
   char *w = NULL;
   char *cmd = NULL;

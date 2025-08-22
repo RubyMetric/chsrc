@@ -58,7 +58,7 @@ os_netbsd_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_netbsd);
+  chsrc_use_this_source (os_netbsd);
 
   chsrc_backup ("/usr/pkg/etc/pkgin/repositories.conf");
 

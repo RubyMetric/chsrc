@@ -52,7 +52,7 @@ pl_julia_getsrc (char *option)
 void
 pl_julia_setsrc (char *option)
 {
-  use_this_source(pl_julia);
+  chsrc_use_this_source (pl_julia);
 
   char *w = xy_strcat (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
 

@@ -82,7 +82,7 @@ wr_tex_setsrc (char *option)
   bool tlmgr_exist, mpm_exist;
   wr_tex_check_cmd (&tlmgr_exist, &mpm_exist);
 
-  use_this_source(wr_tex);
+  chsrc_use_this_source (wr_tex);
 
   char *cmd = NULL;
 

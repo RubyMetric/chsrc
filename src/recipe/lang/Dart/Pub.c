@@ -47,7 +47,7 @@ pl_dart_getsrc (char *option)
 void
 pl_dart_setsrc (char *option)
 {
-  use_this_source(pl_dart);
+  chsrc_use_this_source (pl_dart);
 
   char *w = NULL;
   char *cmd = NULL;

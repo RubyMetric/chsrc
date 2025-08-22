@@ -53,7 +53,7 @@ os_deepin_setsrc (char *option)
 {
   chsrc_ensure_root();
 
-  use_this_source(os_deepin);
+  chsrc_use_this_source (os_deepin);
 
   chsrc_backup (OS_Apt_SourceList);
 

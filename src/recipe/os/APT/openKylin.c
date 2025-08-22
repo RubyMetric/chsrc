@@ -44,7 +44,7 @@ os_openkylin_setsrc (char *option)
 {
   chsrc_ensure_root();
 
-  use_this_source(os_openkylin);
+  chsrc_use_this_source (os_openkylin);
 
   chsrc_backup (OS_Apt_SourceList);
 

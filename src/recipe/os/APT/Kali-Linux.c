@@ -47,7 +47,7 @@ os_kali_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_kali);
+  chsrc_use_this_source (os_kali);
 
   chsrc_backup (OS_Apt_SourceList);
 

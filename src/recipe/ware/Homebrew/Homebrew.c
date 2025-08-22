@@ -53,7 +53,7 @@ wr_homebrew_getsrc (char *option)
 void
 wr_homebrew_setsrc (char *option)
 {
-  use_this_source(wr_homebrew);
+  chsrc_use_this_source (wr_homebrew);
 
   char *w = xy_str_gsub (RAWSTR_wr_homebrew_config_in_bash, "@1@", source.url);
 

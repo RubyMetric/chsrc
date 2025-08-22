@@ -48,7 +48,7 @@ pl_lua_getsrc (char *option)
 void
 pl_lua_setsrc (char *option)
 {
-  use_this_source (pl_lua);
+  chsrc_use_this_source (pl_lua);
 
   char *config = xy_strcat (3, "rocks_servers = {\n"
                                 "  \"", source.url, "\"\n"

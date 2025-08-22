@@ -36,7 +36,7 @@ pl_clojure_prelude ()
 void
 pl_clojure_setsrc (char *option)
 {
-  use_this_source(pl_clojure);
+  chsrc_use_this_source (pl_clojure);
 
   if (chsrc_in_local_mode())
     {

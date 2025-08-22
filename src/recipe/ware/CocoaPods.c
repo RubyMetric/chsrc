@@ -38,7 +38,7 @@ wr_cocoapods_prelude ()
 void
 wr_cocoapods_setsrc (char *option)
 {
-  use_this_source(wr_cocoapods);
+  chsrc_use_this_source (wr_cocoapods);
 
   chsrc_note2 ("请手动执行以下命令:");
   p("cd ~/.cocoapods/repos");

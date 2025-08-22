@@ -50,7 +50,7 @@ os_raspberrypi_setsrc (char *option)
 {
   chsrc_ensure_root(); // HELP: 不确定是否需要
 
-  use_this_source(os_raspberrypi);
+  chsrc_use_this_source (os_raspberrypi);
 
   chsrc_backup (OS_RaspberryPi_SourceList);
 

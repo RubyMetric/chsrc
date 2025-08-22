@@ -80,7 +80,7 @@ pl_go_setsrc (char *option)
 {
   pl_go_check_cmd ();
 
-  use_this_source(pl_go);
+  chsrc_use_this_source (pl_go);
 
   char *cmd = "go env -w GO111MODULE=on";
   chsrc_run (cmd, RunOpt_Default);

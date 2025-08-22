@@ -58,7 +58,7 @@ pl_python_group_setsrc (char *option)
 
   chsrc_set_target_group_mode ();
 
-  use_this_source (pl_python_group);
+  chsrc_use_this_source (pl_python_group);
 
 
   // 交给后面检查命令的存在性

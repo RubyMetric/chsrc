@@ -66,7 +66,7 @@ os_arch_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_arch);
+  chsrc_use_this_source (os_arch);
 
   chsrc_backup (OS_Pacman_MirrorList);
 
@@ -162,7 +162,7 @@ os_archlinuxcn_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_archlinuxcn);
+  chsrc_use_this_source (os_archlinuxcn);
 
   chsrc_backup (OS_Pacman_ArchLinuxCN_MirrorList);
 
