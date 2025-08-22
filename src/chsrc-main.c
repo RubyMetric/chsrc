@@ -505,6 +505,36 @@ iterate_menu (XySeq_t *menu, const char *input, Target_t **target)
 }
 
 
+void
+callback_perform_all_prelude_for_menu (void *data, void *NOUSE)
+{
+  Target_t *target = (Target_t *) data;
+
+  if (!target->preludefn)
+    {
+      chef_debug_target (target);
+      chsrc_panic ("未定义 _prelude() !");
+    }
+
+  target->preludefn();
+}
+
+/**
+ * @brief 用于检查所有 _prelude() 是否能正常工作
+ *
+ * 为了防止 DEBUG 模式下运行流程和普通模式下运行流程不一样，我们只在 Get, Set, Reset
+ * 之后才运行该函数
+ */
+void
+chsrc_perform_all_prelude ()
+{
+  chsrc_debug ("prelude", "DEBUG模式下, 额外检查所有 _prelude() 是否能正常工作");
+  xy_seq_each (ProgStore.pl, callback_perform_all_prelude_for_menu, NULL);
+  xy_seq_each (ProgStore.os, callback_perform_all_prelude_for_menu, NULL);
+  xy_seq_each (ProgStore.wr, callback_perform_all_prelude_for_menu, NULL);
+}
+
+
 /**
  * @brief 在必要的时期，最后告诉用户一些信息
  */
@@ -618,7 +648,10 @@ get_target (const char *input, TargetOp code, char *option)
       chsrc_op_epilogue ();
     }
 
+#ifdef XY_DEBUG
   chef_debug_target (target);
+  chsrc_perform_all_prelude ();
+#endif
 
   return true;
 }
