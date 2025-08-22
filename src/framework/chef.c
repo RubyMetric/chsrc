@@ -33,13 +33,13 @@ chef_debug_target (Target_t *target)
   printf ("  Inited?: %d\n", target->inited);
 
   printf ("  Sources: %p\n", target->sources);
-  printf ("  Sources Count: %lld\n", target->sources_n);
+  printf ("  Sources Count: %d\n", target->sources_n);
 
   printf ("  Chef: %p\n", target->chef);
   printf ("  Cooks: %p\n", target->cooks);
-  printf ("  Cooks Count: %lld\n", target->cooks_n);
+  printf ("  Cooks Count: %d\n", target->cooks_n);
   printf ("  Sauciers: %p\n", target->sauciers);
-  printf ("  Sauciers Count: %lld\n", target->sauciers_n);
+  printf ("  Sauciers Count: %d\n", target->sauciers_n);
 #endif
 }
 

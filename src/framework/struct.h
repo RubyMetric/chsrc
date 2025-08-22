@@ -128,8 +128,8 @@ typedef struct Target_t
   void (*preludefn) (void);
   bool inited; /* 是否执行过了 preludefn() */
 
-  Source_t  *sources;
-  size_t    sources_n;
+  Source_t *sources;
+       int  sources_n;
 
 
   /* Features */
@@ -151,9 +151,9 @@ typedef struct Target_t
 
   Contributor_t  *chef;     /* 该 recipe *当前*的总负责人 (可以任职也可以休职) */
   Contributor_t **cooks;    /* 该 recipe 的主要作者 */
-  size_t          cooks_n;
+            int   cooks_n;
   Contributor_t **sauciers; /* 该 recipe 的次要贡献者 (除主要作者外的其他人) */
-  size_t          sauciers_n;
+            int   sauciers_n;
 }
 Target_t;
 

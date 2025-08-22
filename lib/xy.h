@@ -1033,6 +1033,8 @@ xy_dir_exist (const char *path)
       else
         return false;
     }
+
+  return false;
 }
 
 /**
