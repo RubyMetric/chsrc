@@ -113,7 +113,7 @@ cli_print_available_mirrors ()
   say    ("---------    --------------    -------------------------------------     ---------------------");
   }
 
-  for (int i = 0; i < xy_arylen (chsrc_available_mirrors); i++)
+  for (int i = 0; i < xy_c_array_len (chsrc_available_mirrors); i++)
     {
       MirrorSite_t *mir = chsrc_available_mirrors[i];
       printf ("%-14s%-18s%-41s ", mir->code, mir->abbr, mir->site); say (mir->name);
