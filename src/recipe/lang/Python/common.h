@@ -29,8 +29,9 @@ pl_python_group_prelude (void)
   chef_set_sources_last_updated (this, "2025-07-11");
 
   chef_set_chef (this, "@happy-game");
-  chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_sauciers (this, 1, "@xyx1926885268");
+  // 组换源的 leader target 应把所有 follower target 的贡献者都记录过来
+  chef_set_cooks (this, 2, "@ccmywish", "@happy-game");
+  chef_set_sauciers (this, 2, "@xyx1926885268", "@Kattos");
 
   chef_allow_local_mode (this, PartiallyCan, "部分包管理器支持项目级换源", "Some package managers support project-level source changing");
   chef_allow_english(this);
