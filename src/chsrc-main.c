@@ -122,12 +122,13 @@ cli_print_available_mirrors ()
 
 
 /**
- * 遍历以 / 为分隔符的别名字符串，对每个别名调用回调函数
+ * @brief 遍历以 / 为分隔符的别名字符串，对每个别名调用回调函数
  *
- * @param aliases   空格分隔的 alias 字符串
- * @param callback  对每个 alias 调用的回调函数
- * @param user_data 传递给回调函数的用户数据
- * @return          如果回调函数返回true则停止遍历并返回true，否则返回false
+ * @param  aliases    空格分隔的 alias 字符串
+ * @param  callback   对每个 alias 调用的回调函数
+ * @param  user_data  传递给回调函数的用户数据
+ *
+ * @return 如果回调函数返回true则停止遍历并返回true，否则返回false
  */
 bool
 iterate_aliases (const char *aliases, bool (*callback)(const char *alias, void *user_data), void *user_data)
@@ -166,7 +167,7 @@ iterate_aliases (const char *aliases, bool (*callback)(const char *alias, void *
  * 用于 cli_print_supported_targets_ 的回调函数，打印每个别名
  */
 bool
-print_alias_callback (const char *alias, void *user_data)
+callback_print_alias (const char *alias, void *user_data)
 {
   printf ("%s  ", alias);
   return false; // 继续遍历，不停止
@@ -180,7 +181,7 @@ cli_print_supported_targets_ (TargetRegisterInfo_t menu[], size_t size)
       TargetRegisterInfo_t *entry = &menu[i];
 
       // 使用通用的别名遍历函数打印所有别名
-      iterate_aliases (entry->target->aliases, print_alias_callback, NULL);
+      iterate_aliases (entry->target->aliases, callback_print_alias, NULL);
 
       br(); // 每个target换行
     }
@@ -450,53 +451,56 @@ cli_print_issues ()
 
 
 /**
- * 用于 iterate_menu_ 的回调函数，检查别名是否匹配用户输入
+ * @brief 用于 callback_find_target() 的回调函数，检查别名是否匹配用户输入
  */
 bool
-match_alias_callback (const char *alias, void *user_data)
+callback_match_alias (const char *alias, void *user_data)
 {
   const char *input = (const char *)user_data;
   return xy_streql_ic (input, alias);
 }
 
+/**
+ * @brief 用于 iterate_menu() 的回调函数
+ */
+bool
+callback_find_target (void *data)
+{
+  target = (Target_t *) data;
+  if (iterate_aliases (target->aliases, callback_match_alias, (void *)input))
+    {
+      target->prelude();
+
+      return true;
+    }
+}
 
 /**
  * 查询用户输入 `input` 是否与该 `menu` 中的某个 target 匹配
  * 若匹配将直接调用 prelude
  *
- * @param[in]  menu      menu
- * @param[in]  size      menu 大小
- * @param[in]  input     用户输入的目标名
- * @param[out] target    返回匹配到的 Target_t 指针
+ * @param[in]   menu    menu
+ * @param[in]   input   用户输入的目标名
+ * @param[out]  target  返回匹配到的 Target_t 指针
  *
  * @return 匹配到则返回true，未匹配到则返回false
  */
-#define iterate_menu(ary, input, target) iterate_menu_(ary, xy_arylen(ary), input, target)
 bool
-iterate_menu_ (TargetRegisterInfo_t menu[], size_t size, const char *input, Target_t **target)
+iterate_menu (XySeq_t *menu,  const char *input, Target_t **target)
 {
-  for (int i = 0; i < size; i++)
+  Target_t *t = xy_seq_find (menu, callback_find_target);
+
+  if (t)
     {
-      TargetRegisterInfo_t *entry = &menu[i];
-
-      if (iterate_aliases (entry->target->aliases, match_alias_callback, (void *)input))
-        {
-          if (entry->prelude)
-            {
-              entry->prelude();
-            }
-          else
-            {
-              chsrc_error ("该target未定义 prelude()");
-            }
-
-          *target = entry->target;
-          return true;
-        }
+      *target = t;
+      t->preludefn();
+      return true;
     }
-
-  *target = NULL;
-  return false;
+  else
+    {
+      *target = NULL;
+      return false;
+    }
 }
 
 
@@ -536,9 +540,9 @@ get_target (const char *input, TargetOp code, char *option)
 
   Target_t *target = NULL;
 
-           bool matched = iterate_menu (chsrc_pl_menu, input, &target);
-  if (!matched) matched = iterate_menu (chsrc_os_menu, input, &target);
-  if (!matched) matched = iterate_menu (chsrc_wr_menu, input, &target);
+           bool matched = iterate_menu (ProgStore.pl, input, &target);
+  if (!matched) matched = iterate_menu (ProgStore.os, input, &target);
+  if (!matched) matched = iterate_menu (ProgStore.wr, input, &target);
 
   if (!matched) return false;
 
@@ -623,7 +627,8 @@ get_target (const char *input, TargetOp code, char *option)
 int
 main (int argc, char const *argv[])
 {
-  chsrc_framework_init ();
+  chsrc_init_framework ();
+  chsrc_init_menu ();
 
   argc -= 1;
 
