@@ -5,7 +5,7 @@
  * File Authors  : 曾奥然 <ccmywish@qq.com>
  * Contributors  : Nul None <nul@none.org>
  * Created On    : <2025-08-09>
- * Last Modified : <2025-08-21>
+ * Last Modified : <2025-08-22>
  *
  * chef DSL: for chefs (recipe makers) to define a target
  * ------------------------------------------------------------*/
@@ -39,7 +39,7 @@ chef_register_contributor (char *id, char *name, char *email, char *display_name
   else
     contributor->display_name = xy_strdup (display_name);
 
-  xy_map_set (ProgStatus.contributors, id, contributor);
+  xy_map_set (ProgStore.contributors, id, contributor);
 }
 
 
@@ -187,7 +187,7 @@ chef_verify_contributor (const char *id)
 {
   xy_cant_be_null (id);
 
-  Contributor_t *c = xy_map_get (ProgStatus.contributors, id);
+  Contributor_t *c = xy_map_get (ProgStore.contributors, id);
   if (!c)
     {
       char error[256];

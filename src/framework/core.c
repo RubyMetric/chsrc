@@ -122,8 +122,6 @@ typedef enum ChgType_t
 /* Global Program Status */
 struct
 {
-  XyMap_t *contributors; /* 所有贡献者 */
-
   int leader_selected_index;   /* leader target 选中的索引 */
   ChgType_t chgtype;           /* 换源实现的类型 */
 
@@ -132,7 +130,6 @@ struct
 }
 ProgStatus =
 {
-  .contributors = NULL,
   .leader_selected_index = -1,
   .chgtype = ChgType_Auto,
   .chsrc_run_faas = false
@@ -145,12 +142,14 @@ struct
   XySeq_t *pl;
   XySeq_t *os;
   XySeq_t *wr;
+  XyMap_t *contributors; /* 所有贡献者 */
 }
 ProgStore =
 {
   .pl = NULL,
   .os = NULL,
-  .wr = NULL
+  .wr = NULL,
+  .contributors = NULL,
 };
 
 
@@ -224,12 +223,11 @@ chsrc_alert2 (const char *str)
 
 
 void
-chsrc_framework_init ()
+chsrc_init_framework ()
 {
   xy_init ();
 
-  ProgStatus.contributors = xy_map_new ();
-
+  ProgStore.contributors = xy_map_new ();
   ProgStore.pl = xy_seq_new ();
   ProgStore.os = xy_seq_new ();
   ProgStore.wr = xy_seq_new ();
