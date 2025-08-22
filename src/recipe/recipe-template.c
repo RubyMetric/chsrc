@@ -6,7 +6,7 @@
  * Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2024-08-09>
- * Last Modified : <2025-08-21>
+ * Last Modified : <2025-08-22>
  * -------------------------------------------------------------
  * 本文件作为一个通用模板：
  *
@@ -58,11 +58,8 @@ RubyMetric = {
 void
 <category>_<target>_prelude (void)
 {
-  use_this(<category>_<target>);
-  chef_allow_gsr(<category>_<target>); // 代表支持 Get Set Reset 三种操作
-  // chef_allow_s(<category>_<target>); // 以此类推
-  // chef_allow_gs(<category>_<target>);
-  // chef_allow_sr(<category>_<target>);
+  // op 可以为 NOOP|s|sr|gsr|gs, 代表支持 Get Set Reset 三种操作
+  chef_prep_this (<category>_<target>, op);
 
   chef_set_created_on   (this, "2024-08-09"); // 文件创建日期
   chef_set_last_updated (this, "2025-08-12"); // 文件最后一次更新日期

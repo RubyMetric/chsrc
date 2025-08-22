@@ -126,6 +126,10 @@ typedef struct Target_t
   void (*setfn)   (char *option);
   void (*resetfn) (char *option);
 
+  /* 初始化函数，用于填充该 struct 的各种信息 */
+  void (*preludefn) (void);
+  bool inited; /* 是否执行过了 preludefn() */
+
   Source_t  *sources;
   size_t    sources_n;
 
@@ -167,9 +171,15 @@ TargetRegisterInfo_t;
 
 #define def_target(t, aliases) void t##_getsrc(char *option);void t##_setsrc(char *option);void t##_resetsrc(char *option); Target_t t##_target={aliases};
 
-/* 以下宏仅能放在 prelude() 中使用 */
+#define chef_allow_gsr(t) this->getfn = t##_getsrc; this->setfn = t##_setsrc; this->resetfn = t##_resetsrc;
+#define chef_allow_s(t)   this->getfn = NULL;       this->setfn = t##_setsrc; this->resetfn = NULL;
+#define chef_allow_sr(t)  this->getfn = NULL;       this->setfn = t##_setsrc; this->resetfn = t##_resetsrc;
+#define chef_allow_gs(t)  this->getfn = t##_getsrc; this->setfn = t##_setsrc; this->resetfn = NULL;
+#define chef_allow_NOOP(t)
+#define chef_prep_this(t,op) Target_t *this = &t##_target; this->inited = true; chef_allow_##op(t);
+
 #define use_this(t) Target_t *this = &t##_target;
-#define use_this_source(t) use_this(t); Source_t source = chsrc_yield_source_and_confirm (this, option);
+#define use_this_source(t) Target_t *this = &t##_target; Source_t source = chsrc_yield_source_and_confirm (this, option);
 
 #define def_sources_begin()  Source_t sources[] = {
 #define def_sources_end()    }; \
