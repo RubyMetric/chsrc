@@ -13,24 +13,16 @@
  * -------------------------------------------------------------
  *
  * 这是一个高度依靠贡献者的项目，我们直接把每一位贡献者写进了代码
- * 里，这是比 Git commit 更加稳定的方式。但我们不满足于把大家写在
- * 注释里，因为C语言在编译时会无情地把这些信息抹去。
+ * 里，这是比 Git commit message 更加稳定的方式。但我们不满足于仅
+ * 把大家写在注释里，因为C语言在编译时会无情地把这些信息抹去。
  *
  *           所以，我们让每一位贡献者直接参与运行时！
  *
- * 想象一下，每一位贡献者都化作一串比特：
- *   栖居在内蒙古与贵州的数据中心中；
- *   穿梭于北京与上海的机房；
- *   流淌在广东、浙江的云里；
- *   散布于四川与重庆的算力集群；
- *   潜藏在陕西、甘肃、宁夏的机架之间；
- *   分身于全国各地的桌面电脑里，点亮在湖北、山东、河南的家庭宽带
- * 上，跃动在江苏、安徽、湖南的手机与路由器中，乃至潜入那些无名的
- * 小型嵌入式设备。
- *
+ * 想象一下，每一位贡献者都化作一串比特，穿梭于全国各地的桌面PC中，
+ * 流淌在数据中心的机房，分身在手机、路由器、小型嵌入式设备中...
  * 每当 chsrc 执行一次 recipe 相关的操作，这些比特便会复苏，贡献者
  * 的信息随之浮现。它提醒着使用者：在你与开源世界的每一次交互背后，
- * 都是无数人的心血，跨越省份与疆域，以代码相连，持续回响。
+ * 都是许多人的协作，跨越省份与疆域，以代码相连。
  *
  * 我们希望营造像 Richard Stallman 在创建 GNU 项目之前，在 MIT 时
  * 那样的氛围 —— 写自己用得上的软件，与大家一起开发、维护，简单纯
@@ -38,8 +30,8 @@
  * 然的加入，逐渐成长为互相支持的伙伴。
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.2.3-dev5"
-#define Chsrc_Release_Date   "2025/08/21"
+#define Chsrc_Version        "0.2.2.3-dev6"
+#define Chsrc_Release_Date   "2025/08/22"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
@@ -336,7 +328,7 @@ cli_print_target_features (Target_t *target, const char *input_target_name)
   if (target->note)
     {
       char *msg = ENGLISH ? "NOTE: " : "备注: ";
-      printf ("%s%s\n", bdyellow (msg), bdyellow (target->note));
+      printf ("%s%s\n\n", bdyellow (msg), bdyellow (target->note));
     }
 }
 
@@ -469,7 +461,7 @@ match_alias_callback (const char *alias, void *user_data)
 
 
 /**
- * 查询用户输入 @param:input 是否与该 @param:menu 中的某个 target 匹配
+ * 查询用户输入 `input` 是否与该 `menu` 中的某个 target 匹配
  * 若匹配将直接调用 prelude
  *
  * @param[in]  menu      menu
@@ -529,7 +521,7 @@ typedef enum {
 } TargetOp;
 
 /**
- * 寻找target，并根据 @param:code 执行相应的操作
+ * 寻找target，并根据 `code` 执行相应的操作
  *
  * @param  input   用户输入的目标
  * @param  code    对target要执行的操作
