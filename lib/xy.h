@@ -1356,14 +1356,14 @@ xy_seq_pop (XySeq_t *seq)
  * @flavor Ruby: Array#each
  */
 void
-xy_seq_each (XySeq_t *seq, void (*func)(void *))
+xy_seq_each (XySeq_t *seq, void (*func) (void *, void *), void *user_data)
 {
   xy_cant_be_null (seq);
   xy_cant_be_null (func);
 
   for (XySeqItem_t *it = seq->first_item; it; it = it->next)
     {
-      func (it->data);
+      func (it->data, user_data);
     }
 }
 
@@ -1371,14 +1371,14 @@ xy_seq_each (XySeq_t *seq, void (*func)(void *))
  * @flavor Ruby: Enumerable#find
  */
 void *
-xy_seq_find (XySeq_t *seq, bool (*func)(void *))
+xy_seq_find (XySeq_t *seq, bool (*func) (void *, void *), void *user_data)
 {
   xy_cant_be_null (seq);
   xy_cant_be_null (func);
 
   for (XySeqItem_t *it = seq->first_item; it; it = it->next)
     {
-      if (func (it->data))
+      if (func (it->data, user_data))
         {
           return it->data;
         }
@@ -1503,7 +1503,10 @@ xy_map_get (XyMap_t *map, const char *key)
  * @flavor Ruby: Hash#each
  */
 void
-xy_map_each (XyMap_t *map, void (*func)(const char *key, void *value))
+xy_map_each (
+  XyMap_t *map,
+  void (*func) (const char *key, void *value, void *user_data),
+  void *user_data)
 {
   xy_cant_be_null (map);
   xy_cant_be_null (func);
@@ -1513,7 +1516,7 @@ xy_map_each (XyMap_t *map, void (*func)(const char *key, void *value))
       struct _XyHashBucket_t *bucket = map->buckets[i];
       while (bucket)
         {
-          func (bucket->key, bucket->value);
+          func (bucket->key, bucket->value, user_data);
           bucket = bucket->next;
         }
     }
