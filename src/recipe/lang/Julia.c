@@ -11,11 +11,11 @@ pl_julia_prelude ()
 
   chef_set_created_on   (this, "2023-08-31");
   chef_set_last_updated (this, "2025-08-10");
-  chef_set_sources_last_updated (this, "2025-07-14");
+  chef_set_sources_last_updated (this, "2025-08-22");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_sauciers (this, 0);
+  chef_set_sauciers (this, 1, "@hezonglun");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);
