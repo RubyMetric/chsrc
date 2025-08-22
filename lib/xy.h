@@ -8,7 +8,7 @@
  *               | Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-08-21>
+ * Last Modified : <2025-08-22>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -22,7 +22,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.1.7.0-2025/08/21"
+#define _XY_Version       "v0.1.7.0-2025/08/22"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -1365,6 +1365,25 @@ xy_seq_each (XySeq_t *seq, void (*func)(void *))
     {
       func (it->data);
     }
+}
+
+/**
+ * @flavor Ruby: Enumerable#find
+ */
+void *
+xy_seq_find (XySeq_t *seq, bool (*func)(void *))
+{
+  xy_cant_be_null (seq);
+  xy_cant_be_null (func);
+
+  for (XySeqItem_t *it = seq->first_item; it; it = it->next)
+    {
+      if (func (it->data))
+        {
+          return it->data;
+        }
+    }
+  return NULL;
 }
 
 
