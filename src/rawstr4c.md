@@ -72,7 +72,7 @@
    邀请您担任  Chef, 为用户把关您熟悉的 recipe
 
    源代码地址: https://github.com/RubyMetric/chsrc
-   成为维护者: https://github.com/RubyMetric/chsrc/issues/130
+   成为维护者: https://github.com/RubyMetric/chsrc/issues/275
 ```
 
 <br>
@@ -123,7 +123,7 @@ MAINTAIN:
    We invite you to become a Chef to ensure the quality of recipes you are familiar with for users:
 
    Source Code:               @url@
-   Become a Maintainer:       https://github.com/RubyMetric/chsrc/issues/130
+   Become a Maintainer:       https://github.com/RubyMetric/chsrc/issues/275
 ```
 
 <br>

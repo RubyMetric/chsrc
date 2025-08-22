@@ -94,8 +94,6 @@ Source_t;
 /* 由 prelude() 填充 */
 #define FeedByPrelude NULL
 
-#define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
-
 
 typedef enum Capability_t
 {
@@ -160,13 +158,6 @@ typedef struct Target_t
 Target_t;
 
 
-typedef struct TargetRegisterInfo_t
-{
-  Target_t *target;           /* target 本身 */
-  void     (*prelude) (void); /* 填充 target 信息等预置操作 */
-}
-TargetRegisterInfo_t;
-
 
 #define def_target(t, aliases) void t##_getsrc(char *option);void t##_setsrc(char *option);void t##_resetsrc(char *option); Target_t t##_target={aliases};
 
@@ -182,7 +173,7 @@ TargetRegisterInfo_t;
 
 #define def_sources_begin()  Source_t sources[] = {
 #define def_sources_end()    }; \
-  this->sources_n = xy_arylen(sources); \
+  this->sources_n = xy_c_array_len(sources); \
   char *_sources_storage = xy_malloc0 (sizeof(sources)); \
   memcpy (_sources_storage, sources, sizeof(sources)); \
   this->sources = (Source_t *)_sources_storage;

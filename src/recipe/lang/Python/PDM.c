@@ -17,7 +17,7 @@ pl_python_pdm_prelude (void)
   chef_set_cooks (this, 1, "@ccmywish");
   chef_set_sauciers (this, 0);
 
-  chef_allow_local_mode (this, FullyCan, "支持项目级配置", "Supports project-level configuration");
+  chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);
   chef_allow_user_define(this);
 

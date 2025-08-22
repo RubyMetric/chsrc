@@ -113,7 +113,7 @@ chef_set_provider_speed_measure_accuracy (SourceProvider_t *provider, bool accur
 
 
 /**
- * @brief 提供一个函数，这个函数基于 "换源 URL" 和用户提供的数据来构造和填充精准测速链接
+ * @brief 提供一个函数，这个函数基于 "换源链接" 和用户提供的数据来构造和填充精准测速链接
  */
 void
 chef_set_sources_speed_measure_url_with_func (
@@ -143,7 +143,7 @@ chef_set_sources_speed_measure_url_with_func (
 
 
 /**
- * @brief 给 "换源 URL" 增加一个后缀来构造和填充专用测速链接
+ * @brief 给 "换源链接" 增加一个后缀来构造和填充专用测速链接
  */
 void
 chef_set_sources_speed_measure_url_with_postfix (Target_t *target, char *postfix)

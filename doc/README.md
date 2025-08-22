@@ -3,11 +3,11 @@
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
  ! Doc Name      : (Document Introduction.md)
- ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
- ! Contributors  :  Nul None  <nul@none.org>
+ ! Doc Authors   : 曾奥然 <ccmywish@qq.com>
+ ! Contributors  : Nul None <nul@none.org>
  !               |
  ! Created On    : <2024-12-27>
- ! Last Modified : <2025-08-11>
+ ! Last Modified : <2025-08-22>
  ! ---------------------------------------------------------- -->
 
 # 文档说明
@@ -23,7 +23,7 @@ E2E (End-to-End) 开发文档:
 具体 recipe 相关:
 
 - 如何编写一个具体的 recipe，请参考 [10-如何编写recipe.md](./10-如何编写recipe.md)
-- 如何修改换源URL、模糊/精准测速URL，请参考 [11-如何设置换源链接与测速链接.md](./11-如何设置换源链接与测速链接.md)
+- 如何修改换源链接、模糊/精准测速链接，请参考 [11-如何设置换源链接与测速链接.md](./11-如何设置换源链接与测速链接.md)
 
 <br>
 

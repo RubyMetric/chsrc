@@ -332,11 +332,11 @@ log_cmd_result (bool result, int exit_status)
 /**
  * 检测二进制程序是否存在
  *
- * @param  check_cmd  检测 @param:prog_name 是否存在的一段命令，一般来说，填 @param:prog_name 本身即可，
+ * @param  check_cmd  检测 `prog_name` 是否存在的一段命令，一般来说，填 `prog_name` 本身即可，
  *                    但是某些情况下，需要使用其他命令绕过一些特殊情况，比如 python 这个命令在Windows上
  *                    会自动打开 Microsoft Store，需避免
  *
- * @param  prog_name   要检测的二进制程序名
+ * @param  prog_name  要检测的二进制程序名
  *
  */
 bool
@@ -372,8 +372,8 @@ query_program_exist (char *check_cmd, char *prog_name, int mode)
  * @brief 生成用于 “检测一个程序是否存在” 的命令，该内部函数由 chsrc_check_program() 家族调用
  *
  * @note
- *   1. Unix 中，where 仅在 zsh 中可以使用，sh 和 Bash 中均无法使用，因为其并非二进制程序
- *   2. 因部分linux系统没有 `which` 和 `whereis` 命令，使用 `command -v` 代替
+ *   1. Unix 中，'where' 命令仅在 Zsh 中可以使用，sh 和 Bash 中均无法使用，因为其并非二进制程序
+ *   2. 因部分 Linux 发行版中没有 'which' 和 'whereis' 命令，使用 'command -v' 代替
  */
 static char *
 cmd_to_check_program (char *prog_name)
@@ -386,7 +386,6 @@ cmd_to_check_program (char *prog_name)
 }
 
 
-XY_Deprecate_This("Use cmd_to_check_program() instead")
 /**
  * @brief 通过 `调用程序名 --version` 的方式检测程序是否存在
  *
@@ -396,6 +395,7 @@ XY_Deprecate_This("Use cmd_to_check_program() instead")
  *  2. 有一些程序启动速度太慢，即使只调用 --version，也依旧会花费许多时间，比如 mvn
  *  3. 有些程序并不支持 --version 选项 (虽然基本不可能)
  */
+XY_Deprecate_This("Use cmd_to_check_program() instead")
 static char *
 cmd_to_check_program2 (char *prog_name)
 {
