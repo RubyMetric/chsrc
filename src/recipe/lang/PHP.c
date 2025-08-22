@@ -15,7 +15,7 @@ pl_php_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 0);
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_forbid_english(this);
@@ -55,7 +55,7 @@ pl_php_setsrc (char *option)
 {
   pl_php_check_cmd ();
 
-  use_this_source (pl_php);
+  chsrc_use_this_source (pl_php);
 
   char *where = " -g ";
   if (chsrc_in_local_mode())

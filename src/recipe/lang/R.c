@@ -15,7 +15,7 @@ pl_r_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 1, "@hezonglun");
+  chef_set_sauciers (this, 1, "@hezonglun");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -62,7 +62,7 @@ pl_r_getsrc (char *option)
 void
 pl_r_setsrc (char *option)
 {
-  use_this_source(pl_r);
+  chsrc_use_this_source (pl_r);
 
   char *bioconductor_url = xy_str_delete_suffix (xy_str_delete_suffix (source.url, "cran/"), "CRAN/");
   bioconductor_url = xy_2strcat(bioconductor_url, "bioconductor");

@@ -15,7 +15,7 @@ os_openwrt_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 2, "@Yangmoooo", "@happy-game");
+  chef_set_sauciers (this, 2, "@Yangmoooo", "@happy-game");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);
@@ -57,7 +57,7 @@ os_openwrt_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_openwrt);
+  chsrc_use_this_source (os_openwrt);
 
   chsrc_backup (OS_OpenWRT_SourceConfig);
 

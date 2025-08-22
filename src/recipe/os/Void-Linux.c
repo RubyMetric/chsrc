@@ -15,7 +15,7 @@ os_voidlinux_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 1, "@Yangmoooo");
+  chef_set_sauciers (this, 1, "@Yangmoooo");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -49,7 +49,7 @@ os_voidlinux_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_voidlinux);
+  chsrc_use_this_source (os_voidlinux);
 
   chsrc_ensure_dir ("/etc/xbps.d");
   char *cmd = "cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/";

@@ -15,7 +15,7 @@ os_fedora_prelude ()
 
   chef_set_chef (this, "@happy-game");
   chef_set_cooks (this, 2, "@G_I_Y", "@happy-game");
-  chef_set_contributors (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 1, "@ccmywish");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -50,7 +50,7 @@ os_fedora_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_fedora);
+  chsrc_use_this_source (os_fedora);
 
   chsrc_alert2 ("Fedora 38 及以下版本暂不支持");
 

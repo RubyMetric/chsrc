@@ -3,11 +3,11 @@
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
  ! Doc Name      : 10-如何编写recipe.md
- ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
- ! Contributors  :  Nul None  <nul@none.org>
+ ! Doc Authors   : 曾奥然 <ccmywish@qq.com>
+ ! Contributors  : Nul None <nul@none.org>
  !               |
  ! Created On    : <2024-08-19>
- ! Last Modified : <2025-08-17>
+ ! Last Modified : <2025-08-22>
  ! ---------------------------------------------------------- -->
 
 # Write A Recipe Even If You Don't Know C

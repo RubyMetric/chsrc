@@ -383,22 +383,20 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
   }
 
   {
-    char *msg = ENGLISH ? "Contributors: " : "调味: ";
-    if (target->contributors && target->contributors_n > 0)
+    char *msg = ENGLISH ? "Sauciers: " : "调味: ";
+    if (target->sauciers && target->sauciers_n > 0)
       {
         printf ("%s", bdblue(msg));
-        for (size_t i = 0; i < target->contributors_n; i++)
+        for (size_t i = 0; i < target->sauciers_n; i++)
           {
             if (i > 0) printf (", ");
-            printf ("%s <%s>",
-                    target->contributors[i]->name ? target->contributors[i]->name : "Unknown",
-                    target->contributors[i]->email ? target->contributors[i]->email : "unknown@example.com");
+            printf ("%s <%s>", target->sauciers[i]->name, target->sauciers[i]->email );
           }
-        printf ("\n");
+        br();
       }
     else
       {
-        char *msg1 = CHINESE ? "暂空缺, 欢迎参与贡献!" : "Vacant, Welcome to contribute!";
+        char *msg1 = CHINESE ? "暂空缺, 欢迎参与贡献" : "Vacant, Welcome to contribute!";
         printf ("%s%s\n", bdblue(msg), bdgreen(msg1));
       }
   }
@@ -504,6 +502,36 @@ iterate_menu (XySeq_t *menu, const char *input, Target_t **target)
       *target = NULL;
       return false;
     }
+}
+
+
+void
+callback_perform_all_prelude_for_menu (void *data, void *NOUSE)
+{
+  Target_t *target = (Target_t *) data;
+
+  if (!target->preludefn)
+    {
+      chef_debug_target (target);
+      chsrc_panic ("未定义 _prelude() !");
+    }
+
+  target->preludefn();
+}
+
+/**
+ * @brief 用于检查所有 _prelude() 是否能正常工作
+ *
+ * 为了防止 DEBUG 模式下运行流程和普通模式下运行流程不一样，我们只在 Get, Set, Reset
+ * 之后才运行该函数
+ */
+void
+chsrc_perform_all_prelude ()
+{
+  chsrc_debug ("prelude", "DEBUG模式下, 额外检查所有 _prelude() 是否能正常工作");
+  xy_seq_each (ProgStore.pl, callback_perform_all_prelude_for_menu, NULL);
+  xy_seq_each (ProgStore.os, callback_perform_all_prelude_for_menu, NULL);
+  xy_seq_each (ProgStore.wr, callback_perform_all_prelude_for_menu, NULL);
 }
 
 
@@ -620,7 +648,10 @@ get_target (const char *input, TargetOp code, char *option)
       chsrc_op_epilogue ();
     }
 
+#ifdef XY_DEBUG
   chef_debug_target (target);
+  chsrc_perform_all_prelude ();
+#endif
 
   return true;
 }

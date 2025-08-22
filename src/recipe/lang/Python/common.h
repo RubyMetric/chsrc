@@ -30,7 +30,7 @@ pl_python_group_prelude (void)
 
   chef_set_chef (this, "@happy-game");
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 1, "@xyx1926885268");
+  chef_set_sauciers (this, 1, "@xyx1926885268");
 
   chef_allow_local_mode (this, PartiallyCan, "部分包管理器支持项目级换源", "Some package managers support project-level source changing");
   chef_allow_english(this);

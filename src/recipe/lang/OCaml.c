@@ -15,7 +15,7 @@ pl_ocaml_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 0);
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -51,7 +51,7 @@ pl_ocaml_setsrc (char *option)
 {
   pl_ocaml_check_cmd ();
 
-  use_this_source(pl_ocaml);
+  chsrc_use_this_source (pl_ocaml);
 
   char *cmd = xy_strcat (3, "opam repo set-url default ",
                               source.url,

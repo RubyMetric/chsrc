@@ -12,6 +12,57 @@
 
 #pragma once
 
+void
+chef_debug_target (Target_t *target)
+{
+#ifdef XY_DEBUG
+  if (!target)
+    {
+      chsrc_debug2 ("target", "Target is NULL");
+      return;
+    }
+
+  say ("DEBUG Target Information:");
+  printf ("  Aliases: %s\n", target->aliases);
+
+  printf ("  Get Function: %p\n", target->getfn);
+  printf ("  Set Function: %p\n", target->setfn);
+  printf ("  Reset Function: %p\n", target->resetfn);
+  printf ("  Prelude Function: %p\n", target->preludefn);
+
+  printf ("  Inited?: %d\n", target->inited);
+
+  printf ("  Sources: %p\n", target->sources);
+  printf ("  Sources Count: %lld\n", target->sources_n);
+
+  printf ("  Chef: %p\n", target->chef);
+  printf ("  Cooks: %p\n", target->cooks);
+  printf ("  Cooks Count: %lld\n", target->cooks_n);
+  printf ("  Sauciers: %p\n", target->sauciers);
+  printf ("  Sauciers Count: %lld\n", target->sauciers_n);
+#endif
+}
+
+
+void
+chef_debug_contributor (Contributor_t *contributor)
+{
+#ifdef XY_DEBUG
+  if (!contributor)
+    {
+      chsrc_debug2 ("contrib", "Contributor is NULL");
+      return;
+    }
+
+  say ("DEBUG Contributor Information:");
+  printf ("  ID:    %s\n", contributor->id);
+  printf ("  Name:  %s\n", contributor->name);
+  printf ("  Email: %s\n", contributor->email);
+  printf ("  DisplayName: %s\n", contributor->display_name);
+#endif
+}
+
+
 /**
  * @brief 登记所有贡献者
  *
@@ -107,7 +158,17 @@ chef_set_sources_speed_measure_url_with_postfix (Target_t *target, char *postfix
 void
 chef_use_other_target_sources (Target_t *this, Target_t *other)
 {
-  if (!other->inited) other->preludefn();
+  if (!other->inited)
+    {
+      if (other->preludefn)
+        other->preludefn();
+      else
+        {
+          chef_debug_target (other);
+          chsrc_panic ("`other` 未定义 _prelude() !");
+        }
+    }
+
   this->sources = other->sources;
   this->sources_n = other->sources_n;
 }
@@ -255,27 +316,27 @@ chef_set_cooks (Target_t *target, size_t count, ...)
 }
 
 void
-chef_set_contributors (Target_t *target, uint32_t count, ...)
+chef_set_sauciers (Target_t *target, uint32_t count, ...)
 {
   xy_cant_be_null (target);
 
   if (count == 0)
     {
-      target->contributors = NULL;
-      target->contributors_n = 0;
+      target->sauciers = NULL;
+      target->sauciers_n = 0;
       return;
     }
 
   va_list args;
   va_start (args, count);
 
-  target->contributors = xy_malloc0 (count * sizeof (Contributor_t*));
-  target->contributors_n = count;
+  target->sauciers = xy_malloc0 (count * sizeof (Contributor_t*));
+  target->sauciers_n = count;
 
   for (uint32_t i = 0; i < count; i++)
     {
       char *id = va_arg (args, char*);
-      target->contributors[i] = chef_verify_contributor (id);
+      target->sauciers[i] = chef_verify_contributor (id);
     }
 }
 
@@ -308,49 +369,4 @@ chef_set_sources_last_updated (Target_t *target, char *date)
   xy_cant_be_null (date);
 
   target->sources_last_updated = xy_strdup (date);
-}
-
-
-void
-chef_debug_target (Target_t *target)
-{
-#ifdef XY_DEBUG
-  if (!target)
-    {
-      chsrc_debug2 ("target", "Target is NULL");
-      return;
-    }
-
-  say ("DEBUG Target Information:");
-  printf ("  Get Function: %p\n", target->getfn);
-  printf ("  Set Function: %p\n", target->setfn);
-  printf ("  Reset Function: %p\n", target->resetfn);
-  printf ("  Sources: %p\n", target->sources);
-  printf ("  Sources Count: %lld\n", target->sources_n);
-
-  printf ("  Chef: %p\n", target->chef);
-  printf ("  Cooks: %p\n", target->cooks);
-  printf ("  Cooks Count: %lld\n", target->cooks_n);
-  printf ("  Contributors: %p\n", target->contributors);
-  printf ("  Contributors Count: %lld\n", target->contributors_n);
-#endif
-}
-
-
-void
-chef_debug_contributor (Contributor_t *contributor)
-{
-#ifdef XY_DEBUG
-  if (!contributor)
-    {
-      chsrc_debug2 ("contrib", "Contributor is NULL");
-      return;
-    }
-
-  say ("DEBUG Contributor Information:");
-  printf ("  ID:    %s\n", contributor->id);
-  printf ("  Name:  %s\n", contributor->name);
-  printf ("  Email: %s\n", contributor->email);
-  printf ("  DisplayName: %s\n", contributor->display_name);
-#endif
 }

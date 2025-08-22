@@ -68,7 +68,7 @@ void
   chef_set_chef (this, "@ccmywish");                  // recipe 负责人
   chef_set_cooks (this, 2, "@ccmywish", "@nilnull");  // recipe 核心作者
   // 做了贡献？将自己的信息加在这里！
-  chef_set_contributors (this, 2, "@nulnone", "@someone");
+  chef_set_sauciers (this, 2, "@nulnone", "@someone");
 
   chef_allow_local_mode (this, PartiallyCan, "具体说明是否支持项目级换源...", "Tell users the local mode support");
 
@@ -112,7 +112,7 @@ void
 <category>_<target>_setsrc (char *option)
 {
   /* 下面这行是必须的，注入 source 变量 */
-  use_this_source(<category>_<target>);
+  chsrc_use_this_source (<category>_<target>);
 
   /* 如果是 target group，你可能想要指定不同的 target 来使用它的源 */
   // Source_t source = chsrc_yield_source_and_confirm (&pl_js_group_target, option);

@@ -15,7 +15,7 @@ wr_guix_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 0);
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -37,7 +37,7 @@ wr_guix_prelude ()
 void
 wr_guix_setsrc (char *option)
 {
-  use_this_source(wr_guix);
+  chsrc_use_this_source (wr_guix);
 
   char *file =  xy_strcat (3, "(list (channel\n"
                                "       (inherit (car %default-channels))\n"

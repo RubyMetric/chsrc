@@ -17,7 +17,7 @@ wr_anaconda_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 2, "@Yangmoooo", "@xyx1926885268");
+  chef_set_sauciers (this, 2, "@Yangmoooo", "@xyx1926885268");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -52,7 +52,7 @@ wr_anaconda_getsrc (char *option)
 void
 wr_anaconda_setsrc (char *option)
 {
-  use_this_source(wr_anaconda);
+  chsrc_use_this_source (wr_anaconda);
 
   char *w = xy_str_gsub (RAWSTR_wr_anaconda_condarc, "@1@", source.url);
 

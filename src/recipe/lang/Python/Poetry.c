@@ -15,7 +15,7 @@ pl_python_poetry_prelude (void)
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 0);
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, FullyCan, "Poetry 默认使用项目级换源", "Poetry uses project-level source changing by default");
   chef_allow_english(this);

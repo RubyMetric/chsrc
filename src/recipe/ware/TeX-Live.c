@@ -17,7 +17,7 @@ wr_tex_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 1, "@Mikachu2333");
+  chef_set_sauciers (this, 1, "@Mikachu2333");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -82,7 +82,7 @@ wr_tex_setsrc (char *option)
   bool tlmgr_exist, mpm_exist;
   wr_tex_check_cmd (&tlmgr_exist, &mpm_exist);
 
-  use_this_source(wr_tex);
+  chsrc_use_this_source (wr_tex);
 
   char *cmd = NULL;
 

@@ -15,7 +15,7 @@ os_alpine_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 1, "@Yangmoooo");
+  chef_set_sauciers (this, 1, "@Yangmoooo");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);
@@ -54,7 +54,7 @@ os_alpine_setsrc (char *option)
 {
   // chsrc_ensure_root(); // HELP: 不确定是否需要root
 
-  use_this_source(os_alpine);
+  chsrc_use_this_source (os_alpine);
 
   char* cmd = xy_strcat (3,
             "sed -i 's#https\\?://dl-cdn.alpinelinux.org/alpine#", source.url, "#g' /etc/apk/repositories"

@@ -15,7 +15,7 @@ os_deepin_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@G_I_Y");
-  chef_set_contributors (this, 1, "@Yangmoooo");
+  chef_set_sauciers (this, 1, "@Yangmoooo");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -53,7 +53,7 @@ os_deepin_setsrc (char *option)
 {
   chsrc_ensure_root();
 
-  use_this_source(os_deepin);
+  chsrc_use_this_source (os_deepin);
 
   chsrc_backup (OS_Apt_SourceList);
 

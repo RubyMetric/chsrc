@@ -15,7 +15,7 @@ pl_julia_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 0);
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);
@@ -52,7 +52,7 @@ pl_julia_getsrc (char *option)
 void
 pl_julia_setsrc (char *option)
 {
-  use_this_source(pl_julia);
+  chsrc_use_this_source (pl_julia);
 
   char *w = xy_strcat (3, "ENV[\"JULIA_PKG_SERVER\"] = \"", source.url, "\"");
 

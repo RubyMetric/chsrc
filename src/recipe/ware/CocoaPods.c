@@ -15,7 +15,7 @@ wr_cocoapods_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 0);
+  chef_set_sauciers (this, 0);
 
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
@@ -38,7 +38,7 @@ wr_cocoapods_prelude ()
 void
 wr_cocoapods_setsrc (char *option)
 {
-  use_this_source(wr_cocoapods);
+  chsrc_use_this_source (wr_cocoapods);
 
   chsrc_note2 ("请手动执行以下命令:");
   p("cd ~/.cocoapods/repos");

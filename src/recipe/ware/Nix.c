@@ -15,7 +15,7 @@ wr_nix_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 0);
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -50,7 +50,7 @@ wr_nix_setsrc (char *option)
 {
   wr_nix_check_cmd ();
 
-  use_this_source(wr_nix);
+  chsrc_use_this_source (wr_nix);
 
   char *cmd = xy_strcat (3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
   chsrc_run (cmd, RunOpt_Default);

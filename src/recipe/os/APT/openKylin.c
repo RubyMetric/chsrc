@@ -18,7 +18,7 @@ os_openkylin_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@G_I_Y");
-  chef_set_contributors (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 1, "@ccmywish");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -44,7 +44,7 @@ os_openkylin_setsrc (char *option)
 {
   chsrc_ensure_root();
 
-  use_this_source(os_openkylin);
+  chsrc_use_this_source (os_openkylin);
 
   chsrc_backup (OS_Apt_SourceList);
 

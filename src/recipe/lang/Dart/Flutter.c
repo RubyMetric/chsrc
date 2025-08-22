@@ -15,7 +15,7 @@ pl_dart_flutter_prelude (void)
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 2, "@czyt", "@xrgzs");
+  chef_set_sauciers (this, 2, "@czyt", "@xrgzs");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);
@@ -51,7 +51,7 @@ pl_dart_flutter_getsrc (char *option)
 void
 pl_dart_flutter_setsrc (char *option)
 {
-  use_this_source(pl_dart_flutter);
+  chsrc_use_this_source (pl_dart_flutter);
 
   char *w = NULL;
   char *cmd = NULL;

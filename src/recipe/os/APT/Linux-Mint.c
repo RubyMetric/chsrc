@@ -15,7 +15,7 @@ os_linuxmint_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 1, "@happy-game");
+  chef_set_sauciers (this, 1, "@happy-game");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -58,7 +58,7 @@ os_linuxmint_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_linuxmint);
+  chsrc_use_this_source (os_linuxmint);
 
   chsrc_backup (OS_LinuxMint_SourceList);
 

@@ -15,7 +15,7 @@ os_openbsd_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 2, "@G_I_Y", "@ccmywish");
-  chef_set_contributors (this, 0);
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -57,7 +57,7 @@ os_openbsd_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_openbsd);
+  chsrc_use_this_source (os_openbsd);
 
   chsrc_backup ("/etc/installurl");
   chsrc_overwrite_file (source.url, "/etc/installurl");

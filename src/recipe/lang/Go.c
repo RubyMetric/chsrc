@@ -29,7 +29,7 @@ pl_go_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 2, "@czyt", "@techoc");
+  chef_set_sauciers (this, 2, "@czyt", "@techoc");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -80,7 +80,7 @@ pl_go_setsrc (char *option)
 {
   pl_go_check_cmd ();
 
-  use_this_source(pl_go);
+  chsrc_use_this_source (pl_go);
 
   char *cmd = "go env -w GO111MODULE=on";
   chsrc_run (cmd, RunOpt_Default);

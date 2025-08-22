@@ -3,11 +3,11 @@
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
  ! Doc Name      : README.md
- ! Doc Authors   : Aoran Zeng  <ccmywish@qq.com>
+ ! Doc Authors   : 曾奥然 <ccmywish@qq.com>
  ! Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
  !               |
  ! Created On    : <2023-12-28>
- ! Last Modified : <2025-08-17>
+ ! Last Modified : <2025-08-22>
  ! ---------------------------------------------------------- -->
 
 <div align="center">
@@ -67,7 +67,7 @@
 ---
 
 > [!IMPORTANT]
-> **`chsrc` 可换源 65+ 目标。每个人仅仅贡献和维护自己熟悉的部分，回报是得到其他所有领域专家的帮助。** [欢迎成为 recipe 维护者](https://github.com/RubyMetric/chsrc/issues/130)
+> **`chsrc` 可换源 65+ 目标。每个人仅仅贡献和维护自己熟悉的部分，回报是得到其他所有领域专家的帮助。** [欢迎成为 recipe 维护者](https://github.com/RubyMetric/chsrc/issues/275)
 
 <br>
 

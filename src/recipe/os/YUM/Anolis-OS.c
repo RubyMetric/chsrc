@@ -15,7 +15,7 @@ os_anolis_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 0);
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -39,7 +39,7 @@ os_anolis_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_anolis);
+  chsrc_use_this_source (os_anolis);
 
   char *cmd = xy_strcat (3, "sed -i.bak -E 's|https?://(mirrors\\.openanolis\\.cn/anolis)|", source.url, "|g' /etc/yum.repos.d/*.repo");
   chsrc_run (cmd, RunOpt_Default);

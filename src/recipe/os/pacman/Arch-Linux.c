@@ -18,7 +18,7 @@ os_arch_prelude ()
 
   chef_set_chef (this, "@happy-game");
   chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
-  chef_set_contributors (this, 1, "@happy-game");
+  chef_set_sauciers (this, 1, "@happy-game");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -66,7 +66,7 @@ os_arch_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_arch);
+  chsrc_use_this_source (os_arch);
 
   chsrc_backup (OS_Pacman_MirrorList);
 
@@ -120,7 +120,7 @@ os_archlinuxcn_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
-  chef_set_contributors (this, 1, "@happy-game");
+  chef_set_sauciers (this, 1, "@happy-game");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -162,7 +162,7 @@ os_archlinuxcn_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_archlinuxcn);
+  chsrc_use_this_source (os_archlinuxcn);
 
   chsrc_backup (OS_Pacman_ArchLinuxCN_MirrorList);
 

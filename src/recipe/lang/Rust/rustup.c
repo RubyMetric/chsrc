@@ -18,7 +18,7 @@ pl_rust_rustup_prelude (void)
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 2, "@Yangmoooo", "@Mikachu2333");
+  chef_set_sauciers (this, 2, "@Yangmoooo", "@Mikachu2333");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english (this);
@@ -56,7 +56,7 @@ pl_rust_rustup_getsrc (char *option)
 void
 pl_rust_rustup_setsrc (char *option)
 {
-  use_this_source(pl_rust_rustup);
+  chsrc_use_this_source (pl_rust_rustup);
 
 #ifdef XY_Build_On_Windows
 

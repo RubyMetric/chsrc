@@ -15,7 +15,7 @@ os_gentoo_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@G_I_Y");
-  chef_set_contributors (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 1, "@ccmywish");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);
@@ -42,7 +42,7 @@ os_gentoo_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_gentoo);
+  chsrc_use_this_source (os_gentoo);
 
   chsrc_backup ("/etc/portage/repos.conf/gentoo.conf");
 

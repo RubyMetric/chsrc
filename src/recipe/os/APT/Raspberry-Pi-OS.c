@@ -17,7 +17,7 @@ os_raspberrypi_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 1, "@Yangmoooo");
+  chef_set_sauciers (this, 1, "@Yangmoooo");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -50,7 +50,7 @@ os_raspberrypi_setsrc (char *option)
 {
   chsrc_ensure_root(); // HELP: 不确定是否需要
 
-  use_this_source(os_raspberrypi);
+  chsrc_use_this_source (os_raspberrypi);
 
   chsrc_backup (OS_RaspberryPi_SourceList);
 

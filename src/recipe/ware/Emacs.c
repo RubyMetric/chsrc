@@ -22,7 +22,7 @@ wr_emacs_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 0);
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -47,7 +47,7 @@ wr_emacs_prelude ()
 void
 wr_emacs_setsrc (char *option)
 {
-  use_this_source(wr_emacs);
+  chsrc_use_this_source (wr_emacs);
 
   chsrc_note2 ("Emacs换源涉及Elisp, 需要手动查阅并换源:");
   p (source.url);

@@ -2,12 +2,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Name     :  struct.h
- * File Authors  :  Aoran Zeng   <ccmywish@qq.com>
- *               |   Heng Guo    <2085471348@qq.com>
+ * File Authors  :  曾奥然 <ccmywish@qq.com>
+ *               |   郭恒  <2085471348@qq.com>
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-08-20>
+ * Last Modified : <2025-08-22>
  *
  * chsrc struct
  * ------------------------------------------------------------*/
@@ -151,12 +151,11 @@ typedef struct Target_t
   char *last_updated;
   char *sources_last_updated;
 
-  Contributor_t  *chef;    /* 该 recipe 的负责人 */
-  Contributor_t **cooks;   /* 该 recipe 的核心作者 */
+  Contributor_t  *chef;     /* 该 recipe *当前*的总负责人 (可以任职也可以休职) */
+  Contributor_t **cooks;    /* 该 recipe 的主要作者 */
   size_t          cooks_n;
-
-  Contributor_t **contributors; /* 该 recipe 的所有贡献者(除核心作者外的其他人) */
-  size_t          contributors_n;
+  Contributor_t **sauciers; /* 该 recipe 的次要贡献者 (除主要作者外的其他人) */
+  size_t          sauciers_n;
 }
 Target_t;
 
@@ -179,7 +178,7 @@ TargetRegisterInfo_t;
 #define chef_prep_this(t,op) Target_t *this = &t##_target; this->inited = true; chef_allow_##op(t);
 
 #define use_this(t) Target_t *this = &t##_target;
-#define use_this_source(t) Target_t *this = &t##_target; Source_t source = chsrc_yield_source_and_confirm (this, option);
+#define chsrc_use_this_source(t) Target_t *this = &t##_target; Source_t source = chsrc_yield_source_and_confirm (this, option);
 
 #define def_sources_begin()  Source_t sources[] = {
 #define def_sources_end()    }; \

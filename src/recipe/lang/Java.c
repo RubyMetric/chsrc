@@ -15,7 +15,7 @@ pl_java_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 1, "@BingChunMoLi");
+  chef_set_sauciers (this, 1, "@BingChunMoLi");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -77,7 +77,7 @@ pl_java_setsrc (char *option)
   bool maven_exist, gradle_exist;
   pl_java_check_cmd (&maven_exist, &gradle_exist);
 
-  use_this_source(pl_java);
+  chsrc_use_this_source (pl_java);
 
   if (maven_exist)
     {

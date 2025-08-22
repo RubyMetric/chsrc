@@ -15,7 +15,7 @@ os_rockylinux_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 1, "@happy-game");
+  chef_set_sauciers (this, 1, "@happy-game");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -46,7 +46,7 @@ os_rockylinux_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_rockylinux);
+  chsrc_use_this_source (os_rockylinux);
 
   char *version_str = xy_run ("sed -nr 's/ROCKY_SUPPORT_PRODUCT_VERSION=\"(.*)\"/\\1/p' " ETC_OS_RELEASE, 0);
   double version = atof (version_str);

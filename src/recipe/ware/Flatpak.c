@@ -15,7 +15,7 @@ wr_flatpak_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 1, "@jialinlvcn");
+  chef_set_sauciers (this, 1, "@jialinlvcn");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -63,7 +63,7 @@ wr_flatpak_getsrc (char *option)
 void
 wr_flatpak_setsrc (char *option)
 {
-  use_this_source(wr_flatpak);
+  chsrc_use_this_source (wr_flatpak);
 
   chsrc_alert2 ("若出现问题，可先调用以下命令:");
   char *note = xy_strcat (3,

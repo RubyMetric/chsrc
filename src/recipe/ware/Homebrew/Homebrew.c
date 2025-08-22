@@ -17,7 +17,7 @@ wr_homebrew_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 1, "@Word2VecT");
+  chef_set_sauciers (this, 1, "@Word2VecT");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);
@@ -53,7 +53,7 @@ wr_homebrew_getsrc (char *option)
 void
 wr_homebrew_setsrc (char *option)
 {
-  use_this_source(wr_homebrew);
+  chsrc_use_this_source (wr_homebrew);
 
   char *w = xy_str_gsub (RAWSTR_wr_homebrew_config_in_bash, "@1@", source.url);
 

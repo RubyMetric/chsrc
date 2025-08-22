@@ -15,7 +15,7 @@ pl_clojure_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 1, "@hezonglun");
+  chef_set_sauciers (this, 1, "@hezonglun");
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_forbid_english(this);
@@ -36,7 +36,7 @@ pl_clojure_prelude ()
 void
 pl_clojure_setsrc (char *option)
 {
-  use_this_source(pl_clojure);
+  chsrc_use_this_source (pl_clojure);
 
   if (chsrc_in_local_mode())
     {

@@ -15,7 +15,7 @@ os_ros_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@G_I_Y");
-  chef_set_contributors (this, 2, "@ccmywish", "@zouri");
+  chef_set_sauciers (this, 2, "@ccmywish", "@zouri");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -55,7 +55,7 @@ os_ros_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_ros);
+  chsrc_use_this_source (os_ros);
 
   chsrc_backup (OS_ROS_SourceList);
 
