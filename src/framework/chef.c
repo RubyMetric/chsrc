@@ -91,24 +91,28 @@ chef_register_contributor (char *id, char *name, char *email, char *display_name
 
 /**
  * @brief 修改 Provider 的测速地址
+ *
+ * @note 这个修改的是全局 Provider 里的信息。往往用来设置 UpstreamProvider
  */
 void
 chef_set_provider_speed_measure_url (SourceProvider_t *provider, char *url)
 {
   provider->psmi.skip = NotSkip;
   provider->psmi.url = xy_strdup (url);
-  chsrc_debug ("m", xy_strcat (4, "recipe 重新为 ", provider->code, " 设置测速链接: ", url));
+  chsrc_debug ("m", xy_strcat (4, "recipe 重新为 ", provider->code, "(镜像站信息本身) 设置测速链接: ", url));
 }
 
 
 /**
  * @brief 修改 Provider 的测速精度
+ *
+ * @note 这个修改的是全局 Provider 里的信息。往往用来设置 UpstreamProvider
  */
 void
 chef_set_provider_speed_measure_accuracy (SourceProvider_t *provider, bool accuracy)
 {
   provider->psmi.accurate = accuracy;
-  chsrc_debug ("m", xy_strcat (4, "recipe 重新为 ", provider->code, " 设置测速精度: ", accuracy ? "精准" : "粗略"));
+  chsrc_debug ("m", xy_strcat (4, "recipe 重新为 ", provider->code, "(镜像站信息本身) 设置测速精度: ", accuracy ? "精准" : "粗略"));
 }
 
 

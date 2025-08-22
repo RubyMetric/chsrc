@@ -11,7 +11,7 @@ os_almalinux_prelude ()
 
   chef_set_created_on   (this, "2024-06-12");
   chef_set_last_updated (this, "2025-08-10");
-  chef_set_sources_last_updated (this, "2024-12-18");
+  chef_set_sources_last_updated (this, "2025-08-22");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
@@ -24,7 +24,7 @@ os_almalinux_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&UpstreamProvider, "http://repo.almalinux.org/almalinux", FeedByPrelude},
+  {&UpstreamProvider, "http://repo.almalinux.org/almalinux",  DelegateToUpstream},
   {&Ali,              "https://mirrors.aliyun.com/almalinux", FeedByPrelude},
   {&Volcengine,       "https://mirrors.volces.com/almalinux", FeedByPrelude},
   {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/almalinux", FeedByPrelude},
@@ -32,7 +32,10 @@ os_almalinux_prelude ()
   {&Nju,              "https://mirror.nju.edu.cn/almalinux",         FeedByPrelude}
   def_sources_end()
 
-  chef_set_provider_speed_measure_url (&UpstreamProvider, "https://raw.repo.almalinux.org/almalinux/9.5/isos/x86_64/AlmaLinux-9-latest-x86_64-minimal.iso");
+#define link "/9.6/isos/x86_64/AlmaLinux-9-latest-x86_64-minimal.iso"
+  chef_set_sources_speed_measure_url_with_postfix (this, link);
+  chef_set_provider_speed_measure_url (&UpstreamProvider, "https://raw.repo.almalinux.org/almalinux" link);
+#undef link
 }
 
 /**
