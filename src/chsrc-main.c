@@ -294,7 +294,7 @@ cli_print_target_features (Target_t *target, const char *input_target_name)
   }
 
   {
-  char *msg = ENGLISH ? " UserDefine: using user-defined source URL " : " UserDefine: 用户自定义换源URL ";
+  char *msg = ENGLISH ? " UserDefine: using user-defined source link " : " UserDefine: 用户自定义换源链接 ";
   char *user_define_msg = xy_strcat (5, msg, "| chsrc set ", input_target_name, " https://user-define-url.org/", input_target_name);
   if (target->can_user_define) printf (" %s%s\n", bdgreen(YesMark), purple(user_define_msg));
   else printf (" %s%s\n", bdred(NoMark), user_define_msg);br();
@@ -426,7 +426,7 @@ cli_print_version ()
 void
 cli_print_help ()
 {
-  char *version_string = purple("v" Chsrc_Version "-" Chsrc_Release_Date);
+  char *version_string = "v" Chsrc_Version "-" Chsrc_Release_Date;
 
   const char *raw = CHINESE ? RAWSTR_chsrc_USAGE_CHINESE : RAWSTR_chsrc_USAGE_ENGLISH;
 
@@ -615,7 +615,7 @@ get_target (const char *input, TargetOp code, char *option)
 
       {
       char *msg1 = ENGLISH ? "Mirror abbr" : "镜像站简写";
-      char *msg2 = ENGLISH ? "Source URL"  : "换源URL";
+      char *msg2 = ENGLISH ? "Source URL"  : "换源链接";
       char *msg3 = ENGLISH ? "Mirror Name" : "镜像站";
       char *format = ENGLISH ? "  %-13s%-33s%-38s%s\n" : "  %-13s%-36s%-46s%s\n";
       printf (format, "code", msg1, msg2, msg3);

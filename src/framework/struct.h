@@ -158,13 +158,6 @@ typedef struct Target_t
 Target_t;
 
 
-typedef struct TargetRegisterInfo_t
-{
-  Target_t *target;           /* target 本身 */
-  void     (*prelude) (void); /* 填充 target 信息等预置操作 */
-}
-TargetRegisterInfo_t;
-
 
 #define def_target(t, aliases) void t##_getsrc(char *option);void t##_setsrc(char *option);void t##_resetsrc(char *option); Target_t t##_target={aliases};
 
