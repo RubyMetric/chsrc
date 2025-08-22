@@ -7,16 +7,14 @@ def_target(pl_js_nvm, "nvm");
 void
 pl_js_nvm_prelude (void)
 {
-  use_this(pl_js_nvm);
-  chef_allow_gsr(pl_js_nvm);
+  chef_prep_this (pl_js_nvm, gsr);
 
   chef_set_created_on   (this, "2024-09-23");
   chef_set_last_updated (this, "2025-06-19");
   chef_set_sources_last_updated (this, "2025-06-19");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
   chef_set_contributors (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
@@ -25,9 +23,7 @@ pl_js_nvm_prelude (void)
 
   chef_set_note (this, "nvm 不支持 Fish shell", "nvm does not support Fish");
 
-  // 使用 pl_js_nodejs_binary 的源
-  this->sources = pl_js_nodejs_binary_target.sources;
-  this->sources_n = pl_js_nodejs_binary_target.sources_n;
+  chef_use_other_target_sources (this, &pl_js_nodejs_binary_target);
 }
 
 

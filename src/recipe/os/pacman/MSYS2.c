@@ -7,18 +7,15 @@ def_target(os_msys2, "msys2/msys");
 void
 os_msys2_prelude ()
 {
-  use_this(os_msys2);
-  chef_allow_s(os_msys2);
+  chef_prep_this (os_msys2, s);
 
   chef_set_created_on   (this, "2023-09-06");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2025-06-20");
 
-  chef_set_authors (this, 1, "Heng Guo", "2085471348@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@G_I_Y");
+  chef_set_contributors (this, 1, "@ccmywish");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);

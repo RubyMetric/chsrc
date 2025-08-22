@@ -22,19 +22,15 @@ pl_python_speed_url_constructor (const char *url, const char *user_data)
 void
 pl_python_group_prelude (void)
 {
-  use_this(pl_python_group);
-  chef_allow_gsr(pl_python_group);
+  chef_prep_this (pl_python_group, gsr);
 
   chef_set_created_on   (this, "2023-09-03");
   chef_set_last_updated (this, "2025-07-14");
   chef_set_sources_last_updated (this, "2025-07-11");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 1, "happy game", "happygame1024@gmail.com");
-  chef_set_contributors (this, 1,
-    "yongxiang", "1926885268@qq.com");
-
+  chef_set_chef (this, "@happy-game");
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_contributors (this, 1, "@xyx1926885268");
 
   chef_allow_local_mode (this, PartiallyCan, "部分包管理器支持项目级换源", "Some package managers support project-level source changing");
   chef_allow_english(this);
@@ -76,7 +72,7 @@ pl_python_check_unofficial_pkger (bool *poetry_exist, bool *pdm_exist, bool *uv_
 
 
 /**
- * @param[out] prog 返回 Python 的可用名，如果不可用，则返回 NULL
+ * @param[out] prog_name 返回 Python 的可用名，如果不可用，则返回 NULL
  */
 void
 pl_python_get_py_program_name (char **prog_name)

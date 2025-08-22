@@ -10,19 +10,15 @@ def_target(pl_rust_rustup, "rustup");
 void
 pl_rust_rustup_prelude (void)
 {
-  use_this(pl_rust_rustup);
-  chef_allow_gsr(pl_rust_rustup);
+  chef_prep_this (pl_rust_rustup, gsr);
 
   chef_set_created_on   (this, "2024-10-02");
   chef_set_last_updated (this, "2025-08-07");
   chef_set_sources_last_updated (this, "2025-08-07");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 2,
-    "Yangmoooo", "yangmoooo@outlook.com",
-    "Mikachu2333", "mikachu.23333@zohomail.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_contributors (this, 2, "@Yangmoooo", "@Mikachu2333");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english (this);

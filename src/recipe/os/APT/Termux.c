@@ -7,16 +7,14 @@ def_target(os_termux, "termux");
 void
 os_termux_prelude ()
 {
-  use_this(os_termux);
-  chef_allow_gsr(os_termux);
+  chef_prep_this (os_termux, gsr);
 
   chef_set_created_on   (this, "2025-03-04");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2025-03-04");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
   chef_set_contributors (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);

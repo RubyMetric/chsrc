@@ -7,19 +7,15 @@ def_target(pl_rust_cargo, "rust/cargo/crate/crates");
 void
 pl_rust_cargo_prelude (void)
 {
-  use_this(pl_rust_cargo);
-  chef_allow_gsr(pl_rust_cargo);
+  chef_prep_this (pl_rust_cargo, gsr);
 
   chef_set_created_on   (this, "2023-08-30");
   chef_set_last_updated (this, "2025-07-22");
   chef_set_sources_last_updated (this, "2025-06-18");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "Mikachu2333", "mikachu.23333@zohomail.com");
-
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_contributors (this, 1, "@Mikachu2333");
 
   chef_allow_local_mode (this, PartiallyCan, "可以基于本项目换源吗？请帮助确认", "Can it change sources based on this project? Please help confirm");
   chef_forbid_english (this);

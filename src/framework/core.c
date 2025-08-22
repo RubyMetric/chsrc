@@ -9,7 +9,7 @@
  *               | Yangmoooo  <yangmoooo@outlook.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-08-21>
+ * Last Modified : <2025-08-22>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -122,8 +122,6 @@ typedef enum ChgType_t
 /* Global Program Status */
 struct
 {
-  XyMap_t *contributors; /* 所有贡献者 */
-
   int leader_selected_index;   /* leader target 选中的索引 */
   ChgType_t chgtype;           /* 换源实现的类型 */
 
@@ -132,13 +130,27 @@ struct
 }
 ProgStatus =
 {
-  .contributors = NULL,
   .leader_selected_index = -1,
   .chgtype = ChgType_Auto,
   .chsrc_run_faas = false
 };
 
 
+/* Global Program Store */
+struct
+{
+  XySeq_t *pl;
+  XySeq_t *os;
+  XySeq_t *wr;
+  XyMap_t *contributors; /* 所有贡献者 */
+}
+ProgStore =
+{
+  .pl = NULL,
+  .os = NULL,
+  .wr = NULL,
+  .contributors = NULL,
+};
 
 
 
@@ -161,6 +173,7 @@ ProgStatus =
   #define chsrc_debug(dom,str)
 #endif
 #define chsrc_verbose(str) xy_info(App_Name "(VERBOSE)",str)
+#define chsrc_panic(reason) xy_error(App_Name "(PANIC)",reason); exit(Exit_MaintainerCause)
 
 #define faint(str)    xy_str_to_faint(str)
 #define red(str)      xy_str_to_red(str)
@@ -210,11 +223,14 @@ chsrc_alert2 (const char *str)
 
 
 void
-chsrc_framework_init ()
+chsrc_init_framework ()
 {
   xy_init ();
 
-  ProgStatus.contributors = xy_map_new ();
+  ProgStore.contributors = xy_map_new ();
+  ProgStore.pl = xy_seq_new ();
+  ProgStore.os = xy_seq_new ();
+  ProgStore.wr = xy_seq_new ();
 }
 
 
@@ -1007,6 +1023,14 @@ source_has_empty_url (Source_t *source)
 Source_t
 chsrc_yield_source (Target_t *t, char *option)
 {
+  /**
+   * 防止某些意外时刻 _setsrc() 等函数会被直接调，但此时 _prelude() 还没有执行过
+   * 我们在这里卡一道，确保 _prelude() 被调用
+   *
+   * 目前可能出现这种情况的时候：组换源的时候，组成菜的 _setsrc() 被直接调用
+   */
+  if (!t->inited) t->preludefn();
+
   Source_t source;
   if (chsrc_in_target_group_mode() && ProgStatus.leader_selected_index==-1)
     {

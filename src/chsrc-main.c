@@ -13,24 +13,16 @@
  * -------------------------------------------------------------
  *
  * 这是一个高度依靠贡献者的项目，我们直接把每一位贡献者写进了代码
- * 里，这是比 Git commit 更加稳定的方式。但我们不满足于把大家写在
- * 注释里，因为C语言在编译时会无情地把这些信息抹去。
+ * 里，这是比 Git commit message 更加稳定的方式。但我们不满足于仅
+ * 把大家写在注释里，因为C语言在编译时会无情地把这些信息抹去。
  *
  *           所以，我们让每一位贡献者直接参与运行时！
  *
- * 想象一下，每一位贡献者都化作一串比特：
- *   栖居在内蒙古与贵州的数据中心中；
- *   穿梭于北京与上海的机房；
- *   流淌在广东、浙江的云里；
- *   散布于四川与重庆的算力集群；
- *   潜藏在陕西、甘肃、宁夏的机架之间；
- *   分身于全国各地的桌面电脑里，点亮在湖北、山东、河南的家庭宽带
- * 上，跃动在江苏、安徽、湖南的手机与路由器中，乃至潜入那些无名的
- * 小型嵌入式设备。
- *
+ * 想象一下，每一位贡献者都化作一串比特，穿梭于全国各地的桌面PC中，
+ * 流淌在数据中心的机房，分身在手机、路由器、小型嵌入式设备中...
  * 每当 chsrc 执行一次 recipe 相关的操作，这些比特便会复苏，贡献者
  * 的信息随之浮现。它提醒着使用者：在你与开源世界的每一次交互背后，
- * 都是无数人的心血，跨越省份与疆域，以代码相连，持续回响。
+ * 都是许多人的协作，跨越省份与疆域，以代码相连。
  *
  * 我们希望营造像 Richard Stallman 在创建 GNU 项目之前，在 MIT 时
  * 那样的氛围 —— 写自己用得上的软件，与大家一起开发、维护，简单纯
@@ -38,8 +30,8 @@
  * 然的加入，逐渐成长为互相支持的伙伴。
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.2.3-dev5"
-#define Chsrc_Release_Date   "2025/08/21"
+#define Chsrc_Version        "0.2.2.3-dev6"
+#define Chsrc_Release_Date   "2025/08/22"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
@@ -51,7 +43,9 @@ chsrc_register_contributors ()
 {
   /* 项目创建者 */
   chef_register_contributor ("@ccmywish",       "曾奥然",         "ccmywish@qq.com",                NULL);
+  // 该 ID 为 Gitee ID
   chef_register_contributor ("@G_I_Y",          "郭恒",           "2085471348@qq.com",              NULL);
+
   /* 所有贡献者 (按参与贡献时间排序) */
   chef_register_contributor ("@Aaron-212",      "Aaron Ruan",     "aaron212cn@outlook.com",         NULL);
   chef_register_contributor ("@chenrui333",     "Rui Chen",       "rui@chenrui.dev",                NULL);
@@ -65,21 +59,30 @@ chsrc_register_contributors ()
   chef_register_contributor ("@Word2VecT",      "Word2VecT",      "tangzinan@bupt.edu.cn",          NULL);
   chef_register_contributor ("@wickdynex",      "Xuan",           "wick.dynex@qq.com",              NULL);
   chef_register_contributor ("@Efterklang",     "GnixAij",        "gaojiaxing0220@gmail.com",       NULL);
-  chef_register_contributor ("@ChatGPT",        "ChatGPT",        "chatgpt.com",                    NULL);
   chef_register_contributor ("@czyt",           "czyt",           "czyt.go@gmail.com",              NULL);
+  chef_register_contributor ("@XUANJI233",      "XUANJI233",      "xuanji233@outlook.com",          NULL);
+  chef_register_contributor ("@Yangmoooo",      "Yangmoooo",      "yangmoooo@outlook.com",          NULL);
   chef_register_contributor ("@zouri",          "Zouri",          "guoshuaisun@outlook.com",        NULL);
   chef_register_contributor ("@xyx1926885268",  "Yongxiang",      "1926885268@qq.com",              NULL);
   chef_register_contributor ("@YU-7",           "YU-7",           "2747046473@qq.com",              NULL);
   chef_register_contributor ("@juzeon",         "juzeon",         "skyjuzheng@gmail.com",           NULL);
   chef_register_contributor ("@jialinlvcn",     "Jialin Lyu",     "jialinlvcn@aliyun.com",          NULL);
-  chef_register_contributor ("@GitHub Copilot", "GitHub Copilot", "github.com/copilot",             NULL);
   chef_register_contributor ("@Kattos",         "ccy",            "icuichengyi@gmail.com",          NULL);
   chef_register_contributor ("@xrgzs",          "MadDogOwner",    "xiaoran@xrgzs.top",              NULL);
   chef_register_contributor ("@sanchuanhehe",   "sanchuanhehe",   "wyihe5520@gmail.com",            NULL);
   chef_register_contributor ("@Mikachu2333",    "Mikachu2333",    "mikachu.23333@zohomail.com",     NULL);
   chef_register_contributor ("@techoc",         "Rui Yang",       "techoc@foxmail.com",             NULL);
   chef_register_contributor ("@BingChunMoLi",   "BingChunMoLi",   "bingchunmoli@bingchunmoli.com",  NULL);
+  // 该 ID 为 Gitee ID
   chef_register_contributor ("@hezonglun",      "HeZongLun",      "hezonglun123456@outlook.com",    NULL);
+
+  /**
+   * AI贡献者：
+   *
+   *    ChatGPT、GitHub Copilot、DeepSeek
+   *
+   * 这几位是贡献者显式说明的，也许还有隐式使用的一些AI并没有被记录下来，可以添加在这里
+   */
 }
 
 #include "recipe/menu.c"
@@ -119,12 +122,13 @@ cli_print_available_mirrors ()
 
 
 /**
- * 遍历以 / 为分隔符的别名字符串，对每个别名调用回调函数
+ * @brief 遍历以 / 为分隔符的别名字符串，对每个别名调用回调函数
  *
- * @param aliases   空格分隔的 alias 字符串
- * @param callback  对每个 alias 调用的回调函数
- * @param user_data 传递给回调函数的用户数据
- * @return          如果回调函数返回true则停止遍历并返回true，否则返回false
+ * @param  aliases    空格分隔的 alias 字符串
+ * @param  callback   对每个 alias 调用的回调函数
+ * @param  user_data  传递给回调函数的用户数据
+ *
+ * @return 如果回调函数返回true则停止遍历并返回true，否则返回false
  */
 bool
 iterate_aliases (const char *aliases, bool (*callback)(const char *alias, void *user_data), void *user_data)
@@ -160,27 +164,28 @@ iterate_aliases (const char *aliases, bool (*callback)(const char *alias, void *
 
 
 /**
- * 用于 cli_print_supported_targets_ 的回调函数，打印每个别名
+ * 用于 cli_print_targets_for_menu 的回调函数，打印每个别名
  */
 bool
-print_alias_callback (const char *alias, void *user_data)
+callback_print_alias (const char *alias, void *user_data)
 {
   printf ("%s  ", alias);
   return false; // 继续遍历，不停止
 }
 
 void
-cli_print_supported_targets_ (TargetRegisterInfo_t menu[], size_t size)
+callback_print_targets (void *data, void *NOUSE)
 {
-  for (int i = 0; i < size; i++)
-    {
-      TargetRegisterInfo_t *entry = &menu[i];
+  Target_t *target = (Target_t *) data;
+  // 使用通用的别名遍历函数打印所有别名
+  iterate_aliases (target->aliases, callback_print_alias, NULL);
+  br(); // 每个target换行
+}
 
-      // 使用通用的别名遍历函数打印所有别名
-      iterate_aliases (entry->target->aliases, print_alias_callback, NULL);
-
-      br(); // 每个target换行
-    }
+void
+cli_print_targets_for_menu (XySeq_t *menu)
+{
+  xy_seq_each (menu, callback_print_targets, NULL);
   br(); // 最后额外换行
 }
 
@@ -197,50 +202,51 @@ cli_print_supported_targets ()
   char *msg = ENGLISH ? "Programming Languages" : "编程语言";
   say (bdgreen(msg));
   say ("-------------------------");
-  cli_print_supported_targets_ (chsrc_pl_menu, xy_arylen(chsrc_pl_menu));
+  cli_print_targets_for_menu (ProgStore.pl);
   }
 
   {
   char *msg = ENGLISH ? "Operating Systems" : "操作系统";
   say (bdgreen(msg));
   say ("-------------------------");
-  cli_print_supported_targets_ (chsrc_os_menu, xy_arylen(chsrc_os_menu));
+  cli_print_targets_for_menu (ProgStore.os);
   }
 
   {
   char *msg = ENGLISH ? "Softwares" : "软件";
   say (bdgreen(msg));
   say ("-------------------------");
-  cli_print_supported_targets_ (chsrc_wr_menu, xy_arylen(chsrc_wr_menu));
+  cli_print_targets_for_menu (ProgStore.wr);
   }
 }
 
 void
-cli_print_supported_pl ()
+cli_print_menu (char *menu)
 {
-  char *msg = ENGLISH ? "Support following Programming Languages (same line indicates these targets are compatible)\n"
-                      : "支持对以下编程语言生态换源 (同一行表示这几个目标兼容)\n";
-  say (bdgreen(msg));
-
-  cli_print_supported_targets_ (chsrc_pl_menu,   xy_arylen(chsrc_pl_menu));
-}
-
-void
-cli_print_supported_os ()
-{
-  char *msg = ENGLISH ? "Support following Operating Systems (same line indicates these targets are compatible)\n"
-                      : "支持对以下操作系统换源 (同一行表示这几个目标兼容)\n";
-  say (bdgreen(msg));
-  cli_print_supported_targets_ (chsrc_os_menu, xy_arylen(chsrc_os_menu));
-}
-
-void
-cli_print_supported_wr ()
-{
-  char *msg = ENGLISH ? "Support following Softwares (same line indicates these targets are compatible)\n"
-                      : "支持对以下软件换源 (同一行表示这几个目标兼容)\n";
-  say (bdgreen(msg));
-  cli_print_supported_targets_ (chsrc_wr_menu, xy_arylen(chsrc_wr_menu));
+  if (xy_streql (menu, "pl"))
+    {
+      char *msg =
+        ENGLISH ? "Support following Programming Languages (same line indicates these targets are compatible)\n"
+                : "支持对以下编程语言生态换源 (同一行表示这几个目标兼容)\n";
+      say (bdgreen(msg));
+      cli_print_targets_for_menu (ProgStore.pl);
+    }
+  else if (xy_streql (menu, "os"))
+    {
+      char *msg =
+        ENGLISH ? "Support following Operating Systems (same line indicates these targets are compatible)\n"
+                : "支持对以下操作系统换源 (同一行表示这几个目标兼容)\n";
+      say (bdgreen(msg));
+      cli_print_targets_for_menu (ProgStore.os);
+    }
+  else if (xy_streql (menu, "wr"))
+    {
+      char *msg =
+        ENGLISH ? "Support following Softwares (same line indicates these targets are compatible)\n"
+                : "支持对以下软件换源 (同一行表示这几个目标兼容)\n";
+      say (bdgreen(msg));
+      cli_print_targets_for_menu (ProgStore.wr);
+    }
 }
 
 
@@ -325,7 +331,7 @@ cli_print_target_features (Target_t *target, const char *input_target_name)
   if (target->note)
     {
       char *msg = ENGLISH ? "NOTE: " : "备注: ";
-      printf ("%s%s\n", bdyellow (msg), bdyellow (target->note));
+      printf ("%s%s\n\n", bdyellow (msg), bdyellow (target->note));
     }
 }
 
@@ -333,29 +339,14 @@ cli_print_target_features (Target_t *target, const char *input_target_name)
 void
 cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
 {
-  if (target->authors && target->authors_n > 0)
-    {
-      char *msg = ENGLISH ? "Recipe Original Authors: " : "食谱原始作者: ";
-      printf ("%s", bdblue(msg));
-      for (size_t i = 0; i < target->authors_n; i++)
-        {
-          if (i > 0) printf (", ");
-          printf ("%s <%s>",
-                  target->authors[i].name  ? target->authors[i].name : "Unknown",
-                  target->authors[i].email ? target->authors[i].email : "unknown@example.com");
-        }
-      printf ("\n");
-    }
-
   if (target->created_on)
     {
       char *msg = ENGLISH ? "Recipe Created On: " : "食谱创建时间: ";
       printf ("%s%s\n", bdblue(msg), target->created_on);
     }
 
-
   {
-    char *msg = ENGLISH ? "Current Chef: " : "当前主厨: ";
+    char *msg = ENGLISH ? "Current Chef: " : "品控: ";
     if (target->chef)
       {
         printf ("%s%s <%s>\n", bdblue(msg),
@@ -364,14 +355,14 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
       }
     else
       {
-        char *msg1 = CHINESE ? "暂空缺, 欢迎担任!" : "Vacant, Welcome to hold the position";
+        char *msg1 = CHINESE ? "该 recipe 的负责人暂空缺, 欢迎担任" : "Vacant, Welcome to hold the position";
         printf ("%s%s\n", bdblue(msg), bdgreen(msg1));
       }
   }
 
 
   {
-    char *msg = ENGLISH ? "Current Cooks: " : "当前副厨: ";
+    char *msg = ENGLISH ? "Cooks: " : "掌勺: ";
     if (target->cooks && target->cooks_n > 0)
       {
         printf ("%s", bdblue(msg));
@@ -379,20 +370,20 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
           {
             if (i > 0) printf (", ");
             printf ("%s <%s>",
-                    target->cooks[i].name  ? target->cooks[i].name : "Unknown",
-                    target->cooks[i].email ? target->cooks[i].email : "unknown@example.com");
+                    target->cooks[i]->name  ? target->cooks[i]->name : "Unknown",
+                    target->cooks[i]->email ? target->cooks[i]->email : "unknown@example.com");
           }
         printf ("\n");
       }
     else
       {
-        char *msg1 = CHINESE ? "暂空缺, 欢迎担任!" : "Vacant, Welcome to hold the position!";
+        char *msg1 = CHINESE ? "暂空缺, 欢迎担任" : "Vacant, Welcome to hold the position";
         printf ("%s%s\n", bdblue(msg), bdgreen(msg1));
       }
   }
 
   {
-    char *msg = ENGLISH ? "Contributors: " : "贡献者: ";
+    char *msg = ENGLISH ? "Contributors: " : "调味: ";
     if (target->contributors && target->contributors_n > 0)
       {
         printf ("%s", bdblue(msg));
@@ -400,8 +391,8 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
           {
             if (i > 0) printf (", ");
             printf ("%s <%s>",
-                    target->contributors[i].name ? target->contributors[i].name : "Unknown",
-                    target->contributors[i].email ? target->contributors[i].email : "unknown@example.com");
+                    target->contributors[i]->name ? target->contributors[i]->name : "Unknown",
+                    target->contributors[i]->email ? target->contributors[i]->email : "unknown@example.com");
           }
         printf ("\n");
       }
@@ -462,64 +453,68 @@ cli_print_issues ()
 
 
 /**
- * 用于 iterate_menu_ 的回调函数，检查别名是否匹配用户输入
+ * @brief 用于 callback_find_target() 的回调函数，检查别名是否匹配用户输入
  */
 bool
-match_alias_callback (const char *alias, void *user_data)
+callback_match_alias (const char *alias, void *user_data)
 {
   const char *input = (const char *)user_data;
   return xy_streql_ic (input, alias);
 }
 
+/**
+ * @brief 用于 iterate_menu() 的回调函数
+ */
+bool
+callback_is_one_of_target_aliases (void *data, void *input)
+{
+  Target_t *target = (Target_t *) data;
+  if (iterate_aliases (target->aliases, callback_match_alias, input))
+    {
+      target->preludefn();
+      return true;
+    }
+  else
+    return false;
+}
 
 /**
- * 查询用户输入 @param:input 是否与该 @param:menu 中的某个 target 匹配
+ * 查询用户输入 `input` 是否与该 `menu` 中的某个 target 匹配
  * 若匹配将直接调用 prelude
  *
- * @param[in]  menu      menu
- * @param[in]  size      menu 大小
- * @param[in]  input     用户输入的目标名
- * @param[out] target    返回匹配到的 Target_t 指针
+ * @param[in]   menu    menu
+ * @param[in]   input   用户输入的目标名
+ * @param[out]  target  返回匹配到的 Target_t 指针
  *
  * @return 匹配到则返回true，未匹配到则返回false
  */
-#define iterate_menu(ary, input, target) iterate_menu_(ary, xy_arylen(ary), input, target)
 bool
-iterate_menu_ (TargetRegisterInfo_t menu[], size_t size, const char *input, Target_t **target)
+iterate_menu (XySeq_t *menu, const char *input, Target_t **target)
 {
-  for (int i = 0; i < size; i++)
+  Target_t *t = xy_seq_find (menu, callback_is_one_of_target_aliases, (void *) input);
+
+  if (t)
     {
-      TargetRegisterInfo_t *entry = &menu[i];
-
-      if (iterate_aliases (entry->target->aliases, match_alias_callback, (void *)input))
-        {
-          if (entry->prelude)
-            {
-              entry->prelude();
-            }
-          else
-            {
-              chsrc_error ("该target未定义 prelude()");
-            }
-
-          *target = entry->target;
-          return true;
-        }
+      *target = t;
+      t->preludefn();
+      return true;
     }
-
-  *target = NULL;
-  return false;
+  else
+    {
+      *target = NULL;
+      return false;
+    }
 }
 
 
 /**
- * 我们总是最后告诉用户一些维护信息
+ * @brief 在必要的时期，最后告诉用户一些信息
  */
 void
-cli_notify_lastly_for_users ()
+chsrc_op_epilogue ()
 {
   br();
-  chsrc_note2 (RAWSTR_chsrc_last_message);
+  chsrc_note2 (RAWSTR_chsrc_op_epilogue);
 }
 
 
@@ -533,7 +528,7 @@ typedef enum {
 } TargetOp;
 
 /**
- * 寻找target，并根据 @param:code 执行相应的操作
+ * 寻找target，并根据 `code` 执行相应的操作
  *
  * @param  input   用户输入的目标
  * @param  code    对target要执行的操作
@@ -544,15 +539,15 @@ typedef enum {
 bool
 get_target (const char *input, TargetOp code, char *option)
 {
+  chsrc_register_contributors ();
+
   Target_t *target = NULL;
 
-           bool matched = iterate_menu (chsrc_pl_menu, input, &target);
-  if (!matched) matched = iterate_menu (chsrc_os_menu, input, &target);
-  if (!matched) matched = iterate_menu (chsrc_wr_menu, input, &target);
+           bool matched = iterate_menu (ProgStore.pl, input, &target);
+  if (!matched) matched = iterate_menu (ProgStore.os, input, &target);
+  if (!matched) matched = iterate_menu (ProgStore.wr, input, &target);
 
   if (!matched) return false;
-
-  chsrc_register_contributors ();
 
   if (TargetOp_Set_Source==code)
     {
@@ -622,7 +617,7 @@ get_target (const char *input, TargetOp code, char *option)
 
   if (TargetOp_Set_Source==code || TargetOp_Measure_Source==code)
     {
-      cli_notify_lastly_for_users();
+      chsrc_op_epilogue ();
     }
 
   chef_debug_target (target);
@@ -635,7 +630,8 @@ get_target (const char *input, TargetOp code, char *option)
 int
 main (int argc, char const *argv[])
 {
-  chsrc_framework_init ();
+  chsrc_init_framework ();
+  chsrc_init_menu ();
 
   argc -= 1;
 
@@ -761,25 +757,39 @@ main (int argc, char const *argv[])
       else
         {
           target = argv[cli_arg_Target_pos];
-          if (xy_streql (target, "mirrors") || xy_streql (target, "mirror"))
+          if (   xy_streql (target, "mirrors")
+              || xy_streql (target, "mirror"))
             {
-              cli_print_available_mirrors (); return Exit_OK;
+              cli_print_available_mirrors ();
+              return Exit_OK;
             }
-          else if (xy_streql (target, "targets") || xy_streql (target, "target"))
+
+          else if (   xy_streql (target, "targets")
+                   || xy_streql (target, "target"))
             {
-              cli_print_supported_targets (); return Exit_OK;
+              cli_print_supported_targets ();
+              return Exit_OK;
             }
+
           else if (xy_streql (target, "os"))
             {
-              cli_print_supported_os (); return Exit_OK;
+              cli_print_menu ("os");
+              return Exit_OK;
             }
-          else if (xy_streql (target, "lang") || xy_streql (target, "pl") || xy_streql (target, "language"))
+
+          else if (   xy_streql (target, "lang")
+                   || xy_streql (target, "pl")
+                   || xy_streql (target, "language"))
             {
-              cli_print_supported_pl(); return Exit_OK;
+              cli_print_menu ("pl");
+              return Exit_OK;
             }
-          else if (xy_streql (target, "ware") || xy_streql (target, "software"))
+
+          else if (   xy_streql (target, "ware")
+                   || xy_streql (target, "software"))
             {
-              cli_print_supported_wr (); return Exit_OK;
+              cli_print_menu ("wr");
+              return Exit_OK;
             }
 
           matched = get_target (target, TargetOp_List_Config, NULL);

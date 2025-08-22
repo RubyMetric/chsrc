@@ -14,16 +14,16 @@ def_target(pl_js_group, "js/javascript/node/nodejs");
 void
 pl_js_group_prelude (void)
 {
-  use_this(pl_js_group);
-  chef_allow_gsr(pl_js_group);
+  chef_prep_this (pl_js_group, gsr);
 
   chef_set_created_on   (this, "2023-09-09");
   chef_set_last_updated (this, "2025-07-11");
   chef_set_sources_last_updated (this, "2025-07-11");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 1, "happy game", "happygame1024@gmail.com");
+  chef_set_cooks (this, 1, "@ccmywish");
+
+  chef_set_chef (this, "@happy-game");
+
   chef_set_contributors (this,0);
 
   chef_allow_local_mode (this, PartiallyCan,
@@ -50,16 +50,14 @@ def_target(pl_js_nodejs_binary, "__internal_use_nodejs_binary__");
 void
 pl_js_nodejs_binary_prelude (void)
 {
-  use_this(pl_js_nodejs_binary);
-  chef_allow_gsr(pl_js_group);
+  chef_prep_this (pl_js_nodejs_binary, NOOP);
 
   chef_set_created_on   (this, "2023-09-09");
   chef_set_last_updated (this, "2025-07-11");
   chef_set_sources_last_updated (this, "2025-07-11");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
   chef_set_contributors (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);

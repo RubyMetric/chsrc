@@ -7,16 +7,14 @@ def_target(wr_cocoapods, "cocoa/cocoapods/cocoapod");
 void
 wr_cocoapods_prelude ()
 {
-  use_this(wr_cocoapods);
-  chef_allow_s(wr_cocoapods);
+  chef_prep_this (wr_cocoapods, s);
 
   chef_set_created_on   (this, "2024-06-08");
   chef_set_last_updated (this, "2025-08-09");
   chef_set_sources_last_updated (this, "2025-07-13");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
   chef_set_contributors (this, 0);
 
 

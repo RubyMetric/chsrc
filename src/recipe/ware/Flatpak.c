@@ -7,18 +7,15 @@ def_target(wr_flatpak, "flatpak/flathub");
 void
 wr_flatpak_prelude ()
 {
-  use_this(wr_flatpak);
-  chef_allow_gsr(wr_flatpak);
+  chef_prep_this (wr_flatpak, gsr);
 
   chef_set_created_on   (this, "2023-09-11");
   chef_set_last_updated (this, "2025-08-09");
   chef_set_sources_last_updated (this, "2025-05-27");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "Jialin Lyu", "jialinlvcn@aliyun.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_contributors (this, 1, "@jialinlvcn");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);

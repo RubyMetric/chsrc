@@ -7,16 +7,14 @@ def_target(pl_php, "php/composer");
 void
 pl_php_prelude ()
 {
-  use_this(pl_php);
-  chef_allow_gs(pl_php);
+  chef_prep_this (pl_php, gs);
 
   chef_set_created_on   (this, "2023-08-30");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2024-09-14");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
   chef_set_contributors (this, 0);
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
@@ -57,8 +55,7 @@ pl_php_setsrc (char *option)
 {
   pl_php_check_cmd ();
 
-  use_this(pl_php);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+  use_this_source (pl_php);
 
   char *where = " -g ";
   if (chsrc_in_local_mode())

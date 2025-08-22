@@ -7,26 +7,21 @@ def_target(pl_js_yarn, "yarn");
 void
 pl_js_yarn_prelude (void)
 {
-  use_this(pl_js_yarn);
-  chef_allow_gsr(pl_js_yarn);
+  chef_prep_this (pl_js_yarn, gsr);
 
   chef_set_created_on   (this, "2023-09-09");
   chef_set_last_updated (this, "2025-07-11");
   chef_set_sources_last_updated (this, "2025-07-11");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "Mr. Will", "mr.will.com@outlook.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_contributors (this, 1, "@MrWillCom");
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);
   chef_allow_user_define(this);
 
-  // 使用 pl_js_group 的源
-  this->sources = pl_js_group_target.sources;
-  this->sources_n = pl_js_group_target.sources_n;
+  chef_use_other_target_sources (this, &pl_js_group_target);
 }
 
 static double

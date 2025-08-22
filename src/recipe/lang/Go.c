@@ -21,19 +21,15 @@ def_target(pl_go, "go/golang/goproxy");
 void
 pl_go_prelude ()
 {
-  use_this(pl_go);
-  chef_allow_gsr(pl_go);
+  chef_prep_this (pl_go, gsr);
 
   chef_set_created_on   (this, "2023-08-30");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2025-07-12");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 2,
-    "czyt",     "czyt.go@gmail.com",
-    "Rui Yang", "techoc@foxmail.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_contributors (this, 2, "@czyt", "@techoc");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);

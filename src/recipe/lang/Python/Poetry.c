@@ -7,25 +7,21 @@ def_target(pl_python_poetry, "poetry");
 void
 pl_python_poetry_prelude (void)
 {
-  use_this(pl_python_poetry);
-  chef_allow_gsr(pl_python_poetry);
+  chef_prep_this (pl_python_poetry, gsr);
 
   chef_set_created_on   (this, "2024-08-08");
   chef_set_last_updated (this, "2025-07-11");
   chef_set_sources_last_updated (this, "2025-07-11");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
   chef_set_contributors (this, 0);
 
   chef_allow_local_mode (this, FullyCan, "Poetry 默认使用项目级换源", "Poetry uses project-level source changing by default");
   chef_allow_english(this);
   chef_allow_user_define(this);
 
-  // 使用 pl_python_group 的源
-  this->sources = pl_python_group_target.sources;
-  this->sources_n = pl_python_group_target.sources_n;
+  chef_use_other_target_sources (this, &pl_python_group_target);
 }
 
 void

@@ -10,19 +10,15 @@ def_target(os_arch, "arch/archlinux");
 void
 os_arch_prelude ()
 {
-  use_this(os_arch);
-  chef_allow_gs(os_arch);
+  chef_prep_this (os_arch, gs);
 
   chef_set_created_on   (this, "2023-09-05");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2025-06-20");
 
-  chef_set_authors (this, 2, "Aoran Zeng", "ccmywish@qq.com",
-                             "Heng Guo",   "2085471348@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 1, "happy game", "happygame1024@gmail.com");
-  chef_set_contributors (this, 1,
-    "happy game", "happygame1024@gmail.com");
+  chef_set_chef (this, "@happy-game");
+  chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
+  chef_set_contributors (this, 1, "@happy-game");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -116,18 +112,15 @@ def_target(os_archlinuxcn, "archlinuxcn/archcn");
 void
 os_archlinuxcn_prelude ()
 {
-  use_this(os_archlinuxcn);
-  chef_allow_gs(os_archlinuxcn);
+  chef_prep_this (os_archlinuxcn, gs);
 
   chef_set_created_on   (this, "2023-09-05");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2024-07-03");
 
-  chef_set_authors (this, 2, "Aoran Zeng", "ccmywish@qq.com", "Heng Guo", "2085471348@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "happy game", "happygame1024@gmail.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
+  chef_set_contributors (this, 1, "@happy-game");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
