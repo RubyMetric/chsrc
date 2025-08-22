@@ -45,7 +45,7 @@ pl_js_group_prelude (void)
 
 
 
-def_target(pl_js_nodejs_binary, "__internal_use_nodejs_binary__");
+def_target(pl_js_nodejs_binary, "__internal_target_nodejs_binary__");
 
 void
 pl_js_nodejs_binary_prelude (void)
@@ -53,7 +53,7 @@ pl_js_nodejs_binary_prelude (void)
   chef_prep_this (pl_js_nodejs_binary, NOOP);
 
   chef_set_created_on   (this, "2023-09-09");
-  chef_set_last_updated (this, "2025-07-11");
+  chef_set_last_updated (this, "2025-08-22");
   chef_set_sources_last_updated (this, "2025-07-11");
 
   chef_set_chef (this, NULL);

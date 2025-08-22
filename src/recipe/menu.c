@@ -183,6 +183,9 @@ chsrc_init_menu ()
   add (tex);
   add (anaconda);
 #undef add
+
+  // Internal Target 不会由用户使用，需要特殊对待
+  pl_js_nodejs_binary_target.preludefn = pl_js_nodejs_binary_prelude;
 }
 
 
