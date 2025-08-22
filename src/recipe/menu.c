@@ -5,8 +5,8 @@
  * Contributors   : Mikachu2333 <mikachu.23333@zohomail.com>
  *                |
  * Created On     : <2023-09-01>
- * Major Revision :      4
- * Last Modified  : <2025-08-20>
+ * Major Revision :      5
+ * Last Modified  : <2025-08-22>
  * ------------------------------------------------------------*/
 
 #include "lang/rawstr4c.h"
@@ -104,95 +104,86 @@
 #include "ware/Anaconda/Anaconda.c"
 
 
-
-#define t(o) &o##_target, &o##_prelude
-
-TargetRegisterInfo_t
-chsrc_pl_menu[] =
+void
+chsrc_init_menu ()
 {
-  {t(pl_ruby)},
-  {t(pl_python_group)},
-  {t(pl_python_pip)},
-  {t(pl_python_poetry)},
-  {t(pl_python_pdm)},
-  {t(pl_python_rye)},
-  {t(pl_python_uv)},
-  {t(pl_js_group)},
-  {t(pl_js_bun)},
-  {t(pl_js_npm)},
-  {t(pl_js_yarn)},
-  {t(pl_js_pnpm)},
-  {t(pl_js_nvm)},
-  {t(pl_perl)},
-  {t(pl_php)},
-  {t(pl_lua)},
-  {t(pl_go)},
-  {t(pl_rust_cargo)},
-  {t(pl_rust_rustup)},
-  {t(pl_java)},
-  {t(pl_clojure)},
-  {t(pl_dart)},
-  {t(pl_dart_flutter)},
-  {t(pl_nuget)},
-  {t(pl_haskell)},
-  {t(pl_ocaml)},
-  {t(pl_r)},
-  {t(pl_julia)},
-};
+#define add(t) xy_seq_push(ProgStore.pl, &pl_##t##_target); (&pl_##t##_target)->preludefn = pl_##t##_prelude
+  add (ruby);
+  add (python_group);
+  add (python_pip);
+  add (python_poetry);
+  add (python_pdm);
+  add (python_rye);
+  add (python_uv);
+  add (js_group);
+  add (js_bun);
+  add (js_npm);
+  add (js_yarn);
+  add (js_pnpm);
+  add (js_nvm);
+  add (perl);
+  add (php);
+  add (lua);
+  add (go);
+  add (rust_cargo);
+  add (rust_rustup);
+  add (java);
+  add (clojure);
+  add (dart);
+  add (dart_flutter);
+  add (nuget);
+  add (haskell);
+  add (ocaml);
+  add (r);
+  add (julia);
+#undef add
 
+#define add(t) xy_seq_push(ProgStore.os, &os_##t##_target); (&os_##t##_target)->preludefn = os_##t##_prelude
+  add (ubuntu);
+  add (linuxmint);
+  add (debian);
+  add (fedora);
+  add (opensuse);
+  add (kali);
+  add (msys2);
+  add (arch);
+  add (archlinuxcn);
+  add (manjaro);
+  add (gentoo);
+  add (rockylinux);
+  add (almalinux);
+  add (alpine);
+  add (voidlinux);
+  add (solus);
+  add (trisquel);
+  add (linuxlite);
+  add (ros);
+  add (raspberrypi);
+  add (armbian);
+  add (openwrt);
+  add (termux);
+  add (openkylin);
+  add (openeuler);
+  add (anolis);
+  add (deepin);
+  add (freebsd);
+  add (netbsd);
+  add (openbsd);
+#undef add
 
-
-TargetRegisterInfo_t
-chsrc_os_menu[] =
-{
-  {t(os_ubuntu)},
-  {t(os_linuxmint)},
-  {t(os_debian)},
-  {t(os_fedora)},
-  {t(os_opensuse)},
-  {t(os_kali)},
-  {t(os_msys2)},
-  {t(os_arch)},
-  {t(os_archlinuxcn)},
-  {t(os_manjaro)},
-  {t(os_gentoo)},
-  {t(os_rockylinux)},
-  {t(os_almalinux)},
-  {t(os_alpine)},
-  {t(os_voidlinux)},
-  {t(os_solus)},
-  {t(os_trisquel)},
-  {t(os_linuxlite)},
-  {t(os_ros)},
-  {t(os_raspberrypi)},
-  {t(os_armbian)},
-  {t(os_openwrt)},
-  {t(os_termux)},
-  {t(os_openkylin)},
-  {t(os_openeuler)},
-  {t(os_anolis)},
-  {t(os_deepin)},
-  {t(os_freebsd)},
-  {t(os_netbsd)},
-  {t(os_openbsd)},
-};
-
-
-TargetRegisterInfo_t
-chsrc_wr_menu[] =
-{
-  {t(wr_winget)},
-  {t(wr_homebrew)},
-  {t(wr_cocoapods)},
-  {t(wr_docker)},
-  {t(wr_flatpak)},
-  {t(wr_nix)},
-  {t(wr_guix)},
-  {t(wr_emacs)},
-  {t(wr_tex)},
-  {t(wr_anaconda)},
-};
-#undef t
+#define add(t) xy_seq_push(ProgStore.wr, &wr_##t##_target); (&wr_##t##_target)->preludefn = wr_##t##_prelude
+  add (winget);
+  add (homebrew);
+  add (cocoapods);
+  add (docker);
+  add (flatpak);
+  add (nix);
+  add (guix);
+  add (emacs);
+  add (tex);
+  add (anaconda);
+#undef add
+}
 
 
 
