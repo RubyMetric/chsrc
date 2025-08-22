@@ -164,7 +164,7 @@ iterate_aliases (const char *aliases, bool (*callback)(const char *alias, void *
 
 
 /**
- * 用于 cli_print_supported_targets_ 的回调函数，打印每个别名
+ * 用于 cli_print_targets_for_menu 的回调函数，打印每个别名
  */
 bool
 callback_print_alias (const char *alias, void *user_data)
@@ -174,17 +174,18 @@ callback_print_alias (const char *alias, void *user_data)
 }
 
 void
-cli_print_supported_targets_ (TargetRegisterInfo_t menu[], size_t size)
+callback_print_targets (void *data)
 {
-  for (int i = 0; i < size; i++)
-    {
-      TargetRegisterInfo_t *entry = &menu[i];
+  Target_t *target = (Target_t *) data;
+  // 使用通用的别名遍历函数打印所有别名
+  iterate_aliases (target->aliases, callback_print_alias, NULL);
+  br(); // 每个target换行
+}
 
-      // 使用通用的别名遍历函数打印所有别名
-      iterate_aliases (entry->target->aliases, callback_print_alias, NULL);
-
-      br(); // 每个target换行
-    }
+void
+cli_print_targets_for_menu (XySeq_t *menu)
+{
+  xy_seq_each (menu, callback_print_targets);
   br(); // 最后额外换行
 }
 
@@ -201,50 +202,51 @@ cli_print_supported_targets ()
   char *msg = ENGLISH ? "Programming Languages" : "编程语言";
   say (bdgreen(msg));
   say ("-------------------------");
-  cli_print_supported_targets_ (chsrc_pl_menu, xy_arylen(chsrc_pl_menu));
+  cli_print_targets_for_menu (ProgStore.pl);
   }
 
   {
   char *msg = ENGLISH ? "Operating Systems" : "操作系统";
   say (bdgreen(msg));
   say ("-------------------------");
-  cli_print_supported_targets_ (chsrc_os_menu, xy_arylen(chsrc_os_menu));
+  cli_print_targets_for_menu (ProgStore.os);
   }
 
   {
   char *msg = ENGLISH ? "Softwares" : "软件";
   say (bdgreen(msg));
   say ("-------------------------");
-  cli_print_supported_targets_ (chsrc_wr_menu, xy_arylen(chsrc_wr_menu));
+  cli_print_targets_for_menu (ProgStore.wr);
   }
 }
 
 void
-cli_print_supported_pl ()
+cli_print_menu (char *menu)
 {
-  char *msg = ENGLISH ? "Support following Programming Languages (same line indicates these targets are compatible)\n"
-                      : "支持对以下编程语言生态换源 (同一行表示这几个目标兼容)\n";
-  say (bdgreen(msg));
-
-  cli_print_supported_targets_ (chsrc_pl_menu,   xy_arylen(chsrc_pl_menu));
-}
-
-void
-cli_print_supported_os ()
-{
-  char *msg = ENGLISH ? "Support following Operating Systems (same line indicates these targets are compatible)\n"
-                      : "支持对以下操作系统换源 (同一行表示这几个目标兼容)\n";
-  say (bdgreen(msg));
-  cli_print_supported_targets_ (chsrc_os_menu, xy_arylen(chsrc_os_menu));
-}
-
-void
-cli_print_supported_wr ()
-{
-  char *msg = ENGLISH ? "Support following Softwares (same line indicates these targets are compatible)\n"
-                      : "支持对以下软件换源 (同一行表示这几个目标兼容)\n";
-  say (bdgreen(msg));
-  cli_print_supported_targets_ (chsrc_wr_menu, xy_arylen(chsrc_wr_menu));
+  if (xy_streql (menu, "pl"))
+    {
+      char *msg =
+        ENGLISH ? "Support following Programming Languages (same line indicates these targets are compatible)\n"
+                : "支持对以下编程语言生态换源 (同一行表示这几个目标兼容)\n";
+      say (bdgreen(msg));
+      cli_print_targets_for_menu (ProgStore.pl);
+    }
+  else if (xy_streql (menu, "os"))
+    {
+      char *msg =
+        ENGLISH ? "Support following Operating Systems (same line indicates these targets are compatible)\n"
+                : "支持对以下操作系统换源 (同一行表示这几个目标兼容)\n";
+      say (bdgreen(msg));
+      cli_print_targets_for_menu (ProgStore.os);
+    }
+  else if (xy_streql (menu, "wr"))
+    {
+      char *msg =
+        ENGLISH ? "Support following Softwares (same line indicates these targets are compatible)\n"
+                : "支持对以下软件换源 (同一行表示这几个目标兼容)\n";
+      say (bdgreen(msg));
+      cli_print_targets_for_menu (ProgStore.wr);
+    }
 }
 
 
@@ -464,15 +466,16 @@ callback_match_alias (const char *alias, void *user_data)
  * @brief 用于 iterate_menu() 的回调函数
  */
 bool
-callback_find_target (void *data)
+callback_is_one_of_target_aliases (void *data, void *input)
 {
-  target = (Target_t *) data;
-  if (iterate_aliases (target->aliases, callback_match_alias, (void *)input))
+  Target_t *target = (Target_t *) data;
+  if (iterate_aliases (target->aliases, callback_match_alias, input))
     {
-      target->prelude();
-
+      target->preludefn();
       return true;
     }
+  else
+    return false;
 }
 
 /**
@@ -486,9 +489,9 @@ callback_find_target (void *data)
  * @return 匹配到则返回true，未匹配到则返回false
  */
 bool
-iterate_menu (XySeq_t *menu,  const char *input, Target_t **target)
+iterate_menu (XySeq_t *menu, const char *input, Target_t **target)
 {
-  Target_t *t = xy_seq_find (menu, callback_find_target);
+  Target_t *t = xy_seq_find (menu, callback_is_one_of_target_aliases, (void *) input);
 
   if (t)
     {
@@ -754,25 +757,39 @@ main (int argc, char const *argv[])
       else
         {
           target = argv[cli_arg_Target_pos];
-          if (xy_streql (target, "mirrors") || xy_streql (target, "mirror"))
+          if (   xy_streql (target, "mirrors")
+              || xy_streql (target, "mirror"))
             {
-              cli_print_available_mirrors (); return Exit_OK;
+              cli_print_available_mirrors ();
+              return Exit_OK;
             }
-          else if (xy_streql (target, "targets") || xy_streql (target, "target"))
+
+          else if (   xy_streql (target, "targets")
+                   || xy_streql (target, "target"))
             {
-              cli_print_supported_targets (); return Exit_OK;
+              cli_print_supported_targets ();
+              return Exit_OK;
             }
+
           else if (xy_streql (target, "os"))
             {
-              cli_print_supported_os (); return Exit_OK;
+              cli_print_menu ("os");
+              return Exit_OK;
             }
-          else if (xy_streql (target, "lang") || xy_streql (target, "pl") || xy_streql (target, "language"))
+
+          else if (   xy_streql (target, "lang")
+                   || xy_streql (target, "pl")
+                   || xy_streql (target, "language"))
             {
-              cli_print_supported_pl(); return Exit_OK;
+              cli_print_menu ("pl");
+              return Exit_OK;
             }
-          else if (xy_streql (target, "ware") || xy_streql (target, "software"))
+
+          else if (   xy_streql (target, "ware")
+                   || xy_streql (target, "software"))
             {
-              cli_print_supported_wr (); return Exit_OK;
+              cli_print_menu ("wr");
+              return Exit_OK;
             }
 
           matched = get_target (target, TargetOp_List_Config, NULL);
