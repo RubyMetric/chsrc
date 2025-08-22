@@ -21,9 +21,7 @@ pl_js_npm_prelude (void)
   chef_allow_english(this);
   chef_allow_user_define(this);
 
-  // 使用 pl_js_group 的源
-  this->sources = pl_js_group_target.sources;
-  this->sources_n = pl_js_group_target.sources_n;
+  chef_use_other_target_sources (this, &pl_js_group_target);
 }
 
 

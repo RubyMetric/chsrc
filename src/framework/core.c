@@ -1023,6 +1023,14 @@ source_has_empty_url (Source_t *source)
 Source_t
 chsrc_yield_source (Target_t *t, char *option)
 {
+  /**
+   * 防止某些意外时刻 _setsrc() 等函数会被直接调，但此时 _prelude() 还没有执行过
+   * 我们在这里卡一道，确保 _prelude() 被调用
+   *
+   * 目前可能出现这种情况的时候：组换源的时候，组成菜的 _setsrc() 被直接调用
+   */
+  if (!t->inited) t->preludefn();
+
   Source_t source;
   if (chsrc_in_target_group_mode() && ProgStatus.leader_selected_index==-1)
     {
