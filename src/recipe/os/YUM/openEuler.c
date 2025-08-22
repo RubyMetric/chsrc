@@ -15,7 +15,7 @@ os_openeuler_prelude ()
 
   chef_set_cooks (this, 1, "@G_I_Y");
   chef_set_chef (this, NULL);
-  chef_set_contributors (this, 3, "@ccmywish", "@Yangmoooo", "@happy-game");
+  chef_set_sauciers (this, 3, "@ccmywish", "@Yangmoooo", "@happy-game");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);

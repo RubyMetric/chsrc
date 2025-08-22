@@ -68,7 +68,7 @@ void
   chef_set_chef (this, "@ccmywish");                  // recipe 负责人
   chef_set_cooks (this, 2, "@ccmywish", "@nilnull");  // recipe 核心作者
   // 做了贡献？将自己的信息加在这里！
-  chef_set_contributors (this, 2, "@nulnone", "@someone");
+  chef_set_sauciers (this, 2, "@nulnone", "@someone");
 
   chef_allow_local_mode (this, PartiallyCan, "具体说明是否支持项目级换源...", "Tell users the local mode support");
 

@@ -24,7 +24,7 @@ pl_js_group_prelude (void)
 
   chef_set_chef (this, "@happy-game");
 
-  chef_set_contributors (this,0);
+  chef_set_sauciers (this,0);
 
   chef_allow_local_mode (this, PartiallyCan,
     "支持 npm, yarn v2, pnpm, 不支持 yarn v1",
@@ -58,7 +58,7 @@ pl_js_nodejs_binary_prelude (void)
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 0);
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);

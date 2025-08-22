@@ -15,7 +15,7 @@ pl_js_yarn_prelude (void)
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 1, "@MrWillCom");
+  chef_set_sauciers (this, 1, "@MrWillCom");
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);

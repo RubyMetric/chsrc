@@ -15,7 +15,7 @@ pl_rust_cargo_prelude (void)
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 1, "@Mikachu2333");
+  chef_set_sauciers (this, 1, "@Mikachu2333");
 
   chef_allow_local_mode (this, PartiallyCan, "可以基于本项目换源吗？请帮助确认", "Can it change sources based on this project? Please help confirm");
   chef_forbid_english (this);

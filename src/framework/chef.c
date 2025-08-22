@@ -255,7 +255,7 @@ chef_set_cooks (Target_t *target, size_t count, ...)
 }
 
 void
-chef_set_contributors (Target_t *target, uint32_t count, ...)
+chef_set_sauciers (Target_t *target, uint32_t count, ...)
 {
   xy_cant_be_null (target);
 

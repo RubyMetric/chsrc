@@ -15,7 +15,7 @@ wr_flatpak_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_contributors (this, 1, "@jialinlvcn");
+  chef_set_sauciers (this, 1, "@jialinlvcn");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
