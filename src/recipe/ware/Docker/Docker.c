@@ -24,8 +24,7 @@ def_target(wr_docker, "docker/dockerhub");
 void
 wr_docker_prelude ()
 {
-  use_this(wr_docker);
-  chef_allow_gs(wr_docker);
+  chef_prep_this (wr_docker, gs);
 
   chef_set_created_on   (this, "2024-06-08");
   chef_set_last_updated (this, "2025-08-09");

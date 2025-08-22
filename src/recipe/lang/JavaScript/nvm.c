@@ -7,8 +7,7 @@ def_target(pl_js_nvm, "nvm");
 void
 pl_js_nvm_prelude (void)
 {
-  use_this(pl_js_nvm);
-  chef_allow_gsr(pl_js_nvm);
+  chef_prep_this (pl_js_nvm, gsr);
 
   chef_set_created_on   (this, "2024-09-23");
   chef_set_last_updated (this, "2025-06-19");

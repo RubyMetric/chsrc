@@ -7,8 +7,7 @@ def_target(os_alpine, "alpine");
 void
 os_alpine_prelude ()
 {
-  use_this(os_alpine);
-  chef_allow_gs(os_alpine);
+  chef_prep_this (os_alpine, gs);
 
   chef_set_created_on   (this, "2023-09-24");
   chef_set_last_updated (this, "2025-08-10");

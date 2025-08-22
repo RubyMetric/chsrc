@@ -7,8 +7,7 @@ def_target(os_freebsd, "freebsd");
 void
 os_freebsd_prelude ()
 {
-  use_this(os_freebsd);
-  chef_allow_s(os_freebsd);
+  chef_prep_this (os_freebsd, s);
 
   chef_set_created_on   (this, "2023-09-03");
   chef_set_last_updated (this, "2025-08-10");
@@ -47,7 +46,7 @@ os_freebsd_setsrc (char *option)
   // 据 @ykla，FreeBSD不自带sudo，但是我们依然要保证是root权限
   chsrc_ensure_root ();
 
-  use_this(os_freebsd);
+  use_this (os_freebsd);
   int index = use_specific_mirror_or_auto_select (option, this);
 
   Source_t source = this->sources[index];

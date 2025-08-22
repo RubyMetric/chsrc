@@ -7,8 +7,7 @@ def_target(pl_clojure, "clojure/clojars/cloj/lein");
 void
 pl_clojure_prelude ()
 {
-  use_this(pl_clojure);
-  chef_allow_s(pl_clojure);
+  chef_prep_this (pl_clojure, s);
 
   chef_set_created_on   (this, "2023-09-10");
   chef_set_last_updated (this, "2025-08-10");

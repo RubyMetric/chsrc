@@ -8,8 +8,7 @@ def_target(os_ubuntu, "ubuntu/zorinos");
 void
 os_ubuntu_prelude ()
 {
-  use_this(os_ubuntu);
-  chef_allow_gsr(os_ubuntu);
+  chef_prep_this (os_ubuntu, gsr);
 
   chef_set_created_on   (this, "2023-08-30");
   chef_set_last_updated (this, "2025-08-10");

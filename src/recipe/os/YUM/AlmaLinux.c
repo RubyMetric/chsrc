@@ -7,8 +7,7 @@ def_target(os_almalinux, "alma/almalinux");
 void
 os_almalinux_prelude ()
 {
-  use_this(os_almalinux);
-  chef_allow_s(os_almalinux);
+  chef_prep_this (os_almalinux, s);
 
   chef_set_created_on   (this, "2024-06-12");
   chef_set_last_updated (this, "2025-08-10");

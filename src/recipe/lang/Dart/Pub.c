@@ -7,8 +7,7 @@ def_target(pl_dart, "dart/pub");
 void
 pl_dart_prelude (void)
 {
-  use_this(pl_dart);
-  chef_allow_gsr(pl_dart);
+  chef_prep_this (pl_dart, gsr);
 
   chef_set_created_on   (this, "2023-09-10");
   chef_set_last_updated (this, "2025-07-11");

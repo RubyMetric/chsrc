@@ -7,8 +7,7 @@ def_target(os_gentoo, "gentoo");
 void
 os_gentoo_prelude ()
 {
-  use_this(os_gentoo);
-  chef_allow_s(os_gentoo);
+  chef_prep_this (os_gentoo, s);
 
   chef_set_created_on   (this, "2023-09-05");
   chef_set_last_updated (this, "2025-08-10");

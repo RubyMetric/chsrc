@@ -7,8 +7,7 @@ def_target(pl_haskell, "haskell/cabal/stack/hackage");
 void
 pl_haskell_prelude ()
 {
-  use_this(pl_haskell);
-  chef_allow_s(pl_haskell);
+  chef_prep_this (pl_haskell, s);
 
   chef_set_created_on   (this, "2023-09-10");
   chef_set_last_updated (this, "2025-08-10");

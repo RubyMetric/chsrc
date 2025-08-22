@@ -7,8 +7,7 @@ def_target(os_voidlinux, "voidlinux");
 void
 os_voidlinux_prelude ()
 {
-  use_this(os_voidlinux);
-  chef_allow_gsr(os_voidlinux);
+  chef_prep_this (os_voidlinux, gsr);
 
   chef_set_created_on   (this, "2023-09-24");
   chef_set_last_updated (this, "2025-08-10");

@@ -7,8 +7,7 @@ def_target(pl_ocaml, "ocaml/opam");
 void
 pl_ocaml_prelude ()
 {
-  use_this(pl_ocaml);
-  chef_allow_gs(pl_ocaml);
+  chef_prep_this (pl_ocaml, gs);
 
   chef_set_created_on   (this, "2023-09-15");
   chef_set_last_updated (this, "2025-08-10");

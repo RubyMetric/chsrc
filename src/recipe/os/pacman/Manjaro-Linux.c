@@ -7,8 +7,7 @@ def_target(os_manjaro, "manjaro");
 void
 os_manjaro_prelude ()
 {
-  use_this(os_manjaro);
-  chef_allow_s(os_manjaro);
+  chef_prep_this (os_manjaro, s);
 
   chef_set_created_on   (this, "2023-09-06");
   chef_set_last_updated (this, "2025-08-10");

@@ -9,8 +9,7 @@ def_target(os_trisquel, "trisquel");
 void
 os_trisquel_prelude ()
 {
-  use_this(os_trisquel);
-  chef_allow_gsr(os_trisquel);
+  chef_prep_this (os_trisquel, gsr);
 
   chef_set_created_on   (this, "2023-09-29");
   chef_set_last_updated (this, "2025-08-10");

@@ -7,8 +7,7 @@ def_target(pl_perl, "perl/cpan");
 void
 pl_perl_prelude ()
 {
-  use_this(pl_perl);
-  chef_allow_gs(pl_perl);
+  chef_prep_this (pl_perl, gs);
 
   chef_set_created_on   (this, "2023-09-31");
   chef_set_last_updated (this, "2025-08-10");

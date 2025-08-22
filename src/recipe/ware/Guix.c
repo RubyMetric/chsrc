@@ -7,8 +7,7 @@ def_target(wr_guix, "guix");
 void
 wr_guix_prelude ()
 {
-  use_this(wr_guix);
-  chef_allow_s(wr_guix);
+  chef_prep_this (wr_guix, s);
 
   chef_set_created_on   (this, "2023-09-11");
   chef_set_last_updated (this, "2025-08-09");

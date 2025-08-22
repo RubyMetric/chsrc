@@ -14,8 +14,7 @@ def_target(pl_ruby, "gem/ruby/rb/rubygem/rubygems/bundler");
 void
 pl_ruby_prelude (void)
 {
-  use_this(pl_ruby);
-  chef_allow_gsr(pl_ruby);
+  chef_prep_this (pl_ruby, gsr);
 
   chef_set_created_on   (this, "2023-08-29");
   chef_set_last_updated (this, "2025-08-11");

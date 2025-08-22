@@ -7,8 +7,7 @@ def_target(os_rockylinux, "rocky/rockylinux");
 void
 os_rockylinux_prelude ()
 {
-  use_this(os_rockylinux);
-  chef_allow_sr(os_rockylinux);
+  chef_prep_this (os_rockylinux, sr);
 
   chef_set_created_on   (this, "2023-09-24");
   chef_set_last_updated (this, "2025-08-10");

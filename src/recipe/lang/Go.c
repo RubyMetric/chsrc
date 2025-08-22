@@ -21,8 +21,7 @@ def_target(pl_go, "go/golang/goproxy");
 void
 pl_go_prelude ()
 {
-  use_this(pl_go);
-  chef_allow_gsr(pl_go);
+  chef_prep_this (pl_go, gsr);
 
   chef_set_created_on   (this, "2023-08-30");
   chef_set_last_updated (this, "2025-08-10");

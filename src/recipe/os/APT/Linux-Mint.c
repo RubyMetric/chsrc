@@ -7,8 +7,7 @@ def_target(os_linuxmint, "linuxmint");
 void
 os_linuxmint_prelude ()
 {
-  use_this(os_linuxmint);
-  chef_allow_gs(os_linuxmint);
+  chef_prep_this (os_linuxmint, gs);
 
   chef_set_created_on   (this, "2023-09-29");
   chef_set_last_updated (this, "2025-08-10");

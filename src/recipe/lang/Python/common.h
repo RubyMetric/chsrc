@@ -22,8 +22,7 @@ pl_python_speed_url_constructor (const char *url, const char *user_data)
 void
 pl_python_group_prelude (void)
 {
-  use_this(pl_python_group);
-  chef_allow_gsr(pl_python_group);
+  chef_prep_this (pl_python_group, gsr);
 
   chef_set_created_on   (this, "2023-09-03");
   chef_set_last_updated (this, "2025-07-14");
@@ -73,7 +72,7 @@ pl_python_check_unofficial_pkger (bool *poetry_exist, bool *pdm_exist, bool *uv_
 
 
 /**
- * @param[out] prog 返回 Python 的可用名，如果不可用，则返回 NULL
+ * @param[out] prog_name 返回 Python 的可用名，如果不可用，则返回 NULL
  */
 void
 pl_python_get_py_program_name (char **prog_name)

@@ -9,8 +9,7 @@ def_target(os_raspberrypi, "raspi/raspberrypi");
 void
 os_raspberrypi_prelude ()
 {
-  use_this(os_raspberrypi);
-  chef_allow_gsr(os_raspberrypi);
+  chef_prep_this (os_raspberrypi, gsr);
 
   chef_set_created_on   (this, "2023-09-29");
   chef_set_last_updated (this, "2025-08-10");

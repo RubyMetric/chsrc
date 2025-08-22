@@ -9,8 +9,7 @@ def_target(pl_python_rye, "rye");
 void
 pl_python_rye_prelude (void)
 {
-  use_this(pl_python_rye);
-  chef_allow_gsr(pl_python_rye);
+  chef_prep_this (pl_python_rye, gsr);
 
   chef_set_created_on   (this, "2024-12-06");
   chef_set_last_updated (this, "2025-08-09");

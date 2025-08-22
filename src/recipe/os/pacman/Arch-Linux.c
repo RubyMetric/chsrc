@@ -10,8 +10,7 @@ def_target(os_arch, "arch/archlinux");
 void
 os_arch_prelude ()
 {
-  use_this(os_arch);
-  chef_allow_gs(os_arch);
+  chef_prep_this (os_arch, gs);
 
   chef_set_created_on   (this, "2023-09-05");
   chef_set_last_updated (this, "2025-08-10");
@@ -113,8 +112,7 @@ def_target(os_archlinuxcn, "archlinuxcn/archcn");
 void
 os_archlinuxcn_prelude ()
 {
-  use_this(os_archlinuxcn);
-  chef_allow_gs(os_archlinuxcn);
+  chef_prep_this (os_archlinuxcn, gs);
 
   chef_set_created_on   (this, "2023-09-05");
   chef_set_last_updated (this, "2025-08-10");

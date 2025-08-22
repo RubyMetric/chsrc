@@ -7,8 +7,7 @@ def_target(os_openwrt, "openwrt/opkg/LEDE");
 void
 os_openwrt_prelude ()
 {
-  use_this(os_openwrt);
-  chef_allow_gsr(os_openwrt);
+  chef_prep_this (os_openwrt, gsr);
 
   chef_set_created_on   (this, "2024-08-08");
   chef_set_last_updated (this, "2025-08-10");

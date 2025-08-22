@@ -7,8 +7,7 @@ def_target(os_openeuler, "openeuler");
 void
 os_openeuler_prelude ()
 {
-  use_this(os_openeuler);
-  chef_allow_gs(os_openeuler);
+  chef_prep_this (os_openeuler, gs);
 
   chef_set_created_on   (this, "2023-09-06");
   chef_set_last_updated (this, "2025-08-10");

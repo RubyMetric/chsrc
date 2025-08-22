@@ -7,8 +7,7 @@ def_target(pl_r, "r/cran");
 void
 pl_r_prelude ()
 {
-  use_this(pl_r);
-  chef_allow_gs(pl_r);
+  chef_prep_this (pl_r, gs);
 
   chef_set_created_on   (this, "2023-09-21");
   chef_set_last_updated (this, "2025-08-10");

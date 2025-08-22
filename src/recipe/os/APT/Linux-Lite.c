@@ -7,8 +7,7 @@ def_target(os_linuxlite, "linuxlite");
 void
 os_linuxlite_prelude ()
 {
-  use_this(os_linuxlite);
-  chef_allow_gsr(os_linuxlite);
+  chef_prep_this (os_linuxlite, gsr);
 
   chef_set_created_on   (this, "2023-09-29");
   chef_set_last_updated (this, "2025-08-10");

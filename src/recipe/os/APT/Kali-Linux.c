@@ -7,8 +7,7 @@ def_target(os_kali, "kali");
 void
 os_kali_prelude ()
 {
-  use_this(os_kali);
-  chef_allow_gsr(os_kali);
+  chef_prep_this (os_kali, gsr);
 
   chef_set_created_on   (this, "2023-09-29");
   chef_set_last_updated (this, "2025-08-10");

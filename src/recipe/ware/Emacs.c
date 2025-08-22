@@ -14,8 +14,7 @@ def_target(wr_emacs, "emacs/elpa");
 void
 wr_emacs_prelude ()
 {
-  use_this(wr_emacs);
-  chef_allow_s(wr_emacs);
+  chef_prep_this (wr_emacs, s);
 
   chef_set_created_on   (this, "2023-10-10");
   chef_set_last_updated (this, "2025-08-09");

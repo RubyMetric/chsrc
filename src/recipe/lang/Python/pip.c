@@ -7,8 +7,7 @@ def_target(pl_python_pip, "pip");
 void
 pl_python_pip_prelude (void)
 {
-  use_this(pl_python_pip);
-  chef_allow_gsr(pl_python_pip);
+  chef_prep_this (pl_python_pip, gsr);
 
   chef_set_created_on   (this, "2023-09-03");
   chef_set_last_updated (this, "2025-07-11");

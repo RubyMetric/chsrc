@@ -7,8 +7,7 @@ def_target(wr_nix, "nix");
 void
 wr_nix_prelude ()
 {
-  use_this(wr_nix);
-  chef_allow_s(wr_nix);
+  chef_prep_this (wr_nix, s);
 
   chef_set_created_on   (this, "2023-09-26");
   chef_set_last_updated (this, "2025-08-09");

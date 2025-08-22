@@ -7,8 +7,7 @@ def_target(os_netbsd, "netbsd");
 void
 os_netbsd_prelude ()
 {
-  use_this(os_netbsd);
-  chef_allow_gs(os_netbsd);
+  chef_prep_this (os_netbsd, gs);
 
   chef_set_created_on   (this, "2023-09-05");
   chef_set_last_updated (this, "2025-08-10");

@@ -7,8 +7,7 @@ def_target(os_anolis, "anolis/openanolis");
 void
 os_anolis_prelude ()
 {
-  use_this(os_anolis);
-  chef_allow_s(os_anolis);
+  chef_prep_this (os_anolis, s);
 
   chef_set_created_on   (this, "2023-09-24");
   chef_set_last_updated (this, "2025-08-10");

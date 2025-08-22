@@ -7,8 +7,7 @@ def_target(os_termux, "termux");
 void
 os_termux_prelude ()
 {
-  use_this(os_termux);
-  chef_allow_gsr(os_termux);
+  chef_prep_this (os_termux, gsr);
 
   chef_set_created_on   (this, "2025-03-04");
   chef_set_last_updated (this, "2025-08-10");

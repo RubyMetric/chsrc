@@ -7,8 +7,7 @@ def_target(pl_js_yarn, "yarn");
 void
 pl_js_yarn_prelude (void)
 {
-  use_this(pl_js_yarn);
-  chef_allow_gsr(pl_js_yarn);
+  chef_prep_this (pl_js_yarn, gsr);
 
   chef_set_created_on   (this, "2023-09-09");
   chef_set_last_updated (this, "2025-07-11");

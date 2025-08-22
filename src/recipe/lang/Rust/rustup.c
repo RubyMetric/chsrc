@@ -10,8 +10,7 @@ def_target(pl_rust_rustup, "rustup");
 void
 pl_rust_rustup_prelude (void)
 {
-  use_this(pl_rust_rustup);
-  chef_allow_gsr(pl_rust_rustup);
+  chef_prep_this (pl_rust_rustup, gsr);
 
   chef_set_created_on   (this, "2024-10-02");
   chef_set_last_updated (this, "2025-08-07");

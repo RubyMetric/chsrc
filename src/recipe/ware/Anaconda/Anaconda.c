@@ -9,8 +9,7 @@ def_target(wr_anaconda, "conda/anaconda");
 void
 wr_anaconda_prelude ()
 {
-  use_this(wr_anaconda);
-  chef_allow_gs(wr_anaconda);
+  chef_prep_this (wr_anaconda, gs);
 
   chef_set_created_on   (this, "2023-09-10");
   chef_set_last_updated (this, "2025-08-09");

@@ -7,8 +7,7 @@ def_target(wr_cocoapods, "cocoa/cocoapods/cocoapod");
 void
 wr_cocoapods_prelude ()
 {
-  use_this(wr_cocoapods);
-  chef_allow_s(wr_cocoapods);
+  chef_prep_this (wr_cocoapods, s);
 
   chef_set_created_on   (this, "2024-06-08");
   chef_set_last_updated (this, "2025-08-09");

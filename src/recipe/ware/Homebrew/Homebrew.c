@@ -9,8 +9,7 @@ def_target(wr_homebrew, "brew/homebrew");
 void
 wr_homebrew_prelude ()
 {
-  use_this(wr_homebrew);
-  chef_allow_gs(wr_homebrew);
+  chef_prep_this (wr_homebrew, gs);
 
   chef_set_created_on   (this, "2023-09-10");
   chef_set_last_updated (this, "2025-08-09");

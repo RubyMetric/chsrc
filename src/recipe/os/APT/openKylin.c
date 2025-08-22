@@ -10,8 +10,7 @@ def_target(os_openkylin, "openkylin");
 void
 os_openkylin_prelude ()
 {
-  use_this(os_openkylin);
-  chef_allow_gsr(os_openkylin);
+  chef_prep_this (os_openkylin, gsr);
 
   chef_set_created_on   (this, "2023-09-06");
   chef_set_last_updated (this, "2025-08-10");

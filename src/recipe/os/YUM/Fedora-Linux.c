@@ -7,8 +7,7 @@ def_target(os_fedora, "fedora");
 void
 os_fedora_prelude ()
 {
-  use_this(os_fedora);
-  chef_allow_sr(os_fedora);
+  chef_prep_this (os_fedora, sr);
 
   chef_set_created_on   (this, "2023-09-26");
   chef_set_last_updated (this, "2025-08-10");

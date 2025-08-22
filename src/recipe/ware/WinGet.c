@@ -7,8 +7,7 @@ def_target(wr_winget, "winget");
 void
 wr_winget_prelude ()
 {
-  use_this(wr_winget);
-  chef_allow_gsr(wr_winget);
+  chef_prep_this (wr_winget, gsr);
 
   chef_set_created_on   (this, "2024-06-07");
   chef_set_last_updated (this, "2025-08-17");

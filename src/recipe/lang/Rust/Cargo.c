@@ -7,8 +7,7 @@ def_target(pl_rust_cargo, "rust/cargo/crate/crates");
 void
 pl_rust_cargo_prelude (void)
 {
-  use_this(pl_rust_cargo);
-  chef_allow_gsr(pl_rust_cargo);
+  chef_prep_this (pl_rust_cargo, gsr);
 
   chef_set_created_on   (this, "2023-08-30");
   chef_set_last_updated (this, "2025-07-22");

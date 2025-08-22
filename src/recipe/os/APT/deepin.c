@@ -7,8 +7,7 @@ def_target(os_deepin, "deepin");
 void
 os_deepin_prelude ()
 {
-  use_this(os_deepin);
-  chef_allow_gsr(os_deepin);
+  chef_prep_this (os_deepin, gsr);
 
   chef_set_created_on   (this, "2023-09-26");
   chef_set_last_updated (this, "2025-08-10");

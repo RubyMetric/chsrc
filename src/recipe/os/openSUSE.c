@@ -7,8 +7,7 @@ def_target(os_opensuse, "opensuse/opensuse-leap/opensuse-tumbleweed");
 void
 os_opensuse_prelude ()
 {
-  use_this(os_opensuse);
-  chef_allow_s(os_opensuse);
+  chef_prep_this (os_opensuse, s);
 
   chef_set_created_on   (this, "2023-09-17");
   chef_set_last_updated (this, "2025-08-10");

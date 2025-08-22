@@ -7,8 +7,7 @@ def_target(pl_python_pdm, "pdm");
 void
 pl_python_pdm_prelude (void)
 {
-  use_this(pl_python_pdm);
-  chef_allow_gsr(pl_python_pdm);
+  chef_prep_this (pl_python_pdm, gsr);
 
   chef_set_created_on   (this, "2024-06-05");
   chef_set_last_updated (this, "2025-07-11");
@@ -22,9 +21,6 @@ pl_python_pdm_prelude (void)
   chef_allow_english(this);
   chef_allow_user_define(this);
 
-  // 使用 pl_python_group 的源
-  this->sources = pl_python_group_target.sources;
-  this->sources_n = pl_python_group_target.sources_n;
 }
 
 

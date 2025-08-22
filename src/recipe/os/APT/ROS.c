@@ -7,8 +7,7 @@ def_target(os_ros, "ros/ros2");
 void
 os_ros_prelude ()
 {
-  use_this(os_ros);
-  chef_allow_gs(os_ros);
+  chef_prep_this (os_ros, gs);
 
   chef_set_created_on   (this, "2023-09-03");
   chef_set_last_updated (this, "2025-08-10");

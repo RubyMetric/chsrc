@@ -7,8 +7,7 @@ def_target(os_solus, "solus");
 void
 os_solus_prelude ()
 {
-  use_this(os_solus);
-  chef_allow_s(os_solus);
+  chef_prep_this (os_solus, s);
 
   chef_set_created_on   (this, "2023-09-29");
   chef_set_last_updated (this, "2025-08-10");

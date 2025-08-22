@@ -7,8 +7,7 @@ def_target(pl_java, "java/maven/mvn/gradle");
 void
 pl_java_prelude ()
 {
-  use_this(pl_java);
-  chef_allow_gsr(pl_java);
+  chef_prep_this (pl_java, gsr);
 
   chef_set_created_on   (this, "2023-08-31");
   chef_set_last_updated (this, "2025-08-10");

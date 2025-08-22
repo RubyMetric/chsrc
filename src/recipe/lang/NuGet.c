@@ -7,8 +7,7 @@ def_target(pl_nuget, "nuget/net/.net/dotnet");
 void
 pl_nuget_prelude ()
 {
-  use_this(pl_nuget);
-  chef_allow_gs(pl_nuget);
+  chef_prep_this (pl_nuget, gs);
 
   chef_set_created_on   (this, "2023-09-10");
   chef_set_last_updated (this, "2025-08-10");

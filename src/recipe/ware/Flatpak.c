@@ -7,8 +7,7 @@ def_target(wr_flatpak, "flatpak/flathub");
 void
 wr_flatpak_prelude ()
 {
-  use_this(wr_flatpak);
-  chef_allow_gsr(wr_flatpak);
+  chef_prep_this (wr_flatpak, gsr);
 
   chef_set_created_on   (this, "2023-09-11");
   chef_set_last_updated (this, "2025-08-09");

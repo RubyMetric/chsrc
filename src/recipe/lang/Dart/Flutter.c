@@ -7,8 +7,7 @@ def_target(pl_dart_flutter, "flutter");
 void
 pl_dart_flutter_prelude (void)
 {
-  use_this(pl_dart_flutter);
-  chef_allow_gsr(pl_dart_flutter);
+  chef_prep_this (pl_dart_flutter, gsr);
 
   chef_set_created_on   (this, "2023-09-10");
   chef_set_last_updated (this, "2025-07-11");

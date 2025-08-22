@@ -9,8 +9,7 @@ def_target(wr_tex, "latex/ctan/tex/texlive/miktex/tlmgr/mpm");
 void
 wr_tex_prelude ()
 {
-  use_this(wr_tex);
-  chef_allow_gs(wr_tex);
+  chef_prep_this (wr_tex, gs);
 
   chef_set_created_on   (this, "2023-09-10");
   chef_set_last_updated (this, "2025-08-09");

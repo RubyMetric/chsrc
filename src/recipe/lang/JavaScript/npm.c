@@ -7,8 +7,7 @@ def_target(pl_js_npm, "npm");
 void
 pl_js_npm_prelude (void)
 {
-  use_this(pl_js_npm);
-  chef_allow_gsr(pl_js_npm);
+  chef_prep_this (pl_js_npm, gsr);
 
   chef_set_created_on   (this, "2023-08-30");
   chef_set_last_updated (this, "2025-07-11");

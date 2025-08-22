@@ -7,8 +7,7 @@ def_target(pl_python_uv, "uv");
 void
 pl_python_uv_prelude (void)
 {
-  use_this(pl_python_uv);
-  chef_allow_gsr(pl_python_uv);
+  chef_prep_this (pl_python_uv, gsr);
 
   chef_set_created_on   (this, "2024-12-11");
   chef_set_last_updated (this, "2025-08-09");

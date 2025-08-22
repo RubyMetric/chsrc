@@ -7,8 +7,7 @@ def_target(os_armbian, "armbian");
 void
 os_armbian_prelude ()
 {
-  use_this(os_armbian);
-  chef_allow_gsr(os_armbian);
+  chef_prep_this (os_armbian, gsr);
 
   chef_set_created_on   (this, "2024-06-14");
   chef_set_last_updated (this, "2025-08-10");
