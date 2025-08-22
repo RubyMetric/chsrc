@@ -261,21 +261,21 @@ chef_set_contributors (Target_t *target, uint32_t count, ...)
 
   if (count == 0)
     {
-      target->contributors = NULL;
-      target->contributors_n = 0;
+      target->sauciers = NULL;
+      target->sauciers_n = 0;
       return;
     }
 
   va_list args;
   va_start (args, count);
 
-  target->contributors = xy_malloc0 (count * sizeof (Contributor_t*));
-  target->contributors_n = count;
+  target->sauciers = xy_malloc0 (count * sizeof (Contributor_t*));
+  target->sauciers_n = count;
 
   for (uint32_t i = 0; i < count; i++)
     {
       char *id = va_arg (args, char*);
-      target->contributors[i] = chef_verify_contributor (id);
+      target->sauciers[i] = chef_verify_contributor (id);
     }
 }
 

@@ -383,22 +383,20 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
   }
 
   {
-    char *msg = ENGLISH ? "Contributors: " : "调味: ";
-    if (target->contributors && target->contributors_n > 0)
+    char *msg = ENGLISH ? "Sauciers: " : "调味: ";
+    if (target->sauciers && target->sauciers_n > 0)
       {
         printf ("%s", bdblue(msg));
-        for (size_t i = 0; i < target->contributors_n; i++)
+        for (size_t i = 0; i < target->sauciers_n; i++)
           {
             if (i > 0) printf (", ");
-            printf ("%s <%s>",
-                    target->contributors[i]->name ? target->contributors[i]->name : "Unknown",
-                    target->contributors[i]->email ? target->contributors[i]->email : "unknown@example.com");
+            printf ("%s <%s>", target->sauciers[i]->name, target->sauciers[i]->email );
           }
-        printf ("\n");
+        br();
       }
     else
       {
-        char *msg1 = CHINESE ? "暂空缺, 欢迎参与贡献!" : "Vacant, Welcome to contribute!";
+        char *msg1 = CHINESE ? "暂空缺, 欢迎参与贡献" : "Vacant, Welcome to contribute!";
         printf ("%s%s\n", bdblue(msg), bdgreen(msg1));
       }
   }
