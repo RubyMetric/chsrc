@@ -2,10 +2,10 @@
  ! SPDX-License-Identifier: GPL-3.0-or-later
  ! -------------------------------------------------------------
  ! Config Type   : rawstr4c (Markdown)
- ! Config Authors: Aoran Zeng <ccmywish@qq.com>
- ! Contributors  :  Nil Null  <nil@null.org>
+ ! Config Authors: 曾奥然 <ccmywish@qq.com>
+ ! Contributors  : Nil Null <nil@null.org>
  ! Created On    : <2025-07-22>
- ! Last Modified : <2025-08-09>
+ ! Last Modified : <2025-08-22>
  ! ---------------------------------------------------------- -->
 
 # [rawstr4c] input for chsrc
@@ -189,7 +189,7 @@ Written by Aoran Zeng, Heng Guo and contributors. (See chsrc-main.c)
 
 ## 最后告诉用户一些维护信息
 
-- name = `last_message`
+- name = `op_epilogue`
 
 ```
 

@@ -174,7 +174,7 @@ callback_print_alias (const char *alias, void *user_data)
 }
 
 void
-callback_print_targets (void *data)
+callback_print_targets (void *data, void *NOUSE)
 {
   Target_t *target = (Target_t *) data;
   // 使用通用的别名遍历函数打印所有别名
@@ -185,7 +185,7 @@ callback_print_targets (void *data)
 void
 cli_print_targets_for_menu (XySeq_t *menu)
 {
-  xy_seq_each (menu, callback_print_targets);
+  xy_seq_each (menu, callback_print_targets, NULL);
   br(); // 最后额外换行
 }
 
@@ -508,13 +508,13 @@ iterate_menu (XySeq_t *menu, const char *input, Target_t **target)
 
 
 /**
- * 我们总是最后告诉用户一些维护信息
+ * @brief 在必要的时期，最后告诉用户一些信息
  */
 void
-cli_notify_lastly_for_users ()
+chsrc_op_epilogue ()
 {
   br();
-  chsrc_note2 (RAWSTR_chsrc_last_message);
+  chsrc_note2 (RAWSTR_chsrc_op_epilogue);
 }
 
 
@@ -617,7 +617,7 @@ get_target (const char *input, TargetOp code, char *option)
 
   if (TargetOp_Set_Source==code || TargetOp_Measure_Source==code)
     {
-      cli_notify_lastly_for_users();
+      chsrc_op_epilogue ();
     }
 
   chef_debug_target (target);
