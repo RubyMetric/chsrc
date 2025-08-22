@@ -101,6 +101,18 @@ chef_set_sources_speed_measure_url_with_postfix (Target_t *target, char *postfix
 }
 
 
+/**
+ * @note 用于: 组中的 item target 在 standalone 模式时正确填充源信息
+ */
+void
+chef_use_other_target_sources (Target_t *this, Target_t *other)
+{
+  if (!other->inited) other->preludefn();
+  this->sources = other->sources;
+  this->sources_n = other->sources_n;
+}
+
+
 void
 chef_allow_english (Target_t *target)
 {

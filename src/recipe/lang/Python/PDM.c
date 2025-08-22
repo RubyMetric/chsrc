@@ -21,6 +21,7 @@ pl_python_pdm_prelude (void)
   chef_allow_english(this);
   chef_allow_user_define(this);
 
+  chef_use_other_target_sources (this, &pl_python_group_target);
 }
 
 
