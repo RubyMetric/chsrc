@@ -322,17 +322,23 @@ chef_debug_target (Target_t *target)
     }
 
   say ("DEBUG Target Information:");
+  printf ("  Aliases: %s\n", target->aliases);
+
   printf ("  Get Function: %p\n", target->getfn);
   printf ("  Set Function: %p\n", target->setfn);
   printf ("  Reset Function: %p\n", target->resetfn);
+  printf ("  Prelude Function: %p\n", target->preludefn);
+
+  printf ("  Inited?: %d\n", target->inited);
+
   printf ("  Sources: %p\n", target->sources);
   printf ("  Sources Count: %lld\n", target->sources_n);
 
   printf ("  Chef: %p\n", target->chef);
   printf ("  Cooks: %p\n", target->cooks);
   printf ("  Cooks Count: %lld\n", target->cooks_n);
-  printf ("  Contributors: %p\n", target->contributors);
-  printf ("  Contributors Count: %lld\n", target->contributors_n);
+  printf ("  Sauciers: %p\n", target->sauciers);
+  printf ("  Sauciers Count: %lld\n", target->sauciers_n);
 #endif
 }
 
