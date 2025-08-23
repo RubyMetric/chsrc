@@ -7,25 +7,21 @@ def_target(pl_python_pdm, "pdm");
 void
 pl_python_pdm_prelude (void)
 {
-  use_this(pl_python_pdm);
-  chef_allow_gsr(pl_python_pdm);
+  chef_prep_this (pl_python_pdm, gsr);
 
   chef_set_created_on   (this, "2024-06-05");
   chef_set_last_updated (this, "2025-07-11");
   chef_set_sources_last_updated (this, "2025-07-11");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 0);
 
-  chef_allow_local_mode (this, FullyCan, "支持项目级配置", "Supports project-level configuration");
+  chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);
   chef_allow_user_define(this);
 
-  // 使用 pl_python_group 的源
-  this->sources = pl_python_group_target.sources;
-  this->sources_n = pl_python_group_target.sources_n;
+  chef_use_other_target_sources (this, &pl_python_group_target);
 }
 
 
@@ -52,9 +48,9 @@ pl_python_pdm_setsrc (char *option)
   char *cmd = NULL;
 
   if (chsrc_in_local_mode())
-    cmd = xy_2strjoin ("pdm config --local pypi.url ", source.url);
+    cmd = xy_2strcat ("pdm config --local pypi.url ", source.url);
   else
-    cmd = xy_2strjoin ("pdm config --global pypi.url ", source.url);
+    cmd = xy_2strcat ("pdm config --global pypi.url ", source.url);
 
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 

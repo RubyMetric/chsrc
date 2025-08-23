@@ -7,17 +7,15 @@ def_target(os_solus, "solus");
 void
 os_solus_prelude ()
 {
-  use_this(os_solus);
-  chef_allow_s(os_solus);
+  chef_prep_this (os_solus, s);
 
   chef_set_created_on   (this, "2023-09-29");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2023-09-29");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 0);
 
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
@@ -43,9 +41,9 @@ os_solus_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_solus);
+  chsrc_use_this_source (os_solus);
 
-  char *cmd = xy_2strjoin ("eopkg add-repo Solus ", source.url);
+  char *cmd = xy_2strcat ("eopkg add-repo Solus ", source.url);
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_determine_chgtype (ChgType_Auto);

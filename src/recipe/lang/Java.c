@@ -7,18 +7,15 @@ def_target(pl_java, "java/maven/mvn/maven-daemon/mvnd/gradle");
 void
 pl_java_prelude ()
 {
-  use_this(pl_java);
-  chef_allow_gsr(pl_java);
+  chef_prep_this (pl_java, gsr);
 
   chef_set_created_on   (this, "2023-08-31");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2024-12-18");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "BingChunMoLi", "bingchunmoli@bingchunmoli.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 1, "@BingChunMoLi");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -85,7 +82,6 @@ pl_java_find_maven_config ()
   return "~/.m2/settings.xml";
 }
 
-
 char *
 pl_java_find_maven_daemon_config ()
 {
@@ -114,12 +110,12 @@ pl_java_getsrc (char *option)
   if (maven_exist)
   {
     char *maven_config = pl_java_find_maven_config ();
-    chsrc_note2 (xy_2strjoin ("请查看 ", maven_config));
+    chsrc_note2 (xy_2strcat ("请查看 ", maven_config));
   }
   if(maven_daemon_exist)
   {
     char *maven_config = pl_java_find_maven_daemon_config ();
-    chsrc_note2 (xy_2strjoin ("请查看 ", maven_config));
+    chsrc_note2 (xy_2strcat ("请查看 ", maven_config));
   }
 }
 
@@ -137,7 +133,7 @@ pl_java_setsrc (char *option)
   bool maven_exist, gradle_exist, maven_daemon_exist;
   pl_java_check_cmd (&maven_exist, &gradle_exist, &maven_daemon_exist);
 
-  use_this_source(pl_java);
+  chsrc_use_this_source(pl_java);
   use_custom_user_agent();
   if (maven_exist)
     {
@@ -145,7 +141,7 @@ pl_java_setsrc (char *option)
             file = xy_str_gsub (file, "@name@", source.mirror->name);
             file = xy_str_gsub (file, "@url@", source.url);
       char *maven_config = pl_java_find_maven_config ();
-      chsrc_note2 (xy_strjoin (3, "请在 maven 配置文件 ", maven_config, " 中添加:"));
+      chsrc_note2 (xy_strcat (3, "请在 maven 配置文件 ", maven_config, " 中添加:"));
       println (file);
     }
 

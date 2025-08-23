@@ -7,19 +7,15 @@ def_target(pl_dart_flutter, "flutter");
 void
 pl_dart_flutter_prelude (void)
 {
-  use_this(pl_dart_flutter);
-  chef_allow_gsr(pl_dart_flutter);
+  chef_prep_this (pl_dart_flutter, gsr);
 
   chef_set_created_on   (this, "2023-09-10");
   chef_set_last_updated (this, "2025-07-11");
   chef_set_sources_last_updated (this, "2025-04-15");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 2,
-    "czyt", "czyt.go@gmail.com",
-    "MadDogOwner", "xiaoran@xrgzs.top");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 2, "@czyt", "@xrgzs");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);
@@ -55,13 +51,13 @@ pl_dart_flutter_getsrc (char *option)
 void
 pl_dart_flutter_setsrc (char *option)
 {
-  use_this_source(pl_dart_flutter);
+  chsrc_use_this_source (pl_dart_flutter);
 
   char *w = NULL;
   char *cmd = NULL;
   if (xy_on_windows)
     {
-      cmd = xy_strjoin (3, "setx FLUTTER_STORAGE_BASE_URL \"", source.url, "\"");
+      cmd = xy_strcat (3, "setx FLUTTER_STORAGE_BASE_URL \"", source.url, "\"");
       chsrc_run (cmd, RunOpt_No_Last_New_Line);
     }
   else
@@ -70,7 +66,7 @@ pl_dart_flutter_setsrc (char *option)
       char *bashrc = xy_bashrc;
 
       chsrc_backup (zshrc);
-      w = xy_strjoin (3, "export FLUTTER_STORAGE_BASE_URL=\"", source.url, "\"\n");
+      w = xy_strcat (3, "export FLUTTER_STORAGE_BASE_URL=\"", source.url, "\"\n");
       chsrc_append_to_file (w, zshrc);
 
       if (xy_file_exist (bashrc))

@@ -14,24 +14,22 @@ def_target(pl_lua, "lua/luarocks");
 void
 pl_lua_prelude ()
 {
-  use_this(pl_lua);
-  chef_allow_gs(pl_lua);
+  chef_prep_this (pl_lua, gs);
 
   chef_set_created_on   (this, "2023-09-27");
   chef_set_last_updated (this, "2025-08-10");
-  chef_set_sources_last_updated (this, "2025-07-14");
+  chef_set_sources_last_updated (this, "2025-08-22");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 1, "@hezonglun");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&UpstreamProvider,  NULL, DelegateToUpstream},
+  {&UpstreamProvider, "https://luarocks.org", DelegateToUpstream},
   {&Api7,             "https://luarocks.cn", DelegateToMirror}
   def_sources_end()
 }
@@ -50,17 +48,16 @@ pl_lua_getsrc (char *option)
 void
 pl_lua_setsrc (char *option)
 {
-  use_this(pl_lua);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+  chsrc_use_this_source (pl_lua);
 
-  char *config = xy_strjoin (3, "rocks_servers = {\n"
+  char *config = xy_strcat (3, "rocks_servers = {\n"
                                 "  \"", source.url, "\"\n"
                                 "}");
 
   chsrc_note2 ("请手动修改 ~/.luarocks/config.lua 文件 (用于下载):");
   println (config);
 
-  char *upload_config = xy_strjoin (3, "key = \"<Your API Key>\"\n"
+  char *upload_config = xy_strcat (3, "key = \"<Your API Key>\"\n"
                                       "server = \"", source.url, "\"");
 
   chsrc_note2 ("请手动修改 ~/.luarocks/upload_config.lua 文件 (用于上传):");

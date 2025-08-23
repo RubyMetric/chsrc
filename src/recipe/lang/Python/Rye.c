@@ -9,25 +9,21 @@ def_target(pl_python_rye, "rye");
 void
 pl_python_rye_prelude (void)
 {
-  use_this(pl_python_rye);
-  chef_allow_gsr(pl_python_rye);
+  chef_prep_this (pl_python_rye, gsr);
 
   chef_set_created_on   (this, "2024-12-06");
   chef_set_last_updated (this, "2025-08-09");
   chef_set_sources_last_updated (this, "2025-08-09");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 0);
 
-  chef_allow_local_mode (this, FullyCan, "支持项目级配置", "Supports project-level configuration");
+  chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);
   chef_allow_user_define(this);
 
-  // 使用 pl_python_group 的源
-  this->sources = pl_python_group_target.sources;
-  this->sources_n = pl_python_group_target.sources_n;
+  chef_use_other_target_sources (this, &pl_python_group_target);
 }
 
 char *
@@ -45,7 +41,7 @@ void
 pl_python_rye_getsrc (char *option)
 {
   char *rye_config = pl_python_find_rye_config ();
-  chsrc_note2 (xy_strjoin (3, "请查看 ", rye_config, " 配置文件中的 [[sources]] 节内容"));
+  chsrc_note2 (xy_strcat (3, "请查看 ", rye_config, " 配置文件中的 [[sources]] 节内容"));
 }
 
 
@@ -64,7 +60,7 @@ pl_python_rye_setsrc (char *option)
   content = xy_str_gsub (content, "@2@", source.url);
 
   char *rye_config = pl_python_find_rye_config ();
-  chsrc_note2 (xy_strjoin (3, "请在配置文件 ", rye_config, " 中添加:"));
+  chsrc_note2 (xy_strcat (3, "请在配置文件 ", rye_config, " 中添加:"));
   println (content);
 
   chsrc_determine_chgtype (ChgType_Manual);

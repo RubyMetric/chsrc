@@ -7,17 +7,15 @@ def_target(wr_guix, "guix");
 void
 wr_guix_prelude ()
 {
-  use_this(wr_guix);
-  chef_allow_s(wr_guix);
+  chef_prep_this (wr_guix, s);
 
   chef_set_created_on   (this, "2023-09-11");
   chef_set_last_updated (this, "2025-08-09");
   chef_set_sources_last_updated (this, "2025-07-13");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -39,9 +37,9 @@ wr_guix_prelude ()
 void
 wr_guix_setsrc (char *option)
 {
-  use_this_source(wr_guix);
+  chsrc_use_this_source (wr_guix);
 
-  char *file =  xy_strjoin (3, "(list (channel\n"
+  char *file =  xy_strcat (3, "(list (channel\n"
                                "       (inherit (car %default-channels))\n"
                                "       (url \"", source.url, "\")))");
 

@@ -7,20 +7,15 @@ def_target(os_debian, "debian");
 void
 os_debian_prelude ()
 {
-  use_this(os_debian);
-  chef_allow_gsr(os_debian);
+  chef_prep_this (os_debian, gsr);
 
   chef_set_created_on   (this, "2023-09-02");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2025-07-11");
 
-  chef_set_authors (this, 2,
-    "Aoran Zeng", "ccmywish@qq.com",
-    "Heng Guo",   "2085471348@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "Yangmoooo", "yangmoooo@outlook.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
+  chef_set_sauciers (this, 1, "@Yangmoooo");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -77,7 +72,7 @@ static bool
 os_debian_does_old_sourcelist_use_cdrom (void)
 {
   /* 我们只检查旧版sourcelist，因为 common.h 中的填充只支持旧版 */
-  char *cmd = xy_2strjoin ("grep -q '^deb cdrom:' ", OS_Debian_old_SourceList);
+  char *cmd = xy_2strcat ("grep -q '^deb cdrom:' ", OS_Debian_old_SourceList);
   int ret = system (cmd);
   bool use_cdrom = ret == 0;
 
@@ -88,15 +83,15 @@ os_debian_does_old_sourcelist_use_cdrom (void)
 void
 os_debian_setsrc_for_deb822 (char *option)
 {
-  use_this_source(os_debian);
+  chsrc_use_this_source (os_debian);
 
   chsrc_backup (OS_Debian_SourceList_DEB822);
 
-  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/debian/?@", source.url, "@g' " OS_Debian_SourceList_DEB822);
+  char *cmd = xy_strcat (3, "sed -E -i 's@https?://.*/debian/?@", source.url, "@g' " OS_Debian_SourceList_DEB822);
   chsrc_run (cmd, RunOpt_Default);
 
   /* debian-security 源和其他源不一样 */
-  cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/debian-security/?@", source.url, "-security@g' " OS_Debian_SourceList_DEB822);
+  cmd = xy_strcat (3, "sed -E -i 's@https?://.*/debian-security/?@", source.url, "-security@g' " OS_Debian_SourceList_DEB822);
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);
@@ -149,7 +144,7 @@ os_debian_setsrc (char *option)
         }
     }
 
-  use_this_source(os_debian);
+  chsrc_use_this_source (os_debian);
 
   chsrc_alert2 ("如果遇到无法拉取 HTTPS 源的情况，请手动运行:");
   say ("apt install apt-transport-https ca-certificates");
@@ -160,7 +155,7 @@ os_debian_setsrc (char *option)
       chsrc_backup (OS_Debian_old_SourceList);
     }
 
-  char *cmd = xy_strjoin (3, "sed -E -i \'s@https?://.*/debian/?@", source.url, "@g\' " OS_Debian_old_SourceList);
+  char *cmd = xy_strcat (3, "sed -E -i \'s@https?://.*/debian/?@", source.url, "@g\' " OS_Debian_old_SourceList);
 
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt update", RunOpt_No_Last_New_Line);

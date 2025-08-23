@@ -7,25 +7,21 @@ def_target(pl_python_pip, "pip");
 void
 pl_python_pip_prelude (void)
 {
-  use_this(pl_python_pip);
-  chef_allow_gsr(pl_python_pip);
+  chef_prep_this (pl_python_pip, gsr);
 
   chef_set_created_on   (this, "2023-09-03");
   chef_set_last_updated (this, "2025-07-11");
   chef_set_sources_last_updated (this, "2025-07-11");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);
   chef_allow_user_define(this);
 
-  // 使用 pl_python_group 的源
-  this->sources = pl_python_group_target.sources;
-  this->sources_n = pl_python_group_target.sources_n;
+  chef_use_other_target_sources (this, &pl_python_group_target);
 }
 
 
@@ -35,7 +31,7 @@ pl_python_pip_getsrc (char *option)
   char *py_prog_name = NULL;
   pl_python_get_py_program_name (&py_prog_name);
 
-  char *cmd = xy_2strjoin (py_prog_name, " -m pip config get global.index-url");
+  char *cmd = xy_2strcat (py_prog_name, " -m pip config get global.index-url");
   chsrc_run (cmd, RunOpt_Default);
 }
 
@@ -65,7 +61,7 @@ pl_python_pip_setsrc (char *option)
   // 这里用的是 config --user，会写入用户目录（而不是项目目录）
   // https://github.com/RubyMetric/chsrc/issues/39
   // 经测试，Windows上调用换源命令，会写入 C:\Users\RubyMetric\AppData\Roaming\pip\pip.ini
-  char *cmd = xy_2strjoin (py_prog_name, xy_2strjoin (" -m pip config --user set global.index-url ", source.url));
+  char *cmd = xy_2strcat (py_prog_name, xy_2strcat (" -m pip config --user set global.index-url ", source.url));
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
   if (chsrc_in_standalone_mode())

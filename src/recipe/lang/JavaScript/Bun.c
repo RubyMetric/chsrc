@@ -7,26 +7,21 @@ def_target(pl_js_bun, "bun");
 void
 pl_js_bun_prelude (void)
 {
-  use_this(pl_js_bun);
-  chef_allow_gsr(pl_js_bun);
+  chef_prep_this (pl_js_bun, gsr);
 
   chef_set_created_on   (this, "2024-09-29");
   chef_set_last_updated (this, "2025-07-22");
   chef_set_sources_last_updated (this, "2025-07-22");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "Lontten", "lontten@163.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 1, "@lontten");
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);
   chef_allow_user_define(this);
 
-  // 用的是 npm Registry 的源，所以使用 pl_js_group 的源
-  this->sources = pl_js_group_target.sources;
-  this->sources_n = pl_js_group_target.sources_n;
+  chef_use_other_target_sources (this, &pl_js_group_target);
 }
 
 /**
@@ -62,7 +57,7 @@ pl_js_bun_setsrc (char *option)
     }
   else
     {
-      chsrc_note2 (xy_strjoin (3, "请手动写入以下内容到 ", xy_normalize_path ("~/.bunfig.toml"), " 文件中"));
+      chsrc_note2 (xy_strcat (3, "请手动写入以下内容到 ", xy_normalize_path ("~/.bunfig.toml"), " 文件中"));
     }
 
   println (content);

@@ -7,21 +7,15 @@ def_target(os_openeuler, "openeuler");
 void
 os_openeuler_prelude ()
 {
-  use_this(os_openeuler);
-  chef_allow_gs(os_openeuler);
+  chef_prep_this (os_openeuler, gs);
 
   chef_set_created_on   (this, "2023-09-06");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2025-06-20");
 
-  chef_set_authors (this, 1, "Heng Guo", "2085471348@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 3,
-    "Aoran Zeng", "ccmywish@qq.com",
-    "Yangmoooo", "yangmoooo@outlook.com",
-    "happy game", "happygame1024@gmail.com");
-
+  chef_set_cooks (this, 1, "@G_I_Y");
+  chef_set_chef (this, NULL);
+  chef_set_sauciers (this, 3, "@ccmywish", "@Yangmoooo", "@happy-game");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -66,14 +60,14 @@ os_openeuler_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_openeuler);
+  chsrc_use_this_source (os_openeuler);
 
   chsrc_backup (OS_openEuler_SourceList);
 
   // 替换 baseurl=<<URL>>/openEuler-xx.xx/...
   // openEuler-xx.xx 为 openEuler 版本号
   // sed -E 's!^baseurl=.*?/openEuler-([^/]+)!baseurl=$(source.url)/openEuler-\1/!g' OS_openEuler_SourceList
-  char* cmd = xy_strjoin (6, "sed ",
+  char* cmd = xy_strcat (6, "sed ",
          "-i -E 's!^baseurl=.*?/openEuler-([^/]+)!baseurl=",
          source.url,
          "openEuler-\\1",

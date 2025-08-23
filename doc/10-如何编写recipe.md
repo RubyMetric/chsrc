@@ -3,11 +3,11 @@
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
  ! Doc Name      : 10-如何编写recipe.md
- ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
- ! Contributors  :  Nul None  <nul@none.org>
+ ! Doc Authors   : 曾奥然 <ccmywish@qq.com>
+ ! Contributors  : Nul None <nul@none.org>
  !               |
  ! Created On    : <2024-08-19>
- ! Last Modified : <2025-08-11>
+ ! Last Modified : <2025-08-22>
  ! ---------------------------------------------------------- -->
 
 # Write A Recipe Even If You Don't Know C
@@ -18,7 +18,7 @@
 
 <br>
 
-我鼓励你为新的软件添加换源支持，因为通过 `chsrc` 框架，这将比写 shell 脚本更加轻松，你的贡献也将非常有价值。理论上每一个 `recipe` 都需要有专人长时间维护 ([招募](https://github.com/RubyMetric/chsrc/issues/130))。
+我鼓励你为新的软件添加换源支持，因为通过 `chsrc` 框架，这将比写 shell 脚本更加轻松，你的贡献也将非常有价值。理论上每一个 `recipe` 都需要有专人长时间维护 ([招募](https://github.com/RubyMetric/chsrc/issues/275))。
 
 - 本项目采用 `GPLv3+` 协议，是真正的**自由软件**，而非仅仅是开源软件
 - 代码规范灵活遵循 `GNU` 标准（若标准干扰了可维护性，则并不采纳）
@@ -52,6 +52,8 @@
 - `source`: 该 `target` 所能换的具体的源，由 `mirror` 提供服务，往往一个 `mirror` 会提供许多 `source`
 - `recipe`: 是为一个 `target` 定义的具体换源方法，请参考 `src` 目录中的 `recipe` 目录
 
+- `chef DSL`：是 `chef Domain Specific Language` 的简写，这是一组以 `chef_` 开头的函数，用来定义维护者信息、可用源等元信息
+
 - **换源链接**: 指镜像站所提供的某一个具体的换源使用的URL
 - **测速链接**: 用来测速的URL，与 "换源链接" 不同，可分为 **精准测速** 和 **模糊测速**
 
@@ -81,7 +83,7 @@
 
     该函数将填充 target 所有的必要信息，包括维护信息、换源信息
 
-7. [设置/修改 "换源 URL" 和 "测速 URL" (how?)](./11-如何设置换源链接与测速链接.md)
+7. [设置/修改 "换源链接" 和 "测速链接" (how?)](./11-如何设置换源链接与测速链接.md)
 
 8. 按需实现 `_setsrc()` `_getsrc()` `_resetsrc()`， 可以使用这些函数:
 

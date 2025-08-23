@@ -9,19 +9,15 @@ def_target(wr_anaconda, "conda/anaconda");
 void
 wr_anaconda_prelude ()
 {
-  use_this(wr_anaconda);
-  chef_allow_gs(wr_anaconda);
+  chef_prep_this (wr_anaconda, gs);
 
   chef_set_created_on   (this, "2023-09-10");
   chef_set_last_updated (this, "2025-08-09");
   chef_set_sources_last_updated (this, "2025-07-14");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 2,
-    "Yangmoooo", "yangmoooo@outlook.com",
-    "yongxiang", "1926885268@qq.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 2, "@Yangmoooo", "@xyx1926885268");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -56,12 +52,12 @@ wr_anaconda_getsrc (char *option)
 void
 wr_anaconda_setsrc (char *option)
 {
-  use_this_source(wr_anaconda);
+  chsrc_use_this_source (wr_anaconda);
 
   char *w = xy_str_gsub (RAWSTR_wr_anaconda_condarc, "@1@", source.url);
 
   /* Windows 也是在这里 */
-  char *configfile = xy_2strjoin (xy_os_home, "/.condarc");
+  char *configfile = xy_2strcat (xy_os_home, "/.condarc");
 
   if (xy_on_windows)
     {
@@ -78,7 +74,7 @@ wr_anaconda_setsrc (char *option)
         }
     }
 
-  chsrc_note2 (xy_strjoin (3, "请向 ", configfile, " 中手动添加:"));
+  chsrc_note2 (xy_strcat (3, "请向 ", configfile, " 中手动添加:"));
   println (w);
 
   chsrc_note2 ("然后运行 conda clean -i 清除索引缓存，保证用的是镜像站提供的索引");

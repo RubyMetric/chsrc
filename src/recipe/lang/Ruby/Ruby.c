@@ -14,17 +14,15 @@ def_target(pl_ruby, "gem/ruby/rb/rubygem/rubygems/bundler");
 void
 pl_ruby_prelude (void)
 {
-  use_this(pl_ruby);
-  chef_allow_gsr(pl_ruby);
+  chef_prep_this (pl_ruby, gsr);
 
   chef_set_created_on   (this, "2023-08-29");
   chef_set_last_updated (this, "2025-08-11");
   chef_set_sources_last_updated (this, "2024-12-18");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 0);
+  chef_set_chef (this, "@ccmywish");
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, PartiallyCan, "支持 bundler. 不支持 gem", "Support bundler. Not support gem");
   chef_allow_english(this);
@@ -58,7 +56,7 @@ pl_ruby_remove_gem_source (const char *source)
   char *cmd = NULL;
   if (chef_is_url (source))
     {
-      cmd = xy_2strjoin ("gem sources -r ", source);
+      cmd = xy_2strcat ("gem sources -r ", source);
       chsrc_run (cmd, RunOpt_Default);
     }
   return false
@@ -72,14 +70,14 @@ pl_ruby_setsrc (char *option)
 {
   chsrc_ensure_program ("gem");
 
-  use_this_source(pl_ruby);
+  chsrc_use_this_source (pl_ruby);
 
   char *cmd = NULL;
 
   // step1
-  xy_run_iter ("gem sources -l", 0, pl_ruby_remove_gem_source);
+  xy_run_iter_lines ("gem sources -l", 0, pl_ruby_remove_gem_source);
 
-  cmd = xy_2strjoin ("gem source -a ", source.url);
+  cmd = xy_2strcat ("gem source -a ", source.url);
   chsrc_run (cmd, RunOpt_Default);
 
   // 我们在 step1 中，把源全部清空了，但是现在 RubyGems 的行为是: 当清空会自动给你把默认源给加回来
@@ -95,7 +93,7 @@ pl_ruby_setsrc (char *option)
       where = " --local ";
     }
 
-  cmd = xy_strjoin (4, "bundle config", where, "'mirror.https://rubygems.org' ", source.url);
+  cmd = xy_strcat (4, "bundle config", where, "'mirror.https://rubygems.org' ", source.url);
   chsrc_run (cmd, RunOpt_No_Last_New_Line);
 
   chsrc_determine_chgtype (ChgType_Auto);

@@ -2,12 +2,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Name     :  struct.h
- * File Authors  :  Aoran Zeng   <ccmywish@qq.com>
- *               |   Heng Guo    <2085471348@qq.com>
+ * File Authors  :  曾奥然 <ccmywish@qq.com>
+ *               |   郭恒  <2085471348@qq.com>
  * Contributors  : Shengwei Chen <414685209@qq.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-08-11>
+ * Last Modified : <2025-08-22>
  *
  * chsrc struct
  * ------------------------------------------------------------*/
@@ -94,8 +94,6 @@ Source_t;
 /* 由 prelude() 填充 */
 #define FeedByPrelude NULL
 
-#define def_sources_n(t) const size_t t##_sources_n = xy_arylen(t##_sources)
-
 
 typedef enum Capability_t
 {
@@ -109,8 +107,10 @@ Capability_t;
 
 typedef struct Contributor_t
 {
-  char *name;
+  char *id;     /* 全局唯一贡献者标识符，防止反复写信息，以 @ 开头 */
+  char *name;   /* 贡献者姓名; 鉴于该项目完全依赖于贡献者，建议留下真实姓名或者昵称 */
   char *email;
+  char *display_name; /* recipe 结束时会显示贡献者信息，如果你不愿显示真实姓名或者昵称，可以另外提供一个名字 */
 }
 Contributor_t;
 
@@ -124,8 +124,12 @@ typedef struct Target_t
   void (*setfn)   (char *option);
   void (*resetfn) (char *option);
 
-  Source_t  *sources;
-  size_t    sources_n;
+  /* 初始化函数，用于填充该 struct 的各种信息 */
+  void (*preludefn) (void);
+  bool inited; /* 是否执行过了 preludefn() */
+
+  Source_t *sources;
+       int  sources_n;
 
 
   /* Features */
@@ -140,41 +144,36 @@ typedef struct Target_t
   char *note;              /* 备注 */
 
 
-  /* Recipe maintain info */
+  /* recipe 维护信息 */
   char *created_on;
   char *last_updated;
   char *sources_last_updated;
 
-  Contributor_t *authors;
-  size_t         authors_n;
-
-  Contributor_t *contributors;
-  size_t         contributors_n;
-
-  Contributor_t *chef;   /* Chef 仅有一个 */
-  Contributor_t *cooks;  /* Cook 可以有多个 */
-  size_t         cooks_n;
+  Contributor_t  *chef;     /* 该 recipe *当前*的总负责人 (可以任职也可以休职) */
+  Contributor_t **cooks;    /* 该 recipe 的主要作者 */
+            int   cooks_n;
+  Contributor_t **sauciers; /* 该 recipe 的次要贡献者 (除主要作者外的其他人) */
+            int   sauciers_n;
 }
 Target_t;
 
 
-typedef struct TargetRegisterInfo_t
-{
-  Target_t *target;           /* target 本身 */
-  void     (*prelude) (void); /* 填充 target 信息等预置操作 */
-}
-TargetRegisterInfo_t;
-
 
 #define def_target(t, aliases) void t##_getsrc(char *option);void t##_setsrc(char *option);void t##_resetsrc(char *option); Target_t t##_target={aliases};
 
-/* 以下宏仅能放在 prelude() 中使用 */
+#define chef_allow_gsr(t) this->getfn = t##_getsrc; this->setfn = t##_setsrc; this->resetfn = t##_resetsrc;
+#define chef_allow_s(t)   this->getfn = NULL;       this->setfn = t##_setsrc; this->resetfn = NULL;
+#define chef_allow_sr(t)  this->getfn = NULL;       this->setfn = t##_setsrc; this->resetfn = t##_resetsrc;
+#define chef_allow_gs(t)  this->getfn = t##_getsrc; this->setfn = t##_setsrc; this->resetfn = NULL;
+#define chef_allow_NOOP(t)
+#define chef_prep_this(t,op) Target_t *this = &t##_target; this->inited = true; chef_allow_##op(t);
+
 #define use_this(t) Target_t *this = &t##_target;
-#define use_this_source(t) use_this(t); Source_t source = chsrc_yield_source_and_confirm (this, option);
+#define chsrc_use_this_source(t) Target_t *this = &t##_target; Source_t source = chsrc_yield_source_and_confirm (this, option);
 
 #define def_sources_begin()  Source_t sources[] = {
 #define def_sources_end()    }; \
-  this->sources_n = xy_arylen(sources); \
+  this->sources_n = xy_c_array_len(sources); \
   char *_sources_storage = xy_malloc0 (sizeof(sources)); \
   memcpy (_sources_storage, sources, sizeof(sources)); \
   this->sources = (Source_t *)_sources_storage;

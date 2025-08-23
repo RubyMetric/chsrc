@@ -2,47 +2,122 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Name     : chef.c
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nul None  <nul@none.org>
+ * File Authors  : 曾奥然 <ccmywish@qq.com>
+ * Contributors  : Nul None <nul@none.org>
  * Created On    : <2025-08-09>
- * Last Modified : <2025-08-11>
+ * Last Modified : <2025-08-22>
  *
  * chef DSL: for chefs (recipe makers) to define a target
  * ------------------------------------------------------------*/
 
 #pragma once
 
-#define chef_allow_gsr(t) this->getfn = t##_getsrc; this->setfn = t##_setsrc; this->resetfn = t##_resetsrc;
-#define chef_allow_s(t)   this->getfn = NULL;       this->setfn = t##_setsrc; this->resetfn = NULL;
-#define chef_allow_sr(t)  this->getfn = NULL;       this->setfn = t##_setsrc; this->resetfn = t##_resetsrc;
-#define chef_allow_gs(t)  this->getfn = t##_getsrc; this->setfn = t##_setsrc; this->resetfn = NULL;
+void
+chef_debug_target (Target_t *target)
+{
+#ifdef XY_DEBUG
+  if (!target)
+    {
+      chsrc_debug2 ("target", "Target is NULL");
+      return;
+    }
+
+  say ("DEBUG Target Information:");
+  printf ("  Aliases: %s\n", target->aliases);
+
+  printf ("  Get Function: %p\n", target->getfn);
+  printf ("  Set Function: %p\n", target->setfn);
+  printf ("  Reset Function: %p\n", target->resetfn);
+  printf ("  Prelude Function: %p\n", target->preludefn);
+
+  printf ("  Inited?: %d\n", target->inited);
+
+  printf ("  Sources: %p\n", target->sources);
+  printf ("  Sources Count: %d\n", target->sources_n);
+
+  printf ("  Chef: %p\n", target->chef);
+  printf ("  Cooks: %p\n", target->cooks);
+  printf ("  Cooks Count: %d\n", target->cooks_n);
+  printf ("  Sauciers: %p\n", target->sauciers);
+  printf ("  Sauciers Count: %d\n", target->sauciers_n);
+#endif
+}
+
+
+void
+chef_debug_contributor (Contributor_t *contributor)
+{
+#ifdef XY_DEBUG
+  if (!contributor)
+    {
+      chsrc_debug2 ("contrib", "Contributor is NULL");
+      return;
+    }
+
+  say ("DEBUG Contributor Information:");
+  printf ("  ID:    %s\n", contributor->id);
+  printf ("  Name:  %s\n", contributor->name);
+  printf ("  Email: %s\n", contributor->email);
+  printf ("  DisplayName: %s\n", contributor->display_name);
+#endif
+}
+
+
+/**
+ * @brief 登记所有贡献者
+ *
+ * @param     id       贡献者 ID，这个ID最好是GitHub用户名，但也可以不是，只需要在 chsrc 内部进行区分即可
+ * @param display_name 如果没有提供该参数，则使用 name
+ */
+void
+chef_register_contributor (char *id, char *name, char *email, char *display_name)
+{
+  if (!id || !name || !email)
+    xy_unreached();
+
+  Contributor_t *contributor = xy_malloc0 (sizeof (Contributor_t));
+  contributor->id = xy_strdup (id);
+  contributor->name = xy_strdup (name);
+  contributor->email = xy_strdup (email);
+
+  if (!display_name)
+    contributor->display_name = xy_strdup (name);
+  else
+    contributor->display_name = xy_strdup (display_name);
+
+  xy_map_set (ProgStore.contributors, id, contributor);
+}
 
 
 /**
  * @brief 修改 Provider 的测速地址
+ *
+ * @note 这个修改的是全局 Provider 里的信息。往往用来设置 UpstreamProvider
  */
 void
 chef_set_provider_speed_measure_url (SourceProvider_t *provider, char *url)
 {
   provider->psmi.skip = NotSkip;
   provider->psmi.url = xy_strdup (url);
-  chsrc_debug ("m", xy_strjoin (4, "recipe 重新为 ", provider->code, " 设置测速链接: ", url));
+  chsrc_debug ("m", xy_strcat (4, "recipe 重新为 ", provider->code, "(镜像站信息本身) 设置测速链接: ", url));
 }
 
 
 /**
  * @brief 修改 Provider 的测速精度
+ *
+ * @note 这个修改的是全局 Provider 里的信息。往往用来设置 UpstreamProvider
  */
 void
 chef_set_provider_speed_measure_accuracy (SourceProvider_t *provider, bool accuracy)
 {
   provider->psmi.accurate = accuracy;
-  chsrc_debug ("m", xy_strjoin (4, "recipe 重新为 ", provider->code, " 设置测速精度: ", accuracy ? "精准" : "粗略"));
+  chsrc_debug ("m", xy_strcat (4, "recipe 重新为 ", provider->code, "(镜像站信息本身) 设置测速精度: ", accuracy ? "精准" : "粗略"));
 }
 
 
 /**
- * @brief 提供一个函数，这个函数基于 "换源 URL" 和用户提供的数据来构造和填充精准测速链接
+ * @brief 提供一个函数，这个函数基于 "换源链接" 和用户提供的数据来构造和填充精准测速链接
  */
 void
 chef_set_sources_speed_measure_url_with_func (
@@ -50,8 +125,11 @@ chef_set_sources_speed_measure_url_with_func (
   char *(*func)(const char *url, const char *user_data),
   char *user_data)
 {
+  xy_cant_be_null (target);
+
   Source_t *sources = target->sources;
   int n = target->sources_n;
+
   for (int i=0; i<n; i++)
     {
       Source_t *src = &sources[i];
@@ -69,30 +147,48 @@ chef_set_sources_speed_measure_url_with_func (
 
 
 /**
- * @brief 给 "换源 URL" 增加一个后缀来构造和填充专用测速链接
+ * @brief 给 "换源链接" 增加一个后缀来构造和填充专用测速链接
  */
 void
 chef_set_sources_speed_measure_url_with_postfix (Target_t *target, char *postfix)
 {
-  chef_set_sources_speed_measure_url_with_func (target, xy_2strjoin, postfix);
+  chef_set_sources_speed_measure_url_with_func (target, xy_2strcat, postfix);
+}
+
+
+/**
+ * @note 用于: 组中的 item target 在 standalone 模式时正确填充源信息
+ */
+void
+chef_use_other_target_sources (Target_t *this, Target_t *other)
+{
+  if (!other->inited)
+    {
+      if (other->preludefn)
+        other->preludefn();
+      else
+        {
+          chef_debug_target (other);
+          chsrc_panic ("`other` 未定义 _prelude() !");
+        }
+    }
+
+  this->sources = other->sources;
+  this->sources_n = other->sources_n;
 }
 
 
 void
 chef_allow_english (Target_t *target)
 {
-  if (!target)
-    return;
-
+  xy_cant_be_null (target);
   target->can_english = true;
 }
 
 void
 chef_forbid_english (Target_t *target)
 {
-  if (!target)
-    return;
-
+  xy_cant_be_null (target);
   target->can_english = false;
 }
 
@@ -100,8 +196,7 @@ chef_forbid_english (Target_t *target)
 void
 chef_allow_local_mode (Target_t *target, Capability_t cap, const char *explain_zh, const char *explain_en)
 {
-  if (!target)
-    return;
+  xy_cant_be_null (target);
 
   target->cap_local = cap;
 
@@ -124,8 +219,7 @@ chef_allow_local_mode (Target_t *target, Capability_t cap, const char *explain_z
 void
 chef_allow_user_define (Target_t *target)
 {
-  if (!target)
-    return;
+  xy_cant_be_null (target);
 
   target->can_user_define = true;
   target->can_user_define_explain = NULL;
@@ -134,8 +228,7 @@ chef_allow_user_define (Target_t *target)
 void
 chef_forbid_user_define (Target_t *target)
 {
-  if (!target)
-    return;
+  xy_cant_be_null (target);
 
   target->can_user_define = false;
 
@@ -148,113 +241,116 @@ chef_forbid_user_define (Target_t *target)
 void
 chef_set_note (Target_t *target, const char *note_zh, const char *note_en)
 {
-  if (!target)
-    return;
+  xy_cant_be_null (target);
 
   const char *msg = CHINESE ? note_zh : note_en;
 
   if (msg)
-    target->note = xy_strdup(msg);
+    target->note = xy_strdup (msg);
 }
 
 
-void
-chef_set_contributors (Target_t *target, uint32_t count, ...)
+
+/**
+ * @brief 验证该 `id` 所指的贡献者确有其人
+ */
+Contributor_t *
+chef_verify_contributor (const char *id)
 {
-  if (!target || count==0)
-    return;
+  xy_cant_be_null (id);
 
-  target->contributors_n = count;
-  target->contributors = xy_malloc0 (count * sizeof(Contributor_t));
-
-  va_list args;
-  va_start(args, count);
-
-  for (uint32_t i = 0; i < count; i++)
+  Contributor_t *c = xy_map_get (ProgStore.contributors, id);
+  if (!c)
     {
-      char *name  = va_arg(args, char*);
-      char *email = va_arg(args, char*);
-
-      target->contributors[i].name  = xy_strdup (name);
-      target->contributors[i].email = xy_strdup (email);
+      char error[256];
+      snprintf (error, sizeof (error), "贡献者 %s 不存在, 是否写错？或请在 chsrc-main.c 中登记该贡献者", id);
+      chsrc_panic (error);
     }
+  return c;
 }
 
 
+/**
+ * @brief 设置 Chef (recipe 负责人)
+ */
 void
-chef_set_authors (Target_t *target, size_t count, ...)
+chef_set_chef (Target_t *target, const char *id)
 {
-  if (!target || count == 0)
-    return;
+  xy_cant_be_null (target);
 
-  va_list args;
-  va_start(args, count);
-
-  target->authors = xy_malloc0 (count * sizeof(Contributor_t));
-  target->authors_n = count;
-
-  for (size_t i = 0; i < count; i++)
+  /* Chef 可为空 */
+  if (!id)
     {
-      char *name = va_arg(args, char*);
-      char *email = va_arg(args, char*);
-
-      target->authors[i].name = xy_strdup(name);
-      target->authors[i].email = xy_strdup(email);
+      target->chef = NULL;
+      return;
     }
 
-  va_end(args);
+  Contributor_t *c = chef_verify_contributor (id);
+  target->chef = c;
 }
 
 
-void
-chef_set_chef (Target_t *target, char *name, char *email)
-{
-  if (!target || !name || !email)
-    return;
-
-  target->chef = xy_malloc0 (sizeof(Contributor_t));
-  target->chef->name  = xy_strdup (name);
-  target->chef->email = xy_strdup (email);
-}
-
-
+/**
+ * @brief 设置 Cooks (recipe 核心作者)
+ */
 void
 chef_set_cooks (Target_t *target, size_t count, ...)
 {
-  if (!target)
-    return;
+  xy_cant_be_null (target);
 
   if (count == 0)
     {
-      target->cooks = NULL;
-      target->cooks_n = 0;
+      chsrc_panic ("recipe 一定至少有1位作者(cooks)");
       return;
     }
 
   va_list args;
-  va_start(args, count);
+  va_start (args, count);
 
-  target->cooks = xy_malloc0 (count * sizeof(Contributor_t));
+  target->cooks = xy_malloc0 (count * sizeof (Contributor_t*));
   target->cooks_n = count;
 
   for (size_t i = 0; i < count; i++)
     {
-      char *name = va_arg(args, char*);
-      char *email = va_arg(args, char*);
-
-      target->cooks[i].name = xy_strdup(name);
-      target->cooks[i].email = xy_strdup(email);
+      char *id = va_arg (args, char*);
+      target->cooks[i] = chef_verify_contributor (id);
     }
 
-  va_end(args);
+  va_end (args);
 }
+
+void
+chef_set_sauciers (Target_t *target, uint32_t count, ...)
+{
+  xy_cant_be_null (target);
+
+  if (count == 0)
+    {
+      target->sauciers = NULL;
+      target->sauciers_n = 0;
+      return;
+    }
+
+  va_list args;
+  va_start (args, count);
+
+  target->sauciers = xy_malloc0 (count * sizeof (Contributor_t*));
+  target->sauciers_n = count;
+
+  for (uint32_t i = 0; i < count; i++)
+    {
+      char *id = va_arg (args, char*);
+      target->sauciers[i] = chef_verify_contributor (id);
+    }
+}
+
 
 
 void
 chef_set_created_on (Target_t *target, char *date)
 {
-  if (!target)
-    return;
+  xy_cant_be_null (target);
+  xy_cant_be_null (date);
 
   target->created_on = xy_strdup (date);
 }
@@ -263,8 +359,8 @@ chef_set_created_on (Target_t *target, char *date)
 void
 chef_set_last_updated (Target_t *target, char *date)
 {
-  if (!target)
-    return;
+  xy_cant_be_null (target);
+  xy_cant_be_null (date);
 
   target->last_updated = xy_strdup (date);
 }
@@ -273,36 +369,8 @@ chef_set_last_updated (Target_t *target, char *date)
 void
 chef_set_sources_last_updated (Target_t *target, char *date)
 {
-  if (!target)
-    return;
+  xy_cant_be_null (target);
+  xy_cant_be_null (date);
 
   target->sources_last_updated = xy_strdup (date);
-}
-
-
-void
-chef_debug_target (Target_t *target)
-{
-#ifdef XY_DEBUG
-  if (!target)
-    {
-      chsrc_debug2 ("t", "Target is NULL");
-      return;
-    }
-
-  say ("Debug Target Information:");
-  printf ("  Get Function: %p\n", target->getfn);
-  printf ("  Set Function: %p\n", target->setfn);
-  printf ("  Reset Function: %p\n", target->resetfn);
-  printf ("  Sources: %p\n", target->sources);
-  printf ("  Sources Count: %lld\n", target->sources_n);
-
-  printf ("  Authors: %p\n", target->authors);
-  printf ("  Authors Count: %lld\n", target->authors_n);
-  printf ("  Chef: %p\n", target->chef);
-  printf ("  Cooks: %p\n", target->cooks);
-  printf ("  Cooks Count: %lld\n", target->cooks_n);
-  printf ("  Contributors: %p\n", target->contributors);
-  printf ("  Contributors Count: %lld\n", target->contributors_n);
-#endif
 }

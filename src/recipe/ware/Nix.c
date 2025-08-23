@@ -7,17 +7,15 @@ def_target(wr_nix, "nix");
 void
 wr_nix_prelude ()
 {
-  use_this(wr_nix);
-  chef_allow_s(wr_nix);
+  chef_prep_this (wr_nix, s);
 
   chef_set_created_on   (this, "2023-09-26");
   chef_set_last_updated (this, "2025-08-09");
   chef_set_sources_last_updated (this, "2025-07-13");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -52,21 +50,21 @@ wr_nix_setsrc (char *option)
 {
   wr_nix_check_cmd ();
 
-  use_this_source(wr_nix);
+  chsrc_use_this_source (wr_nix);
 
-  char *cmd = xy_strjoin (3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
+  char *cmd = xy_strcat (3, "nix-channel --add ", source.url, "nixpkgs-unstable nixpkgs");
   chsrc_run (cmd, RunOpt_Default);
 
-  char *w = xy_strjoin (3, "substituters = ", source.url, "store https://cache.nixos.org/");
+  char *w = xy_strcat (3, "substituters = ", source.url, "store https://cache.nixos.org/");
   chsrc_append_to_file (w, "~/.config/nix/nix.conf");
 
   chsrc_run ("nix-channel --update", RunOpt_Default);
 
   chsrc_note2 ("若你使用的是NixOS，请确认你的系统版本<version>（如22.11），并手动运行:");
-  cmd = xy_strjoin (3, "nix-channel --add ", source.url, "nixpkgs-<version> nixpkgs");
+  cmd = xy_strcat (3, "nix-channel --add ", source.url, "nixpkgs-<version> nixpkgs");
   p(cmd);
 
-  cmd = xy_strjoin (3, "nix.settings.substituters = [ \"", source.url, "store\" ];");
+  cmd = xy_strcat (3, "nix.settings.substituters = [ \"", source.url, "store\" ];");
   chsrc_note2 ("若你使用的是NixOS，请额外添加下述内容至 configuration.nix 中");
   p(cmd);
 

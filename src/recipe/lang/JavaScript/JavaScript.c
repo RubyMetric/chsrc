@@ -70,8 +70,7 @@ pl_js_group_setsrc (char *option)
 
   chsrc_set_target_group_mode ();
 
-  use_this(pl_js_group);
-  Source_t source = chsrc_yield_source_and_confirm (this, option);
+  chsrc_use_this_source (pl_js_group);
 
   if (npm_exist)
     {

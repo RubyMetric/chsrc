@@ -7,24 +7,22 @@ def_target(pl_perl, "perl/cpan");
 void
 pl_perl_prelude ()
 {
-  use_this(pl_perl);
-  chef_allow_gs(pl_perl);
+  chef_prep_this (pl_perl, gs);
 
   chef_set_created_on   (this, "2023-09-31");
   chef_set_last_updated (this, "2025-08-10");
-  chef_set_sources_last_updated (this, "2024-05-24");
+  chef_set_sources_last_updated (this, "2025-08-21");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 1, "@hezonglun");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&UpstreamProvider,  NULL, DelegateToUpstream},
+  {&UpstreamProvider, "https://www.cpan.org/", DelegateToUpstream},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/CPAN/", DelegateToMirror},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CPAN/", DelegateToMirror},
   {&Bjtu,             "https://mirror.bjtu.edu.cn/cpan/",  DelegateToMirror},
@@ -59,9 +57,9 @@ pl_perl_getsrc (char *option)
 void
 pl_perl_setsrc (char *option)
 {
-  use_this_source(pl_perl);
+  chsrc_use_this_source (pl_perl);
 
-  char *cmd = xy_strjoin (3,
+  char *cmd = xy_strcat (3,
   "perl -MCPAN -e \"CPAN::HandleConfig->load(); CPAN::HandleConfig->edit('urllist', 'unshift', '", source.url, "'); CPAN::HandleConfig->commit()\"");
   chsrc_run (cmd, RunOpt_Default);
 

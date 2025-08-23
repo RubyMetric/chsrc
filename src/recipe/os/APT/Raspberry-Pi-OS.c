@@ -9,18 +9,15 @@ def_target(os_raspberrypi, "raspi/raspberrypi");
 void
 os_raspberrypi_prelude ()
 {
-  use_this(os_raspberrypi);
-  chef_allow_gsr(os_raspberrypi);
+  chef_prep_this (os_raspberrypi, gsr);
 
   chef_set_created_on   (this, "2023-09-29");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2023-09-29");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "Yangmoooo", "yangmoooo@outlook.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 1, "@Yangmoooo");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -53,11 +50,11 @@ os_raspberrypi_setsrc (char *option)
 {
   chsrc_ensure_root(); // HELP: 不确定是否需要
 
-  use_this_source(os_raspberrypi);
+  chsrc_use_this_source (os_raspberrypi);
 
   chsrc_backup (OS_RaspberryPi_SourceList);
 
-  char *cmd = xy_strjoin (3, "sed -E -i 's@https?://.*/.*/?@", source.url,
+  char *cmd = xy_strcat (3, "sed -E -i 's@https?://.*/.*/?@", source.url,
                             "@g' " OS_RaspberryPi_SourceList);
 
   chsrc_run (cmd, RunOpt_Default);

@@ -2,11 +2,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Name     : recipe-template.c
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
+ * File Authors  : 曾奥然 <ccmywish@qq.com>
+ * Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2024-08-09>
- * Last Modified : <2025-08-11>
+ * Last Modified : <2025-08-22>
  * -------------------------------------------------------------
  * 本文件作为一个通用模板：
  *
@@ -58,29 +58,24 @@ RubyMetric = {
 void
 <category>_<target>_prelude (void)
 {
-  use_this(<category>_<target>);
-  chef_allow_gsr(<category>_<target>);
-  // chef_allow_s(<category>_<target>);
-  // chef_allow_gs(<category>_<target>);
-  // chef_allow_sr(<category>_<target>);
+  // op 可以为 NOOP|s|sr|gsr|gs, 代表支持 Get Set Reset 三种操作
+  chef_prep_this (<category>_<target>, op);
 
-  chef_set_created_on   (this, "2024-08-09");
-  chef_set_last_updated (this, "2025-08-12");
-  chef_set_sources_last_updated (this, "2025-08-11");
+  chef_set_created_on   (this, "2024-08-09"); // 文件创建日期
+  chef_set_last_updated (this, "2025-08-12"); // 文件最后一次更新日期
+  chef_set_sources_last_updated (this, "2025-08-11"); // 镜像源最后一次更新日期
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "Nil Null", "nil@null.org");
-
+  chef_set_chef (this, "@ccmywish");                  // recipe 负责人
+  chef_set_cooks (this, 2, "@ccmywish", "@nilnull");  // recipe 核心作者
+  // 做了贡献？将自己的信息加在这里！
+  chef_set_sauciers (this, 2, "@nulnone", "@someone");
 
   chef_allow_local_mode (this, PartiallyCan, "具体说明是否支持项目级换源...", "Tell users the local mode support");
 
-  // chef_allow_english(this);
+  // chef_allow_english(this); // 项目是否支持英文
   chef_forbid_english(this);
 
-  // chef_allow_user_define(this);
+  // chef_allow_user_define(this); // 是否支持用户自定义镜像源
   chef_forbid_user_define(this);
 
   chef_set_note ("中文备注说明...", "English note...");
@@ -117,7 +112,7 @@ void
 <category>_<target>_setsrc (char *option)
 {
   /* 下面这行是必须的，注入 source 变量 */
-  use_this_source(<category>_<target>);
+  chsrc_use_this_source (<category>_<target>);
 
   /* 如果是 target group，你可能想要指定不同的 target 来使用它的源 */
   // Source_t source = chsrc_yield_source_and_confirm (&pl_js_group_target, option);
@@ -141,3 +136,7 @@ void
   /* 往往统一在 _setsrc() 中实现，直接调用即可 */
   // <category>_<target>_setsrc (option);
 }
+
+
+// 最后，请将自己的文件加入到 menu.c 和 chsrc-main.c 对应的位置
+// 形式可以参考其附近的其他食谱

@@ -7,20 +7,15 @@ def_target(os_fedora, "fedora");
 void
 os_fedora_prelude ()
 {
-  use_this(os_fedora);
-  chef_allow_sr(os_fedora);
+  chef_prep_this (os_fedora, sr);
 
   chef_set_created_on   (this, "2023-09-26");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2025-06-20");
 
-  chef_set_authors (this, 2,
-    "Heng Guo", "2085471348@qq.com",
-    "happy game", "happygame1024@gmail.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 1, "happy game", "happygame1024@gmail.com");
-  chef_set_contributors (this, 1,
-    "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, "@happy-game");
+  chef_set_cooks (this, 2, "@G_I_Y", "@happy-game");
+  chef_set_sauciers (this, 1, "@ccmywish");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -55,7 +50,7 @@ os_fedora_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_fedora);
+  chsrc_use_this_source (os_fedora);
 
   chsrc_alert2 ("Fedora 38 及以下版本暂不支持");
 
@@ -63,7 +58,7 @@ os_fedora_setsrc (char *option)
   chsrc_backup ("/etc/yum.repos.d/fedora-updates.repo");
 
   // 取消对 baseurl 的注释
-  char* cmd = xy_strjoin (5, "sed ",
+  char* cmd = xy_strcat (5, "sed ",
          "-i 's|^#baseurl=|baseurl=",
          "|g' ",
          "/etc/yum.repos.d/fedora.repo ",
@@ -73,7 +68,7 @@ os_fedora_setsrc (char *option)
   // 替换
   // (1) baseurl=<<URL>>/releases/...
   // (2) baseurl=<<URL>>/updates/...
-  cmd = xy_strjoin (7, "sed ",
+  cmd = xy_strcat (7, "sed ",
          "-i -E 's!^baseurl=.*?/(releases|updates)/!baseurl=",
          source.url,
          "/\\1/",

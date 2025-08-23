@@ -2,10 +2,10 @@
  ! SPDX-License-Identifier: GPL-3.0-or-later
  ! -------------------------------------------------------------
  ! Config Type   : rawstr4c (Markdown)
- ! Config Authors: Aoran Zeng <ccmywish@qq.com>
- ! Contributors  :  Nil Null  <nil@null.org>
+ ! Config Authors: 曾奥然 <ccmywish@qq.com>
+ ! Contributors  : Nil Null <nil@null.org>
  ! Created On    : <2025-07-22>
- ! Last Modified : <2025-08-09>
+ ! Last Modified : <2025-08-22>
  ! ---------------------------------------------------------- -->
 
 # [rawstr4c] input for chsrc
@@ -72,7 +72,7 @@
    邀请您担任  Chef, 为用户把关您熟悉的 recipe
 
    源代码地址: https://github.com/RubyMetric/chsrc
-   成为维护者: https://github.com/RubyMetric/chsrc/issues/130
+   成为维护者: https://github.com/RubyMetric/chsrc/issues/275
 ```
 
 <br>
@@ -123,7 +123,7 @@ MAINTAIN:
    We invite you to become a Chef to ensure the quality of recipes you are familiar with for users:
 
    Source Code:               @url@
-   Become a Maintainer:       https://github.com/RubyMetric/chsrc/issues/130
+   Become a Maintainer:       https://github.com/RubyMetric/chsrc/issues/275
 ```
 
 <br>
@@ -189,7 +189,7 @@ Written by Aoran Zeng, Heng Guo and contributors. (See chsrc-main.c)
 
 ## 最后告诉用户一些维护信息
 
-- name = `last_message`
+- name = `op_epilogue`
 
 ```
 

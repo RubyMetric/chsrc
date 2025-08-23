@@ -9,18 +9,15 @@ def_target(wr_tex, "latex/ctan/tex/texlive/miktex/tlmgr/mpm");
 void
 wr_tex_prelude ()
 {
-  use_this(wr_tex);
-  chef_allow_gs(wr_tex);
+  chef_prep_this (wr_tex, gs);
 
   chef_set_created_on   (this, "2023-09-10");
   chef_set_last_updated (this, "2025-08-09");
   chef_set_sources_last_updated (this, "2025-07-28");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "Mikachu2333", "mikachu.23333@zohomail.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 1, "@Mikachu2333");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -85,20 +82,20 @@ wr_tex_setsrc (char *option)
   bool tlmgr_exist, mpm_exist;
   wr_tex_check_cmd (&tlmgr_exist, &mpm_exist);
 
-  use_this_source(wr_tex);
+  chsrc_use_this_source (wr_tex);
 
   char *cmd = NULL;
 
   if (tlmgr_exist)
     {
-      cmd = xy_2strjoin ("tlmgr option repository ", source.url);
+      cmd = xy_2strcat ("tlmgr option repository ", source.url);
       chsrc_run (cmd, RunOpt_Default);
     }
 
   if (mpm_exist)
     {
-      char *miktex_url = xy_2strjoin (xy_str_delete_suffix (source.url, "texlive/tlnet"), "win32/miktex/tm/packages/");
-      cmd = xy_2strjoin ("mpm --set-repository=", miktex_url);
+      char *miktex_url = xy_2strcat (xy_str_delete_suffix (source.url, "texlive/tlnet"), "win32/miktex/tm/packages/");
+      cmd = xy_2strcat ("mpm --set-repository=", miktex_url);
       chsrc_run (cmd, RunOpt_Default);
     }
 

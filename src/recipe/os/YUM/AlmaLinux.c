@@ -7,18 +7,15 @@ def_target(os_almalinux, "alma/almalinux");
 void
 os_almalinux_prelude ()
 {
-  use_this(os_almalinux);
-  chef_allow_s(os_almalinux);
+  chef_prep_this (os_almalinux, s);
 
   chef_set_created_on   (this, "2024-06-12");
   chef_set_last_updated (this, "2025-08-10");
-  chef_set_sources_last_updated (this, "2024-12-18");
+  chef_set_sources_last_updated (this, "2025-08-22");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "Yangmoooo", "yangmoooo@outlook.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 1, "@Yangmoooo");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -27,7 +24,7 @@ os_almalinux_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&UpstreamProvider, "http://repo.almalinux.org/almalinux", FeedByPrelude},
+  {&UpstreamProvider, "http://repo.almalinux.org/almalinux",  DelegateToUpstream},
   {&Ali,              "https://mirrors.aliyun.com/almalinux", FeedByPrelude},
   {&Volcengine,       "https://mirrors.volces.com/almalinux", FeedByPrelude},
   {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/almalinux", FeedByPrelude},
@@ -35,7 +32,10 @@ os_almalinux_prelude ()
   {&Nju,              "https://mirror.nju.edu.cn/almalinux",         FeedByPrelude}
   def_sources_end()
 
-  chef_set_provider_speed_measure_url (&UpstreamProvider, "https://raw.repo.almalinux.org/almalinux/9.5/isos/x86_64/AlmaLinux-9-latest-x86_64-minimal.iso");
+#define link "/9.6/isos/x86_64/AlmaLinux-9-latest-x86_64-minimal.iso"
+  chef_set_sources_speed_measure_url_with_postfix (this, link);
+  chef_set_provider_speed_measure_url (&UpstreamProvider, "https://raw.repo.almalinux.org/almalinux" link);
+#undef link
 }
 
 /**
@@ -46,9 +46,9 @@ os_almalinux_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_almalinux);
+  chsrc_use_this_source (os_almalinux);
 
-  char *cmd = xy_strjoin (3,
+  char *cmd = xy_strcat (3,
     "sed -e 's|^mirrorlist=|#mirrorlist=|g' -e 's|^#\\s*baseurl=https://repo.almalinux.org/almalinux|baseurl=", source.url, "|g'  -i.bak  /etc/yum.repos.d/almalinux*.repo");
 
   chsrc_run (cmd, RunOpt_Default);

@@ -7,18 +7,15 @@ def_target(wr_flatpak, "flatpak/flathub");
 void
 wr_flatpak_prelude ()
 {
-  use_this(wr_flatpak);
-  chef_allow_gsr(wr_flatpak);
+  chef_prep_this (wr_flatpak, gsr);
 
   chef_set_created_on   (this, "2023-09-11");
   chef_set_last_updated (this, "2025-08-09");
   chef_set_sources_last_updated (this, "2025-05-27");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "Jialin Lyu", "jialinlvcn@aliyun.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 1, "@jialinlvcn");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -66,10 +63,10 @@ wr_flatpak_getsrc (char *option)
 void
 wr_flatpak_setsrc (char *option)
 {
-  use_this_source(wr_flatpak);
+  chsrc_use_this_source (wr_flatpak);
 
   chsrc_alert2 ("若出现问题，可先调用以下命令:");
-  char *note = xy_strjoin (3,
+  char *note = xy_strcat (3,
     "wget ", source.url, "/flathub.gpg\n"
     "flatpak remote-modify --gpg-import=flathub.gpg flathub"
   );
@@ -80,7 +77,7 @@ wr_flatpak_setsrc (char *option)
     "尝试运行 flatpak remote-modify flathub --url=https://flathub.org/repo";
   say (repo_note);
 
-  char *cmd = xy_2strjoin ("flatpak remote-modify flathub --url=", source.url);
+  char *cmd = xy_2strcat ("flatpak remote-modify flathub --url=", source.url);
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_determine_chgtype (ChgType_Auto);

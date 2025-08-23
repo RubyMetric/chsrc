@@ -7,18 +7,15 @@ def_target(os_linuxmint, "linuxmint");
 void
 os_linuxmint_prelude ()
 {
-  use_this(os_linuxmint);
-  chef_allow_gs(os_linuxmint);
+  chef_prep_this (os_linuxmint, gs);
 
   chef_set_created_on   (this, "2023-09-29");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2024-11-21");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "Happy Game", "happygame1024@gmail.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 1, "@happy-game");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -61,7 +58,7 @@ os_linuxmint_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_linuxmint);
+  chsrc_use_this_source (os_linuxmint);
 
   chsrc_backup (OS_LinuxMint_SourceList);
 
@@ -69,7 +66,7 @@ os_linuxmint_setsrc (char *option)
   // 暂不实现自动替换基于debian或ubuntu的基础源
   char *version_codename = xy_run ("sed -nr 's/^VERSION_CODENAME=([^\"]+)/\1/p' " ETC_OS_RELEASE, 0);
   // sed -i '/<version_codename>/ s|http[^ ]*|<source.url>|g' OS_LinuxMint_SourceList
-  char* cmd = xy_strjoin (5, "sed -i '/",
+  char* cmd = xy_strcat (5, "sed -i '/",
                           version_codename, "/ s|http[^ ]*|",
                           source.url, "|g' "  OS_LinuxMint_SourceList);
 

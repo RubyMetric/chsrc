@@ -7,27 +7,21 @@ def_target(pl_python_uv, "uv");
 void
 pl_python_uv_prelude (void)
 {
-  use_this(pl_python_uv);
-  chef_allow_gsr(pl_python_uv);
+  chef_prep_this (pl_python_uv, gsr);
 
   chef_set_created_on   (this, "2024-12-11");
   chef_set_last_updated (this, "2025-08-09");
   chef_set_sources_last_updated (this, "2025-08-09");
 
-  chef_set_authors (this, 1, "happy game", "happygame1024@gmail.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 2,
-    "ccy", "icuichengyi@gmail.com",
-    "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@happy-game");
+  chef_set_sauciers (this, 2, "@Kattos", "@ccmywish");
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);
   chef_allow_user_define(this);
 
-  // 使用 pl_python_group 的源
-  this->sources = pl_python_group_target.sources;
-  this->sources_n = pl_python_group_target.sources_n;
+  chef_use_other_target_sources (this, &pl_python_group_target);
 }
 
 
@@ -51,7 +45,7 @@ pl_python_find_uv_config (bool mkdir)
 {
   if (chsrc_in_local_mode())
     {
-      return xy_2strjoin (PL_Python_uv_Local_ConfigPath, PL_Python_uv_ConfigFile);
+      return xy_2strcat (PL_Python_uv_Local_ConfigPath, PL_Python_uv_ConfigFile);
     }
   else
     {
@@ -66,12 +60,12 @@ pl_python_find_uv_config (bool mkdir)
               return NULL;
             }
 
-          char *config_dir = xy_2strjoin(appdata, "\\uv\\");
+          char *config_dir = xy_2strcat(appdata, "\\uv\\");
           if (mkdir)
             {
               chsrc_ensure_dir (config_dir);
             }
-          return xy_2strjoin (config_dir, PL_Python_uv_ConfigFile);
+          return xy_2strcat (config_dir, PL_Python_uv_ConfigFile);
         }
       else
         {
@@ -80,7 +74,7 @@ pl_python_find_uv_config (bool mkdir)
             {
               chsrc_ensure_dir (PL_Python_uv_User_ConfigPath);
             }
-          return xy_2strjoin (PL_Python_uv_User_ConfigPath, PL_Python_uv_ConfigFile);
+          return xy_2strcat (PL_Python_uv_User_ConfigPath, PL_Python_uv_ConfigFile);
         }
     }
 }
@@ -125,7 +119,7 @@ pl_python_uv_setsrc (char *option)
 
   const char *source_content = xy_str_gsub (RAWSTR_pl_python_uv_config_source_content, "@url@", source.url);
 
-#if defined(XY_On_macOS) || defined(XY_On_BSD)
+#if defined(XY_Build_On_macOS) || defined(XY_Build_On_BSD)
   char *sed_cmd = "sed -i '' ";
 #else
   char *sed_cmd = "sed -i ";

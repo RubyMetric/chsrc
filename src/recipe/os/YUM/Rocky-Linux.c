@@ -7,18 +7,15 @@ def_target(os_rockylinux, "rocky/rockylinux");
 void
 os_rockylinux_prelude ()
 {
-  use_this(os_rockylinux);
-  chef_allow_sr(os_rockylinux);
+  chef_prep_this (os_rockylinux, sr);
 
   chef_set_created_on   (this, "2023-09-24");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2025-06-20");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "happy game", "happygame1024@gmail.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 1, "@happy-game");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -49,7 +46,7 @@ os_rockylinux_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_rockylinux);
+  chsrc_use_this_source (os_rockylinux);
 
   char *version_str = xy_run ("sed -nr 's/ROCKY_SUPPORT_PRODUCT_VERSION=\"(.*)\"/\\1/p' " ETC_OS_RELEASE, 0);
   double version = atof (version_str);
@@ -58,7 +55,7 @@ os_rockylinux_setsrc (char *option)
 
   if (version < 9)
     {
-      cmd = xy_strjoin (3,
+      cmd = xy_strcat (3,
                       "sed -e 's|^mirrorlist=|#mirrorlist=|g' "
                       "-e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=", source.url, "|g' "
                       "-i.bak /etc/yum.repos.d/Rocky-*.repo"
@@ -70,7 +67,7 @@ os_rockylinux_setsrc (char *option)
     }
   else
     {
-      cmd = xy_strjoin (3,
+      cmd = xy_strcat (3,
                       "sed -e 's|^mirrorlist=|#mirrorlist=|g' "
                       "-e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=", source.url, "|g' "
                       "-i.bak /etc/yum.repos.d/rocky-extras.repo /etc/yum.repos.d/rocky.repo"

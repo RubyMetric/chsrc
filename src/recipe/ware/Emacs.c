@@ -14,17 +14,15 @@ def_target(wr_emacs, "emacs/elpa");
 void
 wr_emacs_prelude ()
 {
-  use_this(wr_emacs);
-  chef_allow_s(wr_emacs);
+  chef_prep_this (wr_emacs, s);
 
   chef_set_created_on   (this, "2023-10-10");
   chef_set_last_updated (this, "2025-08-09");
   chef_set_sources_last_updated (this, "2025-07-13");
 
-  chef_set_authors (this, 1, "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -49,7 +47,7 @@ wr_emacs_prelude ()
 void
 wr_emacs_setsrc (char *option)
 {
-  use_this_source(wr_emacs);
+  chsrc_use_this_source (wr_emacs);
 
   chsrc_note2 ("Emacs换源涉及Elisp, 需要手动查阅并换源:");
   p (source.url);

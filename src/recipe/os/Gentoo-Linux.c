@@ -7,18 +7,15 @@ def_target(os_gentoo, "gentoo");
 void
 os_gentoo_prelude ()
 {
-  use_this(os_gentoo);
-  chef_allow_s(os_gentoo);
+  chef_prep_this (os_gentoo, s);
 
   chef_set_created_on   (this, "2023-09-05");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2025-06-20");
 
-  chef_set_authors (this, 1, "Heng Guo", "2085471348@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "Aoran Zeng", "ccmywish@qq.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@G_I_Y");
+  chef_set_sauciers (this, 1, "@ccmywish");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);
@@ -45,16 +42,16 @@ os_gentoo_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_gentoo);
+  chsrc_use_this_source (os_gentoo);
 
   chsrc_backup ("/etc/portage/repos.conf/gentoo.conf");
 
-  char *cmd = xy_strjoin (3, "sed -i \"s#rsync://.*/gentoo-portage#rsync://",
+  char *cmd = xy_strcat (3, "sed -i \"s#rsync://.*/gentoo-portage#rsync://",
                              source.url,
                             "gentoo-portage#g");
   chsrc_run (cmd, RunOpt_Default);
 
-  char *w = xy_strjoin (3, "GENTOO_MIRRORS=\"https://", source.url, "gentoo\"\n");
+  char *w = xy_strcat (3, "GENTOO_MIRRORS=\"https://", source.url, "gentoo\"\n");
 
   chsrc_append_to_file (w, "/etc/portage/make.conf");
 

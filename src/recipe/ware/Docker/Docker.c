@@ -24,19 +24,15 @@ def_target(wr_docker, "docker/dockerhub");
 void
 wr_docker_prelude ()
 {
-  use_this(wr_docker);
-  chef_allow_gs(wr_docker);
+  chef_prep_this (wr_docker, gs);
 
   chef_set_created_on   (this, "2024-06-08");
   chef_set_last_updated (this, "2025-08-09");
   chef_set_sources_last_updated (this, "2025-07-14");
 
-  chef_set_authors (this, 2,
-    "happy game", "happygame1024@gmail.com",
-    "Aoran Zeng", "ccmywish@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 1, "happy game", "happygame1024@gmail.com");
-  chef_set_contributors (this, 0);
+  chef_set_chef (this, "@happy-game");
+  chef_set_cooks (this, 2, "@happy-game", "@ccmywish");
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -75,7 +71,7 @@ wr_docker_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(wr_docker);
+  chsrc_use_this_source (wr_docker);
 
   if (xy_on_linux || xy_on_bsd)
     {
@@ -118,7 +114,7 @@ wr_docker_setsrc (char *option)
           /* 不存在 /etc/docker/daemon.json 时可以直接写入文件 */
           chsrc_alert2 ("未找到Docker配置文件, 将自动创建");
           chsrc_ensure_dir ("/etc/docker");
-          chsrc_run ( xy_2strjoin ("touch ", WR_Docker_ConfigFile), RunOpt_Default);
+          chsrc_run ( xy_2strcat ("touch ", WR_Docker_ConfigFile), RunOpt_Default);
 
           chsrc_append_to_file (to_add, WR_Docker_ConfigFile);
         }

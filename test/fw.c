@@ -62,7 +62,7 @@ main (int argc, char const *argv[])
   chsrc_overwrite_file  ("overwrite", bkup);
   chsrc_view_file (bkup);
 
-  chsrc_log (xy_2strjoin ("CPU arch = ", chsrc_get_cpuarch ()));
+  chsrc_log (xy_2strcat ("CPU arch = ", chsrc_get_cpuarch ()));
   print ("chsrc: CPU cores = ");
   println (chsrc_get_cpucore ());
 

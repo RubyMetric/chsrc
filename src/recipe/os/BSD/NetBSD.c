@@ -7,17 +7,15 @@ def_target(os_netbsd, "netbsd");
 void
 os_netbsd_prelude ()
 {
-  use_this(os_netbsd);
-  chef_allow_gs(os_netbsd);
+  chef_prep_this (os_netbsd, gs);
 
   chef_set_created_on   (this, "2023-09-05");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2025-07-31");
 
-  chef_set_authors (this, 2, "Aoran Zeng", "ccmywish@qq.com", "Heng Guo", "2085471348@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 0);
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
+  chef_set_sauciers (this, 0);
 
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
@@ -60,7 +58,7 @@ os_netbsd_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_netbsd);
+  chsrc_use_this_source (os_netbsd);
 
   chsrc_backup ("/usr/pkg/etc/pkgin/repositories.conf");
 
@@ -68,7 +66,7 @@ os_netbsd_setsrc (char *option)
   char *vercmd  = "cat /etc/os-release | grep \"VERSION=\" | grep -Po \"[8-9].[0-9]+\"";
   char *version = xy_run (vercmd, 0);
 
-  char *url = xy_strjoin (5, chef_ensure_trailing_slash (source.url), arch, "/", version, "/All");
+  char *url = xy_strcat (5, chef_ensure_trailing_slash (source.url), arch, "/", version, "/All");
   chsrc_overwrite_file (url, "/usr/pkg/etc/pkgin/repositories.conf");
 
   chsrc_conclude (&source);

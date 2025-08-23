@@ -10,19 +10,15 @@ def_target(os_arch, "arch/archlinux");
 void
 os_arch_prelude ()
 {
-  use_this(os_arch);
-  chef_allow_gs(os_arch);
+  chef_prep_this (os_arch, gs);
 
   chef_set_created_on   (this, "2023-09-05");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2025-06-20");
 
-  chef_set_authors (this, 2, "Aoran Zeng", "ccmywish@qq.com",
-                             "Heng Guo",   "2085471348@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 1, "happy game", "happygame1024@gmail.com");
-  chef_set_contributors (this, 1,
-    "happy game", "happygame1024@gmail.com");
+  chef_set_chef (this, "@happy-game");
+  chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
+  chef_set_sauciers (this, 1, "@happy-game");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -70,7 +66,7 @@ os_arch_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_arch);
+  chsrc_use_this_source (os_arch);
 
   chsrc_backup (OS_Pacman_MirrorList);
 
@@ -81,12 +77,12 @@ os_arch_setsrc (char *option)
   if (strncmp(arch, "x86_64", 6)==0)
     {
       is_x86 = true;
-      to_write = xy_strjoin (3, "Server = ", source.url, "/$repo/os/$arch");
+      to_write = xy_strcat (3, "Server = ", source.url, "/$repo/os/$arch");
     }
   else
     {
       is_x86 = false;
-      to_write = xy_strjoin (3, "Server = ", source.url, "arm/$arch/$repo");
+      to_write = xy_strcat (3, "Server = ", source.url, "arm/$arch/$repo");
     }
 
   /* 配置文件中，越前面的优先级越高 */
@@ -116,18 +112,15 @@ def_target(os_archlinuxcn, "archlinuxcn/archcn");
 void
 os_archlinuxcn_prelude ()
 {
-  use_this(os_archlinuxcn);
-  chef_allow_gs(os_archlinuxcn);
+  chef_prep_this (os_archlinuxcn, gs);
 
   chef_set_created_on   (this, "2023-09-05");
   chef_set_last_updated (this, "2025-08-10");
   chef_set_sources_last_updated (this, "2024-07-03");
 
-  chef_set_authors (this, 2, "Aoran Zeng", "ccmywish@qq.com", "Heng Guo", "2085471348@qq.com");
-  chef_set_chef (this, NULL, NULL);
-  chef_set_cooks (this, 0);
-  chef_set_contributors (this, 1,
-    "happy game", "happygame1024@gmail.com");
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
+  chef_set_sauciers (this, 1, "@happy-game");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -169,7 +162,7 @@ os_archlinuxcn_setsrc (char *option)
 {
   chsrc_ensure_root ();
 
-  use_this_source(os_archlinuxcn);
+  chsrc_use_this_source (os_archlinuxcn);
 
   chsrc_backup (OS_Pacman_ArchLinuxCN_MirrorList);
 
@@ -181,13 +174,13 @@ os_archlinuxcn_setsrc (char *option)
 
   if (ret == 0)
     {
-      char *sed_cmd = xy_strjoin (4, "sed -i '/\\[archlinuxcn\\]/{n;s|^Server = .*|Server = ",
+      char *sed_cmd = xy_strcat (4, "sed -i '/\\[archlinuxcn\\]/{n;s|^Server = .*|Server = ",
                                   source.url, "$arch|;}' ", OS_Pacman_ArchLinuxCN_MirrorList);
       chsrc_run (sed_cmd, RunOpt_Default);
     }
   else
     {
-      char *archlinuxcn_config = xy_strjoin (3, "\n[archlinuxcn]\nServer = ", source.url, "$arch\n");
+      char *archlinuxcn_config = xy_strcat (3, "\n[archlinuxcn]\nServer = ", source.url, "$arch\n");
       chsrc_append_to_file (archlinuxcn_config, OS_Pacman_ArchLinuxCN_MirrorList);
     }
 
