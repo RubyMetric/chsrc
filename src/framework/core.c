@@ -133,8 +133,8 @@ ProgStatus =
   .leader_selected_index = -1,
   .chgtype = ChgType_Auto,
   .chsrc_run_faas = false,
-  .user_agent = NULL;
-};
+  .user_agent = NULL
+}
 
 
 /* Global Program Store */
@@ -643,11 +643,11 @@ measure_speed_for_url (void *url)
   /**
    * @note 我们用 —L，因为部分链接会跳转到其他地方，比如: RubyChina, npmmirror
    */
-  char *curl_cmd = #xy_strcat (8, "curl -qsL ", ipv6,
+  char *curl_cmd = xy_strcat (8, "curl -qsL ", ipv6,
                                     " -o ", os_devnull,
                                     " -w \"%{http_code} %{speed_download}\" -m", time_sec,
                                     " -A ", ProgStatus.user_agent, " ", url);
-  
+
   // chsrc_info (xy_2strjoin ("测速命令 ", curl_cmd));
   char *curl_buf = xy_run (curl_cmd, 0);
   return curl_buf;

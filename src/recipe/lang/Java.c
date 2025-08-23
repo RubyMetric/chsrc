@@ -72,7 +72,7 @@ pl_java_find_maven_config ()
   {
     char *maven_home_line = xy_run_iter ("mvn -v", 0, pl_java_find_maven_home);
     char *maven_home = xy_str_delete_prefix (maven_home_line, "Maven home: ");
-    char *maven_config = xy_normalize_path (xy_2strjoin (maven_home, "/conf/settings.xml"));
+    char *maven_config = xy_normalize_path (xy_2strcat (maven_home, "/conf/settings.xml"));
     return maven_config;
   }
   else
@@ -91,7 +91,7 @@ pl_java_find_maven_daemon_config ()
   {
      char *maven_home_line = xy_run_iter ("mvnd -v", 0, pl_java_find_maven_home);
      char *maven_home = xy_str_delete_prefix (maven_home_line, "Maven home: ");
-     char *maven_config = xy_normalize_path (xy_2strjoin (maven_home, "/conf/settings.xml"));
+     char *maven_config = xy_normalize_path (xy_2strcat (maven_home, "/conf/settings.xml"));
      return maven_config;
   }
   else
@@ -110,12 +110,12 @@ pl_java_getsrc (char *option)
   if (maven_exist)
   {
     char *maven_config = pl_java_find_maven_config ();
-    chsrc_note2 (xy_2strcat ("请查看 ", maven_config));
+    chsrc_note2 (xy_strcat ("请查看 ", maven_config));
   }
   if(maven_daemon_exist)
   {
     char *maven_config = pl_java_find_maven_daemon_config ();
-    chsrc_note2 (xy_2strcat ("请查看 ", maven_config));
+    chsrc_note2 (xy_strcat ("请查看 ", maven_config));
   }
 }
 
@@ -151,7 +151,7 @@ pl_java_setsrc (char *option)
               file = xy_str_gsub (file, "@name@", source.mirror->name);
               file = xy_str_gsub (file, "@url@", source.url);
       char *maven_config = pl_java_find_maven_daemon_config ();
-      chsrc_note2 (xy_strjoin (3, "请在 maven 配置文件 ", maven_config, " 中添加:"));
+      chsrc_note2 (xy_strcat (3, "请在 maven 配置文件 ", maven_config, " 中添加:"));
       println (file);
     }
 
