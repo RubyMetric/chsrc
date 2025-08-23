@@ -696,7 +696,7 @@ _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *c
  * 由于目标行会被返回出来，所以 iter_func() 并不执行目标行，只会执行遍历过的行
  */
 static char *
-xy_run_iter (const char *cmd,  unsigned long n,  void (*iter_func) (const char *))
+xy_run_iter (const char *cmd,  unsigned long n,  bool (*iter_func) (const char *))
 {
   const int size = 512;
   char *buf = (char *) malloc (size);
@@ -722,7 +722,10 @@ xy_run_iter (const char *cmd,  unsigned long n,  void (*iter_func) (const char *
         break;
       if (iter_func)
         {
-          iter_func (buf);
+           if (iter_func (buf)) {
+             pclose (stream);
+             return ret;
+           }
         }
     }
 

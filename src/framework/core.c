@@ -80,7 +80,6 @@ bool chsrc_in_no_color_mode(){return ProgMode.NoColorMode;}
 static bool in_measure_mode(){return ProgMode.MeasureMode;}
 static bool in_ipv6_mode(){return ProgMode.Ipv6Mode;}
 static bool in_dry_run_mode(){return ProgMode.DryRunMode;}
-static bool in_custom_user_agent_mode(){return false;}
 
 /**
  * Target Group mode (相反则称为 standalone mode)
@@ -132,7 +131,8 @@ ProgStatus =
 {
   .leader_selected_index = -1,
   .chgtype = ChgType_Auto,
-  .chsrc_run_faas = false
+  .chsrc_run_faas = false,
+  .user_agent = user_agent
 };
 
 
@@ -603,15 +603,6 @@ measure_speed_for_url (void *url)
       ipv6 = "--ipv6";
     }
 
-  char *user_agent = NULL;
-  if (in_custom_user_agent_mode())
-    {
-      user_agent = strdup("maven/3.9.11");
-    }
-  else
-    {
-      user_agent = xy_2strjoin("chsrc/", Chsrc_Version);
-    }
   char *os_devnull = xy_os_devnull;
 
   /**
@@ -620,11 +611,10 @@ measure_speed_for_url (void *url)
   char *curl_cmd = xy_strjoin (10, "curl -qsL ", ipv6,
                                     " -o ", os_devnull,
                                     " -w \"%{http_code} %{speed_download}\" -m", time_sec,
-                                    " -A ", user_agent, " ", url);
+                                    " -A ", ProgStatus.user_agent, " ", url);
 
   // chsrc_info (xy_2strjoin ("测速命令 ", curl_cmd));
   char *curl_buf = xy_run (curl_cmd, 0);
-  free(user_agent);
   return curl_buf;
 }
 
@@ -1077,7 +1067,11 @@ chsrc_determine_chgtype (ChgType_t type)
   ProgStatus.chgtype =  chsrc_in_reset_mode() ? ChgType_Reset : type;
 }
 
-
+void
+chsrc_custom_user_agent (*char user_agent)
+{
+  ProgStatus.user_agent = user_agent;
+}
 
 #define MSG_EN_PUBLIC_URL "If the URL you specify is a public service, you are invited to contribute: chsrc issue"
 #define MSG_CN_PUBLIC_URL "若您指定的URL为公有服务，邀您参与贡献: chsrc issue"
