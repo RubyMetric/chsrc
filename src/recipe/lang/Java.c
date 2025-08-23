@@ -69,20 +69,40 @@ pl_java_find_maven_home (const char *line)
 char *
 pl_java_find_maven_config ()
 {
-  char *maven_home_line = xy_run_iter ("mvn -v", 0, pl_java_find_maven_home);
-  char *maven_home = xy_str_delete_prefix (maven_home_line, "Maven home: ");
-  char *maven_config = xy_normalize_path (xy_2strjoin (maven_home, "/conf/settings.xml"));
-  return maven_config;
+  char *output;
+  int status = xy_run_capture ("mvn -v", &output);
+  if (0==status)
+  {
+    char *maven_home_line = xy_run_iter ("mvn -v", 0, pl_java_find_maven_home);
+    char *maven_home = xy_str_delete_prefix (maven_home_line, "Maven home: ");
+    char *maven_config = xy_normalize_path (xy_2strjoin (maven_home, "/conf/settings.xml"));
+    return maven_config;
+  }
+  else
+  {
+    printf("no maven home");
+  }
+  return "~/.m2/settings.xml";
 }
 
 
 char *
 pl_java_find_maven_daemon_config ()
 {
-  char *maven_home_line = xy_run_iter ("mvnd -v", 0, pl_java_find_maven_home);
-  char *maven_home = xy_str_delete_prefix (maven_home_line, "Maven home: ");
-  char *maven_config = xy_normalize_path (xy_2strjoin (maven_home, "/conf/settings.xml"));
-  return maven_config;
+  char *output;
+  int status = xy_run_capture ("mvnd -v", &output);
+  if (0==status)
+  {
+     char *maven_home_line = xy_run_iter ("mvnd -v", 0, pl_java_find_maven_home);
+     char *maven_home = xy_str_delete_prefix (maven_home_line, "Maven home: ");
+     char *maven_config = xy_normalize_path (xy_2strjoin (maven_home, "/conf/settings.xml"));
+     return maven_config;
+  }
+  else
+  {
+    printf ("no maven home");
+  }
+  return "~/.m2/settings.xml";
 }
 
 
