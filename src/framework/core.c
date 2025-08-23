@@ -126,13 +126,14 @@ struct
 
   /* 此时 chsrc_run() 不再是recipe中指定要运行的一个外部命令，而是作为一个功能实现的支撑 */
   bool chsrc_run_faas;
+  char *user_agent;
 }
 ProgStatus =
 {
   .leader_selected_index = -1,
   .chgtype = ChgType_Auto,
   .chsrc_run_faas = false,
-  .user_agent = user_agent
+  .user_agent = NULL;
 };
 
 
@@ -1068,7 +1069,7 @@ chsrc_determine_chgtype (ChgType_t type)
 }
 
 void
-chsrc_custom_user_agent (*char user_agent)
+chsrc_custom_user_agent (char *user_agent)
 {
   ProgStatus.user_agent = user_agent;
 }

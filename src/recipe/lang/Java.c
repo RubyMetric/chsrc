@@ -105,7 +105,7 @@ pl_java_getsrc (char *option)
 
 
 void use_custom_user_agent() {
-  chsrc_custom_user_agent("Maven/3.9.11")
+  chsrc_custom_user_agent("Maven/3.9.11");
 }
 
 /**
