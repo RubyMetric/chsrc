@@ -38,7 +38,7 @@ pl_java_check_cmd (bool *maven_exist, bool *gradle_exist, bool *maven_daemon_exi
 {
   *maven_exist  = chsrc_check_program ("mvn");
   *gradle_exist = chsrc_check_program ("gradle");
-  *gradle_exist = chsrc_check_program ("mvnd");
+  *maven_daemon_exist = chsrc_check_program ("mvnd");
 
   if (! *maven_exist && ! *gradle_exist && ! *maven_daemon_exist)
     {
@@ -77,7 +77,7 @@ pl_java_find_maven_config ()
   }
   else
   {
-    printf("no maven home");
+    printf("no find maven home\n");
   }
   return "~/.m2/settings.xml";
 }
@@ -96,7 +96,7 @@ pl_java_find_maven_daemon_config ()
   }
   else
   {
-    printf ("no maven home");
+    printf ("no find maven home\n");
   }
   return "~/.m2/settings.xml";
 }
