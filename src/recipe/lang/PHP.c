@@ -11,11 +11,11 @@ pl_php_prelude ()
 
   chef_set_created_on   (this, "2023-08-30");
   chef_set_last_updated (this, "2025-08-10");
-  chef_set_sources_last_updated (this, "2024-09-14");
+  chef_set_sources_last_updated (this, "2025-08-24");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_sauciers (this, 0);
+  chef_set_sauciers (this, 1, "@hezonglun");
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_forbid_english(this);
