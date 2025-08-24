@@ -81,6 +81,7 @@ static bool in_measure_mode(){return ProgMode.MeasureMode;}
 static bool in_ipv6_mode(){return ProgMode.Ipv6Mode;}
 static bool in_dry_run_mode(){return ProgMode.DryRunMode;}
 
+
 /**
  * Target Group mode (相反则称为 standalone mode)
  *
@@ -133,8 +134,8 @@ ProgStatus =
   .leader_selected_index = -1,
   .chgtype = ChgType_Auto,
   .chsrc_run_faas = false,
-  .user_agent = NULL
-}
+  .user_agent = NULL,
+};
 
 
 /* Global Program Store */
