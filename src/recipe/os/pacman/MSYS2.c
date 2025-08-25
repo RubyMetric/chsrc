@@ -22,7 +22,7 @@ os_msys2_prelude ()
   chef_forbid_user_define(this);
 
   def_sources_begin()
-  {&UpstreamProvider,  NULL,                               DelegateToUpstream},
+  {&UpstreamProvider, "https://mirror.msys2.org/",                               DelegateToUpstream},
   {&Ali,              "https://mirrors.aliyun.com/msys2",  DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/msys2", DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/msys2", DelegateToMirror},
