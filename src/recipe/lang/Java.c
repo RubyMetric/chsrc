@@ -4,6 +4,11 @@
 
 def_target(pl_java, "java/maven/mvn/maven-daemon/mvnd/gradle");
 
+
+void use_custom_user_agent() {
+  chsrc_custom_user_agent("Maven/3.9.11");
+}
+
 void
 pl_java_prelude ()
 {
@@ -20,10 +25,11 @@ pl_java_prelude ()
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
   chef_allow_user_define(this);
+  use_custom_user_agent();
 
   def_sources_begin()
   {&UpstreamProvider, "https://repo1.maven.org/maven2/",                                  DelegateToUpstream},
-  {&Ali,              "https://maven.aliyun.com/repository/public/",                      DelegateToMirror},
+  {&Ali,              "https://maven.aliyun.com/repository/public/",                      "https://maven.aliyun.com/repository/public/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"},
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/maven/",                "https://mirrors.huaweicloud.com/repository/maven/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"},
   {&HuaweiCdn,        "https://repo.huaweicloud.com/repository/maven/",                   "https://repo.huaweicloud.com/repository/maven/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"},
   {&Tencent,          "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/", "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"},
@@ -120,9 +126,6 @@ pl_java_getsrc (char *option)
 }
 
 
-void use_custom_user_agent() {
-  chsrc_custom_user_agent("Maven/3.9.11");
-}
 
 /**
  * @consult https://developer.aliyun.com/mirror/maven
