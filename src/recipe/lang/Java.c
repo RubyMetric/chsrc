@@ -132,7 +132,6 @@ pl_java_setsrc (char *option)
   pl_java_check_cmd (&maven_exist, &gradle_exist, &maven_daemon_exist);
 
   chsrc_use_this_source(pl_java);
-  use_custom_user_agent();
   if (maven_exist)
     {
       char *file = xy_str_gsub (RAWSTR_pl_java_maven_config, "@1@", source.mirror->code);
