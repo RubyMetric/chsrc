@@ -134,7 +134,7 @@ ProgStatus =
   .leader_selected_index = -1,
   .chgtype = ChgType_Auto,
   .chsrc_run_faas = false,
-  .user_agent = "chsrc",
+  .user_agent = "chsrc/" Chsrc_Version,
 };
 
 
