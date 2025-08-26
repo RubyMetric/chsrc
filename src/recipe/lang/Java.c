@@ -4,11 +4,6 @@
 
 def_target(pl_java, "java/maven/mvn/maven-daemon/mvnd/gradle");
 
-
-void use_custom_user_agent() {
-  chsrc_custom_user_agent("Maven/3.9.11");
-}
-
 void
 pl_java_prelude ()
 {
@@ -25,7 +20,7 @@ pl_java_prelude ()
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
   chef_allow_user_define(this);
-  use_custom_user_agent();
+  chsrc_custom_user_agent("Maven/3.9.11");
 
   def_sources_begin()
   {&UpstreamProvider, "https://repo1.maven.org/maven2/",                                  DelegateToUpstream},
