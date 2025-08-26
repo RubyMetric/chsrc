@@ -5,7 +5,7 @@
  * Test Authors  : 曾奥然 <ccmywish@qq.com>
  * Contributors  : Mikachu2333  <mikachu.23333@zohomail.com>
  * Created On    : <2023-08-30>
- * Last Modified : <2025-08-22>
+ * Last Modified : <2025-08-26>
  *
  * Test xy.h
  * ------------------------------------------------------------*/
@@ -13,13 +13,13 @@
 #include "xy.h"
 
 void
-print_str_for_seq (void *str, void *NOUSE)
+callback_print_str_for_seq (void *str, void *DUMMY)
 {
   print ((char *) str);
 }
 
 void
-print_str_for_map (const char *key, void *value, void *NOUSE)
+callback_print_str_for_map (const char *key, void *value, void *DUMMY)
 {
   println (xy_strcat (4, "  ", key, " => ", (char *) value));
 }
@@ -150,7 +150,7 @@ main (int argc, char const *argv[])
   xy_seq_push (seq, "World");
   assert_str ("Hello", xy_seq_at (seq, 1));
   assert_str ("World", xy_seq_at (seq, 2));
-  xy_seq_each (seq, print_str_for_seq, NULL); br();
+  xy_seq_each (seq, callback_print_str_for_seq, NULL); br();
   xy_seq_pop (seq);
   assert (1 == xy_seq_len (seq));
 
@@ -164,7 +164,7 @@ main (int argc, char const *argv[])
   assert_str ("chsrc", xy_map_get (map, "Hello"));
   assert (2 == xy_map_len (map));
   echo ("{");
-    xy_map_each (map, print_str_for_map, NULL);
+    xy_map_each (map, callback_print_str_for_map, NULL);
   echo ("}");
 
   xy_succ ("测试完成", "xy.h 测试全部通过");

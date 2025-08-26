@@ -174,7 +174,7 @@ callback_print_alias (const char *alias, void *user_data)
 }
 
 void
-callback_print_targets (void *data, void *NOUSE)
+callback_print_targets (void *data, void *DUMMY)
 {
   Target_t *target = (Target_t *) data;
   // 使用通用的别名遍历函数打印所有别名
@@ -506,7 +506,7 @@ iterate_menu (XySeq_t *menu, const char *input, Target_t **target)
 
 
 void
-callback_perform_all_prelude_for_menu (void *data, void *NOUSE)
+callback_perform_all_prelude_for_menu (void *data, void *DUMMY)
 {
   Target_t *target = (Target_t *) data;
 
