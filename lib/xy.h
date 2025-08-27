@@ -6,9 +6,10 @@
  *               |   郭恒  <2085471348@qq.com>
  * Contributors  :  juzeon <skyjuzheng@gmail.com>
  *               | Mikachu2333 <mikachu.23333@zohomail.com>
+ *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-08-22>
+ * Last Modified : <2025-08-27>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -796,10 +797,11 @@ xy_run_iter_lines (const char *cmd,  unsigned long n,  bool (*func) (const char 
         break;
       if (func)
         {
-           if (func (buf)) {
-             pclose (stream);
-             return ret;
-           }
+           if (func (buf))
+            {
+              pclose (stream);
+              return ret;
+            }
         }
     }
 

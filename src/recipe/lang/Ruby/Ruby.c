@@ -22,7 +22,7 @@ pl_ruby_prelude (void)
 
   chef_set_chef (this, "@ccmywish");
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_sauciers (this, 0);
+  chef_set_sauciers (this, 1, "@BingChunMoLi");
 
   chef_allow_local_mode (this, PartiallyCan, "支持 bundler. 不支持 gem", "Support bundler. Not support gem");
   chef_allow_english(this);

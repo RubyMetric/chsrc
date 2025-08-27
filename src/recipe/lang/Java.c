@@ -10,12 +10,12 @@ pl_java_prelude ()
   chef_prep_this (pl_java, gsr);
 
   chef_set_created_on   (this, "2023-08-31");
-  chef_set_last_updated (this, "2025-08-10");
+  chef_set_last_updated (this, "2025-08-27");
   chef_set_sources_last_updated (this, "2024-12-18");
 
   chef_set_chef (this, NULL);
-  chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_sauciers (this, 1, "@BingChunMoLi");
+  chef_set_cooks (this, 2, "@BingChunMoLi", "@ccmywish");
+  chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);

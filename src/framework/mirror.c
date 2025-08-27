@@ -1,15 +1,16 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Name     :  mirror.c
- * File Authors  :  Aoran Zeng   <ccmywish@qq.com>
- *               |   Heng Guo    <2085471348@qq.com>
+ * File Name     : mirror.c
+ * File Authors  :  曾奥然 <ccmywish@qq.com>
+ *               |   郭恒  <2085471348@qq.com>
  * Contributors  : Shengwei Chen <414685209@qq.com>
- *               |  Jialin Lyu   <jialinlvcn@aliyun.com>
- *               |  Mikachu2333  <mikachu.23333@zohomail.com>
+ *               |  Jialin Lyu  <jialinlvcn@aliyun.com>
+ *               |  Mikachu2333 <mikachu.23333@zohomail.com>
+ *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-07-14>
+ * Last Modified : <2025-08-27>
  *
  * 通用镜像站
  * ------------------------------------------------------------*/
