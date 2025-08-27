@@ -18,7 +18,7 @@ os_arch_prelude ()
 
   chef_set_chef (this, "@happy-game");
   chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
-  chef_set_sauciers (this, 1, "@happy-game");
+  chef_set_sauciers (this, 2, "@happy-game", "@Young-Lord");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -37,6 +37,7 @@ os_arch_prelude ()
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/archlinux", DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/archlinux", DelegateToMirror},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/archlinux", DelegateToMirror},
+  {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn/archlinux", DelegateToMirror},
   {&Tencent,          "https://mirrors.tencent.com/archlinux", DelegateToMirror},
   // {&Tencent_Intra, "https://mirrors.tencentyun.com/archlinux", DelegateToMirror},
   {&Huawei,           "https://mirrors.huaweicloud.com/archlinux", DelegateToMirror},
@@ -120,7 +121,7 @@ os_archlinuxcn_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
-  chef_set_sauciers (this, 1, "@happy-game");
+  chef_set_sauciers (this, 2, "@happy-game", "@Young-Lord");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -137,6 +138,7 @@ os_archlinuxcn_prelude ()
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/archlinuxcn/", DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/archlinuxcn/", DelegateToMirror},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/", DelegateToMirror},
+  {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/archlinux-cn/", DelegateToMirror},
   {&Tencent,          "https://mirrors.cloud.tencent.com/archlinuxcn/",    DelegateToMirror},
   // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/archlinuxcn/", DelegateToMirror},
 
