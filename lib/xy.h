@@ -840,10 +840,24 @@ xy_run (const char *cmd, unsigned long n)
 
 
 /**
+ * @brief 执行命令，仅返回命令的执行状态
+ */
+int
+xy_run_get_status (char *cmd)
+{
+  char * command = xy_str_to_quietcmd (cmd);
+
+  int status = system (command);
+  return status;
+}
+
+
+/**
  * @brief 捕获命令的输出
  *
  * @param[in]  cmd    要执行的命令
- * @param[out] output 捕获的标准输出
+ * @param[out] output 捕获的标准输出，
+ *                    为NULL时表示不关心stdout输出，但依然允许stderr输出
  *
  * @return 返回命令的执行状态
  */
@@ -874,8 +888,11 @@ xy_run_capture (const char *cmd, char **output)
   buf[size] = '\0';
 
   int status = pclose (stream);
-  *output = buf;
-  return status;
+
+  if (output)
+    *output = buf;
+
+    return status;
 }
 
 
