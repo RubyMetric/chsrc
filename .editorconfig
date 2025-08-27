@@ -1,4 +1,17 @@
+# --------------------------------------------------------------
+# SPDX-License-Identifier: GPL-3.0-or-later
+# --------------------------------------------------------------
+# Config Type   : EditorConfig
+# Config Authors: 曾奥然 <ccmywish@qq.com>
+# Contributors  : Nil Null <nil@null.org>
+# Created On    : <2023-09-06>
+# Last Modified : <2025-08-27>
+#
+# 请参考 ./doc/03-为什么拒绝使用代码格式化工具.md
+#
 # http://editorconfig.org
+# --------------------------------------------------------------
+
 root = true
 
 [*]
@@ -6,7 +19,11 @@ indent_style = space
 indent_size = 2
 charset = utf-8
 trim_trailing_whitespace = true
-insert_final_newline = false
+
+# VS Code 对该配置(为 false)的实现有问题，这是确定的，
+# 然而 CLion 似乎对该配置(为 false)的实现是正确的，这导致不同贡献者反而产生了冲突
+# 所以我们现在改成 true
+insert_final_newline = true
 
 [*.{c,C,cpp,cxx,cc,h,hpp}]
 indent_style = space
