@@ -75,7 +75,7 @@ os_freebsd_setsrc (char *option)
   // @ccmywish: 2023-09-27 据 @ykla , NJU的freebsd-ports源没有设置 Git，
   //                       但是我认为由于使用Git还是要比非Git方便许多，我们尽可能坚持使用Git
   //                       而 gitup 又要额外修改它自己的配置，比较麻烦
-  bool git_exist = query_program_exist (xy_str_to_quietcmd ("git version"), "git", Noisy_When_Exist|Noisy_When_NonExist);
+  bool git_exist = query_program_exist (xy_quiet_cmd ("git version"), "git", Noisy_When_Exist|Noisy_When_NonExist);
   if (git_exist)
     {
       if (xy_streql("nju",source.mirror->code))

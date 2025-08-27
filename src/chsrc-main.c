@@ -443,7 +443,7 @@ cli_print_issues ()
   /*
   if (chsrc_check_program ("gh"))
     {
-      char *cmd = xy_str_to_quietcmd ("gh browse --repo RubyMetric/chsrc");
+      char *cmd = xy_quiet_cmd ("gh browse --repo RubyMetric/chsrc");
       system (cmd);
     }
   */

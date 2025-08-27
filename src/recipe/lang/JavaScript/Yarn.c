@@ -78,7 +78,7 @@ pl_js_yarn_setsrc (char *option)
           // 不能直接退出，因为 Leader target 不能就此结束
           return;
         }
-      // 不再阻止换源命令输出到终端，即不再调用 xy_str_to_quietcmd()
+      // 不再阻止换源命令输出到终端，即不再调用 xy_quiet_cmd()
       cmd = xy_2strcat ("yarn config set registry ", source.url);
       chsrc_run (cmd, RunOpt_No_Last_New_Line);
     }

@@ -491,19 +491,6 @@ xy_streql_ic(const char *str1, const char *str2)
 }
 
 
-static char *
-xy_str_to_quietcmd (const char *cmd)
-{
-  char *ret = NULL;
-#ifdef _WIN32
-  ret = xy_2strcat (cmd, " >nul 2>nul ");
-#else
-  ret = xy_2strcat (cmd, " 1>/dev/null 2>&1 ");
-#endif
-  return ret;
-}
-
-
 /**
  * @flavor Ruby: String#end_with?
  */
@@ -776,8 +763,22 @@ _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *c
 
 
 /******************************************************
- *                      System
+ *                      cross OS
  ******************************************************/
+
+static char *
+xy_quiet_cmd (const char *cmd)
+{
+  char *ret = NULL;
+
+  if (xy.on_windows)
+    ret = xy_2strcat (cmd, " >nul 2>nul ");
+  else
+    ret = xy_2strcat (cmd, " 1>/dev/null 2>&1 ");
+
+  return ret;
+}
+
 
 /**
  * @brief 执行 `cmd`，返回某行输出结果，并对已经遍历过的行执行 `func`
@@ -845,7 +846,7 @@ xy_run (const char *cmd, unsigned long n)
 int
 xy_run_get_status (char *cmd)
 {
-  char * command = xy_str_to_quietcmd (cmd);
+  char * command = xy_quiet_cmd (cmd);
 
   int status = system (command);
   return status;
@@ -895,10 +896,6 @@ xy_run_get_stdout (const char *cmd, char **output)
     return status;
 }
 
-
-/******************************************************
- *                      cross OS
- ******************************************************/
 
  /**
  * @flavor 该函数同 just 中的 os_family()，只区分 windows, unix

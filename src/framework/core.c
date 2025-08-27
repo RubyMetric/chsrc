@@ -383,7 +383,7 @@ cmd_to_check_program (char *prog_name)
 {
   char *check_tool = xy.on_windows ?  "where " : "command -v ";
 
-  char *quiet_cmd = xy_str_to_quietcmd (xy_2strcat (check_tool, prog_name));
+  char *quiet_cmd = xy_quiet_cmd (xy_2strcat (check_tool, prog_name));
 
   return quiet_cmd;
 }
@@ -402,7 +402,7 @@ XY_Deprecate_This("Use cmd_to_check_program() instead")
 static char *
 cmd_to_check_program2 (char *prog_name)
 {
-  char *quiet_cmd = xy_str_to_quietcmd (xy_2strcat (prog_name, " --version"));
+  char *quiet_cmd = xy_quiet_cmd (xy_2strcat (prog_name, " --version"));
   return quiet_cmd;
 }
 
@@ -1595,7 +1595,7 @@ chsrc_ensure_dir (const char *dir)
       mkdir_cmd = "mkdir -p ";
     }
   char *cmd = xy_2strcat (mkdir_cmd, dir);
-  cmd = xy_str_to_quietcmd (cmd);
+  cmd = xy_quiet_cmd (cmd);
 
   chsrc_run_as_a_service (cmd);
 

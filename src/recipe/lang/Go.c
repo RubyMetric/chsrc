@@ -53,7 +53,7 @@ pl_go_prelude ()
 void
 pl_go_check_cmd ()
 {
-  char *check_cmd = xy_str_to_quietcmd ("go version");
+  char *check_cmd = xy_quiet_cmd ("go version");
   bool exist = query_program_exist (check_cmd, "go", Noisy_When_Exist|Noisy_When_NonExist);
 
   if (!exist)
