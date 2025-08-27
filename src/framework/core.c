@@ -127,12 +127,14 @@ struct
 
   /* 此时 chsrc_run() 不再是recipe中指定要运行的一个外部命令，而是作为一个功能实现的支撑 */
   bool chsrc_run_faas;
+  char *user_agent;
 }
 ProgStatus =
 {
   .leader_selected_index = -1,
   .chgtype = ChgType_Auto,
-  .chsrc_run_faas = false
+  .chsrc_run_faas = false,
+  .user_agent = "chsrc/" Chsrc_Version,
 };
 
 
@@ -642,15 +644,13 @@ measure_speed_for_url (void *url)
   /**
    * @note 我们用 —L，因为部分链接会跳转到其他地方，比如: RubyChina, npmmirror
    */
-  char *curl_cmd = xy_strcat (8, "curl -qsL ", ipv6,
-                                  " -o ", os_devnull,
-                                  " -w \"%{http_code} %{speed_download}\" -m", time_sec,
-                                  " -A chsrc/" Chsrc_Version "  ", url);
+  char *curl_cmd = xy_strcat (10, "curl -qsL ", ipv6,
+                                    " -o ", os_devnull,
+                                    " -w \"%{http_code} %{speed_download}\" -m", time_sec,
+                                    " -A ", ProgStatus.user_agent, " ", url);
 
-  // chsrc_info (xy_2strcat ("测速命令 ", curl_cmd));
-
+  // chsrc_note2 (xy_2strcat ("测速命令 ", curl_cmd));
   char *curl_buf = xy_run (curl_cmd, 0);
-
   return curl_buf;
 }
 
@@ -1111,7 +1111,11 @@ chsrc_determine_chgtype (ChgType_t type)
   ProgStatus.chgtype =  chsrc_in_reset_mode() ? ChgType_Reset : type;
 }
 
-
+void
+chsrc_custom_user_agent (char *user_agent)
+{
+  ProgStatus.user_agent = user_agent;
+}
 
 #define MSG_EN_PUBLIC_URL "If the URL you specify is a public service, you are invited to contribute: chsrc issue"
 #define MSG_CN_PUBLIC_URL "若您指定的URL为公有服务，邀您参与贡献: chsrc issue"

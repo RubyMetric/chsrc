@@ -50,7 +50,7 @@ pl_ruby_getsrc (char *option)
   chsrc_run ("bundle config get mirror.https://rubygems.org", RunOpt_Default);
 }
 
-void
+bool
 pl_ruby_remove_gem_source (const char *source)
 {
   char *cmd = NULL;
@@ -59,6 +59,7 @@ pl_ruby_remove_gem_source (const char *source)
       cmd = xy_2strcat ("gem sources -r ", source);
       chsrc_run (cmd, RunOpt_Default);
     }
+  return false;
 }
 
 /**

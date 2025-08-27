@@ -770,7 +770,7 @@ _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *c
  *   由于目标行会被返回出来，所以 `func` 并不执行目标行，只会执行遍历过的行
  */
 static char *
-xy_run_iter_lines (const char *cmd,  unsigned long n,  void (*func) (const char *))
+xy_run_iter_lines (const char *cmd,  unsigned long n,  bool (*func) (const char *))
 {
   const int size = 512;
   char *buf = (char *) malloc (size);
@@ -796,7 +796,10 @@ xy_run_iter_lines (const char *cmd,  unsigned long n,  void (*func) (const char 
         break;
       if (func)
         {
-          func (buf);
+           if (func (buf)) {
+             pclose (stream);
+             return ret;
+           }
         }
     }
 
@@ -1497,7 +1500,6 @@ xy_map_get (XyMap_t *map, const char *key)
   return NULL;
 }
 
-
 /**
  * @flavor Ruby: Hash#each
  */
@@ -1520,6 +1522,5 @@ xy_map_each (
         }
     }
 }
-
 
 #endif
