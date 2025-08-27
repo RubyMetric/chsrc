@@ -1,10 +1,10 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  : Aoran Zeng <ccmywish@qq.com>
- * Contributors  :  Nil Null  <nil@null.org>
+ * File Authors  : 曾奥然 <ccmywish@qq.com>
+ * Contributors  : Nil Null <nil@null.org>
  * Created On    : <2024-12-14>
- * Last Modified : <2025-07-21>
+ * Last Modified : <2025-08-27>
  *
  * 该文件最好启用 DEBUG mode 编译
  * ------------------------------------------------------------*/
@@ -21,7 +21,8 @@ main (int argc, char const *argv[])
       say (Chsrc_Version);
       return 0;
     }
-  xy_useutf8();
+
+  xy_init ();
 
   br();
   chsrc_log  ("chsrc_log");
