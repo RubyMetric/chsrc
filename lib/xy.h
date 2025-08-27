@@ -23,7 +23,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.1.7.0-2025/08/22"
+#define _XY_Version       "v0.2.0.0-2025/08/27"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -64,6 +64,8 @@ struct
 {
   bool enable_color;
 
+  bool inited;
+
   bool on_windows;
   bool on_linux;
   bool on_macos;
@@ -77,6 +79,9 @@ xy =
   .enable_color = true,
 
   /* 由 xy_init() 赋值 */
+
+  .inited = false,
+
   .on_windows = false,
   .on_linux = false,
   .on_macos = false,
@@ -1220,6 +1225,8 @@ xy_init ()
     xy.os_devnull = "/dev/null";
 
   xy_use_utf8 ();
+
+  xy.inited = true;
 }
 
 
