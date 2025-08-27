@@ -71,7 +71,7 @@ char *
 pl_java_find_maven_config ()
 {
   char *output;
-  int status = xy_run_capture ("mvn -v", &output);
+  int status = xy_run_get_stdout ("mvn -v", &output);
   if (0==status)
     {
       char *maven_home_line = xy_run_iter_lines ("mvn -v", 0, pl_java_is_maven_home_line);
@@ -88,7 +88,7 @@ char *
 pl_java_find_maven_daemon_config ()
 {
   char *output;
-  int status = xy_run_capture ("mvnd -v", &output);
+  int status = xy_run_get_stdout ("mvnd -v", &output);
   if (0==status)
     {
       char *maven_home_line = xy_run_iter_lines ("mvnd -v", 0, pl_java_is_maven_home_line);

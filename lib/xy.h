@@ -862,7 +862,7 @@ xy_run_get_status (char *cmd)
  * @return 返回命令的执行状态
  */
 static int
-xy_run_capture (const char *cmd, char **output)
+xy_run_get_stdout (const char *cmd, char **output)
 {
   int cap  = 8192; /* 假如1行100个字符，大约支持80行输出 */
   char *buf = (char *) xy_malloc0 (cap);
