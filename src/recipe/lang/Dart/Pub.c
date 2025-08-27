@@ -51,7 +51,7 @@ pl_dart_setsrc (char *option)
 
   char *w = NULL;
   char *cmd = NULL;
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       cmd = xy_strcat (3, "setx PUB_HOSTED_URL \"", source.url, "\"");
       chsrc_run (cmd, RunOpt_No_Last_New_Line);

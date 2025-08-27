@@ -56,7 +56,7 @@ main (int argc, char const *argv[])
   chsrc_ensure_dir ("test");
 
   chsrc_append_to_file  ("append",  bkup);
-  if (!xy_on_windows)
+  if (!xy.on_windows)
     {
       chsrc_prepend_to_file ("prepend", bkup);
     }
@@ -67,7 +67,7 @@ main (int argc, char const *argv[])
   print ("chsrc: CPU cores = ");
   println (chsrc_get_cpucore ());
 
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       chsrc_run ("del " bkup, RunOpt_No_Last_New_Line);
     }
@@ -83,7 +83,7 @@ main (int argc, char const *argv[])
 
   // chsrc_run_in_inline_pwsh_shell ("Write-Host \"Hello from inline PowerShell\"");
 
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       chsrc_run_as_pwsh_file ("Write-Host \"Hello from PowerShell file\"");
     }

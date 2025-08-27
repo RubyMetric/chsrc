@@ -55,7 +55,7 @@ pl_dart_flutter_setsrc (char *option)
 
   char *w = NULL;
   char *cmd = NULL;
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       cmd = xy_strcat (3, "setx FLUTTER_STORAGE_BASE_URL \"", source.url, "\"");
       chsrc_run (cmd, RunOpt_No_Last_New_Line);

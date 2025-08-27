@@ -110,7 +110,7 @@ main (int argc, char const *argv[])
 
   assert (xy_file_exist ("./doc/image/chsrc.png"));
   assert (xy_dir_exist ("~"));
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       say (xy_normalize_path ("~"));
       say (xy_normalize_path ("~/"));

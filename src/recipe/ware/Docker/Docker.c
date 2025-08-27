@@ -50,7 +50,7 @@ wr_docker_prelude ()
 void
 wr_docker_getsrc (char *option)
 {
-  if (xy_on_linux || xy_on_bsd)
+  if (xy.on_linux || xy.on_bsd)
     {
       chsrc_view_file (WR_Docker_ConfigFile);
     }
@@ -73,7 +73,7 @@ wr_docker_setsrc (char *option)
 
   chsrc_use_this_source (wr_docker);
 
-  if (xy_on_linux || xy_on_bsd)
+  if (xy.on_linux || xy.on_bsd)
     {
       char *to_add = xy_str_gsub (RAWSTR_wr_docker_insert_content, "@1@", source.url);
 
@@ -119,7 +119,7 @@ wr_docker_setsrc (char *option)
           chsrc_append_to_file (to_add, WR_Docker_ConfigFile);
         }
 
-      if (xy_on_linux)
+      if (xy.on_linux)
         {
           /* 由于 systemctl restart docker 会导致所有容器停止，所以不自动重启 */
           chsrc_alert2 ("请自行运行: sudo systemctl restart docker");

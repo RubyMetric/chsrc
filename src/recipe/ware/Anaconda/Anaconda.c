@@ -59,7 +59,7 @@ wr_anaconda_setsrc (char *option)
   /* Windows 也是在这里 */
   char *configfile = xy_2strcat (xy_os_home, "/.condarc");
 
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       if (xy_file_exist (configfile))
         {

@@ -44,7 +44,7 @@ pl_haskell_setsrc (char *option)
   char *content = xy_str_gsub (RAWSTR_pl_haskell_cabal_config, "@url@", source.url);
 
   char *config = NULL;
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       config = xy_normalize_path ("~/AppData/Roaming/cabal/config");
     }

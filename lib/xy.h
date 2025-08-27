@@ -58,12 +58,6 @@
 #endif
 
 
-bool xy_on_windows = false;
-bool xy_on_linux = false;
-bool xy_on_macos = false;
-bool xy_on_bsd = false;
-bool xy_on_android = false;
-
 
 /* 全局变量 与 全局状态 */
 struct
@@ -892,7 +886,7 @@ xy_run_capture (const char *cmd, char **output)
 static char *
 _xy_os_family ()
 {
-  if (xy_on_windows)
+  if (xy.on_windows)
     return "windows";
   else
     return "unix";
@@ -905,7 +899,7 @@ _xy_os_family ()
 static const char *
 xy_os_depend_str (const char *str_for_win, const char *str_for_unix)
 {
-  if (xy_on_windows)
+  if (xy.on_windows)
     return str_for_win;
   else
     return str_for_unix;
@@ -923,7 +917,7 @@ static char *
 _xy_os_home ()
 {
   char *home = NULL;
-  if (xy_on_windows)
+  if (xy.on_windows)
     home = getenv ("USERPROFILE");
   else
     home = getenv ("HOME");
@@ -965,7 +959,7 @@ _xy_win_documents ()
 static char *
 _xy_win_powershell_profile ()
 {
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       char *documents_dir = _xy_win_documents ();
       char *profile_path = xy_2strcat (documents_dir, "\\PowerShell\\Microsoft.PowerShell_profile.ps1");
@@ -985,7 +979,7 @@ _xy_win_powershell_profile ()
 static char *
 _xy_win_powershellv5_profile ()
 {
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       char *documents_dir = _xy_win_documents ();
       char *profile_path = xy_2strcat (documents_dir, "\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1");
@@ -1023,7 +1017,7 @@ static bool
 xy_dir_exist (const char *path)
 {
   const char *dir = path;
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       if (xy_str_start_with (path, "~"))
         {
@@ -1031,7 +1025,7 @@ xy_dir_exist (const char *path)
         }
     }
 
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
 #ifdef XY_Build_On_Windows
       // 也可以用 opendir() #include <dirent.h>
@@ -1085,7 +1079,7 @@ xy_normalize_path (const char *path)
       new = xy_2strcat (xy_os_home, xy_str_delete_prefix (new, "~"));
     }
 
-  if (xy_on_windows)
+  if (xy.on_windows)
     return xy_str_gsub (new, "/", "\\");
   else
     return new;
@@ -1121,7 +1115,7 @@ xy_parent_dir (const char *path)
   *last = '\0';
 
   /* Windows上重新使用 \ 作为路径分隔符 */
-  if (xy_on_windows)
+  if (xy.on_windows)
     return xy_str_gsub (dir, "/", "\\");
   else
     return dir;
@@ -1141,7 +1135,7 @@ xy_detect_os ()
       DIR *d = opendir (path);
       if (d)
         {
-          xy_on_windows = true;
+          xy.on_windows = true;
           closedir (d);
           return;
         }
@@ -1155,12 +1149,12 @@ xy_detect_os ()
       fclose (fp);
       if (strstr (buf, "Android"))
         {
-          xy_on_android = true;
+          xy.on_android = true;
           return;
         }
       else if (strstr (buf, "Linux"))
         {
-          xy_on_linux = true;
+          xy.on_linux = true;
           return;
         }
     }
@@ -1173,7 +1167,7 @@ xy_detect_os ()
       d = opendir ("/Library/Apple");
       if (d)
         {
-          xy_on_macos = true;
+          xy.on_macos = true;
           closedir (d);
         }
     }
@@ -1185,7 +1179,7 @@ xy_detect_os ()
       if (opendir ("/etc/rc.d"))
         {
           closedir (d);
-          xy_on_bsd = true;
+          xy.on_bsd = true;
           return;
         }
     }
@@ -1195,10 +1189,10 @@ xy_detect_os ()
       fgets (buf, sizeof (buf), fp);
       pclose (fp);
       if (strstr (buf, "BSD")  != NULL)
-        xy_on_bsd = true;
+        xy.on_bsd = true;
     }
 
-  if (!(xy_on_windows || xy_on_linux || xy_on_android || xy_on_macos || xy_on_bsd))
+  if (!(xy.on_windows || xy.on_linux || xy.on_android || xy.on_macos || xy.on_bsd))
     xy_panic ("Unknown operating system");
 }
 
@@ -1220,7 +1214,7 @@ xy_init ()
 {
   xy_detect_os ();
 
-  if (xy_on_windows)
+  if (xy.on_windows)
     xy.os_devnull = "nul";
   else
     xy.os_devnull = "/dev/null";

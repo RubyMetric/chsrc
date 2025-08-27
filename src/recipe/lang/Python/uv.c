@@ -49,7 +49,7 @@ pl_python_find_uv_config (bool mkdir)
     }
   else
     {
-      if (xy_on_windows)
+      if (xy.on_windows)
         {
           /* config path on Windows */
           char *appdata = getenv ("APPDATA");

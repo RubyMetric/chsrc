@@ -46,7 +46,7 @@ pl_r_getsrc (char *option)
    * options()$repos
    * options()$BioC_mirror
    */
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       chsrc_view_file (PL_R_Config_Windows);
     }
@@ -74,7 +74,7 @@ pl_r_setsrc (char *option)
 
   // 或者我们调用 r.exe --slave -e 上面的内容
 
-  char *config = xy_on_windows ? PL_R_Config_Windows : PL_R_Config_POSIX;
+  char *config = xy.on_windows ? PL_R_Config_Windows : PL_R_Config_POSIX;
 
   chsrc_append_to_file (w, config);
 

@@ -381,7 +381,7 @@ query_program_exist (char *check_cmd, char *prog_name, int mode)
 static char *
 cmd_to_check_program (char *prog_name)
 {
-  char *check_tool = xy_on_windows ?  "where " : "command -v ";
+  char *check_tool = xy.on_windows ?  "where " : "command -v ";
 
   char *quiet_cmd = xy_str_to_quietcmd (xy_2strcat (check_tool, prog_name));
 
@@ -906,7 +906,7 @@ auto_select_mirror (Source_t *sources, size_t size, const char *target_name)
       exit (Exit_UserCause);
     }
 
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       char *curl_version = xy_run ("curl --version", 1);
       /**
@@ -1399,7 +1399,7 @@ chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilename
    * 这样的话，其实是是无法删除该文件的，但是生成在 /tmp 目录下我们恰好可以不用清理
    * 但是在 Windows 上，就没有办法了，所以我们禁止在 Windows 上不指定返回出的临时文件名
    */
-  if (xy_on_windows && !tmpfilename)
+  if (xy.on_windows && !tmpfilename)
     {
       chsrc_error2 ("在 Windows 上，创建临时文件时必须指定返回的临时文件名");
       xy_unreached();
@@ -1562,7 +1562,7 @@ chsrc_view_file (const char *path)
 {
   char *cmd = NULL;
   path = xy_normalize_path (path);
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       cmd = xy_2strcat ("type ", path);
     }
@@ -1586,7 +1586,7 @@ chsrc_ensure_dir (const char *dir)
 
   // 不存在就生成
   char *mkdir_cmd = NULL;
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       mkdir_cmd = "md ";  // 已存在时返回 errorlevel = 1
     }
@@ -1644,7 +1644,7 @@ log_anyway:
 
   /*
   char *cmd = NULL;
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       cmd = xy_strcat (4, "echo ", str, " >> ", file);
     }
@@ -1669,7 +1669,7 @@ chsrc_prepend_to_file (const char *str, const char *filename)
   chsrc_ensure_dir (dir);
 
   char *cmd = NULL;
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       xy_unimplemented();
     }
@@ -1697,7 +1697,7 @@ chsrc_overwrite_file (const char *str, const char *filename)
   chsrc_ensure_dir (dir);
 
   char *cmd = NULL;
-  if (xy_on_windows)
+  if (xy.on_windows)
     {
       cmd = xy_strcat (4, "echo ", str, " > ", file);
     }
@@ -1730,12 +1730,12 @@ chsrc_backup (const char *path)
       return;
     }
 
-  if (xy_on_bsd || xy_on_macos)
+  if (xy.on_bsd || xy.on_macos)
     {
       /* BSD 和 macOS 的 cp 不支持 --backup 选项 */
       cmd = xy_strcat (5, "cp -f ", path, " ", path, ".bak");
     }
-  else if (xy_on_windows)
+  else if (xy.on_windows)
     {
       /**
        * @note /Y 表示覆盖
