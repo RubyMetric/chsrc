@@ -640,7 +640,7 @@ measure_speed_for_url (void *url)
       ipv6 = "--ipv6";
     }
 
-  char *os_devnull = xy_os_devnull;
+  char *os_devnull = xy.os_devnull;
 
   /**
    * @note 我们用 —L，因为部分链接会跳转到其他地方，比如: RubyChina, npmmirror

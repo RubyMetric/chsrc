@@ -64,7 +64,6 @@ bool xy_on_macos = false;
 bool xy_on_bsd = false;
 bool xy_on_android = false;
 
-char *xy_os_devnull = NULL;
 
 /* 全局变量 与 全局状态 */
 struct
@@ -1222,9 +1221,9 @@ xy_init ()
   xy_detect_os ();
 
   if (xy_on_windows)
-    xy_os_devnull = "nul";
+    xy.os_devnull = "nul";
   else
-    xy_os_devnull = "/dev/null";
+    xy.os_devnull = "/dev/null";
 
   xy_use_utf8 ();
 }
