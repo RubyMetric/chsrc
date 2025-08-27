@@ -21,7 +21,8 @@ pl_java_prelude ()
   chef_forbid_english(this);
   chef_allow_user_define(this);
 
-  // HuaweiCDN 需要该项
+  // 阿里巴巴开源镜像站需要修改为此才能测速
+  // https://github.com/RubyMetric/chsrc/issues/238#issuecomment-3162367686
   chef_set_user_agent ("Maven/3.9.11");
 
   def_sources_begin()
