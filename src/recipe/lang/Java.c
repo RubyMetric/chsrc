@@ -25,14 +25,17 @@ pl_java_prelude ()
   chef_set_user_agent ("Maven/3.9.11");
 
   def_sources_begin()
-  {&UpstreamProvider, "https://repo1.maven.org/maven2/",                                  DelegateToUpstream},
-  {&Ali,              "https://maven.aliyun.com/repository/public/",                      "https://maven.aliyun.com/repository/public/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"},
-  {&Huawei,           "https://mirrors.huaweicloud.com/repository/maven/",                "https://mirrors.huaweicloud.com/repository/maven/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"},
-  {&HuaweiCDN,        "https://repo.huaweicloud.com/repository/maven/",                   "https://repo.huaweicloud.com/repository/maven/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"},
-  {&Tencent,          "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/", "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"},
+  {&UpstreamProvider, "https://repo1.maven.org/maven2/",                                 FeedByPrelude},
+  {&Ali,              "https://maven.aliyun.com/repository/public/",                     FeedByPrelude},
+  {&Huawei,           "https://mirrors.huaweicloud.com/repository/maven/",               FeedByPrelude},
+  {&HuaweiCDN,        "https://repo.huaweicloud.com/repository/maven/",                  FeedByPrelude},
+  {&Tencent,          "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/",FeedByPrelude},
   // 网易的24小时更新一次
-  {&Netease,          "http://mirrors.163.com/maven/repository/maven-public/",            "https://mirrors.163.com/maven/repository/maven-public/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"}
+  {&Netease,          "http://mirrors.163.com/maven/repository/maven-public/",           FeedByPrelude}
   def_sources_end()
+
+  // 220MB
+  chef_set_sources_speed_measure_url_with_postfix (this, "com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar");
 }
 
 
@@ -60,6 +63,10 @@ pl_java_is_maven_home_line (const char *line)
     return false;
 }
 
+
+/**
+ * @consult https://github.com/RubyMetric/chsrc/pull/268#issuecomment-3209071819
+ */
 char *
 pl_java_find_maven_config ()
 {
