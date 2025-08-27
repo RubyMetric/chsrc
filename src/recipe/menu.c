@@ -3,6 +3,7 @@
  * -------------------------------------------------------------
  * File Authors   : 曾奥然 <ccmywish@qq.com>
  * Contributors   : Mikachu2333 <mikachu.23333@zohomail.com>
+ *                | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *                |
  * Created On     : <2023-09-01>
  * Major Revision :      5
@@ -207,7 +208,7 @@ chsrc_available_mirrors[] = {
   /* ------------------------ 商业公司(通用镜像站) ------------------------ */
   &Ali,     // &Ali_ECS_VPC, &Ali_ECS_classic,
   &Tencent, // &Tencent_Intra,
-  &Huawei,
+  &Huawei, &HuaweiCDN,
   &Volcengine,
   &Netease,
   &Sohu,

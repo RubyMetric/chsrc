@@ -26,7 +26,7 @@ pl_java_prelude ()
   {&UpstreamProvider, "https://repo1.maven.org/maven2/",                                  DelegateToUpstream},
   {&Ali,              "https://maven.aliyun.com/repository/public/",                      "https://maven.aliyun.com/repository/public/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"},
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/maven/",                "https://mirrors.huaweicloud.com/repository/maven/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"},
-  {&HuaweiCdn,        "https://repo.huaweicloud.com/repository/maven/",                   "https://repo.huaweicloud.com/repository/maven/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"},
+  {&HuaweiCDN,        "https://repo.huaweicloud.com/repository/maven/",                   "https://repo.huaweicloud.com/repository/maven/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"},
   {&Tencent,          "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/", "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"},
   // 网易的24小时更新一次
   {&Netease,          "http://mirrors.163.com/maven/repository/maven-public/",            "https://mirrors.163.com/maven/repository/maven-public/com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar"}

@@ -261,10 +261,10 @@ Huawei =
   {NotSkip, NA, NA, "https://mirrors.huaweicloud.com/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
-HuaweiCdn =
+HuaweiCDN =
 {
   IS_GeneralMirrorSite,
-  "huaweiCdn",  "Huawei Cloud", "华为开源镜像站",  "https://repo.huaweicloud.com/",
+  "huawei-cdn",  "Huawei Cloud CDN", "华为开源镜像站(CDN)",  "https://repo.huaweicloud.com/",
   {NotSkip, NA, NA, "https://repo.huaweicloud.com/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
