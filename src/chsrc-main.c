@@ -716,7 +716,7 @@ main (int argc, char const *argv[])
           else if (xy_streql (argv[i], "-no-color") || xy_streql (argv[i], "-no-colour"))
             {
               ProgMode.NoColorMode = true;
-              xy_enable_color = false;
+              xy.enable_color = false;
             }
           else if (    xy_streql (argv[i], "-h")
                     || xy_streql (argv[i], "-help")

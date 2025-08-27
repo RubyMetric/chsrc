@@ -58,10 +58,6 @@
 #endif
 
 
-/* 全局变量 */
-bool xy_enable_color = true;
-
-/* 由 xy_init() 赋值 */
 bool xy_on_windows = false;
 bool xy_on_linux = false;
 bool xy_on_macos = false;
@@ -69,6 +65,34 @@ bool xy_on_bsd = false;
 bool xy_on_android = false;
 
 char *xy_os_devnull = NULL;
+
+/* 全局变量 与 全局状态 */
+struct
+{
+  bool enable_color;
+
+  bool on_windows;
+  bool on_linux;
+  bool on_macos;
+  bool on_bsd;
+  bool on_android;
+
+  char *os_devnull;
+}
+xy =
+{
+  .enable_color = true,
+
+  /* 由 xy_init() 赋值 */
+  .on_windows = false,
+  .on_linux = false,
+  .on_macos = false,
+  .on_bsd = false,
+  .on_android = false,
+
+  .os_devnull = NULL
+};
+
 
 
 #ifdef _WIN32
@@ -388,7 +412,7 @@ _xy_str_to_terminal_style (int style, const char *str)
 {
   char *color_fmt_str = NULL;
 
-  if (!xy_enable_color)
+  if (!xy.enable_color)
     {
       color_fmt_str = "%s";
       goto new_str;

@@ -5,7 +5,7 @@
  * Test Authors  : 曾奥然 <ccmywish@qq.com>
  * Contributors  : Mikachu2333  <mikachu.23333@zohomail.com>
  * Created On    : <2023-08-30>
- * Last Modified : <2025-08-26>
+ * Last Modified : <2025-08-27>
  *
  * Test xy.h
  * ------------------------------------------------------------*/
@@ -29,6 +29,9 @@ int
 main (int argc, char const *argv[])
 {
   xy_init ();
+
+  // 关闭颜色
+  // xy.enable_color = false;
 
   println (xy_os_depend_str ("Hello, Windows!", "Hello, Unix!"));
 
