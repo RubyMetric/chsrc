@@ -15,14 +15,14 @@ pl_ocaml_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_sauciers (this, 0);
+  chef_set_sauciers (this, 1, "@hezonglun");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&UpstreamProvider,  NULL, DelegateToUpstream},
+  {&UpstreamProvider,  "https://opam.ocaml.org/", DelegateToUpstream},
   {&Sjtug_Zhiyuan,     "https://mirrors.sjtug.sjtu.edu.cn/git/opam-repository.git", DelegateToMirror}
   def_sources_end()
 }
