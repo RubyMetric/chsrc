@@ -3,9 +3,9 @@
  * -------------------------------------------------------------
  * File Name     : chef.c
  * File Authors  : 曾奥然 <ccmywish@qq.com>
- * Contributors  : Nul None <nul@none.org>
+ * Contributors  : BingChunMoLi <bingchunmoli@bingchunmoli.com>
  * Created On    : <2025-08-09>
- * Last Modified : <2025-08-22>
+ * Last Modified : <2025-08-27>
  *
  * chef DSL: for chefs (recipe makers) to define a target
  * ------------------------------------------------------------*/
@@ -373,4 +373,16 @@ chef_set_sources_last_updated (Target_t *target, char *date)
   xy_cant_be_null (date);
 
   target->sources_last_updated = xy_strdup (date);
+}
+
+
+/**
+ * @note 某些 target 需要修改 User-Agent
+ * 由于单独测速 (chsrc measure) 的时候也需要进行此项修改，
+ * 所以该函数不能仅仅放在 _setsrc() 里，而是应当放在 _prelude() 里
+ */
+void
+chef_set_user_agent (char *user_agent)
+{
+  ProgStatus.user_agent = user_agent;
 }

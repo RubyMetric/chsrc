@@ -1112,11 +1112,6 @@ chsrc_determine_chgtype (ChgType_t type)
   ProgStatus.chgtype =  chsrc_in_reset_mode() ? ChgType_Reset : type;
 }
 
-void
-chsrc_custom_user_agent (char *user_agent)
-{
-  ProgStatus.user_agent = user_agent;
-}
 
 #define MSG_EN_PUBLIC_URL "If the URL you specify is a public service, you are invited to contribute: chsrc issue"
 #define MSG_CN_PUBLIC_URL "若您指定的URL为公有服务，邀您参与贡献: chsrc issue"

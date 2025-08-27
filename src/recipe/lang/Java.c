@@ -20,7 +20,9 @@ pl_java_prelude ()
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
   chef_allow_user_define(this);
-  chsrc_custom_user_agent("Maven/3.9.11");
+
+  // HuaweiCDN 需要该项
+  chef_set_user_agent ("Maven/3.9.11");
 
   def_sources_begin()
   {&UpstreamProvider, "https://repo1.maven.org/maven2/",                                  DelegateToUpstream},
