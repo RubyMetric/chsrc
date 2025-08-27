@@ -15,14 +15,14 @@ os_openbsd_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 2, "@G_I_Y", "@ccmywish");
-  chef_set_sauciers (this, 0);
+  chef_set_sauciers (this, 1, "@hezonglun");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
   chef_forbid_user_define(this);
 
   def_sources_begin()
-  {&UpstreamProvider,  NULL,                                    DelegateToUpstream},
+  {&UpstreamProvider, "https://cdn.openbsd.org/pub/OpenBSD/",   DelegateToUpstream},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/OpenBSD/", DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/OpenBSD/",   DelegateToMirror},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/OpenBSD/", DelegateToMirror},

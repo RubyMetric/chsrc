@@ -15,7 +15,7 @@ os_netbsd_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
-  chef_set_sauciers (this, 0);
+  chef_set_sauciers (this, 1, "@hezonglun");
 
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
@@ -23,7 +23,7 @@ os_netbsd_prelude ()
   chef_forbid_user_define(this);
 
   def_sources_begin()
-  {&UpstreamProvider,  NULL,                                                 DelegateToUpstream},
+  {&UpstreamProvider, "http://ftp.netbsd.org/pub/pkgsrc/packages/NetBSD/",     DelegateToUpstream},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/pkgsrc/packages/NetBSD/", DelegateToMirror},
   {&Ali,              "https://mirrors.aliyun.com/pkgsrc/packages/NetBSD/",  DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/pkgsrc/packages/NetBSD/", DelegateToMirror},

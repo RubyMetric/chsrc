@@ -15,7 +15,7 @@ os_freebsd_prelude ()
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
-  chef_set_sauciers (this, 0);
+  chef_set_sauciers (this, 1, "@hezonglun");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_forbid_english(this);
@@ -25,7 +25,7 @@ os_freebsd_prelude ()
   // 2023-09-24: 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports
   // 2023-09-27: 请务必保持Nju前面有至少一个镜像，原因请查看 freebsd 的换源函数
   def_sources_begin()
-  {&UpstreamProvider, NULL,                  DelegateToUpstream},
+  {&UpstreamProvider, "pkg.freebsd.org",     DelegateToUpstream},
   {&Ustc,             "mirrors.ustc.edu.cn", DelegateToMirror},
   {&Nju,              "mirror.nju.edu.cn",   DelegateToMirror},
   {&Netease,          "mirrors.163.com",     DelegateToMirror},
