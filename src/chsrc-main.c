@@ -75,6 +75,7 @@ chsrc_register_contributors ()
   chef_register_contributor ("@BingChunMoLi",   "BingChunMoLi",   "bingchunmoli@bingchunmoli.com",  NULL);
   // 该 ID 为 Gitee ID
   chef_register_contributor ("@hezonglun",      "HeZongLun",      "hezonglun123456@outlook.com",    NULL);
+  chef_register_contributor ("@Young-Lord",     "LY",             "ly-niko@qq.com",                 NULL);
 
   /**
    * AI贡献者：
