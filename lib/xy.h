@@ -289,7 +289,7 @@ xy_2strcat (const char *str1, const char *str2)
  *
  * @flavor C语言存在 strcat()，然而限制比较大，我们重新实现
 
- *   `concat` 这个API广泛应用于包括 Ruby、JavaScript、JVM family、C#
+ *   'concat' 这个API广泛应用于包括 Ruby、JavaScript、JVM family、C#
  *
  *   但由于 xy_str_concat() 显著长于 xy_strcat()，而这个 API 在 chsrc 中
  *   又大量使用，所以我们选择后者这个更简短的形式
@@ -784,13 +784,17 @@ _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *c
  *
  * @param  cmd   要执行的命令
  * @param   n    指定命令执行输出的结果行中的某一行，0 表示最后一行，n (n>0) 表示第n行
- * @param  func  对遍历时经过的行的内容，进行函数调用
+ * @param  func  对遍历时经过的行的内容，进行函数调用，如果返回 true，则提前停止遍历
  *
- * @return 返回第 `n` 行的内容
+ * @return
+ *   1. 第 `n` 行的内容
+ *   或
+ *   2. `func` 调用后返回为 true 的行
  *
- * @note 返回的字符串最后面一般有换行符号
- *
- *   由于目标行会被返回出来，所以 `func` 并不执行目标行，只会执行遍历过的行
+ * @note
+ *   1. 由于目标行第 `n` 行会被返回出来，所以 `func` 并不执行目标行，只会执行遍历过的行
+ *   或
+ *   2. 由于 `func` 调用后返回为 true 的行会被返回出来，所以该返回出的行也被 `func` 执行过了
  */
 static char *
 xy_run_iter_lines (const char *cmd,  unsigned long n,  bool (*func) (const char *))
@@ -819,11 +823,8 @@ xy_run_iter_lines (const char *cmd,  unsigned long n,  bool (*func) (const char 
         break;
       if (func)
         {
-           if (func (buf))
-            {
-              pclose (stream);
-              return ret;
-            }
+           if (func (ret))
+            break;
         }
     }
 
