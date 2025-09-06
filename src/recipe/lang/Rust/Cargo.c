@@ -71,7 +71,7 @@ pl_rust_cargo_setsrc (char *option)
   chsrc_note2 (xy_strcat (3, "请手动写入以下内容到 ", xy_normalize_path ("~/.cargo/config.toml"), " 文件中:"));
   println (content);
 
-  chsrc_determine_chgtype (ChgType_Auto);
+  chsrc_determine_chgtype (ChgType_Manual);
   chsrc_conclude (&source);
 }
 
