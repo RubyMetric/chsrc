@@ -45,5 +45,3 @@ jobs:
           tag_name: pre
           files: |
             ./artifacts/chsrc-armv7-linux
-          token: ${{ secrets.UPLOAD_TO_GITHUB }}
-
