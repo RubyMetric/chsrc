@@ -78,4 +78,3 @@ jobs:
         tag_name: pre
         files: |
           chsrc-x64-macos
-        token: ${{ secrets.UPLOAD_TO_GITHUB }}

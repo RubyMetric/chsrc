@@ -78,4 +78,3 @@ jobs:
           chsrc-x64-windows.exe
           chsrc-x86-windows.exe
           chsrc-arm64-android
-        token: ${{ secrets.UPLOAD_TO_GITHUB }}
