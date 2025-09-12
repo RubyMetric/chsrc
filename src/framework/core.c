@@ -10,7 +10,7 @@
  *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-08-27>
+ * Last Modified : <2025-09-12>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -1347,6 +1347,28 @@ chsrc_run_as_a_service (const char *cmd)
   ProgStatus.chsrc_run_faas = false;
 }
 
+
+/**
+ * @brief 以纯粹的方式直接运行命令，不做任何多余处理，
+ *        命令执行前显示给用户，并保留所有输出给用户
+ *
+ * @return 返回命令的退出状态
+ */
+int
+chsrc_run_directly (const char *cmd)
+{
+  if (ENGLISH)
+    xy_log_brkt (blue (App_Name), bdblue ("RUN"), blue (cmd));
+  else
+    xy_log_brkt (blue (App_Name), bdblue ("运行"), blue (cmd));
+
+  if (in_dry_run_mode())
+    {
+      return 0; // Dry Run 此时立即结束，并不真正执行
+    }
+  int status = system (cmd);
+  return status;
+}
 
 
 /**
