@@ -30,8 +30,8 @@
  * 然的加入，逐渐成长为互相支持的伙伴。
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.2.3-dev6"
-#define Chsrc_Release_Date   "2025/08/22"
+#define Chsrc_Version        "0.2.2.4"
+#define Chsrc_Release_Date   "2025/09/12"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
