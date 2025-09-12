@@ -12,7 +12,7 @@ wr_homebrew_prelude ()
   chef_prep_this (wr_homebrew, gs);
 
   chef_set_created_on   (this, "2023-09-10");
-  chef_set_last_updated (this, "2025-08-09");
+  chef_set_last_updated (this, "2025-09-12");
   chef_set_sources_last_updated (this, "2025-07-13");
 
   chef_set_chef (this, NULL);
@@ -39,7 +39,7 @@ wr_homebrew_prelude ()
 void
 wr_homebrew_getsrc (char *option)
 {
-  int status = system (RAWSTR_wr_homebrew_read_config_cmd);
+  int status = xy_run_get_status (RAWSTR_wr_homebrew_read_config_cmd);
   if (status != 0) { xy_noop(); }
 }
 

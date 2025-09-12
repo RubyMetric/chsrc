@@ -10,7 +10,7 @@ pl_python_pip_prelude (void)
   chef_prep_this (pl_python_pip, gsr);
 
   chef_set_created_on   (this, "2023-09-03");
-  chef_set_last_updated (this, "2025-09-10");
+  chef_set_last_updated (this, "2025-09-12");
   chef_set_sources_last_updated (this, "2025-07-11");
 
   chef_set_chef (this, NULL);
@@ -31,12 +31,13 @@ pl_python_pip_getsrc (char *option)
   char *py_prog_name = NULL;
   pl_python_get_py_program_name (&py_prog_name);
 
-  char *cmd = xy_2strcat (py_prog_name, " -m pip config get global.index-url 2>/dev/null");
-  
-  int status = system (cmd);
+  char *cmd = xy_2strcat (py_prog_name, " -m pip config get global.index-url");
+
+  int status = chsrc_run_directly (cmd);
   if (0 == status)
     {
       // 执行成功时显示当前源
+      xy_noop ();
     }
   else
     {
@@ -45,9 +46,9 @@ pl_python_pip_getsrc (char *option)
         chsrc_note2 ("No source configured in pip, showing default upstream source:");
       else
         chsrc_note2 ("pip 中未配置源，显示默认上游源：");
-      
+
       Source_t default_source = chsrc_yield_source (&pl_python_group_target, "upstream");
-      chsrc_log (default_source.url);
+      say (default_source.url);
     }
 }
 

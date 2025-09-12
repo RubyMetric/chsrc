@@ -142,7 +142,7 @@ pl_python_uv_setsrc (char *option)
       /* 当 uv_config 存在，如果存在 [[index]] 则更新，否则追加到文件末尾 */
       char *cmd = xy_str_gsub (RAWSTR_pl_python_test_uv_if_set_source, "@f@", uv_config);
       chsrc_ensure_program ("grep");
-      int status = system (cmd);
+      int status = xy_run_get_status (cmd);
       if (0==status)
         {
           chsrc_run (update_config_cmd, RunOpt_Default);
