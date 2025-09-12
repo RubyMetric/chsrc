@@ -1,10 +1,10 @@
 # ---------------------------------------------------------------
 # Workflow File : build-on-Windows.yml
-# File Authors  :  Aoran Zeng <ccmywish@qq.com>
-# Contributors  :   Nul None  <nul@none.org>
+# File Authors  : 曾奥然 <ccmywish@qq.com>
+# Contributors  : Nul None <nul@none.org>
 #               |
 # Created On    : <2023-09-14>
-# Last Modified : <2025-07-22>
+# Last Modified : <2025-09-12>
 #
 # Build chsrc on Windows and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
@@ -78,4 +78,3 @@ jobs:
           chsrc-x64-windows.exe
           chsrc-x86-windows.exe
           chsrc-arm64-android
-        token: ${{ secrets.UPLOAD_TO_GITHUB }}

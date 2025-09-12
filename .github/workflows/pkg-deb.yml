@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------
 # Workflow File : pkg-deb.yml
 # File Authors  : sanchuanhehe <wyihe5520@gmail.com>
-# Contributors  :  Aoran Zeng  <ccmywish@qq.com>
+# Contributors  : 曾奥然 <ccmywish@qq.com>
 #               |
 # Created On    : <2025-06-10>
 # Last Modified : <2025-06-16>
@@ -133,7 +133,6 @@ jobs:
       with:
         # 用 * 省略版本号，以及指代各种架构
         files: dist/chsrc_*.deb
-        token: ${{ secrets.UPLOAD_TO_GITHUB }}
 
     - name: 上传附件到GitHub Releases(the 'pre' release)
       if: github.event_name == 'push'
@@ -142,7 +141,6 @@ jobs:
         tag_name: pre
         # 用 * 指代各种架构
         files: dist-for-pre/chsrc_latest-1_*.deb
-        token: ${{ secrets.UPLOAD_TO_GITHUB }}
 
 
 

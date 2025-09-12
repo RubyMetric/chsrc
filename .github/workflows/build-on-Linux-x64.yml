@@ -1,10 +1,10 @@
 # ---------------------------------------------------------------
 # Workflow File : build-on-Linux-x64.yml
-# File Authors  :  Aoran Zeng <ccmywish@qq.com>
-# Contributors  :   Nul None  <nul@none.org>
+# File Authors  : 曾奥然 <ccmywish@qq.com>
+# Contributors  : Nul None <nul@none.org>
 #               |
 # Created On    : <2023-09-14>
-# Last Modified : <2025-06-20>
+# Last Modified : <2025-09-12>
 #
 # Build chsrc on Linux (x64) and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
@@ -37,4 +37,3 @@ jobs:
         tag_name: pre
         files: |
           chsrc-x64-linux
-        token: ${{ secrets.UPLOAD_TO_GITHUB }}
