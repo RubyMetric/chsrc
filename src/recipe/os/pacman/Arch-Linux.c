@@ -116,7 +116,7 @@ os_archlinuxcn_prelude ()
   chef_prep_this (os_archlinuxcn, gs);
 
   chef_set_created_on   (this, "2023-09-05");
-  chef_set_last_updated (this, "2025-08-10");
+  chef_set_last_updated (this, "2025-09-12");
   chef_set_sources_last_updated (this, "2024-07-03");
 
   chef_set_chef (this, NULL);
@@ -133,7 +133,7 @@ os_archlinuxcn_prelude ()
 
 
   def_sources_begin()
-  {&UpstreamProvider,         "https://repo.archlinuxcn.org/",            DelegateToUpstream},
+  {&UpstreamProvider, "https://repo.archlinuxcn.org/",            DelegateToUpstream},
   {&Ali,              "https://mirrors.aliyun.com/archlinuxcn/",  DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/archlinuxcn/", DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/archlinuxcn/", DelegateToMirror},
@@ -157,7 +157,6 @@ os_archlinuxcn_getsrc (char *option)
 
 /**
  * @consult https://mirrors.tuna.tsinghua.edu.cn/help/archlinuxcn/
- * @update 2025-05-24
  */
 void
 os_archlinuxcn_setsrc (char *option)
@@ -172,7 +171,7 @@ os_archlinuxcn_setsrc (char *option)
 
   /* 检查是否已存在 archlinuxcn 配置段 */
   char *check_cmd = "grep -q '\\[archlinuxcn\\]' " OS_Pacman_ArchLinuxCN_MirrorList;
-  int ret = system(check_cmd);
+  int ret = xy_run_get_status (check_cmd);
 
   if (ret == 0)
     {
