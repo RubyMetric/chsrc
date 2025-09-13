@@ -10,12 +10,12 @@ pl_rust_cargo_prelude (void)
   chef_prep_this (pl_rust_cargo, gsr);
 
   chef_set_created_on   (this, "2023-08-30");
-  chef_set_last_updated (this, "2025-07-22");
+  chef_set_last_updated (this, "2025-09-13");
   chef_set_sources_last_updated (this, "2025-06-18");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_sauciers (this, 1, "@Mikachu2333");
+  chef_set_sauciers (this, 2, "@Mikachu2333", "@happy-game");
 
   chef_allow_local_mode (this, PartiallyCan, "可以基于本项目换源吗？请帮助确认", "Can it change sources based on this project? Please help confirm");
   chef_forbid_english (this);
@@ -62,14 +62,58 @@ pl_rust_cargo_getsrc (char *option)
 void
 pl_rust_cargo_setsrc (char *option)
 {
+  chsrc_ensure_program ("cargo");
+  
   chsrc_use_this_source (pl_rust_cargo);
 
-  char *content = RAWSTR_pl_rust_cargo_config;
+  char *cargo_config_dir = "~/.cargo/";
+  char *cargo_config_file = xy_2strcat (cargo_config_dir, "config.toml");
+  
+  chsrc_ensure_dir (cargo_config_dir);
+  
+  cargo_config_file = xy_normalize_path (cargo_config_file);
+  
+  if (xy_file_exist (cargo_config_file))
+    {
+      chsrc_backup (cargo_config_file);
+    }
 
+  char *content = RAWSTR_pl_rust_cargo_config;
   content = xy_str_gsub (content, "@url@", source.url);
 
-  chsrc_note2 (xy_strcat (3, "请手动写入以下内容到 ", xy_normalize_path ("~/.cargo/config.toml"), " 文件中:"));
-  println (content);
+  if (xy_file_exist (cargo_config_file))
+    {
+      char *check_cmd = xy_str_gsub (RAWSTR_pl_rust_cargo_check_config, "@f@", cargo_config_file);
+      chsrc_ensure_program ("grep");
+      int status = chsrc_run_directly (check_cmd);
+      
+      if (0 == status)
+        {
+#if defined(XY_Build_On_macOS) || defined(XY_Build_On_BSD)
+          char *sed_cmd = "sed -i '' ";
+#else
+          char *sed_cmd = "sed -i ";
+#endif
+          
+          char *update_cmd = xy_str_gsub (RAWSTR_pl_rust_cargo_update_replace_with, "@sed@", sed_cmd);
+          update_cmd = xy_str_gsub (update_cmd, "@f@", cargo_config_file);
+          chsrc_run (update_cmd, RunOpt_Default);
+          
+          update_cmd = xy_str_gsub (RAWSTR_pl_rust_cargo_update_registry, "@sed@", sed_cmd);
+          update_cmd = xy_str_gsub (update_cmd, "@f@", cargo_config_file);
+          update_cmd = xy_str_gsub (update_cmd, "@url@", source.url);
+          chsrc_run (update_cmd, RunOpt_Default);
+        }
+      else
+        {
+          chsrc_append_to_file ("\n", cargo_config_file);
+          chsrc_append_to_file (content, cargo_config_file);
+        }
+    }
+  else
+    {
+      chsrc_append_to_file (content, cargo_config_file);
+    }
 
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);

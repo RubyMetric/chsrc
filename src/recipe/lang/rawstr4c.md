@@ -3,9 +3,9 @@
  ! -------------------------------------------------------------
  ! Config Type   : rawstr4c (Markdown)
  ! Config Authors: Aoran Zeng <ccmywish@qq.com>
- ! Contributors  :  Nil Null  <nil@null.org>
+ ! Contributors  : Happy Game <happygame1024@gmail.com>
  ! Created On    : <2025-07-14>
- ! Last Modified : <2025-08-08>
+ ! Last Modified : <2025-09-13>
  ! ---------------------------------------------------------- -->
 
 # rawstr4c input for PL
@@ -79,6 +79,30 @@ replace-with = 'mirror'
 
 [source.mirror]
 registry = "sparse+@url@"
+```
+
+### cargo check config
+
+- name = `cargo_check_config`
+
+```bash
+grep -q '^\[source\.crates-io\]' @f@
+```
+
+### cargo update replace-with
+
+- name = `cargo_update_replace_with`
+
+```bash
+@sed@ '/^\[source\.crates-io\]$/,/^\[/{s/^replace-with = .*/replace-with = "mirror"/}' @f@
+```
+
+### cargo update registry
+
+- name = `cargo_update_registry`
+
+```bash
+@sed@ '/^\[source\.mirror\]$/,/^\[/{s|^registry = .*|registry = "sparse+@url@"|}' @f@
 ```
 
 <br>
