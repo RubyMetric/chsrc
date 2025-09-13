@@ -295,7 +295,7 @@ log_check_result (const char *check_what, const char *check_type, bool exist)
 
 
 static void
-log_cmd_result (bool result, int exit_status)
+log_cmd_result (bool result, int exit_status, bool use_yellow_for_error)
 {
   char *run_msg  = NULL;
   char *succ_msg = NULL;
@@ -320,8 +320,17 @@ log_cmd_result (bool result, int exit_status)
     {
       char buf[8] = {0};
       sprintf (buf, "%d", exit_status);
-      char *log = xy_2strcat (red (fail_msg), bdred (buf));
-      xy_log_brkt (red (App_Name), bdred (run_msg), log);
+
+      if (use_yellow_for_error)
+        {
+          char *log = xy_2strcat (yellow (fail_msg), bdyellow (buf));
+          xy_log_brkt (yellow (App_Name), bdyellow (run_msg), log);
+        }
+      else
+        {
+          char *log = xy_2strcat (red (fail_msg), bdred (buf));
+          xy_log_brkt (red (App_Name), bdred (run_msg), log);
+        }
     }
 }
 
@@ -1312,16 +1321,18 @@ chsrc_run (const char *cmd, int run_option)
     }
 
   int status = system (cmd);
+  bool use_yellow_for_error = (run_option & RunOpt_Dont_Abort_On_Failure) != 0;
+
   if (0==status)
     {
       if (! (RunOpt_Dont_Notify_On_Success & run_option))
         {
-          log_cmd_result (true, status);
+          log_cmd_result (true, status, use_yellow_for_error);
         }
     }
   else
     {
-      log_cmd_result (false, status);
+      log_cmd_result (false, status, use_yellow_for_error);
       if (! (run_option & RunOpt_Dont_Abort_On_Failure))
         {
           char *msg = ENGLISH ? "Fatal error, forced end" : "关键错误，强制结束";
