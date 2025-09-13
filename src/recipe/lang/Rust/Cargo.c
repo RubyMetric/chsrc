@@ -51,7 +51,49 @@ pl_rust_cargo_prelude (void)
 void
 pl_rust_cargo_getsrc (char *option)
 {
-  chsrc_view_file ("~/.cargo/config.toml");
+  char *cargo_config_file = xy_normalize_path ("~/.cargo/config.toml");
+  
+  if (xy_file_exist (cargo_config_file))
+    {
+      // 尝试提取 [source.mirror] 下的 registry URL
+      char *grep_cmd = xy_str_gsub ("grep -A1 '\\[source\\.mirror\\]' '@f@' | grep 'registry' | cut -d'\"' -f2", "@f@", cargo_config_file);
+      chsrc_ensure_program ("grep");
+      chsrc_ensure_program ("cut");
+      
+      char *mirror_url;
+      int status = xy_run_get_stdout (grep_cmd, &mirror_url);
+      char *stripped_url = (mirror_url) ? xy_str_strip(mirror_url) : "";
+      
+      if (0 == status && stripped_url && strstr(stripped_url, "http"))
+        {
+          // 找到配置的镜像源，如果存在 sparse+ 前缀则去除
+          char *clean_url = (strstr(stripped_url, "sparse+")) ? 
+                           stripped_url + 7 : stripped_url;
+          say (clean_url);
+        }
+      else
+        {
+          // 配置文件存在但没有找到镜像源配置，显示默认上游源
+          if (ENGLISH)
+            chsrc_note2 ("Config file exists but no mirror source found, showing default upstream source:");
+          else
+            chsrc_note2 ("配置文件存在但未找到镜像源配置，显示默认上游源：");
+
+          Source_t default_source = chsrc_yield_source (&pl_rust_cargo_target, "upstream");
+          say (default_source.url);
+        }
+    }
+  else
+    {
+      // 配置文件不存在，显示默认上游源
+      if (ENGLISH)
+        chsrc_note2 ("No source configured in Cargo, showing default upstream source:");
+      else
+        chsrc_note2 ("Cargo 中未配置源，显示默认上游源：");
+
+      Source_t default_source = chsrc_yield_source (&pl_rust_cargo_target, "upstream");
+      say (default_source.url);
+    }
 }
 
 
