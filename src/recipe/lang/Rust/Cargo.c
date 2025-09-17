@@ -10,12 +10,12 @@ pl_rust_cargo_prelude (void)
   chef_prep_this (pl_rust_cargo, gsr);
 
   chef_set_created_on   (this, "2023-08-30");
-  chef_set_last_updated (this, "2025-09-13");
+  chef_set_last_updated (this, "2025-09-18");
   chef_set_sources_last_updated (this, "2025-06-18");
 
   chef_set_chef (this, NULL);
-  chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_sauciers (this, 2, "@Mikachu2333", "@happy-game");
+  chef_set_cooks (this, 2, "@happy-game", "@ccmywish");
+  chef_set_sauciers (this, 1, "@Mikachu2333");
 
   chef_allow_local_mode (this, PartiallyCan, "可以基于本项目换源吗？请帮助确认", "Can it change sources based on this project? Please help confirm");
   chef_forbid_english (this);
@@ -56,9 +56,9 @@ pl_rust_cargo_getsrc (char *option)
   if (xy_file_exist (cargo_config_file))
     {
       // 尝试提取 [source.mirror] 下的 registry URL
-      char *grep_cmd = xy_str_gsub ("grep -A1 '\\[source\\.mirror\\]' '@f@' | grep 'registry' | cut -d'\"' -f2", "@f@", cargo_config_file);
+      char *grep_cmd = xy_str_gsub ("grep -A1 '\\[source\\.mirror\\]' '@f@' | grep 'registry' | sed 's/[^\"]*\"\\([^\"]*\\)\".*/\\1/'", "@f@", cargo_config_file);
       chsrc_ensure_program ("grep");
-      chsrc_ensure_program ("cut");
+      chsrc_ensure_program ("sed");
       
       char *mirror_url;
       int status = xy_run_get_stdout (grep_cmd, &mirror_url);
@@ -131,12 +131,16 @@ pl_rust_cargo_setsrc (char *option)
       
       if (0 == status)
         {
-#if defined(XY_Build_On_macOS) || defined(XY_Build_On_BSD)
-          char *sed_cmd = "sed -i '' ";
-#else
-          char *sed_cmd = "sed -i ";
-#endif
-          
+          char *sed_cmd;
+          if (xy.on_bsd || xy.on_macos)
+            {
+              sed_cmd = "sed -i '' ";
+            }
+          else
+            {
+            sed_cmd = "sed -i ";
+            }
+
           char *update_cmd = xy_str_gsub (RAWSTR_pl_rust_cargo_update_replace_with, "@sed@", sed_cmd);
           update_cmd = xy_str_gsub (update_cmd, "@f@", cargo_config_file);
           chsrc_run (update_cmd, RunOpt_Default);
