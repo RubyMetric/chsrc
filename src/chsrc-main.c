@@ -419,7 +419,9 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
 void
 cli_print_version ()
 {
-  char *str = xy_str_gsub (RAWSTR_chsrc_for_v, "@ver@", Chsrc_Version);
+  char *version_string = "v" Chsrc_Version " (" Chsrc_Release_Date ")";
+
+  char *str = xy_str_gsub (RAWSTR_chsrc_for_v, "@ver@", version_string);
   println (str);
 }
 
@@ -427,7 +429,7 @@ cli_print_version ()
 void
 cli_print_help ()
 {
-  char *version_string = "v" Chsrc_Version "-" Chsrc_Release_Date;
+  char *version_string = "v" Chsrc_Version " (" Chsrc_Release_Date ")";
 
   const char *raw = CHINESE ? RAWSTR_chsrc_USAGE_CHINESE : RAWSTR_chsrc_USAGE_ENGLISH;
 
