@@ -342,8 +342,20 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
 {
   if (target->created_on)
     {
-      char *msg = ENGLISH ? "Recipe Created On: " : "食谱创建时间: ";
-      printf ("%s%s\n", bdblue(msg), target->created_on);
+      char *msg = ENGLISH ? "Recipe Created On: " : "食谱创建: ";
+      printf ("%s%s ", bdblue(msg), target->created_on);
+    }
+
+  if (target->last_updated)
+    {
+      char *msg = ENGLISH ? "Recipe Last Updated: " : "食谱更新: ";
+      printf ("%s%s ", bdblue(msg), target->last_updated);
+    }
+
+  if (target->sources_last_updated)
+    {
+      char *msg = ENGLISH ? "Ingredient(Sources) Last Updated: " : "食源检查: ";
+      printf ("%s%s\n", bdblue(msg), target->sources_last_updated);
     }
 
   {
@@ -401,18 +413,6 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
         printf ("%s%s\n", bdblue(msg), bdgreen(msg1));
       }
   }
-
-  if (target->sources_last_updated)
-    {
-      char *msg = ENGLISH ? "Ingredient(Sources) Last Updated: " : "食源检查时间: ";
-      printf ("%s%s\n", bdblue(msg), target->sources_last_updated);
-    }
-
-  if (target->last_updated)
-    {
-      char *msg = ENGLISH ? "Recipe Last Updated: " : "食谱更新时间: ";
-      printf ("%s%s\n", bdblue(msg), target->last_updated);
-    }
 }
 
 
