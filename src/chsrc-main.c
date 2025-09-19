@@ -30,8 +30,8 @@
  * 然的加入，逐渐成长为互相支持的伙伴。
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.2.4"
-#define Chsrc_Release_Date   "2025/09/12"
+#define Chsrc_Version        "0.2.2.5-dev1"
+#define Chsrc_Release_Date   "2025/09/19"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
@@ -646,7 +646,8 @@ get_target (const char *input, TargetOp code, char *option)
 
   if (TargetOp_Set_Source==code || TargetOp_Measure_Source==code)
     {
-      chsrc_op_epilogue ();
+      // 2025-09-19: 已告知该消息给用户一个多月，我们不再告知
+      // chsrc_op_epilogue ();
     }
 
 #ifdef XY_DEBUG
