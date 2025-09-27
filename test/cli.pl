@@ -1,13 +1,40 @@
 #!/usr/bin/env perl
 # ---------------------------------------------------------------
 # Test File     : cli.pl
-# Test Authors  : Aoran Zeng <ccmywish@qq.com>
+# Test Authors  : 曾奥然 <ccmywish@qq.com>
 # Contributors  :  Nil Null  <nil@null.org>
 # Created On    : <2024-06-05>
-# Last Modified : <2025-08-11>
+# Last Modified : <2025-09-27>
 #
 #   测试 chsrc 可执行文件
 # ---------------------------------------------------------------
+
+=encoding utf8
+
+本文件可以使用
+
+    $ podchecker .test\cli.pl
+
+来检查 Pod 语法
+
+    $ pod2html .\test\cli.pl > CLI.html
+
+来生成 HTML 文件
+
+    $ pod2markdown .\test\cli.pl > CLI.md
+
+来生成 Markdown 文件
+
+=over
+
+=item C<=end> 的时候前面必须给一个空行，否则 podchecker 不认
+
+=item 每一个 Pod block 必须用 C<=cut> 来终结，否则 VS Code 会把后续内容全部认为是 POD
+
+=back
+=cut
+
+
 
 use v5.38;
 use Test::More;
@@ -23,8 +50,12 @@ like `./chsrc --help`, $help_str,    'chsrc --help';
 like `./chsrc help`,   $help_str,    'chsrc help';
 like `./chsrc`,        $help_str,    'chsrc';
 
-=begin
+
+=begin comment
+
 测试 chsrc list
+
+=end comment
 =cut
 my $list_str = qr/mirrorz\s*MirrorZ\s*.*\ntuna\s*TUNA/;
 like `./chsrc ls`,            $list_str,    'chsrc ls';
@@ -33,8 +64,11 @@ like `./chsrc list os`,    qr/netbsd\s*openbsd/,   'chsrc list os';
 like `./chsrc list ware`,  qr/brew\s*homebrew/,   'chsrc list ware';
 
 
-=begin
+=begin comment
+
 测试 chsrc get
+
+=end comment
 =cut
 my $get_null = qr/chsrc: 请提供想要查看源的目标名/;
 like `./chsrc get -no-color 2>&1`,  $get_null,    'chsrc get -no-color';
@@ -62,16 +96,21 @@ my $get_ruby = qr/gem sources/;
 like `./chsrc get ruby`,   $get_ruby,  'chsrc get ruby';
 
 
-=begin
+=begin comment
+
 测试 chsrc measure
+
+=end comment
 =cut
 my $measure_ruby = qr/Ruby China 社区/;
 like `./chsrc measure ruby`,  $measure_ruby,  'chsrc measure ruby';
 
 
+=begin comment
 
-=begin
 测试 chsrc set 以及 chsrc reset
+
+=end comment
 =cut
 my $set_ruby_abcd      = qr/镜像站.*不存在/;
 my $set_ruby_first     = qr/全自动换源完成, 感谢镜像提供方/;
