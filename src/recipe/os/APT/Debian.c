@@ -10,7 +10,7 @@ os_debian_prelude ()
   chef_prep_this (os_debian, gsr);
 
   chef_set_created_on   (this, "2023-09-02");
-  chef_set_last_updated (this, "2025-08-10");
+  chef_set_last_updated (this, "2025-09-12");
   chef_set_sources_last_updated (this, "2025-07-11");
 
   chef_set_chef (this, NULL);
@@ -73,7 +73,7 @@ os_debian_does_old_sourcelist_use_cdrom (void)
 {
   /* 我们只检查旧版sourcelist，因为 common.h 中的填充只支持旧版 */
   char *cmd = xy_2strcat ("grep -q '^deb cdrom:' ", OS_Debian_old_SourceList);
-  int ret = system (cmd);
+  int ret = xy_run_get_status (cmd);
   bool use_cdrom = ret == 0;
 
   return use_cdrom;
@@ -135,7 +135,7 @@ os_debian_setsrc (char *option)
       if (use_cdrom)
         {
           chsrc_backup (OS_Debian_old_SourceList);
-          int rm_status = system ("rm " OS_Debian_old_SourceList);
+          int rm_status = xy_run_get_status ("rm " OS_Debian_old_SourceList);
           if (rm_status != 0) { /* Placate -Wunused-result */ }
 
           chsrc_warn2 ("旧版源配置文件中使用了 CDROM 源，已删除(但备份)该配置文件，重新配置");

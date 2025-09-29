@@ -41,6 +41,7 @@ chsrc-ci-release
 xy
 fw
 README.md.bak*
+*.tmp
 
 # Generated when testing (when there's a bug)
 nul

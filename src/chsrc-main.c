@@ -30,8 +30,8 @@
  * 然的加入，逐渐成长为互相支持的伙伴。
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.2.3-dev6"
-#define Chsrc_Release_Date   "2025/08/22"
+#define Chsrc_Version        "0.2.2.5-dev1"
+#define Chsrc_Release_Date   "2025/09/19"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
@@ -342,8 +342,20 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
 {
   if (target->created_on)
     {
-      char *msg = ENGLISH ? "Recipe Created On: " : "食谱创建时间: ";
-      printf ("%s%s\n", bdblue(msg), target->created_on);
+      char *msg = ENGLISH ? "Recipe Created On: " : "食谱创建: ";
+      printf ("%s%s ", bdblue(msg), target->created_on);
+    }
+
+  if (target->last_updated)
+    {
+      char *msg = ENGLISH ? "Recipe Last Updated: " : "食谱更新: ";
+      printf ("%s%s ", bdblue(msg), target->last_updated);
+    }
+
+  if (target->sources_last_updated)
+    {
+      char *msg = ENGLISH ? "Ingredient(Sources) Last Updated: " : "食源检查: ";
+      printf ("%s%s\n", bdblue(msg), target->sources_last_updated);
     }
 
   {
@@ -401,25 +413,15 @@ cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
         printf ("%s%s\n", bdblue(msg), bdgreen(msg1));
       }
   }
-
-  if (target->sources_last_updated)
-    {
-      char *msg = ENGLISH ? "Ingredient(Sources) Last Updated: " : "食源检查时间: ";
-      printf ("%s%s\n", bdblue(msg), target->sources_last_updated);
-    }
-
-  if (target->last_updated)
-    {
-      char *msg = ENGLISH ? "Recipe Last Updated: " : "食谱更新时间: ";
-      printf ("%s%s\n", bdblue(msg), target->last_updated);
-    }
 }
 
 
 void
 cli_print_version ()
 {
-  char *str = xy_str_gsub (RAWSTR_chsrc_for_v, "@ver@", Chsrc_Version);
+  char *version_string = "v" Chsrc_Version " (" Chsrc_Release_Date ")";
+
+  char *str = xy_str_gsub (RAWSTR_chsrc_for_v, "@ver@", version_string);
   println (str);
 }
 
@@ -427,7 +429,7 @@ cli_print_version ()
 void
 cli_print_help ()
 {
-  char *version_string = "v" Chsrc_Version "-" Chsrc_Release_Date;
+  char *version_string = "v" Chsrc_Version " (" Chsrc_Release_Date ")";
 
   const char *raw = CHINESE ? RAWSTR_chsrc_USAGE_CHINESE : RAWSTR_chsrc_USAGE_ENGLISH;
 
@@ -646,7 +648,8 @@ get_target (const char *input, TargetOp code, char *option)
 
   if (TargetOp_Set_Source==code || TargetOp_Measure_Source==code)
     {
-      chsrc_op_epilogue ();
+      // 2025-09-19: 已告知该消息给用户一个多月，我们不再告知
+      // chsrc_op_epilogue ();
     }
 
 #ifdef XY_DEBUG
