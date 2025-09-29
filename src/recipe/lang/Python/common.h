@@ -9,12 +9,16 @@ def_target(pl_python_group, "python/pypi/py");
 /**
  * @note 测速链接的这个前缀是 ${host}/pipi/web/pacakges/56/e4....
  * 下面有几个镜像站微调了这个路径，我们只要确认能找到 packages 目录就好
+ * @note 2025-09-29 更新了测试的 pkg 链接，换用了一个 40M 的
+ *
+ * @warning 2025-09-29 Sjtug 需要特殊处理
  */
 static char *
 pl_python_speed_url_constructor (const char *url, const char *user_data)
 {
   char *str = xy_str_delete_suffix (url, "/simple");
-  str = xy_2strcat (str, "/packages/56/e4/55aaac2b15af4dad079e5af329a79d961e5206589d0e02b1e8da221472ed/tensorflow-2.18.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl");
+  str = xy_2strcat (str, "/packages/fa/80/eb88edc2e2b11cd2dd2e56f1c80b5784d11d6e6b7f04a1145df64df40065/opencv_python-4.12.0.88-cp37-abi3-win_amd64.whl");
+  str = xy_str_gsub (str, "pypi-packages/packages", "pypi-packages");// 针对 Sjtug
   return str;
 }
 
@@ -25,13 +29,13 @@ pl_python_group_prelude (void)
   chef_prep_this (pl_python_group, gsr);
 
   chef_set_created_on   (this, "2023-09-03");
-  chef_set_last_updated (this, "2025-07-14");
-  chef_set_sources_last_updated (this, "2025-07-11");
+  chef_set_last_updated (this, "2025-09-30");
+  chef_set_sources_last_updated (this, "2025-09-30");
 
   chef_set_chef (this, "@happy-game");
   // 组换源的 leader target 应把所有 follower target 的贡献者都记录过来
   chef_set_cooks (this, 2, "@ccmywish", "@happy-game");
-  chef_set_sauciers (this, 2, "@xyx1926885268", "@Kattos");
+  chef_set_sauciers (this, 3, "@xyx1926885268", "@Kattos", "@Mikachu2333");
 
   chef_allow_local_mode (this, PartiallyCan, "部分包管理器支持项目级换源", "Some package managers support project-level source changing");
   chef_allow_english(this);
@@ -44,10 +48,11 @@ pl_python_group_prelude (void)
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/pypi/web/simple", FeedByPrelude},
   /* 不要添加Zju，浙大的PyPI服务在校外访问会自动转向Tuna */
   {&Lzuoss,           "https://mirror.lzu.edu.cn/pypi/web/simple",FeedByPrelude},
-  {&Jlu,              "https://mirrors.jlu.edu.cn/pypi/web/simple",FeedByPrelude},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/pypi/web/simple",FeedByPrelude},
+  // 2025-09-29 此源已于 2025-04-06 停用
+  // {&Jlu,              "https://mirrors.jlu.edu.cn/pypi/web/simple",FeedByPrelude},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/pypi-packages",FeedByPrelude},
   {&Tuna,             "https://pypi.tuna.tsinghua.edu.cn/simple", FeedByPrelude},
-  {&Ali,              "https://mirrors.aliyun.com/pypi/simple/", FeedByPrelude},
+  {&Ali,              "https://mirrors.aliyun.com/pypi/simple", FeedByPrelude},
   {&Nju,              "https://mirror.nju.edu.cn/pypi/web/simple",FeedByPrelude},
   {&Pku,              "https://mirrors.pku.edu.cn/pypi/web/simple",FeedByPrelude},
   {&Tencent,          "https://mirrors.cloud.tencent.com/pypi/simple",FeedByPrelude},
