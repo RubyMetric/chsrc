@@ -42,6 +42,8 @@ xy
 fw
 README.md.bak*
 *.tmp
+chsrc_tmp_test.txt
+chsrc_tmp_test.txt.bak
 
 # Generated when testing (when there's a bug)
 nul
