@@ -25,16 +25,16 @@ pl_rust_rustup_prelude (void)
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&UpstreamProvider, "https://static.rust-lang.org",         FeedByPrelude},
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/rustup", FeedByPrelude},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/rustup", FeedByPrelude},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/rust-static", FeedByPrelude},
-  {&Nju,              "https://mirror.nju.edu.cn/rustup", FeedByPrelude},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/rust-static", FeedByPrelude},
-  {&Zju,              "https://mirrors.zju.edu.cn/rustup", FeedByPrelude},
-  {&Iscas,            "https://mirror.iscas.ac.cn/rustup", FeedByPrelude},
-  {&Ali,              "https://mirrors.aliyun.com/rustup", FeedByPrelude},
-  {&RsProxyCN,        "https://rsproxy.cn",                FeedByPrelude}
+  {&UpstreamProvider, "https://static.rust-lang.org",                 FeedByPrelude},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/rustup",         FeedByPrelude},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/rustup",  FeedByPrelude},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/rust-static",      FeedByPrelude},
+  {&Nju,              "https://mirror.nju.edu.cn/rustup",             FeedByPrelude},
+  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/rust-static",       FeedByPrelude},
+  {&Zju,              "https://mirrors.zju.edu.cn/rustup",            FeedByPrelude},
+  {&Iscas,            "https://mirror.iscas.ac.cn/rustup",            FeedByPrelude},
+  {&Ali,              "https://mirrors.aliyun.com/rustup",            FeedByPrelude},
+  {&RsProxyCN,        "https://rsproxy.cn",                           FeedByPrelude}
   def_sources_end()
 
   // 20MB大小
