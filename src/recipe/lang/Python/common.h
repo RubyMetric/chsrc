@@ -43,19 +43,20 @@ pl_python_group_prelude (void)
 
 
   def_sources_begin()
-  {&UpstreamProvider, "https://pypi.org/simple",                     FeedByPrelude},
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/pypi/web/simple",FeedByPrelude},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/pypi/web/simple", FeedByPrelude},
-  /* 不要添加Zju，浙大的PyPI服务在校外访问会自动转向Tuna */
-  {&Lzuoss,           "https://mirror.lzu.edu.cn/pypi/web/simple",FeedByPrelude},
-  // 2025-09-29 此源已于 2025-04-06 停用
-  // {&Jlu,              "https://mirrors.jlu.edu.cn/pypi/web/simple",FeedByPrelude},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/pypi-packages",FeedByPrelude},
-  {&Tuna,             "https://pypi.tuna.tsinghua.edu.cn/simple", FeedByPrelude},
-  {&Ali,              "https://mirrors.aliyun.com/pypi/simple", FeedByPrelude},
-  {&Nju,              "https://mirror.nju.edu.cn/pypi/web/simple",FeedByPrelude},
-  {&Pku,              "https://mirrors.pku.edu.cn/pypi/web/simple",FeedByPrelude},
-  {&Tencent,          "https://mirrors.cloud.tencent.com/pypi/simple",FeedByPrelude},
+  {&UpstreamProvider, "https://pypi.org/simple",                       FeedByPrelude},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/pypi/web/simple", FeedByPrelude},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/pypi/web/simple",   FeedByPrelude},
+  // 不要添加Zju，浙大的PyPI服务在校外访问会自动转向Tuna
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/pypi/web/simple",     FeedByPrelude},
+  // 2025-09-29 此源已停用
+  // @ref https://mirrors.jlu.edu.cn/_news/#2025-04-06-pypi-repo-down
+  // {&Jlu,              "https://mirrors.jlu.edu.cn/pypi/web/simple", FeedByPrelude},
+  {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn/pypi-packages",      FeedByPrelude},
+  {&Tuna,             "https://pypi.tuna.tsinghua.edu.cn/simple",      FeedByPrelude},
+  {&Ali,              "https://mirrors.aliyun.com/pypi/simple",        FeedByPrelude},
+  {&Nju,              "https://mirror.nju.edu.cn/pypi/web/simple",     FeedByPrelude},
+  {&Pku,              "https://mirrors.pku.edu.cn/pypi/web/simple",    FeedByPrelude},
+  {&Tencent,          "https://mirrors.cloud.tencent.com/pypi/simple", FeedByPrelude},
 
   // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/pypi/simple",FeedByPrelude}
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/pypi/simple",FeedByPrelude},
