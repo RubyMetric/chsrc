@@ -2,15 +2,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Name     : core.c
- * File Authors  : 曾奥然 <ccmywish@qq.com>
- *               |  郭恒  <2085471348@qq.com>
- * Contributors  :  Peng Gao  <gn3po4g@outlook.com>
- *               | Happy Game <happygame10124@gmail.com>
- *               | Yangmoooo  <yangmoooo@outlook.com>
- *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
+ * File Authors  : 曾奥然        <ccmywish@qq.com>
+ *               |  郭恒         <2085471348@qq.com>
+ * Contributors  :  Peng Gao     <gn3po4g@outlook.com>
+ *               | Happy Game    <happygame10124@gmail.com>
+ *               | Yangmoooo     <yangmoooo@outlook.com>
+ *               | BingChunMoLi  <bingchunmoli@bingchunmoli.com>
+ *               | Mikachu2333   <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-09-12>
+ * Last Modified : <2025-09-29>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -239,9 +240,9 @@ chsrc_init_framework ()
 
 
 void
-chsrc_log_write (const char *filename)
+chsrc_log_write (const char *filename, bool is_overwrite)
 {
-  char *msg = ENGLISH ? "WRITE" : "写入";
+  char *msg = is_overwrite ? (ENGLISH ? "OVERWRITE" : "覆写") : (ENGLISH ? "WRITE" : "写入");
 
   xy_log_brkt (blue(App_Name), bdblue(msg), blue(filename));
 }
@@ -1673,7 +1674,7 @@ chsrc_append_to_file (const char *str, const char *filename)
 
 log_anyway:
   /* 输出recipe指定的文件名 */
-  chsrc_log_write (filename);
+  chsrc_log_write (filename, false);
 
   /*
   char *cmd = NULL;
@@ -1714,7 +1715,7 @@ chsrc_prepend_to_file (const char *str, const char *filename)
 
 log_anyway:
   /* 输出recipe指定的文件名 */
-  chsrc_log_write (filename);
+  chsrc_log_write (filename, false);
 }
 
 static void
@@ -1742,7 +1743,7 @@ chsrc_overwrite_file (const char *str, const char *filename)
 
 log_anyway:
   /* 输出recipe指定的文件名 */
-  chsrc_log_write (filename);
+  chsrc_log_write (filename, true);
 }
 
 static void
