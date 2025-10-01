@@ -1387,14 +1387,14 @@ chsrc_run_directly (const char *cmd)
  * @brief 在本目录创建一个临时文件
  *
  * @param[in]  filename    文件名，不包含后缀名
- * @oaram[in]  postfix     后缀名，需要自己加 '.'
- * @oaram[in]  loud        创建成功时是否提示用户
- * @param[out] tmpfilename 生成的临时文件名，可以为 NULL
+ * @param[in]  postfix     后缀名，需要自己加 '.'
+ * @param[in]  loud        创建成功时是否提示用户
+ * @param[out] tmpfilepath 生成的临时文件名，非 Windows 可以为 NULL
  *
  * @return 返回一个 FILE*，调用者需要关闭该文件
  */
 FILE *
-chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilename)
+chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilepath)
 {
 #ifdef XY_Build_On_Windows
   /**
@@ -1430,18 +1430,18 @@ chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilename
 
   /**
    * 允许生成文件后不了解其文件名，调用者只了解 FILE*
-   * 这样的话，其实是是无法删除该文件的，但是生成在 /tmp 目录下我们恰好可以不用清理
+   * 这样的话，其实是无法删除该文件的，但是生成在 /tmp 目录下我们恰好可以不用清理
    * 但是在 Windows 上，就没有办法了，所以我们禁止在 Windows 上不指定返回出的临时文件名
    */
-  if (xy.on_windows && !tmpfilename)
+  if (xy.on_windows && !tmpfilepath)
     {
       chsrc_error2 ("在 Windows 上，创建临时文件时必须指定返回的临时文件名");
       xy_unreached();
     }
 
-  if (tmpfilename)
+  if (tmpfilepath)
     {
-      *tmpfilename = xy_strdup (tmpfile);
+      *tmpfilepath = xy_normalize_path (xy_strdup (tmpfile));
     }
 
   return f;
