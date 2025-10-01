@@ -1690,6 +1690,9 @@ log_anyway:
   */
 }
 
+/**
+ * @note 本函数不会自动在 str 末尾添加换行符
+ */
 static void
 chsrc_prepend_to_file (const char *str, const char *filename)
 {
@@ -1702,16 +1705,64 @@ chsrc_prepend_to_file (const char *str, const char *filename)
   char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
 
-  char *cmd = NULL;
-  if (xy.on_windows)
+  char *tmpfile_name = "prepend";
+  char *tmpfile_ext = ".txt";
+  char *tmpnull = "";
+  FILE *tmp = chsrc_make_tmpfile (tmpfile_name, tmpfile_ext, true, &tmpnull);
+  fclose (tmp);
+  char *temp_file = xy_strcat (3, "chsrc_tmp_", tmpfile_name, tmpfile_ext);
+
+  FILE *input = fopen (file, "r");
+  FILE *output = fopen (temp_file, "w");
+
+  if (!output)
     {
-      xy_unimplemented();
+      if (input) fclose (input);
+      free (temp_file);
+      char *msg = ENGLISH ? xy_2strcat ("Create temp file before Write prepend failed ", file)
+                          : xy_2strcat ("尝试在文件开头写入时创建临时文件失败：", file);
+      chsrc_error2 (msg);
+      exit (Exit_ExternalError);
     }
-  else
+
+  // 先写入要插入的行
+  fprintf (output, "%s", str);
+
+  // 如果原文件存在，复制其内容
+  if (input)
     {
-      cmd = xy_strcat (4, "sed -i '1i ", str, "' ", file);
+      fseek (input, 0, SEEK_END);
+      long file_size = ftell (input);
+      fseek (input, 0, SEEK_SET);
+
+      char *buffer = malloc(file_size);
+      if (buffer == NULL)
+        {
+          fclose (input);
+          return;
+        }
+
+      size_t bytes = fread(buffer, 1, file_size, input);
+      if (bytes > 0) fwrite(buffer, 1, bytes, output);
+
+      free (buffer);
+      fclose (input);
     }
-  chsrc_run_as_a_service (cmd);
+
+  fclose (output);
+  remove (file);
+
+  if (rename (temp_file, file) != 0)
+    {
+      unlink (temp_file);
+      free (temp_file);
+      char *msg = ENGLISH ? xy_2strcat ("Write prepend failed to ", file)
+                          : xy_2strcat ("在文件开头写入失败: ", file);
+      chsrc_error2 (msg);
+      exit (Exit_ExternalError);
+    }
+
+  free (temp_file);
 
 log_anyway:
   /* 输出recipe指定的文件名 */
