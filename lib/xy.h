@@ -9,7 +9,7 @@
  *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-08-27>
+ * Last Modified : <2025-09-29>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -608,6 +608,42 @@ xy_str_strip (const char *str)
     }
   return new;
 }
+
+typedef struct
+{
+  bool   found;
+  size_t begin;
+  size_t end;
+}
+XyStrFindResult_t;
+
+/**
+ * @brief 查找子串，返回是否命中以及子串在原串中的起止位置（0 基，end 为闭区间）
+ */
+static XyStrFindResult_t
+xy_str_find (const char *str, const char *substr)
+{
+  XyStrFindResult_t result = { .found = false, .begin = 0, .end = 0 };
+
+  if (!str || !substr)
+    return result;
+
+  if ('\0' == substr[0])
+    {
+      result.found = true;
+      return result;
+    }
+
+  const char *pos = strstr (str, substr);
+  if (!pos)
+    return result;
+
+  result.found = true;
+  result.begin = (size_t) (pos - str);
+  result.end = result.begin + strlen (substr) - 1;
+  return result;
+}
+
 
 
 /**
@@ -1616,5 +1652,6 @@ xy_map_each (
         }
     }
 }
+
 
 #endif
