@@ -610,6 +610,59 @@ xy_str_strip (const char *str)
 }
 
 
+/**
+ * @brief 读取文件内容并返回字符串，失败时返回空字符串
+ * @note 已处理 `\r\n` 和 `\r`，返回的字符串均为 `\n` 换行
+ */
+static char *
+xy_file_to_str (const char *path)
+{
+  FILE *fp = fopen (path, "rb");
+  if (!fp)
+    return xy_strdup ("");
+
+  if (fseek (fp, 0, SEEK_END) != 0)
+    {
+      fclose (fp);
+      return xy_strdup ("");
+    }
+
+  long size = ftell (fp);
+  if (size < 0)
+    {
+      fclose (fp);
+      return xy_strdup ("");
+    }
+  rewind (fp);
+
+  char *buf = xy_malloc0 ((size_t) size + 1);
+  if (!buf)
+    {
+      fclose (fp);
+      return xy_strdup ("");
+    }
+
+  size_t read_bytes = fread (buf, 1, (size_t) size, fp);
+  if (read_bytes < (size_t) size && ferror (fp))
+    {
+      fclose (fp);
+      free (buf);
+      return xy_strdup ("");
+    }
+
+  fclose (fp);
+  buf[read_bytes] = '\0';
+
+  char *formatted_str = xy_str_gsub (buf, "\r\n", "\n");
+  formatted_str = xy_str_gsub (formatted_str, "\r", "\n");
+
+  free (buf);
+
+  return formatted_str;
+}
+
+
+
 /******************************************************
  *                      Logging
  ******************************************************/
