@@ -1781,16 +1781,26 @@ chsrc_overwrite_file (const char *str, const char *filename)
   char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
 
-  char *cmd = NULL;
-  if (xy.on_windows)
+  FILE *f = fopen (file, "w");
+  if (NULL==f)
     {
-      cmd = xy_strcat (4, "echo ", str, " > ", file);
+      char *msg = ENGLISH ? xy_2strcat ("Unable to open file to overwrite: ", file)
+                          : xy_2strcat ("无法打开文件以覆盖: ", file);
+      chsrc_error2 (msg);
+      exit (Exit_UserCause);
     }
-  else
+
+  size_t len = strlen (str);
+  size_t ret = fwrite (str, len, 1, f);
+  if (ret != 1)
     {
-      cmd = xy_strcat (4, "echo '", str, "' > ", file);
+      char *msg = ENGLISH ? xy_2strcat ("Write failed to ", file)
+                          : xy_2strcat ("写入文件失败: ", file);
+      chsrc_error2 (msg);
+      exit (Exit_UserCause);
     }
-  chsrc_run_as_a_service (cmd);
+
+  fclose (f);
 
 log_anyway:
   /* 输出recipe指定的文件名 */
