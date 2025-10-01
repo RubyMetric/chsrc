@@ -75,34 +75,11 @@ allprojects {
 
 ```toml
 [source.crates-io]
-replace-with = 'mirror'
+replace-with = "mirror"
 
 [source.mirror]
 registry = "sparse+@url@"
-```
 
-### cargo check config
-
-- name = `cargo_check_config`
-
-```bash
-grep -q '^\[source\.crates-io\]' @f@
-```
-
-### cargo update replace-with
-
-- name = `cargo_update_replace_with`
-
-```bash
-@sed@ '/^\[source\.crates-io\]$/,/^\[/{s/^replace-with = .*/replace-with = "mirror"/}' @f@
-```
-
-### cargo update registry
-
-- name = `cargo_update_registry`
-
-```bash
-@sed@ '/^\[source\.mirror\]$/,/^\[/{s|^registry = .*|registry = "sparse+@url@"|}' @f@
 ```
 
 <br>
