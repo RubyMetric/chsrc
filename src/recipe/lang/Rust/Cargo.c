@@ -19,7 +19,7 @@ pl_rust_cargo_prelude (void)
 
   chef_allow_local_mode (this, PartiallyCan, "可以基于本项目换源吗？请帮助确认", "Can it change sources based on this project? Please help confirm");
   chef_forbid_english (this);
-  chef_allow_user_define(this);
+  chef_allow_user_define (this);
 
 
   // 以下都支持稀疏索引，我们换源时都将默认添加 `sparse+`。链接末尾的 `/` 不能缺少
@@ -49,53 +49,78 @@ pl_rust_cargo_prelude (void)
 
 
 void
+rust_cargo_note_get_src_default ()
+{
+  if (ENGLISH)
+    chsrc_note2 ("No source configured in Cargo, showing default upstream source:");
+  else
+    chsrc_note2 ("Cargo 中未自定义源，显示默认源：");
+
+    Source_t default_source = chsrc_yield_source (&pl_rust_cargo_target, "upstream");
+    say (default_source.url);
+}
+
+void
+rust_cargo_note_get_src_mirror (char *url, bool sparse)
+{
+  if (ENGLISH)
+    {
+      chsrc_note2 ("Custom source found:");
+    }
+  else
+    {
+      chsrc_note2 ("已找到自定义源：");
+    }
+  say (xy_2strcat (url, sparse ? " (sparse)" : ""));
+}
+
+void
 pl_rust_cargo_getsrc (char *option)
 {
   char *cargo_config_file = xy_normalize_path ("~/.cargo/config.toml");
-  
-  if (xy_file_exist (cargo_config_file))
-    {
-      // 尝试提取 [source.mirror] 下的 registry URL
-      char *grep_cmd = xy_str_gsub ("grep -A1 '\\[source\\.mirror\\]' '@f@' | grep 'registry' | sed 's/[^\"]*\"\\([^\"]*\\)\".*/\\1/'", "@f@", cargo_config_file);
-      chsrc_ensure_program ("grep");
-      chsrc_ensure_program ("sed");
-      
-      char *mirror_url;
-      int status = xy_run_get_stdout (grep_cmd, &mirror_url);
-      char *stripped_url = (mirror_url) ? xy_str_strip(mirror_url) : "";
-      
-      if (0 == status && stripped_url && strstr(stripped_url, "http"))
-        {
-          // 找到配置的镜像源，如果存在 sparse+ 前缀则去除
-          char *clean_url = (strstr(stripped_url, "sparse+")) ? 
-                           stripped_url + 7 : stripped_url;
-          say (clean_url);
-        }
-      else
-        {
-          // 配置文件存在但没有找到镜像源配置，显示默认上游源
-          if (ENGLISH)
-            chsrc_note2 ("Config file exists but no mirror source found, showing default upstream source:");
-          else
-            chsrc_note2 ("配置文件存在但未找到镜像源配置，显示默认上游源：");
 
-          Source_t default_source = chsrc_yield_source (&pl_rust_cargo_target, "upstream");
-          say (default_source.url);
+  char *raw_content = xy_file_to_str (cargo_config_file);
+  char *formatted_content = xy_str_gsub (raw_content, " ", "");
+  formatted_content = xy_str_gsub (raw_content, "\"", "");
+  free (raw_content);
+
+  XyStrFindResult_t result_has_mirror = xy_str_find (formatted_content, "replace-with");
+  if (result_has_mirror.found)
+    {
+      char *mirror_name = xy_str_take_until_newline (formatted_content + result_has_mirror.end + 1);
+      mirror_name = xy_str_delete_prefix (mirror_name, "=\"");
+      mirror_name = xy_str_delete_suffix (mirror_name, "\"");
+
+      XyStrFindResult_t result_mirror = xy_str_find (formatted_content, xy_strcat (3, "[source.", mirror_name, "]"));
+      if (!result_mirror.found)
+        {
+          rust_cargo_note_get_src_default();
+          return;
+        }
+      char *mirror_url = xy_str_take_until_newline (formatted_content + result_mirror.end + 1);
+      mirror_url = xy_str_delete_prefix (mirror_url, "registry=\"");
+      mirror_url = xy_str_delete_suffix (mirror_url, "\"");
+      if (xy_str_find (mirror_url, "sparse+").found)
+        {
+          rust_cargo_note_get_src_mirror (xy_str_delete_prefix (mirror_url, "sparse+"), true);
         }
     }
   else
     {
-      // 配置文件不存在，显示默认上游源
-      if (ENGLISH)
-        chsrc_note2 ("No source configured in Cargo, showing default upstream source:");
-      else
-        chsrc_note2 ("Cargo 中未配置源，显示默认上游源：");
-
-      Source_t default_source = chsrc_yield_source (&pl_rust_cargo_target, "upstream");
-      say (default_source.url);
+      rust_cargo_note_get_src_default();
     }
 }
 
+
+void
+write_rust_config (const char *path, const char *url)
+{
+  remove (path);
+  char *content = RAWSTR_pl_rust_cargo_config;
+  content = xy_str_gsub (content, "@url@", url);
+  chsrc_overwrite_file (content, path);
+  free (content);
+}
 
 /**
  * @consult https://mirrors.tuna.tsinghua.edu.cn/help/crates.io-index/
@@ -105,62 +130,65 @@ void
 pl_rust_cargo_setsrc (char *option)
 {
   chsrc_ensure_program ("cargo");
-  
+
   chsrc_use_this_source (pl_rust_cargo);
 
+  char *default_content = RAWSTR_pl_rust_cargo_config;
   char *cargo_config_dir = "~/.cargo/";
   char *cargo_config_file = xy_2strcat (cargo_config_dir, "config.toml");
-  
+
   chsrc_ensure_dir (cargo_config_dir);
-  
+
   cargo_config_file = xy_normalize_path (cargo_config_file);
-  
+
   if (xy_file_exist (cargo_config_file))
     {
       chsrc_backup (cargo_config_file);
-    }
 
-  char *content = RAWSTR_pl_rust_cargo_config;
-  content = xy_str_gsub (content, "@url@", source.url);
+      char *raw_content = xy_file_to_str (cargo_config_file);
+      char *formatted_content = xy_str_gsub (raw_content, " ", "");
+      formatted_content = xy_str_gsub (raw_content, "\"", "");
 
-  if (xy_file_exist (cargo_config_file))
-    {
-      char *check_cmd = xy_str_gsub (RAWSTR_pl_rust_cargo_check_config, "@f@", cargo_config_file);
-      chsrc_ensure_program ("grep");
-      int status = chsrc_run_directly (check_cmd);
-      
-      if (0 == status)
+      XyStrFindResult_t result_has_mirror = xy_str_find (raw_content, "replace-with");
+      if (!result_has_mirror.found)
         {
-          char *sed_cmd;
-          if (xy.on_bsd || xy.on_macos)
-            {
-              sed_cmd = "sed -i '' ";
-            }
-          else
-            {
-            sed_cmd = "sed -i ";
-            }
-
-          char *update_cmd = xy_str_gsub (RAWSTR_pl_rust_cargo_update_replace_with, "@sed@", sed_cmd);
-          update_cmd = xy_str_gsub (update_cmd, "@f@", cargo_config_file);
-          chsrc_run (update_cmd, RunOpt_Default);
-          
-          update_cmd = xy_str_gsub (RAWSTR_pl_rust_cargo_update_registry, "@sed@", sed_cmd);
-          update_cmd = xy_str_gsub (update_cmd, "@f@", cargo_config_file);
-          update_cmd = xy_str_gsub (update_cmd, "@url@", source.url);
-          chsrc_run (update_cmd, RunOpt_Default);
+          write_rust_config (cargo_config_file, source.url);
+          goto finish;
         }
-      else
+
+      char *mirror_name = xy_str_take_until_newline (raw_content + result_has_mirror.end + 1);
+      mirror_name = xy_str_gsub (mirror_name, " ", "");
+      mirror_name = xy_str_gsub (mirror_name, "'", "\"");
+      mirror_name = xy_str_delete_prefix (mirror_name, "=\"");
+      mirror_name = xy_str_delete_suffix (mirror_name, "\"");
+
+      XyStrFindResult_t result_mirror = xy_str_find (raw_content, xy_strcat (3, "[source.", mirror_name, "]"));
+      if (!result_mirror.found)
         {
-          chsrc_append_to_file ("\n", cargo_config_file);
-          chsrc_append_to_file (content, cargo_config_file);
+          write_rust_config (cargo_config_file, source.url);
+          goto finish;
         }
-    }
-  else
-    {
-      chsrc_append_to_file (content, cargo_config_file);
+
+      char *mirror_url = xy_str_take_until_newline (raw_content + result_mirror.end + 1);
+      mirror_url = xy_str_gsub (mirror_url, " ", "");
+      if (!xy_str_find (mirror_url, "registry").found)
+        {
+          write_rust_config (cargo_config_file, source.url);
+          goto finish;
+        }
+      mirror_url = xy_str_delete_prefix (mirror_url, "registry=\"");
+      mirror_url = xy_str_delete_suffix (mirror_url, "\"");
+
+      char *final_content = xy_str_gsub (raw_content, mirror_url, xy_2strcat ("sparse+", source.url));
+      chsrc_overwrite_file (final_content, cargo_config_file);
+      free (final_content);
+      goto finish;
     }
 
+    write_rust_config (cargo_config_file, source.url);
+    goto finish;
+
+finish:
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
