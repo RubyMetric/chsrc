@@ -644,6 +644,32 @@ xy_str_find (const char *str, const char *substr)
   return result;
 }
 
+/**
+ * @brief 获取字符串下一行的内容
+ * @note 将忽略开头的换行，截取至下一个换行前（不含换行符）
+ */
+static char *
+xy_str_take_until_newline (const char *str)
+{
+  if (!str)
+    return xy_strdup ("");
+
+  const char *cur = str;
+  while (*cur == '\n')
+    cur++;
+
+  if ('\0' == *cur)
+    return xy_strdup ("");
+
+  const char *newline = strchr (cur, '\n');
+  size_t len = newline ? (size_t) (newline - cur) : strlen (cur);
+
+  char *ret = xy_malloc0 (len + 1);
+  strncpy (ret, cur, len);
+  ret[len] = '\0';
+  return ret;
+}
+
 
 
 /******************************************************
