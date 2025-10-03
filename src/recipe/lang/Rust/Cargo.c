@@ -49,7 +49,7 @@ pl_rust_cargo_prelude (void)
 
 
 void
-rust_cargo_note_get_src_default ()
+pl_rust_cargo_note_get_src_default ()
 {
   if (ENGLISH)
     chsrc_note2 ("No source configured in Cargo, showing default upstream source:");
@@ -61,7 +61,7 @@ rust_cargo_note_get_src_default ()
 }
 
 void
-rust_cargo_note_get_src_mirror (char *url, bool sparse)
+pl_rust_cargo_note_get_src_mirror (char *url, bool sparse)
 {
   if (ENGLISH)
     {
@@ -94,7 +94,7 @@ pl_rust_cargo_getsrc (char *option)
       XyStrFindResult_t result_mirror = xy_str_find (formatted_content, xy_strcat (3, "[source.", mirror_name, "]"));
       if (!result_mirror.found)
         {
-          rust_cargo_note_get_src_default();
+          pl_rust_cargo_note_get_src_default();
           return;
         }
       char *mirror_url = xy_str_take_until_newline (formatted_content + result_mirror.end + 1);
@@ -102,12 +102,12 @@ pl_rust_cargo_getsrc (char *option)
       mirror_url = xy_str_delete_suffix (mirror_url, "\"");
       if (xy_str_find (mirror_url, "sparse+").found)
         {
-          rust_cargo_note_get_src_mirror (xy_str_delete_prefix (mirror_url, "sparse+"), true);
+          pl_rust_cargo_note_get_src_mirror (xy_str_delete_prefix (mirror_url, "sparse+"), true);
         }
     }
   else
     {
-      rust_cargo_note_get_src_default();
+      pl_rust_cargo_note_get_src_default();
     }
 }
 
@@ -146,8 +146,6 @@ pl_rust_cargo_setsrc (char *option)
       chsrc_backup (cargo_config_file);
 
       char *raw_content = xy_file_to_str (cargo_config_file);
-      char *formatted_content = xy_str_gsub (raw_content, " ", "");
-      formatted_content = xy_str_gsub (raw_content, "\"", "");
 
       XyStrFindResult_t result_has_mirror = xy_str_find (raw_content, "replace-with");
       if (!result_has_mirror.found)
