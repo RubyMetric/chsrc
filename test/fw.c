@@ -48,37 +48,37 @@ main (int argc, char const *argv[])
   assert (chsrc_check_program_quietly_when_exist ("curl"));
   chsrc_ensure_program ("curl");
 
-  #define bkup "README.md.bak"
-
-  chsrc_backup ("README.md");
-  assert (chsrc_check_file (bkup));
-
   chsrc_ensure_dir ("test");
 
-  chsrc_append_to_file  ("append",  bkup);
-  if (!xy.on_windows)
-    {
-      chsrc_prepend_to_file ("prepend", bkup);
-    }
-  chsrc_overwrite_file  ("overwrite", bkup);
-  chsrc_view_file (bkup);
+  char *tmpfile_content = "Line2\n\nLine3\n";
+  char *tmpfile_name = "test";
+  char *tmpfile_ext = ".txt";
+  char *tmpfile = "";
+
+  FILE *tmp = chsrc_make_tmpfile (tmpfile_name, tmpfile_ext, true, &tmpfile);
+  fwrite (tmpfile_content, sizeof (char), strlen (tmpfile_content), tmp);
+  fclose (tmp);
+
+  char *tmpfile_bk = xy_2strcat (tmpfile, ".bak");
+
+  assert (xy_file_exist (tmpfile));
+  chsrc_backup (tmpfile);\
+  assert (chsrc_check_file (tmpfile_bk));
+  remove (tmpfile_bk);
+
+  chsrc_append_to_file ("Line4\n", tmpfile);
+  assert_str (xy_file_to_str (tmpfile), "Line2\n\nLine3\nLine4\n");
+
+  chsrc_prepend_to_file ("Line1 \n", tmpfile);
+  assert_str (xy_file_to_str (tmpfile), "Line1 \nLine2\n\nLine3\nLine4\n");
+
+  chsrc_overwrite_file ("Line999 \nLine998\nLine997\n", tmpfile);
+  assert_str (xy_file_to_str (tmpfile), "Line999 \nLine998\nLine997\n");
 
   chsrc_log (xy_2strcat ("CPU arch = ", chsrc_get_cpuarch ()));
   print ("chsrc: CPU cores = ");
   println (chsrc_get_cpucore ());
 
-  if (xy.on_windows)
-    {
-      chsrc_run ("del " bkup, RunOpt_No_Last_New_Line);
-    }
-  else
-    {
-      chsrc_run ("rm " bkup, RunOpt_No_Last_New_Line);
-    }
-
-  char *tmpfile = NULL;
-  FILE *tmp = chsrc_make_tmpfile ("tmpfile", ".txt", true, &tmpfile);
-  fclose (tmp);
   remove (tmpfile);
 
   // chsrc_run_in_inline_pwsh_shell ("Write-Host \"Hello from inline PowerShell\"");
