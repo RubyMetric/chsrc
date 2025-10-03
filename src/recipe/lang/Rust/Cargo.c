@@ -10,12 +10,12 @@ pl_rust_cargo_prelude (void)
   chef_prep_this (pl_rust_cargo, gsr);
 
   chef_set_created_on   (this, "2023-08-30");
-  chef_set_last_updated (this, "2025-09-18");
+  chef_set_last_updated (this, "2025-10-03");
   chef_set_sources_last_updated (this, "2025-06-18");
 
   chef_set_chef (this, NULL);
-  chef_set_cooks (this, 2, "@happy-game", "@ccmywish");
-  chef_set_sauciers (this, 1, "@Mikachu2333");
+  chef_set_cooks (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 2, "@happy-game", "@Mikachu2333");
 
   chef_allow_local_mode (this, PartiallyCan, "可以基于本项目换源吗？请帮助确认", "Can it change sources based on this project? Please help confirm");
   chef_forbid_english (this);
@@ -63,14 +63,7 @@ pl_rust_cargo_note_get_src_default ()
 void
 pl_rust_cargo_note_get_src_mirror (char *url, bool sparse)
 {
-  if (ENGLISH)
-    {
-      chsrc_note2 ("Custom source found:");
-    }
-  else
-    {
-      chsrc_note2 ("已找到自定义源：");
-    }
+  chsrc_note2 (ENGLISH ? "Custom source found: " : "已找到自定义源：");
   say (xy_2strcat (url, sparse ? " (sparse)" : ""));
 }
 
@@ -81,7 +74,7 @@ pl_rust_cargo_getsrc (char *option)
 
   char *raw_content = xy_file_to_str (cargo_config_file);
   char *formatted_content = xy_str_gsub (raw_content, " ", "");
-  formatted_content = xy_str_gsub (raw_content, "\"", "");
+  formatted_content = xy_str_gsub (formatted_content, "'", "\"");
   free (raw_content);
 
   XyStrFindResult_t result_has_mirror = xy_str_find (formatted_content, "replace-with");
