@@ -106,7 +106,7 @@ pl_rust_cargo_getsrc (char *option)
 
 
 void
-write_rust_config (const char *path, const char *url)
+pl_write_rust_config (const char *path, const char *url)
 {
   remove (path);
   char *content = RAWSTR_pl_rust_cargo_config;
@@ -143,7 +143,7 @@ pl_rust_cargo_setsrc (char *option)
       XyStrFindResult_t result_has_mirror = xy_str_find (raw_content, "replace-with");
       if (!result_has_mirror.found)
         {
-          write_rust_config (cargo_config_file, source.url);
+          pl_write_rust_config (cargo_config_file, source.url);
           goto finish;
         }
 
@@ -156,7 +156,7 @@ pl_rust_cargo_setsrc (char *option)
       XyStrFindResult_t result_mirror = xy_str_find (raw_content, xy_strcat (3, "[source.", mirror_name, "]"));
       if (!result_mirror.found)
         {
-          write_rust_config (cargo_config_file, source.url);
+          pl_write_rust_config (cargo_config_file, source.url);
           goto finish;
         }
 
@@ -164,7 +164,7 @@ pl_rust_cargo_setsrc (char *option)
       mirror_url = xy_str_gsub (mirror_url, " ", "");
       if (!xy_str_find (mirror_url, "registry").found)
         {
-          write_rust_config (cargo_config_file, source.url);
+          pl_write_rust_config (cargo_config_file, source.url);
           goto finish;
         }
       mirror_url = xy_str_delete_prefix (mirror_url, "registry=\"");
@@ -176,7 +176,7 @@ pl_rust_cargo_setsrc (char *option)
       goto finish;
     }
 
-    write_rust_config (cargo_config_file, source.url);
+    pl_write_rust_config (cargo_config_file, source.url);
     goto finish;
 
 finish:
