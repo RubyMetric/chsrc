@@ -1273,10 +1273,10 @@ xy_parent_dir (const char *path)
   char *dir = xy_normalize_path (path);
 
   /* 不管是否为Windows，全部统一使用 / 作为路径分隔符，方便后续处理 */
-  dir = xy_str_gsub (dir, "\\", "/");
+  xy_str_swap (&dir, xy_str_gsub (dir, "\\", "/"));
 
   if (xy_str_end_with (dir, "/"))
-    dir = xy_str_delete_suffix (dir, "/");
+    xy_str_swap (&dir, xy_str_delete_suffix (dir, "/"));
 
   char *last = NULL;
 
@@ -1290,9 +1290,10 @@ xy_parent_dir (const char *path)
 
   /* Windows上重新使用 \ 作为路径分隔符 */
   if (xy.on_windows)
-    return xy_str_gsub (dir, "/", "\\");
-  else
-    return dir;
+    {
+      xy_str_swap (&dir, xy_str_gsub (dir, "/", "\\"));
+    }
+  return dir;
 }
 
 
