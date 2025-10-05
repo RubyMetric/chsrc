@@ -745,7 +745,7 @@ xy_file_read (const char *path)
   buf[read_bytes] = '\0';
 
   char *formatted_str = xy_str_gsub (buf, "\r\n", "\n");
-  formatted_str = xy_str_gsub (formatted_str, "\r", "\n");
+  xy_str_swap (&formatted_str, xy_str_gsub (formatted_str, "\r", "\n"));
 
   free (buf);
 
