@@ -1186,12 +1186,14 @@ xy_file_exist (const char *path)
 static bool
 xy_dir_exist (const char *path)
 {
+  char *allocated_dir = NULL;
   const char *dir = path;
   if (xy.on_windows)
     {
       if (xy_str_start_with (path, "~"))
         {
-          dir = xy_2strcat (xy_os_home, path + 1);
+          allocated_dir = xy_2strcat (xy_os_home, path + 1);
+          dir = allocated_dir;
         }
     }
 
@@ -1201,29 +1203,30 @@ xy_dir_exist (const char *path)
       // 也可以用 opendir() #include <dirent.h>
       DWORD attr = GetFileAttributesA (dir);
 
+      bool result = false;
       if (attr == INVALID_FILE_ATTRIBUTES)
         {
           // Q: 我们应该报错吗？
-          return false;
+          result = false;
         }
       else if (attr & FILE_ATTRIBUTE_DIRECTORY)
         {
-          return true;
+          result = true;
         }
       else
         {
-          return false;
+          result = false;
         }
+      if (allocated_dir) free (allocated_dir);
+      return result;
 #endif
     }
   else
     {
       int status = system (xy_2strcat ("test -d ", dir));
-
-      if (0==status)
-        return true;
-      else
-        return false;
+      bool result = (0==status);
+      if (allocated_dir) free (allocated_dir);
+      return result;
     }
 
   return false;
