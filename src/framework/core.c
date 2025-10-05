@@ -863,6 +863,9 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
           char *curl_result = measure_speed_for_url (url);
           double speed = parse_and_say_curl_result (curl_result);
           speed_records[i] = speed;
+
+          /* 释放 url 内存 */
+          if (url) free (url);
         }
       else
         {
@@ -1519,6 +1522,7 @@ chsrc_run_as_bash_file (const char *script_content)
   char *cmd = xy_2strcat ("bash ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
   remove (tmpfile);
+  free (tmpfile);  /* 释放 tmpfile 路径内存 */
 }
 
 
@@ -1539,6 +1543,7 @@ chsrc_run_as_sh_file (const char *script_content)
   char *cmd = xy_2strcat ("sh ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
   remove (tmpfile);
+  free (tmpfile);
 }
 
 
@@ -1558,6 +1563,7 @@ chsrc_run_as_pwsh_file (const char *script_content)
   char *cmd = xy_2strcat ("pwsh ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
   remove (tmpfile);
+  free (tmpfile);
 }
 
 
@@ -1849,6 +1855,7 @@ chsrc_overwrite_file (const char *str, const char *filename)
   size_t ret = fwrite (str, len, 1, f);
   if (ret != 1)
     {
+      fclose (f);
       char *msg = ENGLISH ? xy_2strcat ("Write failed to ", file)
                           : xy_2strcat ("写入文件失败: ", file);
       chsrc_error2 (msg);
