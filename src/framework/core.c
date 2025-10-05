@@ -1759,64 +1759,65 @@ chsrc_prepend_to_file (const char *str, const char *filename)
   char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
 
-  char *tmpfile_name = "prepend";
-  char *tmpfile_ext = ".txt";
-  char *tmpnull = "";
-  FILE *tmp = chsrc_make_tmpfile (tmpfile_name, tmpfile_ext, true, &tmpnull);
-  fclose (tmp);
-  char *temp_file = xy_strcat (3, "chsrc_tmp_", tmpfile_name, tmpfile_ext);
-
-  FILE *input = fopen (file, "r");
-  FILE *output = fopen (temp_file, "w");
+  char *tmpfile_path = NULL;
+  FILE *output = chsrc_make_tmpfile ("prepend", ".txt", false, &tmpfile_path);
 
   if (!output)
     {
-      if (input) fclose (input);
-      free (temp_file);
       char *msg = ENGLISH ? xy_2strcat ("Create temp file before Write prepend failed ", file)
                           : xy_2strcat ("尝试在文件开头写入时创建临时文件失败：", file);
       chsrc_error2 (msg);
       exit (Exit_ExternalError);
     }
 
-  // 先写入要插入的行
+  /* 先写入要插入的内容 */
   fprintf (output, "%s", str);
 
-  // 如果原文件存在，复制其内容
+  /* 如果原文件存在，复制其内容到临时文件 */
+  FILE *input = fopen (file, "r");
   if (input)
     {
       fseek (input, 0, SEEK_END);
       long file_size = ftell (input);
       fseek (input, 0, SEEK_SET);
 
-      char *buffer = malloc(file_size);
-      if (buffer == NULL)
+      if (file_size > 0)
         {
-          fclose (input);
-          return;
+          char *buffer = malloc (file_size);
+          if (buffer == NULL)
+            {
+              fclose (input);
+              fclose (output);
+              remove (tmpfile_path);
+              char *msg = ENGLISH ? "Memory allocation failed" : "内存分配失败";
+              chsrc_error2 (msg);
+              exit (Exit_ExternalError);
+            }
+
+          size_t bytes = fread (buffer, 1, file_size, input);
+          if (bytes > 0)
+            {
+              fwrite (buffer, 1, bytes, output);
+            }
+          free (buffer);
         }
-
-      size_t bytes = fread(buffer, 1, file_size, input);
-      if (bytes > 0) fwrite(buffer, 1, bytes, output);
-
-      free (buffer);
       fclose (input);
     }
 
   fclose (output);
+
+  /* 删除原文件（如果存在） */
   remove (file);
 
-  if (rename (temp_file, file) != 0)
+  /* 将临时文件重命名为目标文件 */
+  if (rename (tmpfile_path, file) != 0)
     {
-      unlink (temp_file);
-      free (temp_file);
+      unlink (tmpfile_path);
       char *msg = ENGLISH ? xy_2strcat ("Write prepend failed to ", file)
                           : xy_2strcat ("在文件开头写入失败: ", file);
       chsrc_error2 (msg);
       exit (Exit_ExternalError);
     }
-
-  free (temp_file);
 
 log_anyway:
   /* 输出recipe指定的文件名 */
