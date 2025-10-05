@@ -583,12 +583,11 @@ xy_str_delete_prefix (const char *str, const char *prefix)
 {
   char *new = xy_strdup (str);
   bool yes = xy_str_start_with (str, prefix);
-  if (!yes)
-    return new;
-
+  if (!yes) return new;
   size_t len = strlen (prefix);
-  char *cur = new + len;
-  return cur;
+  char *ret = xy_strdup (new + len);
+  free (new);
+  return ret;
 }
 
 /**
