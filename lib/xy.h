@@ -614,23 +614,25 @@ xy_str_delete_suffix (const char *str, const char *suffix)
 static char *
 xy_str_strip (const char *str)
 {
-  char *new = xy_strdup (str);
+  if (!str)
+    return xy_strdup ("");
 
-  while (strchr ("\n\r\v\t\f ", new[0]))
-    {
-      new += 1;
-    }
+  const char *start = str;
+  while (*start && strchr ("\n\r\v\t\f ", *start))
+    start++;
 
-  size_t len = strlen (new);
+  if ('\0' == *start)
+    return xy_strdup ("");
 
-  char *last = new + len - 1;
+  const char *end = start + strlen (start) - 1;
+  while (end >= start && strchr ("\n\r\v\t\f ", *end))
+    end--;
 
-  while (strchr ("\n\r\v\t\f ", *last))
-    {
-      *last = '\0';
-      last -= 1;
-    }
-  return new;
+  size_t len = (size_t) (end - start + 1);
+  char *ret = xy_malloc0 (len + 1);
+  memcpy (ret, start, len);
+  ret[len] = '\0';
+  return ret;
 }
 
 typedef struct
