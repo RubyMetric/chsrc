@@ -10,12 +10,12 @@ pl_rust_cargo_prelude (void)
   chef_prep_this (pl_rust_cargo, gsr);
 
   chef_set_created_on   (this, "2023-08-30");
-  chef_set_last_updated (this, "2025-10-03");
+  chef_set_last_updated (this, "2025-10-06");
   chef_set_sources_last_updated (this, "2025-06-18");
 
   chef_set_chef (this, NULL);
-  chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_sauciers (this, 2, "@happy-game", "@Mikachu2333");
+  chef_set_cooks (this, 2, "@ccmywish", "@Mikachu2333");
+  chef_set_sauciers (this, 1, "@happy-game");
 
   chef_allow_local_mode (this, PartiallyCan, "可以基于本项目换源吗？请帮助确认", "Can it change sources based on this project? Please help confirm");
   chef_forbid_english (this);
