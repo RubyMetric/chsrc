@@ -1351,9 +1351,10 @@ xy_detect_os ()
   fp = popen ("uname -s", "r");
   if (!fp)
     {
-      if (opendir ("/etc/rc.d"))
+      DIR *bsd_dir = opendir ("/etc/rc.d");
+      if (bsd_dir)
         {
-          closedir (d);
+          closedir (bsd_dir);
           xy.on_bsd = true;
           return;
         }
