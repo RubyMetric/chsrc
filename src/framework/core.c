@@ -1396,23 +1396,46 @@ chsrc_run_directly (const char *cmd)
 FILE *
 chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilepath)
 {
+  char *tmpfile = NULL;
+  FILE *f = NULL;
+
 #ifdef XY_Build_On_Windows
   /**
-   * Windows 上没有 mkstemps()，只有 mkstemp() 和 _mktemp_s()，这后两者效果是等价的，只不过传参不同，
-   * 这意味着我们无法给一个文件名后缀（postfix），只能生成一个临时文件名
-   * 然而 PowerShell 的执行，即使加了 -File 参数，也必须要求你拥有 .ps1 后缀
-   * 这使得我们在 Windows 上只能创建一个假的临时文件
+   * Windows 上使用 GetTempPath 和 GetTempFileName 创建临时文件
+   * 这是 Windows API 推荐的标准方法
+   *
+   * 由于 GetTempFileName 不支持自定义后缀，我们需要：
+   * 1. 使用 GetTempFileName 生成唯一的临时文件名
+   * 2. 将其重命名为带有正确后缀的文件名（PowerShell 需要 .ps1 后缀）
    */
-  char *tmpfile = xy_strcat (3, "chsrc_tmp_", filename, postfix);
-  FILE *f = fopen (tmpfile, "w+");
-#else
-  char *tmpfile = xy_strcat (5, "/tmp/", "chsrc_tmp_", filename, "_XXXXXX", postfix);
-  size_t postfix_len = strlen (postfix);
+  char temp_path[MAX_PATH];
+  char temp_filename[MAX_PATH];
 
-  /* 和 _mktemp_s() 参数不同，前者是整个缓存区大小，这里的长度是后缀长度 */
-  int fd = mkstemps (tmpfile, postfix_len);
-  FILE *f = fdopen (fd, "w+");
-#endif
+  /* 获取系统临时目录 */
+  DWORD ret = GetTempPathA (MAX_PATH, temp_path);
+  if (ret == 0 || ret > MAX_PATH)
+    {
+      char *msg = CHINESE ? "无法获取系统临时目录" : "Unable to get system temp directory";
+      chsrc_error2 (msg);
+      exit (Exit_ExternalError);
+    }
+
+  /* 生成唯一的临时文件名 (会自动创建文件) */
+  ret = GetTempFileNameA (temp_path, "chsrc_", 0, temp_filename);
+  if (ret == 0)
+    {
+      char *msg = CHINESE ? "无法生成临时文件名" : "Unable to generate temporary filename";
+      chsrc_error2 (msg);
+      exit (Exit_ExternalError);
+    }
+
+  tmpfile = xy_strcat (4, temp_filename, "_", filename, postfix);
+
+  /* 删除 GetTempFileName 自动创建的文件 */
+  DeleteFileA (temp_filename);
+
+  /* 创建带有正确后缀的文件 */
+  f = fopen (tmpfile, "w+");
 
   if (!f)
     {
@@ -1421,7 +1444,38 @@ chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilepath
       chsrc_error2 (msg);
       exit (Exit_ExternalError);
     }
-  else if (loud)
+#else
+  /**
+   * 非 Windows 平台使用 mkstemps() 创建临时文件
+   * 这是 POSIX 标准方法，可以指定后缀名
+   */
+  tmpfile = xy_strcat (5, "/tmp/", "chsrc_tmp_", filename, "_XXXXXX", postfix);
+  size_t postfix_len = strlen (postfix);
+
+  /* mkstemps() 会原子性地创建文件并返回文件描述符 */
+  int fd = mkstemps (tmpfile, postfix_len);
+
+  if (fd == -1)
+    {
+      char *msg = CHINESE ? "无法创建临时文件: " : "Unable to create temporary file: ";
+            msg = xy_2strcat (msg, tmpfile);
+      chsrc_error2 (msg);
+      exit (Exit_ExternalError);
+    }
+
+  f = fdopen (fd, "w+");
+
+  if (!f)
+    {
+      close (fd);  /* 关闭文件描述符以避免泄漏 */
+      char *msg = CHINESE ? "无法打开临时文件: " : "Unable to open temporary file: ";
+            msg = xy_2strcat (msg, tmpfile);
+      chsrc_error2 (msg);
+      exit (Exit_ExternalError);
+    }
+#endif
+
+  if (loud)
     {
       char *msg = CHINESE ? "已创建临时文件: " : "Temporary file created: ";
             msg = xy_2strcat (msg, tmpfile);
