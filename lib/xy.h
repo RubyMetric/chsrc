@@ -1250,7 +1250,10 @@ xy_normalize_path (const char *path)
 
   if (xy_str_start_with (new, "~"))
     {
-      xy_str_swap (&new, xy_2strcat (xy_os_home, xy_str_delete_prefix (new, "~")));
+      char *tmp = xy_str_delete_prefix (new, "~");
+      char *joined = xy_2strcat (xy_os_home, tmp);
+      free (tmp);
+      xy_str_swap (&new, joined);
     }
 
   if (xy.on_windows)
