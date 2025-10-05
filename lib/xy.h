@@ -209,6 +209,27 @@ xy_malloc0 (size_t size)
  ******************************************************/
 
 /**
+ * @brief 替换字符串指针并自动释放旧内存
+ *
+ * @param old_ptr 指向要被替换的字符串指针的指针 (char **)
+ * @param new_str 新的字符串指针
+ */
+static inline void
+xy_str_swap (char **old_ptr, char *new_str)
+{
+  if (old_ptr && *old_ptr)
+    {
+      char *temp = *old_ptr;
+      *old_ptr = new_str;
+      free (temp);
+    }
+  else if (old_ptr)
+    {
+      *old_ptr = new_str;
+    }
+}
+
+/**
  * @brief 将 str 中所有的 pat 字符串替换成 replace，返回一个全新的字符串；也可用作删除、缩小、扩张
  *
  * @flavor Ruby: String#gsub
