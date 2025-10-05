@@ -1249,13 +1249,14 @@ xy_normalize_path (const char *path)
 
   if (xy_str_start_with (new, "~"))
     {
-      new = xy_2strcat (xy_os_home, xy_str_delete_prefix (new, "~"));
+      xy_str_swap (&new, xy_2strcat (xy_os_home, xy_str_delete_prefix (new, "~")));
     }
 
   if (xy.on_windows)
-    return xy_str_gsub (new, "/", "\\");
-  else
-    return new;
+    {
+      xy_str_swap (&new, xy_str_gsub (new, "/", "\\"));
+    }
+  return new;
 }
 
 
