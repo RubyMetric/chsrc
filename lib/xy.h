@@ -1164,13 +1164,19 @@ _xy_win_powershellv5_profile ()
 static bool
 xy_file_exist (const char *path)
 {
-  const char *new_path = path;
+  char *expanded_path = NULL;
+  const char *check_path = path;
+
   if (xy_str_start_with (path, "~"))
     {
-      new_path = xy_2strcat (xy_os_home, path + 1);
+      expanded_path = xy_2strcat (xy_os_home, path + 1);
+      check_path = expanded_path;
     }
+
   // 0 即 F_OK
-  return (0==access (new_path, 0)) ? true : false;
+  bool result = (0 == access (check_path, 0)) ? true : false;
+  if (expanded_path) free (expanded_path);
+  return result;
 }
 
 /**
