@@ -1144,7 +1144,7 @@ chsrc_determine_chgtype (ChgType_t type)
 #define MSG_EN_STILL      "Still need to operate manually according to the above prompts. "
 #define MSG_CN_STILL      "仍需按上述提示手工操作"
 
-#define thank_mirror(msg) chsrc_log(xy_2strcat(msg,purple(ENGLISH?source->mirror->abbr:source->mirror->name)))
+#define thank_mirror(msg) say(xy_2strcat(msg,purple(ENGLISH?source->mirror->abbr:source->mirror->name)))
 
 /**
  * @param source 可为NULL

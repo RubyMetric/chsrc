@@ -337,6 +337,41 @@ cli_print_target_features (Target_t *target, const char *input_target_name)
 }
 
 
+/**
+ * @brief 简略打印维护信息
+ *
+ * 用于 chsrc get/set/reset <target>
+ */
+void
+cli_print_target_maintain_info_briefly (Target_t *target, const char *input_target_name)
+{
+  if (target->sources_last_updated)
+    {
+      char *msg = ENGLISH ? "Ingredient(Sources) Last Updated: " : "食源检查: ";
+      printf ("%s%s  ", msg, purple(target->sources_last_updated));
+    }
+
+  if (target->last_updated)
+    {
+      char *msg = ENGLISH ? "Recipe Last Updated: " : "食谱更新: ";
+      printf ("%s%s  ", msg, purple(target->last_updated));
+    }
+
+  char num[32]; sprintf(num, "%d", target->cooks_n + target->sauciers_n);
+  char *msg = ENGLISH ? "Contributors: " : "后厨人数: ";
+  printf ("%s%s  ", msg, purple(num));
+
+  msg = ENGLISH ? xy_strcat (3, "(See chsrc ls ",  input_target_name, ")")
+                : xy_strcat (3, "(详查 chsrc ls ", input_target_name, ")");
+  printf ("%s\n", msg);
+}
+
+
+/**
+ * @brief 详细打印维护信息
+ *
+ * 用于 chsrc ls <target>
+ */
 void
 cli_print_target_maintain_info (Target_t *target, const char *input_target_name)
 {
@@ -640,10 +675,10 @@ get_target (const char *input, TargetOp code, char *option)
       return true;
     }
 
+  /* 简短显示维护信息 */
   if (TargetOp_Get_Source==code || TargetOp_Set_Source==code || TargetOp_Reset_Source==code)
     {
-      br();
-      cli_print_target_maintain_info (target, input);
+      cli_print_target_maintain_info_briefly (target, input);
     }
 
   if (TargetOp_Set_Source==code || TargetOp_Measure_Source==code)
