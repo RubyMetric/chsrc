@@ -14,10 +14,10 @@ pl_rust_cargo_prelude (void)
   chef_set_sources_last_updated (this, "2025-06-18");
 
   chef_set_chef (this, NULL);
-  chef_set_cooks (this, 2, "@ccmywish", "@Mikachu2333");
+  chef_set_cooks (this, 2, "@Mikachu2333", "@ccmywish");
   chef_set_sauciers (this, 1, "@happy-game");
 
-  chef_allow_local_mode (this, PartiallyCan, "可以基于本项目换源吗？请帮助确认", "Can it change sources based on this project? Please help confirm");
+  chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_forbid_english (this);
   chef_allow_user_define (this);
 
@@ -72,7 +72,7 @@ pl_rust_cargo_getsrc (char *option)
 {
   char *cargo_config_file = xy_normalize_path ("~/.cargo/config.toml");
 
-  char *raw_content = xy_file_to_str (cargo_config_file);
+  char *raw_content = xy_file_read (cargo_config_file);
   char *formatted_content = xy_str_gsub (raw_content, " ", "");
   formatted_content = xy_str_gsub (formatted_content, "'", "\"");
   free (raw_content);
@@ -80,7 +80,7 @@ pl_rust_cargo_getsrc (char *option)
   XyStrFindResult_t result_has_mirror = xy_str_find (formatted_content, "replace-with");
   if (result_has_mirror.found)
     {
-      char *mirror_name = xy_str_take_until_newline (formatted_content + result_has_mirror.end + 1);
+      char *mirror_name = xy_str_next_nonempty_line (formatted_content + result_has_mirror.end + 1);
       mirror_name = xy_str_delete_prefix (mirror_name, "=\"");
       mirror_name = xy_str_delete_suffix (mirror_name, "\"");
 
@@ -90,7 +90,7 @@ pl_rust_cargo_getsrc (char *option)
           pl_rust_cargo_note_get_src_default();
           return;
         }
-      char *mirror_url = xy_str_take_until_newline (formatted_content + result_mirror.end + 1);
+      char *mirror_url = xy_str_next_nonempty_line (formatted_content + result_mirror.end + 1);
       mirror_url = xy_str_delete_prefix (mirror_url, "registry=\"");
       mirror_url = xy_str_delete_suffix (mirror_url, "\"");
       if (xy_str_find (mirror_url, "sparse+").found)
@@ -138,7 +138,7 @@ pl_rust_cargo_setsrc (char *option)
     {
       chsrc_backup (cargo_config_file);
 
-      char *raw_content = xy_file_to_str (cargo_config_file);
+      char *raw_content = xy_file_read (cargo_config_file);
 
       XyStrFindResult_t result_has_mirror = xy_str_find (raw_content, "replace-with");
       if (!result_has_mirror.found)
@@ -147,7 +147,7 @@ pl_rust_cargo_setsrc (char *option)
           goto finish;
         }
 
-      char *mirror_name = xy_str_take_until_newline (raw_content + result_has_mirror.end + 1);
+      char *mirror_name = xy_str_next_nonempty_line (raw_content + result_has_mirror.end + 1);
       mirror_name = xy_str_gsub (mirror_name, " ", "");
       mirror_name = xy_str_gsub (mirror_name, "'", "\"");
       mirror_name = xy_str_delete_prefix (mirror_name, "=\"");
@@ -160,7 +160,7 @@ pl_rust_cargo_setsrc (char *option)
           goto finish;
         }
 
-      char *mirror_url = xy_str_take_until_newline (raw_content + result_mirror.end + 1);
+      char *mirror_url = xy_str_next_nonempty_line (raw_content + result_mirror.end + 1);
       mirror_url = xy_str_gsub (mirror_url, " ", "");
       if (!xy_str_find (mirror_url, "registry").found)
         {

@@ -2,9 +2,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors  : 曾奥然 <ccmywish@qq.com>
- * Contributors  : Nil Null <nil@null.org>
+ * Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
  * Created On    : <2024-12-14>
- * Last Modified : <2025-08-27>
+ * Last Modified : <2025-10-06>
  *
  * 该文件最好启用 DEBUG mode 编译
  * ------------------------------------------------------------*/
@@ -67,13 +67,13 @@ main (int argc, char const *argv[])
   remove (tmpfile_bk);
 
   chsrc_append_to_file ("Line4\n", tmpfile);
-  assert_str (xy_file_to_str (tmpfile), "Line2\n\nLine3\nLine4\n");
+  assert_str (xy_file_read (tmpfile), "Line2\n\nLine3\nLine4\n");
 
   chsrc_prepend_to_file ("Line1 \n", tmpfile);
-  assert_str (xy_file_to_str (tmpfile), "Line1 \nLine2\n\nLine3\nLine4\n");
+  assert_str (xy_file_read (tmpfile), "Line1 \nLine2\n\nLine3\nLine4\n");
 
   chsrc_overwrite_file ("Line999 \nLine998\nLine997\n", tmpfile);
-  assert_str (xy_file_to_str (tmpfile), "Line999 \nLine998\nLine997\n");
+  assert_str (xy_file_read (tmpfile), "Line999 \nLine998\nLine997\n");
 
   chsrc_log (xy_2strcat ("CPU arch = ", chsrc_get_cpuarch ()));
   print ("chsrc: CPU cores = ");

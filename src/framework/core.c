@@ -1745,7 +1745,7 @@ log_anyway:
 }
 
 /**
- * @note 本函数不会自动在 str 末尾添加换行符
+ * @note 本函数不会自动在 `str` 末尾添加换行符
  */
 static void
 chsrc_prepend_to_file (const char *str, const char *filename)

@@ -4,12 +4,12 @@
  * -------------------------------------------------------------
  * Lib Authors   :  曾奥然 <ccmywish@qq.com>
  *               |   郭恒  <2085471348@qq.com>
- * Contributors  :  juzeon <skyjuzheng@gmail.com>
- *               | Mikachu2333 <mikachu.23333@zohomail.com>
+ * Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
+ *               | juzeon <skyjuzheng@gmail.com>
  *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-09-29>
+ * Last Modified : <2025-10-06>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -23,7 +23,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.2.0.0-2025/08/27"
+#define _XY_Version       "v0.2.1.0-2025/10/06"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -123,6 +123,10 @@ xy =
 #define assert_str(a, b) assert (xy_streql ((a), (b)))
 
 #define xy_panic(reason)    assert(!reason)
+
+// @flavor Perl, PHP, Raku
+#define die xy_panic
+
 #define xy_unsupported()    xy_panic("Unsuppoted")
 #define xy_unimplemented()  xy_panic("Unimplemented temporarily")
 #define xy_unreached()      xy_panic("This code shouldn't be reached")
@@ -177,7 +181,7 @@ static void _xy_println_const_str (const char *str) {printf ("%s\n", str);}
   const char *:   _xy_println_const_str, \
   default:   xy_panic("Unsupported type for println()/say()!") \
 )(x)
-/* @flavor Perl/Raku */
+/* @flavor Raku, Perl */
 #define say println
 /* @flavor PHP */
 #define echo println
@@ -646,10 +650,11 @@ xy_str_find (const char *str, const char *substr)
 
 /**
  * @brief 获取字符串下一行的内容
+ *
  * @note 将忽略开头的换行，截取至下一个换行前（不含换行符）
  */
 static char *
-xy_str_take_until_newline (const char *str)
+xy_str_next_nonempty_line (const char *str)
 {
   if (!str)
     return xy_strdup ("");
@@ -674,10 +679,13 @@ xy_str_take_until_newline (const char *str)
 
 /**
  * @brief 读取文件内容并返回字符串，失败时返回空字符串
- * @note 已处理 `\r\n` 和 `\r`，返回的字符串均为 `\n` 换行
+ *
+ * @note 已处理 \r\n 和 \r，返回的字符串均为 \n 换行
+ *
+ * @flavor Ruby: IO::read
  */
 static char *
-xy_file_to_str (const char *path)
+xy_file_read (const char *path)
 {
   FILE *fp = fopen (path, "rb");
   if (!fp)
