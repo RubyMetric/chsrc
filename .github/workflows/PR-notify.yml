@@ -49,10 +49,10 @@ jobs:
           echo "Event 名: ${{ github.event_name }}"
 
       # 2025-10-06 移除点赞的步骤
-      # 因原 peter-evans/create-or-update-comment@v4 已不再支持空body，而如果使用 Github Token 之类又过于大材小用因此移除
+      # 因原 peter-evans/create-or-update-comment@v5 已不再支持空body，而如果使用 Github Token 之类又过于大材小用因此移除
 
       - name: 添加评论欢迎 PRer
-        uses: peter-evans/create-or-update-comment@v4
+        uses: peter-evans/create-or-update-comment@v5
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
