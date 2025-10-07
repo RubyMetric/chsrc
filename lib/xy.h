@@ -9,7 +9,7 @@
  *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-10-06>
+ * Last Modified : <2025-10-07>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -23,7 +23,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.2.1.0-2025/10/06"
+#define _XY_Version       "v0.2.1.1-2025/10/07"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
