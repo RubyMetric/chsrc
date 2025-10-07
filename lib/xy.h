@@ -215,7 +215,7 @@ xy_malloc0 (size_t size)
  * @param new_str 新的字符串指针
  */
 static inline void
-xy_str_swap (char **old_ptr, char *new_str)
+xy_str_replace (char **old_ptr, char *new_str)
 {
   if (old_ptr && *old_ptr)
     {
@@ -749,7 +749,7 @@ xy_file_read (const char *path)
   buf[read_bytes] = '\0';
 
   char *formatted_str = xy_str_gsub (buf, "\r\n", "\n");
-  xy_str_swap (&formatted_str, xy_str_gsub (formatted_str, "\r", "\n"));
+  xy_str_replace (&formatted_str, xy_str_gsub (formatted_str, "\r", "\n"));
 
   free (buf);
 
@@ -1258,12 +1258,12 @@ xy_normalize_path (const char *path)
       char *tmp = xy_str_delete_prefix (new, "~");
       char *joined = xy_2strcat (xy_os_home, tmp);
       free (tmp);
-      xy_str_swap (&new, joined);
+      xy_str_replace (&new, joined);
     }
 
   if (xy.on_windows)
     {
-      xy_str_swap (&new, xy_str_gsub (new, "/", "\\"));
+      xy_str_replace (&new, xy_str_gsub (new, "/", "\\"));
     }
   return new;
 }
@@ -1282,10 +1282,10 @@ xy_parent_dir (const char *path)
   char *dir = xy_normalize_path (path);
 
   /* 不管是否为Windows，全部统一使用 / 作为路径分隔符，方便后续处理 */
-  xy_str_swap (&dir, xy_str_gsub (dir, "\\", "/"));
+  xy_str_replace (&dir, xy_str_gsub (dir, "\\", "/"));
 
   if (xy_str_end_with (dir, "/"))
-    xy_str_swap (&dir, xy_str_delete_suffix (dir, "/"));
+    xy_str_replace (&dir, xy_str_delete_suffix (dir, "/"));
 
   char *last = NULL;
 
@@ -1300,7 +1300,7 @@ xy_parent_dir (const char *path)
   /* Windows上重新使用 \ 作为路径分隔符 */
   if (xy.on_windows)
     {
-      xy_str_swap (&dir, xy_str_gsub (dir, "/", "\\"));
+      xy_str_replace (&dir, xy_str_gsub (dir, "/", "\\"));
     }
   return dir;
 }
