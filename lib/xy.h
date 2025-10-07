@@ -491,15 +491,15 @@ xy_streql (const char *str1, const char *str2)
 }
 
 static bool
-xy_streql_ic(const char *str1, const char *str2)
+xy_streql_ic (const char *str1, const char *str2)
 {
   if (NULL == str1 || NULL == str2)
     {
       return false;
     }
 
-  size_t len1 = strlen(str1);
-  size_t len2 = strlen(str2);
+  size_t len1 = strlen (str1);
+  size_t len2 = strlen (str2);
   if (len1 != len2)
     {
       return false;
@@ -507,7 +507,7 @@ xy_streql_ic(const char *str1, const char *str2)
 
   for (size_t i = 0; i < len1; i++)
     {
-      if (tolower(str1[i]) != tolower(str2[i]))
+      if (tolower (str1[i]) != tolower (str2[i]))
         {
           return false;
         }
@@ -584,7 +584,7 @@ xy_str_delete_prefix (const char *str, const char *prefix)
   bool yes = xy_str_start_with (str, prefix);
   if (!yes)
     {
-      return xy_strdup(str);
+      return xy_strdup (str);
     }
   else
     {
@@ -1329,7 +1329,7 @@ xy_detect_os ()
   if (fp)
     {
       char buf[256] = {0};
-      fread (buf, 1, sizeof(buf) - 1, fp);
+      fread (buf, 1, sizeof (buf) - 1, fp);
       fclose (fp);
       if (strstr (buf, "Android"))
         {
