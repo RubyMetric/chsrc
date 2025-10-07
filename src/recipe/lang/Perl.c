@@ -10,26 +10,38 @@ pl_perl_prelude ()
   chef_prep_this (pl_perl, gs);
 
   chef_set_created_on   (this, "2023-09-31");
-  chef_set_last_updated (this, "2025-08-10");
-  chef_set_sources_last_updated (this, "2025-08-21");
+  chef_set_last_updated (this, "2025-10-07");
+  chef_set_sources_last_updated (this, "2025-10-07");
 
-  chef_set_chef (this, NULL);
-  chef_set_cooks (this, 1, "@ccmywish");
-  chef_set_sauciers (this, 1, "@hezonglun");
+  chef_set_chef     (this, NULL);
+  chef_set_cooks    (this, 1, "@ccmywish");
+  chef_set_sauciers (this, 2, "@hezonglun", "@Mikachu2333");
 
-  chef_allow_local_mode (this, CanNot, NULL, NULL);
-  chef_forbid_english(this);
-  chef_allow_user_define(this);
+  chef_allow_local_mode  (this, CanNot, NULL, NULL);
+  chef_forbid_english    (this);
+  chef_allow_user_define (this);
 
   def_sources_begin()
-  {&UpstreamProvider, "https://www.cpan.org/", DelegateToUpstream},
-  {&Bfsu,             "https://mirrors.bfsu.edu.cn/CPAN/", DelegateToMirror},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CPAN/", DelegateToMirror},
-  {&Bjtu,             "https://mirror.bjtu.edu.cn/cpan/",  DelegateToMirror},
-  {&Hust,             "https://mirrors.hust.edu.cn/CPAN/", DelegateToMirror},
-  {&Ali,              "https://mirrors.aliyun.com/CPAN/",  DelegateToMirror},
-  {&Lzuoss,           "https://mirror.lzu.edu.cn/CPAN/",  DelegateToMirror}
+  {&UpstreamProvider, "https://www.cpan.org/",                      FeedByPrelude},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/CPAN/",        FeedByPrelude},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CPAN/", FeedByPrelude},
+  {&Bfsu,             "https://mirrors.bfsu.edu.cn/CPAN/",          FeedByPrelude},
+  {&Cqu,              "https://mirrors.cqu.edu.cn/CPAN/",           FeedByPrelude},
+  // 2025-10-07，好像bjtu整个镜像站都炸了
+  //{&Bjtu,           "https://mirror.bjtu.edu.cn/cpan/",           FeedByPrelude},
+  {&Nju,              "https://mirrors.nju.edu.cn/CPAN/",           FeedByPrelude},
+  {&Nyist,            "https://mirror.nyist.edu.cn/CPAN/",          FeedByPrelude},
+  {&Nwafu,            "https://mirrors.nwafu.edu.cn/cpan/",         FeedByPrelude},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/CPAN/",          FeedByPrelude},
+  {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn/cpan/",           FeedByPrelude},
+  {&Iscas,            "https://mirror.iscas.ac.cn/CPAN/",           FeedByPrelude},
+  {&Zju,              "https://mirrors.zju.edu.cn/CPAN/",           FeedByPrelude},
+  {&Lzuoss,           "https://mirrors.lzu.edu.cn/CPAN/",           FeedByPrelude},
+  {&Hust,             "https://mirrors.hust.edu.cn/CPAN/",          FeedByPrelude},
+  {&Ali,              "https://mirrors.aliyun.com/CPAN/",           FeedByPrelude}
   def_sources_end()
+
+  chef_set_sources_speed_measure_url_with_postfix (this, "authors/id/D/DB/DBAURAIN/Bio-MUST-Apps-FortyTwo-0.213470.tar.gz");
 }
 
 
