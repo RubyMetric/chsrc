@@ -581,13 +581,16 @@ xy_str_start_with (const char *str, const char *prefix)
 static char *
 xy_str_delete_prefix (const char *str, const char *prefix)
 {
-  char *new = xy_strdup (str);
   bool yes = xy_str_start_with (str, prefix);
-  if (!yes) return new;
-  size_t len = strlen (prefix);
-  char *ret = xy_strdup (new + len);
-  free (new);
-  return ret;
+  if (!yes)
+    {
+      return xy_strdup(str);
+    }
+  else
+    {
+      size_t len = strlen (prefix);
+      return xy_strdup (str + len);
+    }
 }
 
 /**
@@ -1224,7 +1227,9 @@ xy_dir_exist (const char *path)
     }
   else
     {
-      int status = system (xy_2strcat ("test -d ", dir));
+      char *tmp_cmd = xy_2strcat ("test -d ", dir);
+      int status = system (tmp_cmd);
+      free (tmp_cmd);
       bool result = (0==status);
       if (allocated_dir) free (allocated_dir);
       return result;
