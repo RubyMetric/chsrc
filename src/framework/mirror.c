@@ -10,7 +10,7 @@
  *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-08-27>
+ * Last Modified : <2025-10-07>
  *
  * 通用镜像站
  * ------------------------------------------------------------*/
@@ -170,6 +170,13 @@ Nyist =
   IS_GeneralMirrorSite,
   "nyist", "NYIST", "南阳理工学院开源软件镜像站", "https://mirror.nyist.edu.cn/",
   {NotSkip, NA, NA, "https://mirror.nyist.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
+},
+
+Nwafu =
+{
+  IS_GeneralMirrorSite,
+  "nwafu", "NWAFU", "西北农林科技大学镜像站", "https://mirrors.nwafu.edu.cn/",
+  {NotSkip, NA, NA, "https://mirrors.nwafu.edu.cn/ubuntu/ls-lR.gz", ROUGH}
 },
 
 Sdu =
