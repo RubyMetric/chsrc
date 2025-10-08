@@ -172,12 +172,15 @@ Nyist =
   {NotSkip, NA, NA, "https://mirror.nyist.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
+/**
+ * @deprecated 2025-10-07 对校外用户限制严格
 Nwafu =
 {
   IS_GeneralMirrorSite,
   "nwafu", "NWAFU", "西北农林科技大学镜像站", "https://mirrors.nwafu.edu.cn/",
   {NotSkip, NA, NA, "https://mirrors.nwafu.edu.cn/ubuntu/ls-lR.gz", ROUGH}
 },
+*/
 
 Sdu =
 {

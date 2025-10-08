@@ -31,7 +31,8 @@ pl_perl_prelude ()
   //{&Bjtu,           "https://mirror.bjtu.edu.cn/cpan/",           FeedByPrelude},
   {&Nju,              "https://mirrors.nju.edu.cn/CPAN/",           FeedByPrelude},
   {&Nyist,            "https://mirror.nyist.edu.cn/CPAN/",          FeedByPrelude},
-  {&Nwafu,            "https://mirrors.nwafu.edu.cn/cpan/",         FeedByPrelude},
+  // 2025-10-09 对校外限制大
+  //{&Nwafu,          "https://mirrors.nwafu.edu.cn/cpan/",         FeedByPrelude},
   {&Ustc,             "https://mirrors.ustc.edu.cn/CPAN/",          FeedByPrelude},
   {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn/cpan/",           FeedByPrelude},
   {&Iscas,            "https://mirror.iscas.ac.cn/CPAN/",           FeedByPrelude},
