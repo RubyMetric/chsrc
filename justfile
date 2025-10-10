@@ -3,11 +3,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # --------------------------------------------------------------
 # Build File    :  justfile
-# File Authors  : Aoran Zeng <ccmywish@qq.com>
-# Contributors  :  Nul None  <nul@none.org>
+# File Authors  : Aoran Zeng   <ccmywish@qq.com>
+# Contributors  : Mikachu2333  <mikachu.23333@zohomail.com>
 #								|
 # Created On    : <2025-06-18>
-# Last Modified : <2025-07-21>
+# Last Modified : <2025-10-11>
 #
 # 该文件主要用于在原生Windows上执行项目的基本任务，而不借助于
 # GNU make 以及相应的 MSYS2、Cygwin 环境
@@ -104,9 +104,9 @@ alias c := clean
 default: build-in-dev-mode
 
 build-in-dev-mode:
-  @echo Starting: Build in DEV mode: '{{CC}}' {{CFLAGS_dev_mode_prompt}} -o {{DevMode-Target-Name}}
-  @{{CC}} src/chsrc-main.c {{CFLAGS_dev_mode}} -o {{DevMode-Target-Name}}
-  @echo Finished: Build in DEV mode
+	@echo Starting: Build in DEV mode: '{{CC}}' {{CFLAGS_dev_mode_prompt}} -o {{DevMode-Target-Name}}
+	@{{CC}} src/chsrc-main.c {{CFLAGS_dev_mode}} -o {{DevMode-Target-Name}}
+	@echo Finished: Build in DEV mode
 
 build-in-debug-mode:
 	@echo Starting: Build in DEBUG mode: '{{CC}}' {{CFLAGS_debug_mode_prompt}} -o {{DebugMode-Target-Name}}
@@ -115,7 +115,10 @@ build-in-debug-mode:
 
 build-in-release-mode:
 	@echo Starting: Build in RELEASE mode: '{{CC}}' {{CFLAGS_release_mode_prompt}} -o {{ReleaseMode-Target-Name}}
-	@{{CC}} src/chsrc-main.c {{CFLAGS_release_mode}} -o {{ReleaseMode-Target-Name}}
+	{{ if os() == 'windows' { '@if exist lib\\chsrc.res del lib\\chsrc.res' } else { '' } }}
+	{{ if os() == 'windows' { '@windres lib\\win_res.rc -O coff -o lib\\chsrc.res -Iinclude -Ilib' } else { '' } }}
+	{{ if os() == 'windows' { '@{{CC}} src/chsrc-main.c lib/chsrc.res {{CFLAGS_release_mode}} -o {{ReleaseMode-Target-Name}}' } else { '@{{CC}} src/chsrc-main.c {{CFLAGS_release_mode}} -o {{ReleaseMode-Target-Name}}' } }}
+	{{ if os() == 'windows' { '@del lib\\chsrc.res' } else { '' } }}
 	@echo Finished: Build in RELEASE mode
 
 debug: build-in-debug-mode
