@@ -3,12 +3,13 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # --------------------------------------------------------------
 # Build File    :   Makefile
-# File Authors  :  Aoran Zeng  <ccmywish@qq.com>
-# Contributors  :  Yangmoooo   <yangmoooo@outlook.com>
-#								| sanchuanhehe <wyihe5520@gmail.com>
-#								|
+# File Authors  :  Aoran Zeng   <ccmywish@qq.com>
+# Contributors  :  Yangmoooo    <yangmoooo@outlook.com>
+#               | sanchuanhehe  <wyihe5520@gmail.com>
+#               | Mikachu2333   <mikachu.23333@zohomail.com>
+#               |
 # Created On    : <2023-08-28>
-# Last Modified : <2025-07-22>
+# Last Modified : <2025-10-11>
 #
 # 请阅读 ./doc/01-开发与构建.md 来使用
 # --------------------------------------------------------------
@@ -18,17 +19,24 @@ On-Linux = 0
 On-Windows = 0
 On-macOS = 0
 
-ifeq ($(shell uname), Linux)
-	On-Linux = 1
-endif
-
-ifeq ($(shell uname), Darwin)
-	On-macOS = 1
-endif
-
-# 只有Windows会定义$(OS)变量
-ifeq ($(OS), Windows_NT)
+# Windows 会定义 OS 或 ComSpec 环境变量
+ifdef ComSpec
 	On-Windows = 1
+else ifdef OS
+	ifeq ($(OS), Windows_NT)
+		On-Windows = 1
+	endif
+endif
+
+# 只在非 Windows 环境下调用 uname
+ifneq ($(On-Windows), 1)
+	UNAME_S := $(shell uname 2>/dev/null || echo unknown)
+	ifeq ($(UNAME_S), Linux)
+		On-Linux = 1
+	endif
+	ifeq ($(UNAME_S), Darwin)
+		On-macOS = 1
+	endif
 endif
 #=====================================
 
@@ -36,8 +44,8 @@ endif
 
 #======== Default Tooling ============
 ifeq ($(On-Windows), 1)
-  # MSYS2 环境
-	CC = cc
+  # Windows 环境 - 使用 gcc
+	CC = gcc
 else ifeq ($(On-macOS), 1)
 	CC = clang
 else
@@ -142,13 +150,25 @@ build-in-debug-mode:
 build-in-release-mode: CFLAGS += $(CFLAGS_optimization)
 build-in-release-mode:
 	@echo Starting: Build in RELEASE mode: \'$(CC)\' $(CFLAGS) -o $(ReleaseMode-Target-Name)
+ifeq ($(On-Windows), 1)
+	@if exist lib\chsrc.res del /Q lib\chsrc.res 2>nul
+	@windres lib\win_res.rc -O coff -o lib\chsrc.res -Iinclude -Ilib
+	@$(CC) src/chsrc-main.c lib/chsrc.res $(CFLAGS) $(_C_Warning_Flags) -o $(ReleaseMode-Target-Name)
+	@del /Q lib\chsrc.res 2>nul
+else
 	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(ReleaseMode-Target-Name)
+endif
 	@echo Finished: Build in RELEASE mode
 
 # CI release mode 的配置在该文件上方
 build-in-ci-release-mode:
 	@echo Starting: Build in CI-RELEASE mode: \'$(CC)\' $(CFLAGS) -o $(CIReleaseMode-Target-Name)
+ifeq ($(On-Windows), 1)
+	@windres lib\win_res.rc -O coff -o lib\chsrc.res -Iinclude -Ilib
+	@$(CC) src/chsrc-main.c lib/chsrc.res $(CFLAGS) $(_C_Warning_Flags) -o $(CIReleaseMode-Target-Name)
+else
 	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(CIReleaseMode-Target-Name)
+endif
 	@echo Finished: Build in CI-RELEASE mode
 
 # 永远重新编译
@@ -163,6 +183,10 @@ test-make-env:
 	@echo "On-macOS: $(On-macOS)"
 	@echo "CC: $(CC)"
 	@echo "CFLAGS: $(CFLAGS)"
+ifeq ($(On-Windows), 1)
+	@echo "USER: $(USERNAME)"
+	@echo "PWD: $(CURDIR)"
+else
 	@echo "USER: $$(whoami)"
 	@echo "PWD: $(shell pwd)"
 	@echo "UID: $$(id -u)"
@@ -173,17 +197,28 @@ test-make-env:
 	else \
 	 echo "HOME: $(HOME)"; \
 	fi
+endif
 
 # 这两个测试文件都用 DEBUG mode
 test-xy: CFLAGS += $(CFLAGS_debug)
 test-xy:
+ifeq ($(On-Windows), 1)
+	@$(CC) test/xy.c $(CFLAGS) -o xy.exe
+	@xy.exe
+else
 	@$(CC) test/xy.c $(CFLAGS) -o xy
 	@./xy
+endif
 
 test-fw: CFLAGS += $(CFLAGS_debug)
 test-fw:
+ifeq ($(On-Windows), 1)
+	@$(CC) test/fw.c $(CFLAGS) -o fw.exe
+	@fw.exe
+else
 	@$(CC) test/fw.c $(CFLAGS) -o fw
 	@./fw
+endif
 
 check: test
 
@@ -195,15 +230,25 @@ test-cli: $(DevMode-Target-Name)
 	@perl ./test/cli.pl
 
 clean:
+ifeq ($(On-Windows), 1)
+	-@if exist *.exe del /Q *.exe 2>nul
+	-@if exist xy.exe del /Q xy.exe 2>nul
+	-@if exist fw.exe del /Q fw.exe 2>nul
+	-@if exist README.md.bak* del /Q README.md.bak* 2>nul
+	-@if exist chsrc.exe del /Q chsrc.exe 2>nul
+	-@if exist chsrc-debug.exe del /Q chsrc-debug.exe 2>nul
+	-@if exist chsrc-release.exe del /Q chsrc-release.exe 2>nul
+	-@if exist chsrc-ci-release.exe del /Q chsrc-ci-release.exe 2>nul
+else
 	-@rm *.exe  2>/dev/null
 	-@rm xy     2>/dev/null
 	-@rm fw     2>/dev/null
 	-@rm README.md.bak*    2>/dev/null
-
 	-@rm chsrc  					 2>/dev/null
 	-@rm chsrc-debug       2>/dev/null
 	-@rm chsrc-release  	 2>/dev/null
 	-@rm chsrc-ci-release  2>/dev/null
+endif
 
 # -include pkg/deb/Makefile # 不这么做，因为 pkg/deb/Makefile 需要在 pkg/deb 目录下执行
 # 保持动词在前的任务名风格
