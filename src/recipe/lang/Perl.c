@@ -27,12 +27,9 @@ pl_perl_prelude ()
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CPAN/", FeedByPrelude},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/CPAN/",          FeedByPrelude},
   {&Cqu,              "https://mirrors.cqu.edu.cn/CPAN/",           FeedByPrelude},
-  // 2025-10-07，好像bjtu整个镜像站都炸了
-  //{&Bjtu,           "https://mirror.bjtu.edu.cn/cpan/",           FeedByPrelude},
+  {&Bjtu,             "https://mirror.bjtu.edu.cn/cpan/",           FeedByPrelude},
   {&Nju,              "https://mirrors.nju.edu.cn/CPAN/",           FeedByPrelude},
   {&Nyist,            "https://mirror.nyist.edu.cn/CPAN/",          FeedByPrelude},
-  // 2025-10-09 对校外限制大
-  //{&Nwafu,          "https://mirrors.nwafu.edu.cn/cpan/",         FeedByPrelude},
   {&Ustc,             "https://mirrors.ustc.edu.cn/CPAN/",          FeedByPrelude},
   {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn/cpan/",           FeedByPrelude},
   {&Iscas,            "https://mirror.iscas.ac.cn/CPAN/",           FeedByPrelude},
