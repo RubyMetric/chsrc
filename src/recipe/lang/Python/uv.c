@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-def_target(pl_python_uv, "uv");
+def_target (pl_python_uv, "uv");
 
 void
 pl_python_uv_prelude (void)
@@ -14,12 +14,12 @@ pl_python_uv_prelude (void)
   chef_set_sources_last_updated (this, "2025-10-11");
 
   chef_set_chef (this, NULL);
-  chef_set_cooks (this, 2, "@mikachu2333", "@happy-game");
+  chef_set_cooks (this, 2, "@Mikachu2333", "@happy-game");
   chef_set_sauciers (this, 2, "@Kattos", "@ccmywish");
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
-  chef_allow_english(this);
-  chef_allow_user_define(this);
+  chef_allow_english (this);
+  chef_allow_user_define (this);
 
   chef_use_other_target_sources (this, &pl_python_group_target);
 }
@@ -190,7 +190,7 @@ pl_python_uv_config_find ()
       result.pypi_url = result2.url;
       result.pypi_path = result2.file_path;
     }
-  if (pl_python_uv_config_summary_struct_is_full (&result) || chsrc_in_local_mode()) return result;
+  if (pl_python_uv_config_summary_struct_is_full (&result) || chsrc_in_local_mode ()) return result;
 
   PlPythonUvConfig result3 = pl_python_uv_config_define_python (PL_Python_uv_Proj_pyproj);
   if (!result3.is_empty)
