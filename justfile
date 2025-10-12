@@ -53,7 +53,7 @@ CFLAGS_chk_Clang := if os() == 'windows' {
 } else {''}
 
 
-CFLAGS_base := '-Iinclude -Ilib ' + CFLAGS_chk_Clang
+CFLAGS_base := '-Iinclude -Ilib -Isrc/framework ' + CFLAGS_chk_Clang
 
 WARN := '-Wall -Wextra -Wno-unused-variable -Wno-unused-function -Wno-missing-braces -Wno-misleading-indentation' + ' ' + \
 	'-Wno-missing-field-initializers -Wno-unused-parameter -Wno-sign-compare'
@@ -115,10 +115,10 @@ build-in-debug-mode:
 
 build-in-release-mode:
 	@echo Starting: Build in RELEASE mode: '{{CC}}' {{CFLAGS_release_mode_prompt}} -o {{ReleaseMode-Target-Name}}
-	{{ if os() == 'windows' { '@if exist lib\\chsrc.res del lib\\chsrc.res' } else { '' } }}
-	{{ if os() == 'windows' { '@windres lib\\win_res.rc -O coff -o lib\\chsrc.res -Iinclude -Ilib' } else { '' } }}
-	{{ if os() == 'windows' { '@{{CC}} src/chsrc-main.c lib/chsrc.res {{CFLAGS_release_mode}} -o {{ReleaseMode-Target-Name}}' } else { '@{{CC}} src/chsrc-main.c {{CFLAGS_release_mode}} -o {{ReleaseMode-Target-Name}}' } }}
-	{{ if os() == 'windows' { '@del lib\\chsrc.res' } else { '' } }}
+	{{ if os() == 'windows' { '@if exist src\\res\\chsrc.res del src\\res\\chsrc.res' } else { '' } }}
+	{{ if os() == 'windows' { '@windres src\\res\\win_res.rc -O coff -o src\\res\\chsrc.res -Iinclude -Ilib -Isrc\\framework -Isrc\\res' } else { '' } }}
+	{{ if os() == 'windows' {  '@' + CC + ' src/chsrc-main.c src/res/chsrc.res ' + CFLAGS_release_mode + ' -o ' + ReleaseMode-Target-Name } else { '@' + CC + ' src/chsrc-main.c ' + CFLAGS_release_mode + ' -o ' + ReleaseMode-Target-Name } }}
+	{{ if os() == 'windows' { '@del src\\res\\chsrc.res' } else { '' } }}
 	@echo Finished: Build in RELEASE mode
 
 debug: build-in-debug-mode

@@ -62,7 +62,7 @@ endif
 
 
 #======== Compilation Config ==========
-CFLAGS += -Iinclude -Ilib
+CFLAGS += -Iinclude -Ilib -Isrc/framework -Isrc/res
 
 ifeq ($(On-Windows), 1)
 	CLANG_FLAGS = -target x86_64-pc-windows-gnu
@@ -151,10 +151,10 @@ build-in-release-mode: CFLAGS += $(CFLAGS_optimization)
 build-in-release-mode:
 	@echo Starting: Build in RELEASE mode: \'$(CC)\' $(CFLAGS) -o $(ReleaseMode-Target-Name)
 ifeq ($(On-Windows), 1)
-	@if exist lib\chsrc.res del /Q lib\chsrc.res 2>nul
-	@windres lib\win_res.rc -O coff -o lib\chsrc.res -Iinclude -Ilib
-	@$(CC) src/chsrc-main.c lib/chsrc.res $(CFLAGS) $(_C_Warning_Flags) -o $(ReleaseMode-Target-Name)
-	@del /Q lib\chsrc.res 2>nul
+	@if exist src\\res\\chsrc.res del src\\res\\chsrc.res
+	@windres src\\res\\win_res.rc -O coff -o src\\res\\chsrc.res -Iinclude -Ilib -Isrc\\framework -Isrc\\res
+	@$(CC) src\\chsrc-main.c src\\res\\chsrc.res $(CFLAGS) $(_C_Warning_Flags) -o $(ReleaseMode-Target-Name)
+	@del src\\res\\chsrc.res
 else
 	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(ReleaseMode-Target-Name)
 endif
@@ -164,8 +164,8 @@ endif
 build-in-ci-release-mode:
 	@echo Starting: Build in CI-RELEASE mode: \'$(CC)\' $(CFLAGS) -o $(CIReleaseMode-Target-Name)
 ifeq ($(On-Windows), 1)
-	@windres lib\win_res.rc -O coff -o lib\chsrc.res -Iinclude -Ilib
-	@$(CC) src/chsrc-main.c lib/chsrc.res $(CFLAGS) $(_C_Warning_Flags) -o $(CIReleaseMode-Target-Name)
+	@windres src\\res\\win_res.rc -O coff -o src\\res\\chsrc.res -Iinclude -Ilib -Isrc\\framework -Isrc\\res
+	@$(CC) src\\chsrc-main.c src\\res\\chsrc.res $(CFLAGS) $(_C_Warning_Flags) -o $(CIReleaseMode-Target-Name)
 else
 	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(CIReleaseMode-Target-Name)
 endif
