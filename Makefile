@@ -64,8 +64,18 @@ endif
 #======== Compilation Config ==========
 CFLAGS += -Iinclude -Ilib -Isrc/framework -Isrc/res
 
+Target-Is-Windows = 0
+Use-Windows-Resource = 0
+
 ifeq ($(On-Windows), 1)
 	CLANG_FLAGS = -target x86_64-pc-windows-gnu
+	Target-Machine := $(shell $(CC) -dumpmachine 2>nul || echo unknown)
+	ifneq ($(findstring mingw,$(Target-Machine)),)
+		Target-Is-Windows = 1
+	else ifneq ($(findstring windows,$(Target-Machine)),)
+		Target-Is-Windows = 1
+	endif
+	Use-Windows-Resource := $(Target-Is-Windows)
 endif
 
 ifeq ($(CC), clang)
@@ -150,7 +160,7 @@ build-in-debug-mode:
 build-in-release-mode: CFLAGS += $(CFLAGS_optimization)
 build-in-release-mode:
 	@echo Starting: Build in RELEASE mode: \'$(CC)\' $(CFLAGS) -o $(ReleaseMode-Target-Name)
-ifeq ($(On-Windows), 1)
+ifeq ($(Use-Windows-Resource), 1)
 	@if exist src\\res\\chsrc.res del src\\res\\chsrc.res
 	@windres src\\res\\win_res.rc -O coff -o src\\res\\chsrc.res -Iinclude -Ilib -Isrc\\framework -Isrc\\res
 	@$(CC) src\\chsrc-main.c src\\res\\chsrc.res $(CFLAGS) $(_C_Warning_Flags) -o $(ReleaseMode-Target-Name)
@@ -163,7 +173,7 @@ endif
 # CI release mode 的配置在该文件上方
 build-in-ci-release-mode:
 	@echo Starting: Build in CI-RELEASE mode: \'$(CC)\' $(CFLAGS) -o $(CIReleaseMode-Target-Name)
-ifeq ($(On-Windows), 1)
+ifeq ($(Use-Windows-Resource), 1)
 	@windres src\\res\\win_res.rc -O coff -o src\\res\\chsrc.res -Iinclude -Ilib -Isrc\\framework -Isrc\\res
 	@$(CC) src\\chsrc-main.c src\\res\\chsrc.res $(CFLAGS) $(_C_Warning_Flags) -o $(CIReleaseMode-Target-Name)
 else
