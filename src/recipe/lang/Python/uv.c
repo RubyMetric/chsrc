@@ -296,40 +296,6 @@ pl_python_uv_getsrc (char *option)
 }
 
 
-static bool
-pl_python_uv_path_is_pyproject (const char *path)
-{
-  if (!path)
-    return false;
-  return xy_str_end_with (path, "pyproject.toml");
-}
-
-
-static char *
-pl_python_uv_replace_first_literal (const char *content, const char *old_literal, const char *new_literal)
-{
-  if (!content || !old_literal || !new_literal)
-    return NULL;
-
-  char *position = strstr (content, old_literal);
-  if (!position)
-    return NULL;
-
-  size_t prefix_len = position - content;
-  size_t old_len = strlen (old_literal);
-  size_t suffix_len = strlen (position + old_len);
-
-  size_t result_len = prefix_len + strlen (new_literal) + suffix_len;
-  char *result = xy_malloc0 (result_len + 1);
-  memcpy (result, content, prefix_len);
-  memcpy (result + prefix_len, new_literal, strlen (new_literal));
-  memcpy (result + prefix_len + strlen (new_literal), position + old_len, suffix_len);
-  result[result_len] = '\0';
-
-  return result;
-}
-
-
 static char *
 pl_python_uv_replace_key_value (const char *content, const char *key, const char *new_value)
 {
@@ -478,37 +444,6 @@ pl_python_uv_insert_into_section (const char *content, const char *section_heade
 }
 
 
-static char *
-pl_python_uv_dirname (const char *path)
-{
-  if (!path)
-    return NULL;
-
-  const char *slash1 = strrchr (path, '/');
-  const char *slash2 = strrchr (path, '\\');
-  const char *slash = slash1 > slash2 ? slash1 : slash2;
-  if (!slash)
-    return NULL;
-
-  size_t len = slash - path + 1;
-  char *dir = xy_malloc0 (len + 1);
-  memcpy (dir, path, len);
-  dir[len] = '\0';
-  return dir;
-}
-
-
-static char *
-pl_python_uv_dup_normalized (const char *path)
-{
-  if (!path)
-    return NULL;
-
-  char *dup = xy_strdup (path);
-  return xy_normalize_path (dup);
-}
-
-
 static void
 pl_python_uv_upsert_python (char **content,
                             const char *existing_url,
@@ -521,14 +456,19 @@ pl_python_uv_upsert_python (char **content,
     {
       char *old_literal = xy_strcat (3, "\"", existing_url, "\"");
       char *new_literal = xy_strcat (3, "\"", new_url, "\"");
-      char *replaced = pl_python_uv_replace_first_literal (*content, old_literal, new_literal);
+      char *replaced = xy_str_gsub (*content, old_literal, new_literal);
+      bool changed = !xy_streql (replaced, *content);
       free (old_literal);
       free (new_literal);
-      if (replaced)
+      if (changed)
         {
           free (*content);
           *content = replaced;
           updated = true;
+        }
+      else
+        {
+          free (replaced);
         }
     }
 
@@ -601,14 +541,19 @@ pl_python_uv_upsert_pypi (char **content,
     {
       char *old_literal = xy_strcat (3, "\"", existing_url, "\"");
       char *new_literal = xy_strcat (3, "\"", new_url, "\"");
-      char *replaced = pl_python_uv_replace_first_literal (*content, old_literal, new_literal);
+      char *replaced = xy_str_gsub (*content, old_literal, new_literal);
+      bool changed = !xy_streql (replaced, *content);
       free (old_literal);
       free (new_literal);
-      if (replaced)
+      if (changed)
         {
           free (*content);
           *content = replaced;
           updated = true;
+        }
+      else
+        {
+          free (replaced);
         }
     }
 
@@ -739,7 +684,7 @@ pl_python_uv_target_add (PlPythonUvTarget targets[],
     {
       index = *count;
       targets[index].path = xy_strdup (path);
-      targets[index].is_pyproject = pl_python_uv_path_is_pyproject (path);
+      targets[index].is_pyproject = xy_str_end_with (path, "pyproject.toml");
       targets[index].update_python = update_python;
       targets[index].update_pypi = update_pypi;
       targets[index].existing_python_url = existing_python_url;
@@ -777,8 +722,8 @@ pl_python_uv_setsrc (char *option)
 
   const char *PL_CPYTHON_URL = "https://mirror.nju.edu.cn/github-release/astral-sh/python-build-standalone/";
 
-  char *summary_python_path = pl_python_uv_dup_normalized (uv_config.python_path);
-  char *summary_pypi_path = pl_python_uv_dup_normalized (uv_config.pypi_path);
+  char *summary_python_path = uv_config.python_path ? xy_normalize_path (uv_config.python_path) : NULL;
+  char *summary_pypi_path = uv_config.pypi_path ? xy_normalize_path (uv_config.pypi_path) : NULL;
 
   char *uv_local_config_path = NULL;
   if (xy.on_windows)
@@ -791,8 +736,8 @@ pl_python_uv_setsrc (char *option)
     }
   uv_local_config_path = xy_normalize_path (uv_local_config_path);
 
-  char *proj_uv_path = pl_python_uv_dup_normalized (PL_Python_uv_Proj_uv);
-  char *proj_pyproj_path = pl_python_uv_dup_normalized (PL_Python_uv_Proj_pyproj);
+  char *proj_uv_path = xy_normalize_path (PL_Python_uv_Proj_uv);
+  char *proj_pyproj_path = xy_normalize_path (PL_Python_uv_Proj_pyproj);
 
   bool proj_uv_exist = xy_file_exist (proj_uv_path);
   bool proj_pyproj_exist = xy_file_exist (proj_pyproj_path);
@@ -870,7 +815,7 @@ pl_python_uv_setsrc (char *option)
         }
       else
         {
-          char *dir = pl_python_uv_dirname (path);
+          char *dir = xy_parent_dir (path);
           if (dir)
             {
               chsrc_ensure_dir (dir);
