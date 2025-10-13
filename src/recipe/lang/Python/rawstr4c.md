@@ -22,39 +22,34 @@
 
 ## uv
 
-### uv config source content
+### uv config source content (`uv.toml`)
 
 ```toml
-[[index]]
-url = "@url@"
-default = true
-
+[pip]
+index-url = "@url@"
 ```
 
+### uv config source content (`pyproject.toml`)
 
-### Get uv config
-
-```sh
-grep -A 2 'index' @f@ | sed -n 's/^url = "\(.*\)"/\1/p'
+```toml
+[tool.uv.pip]
+index-url = "@url@"
 ```
 
+### uv config cpython source content (`uv.toml`)
 
-### Set uv config
-
-```sh
-@sed@ '/^\[\[index\]\]$/,/^default = true$/{s|^url = ".*"$|url = "@url@"|}' @f@
+```toml
+python-install-mirror = "@url@"
 ```
 
+### uv config cpython source content (`pyproject.toml`)
 
-### Test uv if set source
-
-```sh
-grep -q '^\[\[index]]$' @f@
+```toml
+[tool.uv]
+python-install-mirror = "@url@"
 ```
 
 <br>
-
-
 
 ## Rye
 
