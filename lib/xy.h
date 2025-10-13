@@ -1284,13 +1284,14 @@ xy_detect_os ()
         }
     }
 
-    char *android_env = getenv ("ANDROID_ROOT");
-    if (android_env == "/system")
-      {
-        xy.on_linux = true;
-        xy.on_android = true;
-        return;
-      }
+  // REF: https://android.googlesource.com/platform/system/core/+/refs/heads/main/rootdir/init.environ.rc.in
+  char *android_env = getenv ("ANDROID_ROOT");
+  if (xy_str_find (android_env, "/system").found)
+    {
+      xy.on_linux = true;
+      xy.on_android = true;
+      return;
+    }
 
   /* 判断 macOS */
   DIR *d = opendir ("/System/Applications");
