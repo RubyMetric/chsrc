@@ -1284,23 +1284,13 @@ xy_detect_os ()
         }
     }
 
-  FILE *fp = fopen ("/proc/version", "r");
-  if (fp)
-    {
-      char buf[256] = {0};
-      fread (buf, 1, sizeof(buf) - 1, fp);
-      fclose (fp);
-      if (strstr (buf, "Android"))
-        {
-          xy.on_android = true;
-          return;
-        }
-      else if (strstr (buf, "Linux"))
-        {
-          xy.on_linux = true;
-          return;
-        }
-    }
+    char *android_env = getenv ("ANDROID_ROOT");
+    if (android_env == "/system")
+      {
+        xy.on_linux = true;
+        xy.on_android = true;
+        return;
+      }
 
   /* 判断 macOS */
   DIR *d = opendir ("/System/Applications");
