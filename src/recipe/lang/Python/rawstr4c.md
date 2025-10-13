@@ -25,28 +25,20 @@
 ### uv config source content (`uv.toml`)
 
 ```toml
+python-install-mirror = "@urlA@"
+
 [pip]
-index-url = "@url@"
+index-url = "@urlB@"
 ```
 
 ### uv config source content (`pyproject.toml`)
 
 ```toml
-[tool.uv.pip]
-index-url = "@url@"
-```
-
-### uv config cpython source content (`uv.toml`)
-
-```toml
-python-install-mirror = "@url@"
-```
-
-### uv config cpython source content (`pyproject.toml`)
-
-```toml
 [tool.uv]
-python-install-mirror = "@url@"
+python-install-mirror = "@urlA@"
+
+[tool.uv.pip]
+index-url = "@urlB@"
 ```
 
 <br>
