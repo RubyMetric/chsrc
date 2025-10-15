@@ -9,7 +9,7 @@
  *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-10-06>
+ * Last Modified : <2025-10-07>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -23,7 +23,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.2.1.0-2025/10/06"
+#define _XY_Version       "v0.2.1.1-2025/10/07"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -207,6 +207,27 @@ xy_malloc0 (size_t size)
 /******************************************************
  *                      String
  ******************************************************/
+
+/**
+ * @brief 替换字符串指针并自动释放旧内存
+ *
+ * @param old_ptr 指向要被替换的字符串指针的指针 (char **)
+ * @param new_str 新的字符串指针
+ */
+static inline void
+xy_ptr_replace (char **old_ptr, char *new_str)
+{
+  if (old_ptr && *old_ptr)
+    {
+      char *temp = *old_ptr;
+      *old_ptr = new_str;
+      free (temp);
+    }
+  else if (old_ptr)
+    {
+      *old_ptr = new_str;
+    }
+}
 
 /**
  * @brief 将 str 中所有的 pat 字符串替换成 replace，返回一个全新的字符串；也可用作删除、缩小、扩张
@@ -470,15 +491,15 @@ xy_streql (const char *str1, const char *str2)
 }
 
 static bool
-xy_streql_ic(const char *str1, const char *str2)
+xy_streql_ic (const char *str1, const char *str2)
 {
   if (NULL == str1 || NULL == str2)
     {
       return false;
     }
 
-  size_t len1 = strlen(str1);
-  size_t len2 = strlen(str2);
+  size_t len1 = strlen (str1);
+  size_t len2 = strlen (str2);
   if (len1 != len2)
     {
       return false;
@@ -486,7 +507,7 @@ xy_streql_ic(const char *str1, const char *str2)
 
   for (size_t i = 0; i < len1; i++)
     {
-      if (tolower(str1[i]) != tolower(str2[i]))
+      if (tolower (str1[i]) != tolower (str2[i]))
         {
           return false;
         }
@@ -560,14 +581,16 @@ xy_str_start_with (const char *str, const char *prefix)
 static char *
 xy_str_delete_prefix (const char *str, const char *prefix)
 {
-  char *new = xy_strdup (str);
   bool yes = xy_str_start_with (str, prefix);
   if (!yes)
-    return new;
-
-  size_t len = strlen (prefix);
-  char *cur = new + len;
-  return cur;
+    {
+      return xy_strdup (str);
+    }
+  else
+    {
+      size_t len = strlen (prefix);
+      return xy_strdup (str + len);
+    }
 }
 
 /**
@@ -594,23 +617,26 @@ xy_str_delete_suffix (const char *str, const char *suffix)
 static char *
 xy_str_strip (const char *str)
 {
-  char *new = xy_strdup (str);
+  if (!str)
+    xy_cant_be_null (str);
+    
 
-  while (strchr ("\n\r\v\t\f ", new[0]))
-    {
-      new += 1;
-    }
+  const char *start = str;
+  while (*start && strchr ("\n\r\v\t\f ", *start))
+    start++;
 
-  size_t len = strlen (new);
+  if ('\0' == *start)
+    return xy_strdup ("");
 
-  char *last = new + len - 1;
+  const char *end = start + strlen (start) - 1;
+  while (end >= start && strchr ("\n\r\v\t\f ", *end))
+    end--;
 
-  while (strchr ("\n\r\v\t\f ", *last))
-    {
-      *last = '\0';
-      last -= 1;
-    }
-  return new;
+  size_t len = (size_t) (end - start + 1);
+  char *ret = xy_malloc0 (len + 1);
+  memcpy (ret, start, len);
+  ret[len] = '\0';
+  return ret;
 }
 
 typedef struct
@@ -724,7 +750,7 @@ xy_file_read (const char *path)
   buf[read_bytes] = '\0';
 
   char *formatted_str = xy_str_gsub (buf, "\r\n", "\n");
-  formatted_str = xy_str_gsub (formatted_str, "\r", "\n");
+  xy_ptr_replace (&formatted_str, xy_str_gsub (formatted_str, "\r", "\n"));
 
   free (buf);
 
@@ -1143,13 +1169,19 @@ _xy_win_powershellv5_profile ()
 static bool
 xy_file_exist (const char *path)
 {
-  const char *new_path = path;
+  char *expanded_path = NULL;
+  const char *check_path = path;
+
   if (xy_str_start_with (path, "~"))
     {
-      new_path = xy_2strcat (xy_os_home, path + 1);
+      expanded_path = xy_2strcat (xy_os_home, path + 1);
+      check_path = expanded_path;
     }
+
   // 0 即 F_OK
-  return (0==access (new_path, 0)) ? true : false;
+  bool result = (0 == access (check_path, 0)) ? true : false;
+  if (expanded_path) free (expanded_path);
+  return result;
 }
 
 /**
@@ -1159,12 +1191,14 @@ xy_file_exist (const char *path)
 static bool
 xy_dir_exist (const char *path)
 {
+  char *allocated_dir = NULL;
   const char *dir = path;
   if (xy.on_windows)
     {
       if (xy_str_start_with (path, "~"))
         {
-          dir = xy_2strcat (xy_os_home, path + 1);
+          allocated_dir = xy_2strcat (xy_os_home, path + 1);
+          dir = allocated_dir;
         }
     }
 
@@ -1174,29 +1208,32 @@ xy_dir_exist (const char *path)
       // 也可以用 opendir() #include <dirent.h>
       DWORD attr = GetFileAttributesA (dir);
 
+      bool result = false;
       if (attr == INVALID_FILE_ATTRIBUTES)
         {
           // Q: 我们应该报错吗？
-          return false;
+          result = false;
         }
       else if (attr & FILE_ATTRIBUTE_DIRECTORY)
         {
-          return true;
+          result = true;
         }
       else
         {
-          return false;
+          result = false;
         }
+      if (allocated_dir) free (allocated_dir);
+      return result;
 #endif
     }
   else
     {
-      int status = system (xy_2strcat ("test -d ", dir));
-
-      if (0==status)
-        return true;
-      else
-        return false;
+      char *tmp_cmd = xy_2strcat ("test -d ", dir);
+      int status = system (tmp_cmd);
+      free (tmp_cmd);
+      bool result = (0==status);
+      if (allocated_dir) free (allocated_dir);
+      return result;
     }
 
   return false;
@@ -1219,13 +1256,17 @@ xy_normalize_path (const char *path)
 
   if (xy_str_start_with (new, "~"))
     {
-      new = xy_2strcat (xy_os_home, xy_str_delete_prefix (new, "~"));
+      char *tmp = xy_str_delete_prefix (new, "~");
+      char *joined = xy_2strcat (xy_os_home, tmp);
+      free (tmp);
+      xy_ptr_replace (&new, joined);
     }
 
   if (xy.on_windows)
-    return xy_str_gsub (new, "/", "\\");
-  else
-    return new;
+    {
+      xy_ptr_replace (&new, xy_str_gsub (new, "/", "\\"));
+    }
+  return new;
 }
 
 
@@ -1242,10 +1283,10 @@ xy_parent_dir (const char *path)
   char *dir = xy_normalize_path (path);
 
   /* 不管是否为Windows，全部统一使用 / 作为路径分隔符，方便后续处理 */
-  dir = xy_str_gsub (dir, "\\", "/");
+  xy_ptr_replace (&dir, xy_str_gsub (dir, "\\", "/"));
 
   if (xy_str_end_with (dir, "/"))
-    dir = xy_str_delete_suffix (dir, "/");
+    xy_ptr_replace (&dir, xy_str_delete_suffix (dir, "/"));
 
   char *last = NULL;
 
@@ -1259,9 +1300,10 @@ xy_parent_dir (const char *path)
 
   /* Windows上重新使用 \ 作为路径分隔符 */
   if (xy.on_windows)
-    return xy_str_gsub (dir, "/", "\\");
-  else
-    return dir;
+    {
+      xy_ptr_replace (&dir, xy_str_gsub (dir, "/", "\\"));
+    }
+  return dir;
 }
 
 
@@ -1288,7 +1330,7 @@ xy_detect_os ()
   if (fp)
     {
       char buf[256] = {0};
-      fread (buf, 1, sizeof(buf) - 1, fp);
+      fread (buf, 1, sizeof (buf) - 1, fp);
       fclose (fp);
       if (strstr (buf, "Android"))
         {
@@ -1319,9 +1361,10 @@ xy_detect_os ()
   fp = popen ("uname -s", "r");
   if (!fp)
     {
-      if (opendir ("/etc/rc.d"))
+      DIR *bsd_dir = opendir ("/etc/rc.d");
+      if (bsd_dir)
         {
-          closedir (d);
+          closedir (bsd_dir);
           xy.on_bsd = true;
           return;
         }
