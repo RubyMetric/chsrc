@@ -2,13 +2,13 @@
 # --------------------------------------------------------------
 # SPDX-License-Identifier: GPL-3.0-or-later
 # --------------------------------------------------------------
-# Build File    :   Makefile
-# File Authors  :  Aoran Zeng  <ccmywish@qq.com>
-# Contributors  :  Yangmoooo   <yangmoooo@outlook.com>
+# Build File    : Makefile
+# File Authors  : 曾奥然 <ccmywish@qq.com>
+# Contributors  : Yangmoooo <yangmoooo@outlook.com>
 #								| sanchuanhehe <wyihe5520@gmail.com>
 #								|
 # Created On    : <2023-08-28>
-# Last Modified : <2025-07-22>
+# Last Modified : <2025-10-15>
 #
 # 请阅读 ./doc/01-开发与构建.md 来使用
 # --------------------------------------------------------------
@@ -26,10 +26,12 @@ ifeq ($(shell uname), Darwin)
 	On-macOS = 1
 endif
 
-# 只有Windows会定义$(OS)变量
+# 只有 MSYS2 会定义 $(OS) 变量
 ifeq ($(OS), Windows_NT)
 	On-Windows = 1
 endif
+# 注意, 原生 Windows 会定义 $(ComSpec) 变量，且区分大小写
+# 但是 MSYS2 并不会定义
 #=====================================
 
 
@@ -196,6 +198,7 @@ test-cli: $(DevMode-Target-Name)
 
 clean:
 	-@rm *.exe  2>/dev/null
+	-@rm *.res  2>/dev/null
 	-@rm xy     2>/dev/null
 	-@rm fw     2>/dev/null
 	-@rm README.md.bak*    2>/dev/null

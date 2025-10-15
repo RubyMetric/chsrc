@@ -148,6 +148,7 @@ test-cli:
 
 clean:
 	-@{{BIN_rm}} *.exe
+	-@{{BIN_rm}} *.res
 	-@{{BIN_rm}} xy
 	-@{{BIN_rm}} fw
 	-@{{BIN_rm}} chsrc
