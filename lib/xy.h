@@ -1284,11 +1284,23 @@ xy_detect_os ()
         }
     }
 
-  // REF: https://android.googlesource.com/platform/system/core/+/refs/heads/main/rootdir/init.environ.rc.in
+  FILE *fp = fopen ("/proc/version", "r");
+  if (fp)
+    {
+      char buf[256] = {0};
+      fread (buf, 1, sizeof(buf) - 1, fp);
+      fclose (fp);
+      if (strstr (buf, "Linux"))
+        {
+          xy.on_linux = true;
+          return;
+        }
+    }
+
+  // @consult https://android.googlesource.com/platform/system/core/+/refs/heads/main/rootdir/init.environ.rc.in
   char *android_env = getenv ("ANDROID_ROOT");
   if (xy_str_find (android_env, "/system").found)
     {
-      xy.on_linux = true;
       xy.on_android = true;
       return;
     }
@@ -1303,6 +1315,7 @@ xy_detect_os ()
         {
           xy.on_macos = true;
           closedir (d);
+          return;
         }
     }
 
@@ -1324,6 +1337,7 @@ xy_detect_os ()
       pclose (fp);
       if (strstr (buf, "BSD")  != NULL)
         xy.on_bsd = true;
+        return;
     }
 
   if (!(xy.on_windows || xy.on_linux || xy.on_android || xy.on_macos || xy.on_bsd))
