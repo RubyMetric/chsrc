@@ -3,13 +3,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # --------------------------------------------------------------
 # Build File    :   Makefile
-# File Authors  :  Aoran Zeng   <ccmywish@qq.com>
-# Contributors  :  Yangmoooo    <yangmoooo@outlook.com>
-#               | sanchuanhehe  <wyihe5520@gmail.com>
-#               | Mikachu2333   <mikachu.23333@zohomail.com>
-#               |
+# File Authors  :  Aoran Zeng  <ccmywish@qq.com>
+# Contributors  :  Yangmoooo   <yangmoooo@outlook.com>
+#								| sanchuanhehe <wyihe5520@gmail.com>
+#								|
 # Created On    : <2023-08-28>
-# Last Modified : <2025-10-11>
+# Last Modified : <2025-07-22>
 #
 # 请阅读 ./doc/01-开发与构建.md 来使用
 # --------------------------------------------------------------
@@ -19,24 +18,17 @@ On-Linux = 0
 On-Windows = 0
 On-macOS = 0
 
-# Windows 会定义 OS 或 ComSpec 环境变量
-ifdef ComSpec
-	On-Windows = 1
-else ifdef OS
-	ifeq ($(OS), Windows_NT)
-		On-Windows = 1
-	endif
+ifeq ($(shell uname), Linux)
+	On-Linux = 1
 endif
 
-# 只在非 Windows 环境下调用 uname
-ifneq ($(On-Windows), 1)
-	UNAME_S := $(shell uname 2>/dev/null || echo unknown)
-	ifeq ($(UNAME_S), Linux)
-		On-Linux = 1
-	endif
-	ifeq ($(UNAME_S), Darwin)
-		On-macOS = 1
-	endif
+ifeq ($(shell uname), Darwin)
+	On-macOS = 1
+endif
+
+# 只有Windows会定义$(OS)变量
+ifeq ($(OS), Windows_NT)
+	On-Windows = 1
 endif
 #=====================================
 
@@ -44,8 +36,8 @@ endif
 
 #======== Default Tooling ============
 ifeq ($(On-Windows), 1)
-  # Windows 环境 - 使用 gcc
-	CC = gcc
+  # MSYS2 环境
+	CC = cc
 else ifeq ($(On-macOS), 1)
 	CC = clang
 else
@@ -62,20 +54,10 @@ endif
 
 
 #======== Compilation Config ==========
-CFLAGS += -Iinclude -Ilib -Isrc/framework -Isrc/res
-
-Target-Is-Windows = 0
-Use-Windows-Resource = 0
+CFLAGS += -Iinclude -Ilib
 
 ifeq ($(On-Windows), 1)
 	CLANG_FLAGS = -target x86_64-pc-windows-gnu
-	Target-Machine := $(shell $(CC) -dumpmachine 2>nul || echo unknown)
-	ifneq ($(findstring mingw,$(Target-Machine)),)
-		Target-Is-Windows = 1
-	else ifneq ($(findstring windows,$(Target-Machine)),)
-		Target-Is-Windows = 1
-	endif
-	Use-Windows-Resource := $(Target-Is-Windows)
 endif
 
 ifeq ($(CC), clang)
@@ -160,25 +142,13 @@ build-in-debug-mode:
 build-in-release-mode: CFLAGS += $(CFLAGS_optimization)
 build-in-release-mode:
 	@echo Starting: Build in RELEASE mode: \'$(CC)\' $(CFLAGS) -o $(ReleaseMode-Target-Name)
-ifeq ($(Use-Windows-Resource), 1)
-	@if exist src\\res\\chsrc.res del src\\res\\chsrc.res
-	@windres src\\res\\win_res.rc -O coff -o src\\res\\chsrc.res -Iinclude -Ilib -Isrc\\framework -Isrc\\res
-	@$(CC) src\\chsrc-main.c src\\res\\chsrc.res $(CFLAGS) $(_C_Warning_Flags) -o $(ReleaseMode-Target-Name)
-	@del src\\res\\chsrc.res
-else
 	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(ReleaseMode-Target-Name)
-endif
 	@echo Finished: Build in RELEASE mode
 
 # CI release mode 的配置在该文件上方
 build-in-ci-release-mode:
 	@echo Starting: Build in CI-RELEASE mode: \'$(CC)\' $(CFLAGS) -o $(CIReleaseMode-Target-Name)
-ifeq ($(Use-Windows-Resource), 1)
-	@windres src\\res\\win_res.rc -O coff -o src\\res\\chsrc.res -Iinclude -Ilib -Isrc\\framework -Isrc\\res
-	@$(CC) src\\chsrc-main.c src\\res\\chsrc.res $(CFLAGS) $(_C_Warning_Flags) -o $(CIReleaseMode-Target-Name)
-else
 	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(CIReleaseMode-Target-Name)
-endif
 	@echo Finished: Build in CI-RELEASE mode
 
 # 永远重新编译
@@ -193,10 +163,6 @@ test-make-env:
 	@echo "On-macOS: $(On-macOS)"
 	@echo "CC: $(CC)"
 	@echo "CFLAGS: $(CFLAGS)"
-ifeq ($(On-Windows), 1)
-	@echo "USER: $(USERNAME)"
-	@echo "PWD: $(CURDIR)"
-else
 	@echo "USER: $$(whoami)"
 	@echo "PWD: $(shell pwd)"
 	@echo "UID: $$(id -u)"
@@ -207,28 +173,17 @@ else
 	else \
 	 echo "HOME: $(HOME)"; \
 	fi
-endif
 
 # 这两个测试文件都用 DEBUG mode
 test-xy: CFLAGS += $(CFLAGS_debug)
 test-xy:
-ifeq ($(On-Windows), 1)
-	@$(CC) test/xy.c $(CFLAGS) -o xy.exe
-	@xy.exe
-else
 	@$(CC) test/xy.c $(CFLAGS) -o xy
 	@./xy
-endif
 
 test-fw: CFLAGS += $(CFLAGS_debug)
 test-fw:
-ifeq ($(On-Windows), 1)
-	@$(CC) test/fw.c $(CFLAGS) -o fw.exe
-	@fw.exe
-else
 	@$(CC) test/fw.c $(CFLAGS) -o fw
 	@./fw
-endif
 
 check: test
 
@@ -240,25 +195,15 @@ test-cli: $(DevMode-Target-Name)
 	@perl ./test/cli.pl
 
 clean:
-ifeq ($(On-Windows), 1)
-	-@if exist *.exe del /Q *.exe 2>nul
-	-@if exist xy.exe del /Q xy.exe 2>nul
-	-@if exist fw.exe del /Q fw.exe 2>nul
-	-@if exist README.md.bak* del /Q README.md.bak* 2>nul
-	-@if exist chsrc.exe del /Q chsrc.exe 2>nul
-	-@if exist chsrc-debug.exe del /Q chsrc-debug.exe 2>nul
-	-@if exist chsrc-release.exe del /Q chsrc-release.exe 2>nul
-	-@if exist chsrc-ci-release.exe del /Q chsrc-ci-release.exe 2>nul
-else
 	-@rm *.exe  2>/dev/null
 	-@rm xy     2>/dev/null
 	-@rm fw     2>/dev/null
 	-@rm README.md.bak*    2>/dev/null
+
 	-@rm chsrc  					 2>/dev/null
 	-@rm chsrc-debug       2>/dev/null
 	-@rm chsrc-release  	 2>/dev/null
 	-@rm chsrc-ci-release  2>/dev/null
-endif
 
 # -include pkg/deb/Makefile # 不这么做，因为 pkg/deb/Makefile 需要在 pkg/deb 目录下执行
 # 保持动词在前的任务名风格
