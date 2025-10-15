@@ -9,8 +9,9 @@ IDI_ICON1 ICON DISCARDABLE "logo.ico"
 
 // 版本信息
 VS_VERSION_INFO VERSIONINFO
-    FILEVERSION     Chsrc_Version_Major,Chsrc_Version_Minor,Chsrc_Version_Patch,0
-    PRODUCTVERSION  Chsrc_Version_Major,Chsrc_Version_Minor,Chsrc_Version_Patch,0
+    FILEVERSION     Chsrc_Version_Major,Chsrc_Version_Minor,Chsrc_Version_Patch,Chsrc_Version_Pre
+    // 经实验，该值会被下面的 ProductVersion 替换
+    // PRODUCTVERSION  Chsrc_Version_Major,Chsrc_Version_Minor,Chsrc_Version_Patch,Chsrc_Version_Pre
     FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
 #ifdef _DEBUG
     FILEFLAGS       VS_FF_DEBUG
@@ -27,7 +28,10 @@ BEGIN
         BEGIN
             VALUE "CompanyName",      "RubyMetric"
             VALUE "FileDescription",  "Change Source everywhere for every software"
-            VALUE "FileVersion",       Chsrc_Version
+
+            // 经实验，该值会被上面的 FILEVERSION 替换
+            // VALUE "FileVersion",    Chsrc_Version
+
             VALUE "InternalName",     "chsrc"
             VALUE "LegalCopyright",   "Copyright (c) 2023-2025 RubyMetric"
             VALUE "OriginalFilename", "chsrc.exe"

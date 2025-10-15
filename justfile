@@ -116,7 +116,7 @@ build-in-debug-mode:
 build-in-release-mode:
   @echo Starting: Build in RELEASE mode: '{{CC}}' {{CFLAGS_release_mode_prompt}} -o {{ReleaseMode-Target-Name}}
   @{{ if os() == 'windows' { \
-        'if exist chsrc.res del chsrc.res' + \
+        '(if exist chsrc.res del chsrc.res)' + \
         ' & windres src/resource/chsrc.rc -O coff -o chsrc.res' \
       } else { '' } }}
   @{{ if os() == 'windows' { \
