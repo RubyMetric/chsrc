@@ -1290,16 +1290,19 @@ xy_detect_os ()
       char buf[256] = {0};
       fread (buf, 1, sizeof(buf) - 1, fp);
       fclose (fp);
-      if (strstr (buf, "Android"))
-        {
-          xy.on_android = true;
-          return;
-        }
-      else if (strstr (buf, "Linux"))
+      if (strstr (buf, "Linux"))
         {
           xy.on_linux = true;
           return;
         }
+    }
+
+  // @consult https://android.googlesource.com/platform/system/core/+/refs/heads/main/rootdir/init.environ.rc.in
+  char *android_env = getenv ("ANDROID_ROOT");
+  if (xy_str_find (android_env, "/system").found)
+    {
+      xy.on_android = true;
+      return;
     }
 
   /* 判断 macOS */
@@ -1312,6 +1315,7 @@ xy_detect_os ()
         {
           xy.on_macos = true;
           closedir (d);
+          return;
         }
     }
 
@@ -1333,6 +1337,7 @@ xy_detect_os ()
       pclose (fp);
       if (strstr (buf, "BSD")  != NULL)
         xy.on_bsd = true;
+        return;
     }
 
   if (!(xy.on_windows || xy.on_linux || xy.on_android || xy.on_macos || xy.on_bsd))
