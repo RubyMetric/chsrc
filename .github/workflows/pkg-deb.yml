@@ -121,7 +121,7 @@ jobs:
         bash pkg/deb/deb-installation-test.sh
 
     - name: 上传deb包到artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: chsrc-deb-files
         path: dist/chsrc_*.deb
@@ -172,7 +172,7 @@ jobs:
         dpkg-scanpackages . /dev/null > Packages
 
     - name: Upload repository metadata
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: debian-repository-metadata
         path: debs/Packages*
