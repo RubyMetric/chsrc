@@ -18,8 +18,8 @@ os_ros_prelude ()
   chef_set_sauciers (this, 2, "@ccmywish", "@zouri");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
-  chef_forbid_english(this);
-  chef_forbid_user_define(this);
+  chef_deny_english(this);
+  chef_deny_user_define(this);
 
   chef_set_note(this, "该换源方案中，URL存在拼凑，因此不能手动使用某URL来换源", "In this switching method, URLs are constructed, so manual URL specification is not supported");
 

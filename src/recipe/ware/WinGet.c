@@ -17,7 +17,7 @@ wr_winget_prelude ()
   chef_set_cooks (this, 1, "@ccmywish");
   chef_set_sauciers (this, 1, "@Mikachu2333");
 
-  chef_forbid_english(this);
+  chef_deny_english(this);
   chef_allow_user_define(this);
 
   def_sources_begin()

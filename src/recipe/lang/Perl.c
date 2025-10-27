@@ -18,7 +18,7 @@ pl_perl_prelude ()
   chef_set_sauciers (this, 2, "@hezonglun", "@Mikachu2333");
 
   chef_allow_local_mode  (this, CanNot, NULL, NULL);
-  chef_forbid_english    (this);
+  chef_deny_english    (this);
   chef_allow_user_define (this);
 
   def_sources_begin()

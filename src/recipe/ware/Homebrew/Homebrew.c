@@ -21,7 +21,7 @@ wr_homebrew_prelude ()
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);
-  chef_forbid_user_define(this);
+  chef_deny_user_define(this);
 
   chef_set_note (this, "该换源通过写入环境变量实现，若多次换源，请手动清理profile文件",
                        "This source switching is implemented by writing environment variables. If switching sources multiple times, please manually clean the profile file");

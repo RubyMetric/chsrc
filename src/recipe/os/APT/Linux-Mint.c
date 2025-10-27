@@ -18,8 +18,8 @@ os_linuxmint_prelude ()
   chef_set_sauciers (this, 1, "@happy-game");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
-  chef_forbid_english(this);
-  chef_forbid_user_define(this);
+  chef_deny_english(this);
+  chef_deny_user_define(this);
 
 
   /* @note 实际上镜像站里的内容和Ubuntu的不太一样 */

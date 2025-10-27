@@ -21,8 +21,8 @@ os_arch_prelude ()
   chef_set_sauciers (this, 2, "@happy-game", "@Young-Lord");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
-  chef_forbid_english(this);
-  chef_forbid_user_define(this);
+  chef_deny_english(this);
+  chef_deny_user_define(this);
 
   chef_set_note (this,
     "可额外使用 chsrc set archlinuxcn 来更换 Arch Linux CN Repository 源",
@@ -124,8 +124,8 @@ os_archlinuxcn_prelude ()
   chef_set_sauciers (this, 2, "@happy-game", "@Young-Lord");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
-  chef_forbid_english(this);
-  chef_forbid_user_define(this);
+  chef_deny_english(this);
+  chef_deny_user_define(this);
 
   chef_set_note (this,
     "可额外使用 chsrc set arch 来更换 Arch Linux 源",

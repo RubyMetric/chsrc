@@ -18,7 +18,7 @@ pl_clojure_prelude ()
   chef_set_sauciers (this, 1, "@hezonglun");
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
-  chef_forbid_english(this);
+  chef_deny_english(this);
   chef_allow_user_define(this);
 
   def_sources_begin()

@@ -18,7 +18,7 @@ wr_flatpak_prelude ()
   chef_set_sauciers (this, 1, "@jialinlvcn");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
-  chef_forbid_english(this);
+  chef_deny_english(this);
   chef_allow_user_define(this);
 
   chef_set_note (this, "对Flathub目标进行测速的文件非常小，测速效果严重失真，若你知道可供测速的URL，欢迎参与贡献: chsrc issue",

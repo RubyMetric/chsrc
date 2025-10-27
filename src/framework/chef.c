@@ -5,7 +5,7 @@
  * File Authors  : 曾奥然 <ccmywish@qq.com>
  * Contributors  : BingChunMoLi <bingchunmoli@bingchunmoli.com>
  * Created On    : <2025-08-09>
- * Last Modified : <2025-08-27>
+ * Last Modified : <2025-10-27>
  *
  * chef DSL: for chefs (recipe makers) to define a target
  * ------------------------------------------------------------*/
@@ -186,7 +186,7 @@ chef_allow_english (Target_t *target)
 }
 
 void
-chef_forbid_english (Target_t *target)
+chef_deny_english (Target_t *target)
 {
   xy_cant_be_null (target);
   target->can_english = false;
@@ -226,7 +226,7 @@ chef_allow_user_define (Target_t *target)
 }
 
 void
-chef_forbid_user_define (Target_t *target)
+chef_deny_user_define (Target_t *target)
 {
   xy_cant_be_null (target);
 

@@ -18,8 +18,8 @@ pl_nuget_prelude ()
   chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
-  chef_forbid_english(this);
-  chef_forbid_user_define(this);
+  chef_deny_english(this);
+  chef_deny_user_define(this);
 
   def_sources_begin()
   {&UpstreamProvider, "https://www.nuget.org/api/v3/", DelegateToUpstream},
