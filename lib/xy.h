@@ -9,7 +9,7 @@
  *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-10-15>
+ * Last Modified : <2025-10-28>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -23,7 +23,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.2.1.1-2025/10/07"
+#define _XY_Version       "v0.2.2.0-2025/10/28"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -213,33 +213,31 @@ xy_malloc0 (size_t size)
 }
 
 
+/**
+ * @brief 替换指针内容并自动释放旧内存
+ *
+ * @param pptr    指向要被替换内存区域的指针的指针
+ *                *pptr 可为 NULL
+ * @param new_mem 新的内存区域
+ */
+static inline void
+xy_ptr_replace (char **pptr, char *new_mem)
+{
+  xy_cant_be_null (pptr);
+
+  if (*pptr)
+    free (*pptr);
+
+  *pptr = new_mem;
+}
+
+
 /******************************************************
  *                      String
  ******************************************************/
 
 /**
- * @brief 替换字符串指针并自动释放旧内存
- *
- * @param old_ptr 指向要被替换的字符串指针的指针 (char **)
- * @param new_str 新的字符串指针
- */
-static inline void
-xy_ptr_replace (char **old_ptr, char *new_str)
-{
-  if (old_ptr && *old_ptr)
-    {
-      char *temp = *old_ptr;
-      *old_ptr = new_str;
-      free (temp);
-    }
-  else if (old_ptr)
-    {
-      *old_ptr = new_str;
-    }
-}
-
-/**
- * @brief 将 str 中所有的 pat 字符串替换成 replace，返回一个全新的字符串；也可用作删除、缩小、扩张
+ * @brief 将 str 中所有的 pat 字符串替换成 replace，返回一个全新的字符串
  *
  * @flavor Ruby: String#gsub
  *
@@ -626,9 +624,7 @@ xy_str_delete_suffix (const char *str, const char *suffix)
 static char *
 xy_str_strip (const char *str)
 {
-  if (!str)
-    xy_cant_be_null (str);
-    
+  xy_cant_be_null (str);
 
   const char *start = str;
   while (*start && strchr ("\n\r\v\t\f ", *start))
