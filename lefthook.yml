@@ -15,9 +15,10 @@ pre-commit:
   parallel: true
   jobs:
     - name: 试运行 DEBUG mode
-      run:
+      # 触发所有 _prelude() 函数检查
+      run: |
         just build-in-debug-mode
-        ./chsrc-debug
+        ./chsrc-debug get pip
       glob: "*.{c,h}"
       exclude: test/*
 
