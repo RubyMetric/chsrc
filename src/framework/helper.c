@@ -1,18 +1,18 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Name     : chef-helper.c
+ * File Name     : helper.c
  * File Authors  : 曾奥然 <ccmywish@qq.com>
  * Contributors  : Nul None <nul@none.org>
  * Created On    : <2025-07-14>
- * Last Modified : <2025-08-20>
+ * Last Modified : <2025-10-28>
  *
  * For chefs (recipe makers) and sometimes framewoker
  * to do some work not releated to OS operations
  * ------------------------------------------------------------*/
 
 bool
-chef_is_url (const char *str)
+hp_is_url (const char *str)
 {
   return (xy_str_start_with (str, "http://") || xy_str_start_with (str, "https://"));
 }
@@ -21,7 +21,7 @@ chef_is_url (const char *str)
  * @return 一律返回新字符串
  */
 char *
-chef_remove_trailing_slash (char *str)
+hp_remove_trailing_slash (char *str)
 {
   char *newstr = xy_strdup (str);
   size_t len = strlen (newstr);
@@ -34,7 +34,7 @@ chef_remove_trailing_slash (char *str)
  * @return 一律返回新字符串
  */
 char *
-chef_ensure_trailing_slash (char *str)
+hp_ensure_trailing_slash (char *str)
 {
   size_t len = strlen (str);
   if (len == 0 || str[len - 1] == '/')

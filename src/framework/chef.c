@@ -137,7 +137,7 @@ chef_set_sources_speed_measure_url_with_func (
       if (src->url)
         {
           /* 为空时才修改 或者里面是脏数据 */
-          if (NULL==src->speed_measure_url || !chef_is_url (src->speed_measure_url))
+          if (NULL==src->speed_measure_url || !hp_is_url (src->speed_measure_url))
             {
               src->speed_measure_url = func (src->url, user_data);
             }

@@ -66,7 +66,7 @@ os_netbsd_setsrc (char *option)
   char *vercmd  = "cat /etc/os-release | grep \"VERSION=\" | grep -Po \"[8-9].[0-9]+\"";
   char *version = xy_run (vercmd, 0);
 
-  char *url = xy_strcat (5, chef_ensure_trailing_slash (source.url), arch, "/", version, "/All");
+  char *url = xy_strcat (5, hp_ensure_trailing_slash (source.url), arch, "/", version, "/All");
   chsrc_overwrite_file (url, "/usr/pkg/etc/pkgin/repositories.conf");
 
   chsrc_conclude (&source);

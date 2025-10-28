@@ -11,7 +11,7 @@
  *               | Mikachu2333   <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-09-29>
+ * Last Modified : <2025-10-28>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -27,7 +27,7 @@
 #include "xy.h"
 #include "struct.h"
 #include "mirror.c"
-#include "chef-helper.c"
+#include "helper.c"
 
 #define App_Name "chsrc"
 
@@ -511,7 +511,7 @@ chsrc_check_file (char *path)
 int
 query_mirror_exist (Source_t *sources, size_t size, char *target_name, char *input)
 {
-  if (chef_is_url (input))
+  if (hp_is_url (input))
     {
       char *msg = ENGLISH ? "Using user-defined sources for this software is not supported at this time, please contact the developers to ask why or request support" : "暂不支持对该软件使用用户自定义源，请联系开发者询问原因或请求支持";
       chsrc_error (msg);
@@ -764,7 +764,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
         }
       else if (!provider_skip && provider_speed_url)
         {
-          if (chef_is_url (provider_speed_url))
+          if (hp_is_url (provider_speed_url))
             {
               url = xy_strdup (provider_speed_url);
               chsrc_debug ("m", xy_2strcat ("使用镜像站整体测速链接: ", url));
@@ -777,7 +777,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
 
       if (dedicated_speed_url)
         {
-          if (chef_is_url (dedicated_speed_url))
+          if (hp_is_url (dedicated_speed_url))
             {
               url = xy_strdup (dedicated_speed_url);
               has_dedicated_speed_url = true;
@@ -1055,7 +1055,7 @@ chsrc_yield_source (Target_t *t, char *option)
     {
       source = t->sources[ProgStatus.leader_selected_index];
     }
-  else if (chef_is_url (option))
+  else if (hp_is_url (option))
     {
       Source_t tmp = { &UserDefinedProvider, option };
       source = tmp;
