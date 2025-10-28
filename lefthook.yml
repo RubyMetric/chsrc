@@ -7,13 +7,19 @@
 # Last Modified : <2025-10-28>
 # ---------------------------------------------------------------
 
+min_version: 2.0.1
+
 pre-commit:
   only:
     - ref: dev
   parallel: true
   jobs:
-    - name: 测试编译
-      run: just
+    - name: 试运行 DEBUG mode
+      run:
+        just build-in-debug-mode
+        ./chsrc-debug
+      glob: "*.{c,h}"
+      exclude: test/*
 
     - name: 测试 xy.h
       run: just test-xy
@@ -27,3 +33,20 @@ pre-commit:
         - "src/framework/*.{c,h}"
         - src/chsrc-main.c
         - test/fw.c
+
+post-merge:
+  only:
+    - ref: main
+  jobs:
+    - name: 测试编译 DEV mode
+      run: just build-in-dev-mode
+
+pre-push:
+  only:
+    - ref: gh-build
+  jobs:
+    - name: 测试编译 RELEASE mode
+      run: just build-in-release-mode
+
+    - name: 测试运行
+      run: just test-cli
