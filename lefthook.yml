@@ -9,10 +9,20 @@
 
 pre-commit:
   only:
-    - ref: dev
+    - ref: dev|main
   jobs:
+    - name: 测试编译
+      run: just
+
     - name: 测试 xy.h
       run: just test-xy
+      glob:
+        - lib/xy.h
+        - test/xy.c
 
     - name: 测试 framework
       run: just test-fw
+      glob:
+        - "src/framework/*.{c,h}"
+        - src/chsrc-main.c
+        - test/fw.c
