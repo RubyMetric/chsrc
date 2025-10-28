@@ -72,6 +72,8 @@ struct
   bool on_bsd;
   bool on_android;
 
+  /* @flavor 同 just 中的 os_family()，只区分 windows, unix */
+  char *os_family;
   char *os_devnull;
 }
 xy =
@@ -88,6 +90,7 @@ xy =
   .on_bsd = false,
   .on_android = false,
 
+  .os_family = NULL,
   .os_devnull = NULL
 };
 
@@ -1051,21 +1054,6 @@ xy_run_get_stdout (const char *cmd, char **output)
 }
 
 
- /**
- * @flavor 该函数同 just 中的 os_family()，只区分 windows, unix
- *
- * @return 返回 "windows" 或 "unix"
- */
-#define xy_os_family _xy_os_family ()
-static char *
-_xy_os_family ()
-{
-  if (xy.on_windows)
-    return "windows";
-  else
-    return "unix";
-}
-
 
 /**
  * @brief 该函数返回所在 os family 的对应字符串
@@ -1312,11 +1300,17 @@ xy_parent_dir (const char *path)
 }
 
 
-
+/**
+ * @internal 仅由 xy_init () 调用
+ */
 void
-xy_detect_os ()
+_xy_detect_os ()
 {
-  // C:
+  /**
+   * 首先判断是否为 Windows
+   *
+   * SystemDrive 为 C:
+   */
   char *drive = getenv ("SystemDrive");
   if (drive)
     {
@@ -1326,11 +1320,13 @@ xy_detect_os ()
       if (d)
         {
           xy.on_windows = true;
+          xy.os_family = "windows";
           closedir (d);
           return;
         }
     }
 
+  /* 判断 Linux */
   FILE *fp = fopen ("/proc/version", "r");
   if (fp)
     {
@@ -1340,16 +1336,25 @@ xy_detect_os ()
       if (strstr (buf, "Linux"))
         {
           xy.on_linux = true;
+          xy.os_family = "unix";
           return;
         }
     }
 
-  // @consult https://android.googlesource.com/platform/system/core/+/refs/heads/main/rootdir/init.environ.rc.in
+  /**
+   * 判断 Android
+   *
+   * @consult https://android.googlesource.com/platform/system/core/+/refs/heads/main/rootdir/init.environ.rc.in
+   */
   char *android_env = getenv ("ANDROID_ROOT");
-  if (xy_str_find (android_env, "/system").found)
+  if (android_env)
     {
-      xy.on_android = true;
-      return;
+      if (xy_str_find (android_env, "/system").found)
+        {
+          xy.on_android = true;
+          xy.os_family = "unix";
+          return;
+        }
     }
 
   /* 判断 macOS */
@@ -1361,6 +1366,7 @@ xy_detect_os ()
       if (d)
         {
           xy.on_macos = true;
+          xy.os_family = "unix";
           closedir (d);
           return;
         }
@@ -1368,24 +1374,28 @@ xy_detect_os ()
 
   /* 最后判断 BSD */
   fp = popen ("uname -s", "r");
-  if (!fp)
+  if (fp)
+    {
+      char buf[256];
+      fgets (buf, sizeof (buf), fp);
+      pclose (fp);
+      if (strstr (buf, "BSD") != NULL)
+        {
+          xy.on_bsd = true;
+          xy.os_family = "unix";
+          return;
+        }
+    }
+  else
     {
       DIR *bsd_dir = opendir ("/etc/rc.d");
       if (bsd_dir)
         {
           closedir (bsd_dir);
           xy.on_bsd = true;
+          xy.os_family = "unix";
           return;
         }
-    }
-  else
-    {
-      char buf[256];
-      fgets (buf, sizeof (buf), fp);
-      pclose (fp);
-      if (strstr (buf, "BSD")  != NULL)
-        xy.on_bsd = true;
-        return;
     }
 
   if (!(xy.on_windows || xy.on_linux || xy.on_android || xy.on_macos || xy.on_bsd))
@@ -1408,7 +1418,7 @@ xy_use_utf8 ()
 void
 xy_init ()
 {
-  xy_detect_os ();
+  _xy_detect_os ();
 
   if (xy.on_windows)
     xy.os_devnull = "nul";
