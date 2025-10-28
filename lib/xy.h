@@ -145,6 +145,11 @@ xy =
 #define xy_cant_be_null(p)  if(!p) xy_throw("This pointer can't be null")
 
 
+static inline void
+_xy_internal_warn (char *str)
+{
+  fprintf (stderr, "[xy.h] %s\n", str);
+}
 
 static void _xy_print_int    (int n) {printf ("%d", n);}
 static void _xy_print_long   (long n) {printf ("%ld", n);}
@@ -375,7 +380,7 @@ xy_strcat (unsigned int count, ...)
         }
       if (NULL == ret)
         {
-          fprintf (stderr, "xy.h: No availble memory!");
+          _xy_internal_warn ("xy_strcat(): No availble memory to allocate!");
           return NULL;
         }
       strcpy (cur, str);
@@ -401,7 +406,7 @@ xy_strdup (const char *str)
 {
   if (!str)
     {
-      fprintf (stderr, "xy.h: xy_strdup() called with NULL!\n");
+      _xy_internal_warn ("xy_strdup(): called with NULL!");
       return NULL;
     }
 
@@ -963,7 +968,7 @@ xy_run_iter_lines (const char *cmd,  unsigned long n,  bool (*func) (const char 
   FILE *stream = popen (cmd, "r");
   if (stream == NULL)
     {
-      fprintf (stderr, "xy: 命令执行失败\n");
+      _xy_internal_warn ("xy_run_iter_lines(): popen() failed");
       return NULL;
     }
 
@@ -1028,7 +1033,7 @@ xy_run_get_stdout (const char *cmd, char **output)
   FILE *stream = popen (cmd, "r");
   if (stream == NULL)
     {
-      fprintf (stderr, "xy: 命令执行失败\n");
+      _xy_internal_warn ("xy_run_get_stdout(): popen() failed");
       return -1;
     }
 
