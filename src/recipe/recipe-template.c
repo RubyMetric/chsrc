@@ -73,10 +73,10 @@ void
   chef_allow_local_mode (this, PartiallyCan, "具体说明是否支持项目级换源...", "Tell users the local mode support");
 
   // chef_allow_english(this); // 项目是否支持英文
-  chef_forbid_english(this);
+  chef_deny_english(this);
 
   // chef_allow_user_define(this); // 是否支持用户自定义镜像源
-  chef_forbid_user_define(this);
+  chef_deny_user_define(this);
 
   chef_set_note ("中文备注说明...", "English note...");
 

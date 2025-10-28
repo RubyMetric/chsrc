@@ -19,7 +19,7 @@ os_gentoo_prelude ()
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_allow_english(this);
-  chef_forbid_user_define(this);
+  chef_deny_user_define(this);
 
   chef_set_note(this, NULL, NULL);
 

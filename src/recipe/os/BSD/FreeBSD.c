@@ -18,8 +18,8 @@ os_freebsd_prelude ()
   chef_set_sauciers (this, 1, "@hezonglun");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
-  chef_forbid_english(this);
-  chef_forbid_user_define(this);
+  chef_deny_english(this);
+  chef_deny_user_define(this);
 
 
   // 2023-09-24: 以下三个USTC, NJU, Netease 均维护了 freebsd-pkg freebsd-ports

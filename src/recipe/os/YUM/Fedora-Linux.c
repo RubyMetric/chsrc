@@ -18,8 +18,8 @@ os_fedora_prelude ()
   chef_set_sauciers (this, 1, "@ccmywish");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
-  chef_forbid_english(this);
-  chef_forbid_user_define(this);
+  chef_deny_english(this);
+  chef_deny_user_define(this);
 
   chef_set_note(this, NULL, NULL);
 

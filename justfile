@@ -2,12 +2,12 @@
 # --------------------------------------------------------------
 # SPDX-License-Identifier: GPL-3.0-or-later
 # --------------------------------------------------------------
-# Build File    :  justfile
-# File Authors  : Aoran Zeng <ccmywish@qq.com>
-# Contributors  :  Nul None  <nul@none.org>
-#								|
+# Build File    : justfile
+# File Authors  : 曾奥然      <ccmywish@qq.com>
+# Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
+#               |
 # Created On    : <2025-06-18>
-# Last Modified : <2025-07-21>
+# Last Modified : <2025-10-15>
 #
 # 该文件主要用于在原生Windows上执行项目的基本任务，而不借助于
 # GNU make 以及相应的 MSYS2、Cygwin 环境
@@ -104,9 +104,9 @@ alias c := clean
 default: build-in-dev-mode
 
 build-in-dev-mode:
-  @echo Starting: Build in DEV mode: '{{CC}}' {{CFLAGS_dev_mode_prompt}} -o {{DevMode-Target-Name}}
-  @{{CC}} src/chsrc-main.c {{CFLAGS_dev_mode}} -o {{DevMode-Target-Name}}
-  @echo Finished: Build in DEV mode
+	@echo Starting: Build in DEV mode: '{{CC}}' {{CFLAGS_dev_mode_prompt}} -o {{DevMode-Target-Name}}
+	@{{CC}} src/chsrc-main.c {{CFLAGS_dev_mode}} -o {{DevMode-Target-Name}}
+	@echo Finished: Build in DEV mode
 
 build-in-debug-mode:
 	@echo Starting: Build in DEBUG mode: '{{CC}}' {{CFLAGS_debug_mode_prompt}} -o {{DebugMode-Target-Name}}
@@ -114,9 +114,17 @@ build-in-debug-mode:
 	@echo Finished: Build in DEBUG mode
 
 build-in-release-mode:
-	@echo Starting: Build in RELEASE mode: '{{CC}}' {{CFLAGS_release_mode_prompt}} -o {{ReleaseMode-Target-Name}}
-	@{{CC}} src/chsrc-main.c {{CFLAGS_release_mode}} -o {{ReleaseMode-Target-Name}}
-	@echo Finished: Build in RELEASE mode
+  @echo Starting: Build in RELEASE mode: '{{CC}}' {{CFLAGS_release_mode_prompt}} -o {{ReleaseMode-Target-Name}}
+  @{{ if os() == 'windows' { \
+        '(if exist chsrc.res del chsrc.res)' + \
+        ' & windres src/resource/chsrc.rc -O coff -o chsrc.res' \
+      } else { '' } }}
+  @{{ if os() == 'windows' { \
+      CC + ' src/chsrc-main.c chsrc.res ' + CFLAGS_release_mode + ' -o ' + ReleaseMode-Target-Name \
+    } else { \
+      CC + ' src/chsrc-main.c '           + CFLAGS_release_mode + ' -o ' + ReleaseMode-Target-Name \
+    } }}
+  @echo Finished: Build in RELEASE mode
 
 debug: build-in-debug-mode
   @{{DEBUGGER}} {{DebugMode-Target-Name}}
@@ -140,6 +148,7 @@ test-cli:
 
 clean:
 	-@{{BIN_rm}} *.exe
+	-@{{BIN_rm}} *.res
 	-@{{BIN_rm}} xy
 	-@{{BIN_rm}} fw
 	-@{{BIN_rm}} chsrc

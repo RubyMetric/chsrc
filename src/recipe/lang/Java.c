@@ -18,7 +18,7 @@ pl_java_prelude ()
   chef_set_sauciers (this, 0);
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
-  chef_forbid_english(this);
+  chef_deny_english(this);
   chef_allow_user_define(this);
 
   // 阿里巴巴开源镜像站需要修改为此才能测速

@@ -18,7 +18,7 @@ pl_r_prelude ()
   chef_set_sauciers (this, 1, "@hezonglun");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
-  chef_forbid_english(this);
+  chef_deny_english(this);
   chef_allow_user_define(this);
 
   // 以下注释的，是不含有bioconductor的镜像站，我们在换cran的同时，也直接帮助用户换bioconductor

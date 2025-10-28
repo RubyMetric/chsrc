@@ -18,7 +18,7 @@ pl_rust_cargo_prelude (void)
   chef_set_sauciers (this, 1, "@happy-game");
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
-  chef_forbid_english (this);
+  chef_deny_english (this);
   chef_allow_user_define (this);
 
 
@@ -75,7 +75,6 @@ pl_rust_cargo_getsrc (char *option)
   char *raw_content = xy_file_read (cargo_config_file);
   char *formatted_content = xy_str_gsub (raw_content, " ", "");
   formatted_content = xy_str_gsub (formatted_content, "'", "\"");
-  free (raw_content);
 
   XyStrFindResult_t result_has_mirror = xy_str_find (formatted_content, "replace-with");
   if (result_has_mirror.found)
@@ -112,7 +111,6 @@ pl_write_rust_config (const char *path, const char *url)
   char *content = RAWSTR_pl_rust_cargo_config;
   content = xy_str_gsub (content, "@url@", url);
   chsrc_overwrite_file (content, path);
-  free (content);
 }
 
 /**
@@ -172,7 +170,6 @@ pl_rust_cargo_setsrc (char *option)
 
       char *final_content = xy_str_gsub (raw_content, mirror_url, xy_2strcat ("sparse+", source.url));
       chsrc_overwrite_file (final_content, cargo_config_file);
-      free (final_content);
       goto finish;
     }
 

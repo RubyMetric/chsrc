@@ -30,11 +30,10 @@
  * 然的加入，逐渐成长为互相支持的伙伴。
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.3"
-#define Chsrc_Release_Date   "2025/10/06"
 #define Chsrc_Maintain_URL   "https://github.com/RubyMetric/chsrc"
 #define Chsrc_Maintain_URL2  "https://gitee.com/RubyMetric/chsrc"
 
+#include "framework/version.h"
 #include "framework/core.c"
 #include "framework/chef.c"
 

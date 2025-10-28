@@ -18,8 +18,8 @@ os_armbian_prelude ()
   chef_set_sauciers (this, 2, "@ccmywish", "@Yangmoooo");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
-  chef_forbid_english(this);
-  chef_forbid_user_define(this);
+  chef_deny_english(this);
+  chef_deny_user_define(this);
 
   chef_set_note(this, NULL, NULL);
 

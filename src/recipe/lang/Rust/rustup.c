@@ -21,7 +21,7 @@ pl_rust_rustup_prelude (void)
   chef_set_sauciers (this, 2, "@Yangmoooo", "@Mikachu2333");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
-  chef_forbid_english (this);
+  chef_deny_english (this);
   chef_allow_user_define(this);
 
   def_sources_begin()
