@@ -9,7 +9,8 @@
 
 pre-commit:
   only:
-    - ref: dev|main
+    - ref: dev
+  parallel: true
   jobs:
     - name: 测试编译
       run: just
