@@ -2,11 +2,11 @@
 # ---------------------------------------------------------------
 # Test File     : cli.pl
 # Test Authors  : 曾奥然 <ccmywish@qq.com>
-# Contributors  :  Nil Null  <nil@null.org>
+# Contributors  : Nil Null <nil@null.org>
 # Created On    : <2024-06-05>
-# Last Modified : <2025-09-27>
+# Last Modified : <2025-10-29>
 #
-#   测试 chsrc 可执行文件
+# 测试 chsrc 可执行文件
 # ---------------------------------------------------------------
 
 =encoding utf8
@@ -62,11 +62,16 @@ use open qw(:std :encoding(UTF-8));
 
 my $CHSRC = ($^O eq 'MSWin32') ? '.\chsrc' : './chsrc';
 
+my $version_str_cn = qr|chsrc .*\n\nCopyright .*\n许可证 GPLv3\+：GNU GPL 第 3 版或更高版本|;
+like `$CHSRC -v`,         $version_str_cn,  'chsrc -v';
+like `$CHSRC --version`,  $version_str_cn,  'chsrc --version';
+like `$CHSRC version`,    $version_str_cn,  'chsrc version';
 
-my $version_str = qr|chsrc .*\nCopyright .*\nLicense GPLv3\+: GNU GPL version 3 or later|;
-like `$CHSRC -v`,         $version_str,  'chsrc -v';
-like `$CHSRC --version`,  $version_str,  'chsrc --version';
-like `$CHSRC version`,    $version_str,  'chsrc version';
+my $version_str_en = qr|chsrc .*\n\nCopyright .*\nLicense GPLv3\+: GNU GPL version 3 or later|;
+like `$CHSRC -v -en`,     $version_str_en,  'chsrc -v -en';
+like `$CHSRC -en -v`,     $version_str_en,  'chsrc -en -v';
+like `$CHSRC --version -en`,  $version_str_en,  'chsrc --version -en';
+like `$CHSRC version -en`,    $version_str_en,  'chsrc version -en';
 
 my $help_str = qr/^   (help|list|get|set|reset)/m;
 like `$CHSRC -h`,     $help_str,    'chsrc -h';
