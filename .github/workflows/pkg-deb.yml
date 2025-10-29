@@ -44,7 +44,7 @@ jobs:
 
         elif [ "${{ github.event_name }}" = "push" ];then
           # 从源代码中提取版本号
-          version=$(sed -E -n 's/^#define Chsrc_Version +"([0-9]+\.[0-9]+\.[0-9]+).*"/\1/p' ./src/framework/version.c)
+          version=$(sed -E -n 's/^#define Chsrc_Version +"([0-9]+\.[0-9]+\.[0-9]+).*"/\1/p' ./src/framework/version.h)
 
         else
           version="${{ github.event.inputs.version }}"
