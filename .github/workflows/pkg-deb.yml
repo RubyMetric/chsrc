@@ -4,7 +4,7 @@
 # Contributors  : 曾奥然 <ccmywish@qq.com>
 #               |
 # Created On    : <2025-06-10>
-# Last Modified : <2025-06-16>
+# Last Modified : <2025-10-29>
 #
 # Build and publish deb packages
 # ---------------------------------------------------------------
@@ -44,7 +44,7 @@ jobs:
 
         elif [ "${{ github.event_name }}" = "push" ];then
           # 从源代码中提取版本号
-          version=$(sed -E -n 's/^#define Chsrc_Version +"([0-9]+\.[0-9]+\.[0-9]+).*"/\1/p' ./src/chsrc-main.c)
+          version=$(sed -E -n 's/^#define Chsrc_Version +"([0-9]+\.[0-9]+\.[0-9]+).*"/\1/p' ./src/framework/version.c)
 
         else
           version="${{ github.event.inputs.version }}"

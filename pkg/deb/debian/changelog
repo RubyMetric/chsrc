@@ -1,8 +1,15 @@
+chsrc (0.2.3-1) unstable; urgency=medium
+
+  * v0.2.3 已发布
+
+ -- 曾奥然 <ccmywish@qq.com>  Wed, 29 Oct 2025 11:29:05 +0800
+
+
 chsrc (0.1.9-1) unstable; urgency=medium
 
   * v0.1.9 已发布
 
- -- Aoran Zeng <ccmywish@qq.com>  Sun, 15 Jun 2025 13:32:50 +0800
+ -- 曾奥然 <ccmywish@qq.com>  Sun, 15 Jun 2025 13:32:50 +0800
 
 
 chsrc (0.0.1-1) unstable; urgency=medium

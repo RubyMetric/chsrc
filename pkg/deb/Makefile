@@ -4,7 +4,7 @@
 # --------------------------------------------------------------
 # Build File    : Makefile
 # File Authors  : sanchuanhehe <wyihe5520@gmail.com>
-# Contributors  :  Aoran Zeng  <ccmywish@qq.com>
+# Contributors  :  曾奥然 <ccmywish@qq.com>
 #								|
 # Created On    : <2025-06-14>
 # Last Modified : <2025-06-16>

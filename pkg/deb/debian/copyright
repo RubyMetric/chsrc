@@ -1,17 +1,17 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: chsrc
-Upstream-Contact: Aoran Zeng <ccmywish@qq.com>
+Upstream-Contact: 曾奥然 <ccmywish@qq.com>
 Source: https://github.com/RubyMetric/chsrc
 
 Files: *
-Copyright: 2023-2025 Aoran Zeng <ccmywish@qq.com>
-           2023-2025  Heng Guo  <2085471348@qq.com>
+Copyright: 2023-2025 曾奥然 <ccmywish@qq.com>
+           2023-2025  郭恒  <2085471348@qq.com>
 License: GPL-3+
 Comment: The authors' names are indicated in each source code file's header.
 
 Files: lib/xy.h
-Copyright: 2023-2025 Aoran Zeng <ccmywish@qq.com>
-           2023-2025  Heng Guo  <2085471348@qq.com>
+Copyright: 2023-2025 曾奥然 <ccmywish@qq.com>
+           2023-2025  郭恒  <2085471348@qq.com>
 License: MIT
 
 Files: pkg/deb/debian/*
