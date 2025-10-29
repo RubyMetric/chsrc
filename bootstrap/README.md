@@ -3,8 +3,8 @@
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
  ! Doc Name      : (chsrc-bootstrap Introduction.md)
- ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
- ! Contributors  :  Nul None  <nul@none.org>
+ ! Doc Authors   : 曾奥然 <ccmywish@qq.com>
+ ! Contributors  : Nul None <nul@none.org>
  !               |
  ! Created On    : <2025-07-12>
  ! Last Modified : <2025-07-22>

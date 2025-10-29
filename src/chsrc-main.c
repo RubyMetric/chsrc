@@ -455,7 +455,8 @@ cli_print_version ()
 {
   char *version_string = "v" Chsrc_Version " (" Chsrc_Release_Date ")";
 
-  char *str = xy_str_gsub (RAWSTR_chsrc_for_v, "@ver@", version_string);
+  char *str = xy_str_gsub (CHINESE ? RAWSTR_chsrc_for_v_CHINESE : RAWSTR_chsrc_for_v_ENGLISH,
+                           "@ver@", version_string);
   println (str);
 }
 

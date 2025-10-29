@@ -3,8 +3,8 @@
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
  ! Doc Name      : README.md
- ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
- ! Contributors  :  Nil Null  <nil@null.org>
+ ! Doc Authors   : 曾奥然 <ccmywish@qq.com>
+ ! Contributors  : Nil Null <nil@null.org>
  !               |
  ! Created On    : <2025-06-15>
  ! Last Modified : <2025-06-16>

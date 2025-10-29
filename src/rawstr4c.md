@@ -5,7 +5,7 @@
  ! Config Authors: 曾奥然 <ccmywish@qq.com>
  ! Contributors  : Nil Null <nil@null.org>
  ! Created On    : <2025-07-22>
- ! Last Modified : <2025-08-22>
+ ! Last Modified : <2025-10-29>
  ! ---------------------------------------------------------- -->
 
 # [rawstr4c] input for chsrc
@@ -132,16 +132,36 @@ MAINTAIN:
 
 ## for `chsrc -v`
 
-- name = `for__v`
+- name = `for__v_CHINESE`
 
 ```
 chsrc @ver@
-Copyright (C) 2025 Aoran Zeng, Heng Guo
+
+Copyright (C) 2023-2025 曾奥然, 郭恒
+许可证 GPLv3+：GNU GPL 第 3 版或更高版本 <https://gnu.org/licenses/gpl.html>
+这是自由软件：您可以自由修改和分发它。
+在法律允许的最大范围内，本软件按'原样'提供，不作任何明示或暗示的保证。
+
+由作者：曾奥然、郭恒，协作者：Mikachu2333、Happy Game 以及各位贡献者开发。(详见 chsrc-main.c, 或 `chsrc ls <target>`)
+```
+
+<br>
+
+
+
+## for `chsrc -v -en`
+
+- name = `for__v_ENGLISH`
+
+```
+chsrc @ver@
+
+Copyright (C) 2023-2025 Aoran Zeng, Heng Guo
 License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 
-Written by Aoran Zeng, Heng Guo and contributors. (See chsrc-main.c)
+Written by authors: Aoran Zeng, Heng Guo, collaborators: Mikachu2333, Happy Game, and contributors. (See chsrc-main.c, or `chsrc ls <target>`)
 ```
 
 <br>

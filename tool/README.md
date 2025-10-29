@@ -3,9 +3,9 @@
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
  ! Doc Name      : (Tools Introduction).md
- ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
- !               |   xuan     <wick.dynex@qq.com>
- ! Contributors  :  ChatGPT   <https://chatgpt.com>
+ ! Doc Authors   : 曾奥然  <ccmywish@qq.com>
+ !               |  xuan   <wick.dynex@qq.com>
+ ! Contributors  : ChatGPT <https://chatgpt.com>
  !               |
  ! Created On    : <2024-10-25>
  ! Last Modified : <2025-07-21>

@@ -2,29 +2,29 @@
 @c SPDX-License-Identifier: GFDL-1.3-or-later
 @c --------------------------------------------------------------
 @c Doc Type      : Texinfo
-@c Doc Authors   : Aoran Zeng <ccmywish@qq.com>
-@c Contributors  :  Nul None  <nul@none.org>
+@c Doc Authors   : 曾奥然 <ccmywish@qq.com>
+@c Contributors  : Nul None <nul@none.org>
 @c               |
 @c Created On    : <2024-08-22>
-@c Last Modified : <2025-08-11>
+@c Last Modified : <2025-10-29>
 @c --------------------------------------------------------------
 
 \input texinfo
 @setfilename chsrc.info
 @settitle chsrc
 
-@set Chsrc_Version v0.2.2.3
-@set Doc_Publish_Date 2025-08-11
+@set Chsrc_Version v0.2.3.1
+@set Doc_Publish_Date 2025-10-29
 
 @copying
 @comment 这是软件copyright，不是文档copyright，因此不放在titlepage
-Copyright @copyright{} 2025 Aoran Zeng, Heng Guo
+Copyright @copyright{} 2025 曾奥然, 郭恒
 @end copying
 
 @titlepage
 @title chsrc printed manual
 @subtitle Change Source everywhere for every software!
-@author Aoran Zeng
+@author 曾奥然
 @c @insertcopying
 For chsrc @value{Chsrc_Version}
 @page

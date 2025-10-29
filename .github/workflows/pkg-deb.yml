@@ -73,7 +73,7 @@ jobs:
 
           * Release version $version
 
-         -- Aoran Zeng <ccmywish@qq.com>  $(date -R)
+         -- 曾奥然 <ccmywish@qq.com>  $(date -R)
 
         EOF
 

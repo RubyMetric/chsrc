@@ -3,8 +3,8 @@
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
  ! Doc Name      : (for VS Code users) README.md
- ! Doc Authors   : Aoran Zeng <ccmywish@qq.com>
- ! Contributors  :  Nul None  <nul@none.org>
+ ! Doc Authors   : 曾奥然 <ccmywish@qq.com>
+ ! Contributors  : Nul None <nul@none.org>
  !               |
  ! Created On    : <2025-06-18>
  ! Last Modified : <2025-06-20>
