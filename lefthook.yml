@@ -4,7 +4,7 @@
 # Contributors  : Nul None <nul@none.org>
 #               |
 # Created On    : <2025-10-28>
-# Last Modified : <2025-10-28>
+# Last Modified : <2025-10-30>
 # ---------------------------------------------------------------
 
 min_version: 2.0.1
@@ -12,7 +12,7 @@ min_version: 2.0.1
 pre-commit:
   only:
     - ref: dev
-  parallel: true
+  parallel: false
   jobs:
     - name: 试运行 DEBUG mode
       # 触发所有 _prelude() 函数检查
