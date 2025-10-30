@@ -11,7 +11,7 @@
  *               | Mikachu2333   <mikachu.23333@zohomail.com>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-10-28>
+ * Last Modified : <2025-10-30>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -1751,7 +1751,7 @@ log_anyway:
 }
 
 /**
- * @note 本函数不会自动在 `str` 末尾添加换行符
+ * @note 本函数不会在 `str` 末尾添加换行符，所以你可能需要在 `str` 中手动添加
  */
 static void
 chsrc_prepend_to_file (const char *str, const char *filename)
@@ -1762,67 +1762,21 @@ chsrc_prepend_to_file (const char *str, const char *filename)
     }
 
   char *file = xy_normalize_path (filename);
-  char *dir = xy_parent_dir (file);
-  chsrc_ensure_dir (dir);
 
-  char *tmpfile_path = NULL;
-  FILE *output = chsrc_make_tmpfile ("prepend", ".txt", false, &tmpfile_path);
+  char *file_content = xy_file_read (file);
+  char *content = xy_2strcat (str, file_content);
 
-  if (!output)
+  FILE *f = fopen (file, "w");
+
+  if (f)
     {
-      char *msg = ENGLISH ? xy_2strcat ("Create temp file before Write prepend failed ", file)
-                          : xy_2strcat ("尝试在文件开头写入时创建临时文件失败：", file);
-      chsrc_error2 (msg);
-      exit (Exit_ExternalError);
+      fwrite (content, 1, strlen (content), f);
+      fclose (f);
     }
-
-  /* 先写入要插入的内容 */
-  fprintf (output, "%s", str);
-
-  /* 如果原文件存在，复制其内容到临时文件 */
-  FILE *input = fopen (file, "r");
-  if (input)
+  else
     {
-      fseek (input, 0, SEEK_END);
-      long file_size = ftell (input);
-      fseek (input, 0, SEEK_SET);
-
-      if (file_size > 0)
-        {
-          char *buffer = malloc (file_size);
-          if (buffer == NULL)
-            {
-              fclose (input);
-              fclose (output);
-              remove (tmpfile_path);
-              char *msg = ENGLISH ? "Memory allocation failed" : "内存分配失败";
-              chsrc_error2 (msg);
-              exit (Exit_ExternalError);
-            }
-
-          size_t bytes = fread (buffer, 1, file_size, input);
-          if (bytes > 0)
-            {
-              fwrite (buffer, 1, bytes, output);
-            }
-          free (buffer);
-        }
-      fclose (input);
-    }
-
-  fclose (output);
-
-  /* 删除原文件（如果存在） */
-  remove (file);
-
-  /* 将临时文件重命名为目标文件 */
-  if (rename (tmpfile_path, file) != 0)
-    {
-      unlink (tmpfile_path);
-      char *msg = ENGLISH ? xy_2strcat ("Write prepend failed to ", file)
-                          : xy_2strcat ("在文件开头写入失败: ", file);
-      chsrc_error2 (msg);
-      exit (Exit_ExternalError);
+      chsrc_error2 ("文件打开失败");
+      exit (Exit_UserCause);
     }
 
 log_anyway:
