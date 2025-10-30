@@ -13,7 +13,7 @@ os_arch_prelude ()
   chef_prep_this (os_arch, gs);
 
   chef_set_created_on   (this, "2023-09-05");
-  chef_set_last_updated (this, "2025-08-10");
+  chef_set_last_updated (this, "2025-10-30");
   chef_set_sources_last_updated (this, "2025-06-20");
 
   chef_set_chef (this, "@happy-game");
@@ -78,12 +78,12 @@ os_arch_setsrc (char *option)
   if (strncmp(arch, "x86_64", 6)==0)
     {
       is_x86 = true;
-      to_write = xy_strcat (3, "Server = ", source.url, "/$repo/os/$arch");
+      to_write = xy_strcat (3, "Server = ", source.url, "/$repo/os/$arch\n");
     }
   else
     {
       is_x86 = false;
-      to_write = xy_strcat (3, "Server = ", source.url, "arm/$arch/$repo");
+      to_write = xy_strcat (3, "Server = ", source.url, "arm/$arch/$repo\n");
     }
 
   /* 配置文件中，越前面的优先级越高 */
