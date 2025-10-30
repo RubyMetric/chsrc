@@ -12,7 +12,7 @@
  * 发布新版本前请修改此文件
  * ------------------------------------------------------------*/
 
-#define Chsrc_Version        "0.2.3.2-dev1"
+#define Chsrc_Version        "0.2.3.2"
 
 // 以下四个宏仅用于 resource/chsrc.rc
 #define Chsrc_Version_Major  0
@@ -20,4 +20,4 @@
 #define Chsrc_Version_Patch  3
 #define Chsrc_Version_Pre    2
 
-#define Chsrc_Release_Date   "2025/10/29"
+#define Chsrc_Release_Date   "2025/10/30"
