@@ -10,7 +10,7 @@ os_debian_prelude ()
   chef_prep_this (os_debian, gsr);
 
   chef_set_created_on   (this, "2023-09-02");
-  chef_set_last_updated (this, "2025-09-12");
+  chef_set_last_updated (this, "2025-11-09");
   chef_set_sources_last_updated (this, "2025-07-11");
 
   chef_set_chef (this, NULL);
@@ -25,7 +25,7 @@ os_debian_prelude ()
 
   def_sources_begin()
   {&UpstreamProvider, "http://deb.debian.org/debian",          FeedByPrelude},
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/debian/", FeedByPrelude},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/debian",  FeedByPrelude},
   {&Ali,              "https://mirrors.aliyun.com/debian", FeedByPrelude},
   {&Volcengine,       "https://mirrors.volces.com/debian", FeedByPrelude},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/debian", FeedByPrelude},
