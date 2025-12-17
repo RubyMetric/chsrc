@@ -6,7 +6,7 @@
  !               | happy game <happygame1024@gmail.com>
  ! Contributors  :  Nil Null  <nil@null.org>
  ! Created On    : <2025-07-14>
- ! Last Modified : <2025-08-09>
+ ! Last Modified : <2025-12-17>
  ! ---------------------------------------------------------- -->
 
 # rawstr4c input for Python
@@ -42,7 +42,7 @@ grep -A 2 'index' @f@ | sed -n 's/^url = "\(.*\)"/\1/p'
 ### Set uv config
 
 ```sh
-@sed@ '/^\[\[index\]\]$/,/^default = true$/{s|^url = ".*"$|url = "@url@"|}' @f@
+@sed@ '/^\[\[index\]\]$/,/^default = true$/{s|^url = ".*"$|url = "@url@"|;}' @f@
 ```
 
 
