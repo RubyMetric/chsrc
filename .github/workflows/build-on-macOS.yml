@@ -4,7 +4,7 @@
 # Contributors  : Nul None <nul@none.org>
 #               |
 # Created On    : <2023-09-15>
-# Last Modified : <2025-09-12>
+# Last Modified : <2025-12-18>
 #
 # Build chsrc on macOS and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
@@ -48,7 +48,9 @@ jobs:
 
 
   on-x64:
-    runs-on: macos-13 # macos-14 is AArch64(ARMv8-A)
+    # macos-13 是 x64，macos-14 是 AArch64(ARMv8-A)
+    # 但是 macos-13 已经于 2025-12-04 下线
+    runs-on: macos-15-intel
 
     steps:
     - name: 检出代码
