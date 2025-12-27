@@ -45,11 +45,23 @@ grep -A 2 'index' @f@ | sed -n 's/^url = "\(.*\)"/\1/p'
 @sed@ '/^\[\[index\]\]$/,/^default = true$/{s|^url = ".*"$|url = "@url@"|;}' @f@
 ```
 
+### Set uv config on Windows
+
+```powershell
+powershell -Command "$content = Get-Content '@f@'; $content = $content -replace '^url = \".*\"$', 'url = \"@url@\"'; $content | Set-Content '@f@'"
+```
+
 
 ### Test uv if set source
 
 ```sh
 grep -q '^\[\[index]]$' @f@
+```
+
+### Test uv if set source on Windows
+
+```powershell
+powershell -Command "if (Get-Content @f@ | Select-String '^\[\[index\]\]$') { exit 0 } else { exit 1 }"
 ```
 
 <br>
