@@ -131,7 +131,7 @@ pl_python_uv_setsrc (char *option)
       if (xy.on_windows)
         {
           /* 在 Windows 上使用 PowerShell 替代 grep */
-          cmd = xy_str_gsub("powershell -Command \"if (Get-Content @f@ | Select-String '^\\[\\[index\\]\\]$') { exit 0 } else { exit 1 }\"", "@f@", uv_config);
+          cmd = xy_str_gsub (RAWSTR_pl_python_test_uv_if_set_source_on_windows, "@f@", uv_config);
         }
       else
         {
@@ -144,8 +144,7 @@ pl_python_uv_setsrc (char *option)
           if (xy.on_windows)
             {
               /* 在 Windows 上使用 PowerShell 替代 sed */
-              char *powershell_cmd_template = "powershell -Command \"$content = Get-Content '@f@'; $content = $content -replace '^url = \\\".*\\\"$', 'url = \\\"@url@\\\"'; $content | Set-Content '@f@'\"";
-              char *powershell_cmd_with_file = xy_str_gsub(powershell_cmd_template, "@f@", uv_config);
+              char *powershell_cmd_with_file = xy_str_gsub(RAWSTR_pl_python_set_uv_config_on_windows, "@f@", uv_config);
               char *powershell_cmd = xy_str_gsub(powershell_cmd_with_file, "@url@", source.url);
               chsrc_run (powershell_cmd, RunOpt_Default);
             }
