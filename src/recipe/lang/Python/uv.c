@@ -10,12 +10,12 @@ pl_python_uv_prelude (void)
   chef_prep_this (pl_python_uv, gsr);
 
   chef_set_created_on   (this, "2024-12-11");
-  chef_set_last_updated (this, "2025-12-17");
+  chef_set_last_updated (this, "2025-12-28");
   chef_set_sources_last_updated (this, "2025-08-09");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@happy-game");
-  chef_set_sauciers (this, 2, "@Kattos", "@ccmywish");
+  chef_set_sauciers (this, 3, "@MingriLingran", "@Kattos", "@ccmywish");
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);
