@@ -39,6 +39,13 @@ grep -A 2 'index' @f@ | sed -n 's/^url = "\(.*\)"/\1/p'
 ```
 
 
+### Get uv config on Windows
+
+```powershell
+powershell -Command "Get-Content '@f@'"
+```
+
+
 ### Set uv config
 
 ```sh

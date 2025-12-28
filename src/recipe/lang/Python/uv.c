@@ -91,8 +91,18 @@ pl_python_uv_getsrc (char *option)
     }
 
   /* 获取 [[index]] 配置项的 url */
-  char *cmd = xy_str_gsub (RAWSTR_pl_python_get_uv_config, "@f@", uv_config);
-  chsrc_run (cmd, RunOpt_Default);
+  char *cmd = NULL;
+  if (xy.on_windows)
+    {
+      /* 在 Windows 上使用 PowerShell 替代 grep */
+      cmd = xy_str_gsub(RAWSTR_pl_python_get_uv_config_on_windows, "@f@", uv_config);
+    }
+  else
+    {
+      /* 在 Linux 或 macOS 上使用 grep */
+      cmd = xy_str_gsub(RAWSTR_pl_python_get_uv_config, "@f@", uv_config);
+    }
+  chsrc_run(cmd, RunOpt_Default);
 }
 
 
