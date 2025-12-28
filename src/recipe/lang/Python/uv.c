@@ -10,12 +10,12 @@ pl_python_uv_prelude (void)
   chef_prep_this (pl_python_uv, gsr);
 
   chef_set_created_on   (this, "2024-12-11");
-  chef_set_last_updated (this, "2025-12-17");
+  chef_set_last_updated (this, "2025-12-28");
   chef_set_sources_last_updated (this, "2025-08-09");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@happy-game");
-  chef_set_sauciers (this, 2, "@Kattos", "@ccmywish");
+  chef_set_sauciers (this, 3, "@MingriLingran", "@Kattos", "@ccmywish");
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);
@@ -91,8 +91,18 @@ pl_python_uv_getsrc (char *option)
     }
 
   /* 获取 [[index]] 配置项的 url */
-  char *cmd = xy_str_gsub (RAWSTR_pl_python_get_uv_config, "@f@", uv_config);
-  chsrc_run (cmd, RunOpt_Default);
+  char *cmd = NULL;
+  if (xy.on_windows)
+    {
+      /* 在 Windows 上使用 PowerShell 替代 grep */
+      cmd = xy_str_gsub(RAWSTR_pl_python_get_uv_config_on_windows, "@f@", uv_config);
+    }
+  else
+    {
+      /* 在 Linux 或 macOS 上使用 grep */
+      cmd = xy_str_gsub(RAWSTR_pl_python_get_uv_config, "@f@", uv_config);
+    }
+  chsrc_run(cmd, RunOpt_Default);
 }
 
 
