@@ -10,12 +10,12 @@ pl_python_uv_prelude (void)
   chef_prep_this (pl_python_uv, gsr);
 
   chef_set_created_on   (this, "2024-12-11");
-  chef_set_last_updated (this, "2025-12-17");
+  chef_set_last_updated (this, "2025-12-28");
   chef_set_sources_last_updated (this, "2025-08-09");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@happy-game");
-  chef_set_sauciers (this, 2, "@Kattos", "@ccmywish");
+  chef_set_sauciers (this, 3, "@MingriLingran", "@Kattos", "@ccmywish");
 
   chef_allow_local_mode (this, FullyCan, NULL, NULL);
   chef_allow_english(this);
@@ -91,8 +91,18 @@ pl_python_uv_getsrc (char *option)
     }
 
   /* 获取 [[index]] 配置项的 url */
-  char *cmd = xy_str_gsub (RAWSTR_pl_python_get_uv_config, "@f@", uv_config);
-  chsrc_run (cmd, RunOpt_Default);
+  char *cmd = NULL;
+  if (xy.on_windows)
+    {
+      /* 在 Windows 上使用 PowerShell 替代 grep */
+      cmd = xy_str_gsub(RAWSTR_pl_python_get_uv_config_on_windows, "@f@", uv_config);
+    }
+  else
+    {
+      /* 在 Linux 或 macOS 上使用 grep */
+      cmd = xy_str_gsub(RAWSTR_pl_python_get_uv_config, "@f@", uv_config);
+    }
+  chsrc_run(cmd, RunOpt_Default);
 }
 
 
@@ -119,19 +129,6 @@ pl_python_uv_setsrc (char *option)
 
   const char *source_content = xy_str_gsub (RAWSTR_pl_python_uv_config_source_content, "@url@", source.url);
 
-#if defined(XY_Build_On_macOS) || defined(XY_Build_On_BSD)
-  char *sed_cmd = "sed -i '' ";
-#else
-  char *sed_cmd = "sed -i ";
-#endif
-
-  /**
-   * 将 [[index]] 到 default = true 之间的 url = ".*" 替换为 url = "source.url"
-   */
-  char *update_config_cmd = xy_str_gsub (RAWSTR_pl_python_set_uv_config, "@sed@", sed_cmd);
-        update_config_cmd = xy_str_gsub (update_config_cmd, "@f@", uv_config);
-        update_config_cmd = xy_str_gsub (update_config_cmd, "@url@", source.url);
-
   if (!xy_file_exist (uv_config))
     {
       /* 当 uv_config 不存在，直接写入文件 */
@@ -140,12 +137,41 @@ pl_python_uv_setsrc (char *option)
   else
     {
       /* 当 uv_config 存在，如果存在 [[index]] 则更新，否则追加到文件末尾 */
-      char *cmd = xy_str_gsub (RAWSTR_pl_python_test_uv_if_set_source, "@f@", uv_config);
-      chsrc_ensure_program ("grep");
+      char *cmd = NULL;
+      if (xy.on_windows)
+        {
+          /* 在 Windows 上使用 PowerShell 替代 grep */
+          cmd = xy_str_gsub (RAWSTR_pl_python_test_uv_if_set_source_on_windows, "@f@", uv_config);
+        }
+      else
+        {
+          cmd = xy_str_gsub (RAWSTR_pl_python_test_uv_if_set_source, "@f@", uv_config);
+        }
+      
       int status = xy_run_get_status (cmd);
       if (0==status)
         {
-          chsrc_run (update_config_cmd, RunOpt_Default);
+          if (xy.on_windows)
+            {
+              /* 在 Windows 上使用 PowerShell 替代 sed */
+              char *powershell_cmd_with_file = xy_str_gsub(RAWSTR_pl_python_set_uv_config_on_windows, "@f@", uv_config);
+              char *powershell_cmd = xy_str_gsub(powershell_cmd_with_file, "@url@", source.url);
+              chsrc_run (powershell_cmd, RunOpt_Default);
+            }
+          else
+            {
+              /* 非 Windows 系统使用 sed */
+              char *sed_cmd = NULL;
+#if defined(XY_Build_On_macOS) || defined(XY_Build_On_BSD)
+              sed_cmd = "sed -i '' ";
+#else
+              sed_cmd = "sed -i ";
+#endif
+              char *update_config_cmd = xy_str_gsub (RAWSTR_pl_python_set_uv_config, "@sed@", sed_cmd);
+                    update_config_cmd = xy_str_gsub (update_config_cmd, "@f@", uv_config);
+                    update_config_cmd = xy_str_gsub (update_config_cmd, "@url@", source.url);
+              chsrc_run (update_config_cmd, RunOpt_Default);
+            }
         }
       else
         {
