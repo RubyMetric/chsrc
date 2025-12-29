@@ -42,7 +42,7 @@ grep -A 2 'index' @f@ | sed -n 's/^url = "\(.*\)"/\1/p'
 ### Get uv config on Windows
 
 ```powershell
-powershell -Command '$lines = Get-Content C:\Users\30353\AppData\Roaming\uv\uv.toml; for($i=0; $i -lt $lines.Count; $i++) { if($lines[$i] -match "^\[\[index\]\]$") { $lines[$i..($i+3)] } }'
+powershell -Command "$lines = Get-Content @f@; for($index=0; $index -lt $lines.Count; $index++) { if($lines[$index] -match '^\[\[index\]\]$') { $lines[$index..($index+3)] } }"
 ```
 
 
