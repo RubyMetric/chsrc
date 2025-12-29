@@ -1648,27 +1648,30 @@ chsrc_view_env (const char *var1, ...)
   bool first = true;
   while (var)
     {
-#ifdef XY_Build_On_Windows
-      if (first)
+      if (xy.on_windows)
         {
-          cmd = xy_strcat (3, "set ", var, " ");
-          first = false;
+          if (first)
+            {
+              cmd = xy_strcat (3, "set ", var, " ");
+              first = false;
+            }
+          else
+            {
+              cmd = xy_strcat (4, cmd, "& set ", var, " ");
+            }
         }
       else
-        {
-          cmd = xy_strcat (4, cmd, "& set ", var, " ");
+       {
+          if (first)
+            {
+              cmd = xy_strcat (5, "echo ", var, "=$", var, " ");
+              first = false;
+            }
+          else
+            {
+              cmd = xy_strcat (6, cmd, "; echo ", var, "=$", var, " ");
+            }
         }
-#else
-      if (first)
-        {
-          cmd = xy_strcat (5, "echo ", var, "=$", var, " ");
-          first = false;
-        }
-      else
-        {
-          cmd = xy_strcat (6, cmd, "; echo ", var, "=$", var, " ");
-        }
-#endif
       var = va_arg (vars, const char *);
     }
 

@@ -1,10 +1,10 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors  : 曾奥然 <ccmywish@qq.com>
- * Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
+ * File Authors  : @ccmywish
+ * Contributors  : @Mikachu2333
  * Created On    : <2024-12-14>
- * Last Modified : <2025-10-06>
+ * Last Modified : <2025-12-29>
  *
  * 该文件最好启用 DEBUG mode 编译
  * ------------------------------------------------------------*/
@@ -85,10 +85,14 @@ main (int argc, char const *argv[])
 
   if (xy.on_windows)
     {
-      chsrc_run_as_pwsh_file ("Write-Host \"Hello from PowerShell file\"");
+      chsrc_view_env ("OS", "windir", NULL);
+      chsrc_run_as_pwsh_file ("Write-Host \"Hello from PowerShell (v7) file\"");
+      chsrc_run_as_powershellv5_file ("Write-Host \"Hello from PowerShell v5 file\"");
+      chsrc_run_as_powershell_file ("Write-Host \"Hello from PowerShell file\"");
     }
   else
     {
+      chsrc_view_env ("PWD", NULL);
       chsrc_run_as_sh_file ("echo Hello from sh file");
       chsrc_run_as_bash_file ("echo Hello from Bash file");
     }
