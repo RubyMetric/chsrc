@@ -2,16 +2,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Name     : core.c
- * File Authors  : 曾奥然        <ccmywish@qq.com>
- *               |  郭恒         <2085471348@qq.com>
- * Contributors  :  Peng Gao     <gn3po4g@outlook.com>
- *               | Happy Game    <happygame10124@gmail.com>
- *               | Yangmoooo     <yangmoooo@outlook.com>
- *               | BingChunMoLi  <bingchunmoli@bingchunmoli.com>
- *               | Mikachu2333   <mikachu.23333@zohomail.com>
+ * File Authors  : @ccmywish
+ *               | @G_I_Y
+ * Contributors  : @Gn3po4g
+ *               | @happy-game
+ *               | @Yangmoooo
+ *               | @BingChunMoLi
+ *               | @Mikachu2333
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-10-30>
+ * Last Modified : <2025-12-29>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -1557,13 +1557,54 @@ chsrc_run_as_pwsh_file (const char *script_content)
   FILE *f = chsrc_make_tmpfile ("pwsh_script", ".ps1", false, &tmpfile);
   fwrite (script_content, strlen (script_content), 1, f);
   fclose (f);
-  char *msg = CHINESE ? "即将执行 PowerShell 脚本内容:" : "The PowerShell script content will be executed:";
+  char *msg = CHINESE ? "即将执行 PowerShell (v7以上) 脚本内容:" : "The PowerShell script content will be executed:";
   chsrc_note2 (msg);
   println (faint(script_content));
   char *cmd = xy_2strcat ("pwsh ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
   remove (tmpfile);
   free (tmpfile);
+}
+
+
+/**
+ * 以 powershell file.ps1 的形式运行脚本内容
+ */
+void
+chsrc_run_as_powershellv5_file (const char *script_content)
+{
+  char *tmpfile = NULL;
+  FILE *f = chsrc_make_tmpfile ("psv5_script", ".ps1", false, &tmpfile);
+  fwrite (script_content, strlen (script_content), 1, f);
+  fclose (f);
+  char *msg = CHINESE ? "即将执行 PowerShell v5 脚本内容:" : "The PowerShell v5 script content will be executed:";
+  chsrc_note2 (msg);
+  println (faint(script_content));
+  // -ExecutionPolicy Bypass
+  char *cmd = xy_2strcat ("powershell -File ", tmpfile);
+  chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
+  remove (tmpfile);
+  free (tmpfile);
+}
+
+
+/**
+ * 使用 pwsh 或 旧的 powershell (v5) 运行脚本内容，优先使用 pwsh
+ */
+void
+chsrc_run_as_powershell_file (const char *script_content)
+{
+  // if (chsrc_check_program_quietly_when_exist ("pwsh"))
+  if (chsrc_check_program_quietly ("pwsh"))
+    {
+      chsrc_run_as_pwsh_file (script_content);
+    }
+  else
+    {
+      chsrc_alert2 (CHINESE ? "未检测到 PowerShell 7 及以上版本，默认使用 PowerShell v5"
+                            : "PowerShell 7 or above not detected, switch to PowerShell v5");
+      chsrc_run_as_powershellv5_file (script_content);
+    }
 }
 
 

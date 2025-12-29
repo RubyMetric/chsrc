@@ -95,7 +95,7 @@ pl_python_uv_getsrc (char *option)
     {
       /* 在 Windows 上使用 PowerShell 替代 grep */
       char *script = xy_str_gsub (RAWSTR_pl_python_get_uv_config_on_windows, "@f@", uv_config);
-      chsrc_run_as_pwsh_file (script);
+      chsrc_run_as_powershell_file (script);
     }
   else
     {
