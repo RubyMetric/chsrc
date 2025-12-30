@@ -2,6 +2,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
+#define RAWSTR_pl_rust_cargo_default_download_url "https://static.crates.io/crates/windows/windows-0.58.0.crate"
+#define RAWSTR_pl_rust_cargo_custom_default_download_url "api/v1/crates/windows/0.58.0/download"
+
 def_target(pl_rust_cargo, "rust/cargo/crate/crates");
 
 void
@@ -10,8 +13,8 @@ pl_rust_cargo_prelude (void)
   chef_prep_this (pl_rust_cargo, gsr);
 
   chef_set_created_on   (this, "2023-08-30");
-  chef_set_last_updated (this, "2025-12-29");
-  chef_set_sources_last_updated (this, "2025-12-29");
+  chef_set_last_updated (this, "2025-12-30");
+  chef_set_sources_last_updated (this, "2025-12-30");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 2, "@Mikachu2333", "@ccmywish");
