@@ -9,7 +9,7 @@
  *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-10-28>
+ * Last Modified : <2025-12-31>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -943,10 +943,10 @@ xy_quiet_cmd (const char *cmd)
 
 
 /**
- * @brief 执行 `cmd`，返回某行输出结果，并对已经遍历过的行执行 `func`
+ * @brief 执行 `cmd`，返回其输出到 stdout 的内容中的第 `n` 行，并对已经遍历过的行执行 `func`
  *
  * @param  cmd   要执行的命令
- * @param   n    指定命令执行输出的结果行中的某一行，0 表示最后一行，n (n>0) 表示第n行
+ * @param   n    指定命令执行输出到 stdout 内容中的某一行，0 表示最后一行，n (n>0) 表示第n行
  * @param  func  对遍历时经过的行的内容，进行函数调用，如果返回 true，则提前停止遍历
  *
  * @return
@@ -995,6 +995,11 @@ xy_run_iter_lines (const char *cmd,  unsigned long n,  bool (*func) (const char 
   return ret;
 }
 
+/**
+ * @brief 执行命令 `cmd`，返回第 `n` 行输出到 stdout 的内容
+ *
+ * @return 返回第 `n` 行输出到 stdout 的内容
+ */
 static char *
 xy_run (const char *cmd, unsigned long n)
 {
@@ -1003,7 +1008,9 @@ xy_run (const char *cmd, unsigned long n)
 
 
 /**
- * @brief 执行命令，仅返回命令的执行状态
+ * @brief 执行命令 `cmd`，仅返回其 Exit Code，stdout 与 stderr 均不输出到终端
+ *
+ * @return 返回 `cmd` 的 Exit Code
  */
 int
 xy_run_get_status (char *cmd)
@@ -1016,7 +1023,7 @@ xy_run_get_status (char *cmd)
 
 
 /**
- * @brief 捕获命令的输出
+ * @brief 获得执行命令 `cmd` 输出到 stdout 的内容，而 stderr 依然输出到终端
  *
  * @param[in]  cmd    要执行的命令
  * @param[out] output 捕获的标准输出，
