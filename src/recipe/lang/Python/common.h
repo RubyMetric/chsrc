@@ -9,7 +9,8 @@ def_target(pl_python_group, "python/pypi/py");
 /**
  * @note 测速链接的这个前缀是 ${host}/pipi/web/pacakges/56/e4....
  * 下面有几个镜像站微调了这个路径，我们只要确认能找到 packages 目录就好
- * @note 2025-09-29 更新了测试的 pkg 链接，换用了一个 40M 的
+ *
+ * @note 2025-09-29 更新了测试的 pkg 链接，换用了一个 40M 的文件
  *
  * @warning 2025-09-29 Sjtug 需要特殊处理
  */
@@ -32,7 +33,7 @@ pl_python_group_prelude (void)
   chef_prep_this (pl_python_group, gsr);
 
   chef_set_created_on   (this, "2023-09-03");
-  chef_set_last_updated (this, "2025-09-30");
+  chef_set_last_updated (this, "2025-12-31");
   chef_set_sources_last_updated (this, "2025-09-30");
 
   chef_set_chef (this, "@happy-game");
@@ -99,11 +100,33 @@ pl_python_get_py_program_name (char **prog_name)
    */
   py_exist = chsrc_check_program ("python3");
 
-  if (py_exist) *prog_name = "python3";
+  if (py_exist)
+    {
+      *prog_name = "python3";
+
+      // https://github.com/RubyMetric/chsrc/issues/327
+      if (xy.on_windows)
+        {
+          int status = xy_run_get_status ("python3 --version");
+          if (status == 9009)
+            {
+              chsrc_error2 (CHINESE ? "用户环境中的 `python3` 命令，是微软商店的占位符，并非真正可用的 Python。请安装真正的 Python 后重试！"
+                                    : "`python3` in your environment is a placeholder of Microsoft Store, not the real Python which can be used, please install the real Python and try again!");
+              exit (Exit_UserCause);
+            }
+        }
+
+    }
   else
     {
-      /* 不要调用 python 自己，而是使用 python --version，或者其他方式
-         因为直接执行 python 会使Windows弹出Microsoft Store */
+      /**
+       * 不要直接:
+       *
+       *   $ python
+       *
+       * 这样调用 `python` 自己，而是使用 `python --version`，或者其他方式
+       * 因为直接执行 `python` 会使 Windows 弹出Microsoft Store
+       */
       py_exist = chsrc_check_program ("python");
 
       if (py_exist) *prog_name = "python";
