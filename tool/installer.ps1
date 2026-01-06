@@ -7,7 +7,7 @@
 # Contributors  : Aoran Zeng <ccmywish@qq.com>
 #               |
 # Created On    : <2024-10-26>
-# Last Modified : <2025-03-07>
+# Last Modified : <2026-01-06>
 #
 #         chsrc installer for Windows
 # ---------------------------------------------------------------
@@ -16,13 +16,12 @@
 param(
     [switch]
     $Help,
-    $Directory = "${HOME}\Downloads",
+    $Directory = $null,
     $Version = "pre"
 )
 
 
 $binary_name = "chsrc"
-$default_install_dir = "${HOME}\Downloads"
 $platform = "Windows"
 
 $global:install_dir = ""
@@ -58,7 +57,7 @@ chsrc-installer: Install chsrc on ${platform}.
 Usage: install.ps1 [options]
 Options:
 -h            Print this help information
--d <dir>      Specify installation directory, default is $default_install_dir
+-d <dir>      Specify installation directory, default is current directory
 -v <version>  Specify chsrc version
 
 "@
@@ -80,7 +79,42 @@ function output_error () {
 }
 
 
+function Get_Downloads_Dir {
+    # 尝试从注册表获取实际的 Downloads 文件夹位置
+    try {
+        $shellFoldersKey = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
+        $downloadsGuid = "{374DE290-123F-4565-9164-39C4925E467B}"
+        $downloadsPath = (Get-ItemProperty -Path $shellFoldersKey -Name $downloadsGuid -ErrorAction Stop).$downloadsGuid
+        
+        # 展开环境变量 (例如 %USERPROFILE% -> C:\Users\xxx)
+        $downloadsPath = [System.Environment]::ExpandEnvironmentVariables($downloadsPath)
+        
+        if (Test-Path -Path $downloadsPath -PathType Container) {
+            return $downloadsPath
+        }
+    } catch {
+        # 如果注册表读取失败，不输出错误信息，继续使用后备方案
+    }
+    
+    # 后备方案：返回 null，稍后使用当前目录
+    return $null
+}
+
 function Set_Install_Dir {
+    # 如果用户未指定目录，则自动检测
+    if ($null -eq $Directory) {
+        # 尝试获取实际的 Downloads 目录
+        $detectedDownloads = Get_Downloads_Dir
+        if ($null -ne $detectedDownloads) {
+            $Directory = $detectedDownloads
+            output_info "Detected Downloads directory: $Directory"
+        } else {
+            # 使用当前目录作为默认值
+            $Directory = Get-Location | Select-Object -ExpandProperty Path
+            output_info "Using current directory: $Directory"
+        }
+    }
+    
     # 检查目录是否存在
     if (-not (Test-Path -Path $Directory -PathType Container)) {
         # 如果目录不存在，执行下面的代码块
