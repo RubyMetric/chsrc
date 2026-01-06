@@ -110,7 +110,7 @@ function Set_Install_Dir {
             output_info "Detected Downloads directory: $Directory"
         } else {
             # 使用当前目录作为默认值
-            $Directory = Get-Location | Select-Object -ExpandProperty Path
+            $Directory = $PWD.Path
             output_info "Using current directory: $Directory"
         }
     }
