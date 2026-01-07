@@ -33,7 +33,7 @@ BEGIN
             // VALUE "FileVersion",    Chsrc_Version
 
             VALUE "InternalName",     "chsrc"
-            VALUE "LegalCopyright",   "Copyright (c) 2023-2025 RubyMetric"
+            VALUE "LegalCopyright",   "Copyright (c) 2023-2026 RubyMetric"
             VALUE "OriginalFilename", "chsrc.exe"
             VALUE "ProductName",      "chsrc"
             VALUE "ProductVersion",    Chsrc_Version

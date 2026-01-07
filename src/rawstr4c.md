@@ -137,7 +137,7 @@ MAINTAIN:
 ```
 chsrc @ver@
 
-Copyright (C) 2023-2025 曾奥然, 郭恒
+Copyright (C) 2023-2026 曾奥然, 郭恒
 许可证 GPLv3+：GNU GPL 第 3 版或更高版本 <https://gnu.org/licenses/gpl.html>
 这是自由软件：您可以自由修改和分发它。
 在法律允许的最大范围内，本软件按'原样'提供，不作任何明示或暗示的保证。
@@ -156,7 +156,7 @@ Copyright (C) 2023-2025 曾奥然, 郭恒
 ```
 chsrc @ver@
 
-Copyright (C) 2023-2025 Aoran Zeng, Heng Guo
+Copyright (C) 2023-2026 Aoran Zeng, Heng Guo
 License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.

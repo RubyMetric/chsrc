@@ -18,7 +18,7 @@
 
 @copying
 @comment 这是软件copyright，不是文档copyright，因此不放在titlepage
-Copyright @copyright{} 2025 曾奥然, 郭恒
+Copyright @copyright{} 2023-2026 曾奥然, 郭恒
 @end copying
 
 @titlepage
