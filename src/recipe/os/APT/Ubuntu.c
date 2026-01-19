@@ -11,12 +11,12 @@ os_ubuntu_prelude ()
   chef_prep_this (os_ubuntu, gsr);
 
   chef_set_created_on   (this, "2023-08-30");
-  chef_set_last_updated (this, "2025-08-10");
-  chef_set_sources_last_updated (this, "2025-07-11");
+  chef_set_last_updated (this, "2026-01-20");
+  chef_set_sources_last_updated (this, "2026-01-20");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
-  chef_set_sauciers (this, 1, "@XUANJI233");
+  chef_set_sauciers (this, 2, "@XUANJI233", "@usernameisnull");
 
   chef_allow_local_mode (this, CanNot, NULL, NULL);
   chef_deny_english(this);
@@ -25,8 +25,8 @@ os_ubuntu_prelude ()
   chef_set_note(this, NULL, NULL);
 
   def_sources_begin()
-  {&UpstreamProvider, "http://archive.ubuntu.com/ubuntu/",  FeedByPrelude}, /* 不支持https */
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/ubuntu/",FeedByPrelude},
+  {&UpstreamProvider, "http://archive.ubuntu.com/ubuntu",  FeedByPrelude}, /* 不支持https */
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/ubuntu",FeedByPrelude},
   {&Ali,              "https://mirrors.aliyun.com/ubuntu",FeedByPrelude},
   {&Volcengine,       "https://mirrors.volces.com/ubuntu",FeedByPrelude},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/ubuntu",FeedByPrelude},
@@ -148,5 +148,12 @@ os_ubuntu_setsrc (char *option)
 void
 os_ubuntu_resetsrc (char *option)
 {
+  use_this (os_ubuntu);
+  char *arch = chsrc_get_cpuarch ();
+  if (strncmp (arch, "x86_64", 6)!=0)
+    {
+      // ubuntu arm的源地址和x86_64不一样
+      this->sources[0].url = "http://ports.ubuntu.com/ubuntu";
+    }
   os_ubuntu_setsrc (option);
 }
