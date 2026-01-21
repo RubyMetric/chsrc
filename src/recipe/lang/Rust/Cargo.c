@@ -2,9 +2,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
-#define PL_Rust_cargo_default_download_url "https://static.crates.io/crates/windows/windows-0.62.2.crate"
-#define PL_Rust_cargo_custom_download_url  "api/v1/crates/windows/0.62.2/download"
-
 def_target(pl_rust_cargo, "rust/cargo/crate/crates");
 
 void
@@ -14,7 +11,7 @@ pl_rust_cargo_prelude (void)
 
   chef_set_created_on   (this, "2023-08-30");
   chef_set_last_updated (this, "2025-12-31");
-  chef_set_sources_last_updated (this, "2025-12-31");
+  chef_set_sources_last_updated (this, "2026-01-21");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 2, "@Mikachu2333", "@ccmywish");
@@ -31,27 +28,30 @@ pl_rust_cargo_prelude (void)
    *   许多镜像站的 dl 字段指向 static.crates.io，因此测速链接也指向 static.crates.io，原API失效
    *   见: https://github.com/RubyMetric/chsrc/pull/330
    */
+#define url_postfix "api/v1/crates/windows/0.62.2/download"
+
   def_sources_begin()
-  {&UpstreamProvider, "https://crates.io/",                             PL_Rust_cargo_default_download_url},
-  {&MirrorZ,          "https://mirrors.cernet.edu.cn/crates.io-index/", PL_Rust_cargo_default_download_url},
-  {&RsProxyCN,        "https://rsproxy.cn/index/",                      "https://rsproxy.cn/" PL_Rust_cargo_custom_download_url},
-  {&Ali,              "https://mirrors.aliyun.com/crates.io-index/",    "https://mirrors.aliyun.com/crates/" PL_Rust_cargo_custom_download_url},
-  {&Zju,              "https://mirrors.zju.edu.cn/crates.io-index/",    PL_Rust_cargo_default_download_url},
+  {&UpstreamProvider, "https://crates.io/",                             "https://static.crates.io/crates/windows/windows-0.62.2.crate"},
+  {&MirrorZ,          "https://mirrors.cernet.edu.cn/crates.io-index/", NULL},
+  {&RsProxyCN,        "https://rsproxy.cn/index/",                      "https://rsproxy.cn/" url_postfix},
+  {&Ali,              "https://mirrors.aliyun.com/crates.io-index/",    "https://mirrors.aliyun.com/crates/" url_postfix},
+  {&Zju,              "https://mirrors.zju.edu.cn/crates.io-index/",    NULL},
 
   /* 注释原因: (2025-06-17) 镜像同步失败，多数包都不可用 */
   // {&Nju,        "https://mirror.nju.edu.cn/git/crates.io-index.git/",   FeedByPrelude},
 
   {&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/",   "https://mirror.sjtu.edu.cn/crates.io/crates/windows/windows-0.58.0.crate"},
-  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/",PL_Rust_cargo_default_download_url},
-  {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/",         PL_Rust_cargo_default_download_url},
-  {&Ustc,          "https://mirrors.ustc.edu.cn/crates.io-index/",         "https://crates-io.proxy.ustclug.org/" PL_Rust_cargo_custom_download_url},
+  {&Tuna,          "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/", NULL},
+  {&Bfsu,          "https://mirrors.bfsu.edu.cn/crates.io-index/",          NULL},
+  {&Ustc,          "https://mirrors.ustc.edu.cn/crates.io-index/",         "https://crates-io.proxy.ustclug.org/" url_postfix},
 
   /* 注释原因: (2025-06-17) 镜像同步失败，多数包都不可用 */
   // {&Hust,       "https://mirrors.hust.edu.cn/crates.io-index/", FeedByPrelude},
 
-  {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/",  PL_Rust_cargo_default_download_url}
+  {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/",  NULL}
   def_sources_end()
 
+#undef url_postfix
 }
 
 

@@ -171,6 +171,20 @@ Target_t;
 #define chef_use_this(t) Target_t *this = &t##_target;
 #define chsrc_use_this_source(t) Target_t *this = &t##_target; Source_t source = chsrc_yield_source_and_confirm (this, option);
 
+/**
+ * 用于定义换源列表
+ *
+ *   def_sources_begin()
+ *   {&UpstreamProvider, "换源URL", "精准测速链接"},
+ *   {&某镜像站1,        "换源URL", "精准测速链接"},
+ *   {&某镜像站2,        "换源URL",  NULL },  // 若精准测速链接为空，则为模糊测速，默认使用该镜像站的整体测速链接
+ *   def_sources_end()
+ *
+ *   若是出于代码美观考虑，上述第三列可以写 FeedByPrelude，然后下面调用函数来填充:
+ *     chef_set_source_speed_measure_url()
+ *     chef_set_sources_speed_measure_url_with_postfix()
+ *     chef_set_sources_speed_measure_url_with_func()
+ */
 #define def_sources_begin()  Source_t sources[] = {
 #define def_sources_end()    }; \
   this->sources_n = xy_c_array_len(sources); \
