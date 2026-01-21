@@ -95,7 +95,7 @@ chef_register_contributor (char *id, char *name, char *email, char *display_name
  * @note 这个修改的是全局 Provider 里的信息。往往用来设置 UpstreamProvider
  */
 void
-chef_set_provider_smurl (SourceProvider_t *provider, char *url)
+chef_set_provider_smURL (SourceProvider_t *provider, char *url)
 {
   provider->psmi.skip = NotSkip;
   provider->psmi.url = xy_strdup (url);
@@ -117,12 +117,12 @@ chef_set_provider_sm_accuracy (SourceProvider_t *provider, bool accuracy)
 
 
 /**
- * @brief 修改 或 补充 某个镜像站的换源链接
+ * @brief 修改 或 补充 某个镜像站的换源链接，即修改 Source_t.url
  *
  * @example 见 os_ubuntu_resetsrc() 中对非 x86_64 架构源地址的修改
  */
 void
-chef_set_url (Target_t *target, SourceProvider_t *provider, char *url)
+chef_set_repoURL (Target_t *target, SourceProvider_t *provider, char *url)
 {
   xy_cant_be_null (target);
   xy_cant_be_null (provider);
@@ -143,12 +143,10 @@ chef_set_url (Target_t *target, SourceProvider_t *provider, char *url)
 }
 
 /**
- * 设置 或 修改 某个镜像站的 *精准*测速链接
- *
- * sm = speed measure
+ * @breif 设置 或 修改 某个镜像站的 *精准*测速链接，即修改 Source_t.speed_measure_url
  */
 void
-chef_set_smurl (Target_t *target, SourceProvider_t *provider, char *url)
+chef_set_smURL (Target_t *target, SourceProvider_t *provider, char *url)
 {
   xy_cant_be_null (target);
   xy_cant_be_null (provider);
@@ -173,7 +171,7 @@ chef_set_smurl (Target_t *target, SourceProvider_t *provider, char *url)
  * @brief 提供一个函数，这个函数基于 "换源链接" 和用户提供的数据来构造和填充精准测速链接
  */
 void
-chef_set_all_smurl_with_func (
+chef_set_all_smURL_with_func (
   Target_t *target,
   char *(*func)(const char *url, const char *user_data),
   char *user_data)
@@ -203,9 +201,9 @@ chef_set_all_smurl_with_func (
  * @brief 给 "换源链接" 增加一个后缀来构造和填充专用测速链接
  */
 void
-chef_set_all_smurl_with_postfix (Target_t *target, char *postfix)
+chef_set_all_smURL_with_postfix (Target_t *target, char *postfix)
 {
-  chef_set_all_smurl_with_func (target, xy_2strcat, postfix);
+  chef_set_all_smURL_with_func (target, xy_2strcat, postfix);
 }
 
 

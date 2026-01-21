@@ -35,7 +35,7 @@ os_openwrt_prelude ()
   {&Sustech,          "https://mirrors.sustech.edu.cn/openwrt", DelegateToMirror}
   def_sources_end()
 
-  chef_set_provider_smurl (&UpstreamProvider, "https://downloads.openwrt.org/releases/23.05.5/targets/x86/64/openwrt-sdk-23.05.5-x86-64_gcc-12.3.0_musl.Linux-x86_64.tar.xz");
+  chef_set_provider_smURL (&UpstreamProvider, "https://downloads.openwrt.org/releases/23.05.5/targets/x86/64/openwrt-sdk-23.05.5-x86-64_gcc-12.3.0_musl.Linux-x86_64.tar.xz");
 }
 
 

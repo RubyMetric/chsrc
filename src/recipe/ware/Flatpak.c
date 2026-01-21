@@ -31,7 +31,7 @@ wr_flatpak_prelude ()
   def_sources_end()
 
 
-  chef_set_provider_smurl (&UpstreamProvider, "https://flathub.org/repo/flathub.gpg");
+  chef_set_provider_smURL (&UpstreamProvider, "https://flathub.org/repo/flathub.gpg");
   /* upstream 默认是 ACCURATE 的，但是我们给了一个超小的文件，测速效果严重失真，所以改为 ROUGH */
   chef_set_provider_sm_accuracy (&UpstreamProvider, ROUGH);
 
@@ -41,8 +41,8 @@ wr_flatpak_prelude ()
    *       若无速度，则证明无法访问。
    *       注意，这会使得测速的效果严重失真。
    */
-  chef_set_provider_smurl (&Sjtug_Siyuan,  "https://mirror.sjtu.edu.cn/flathub/flathub.gpg");
-  chef_set_provider_smurl (&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/flathub/flathub.gpg");
+  chef_set_provider_smURL (&Sjtug_Siyuan,  "https://mirror.sjtu.edu.cn/flathub/flathub.gpg");
+  chef_set_provider_smURL (&Sjtug_Zhiyuan, "https://mirrors.sjtug.sjtu.edu.cn/flathub/flathub.gpg");
   /* 由于实在找不到其他可测文件，所以这也只能是 ROUGH */
   chef_set_provider_sm_accuracy (&Sjtug_Siyuan, ROUGH);
   chef_set_provider_sm_accuracy (&Sjtug_Zhiyuan, ROUGH);

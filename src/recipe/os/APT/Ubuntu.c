@@ -43,7 +43,7 @@ os_ubuntu_prelude ()
   // {&Sohu,             "https://mirrors.sohu.com/ubuntu", FeedByPrelude}
   def_sources_end()
 
-  chef_set_all_smurl_with_postfix (this, "/dists/noble/Contents-amd64.gz");
+  chef_set_all_smURL_with_postfix (this, "/dists/noble/Contents-amd64.gz");
 }
 
 
@@ -153,7 +153,7 @@ os_ubuntu_resetsrc (char *option)
   if (strncmp (arch, "x86_64", 6)!=0)
     {
       // Ubuntu 非 x86_64 架构的源地址有所不同
-      chef_set_url (this, &UpstreamProvider, "http://ports.ubuntu.com/ubuntu");
+      chef_set_repoURL (this, &UpstreamProvider, "http://ports.ubuntu.com/ubuntu");
       // this->sources[0].url = "http://ports.ubuntu.com/ubuntu";
     }
   os_ubuntu_setsrc (option);

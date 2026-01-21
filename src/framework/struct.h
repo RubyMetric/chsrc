@@ -77,10 +77,10 @@ typedef struct Source_t
     SourceProvider_t *provider;
     MirrorSite_t     *mirror;
   };
-  /* 用于换源的 URL */
+  /* 用于换源的 URL，也称 repoURL */
   char *url;
 
-  /* 对该 source 的专用测速链接，这就是精准测速 */
+  /* 对该 source 的专用测速链接，这就是精准测速，也称 smURL */
   char *speed_measure_url;
 }
 Source_t;
@@ -181,9 +181,9 @@ Target_t;
  *   def_sources_end()
  *
  *   若是出于代码美观考虑，上述第三列可以写 FeedByPrelude，然后下面调用函数来填充:
- *     chef_set_smurl()
- *     chef_set_all_smurl_with_postfix()
- *     chef_set_all_smurl_with_func()
+ *     chef_set_smURL()
+ *     chef_set_all_smURL_with_postfix()
+ *     chef_set_all_smURL_with_func()
  */
 #define def_sources_begin()  Source_t sources[] = {
 #define def_sources_end()    }; \

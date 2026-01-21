@@ -38,7 +38,7 @@ os_openeuler_prelude ()
   // {&Sohu,             "https://mirrors.sohu.com/openeuler/", FeedByPrelude}
   def_sources_end()
 
-  chef_set_all_smurl_with_postfix (this, "https://repo.openeuler.org/openEuler-24.03-LTS/ISO/x86_64/openEuler-24.03-LTS-netinst-x86_64-dvd.iso");
+  chef_set_all_smURL_with_postfix (this, "https://repo.openeuler.org/openEuler-24.03-LTS/ISO/x86_64/openEuler-24.03-LTS-netinst-x86_64-dvd.iso");
 }
 
 
