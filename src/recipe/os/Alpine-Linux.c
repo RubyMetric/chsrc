@@ -35,7 +35,7 @@ os_alpine_prelude ()
   {&Huawei,           "https://mirrors.huaweicloud.com/alpine", FeedByPrelude}
   def_sources_end()
 
-  chef_set_all_smURL_with_postfix (this, "/latest-stable/releases/x86_64/alpine-standard-3.21.0-x86_64.iso");
+  chef_set_rest_smURL_with_postfix (this, "/latest-stable/releases/x86_64/alpine-standard-3.21.0-x86_64.iso");
 }
 
 

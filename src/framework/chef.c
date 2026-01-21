@@ -209,10 +209,10 @@ chef_set_smURL (Target_t *target, SourceProvider_t *provider, char *url)
 
 
 /**
- * @brief 提供一个函数，这个函数基于 "换源链接" 和用户提供的数据来构造和填充精准测速链接
+ * @brief 针对每一个剩下的还未设置专用测速链接的源，对其 "换源链接" 使用函数 `func` 来生成专用测速链接
  */
 void
-chef_set_all_smURL_with_func (
+chef_set_rest_smURL_with_func (
   Target_t *target,
   char *(*func)(const char *url, const char *user_data),
   char *user_data)
@@ -239,12 +239,12 @@ chef_set_all_smURL_with_func (
 
 
 /**
- * @brief 给 "换源链接" 增加一个后缀来构造和填充专用测速链接
+ * @brief 针对每一个剩下的还未设置专用测速链接的源，对其 "换源链接" 增加一个后缀来生成专用测速链接
  */
 void
-chef_set_all_smURL_with_postfix (Target_t *target, char *postfix)
+chef_set_rest_smURL_with_postfix (Target_t *target, char *postfix)
 {
-  chef_set_all_smURL_with_func (target, xy_2strcat, postfix);
+  chef_set_rest_smURL_with_func (target, xy_2strcat, postfix);
 }
 
 

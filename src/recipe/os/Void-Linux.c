@@ -30,7 +30,7 @@ os_voidlinux_prelude ()
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/voidlinux", FeedByPrelude}
   def_sources_end()
 
-  chef_set_all_smURL_with_postfix (this, "/live/20240314/void-live-x86_64-musl-20240314-xfce.iso");
+  chef_set_rest_smURL_with_postfix (this, "/live/20240314/void-live-x86_64-musl-20240314-xfce.iso");
 }
 
 

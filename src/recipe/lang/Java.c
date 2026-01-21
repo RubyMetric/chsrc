@@ -36,7 +36,7 @@ pl_java_prelude ()
   def_sources_end()
 
   // 220MB
-  chef_set_all_smURL_with_postfix (this, "com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar");
+  chef_set_rest_smURL_with_postfix (this, "com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar");
 }
 
 

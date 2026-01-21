@@ -180,10 +180,7 @@ Target_t;
  *   {&某镜像站2,        "换源URL",  NULL },  // 若精准测速链接为空，则为模糊测速，默认使用该镜像站的整体测速链接
  *   def_sources_end()
  *
- *   若是出于代码美观考虑，上述第三列可以写 FeedByPrelude，然后下面调用函数来填充:
- *     chef_set_smURL()
- *     chef_set_all_smURL_with_postfix()
- *     chef_set_all_smURL_with_func()
+ *   出于代码美观考虑，上述第三列可以写 FeedByPrelude，然后下面使用文档 ./doc/11-如何设置换源链接与测速链接.md 中的函数来填充
  */
 #define def_sources_begin()  Source_t sources[] = {
 #define def_sources_end()    }; \

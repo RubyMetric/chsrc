@@ -43,7 +43,7 @@ os_ubuntu_prelude ()
   // {&Sohu,             "https://mirrors.sohu.com/ubuntu", FeedByPrelude}
   def_sources_end()
 
-  chef_set_all_smURL_with_postfix (this, "/dists/noble/Contents-amd64.gz");
+  chef_set_rest_smURL_with_postfix (this, "/dists/noble/Contents-amd64.gz");
 }
 
 
