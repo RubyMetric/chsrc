@@ -164,6 +164,10 @@ chef_set_sources_speed_measure_url_with_postfix (Target_t *target, char *postfix
 void
 chef_set_source_url (Target_t *target, SourceProvider_t *provider, char *url)
 {
+  xy_cant_be_null (target);
+  xy_cant_be_null (provider);
+  xy_cant_be_null (url);
+
   for (int i=0; i < target->sources_n; i++)
     {
       Source_t *src = &target->sources[i];
@@ -171,6 +175,32 @@ chef_set_source_url (Target_t *target, SourceProvider_t *provider, char *url)
       if (p == provider)
         {
           src->url = xy_strdup (url);
+          return;
+        }
+    }
+
+  xy_unreached();
+}
+
+/**
+ * 设置 或 修改 某个镜像站的 *精准*测速链接
+ *
+ * sm = speed measure
+ */
+void
+chef_set_source_smurl (Target_t *target, SourceProvider_t *provider, char *url)
+{
+  xy_cant_be_null (target);
+  xy_cant_be_null (provider);
+  xy_cant_be_null (url);
+
+  for (int i=0; i < target->sources_n; i++)
+    {
+      Source_t *src = &target->sources[i];
+      SourceProvider_t *p = src->provider;
+      if (p == provider)
+        {
+          src->speed_measure_url = xy_strdup (url);
           return;
         }
     }

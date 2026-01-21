@@ -181,7 +181,7 @@ Target_t;
  *   def_sources_end()
  *
  *   若是出于代码美观考虑，上述第三列可以写 FeedByPrelude，然后下面调用函数来填充:
- *     chef_set_source_speed_measure_url()
+ *     chef_set_source_smurl()
  *     chef_set_sources_speed_measure_url_with_postfix()
  *     chef_set_sources_speed_measure_url_with_func()
  */
