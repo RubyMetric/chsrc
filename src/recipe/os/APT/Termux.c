@@ -66,7 +66,7 @@ os_termux_setsrc (char *option)
 
   chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_run ("apt update",  RunOpt_Default);
+  chsrc_run ("apt-get update",  RunOpt_Default);
   chsrc_run ("apt upgrade", RunOpt_Default);
 
   chsrc_determine_chgtype (ChgType_Auto);

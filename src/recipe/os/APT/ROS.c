@@ -66,7 +66,7 @@ os_ros_setsrc (char *option)
   cmd = "apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654";
   chsrc_run (cmd, RunOpt_Default);
 
-  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
+  chsrc_run ("apt-get update", RunOpt_No_Last_New_Line);
 
   chsrc_determine_chgtype (ChgType_Untested);
   chsrc_conclude (&source);

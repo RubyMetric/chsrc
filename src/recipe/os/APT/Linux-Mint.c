@@ -71,7 +71,7 @@ os_linuxmint_setsrc (char *option)
                           source.url, "|g' "  OS_LinuxMint_SourceList);
 
   chsrc_run (cmd, RunOpt_Default);
-  chsrc_run ("apt update", RunOpt_No_Last_New_Line);
+  chsrc_run ("apt-get update", RunOpt_No_Last_New_Line);
 
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);

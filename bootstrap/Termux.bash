@@ -6,7 +6,7 @@
 # File Authors  : Aoran Zeng <ccmywish@qq.com>
 # Contributors  : Nul None <nul@none.org>
 # Created On    : <2025-07-12>
-# Last Modified : <2025-07-22>
+# Last Modified : <2026-01-21>
 #
 # Termux:
 #
@@ -30,7 +30,7 @@ else
 
   # 必要的
   sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.cernet.edu.cn/termux/apt/termux-main stable main@' $PREFIX/etc/apt/sources.list
-  apt update
+  apt-get update
 
   # x11-repo
   sed -i 's@^\(deb.*x11 main\)$@#\1\ndeb https://mirrors.cernet.edu.cn/termux/apt/termux-x11 x11 main @' $PREFIX/etc/apt/sources.list.d/x11.list
@@ -40,7 +40,7 @@ else
 fi
 
 # 立即更新测试换源状态
-apt update && apt upgrade
+apt-get update && apt-get upgrade
 
 bs_echo "基础换源已完成"
 
