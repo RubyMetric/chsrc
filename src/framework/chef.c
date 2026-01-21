@@ -192,7 +192,7 @@ chef_set_smURL_with_postfix (Target_t *target, SourceProvider_t *provider, char 
 /**
  * @internal 该函数仅用于实现 chef_set_smURL()
  */
-void
+char *
 _chef_strdup_2nd_argument (const char *DUMMY, const char *str)
 {
   return xy_strdup (str);
