@@ -10,7 +10,7 @@ os_termux_prelude ()
   chef_prep_this (os_termux, gsr);
 
   chef_set_created_on   (this, "2025-03-04");
-  chef_set_last_updated (this, "2025-08-10");
+  chef_set_last_updated (this, "2026-01-21");
   chef_set_sources_last_updated (this, "2025-03-04");
 
   chef_set_chef (this, NULL);
@@ -56,7 +56,6 @@ os_termux_getsrc (char *option)
 void
 os_termux_setsrc (char *option)
 {
-
   // chsrc_ensure_root (); Termux下禁止使用root
 
   chsrc_use_this_source (os_termux);
@@ -67,7 +66,7 @@ os_termux_setsrc (char *option)
   chsrc_run (cmd, RunOpt_Default);
 
   chsrc_run ("apt-get update",  RunOpt_Default);
-  chsrc_run ("apt upgrade", RunOpt_Default);
+  chsrc_run ("apt-get upgrade", RunOpt_Default);
 
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
