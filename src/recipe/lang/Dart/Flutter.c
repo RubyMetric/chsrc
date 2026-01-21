@@ -29,7 +29,7 @@ pl_dart_flutter_prelude (void)
   {&Nju,              "https://mirror.nju.edu.cn/flutter", FeedByPrelude}
   def_sources_end()
 
-  chef_set_sources_speed_measure_url_with_postfix (this, "/flutter_infra_release/releases/stable/linux/flutter_linux_v1.0.0-stable.tar.xz");
+  chef_set_all_smurl_with_postfix (this, "/flutter_infra_release/releases/stable/linux/flutter_linux_v1.0.0-stable.tar.xz");
 }
 
 

@@ -42,7 +42,7 @@ os_debian_prelude ()
   // {&Sohu,        "https://mirrors.sohu.com/debian", FeedByPrelude}
   def_sources_end()
 
-  chef_set_sources_speed_measure_url_with_postfix (this, "/dists/bookworm/main/Contents-all.gz");
+  chef_set_all_smurl_with_postfix (this, "/dists/bookworm/main/Contents-all.gz");
 }
 
 

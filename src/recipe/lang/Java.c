@@ -36,7 +36,7 @@ pl_java_prelude ()
   def_sources_end()
 
   // 220MB
-  chef_set_sources_speed_measure_url_with_postfix (this, "com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar");
+  chef_set_all_smurl_with_postfix (this, "com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar");
 }
 
 

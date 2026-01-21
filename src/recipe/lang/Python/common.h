@@ -70,7 +70,7 @@ pl_python_group_prelude (void)
   // {&Netease,       "https://mirrors.163.com/.help/pypi.html", NULL}
   def_sources_end()
 
-  chef_set_sources_speed_measure_url_with_func (this, pl_python_speed_url_constructor, NULL);
+  chef_set_all_smurl_with_func (this, pl_python_speed_url_constructor, NULL);
 }
 
 void

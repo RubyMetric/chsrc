@@ -7,7 +7,7 @@
  ! Contributors  : Nul None <nul@none.org>
  !               |
  ! Created On    : <2024-08-19>
- ! Last Modified : <2025-10-28>
+ ! Last Modified : <2026-01-21>
  ! ---------------------------------------------------------- -->
 
 # Write A Recipe Even If You Don't Know C
@@ -56,6 +56,11 @@
 
 - **换源链接**: 指镜像站所提供的某一个具体的换源使用的URL
 - **测速链接**: 用来测速的URL，与 "换源链接" 不同，可分为 **精准测速** 和 **模糊测速**
+
+    1. 在代码中，测速链接一般使用 `smurl` (即 `speed measure URL`) 来指代
+    2. 在代码中，换源链接一般使用 `repourl` (即 `repository URL`) 来指代
+
+        为什么不用 `regurl`，因为使用术语 `repository` 的 target 远多于使用术语 `registry` 的。
 
 - **镜像源**: 为了方便，**偶尔**我们将直接称`mirror`和/或`source`为**镜像源**，这只是一种方便性的称呼，可以统称二者，也可以根据上下文指代二者之一
 

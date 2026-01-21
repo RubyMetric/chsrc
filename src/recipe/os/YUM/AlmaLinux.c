@@ -33,8 +33,8 @@ os_almalinux_prelude ()
   def_sources_end()
 
 #define link "/9.6/isos/x86_64/AlmaLinux-9-latest-x86_64-minimal.iso"
-  chef_set_sources_speed_measure_url_with_postfix (this, link);
-  chef_set_provider_speed_measure_url (&UpstreamProvider, "https://raw.repo.almalinux.org/almalinux" link);
+  chef_set_all_smurl_with_postfix (this, link);
+  chef_set_provider_smurl (&UpstreamProvider, "https://raw.repo.almalinux.org/almalinux" link);
 #undef link
 }
 

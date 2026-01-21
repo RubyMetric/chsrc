@@ -39,7 +39,7 @@ pl_perl_prelude ()
   {&Ali,              "https://mirrors.aliyun.com/CPAN/",           FeedByPrelude}
   def_sources_end()
 
-  chef_set_sources_speed_measure_url_with_postfix (this, "authors/id/D/DB/DBAURAIN/Bio-MUST-Apps-FortyTwo-0.213470.tar.gz");
+  chef_set_all_smurl_with_postfix (this, "authors/id/D/DB/DBAURAIN/Bio-MUST-Apps-FortyTwo-0.213470.tar.gz");
 }
 
 
