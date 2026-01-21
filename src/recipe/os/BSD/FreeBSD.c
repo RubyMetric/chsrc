@@ -46,7 +46,7 @@ os_freebsd_setsrc (char *option)
   // 据 @ykla，FreeBSD不自带sudo，但是我们依然要保证是root权限
   chsrc_ensure_root ();
 
-  use_this (os_freebsd);
+  chef_use_this (os_freebsd);
   int index = use_specific_mirror_or_auto_select (option, this);
 
   Source_t source = this->sources[index];

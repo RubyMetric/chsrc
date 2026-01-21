@@ -148,7 +148,7 @@ os_ubuntu_setsrc (char *option)
 void
 os_ubuntu_resetsrc (char *option)
 {
-  use_this (os_ubuntu);
+  chef_use_this (os_ubuntu);
   char *arch = chsrc_get_cpuarch ();
   if (strncmp (arch, "x86_64", 6)!=0)
     {

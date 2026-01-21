@@ -1,13 +1,13 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Name     :  struct.h
- * File Authors  :  曾奥然 <ccmywish@qq.com>
- *               |   郭恒  <2085471348@qq.com>
- * Contributors  : Shengwei Chen <414685209@qq.com>
+ * File Name     : struct.h
+ * File Authors  : @ccmywish
+ *               | @G_I_Y
+ * Contributors  : @livelycode36
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-08-22>
+ * Last Modified : <2026-01-21>
  *
  * chsrc struct
  * ------------------------------------------------------------*/
@@ -168,7 +168,7 @@ Target_t;
 #define chef_allow_NOOP(t)
 #define chef_prep_this(t,op) Target_t *this = &t##_target; this->inited = true; chef_allow_##op(t);
 
-#define use_this(t) Target_t *this = &t##_target;
+#define chef_use_this(t) Target_t *this = &t##_target;
 #define chsrc_use_this_source(t) Target_t *this = &t##_target; Source_t source = chsrc_yield_source_and_confirm (this, option);
 
 #define def_sources_begin()  Source_t sources[] = {
