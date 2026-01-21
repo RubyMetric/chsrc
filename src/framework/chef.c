@@ -2,10 +2,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Name     : chef.c
- * File Authors  : 曾奥然 <ccmywish@qq.com>
- * Contributors  : BingChunMoLi <bingchunmoli@bingchunmoli.com>
+ * File Authors  : @ccmywish
+ * Contributors  : @BingChunMoLi
  * Created On    : <2025-08-09>
- * Last Modified : <2025-10-27>
+ * Last Modified : <2026-01-21>
  *
  * chef DSL: for chefs (recipe makers) to define a target
  * ------------------------------------------------------------*/
@@ -153,6 +153,29 @@ void
 chef_set_sources_speed_measure_url_with_postfix (Target_t *target, char *postfix)
 {
   chef_set_sources_speed_measure_url_with_func (target, xy_2strcat, postfix);
+}
+
+
+/**
+ * @brief 修改 或 补充 某个镜像站的换源链接
+ *
+ * @example 见 os_ubuntu_resetsrc() 中对非 x86_64 架构源地址的修改
+ */
+void
+chef_set_source_url (Target_t *target, SourceProvider_t *provider, char *url)
+{
+  for (int i=0; i < target->sources_n; i++)
+    {
+      Source_t *src = &target->sources[i];
+      SourceProvider_t *p = src->provider;
+      if (p == provider)
+        {
+          src->url = xy_strdup (url);
+          return;
+        }
+    }
+
+  xy_unreached();
 }
 
 

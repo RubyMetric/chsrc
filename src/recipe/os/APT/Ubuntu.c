@@ -152,8 +152,9 @@ os_ubuntu_resetsrc (char *option)
   char *arch = chsrc_get_cpuarch ();
   if (strncmp (arch, "x86_64", 6)!=0)
     {
-      // ubuntu arm的源地址和x86_64不一样
-      this->sources[0].url = "http://ports.ubuntu.com/ubuntu";
+      // Ubuntu 非 x86_64 架构的源地址有所不同
+      chef_set_source_url (this, &UpstreamProvider, "http://ports.ubuntu.com/ubuntu");
+      // this->sources[0].url = "http://ports.ubuntu.com/ubuntu";
     }
   os_ubuntu_setsrc (option);
 }
