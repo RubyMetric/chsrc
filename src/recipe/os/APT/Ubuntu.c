@@ -11,8 +11,8 @@ os_ubuntu_prelude ()
   chef_prep_this (os_ubuntu, gsr);
 
   chef_set_created_on   (this, "2023-08-30");
-  chef_set_last_updated (this, "2026-01-20");
-  chef_set_sources_last_updated (this, "2026-01-20");
+  chef_set_last_updated (this, "2026-01-21");
+  chef_set_sources_last_updated (this, "2026-01-21");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
@@ -42,6 +42,13 @@ os_ubuntu_prelude ()
   /* 不启用原因：过慢 */
   // {&Sohu,             "https://mirrors.sohu.com/ubuntu", FeedByPrelude}
   def_sources_end()
+
+  char *arch = chsrc_get_cpuarch ();
+  // Ubuntu 非 x86_64 架构的默认源地址有所不同
+  if (strncmp (arch, "x86_64", 6)!=0)
+    {
+      chef_set_repoURL (this, &UpstreamProvider, "http://ports.ubuntu.com/ubuntu");
+    }
 
   chef_set_rest_smURL_with_postfix (this, "/dists/noble/Contents-amd64.gz");
 }
@@ -148,13 +155,5 @@ os_ubuntu_setsrc (char *option)
 void
 os_ubuntu_resetsrc (char *option)
 {
-  chef_use_this (os_ubuntu);
-  char *arch = chsrc_get_cpuarch ();
-  if (strncmp (arch, "x86_64", 6)!=0)
-    {
-      // Ubuntu 非 x86_64 架构的源地址有所不同
-      chef_set_repoURL (this, &UpstreamProvider, "http://ports.ubuntu.com/ubuntu");
-      // this->sources[0].url = "http://ports.ubuntu.com/ubuntu";
-    }
   os_ubuntu_setsrc (option);
 }
