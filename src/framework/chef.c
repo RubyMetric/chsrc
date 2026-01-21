@@ -142,15 +142,20 @@ chef_set_repoURL (Target_t *target, SourceProvider_t *provider, char *url)
   xy_unreached();
 }
 
+
 /**
- * @breif 设置 或 修改 某个镜像站的 *精准*测速链接，即修改 Source_t.speed_measure_url
+ * @brief 提供一个函数，这个函数基于 "换源链接" 和用户提供的数据来构造和填充精准测速链接
  */
 void
-chef_set_smURL (Target_t *target, SourceProvider_t *provider, char *url)
+chef_set_smURL_with_func (
+  Target_t *target,
+  SourceProvider_t *provider,
+  char *(*func)(const char *url, const char *user_data),
+  char *user_data)
 {
   xy_cant_be_null (target);
   xy_cant_be_null (provider);
-  xy_cant_be_null (url);
+  xy_cant_be_null (func);
 
   for (int i=0; i < target->sources_n; i++)
     {
@@ -158,12 +163,48 @@ chef_set_smURL (Target_t *target, SourceProvider_t *provider, char *url)
       SourceProvider_t *p = src->provider;
       if (p == provider)
         {
-          src->speed_measure_url = xy_strdup (url);
-          return;
+          if (src->url)
+            {
+              src->speed_measure_url = func (src->url, user_data);
+              return;
+            }
+          else
+            {
+              chsrc_panic ("该函数基于已有的换源链接来生成测速链接，但该源的换源链接为空");
+            }
         }
     }
 
   xy_unreached();
+}
+
+
+/**
+ * @brief 给 "换源链接" 增加一个后缀来构造和填充专用测速链接
+ */
+void
+chef_set_smURL_with_postfix (Target_t *target, SourceProvider_t *provider, char *postfix)
+{
+  chef_set_smURL_with_func (target, provider, xy_2strcat, postfix);
+}
+
+
+/**
+ * @internal 该函数仅用于实现 chef_set_smURL()
+ */
+void
+_chef_strdup_2nd_argument (const char *DUMMY, const char *str)
+{
+  return xy_strdup (str);
+}
+
+/**
+ * @breif 设置 或 修改 某个镜像站的 *精准*测速链接，即修改 Source_t.speed_measure_url
+ */
+void
+chef_set_smURL (Target_t *target, SourceProvider_t *provider, char *url)
+{
+  chef_set_smURL_with_func (target, provider, _chef_strdup_2nd_argument, url);
 }
 
 
