@@ -47,6 +47,8 @@
 #include <unistd.h>
 #include <dirent.h> // opendir() closedir()
 
+#include "mempool.h"
+
 #if defined(__STDC__) && __STDC_VERSION__ >= 202311
   #define XY_Deprecate_This(msg) [[deprecated(msg)]]
 #elif defined(__GNUC__) || defined(__clang__)
@@ -215,9 +217,10 @@ void p (const char *s)       { printf ("%s\n", s); }
 static inline void *
 xy_malloc0 (size_t size)
 {
-  void *ptr = malloc (size);
-  memset (ptr, 0, size);
-  return ptr;
+  // void *ptr = malloc (size);
+  // memset (ptr, 0, size);
+  // return ptr;
+  return mp_calloc(size,1);
 }
 
 
@@ -234,7 +237,7 @@ xy_ptr_replace (char **pptr, char *new_mem)
   xy_cant_be_null (pptr);
 
   if (*pptr)
-    free (*pptr);
+    mp_free (*pptr);
 
   *pptr = new_mem;
 }
@@ -283,7 +286,7 @@ xy_str_gsub (const char *str, const char *pat, const char *replace)
     }
   // puti(count); DEBUG 匹配次数
 
-  char *ret = malloc (unit * count + len + 1);
+  char *ret = mp_malloc (unit * count + len + 1);
   char *retcur = ret;
 
   cur = str;
@@ -317,7 +320,7 @@ xy_2strcat (const char *str1, const char *str2)
 {
   size_t len = strlen (str1);
   size_t size = len + strlen (str2) + 1;
-  char *ret = malloc (size);
+  char *ret = mp_malloc (size);
   strcpy (ret, str1);
   strcpy (ret + len, str2);
   return ret;
@@ -343,7 +346,7 @@ static char *
 xy_strcat (unsigned int count, ...)
 {
   size_t al_fixed = 256;
-  char *ret = calloc (1, al_fixed);
+  char *ret = mp_calloc (1, al_fixed);
   // 已分配次数
   int al_times = 1;
   // 当前已分配量
@@ -375,7 +378,7 @@ xy_strcat (unsigned int count, ...)
       if (need_realloc)
         {
           ptrdiff_t diff = cur - ret;
-          ret = realloc (ret, al_cur);
+          ret = mp_realloc (ret, al_cur);
           cur = ret + diff;
         }
       if (NULL == ret)
@@ -489,7 +492,7 @@ _xy_str_to_terminal_style (int style, const char *str)
 new_str:
   // -2 把中间%s减掉
   len = strlen (color_fmt_str) - 2;
-  char *buf = malloc (strlen (str) + len + 1);
+  char *buf = mp_malloc (strlen (str) + len + 1);
   sprintf (buf, color_fmt_str, str);
   return buf;
 }
@@ -755,7 +758,7 @@ xy_file_read (const char *path)
   if (read_bytes < (size_t) size && ferror (fp))
     {
       fclose (fp);
-      free (buf);
+      mp_free (buf);
       return xy_strdup ("");
     }
 
@@ -765,7 +768,7 @@ xy_file_read (const char *path)
   char *formatted_str = xy_str_gsub (buf, "\r\n", "\n");
   xy_ptr_replace (&formatted_str, xy_str_gsub (formatted_str, "\r", "\n"));
 
-  free (buf);
+  mp_free (buf);
 
   return formatted_str;
 }
@@ -833,7 +836,7 @@ _xy_log (int level, const char *prompt, const char *content)
     {
       puts (str);
     }
-  free (str);
+  mp_free (str);
 }
 
 
@@ -858,7 +861,7 @@ xy_log_brkt_to (const char *prompt, const char *content, FILE *stream)
 {
   char *str = xy_strcat (4, "[", prompt, "] ", content);
   fprintf (stream, "%s\n", str);
-  free (str);
+  mp_free (str);
 }
 
 #define xy_log_brkt(prompt1,prompt2,content)   _xy_log_brkt(_XY_Log_Plain,  prompt1,prompt2,content)
@@ -919,7 +922,7 @@ _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *c
     {
       puts (str);
     }
-  free (str);
+  mp_free (str);
 }
 
 
@@ -963,7 +966,7 @@ static char *
 xy_run_iter_lines (const char *cmd,  unsigned long n,  bool (*func) (const char *))
 {
   const int size = 512;
-  char *buf = (char *) malloc (size);
+  char *buf = (char *) mp_malloc (size);
 
   FILE *stream = popen (cmd, "r");
   if (stream == NULL)
@@ -1051,7 +1054,7 @@ xy_run_get_stdout (const char *cmd, char **output)
     if (size == cap)
       {
         cap *= 2;
-        char *new_buf = realloc (buf, cap);
+        char *new_buf = mp_realloc (buf, cap);
         buf = new_buf;
       }
     }
@@ -1137,7 +1140,7 @@ _xy_win_powershell_profile ()
     {
       char *documents_dir = _xy_win_documents ();
       char *profile_path = xy_2strcat (documents_dir, "\\PowerShell\\Microsoft.PowerShell_profile.ps1");
-      free (documents_dir);
+      mp_free (documents_dir);
       return profile_path;
     }
   else
@@ -1157,7 +1160,7 @@ _xy_win_powershellv5_profile ()
     {
       char *documents_dir = _xy_win_documents ();
       char *profile_path = xy_2strcat (documents_dir, "\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1");
-      free (documents_dir);
+      mp_free (documents_dir);
       return profile_path;
     }
   else
@@ -1185,7 +1188,7 @@ xy_file_exist (const char *path)
 
   // 0 即 F_OK
   bool result = (0 == access (check_path, 0)) ? true : false;
-  if (expanded_path) free (expanded_path);
+  if (expanded_path) mp_free (expanded_path);
   return result;
 }
 
@@ -1227,7 +1230,7 @@ xy_dir_exist (const char *path)
         {
           result = false;
         }
-      if (allocated_dir) free (allocated_dir);
+      if (allocated_dir) mp_free (allocated_dir);
       return result;
 #endif
     }
@@ -1235,9 +1238,9 @@ xy_dir_exist (const char *path)
     {
       char *tmp_cmd = xy_2strcat ("test -d ", dir);
       int status = system (tmp_cmd);
-      free (tmp_cmd);
+      mp_free (tmp_cmd);
       bool result = (0==status);
-      if (allocated_dir) free (allocated_dir);
+      if (allocated_dir) mp_free (allocated_dir);
       return result;
     }
 
@@ -1263,7 +1266,7 @@ xy_normalize_path (const char *path)
     {
       char *tmp = xy_str_delete_prefix (new, "~");
       char *joined = xy_2strcat (xy_os_home, tmp);
-      free (tmp);
+      mp_free (tmp);
       xy_ptr_replace (&new, joined);
     }
 
@@ -1588,7 +1591,7 @@ xy_seq_pop (XySeq_t *seq)
   seq->length--;
 
   void *data = l->data;
-  free (l);
+  mp_free (l);
   return data;
 }
 
