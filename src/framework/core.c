@@ -853,7 +853,7 @@ measure_speed_for_every_source (Source_t sources[], int size, double speed_recor
           speed_records[i] = speed;
 
           /* 释放 url 内存 */
-          if (url) free (url);
+          // if (url) free (url);
         }
       else
         {
@@ -1566,7 +1566,7 @@ chsrc_run_as_bash_file (const char *script_content)
   char *cmd = xy_2strcat ("bash ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
   remove (tmpfile);
-  free (tmpfile);  /* 释放 tmpfile 路径内存 */
+  // free (tmpfile);  /* 释放 tmpfile 路径内存 */
 }
 
 
@@ -1587,7 +1587,7 @@ chsrc_run_as_sh_file (const char *script_content)
   char *cmd = xy_2strcat ("sh ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
   remove (tmpfile);
-  free (tmpfile);
+  // free (tmpfile);
 }
 
 
@@ -1607,7 +1607,7 @@ chsrc_run_as_pwsh_file (const char *script_content)
   char *cmd = xy_2strcat ("pwsh ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
   remove (tmpfile);
-  free (tmpfile);
+  // free (tmpfile);
 }
 
 
@@ -1628,7 +1628,7 @@ chsrc_run_as_powershellv5_file (const char *script_content)
   char *cmd = xy_2strcat ("powershell -File ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
   remove (tmpfile);
-  free (tmpfile);
+  // free (tmpfile);
 }
 
 
