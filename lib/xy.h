@@ -1,5 +1,5 @@
 /** ------------------------------------------------------------
- * Copyright © 2023-2026 曾奥然, 郭恒
+ * Copyright © 2026-2026 曾奥然, 郭恒
  * SPDX-License-Identifier: MIT
  * -------------------------------------------------------------
  * Lib Authors   :  曾奥然 <ccmywish@qq.com>
@@ -9,7 +9,7 @@
  *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-12-31>
+ * Last Modified : <2026-03-16>
  *
  *
  *                     xy: 襄阳、咸阳
