@@ -9,7 +9,7 @@
  *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2025-12-31>
+ * Last Modified : <2026-03-17>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -23,7 +23,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.2.2.0-2025/10/28"
+#define _XY_Version       "v0.2.2.1-2026/03/17"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -261,14 +261,12 @@ xy_str_gsub (const char *str, const char *pat, const char *replace)
   size_t replace_len = strlen (replace);
   size_t pat_len = strlen (pat);
 
-  int unit = replace_len - pat_len;
-  if (unit <= 0)
-    unit = 0;
+  size_t unit = (replace_len > pat_len) ? (replace_len - pat_len) : 0;
 
   size_t len = strlen (str);
 
   const char *cur = str;
-  int count = 0;
+  size_t count = 0;
 
   while (cur < str + len)
     {
@@ -284,6 +282,7 @@ xy_str_gsub (const char *str, const char *pat, const char *replace)
   // puti(count); DEBUG 匹配次数
 
   char *ret = malloc (unit * count + len + 1);
+  if (!ret) return NULL;
   char *retcur = ret;
 
   cur = str;
@@ -379,9 +378,9 @@ xy_strcat (unsigned int count, ...)
           cur = ret + diff;
         }
       if (NULL == ret)
-        {
+            {
           _xy_internal_warn ("xy_strcat(): No availble memory to allocate!");
-          return NULL;
+              return NULL;
         }
       strcpy (cur, str);
       // puts(ret);
@@ -485,10 +484,9 @@ _xy_str_to_terminal_style (int style, const char *str)
     }
 
 
-  size_t len = 0;
 new_str:
   // -2 把中间%s减掉
-  len = strlen (color_fmt_str) - 2;
+  size_t len = strlen (color_fmt_str) - 2;
   char *buf = malloc (strlen (str) + len + 1);
   sprintf (buf, color_fmt_str, str);
   return buf;
@@ -969,6 +967,7 @@ xy_run_iter_lines (const char *cmd,  unsigned long n,  bool (*func) (const char 
   if (stream == NULL)
     {
       _xy_internal_warn ("xy_run_iter_lines(): popen() failed");
+      free (buf);
       return NULL;
     }
 
@@ -980,6 +979,8 @@ xy_run_iter_lines (const char *cmd,  unsigned long n,  bool (*func) (const char 
       if (NULL == fgets (buf, size, stream))
         break;
       /* 存在换行的总是会把换行符读出来，删掉 */
+      if (ret)
+        free (ret);
       ret = xy_str_delete_suffix (buf, "\n");
       count += 1;
       if (n == count)
@@ -991,6 +992,7 @@ xy_run_iter_lines (const char *cmd,  unsigned long n,  bool (*func) (const char 
         }
     }
 
+  free (buf);
   pclose (stream);
   return ret;
 }
@@ -1018,6 +1020,7 @@ xy_run_get_status (char *cmd)
   char * command = xy_quiet_cmd (cmd);
 
   int status = system (command);
+  free (command);
   return status;
 }
 
@@ -1041,6 +1044,7 @@ xy_run_get_stdout (const char *cmd, char **output)
   if (stream == NULL)
     {
       _xy_internal_warn ("xy_run_get_stdout(): popen() failed");
+      free (buf);
       return -1;
     }
 
@@ -1061,6 +1065,8 @@ xy_run_get_stdout (const char *cmd, char **output)
 
   if (output)
     *output = buf;
+  else
+    free (buf);
 
     return status;
 }
@@ -1299,7 +1305,8 @@ xy_parent_dir (const char *path)
   if (!last)
     {
       /* 路径中没有一个 / 是很奇怪的，我们直接返回 . 作为当前目录 */
-      return ".";
+      free (dir);
+      return xy_strdup (".");
     }
   *last = '\0';
 
