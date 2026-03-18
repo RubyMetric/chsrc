@@ -17,6 +17,13 @@ Fit2Cloud =
   IS_DedicatedMirrorSite,
   "fit2cloud", "FIT2CLOUD", "杭州飞致云信息科技有限公司", "https://www.fit2cloud.com/",
   {SKIP, ToFill, ToFill, NULL, ROUGH}
+},
+
+Xuanyuan =
+{
+  IS_DedicatedMirrorSite,
+  "xuanyuan", "轩辕", "轩辕镜像站", "https://docker.xuanyuan.me",
+  {SKIP, ToFill, ToFill, NULL, ROUGH}
 };
 
 def_target(wr_docker, "docker/dockerhub");
@@ -28,7 +35,7 @@ wr_docker_prelude ()
 
   chef_set_recipe_created_on   (this, "2024-06-08");
   chef_set_recipe_last_updated (this, "2025-08-09");
-  chef_set_sources_last_updated (this, "2025-07-14");
+  chef_set_sources_last_updated (this, "2025-08-09");
 
   chef_set_chef (this, "@happy-game");
   chef_set_cooks (this, 2, "@happy-game", "@ccmywish");
@@ -45,7 +52,8 @@ wr_docker_prelude ()
   def_sources_begin()
   {&UpstreamProvider, "https://hub.docker.com/", DelegateToUpstream},
   {&DaoCloud,         "https://docker.m.daocloud.io", DelegateToMirror},
-  {&Fit2Cloud,        "https://docker.1panel.live", DelegateToMirror}
+  {&Fit2Cloud,        "https://docker.1panel.live", DelegateToMirror},
+  {&Xuanyuan,         "https://docker.xuanyuan.me", DelegateToMirror}
   def_sources_end()
 }
 
