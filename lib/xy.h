@@ -9,7 +9,7 @@
  *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2026-03-17>
+ * Last Modified : <2026-03-18>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -18,12 +18,17 @@
  *
  * 该库的特点是混合多种编程语言风味 (绝大多数为 Ruby)，每个 API
  * 均使用 @flavor 标注其参考依据
+ *
+ *
+ * 说明:
+ *   1. 完全不考虑OOM等内存分配失败的情况
+ *
  * ------------------------------------------------------------*/
 
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.2.2.1-2026/03/17"
+#define _XY_Version       "v0.2.2.2-2026/03/18"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -279,10 +284,9 @@ xy_str_gsub (const char *str, const char *pat, const char *replace)
       else
         break;
     }
-  // puti(count); DEBUG 匹配次数
+  // print(count); /* DEBUG 匹配次数 */
 
   char *ret = malloc (unit * count + len + 1);
-  if (!ret) return NULL;
   char *retcur = ret;
 
   cur = str;
@@ -376,11 +380,6 @@ xy_strcat (unsigned int count, ...)
           ptrdiff_t diff = cur - ret;
           ret = realloc (ret, al_cur);
           cur = ret + diff;
-        }
-      if (NULL == ret)
-            {
-          _xy_internal_warn ("xy_strcat(): No availble memory to allocate!");
-              return NULL;
         }
       strcpy (cur, str);
       // puts(ret);
@@ -743,11 +742,6 @@ xy_file_read (const char *path)
   rewind (fp);
 
   char *buf = xy_malloc0 ((size_t) size + 1);
-  if (!buf)
-    {
-      fclose (fp);
-      return xy_strdup ("");
-    }
 
   size_t read_bytes = fread (buf, 1, (size_t) size, fp);
   if (read_bytes < (size_t) size && ferror (fp))
@@ -979,15 +973,14 @@ xy_run_iter_lines (const char *cmd,  unsigned long n,  bool (*func) (const char 
       if (NULL == fgets (buf, size, stream))
         break;
       /* 存在换行的总是会把换行符读出来，删掉 */
-      if (ret)
-        free (ret);
+      if (ret) free (ret); /* 上次读到的需要释放 */
       ret = xy_str_delete_suffix (buf, "\n");
       count += 1;
       if (n == count)
         break;
       if (func)
         {
-           if (func (ret))
+          if (func (ret))
             break;
         }
     }
@@ -1476,7 +1469,6 @@ XySeq_t*
 xy_seq_new (void)
 {
   XySeq_t *seq = xy_malloc0 (sizeof (XySeq_t));
-  if (!seq) return NULL;
 
   seq->first_item = NULL;
   seq->last_item = NULL;
