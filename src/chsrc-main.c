@@ -372,7 +372,7 @@ cli_print_target_features (Target_t *target, const char *input_target_name)
       default:
         xy_unreached();
       }
-    char *msg = xy_strcat (3, bdblue (" = "),
+    char *msg = xy_strcat (2, bdblue (" = "),
       purple (xy_strcat (5, "默认作用域 | chsrc set -scope=default ", input_target_name, " (= ", default_scope_name ,")")));
     puts (msg);
     br();
