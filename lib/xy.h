@@ -20,9 +20,13 @@
  * 均使用 @flavor 标注其参考依据
  *
  *
- * 说明:
+ * 关于内存管理的说明:
  *   1. 完全不考虑OOM等内存分配失败的情况
- *
+ *   2. 不追求完全的内存无泄漏。各个函数尽量使用 @memory SAFE|LEAK标注
+ *       return caller-free:      调用者需要负责释放返回的内存
+ *       return caller-dont-care: 调用者不需要负责释放返回的内存
+ *       param[out] `abc` caller-free:      调用者需要负责释放回传给参数 `abc` 的内存
+ *       param[out] `abc` caller-dont-care: 调用者不需要负责释放回传给参数 `abc` 的内存
  * ------------------------------------------------------------*/
 
 #ifndef XY_H
@@ -217,6 +221,10 @@ void p (const char *s)       { printf ("%s\n", s); }
 #define xy_c_array_len(arr) (sizeof (arr) / sizeof (arr[0]))
 
 
+/**
+ * @memory SAFE
+ *   return caller-free
+ */
 static inline void *
 xy_malloc0 (size_t size)
 {
@@ -232,6 +240,8 @@ xy_malloc0 (size_t size)
  * @param pptr    指向要被替换内存区域的指针的指针
  *                *pptr 可为 NULL
  * @param new_mem 新的内存区域
+ *
+ * @memory SAFE
  */
 static inline void
 xy_ptr_replace (char **pptr, char *new_mem)
@@ -259,6 +269,9 @@ xy_ptr_replace (char **pptr, char *new_mem)
  * @param replace 替换成的字符串
  *
  * @return 替换后的新字符串
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 xy_str_gsub (const char *str, const char *pat, const char *replace)
@@ -314,6 +327,9 @@ xy_str_gsub (const char *str, const char *pat, const char *replace)
 
 /**
  * @flavor 见 xy_strcat()
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 xy_2strcat (const char *str1, const char *str2)
@@ -341,6 +357,9 @@ xy_2strcat (const char *str1, const char *str2)
  * @param ...   连接的字符串
  *
  * @return 拼接的新字符串
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 xy_strcat (unsigned int count, ...)
@@ -398,6 +417,9 @@ xy_strcat (unsigned int count, ...)
  * @param str 要复制的字符串
  *
  * @return 复制的新字符串
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 xy_strdup (const char *str)
@@ -443,6 +465,10 @@ xy_strdup (const char *str)
 #define xy_str_to_purple        xy_str_to_magenta
 #define xy_str_to_cyan(str)    _xy_str_to_terminal_style (_XY_Str_Cyan, str)
 
+/**
+ * @memory SAFE
+ *   return caller-free
+ */
 static char *
 _xy_str_to_terminal_style (int style, const char *str)
 {
@@ -530,6 +556,8 @@ xy_streql_ic (const char *str1, const char *str2)
 
 /**
  * @flavor Ruby: String#end_with?
+ *
+ * @memory SAFE
  */
 static bool
 xy_str_end_with (const char *str, const char *suffix)
@@ -557,6 +585,8 @@ xy_str_end_with (const char *str, const char *suffix)
 
 /**
  * @flavor Ruby: String#start_with?
+ *
+ * @memory SAFE
  */
 static bool
 xy_str_start_with (const char *str, const char *prefix)
@@ -589,6 +619,9 @@ xy_str_start_with (const char *str, const char *prefix)
 
 /**
  * @flavor Ruby: String#delete_prefix
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 xy_str_delete_prefix (const char *str, const char *prefix)
@@ -607,6 +640,9 @@ xy_str_delete_prefix (const char *str, const char *prefix)
 
 /**
  * @flavor Ruby: String#delete_suffix
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 xy_str_delete_suffix (const char *str, const char *suffix)
@@ -625,6 +661,9 @@ xy_str_delete_suffix (const char *str, const char *suffix)
 
 /**
  * @flavor Ruby: String#strip
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 xy_str_strip (const char *str)
@@ -659,6 +698,8 @@ XyStrFindResult_t;
 
 /**
  * @brief 查找子串，返回是否命中以及子串在原串中的起止位置（0 基，end 为闭区间）
+ *
+ * @memory SAFE
  */
 static XyStrFindResult_t
 xy_str_find (const char *str, const char *substr)
@@ -688,6 +729,9 @@ xy_str_find (const char *str, const char *substr)
  * @brief 获取字符串下一行的内容
  *
  * @note 将忽略开头的换行，截取至下一个换行前（不含换行符）
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 xy_str_next_nonempty_line (const char *str)
@@ -719,6 +763,9 @@ xy_str_next_nonempty_line (const char *str)
  * @note 已处理 \r\n 和 \r，返回的字符串均为 \n 换行
  *
  * @flavor Ruby: IO::read
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 xy_file_read (const char *path)
@@ -780,6 +827,11 @@ xy_file_read (const char *path)
 #define xy_warn(prompt,str)  _xy_log (_XY_Log_Warn,    prompt, str)
 #define xy_error(prompt,str) _xy_log (_XY_Log_Error,   prompt, str)
 
+/**
+ * @memory LEAK
+ *   xy_str_to_*() 返回的中间色彩字符串传入xy_strcat() 后没有被释放；
+ *   最终的 str 本身已 free
+ */
 static void
 _xy_log (int level, const char *prompt, const char *content)
 {
@@ -845,6 +897,9 @@ _xy_log (int level, const char *prompt, const char *content)
  *    应基于下述 xy_<level>_brkt 定义自己的 app_<level>_brkt()，或直接使用 xy_<level>_brkt
  */
 
+/**
+ * @memory SAFE
+ */
 static void
 xy_log_brkt_to (const char *prompt, const char *content, FILE *stream)
 {
@@ -859,6 +914,10 @@ xy_log_brkt_to (const char *prompt, const char *content, FILE *stream)
 #define xy_warn_brkt(prompt1,prompt2,content)  _xy_log_brkt(_XY_Log_Warn,   prompt1,prompt2,content)
 #define xy_error_brkt(prompt1,prompt2,content) _xy_log_brkt(_XY_Log_Error,  prompt1,prompt2,content)
 
+/**
+ * @memory LEAK
+ *   同 _xy_log，xy_str_to_*() 嵌套调用产生的中间字符串没有被释放
+ */
 static void
 _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *content)
 {
@@ -920,6 +979,10 @@ _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *c
  *                      cross OS
  ******************************************************/
 
+/**
+ * @memory SAFE
+ *   return caller-free
+ */
 static char *
 xy_quiet_cmd (const char *cmd)
 {
@@ -950,6 +1013,9 @@ xy_quiet_cmd (const char *cmd)
  *   1. 由于目标行第 `n` 行会被返回出来，所以 `func` 并不执行目标行，只会执行遍历过的行
  *   或
  *   2. 由于 `func` 调用后返回为 true 的行会被返回出来，所以该返回出的行也被 `func` 执行过了
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 xy_run_iter_lines (const char *cmd,  unsigned long n,  bool (*func) (const char *))
@@ -994,6 +1060,9 @@ xy_run_iter_lines (const char *cmd,  unsigned long n,  bool (*func) (const char 
  * @brief 执行命令 `cmd`，返回第 `n` 行输出到 stdout 的内容
  *
  * @return 返回第 `n` 行输出到 stdout 的内容
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 xy_run (const char *cmd, unsigned long n)
@@ -1006,6 +1075,8 @@ xy_run (const char *cmd, unsigned long n)
  * @brief 执行命令 `cmd`，仅返回其 Exit Code，stdout 与 stderr 均不输出到终端
  *
  * @return 返回 `cmd` 的 Exit Code
+ *
+ * @memory SAFE
  */
 int
 xy_run_get_status (char *cmd)
@@ -1026,6 +1097,9 @@ xy_run_get_status (char *cmd)
  *                    为NULL时表示不关心stdout输出，但依然允许stderr输出
  *
  * @return 返回命令的执行状态
+ *
+ * @memory SAFE
+ *   param[out] `output` caller-free
  */
 static int
 xy_run_get_stdout (const char *cmd, char **output)
@@ -1068,6 +1142,9 @@ xy_run_get_stdout (const char *cmd, char **output)
 
 /**
  * @brief 该函数返回所在 os family 的对应字符串
+ *
+ * @memory SAFE
+ *   return caller-dont-care
  */
 static const char *
 xy_os_depend_str (const char *str_for_win, const char *str_for_unix)
@@ -1084,6 +1161,9 @@ xy_os_depend_str (const char *str_for_win, const char *str_for_unix)
  *
  * @note  Windows 上返回 %USERPROFILE%，Linux 等返回 $HOME
  * @warning Windows 上要警惕 Documents 等目录被移动位置的情况，避免使用本函数的 HOME 路径直接拼接 Documents，应参考 _xy_win_documents() 的实现
+ *
+ * @memory SAFE
+ *   return caller-dont-care
  */
 #define xy_os_home _xy_os_home ()
 static char *
@@ -1103,6 +1183,9 @@ _xy_os_home ()
  *
  * @note 警告，不可使用 HOME 目录直接拼接，若用户移动了 Documents，将导致错误
  * @warning 非 Windows 返回 NULL
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 _xy_win_documents ()
@@ -1128,6 +1211,9 @@ _xy_win_documents ()
  * @brief 返回 Windows 上 pwsh (>=v5) 的配置文件路径
  *
  * @warning 非 Windows 返回 NULL
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 _xy_win_powershell_profile ()
@@ -1148,6 +1234,9 @@ _xy_win_powershell_profile ()
  * @brief 返回 Windows 上自带的 powershell (v5) 的配置文件路径
  *
  * @warning 非 Windows 返回 NULL
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 _xy_win_powershellv5_profile ()
@@ -1169,6 +1258,8 @@ _xy_win_powershellv5_profile ()
 
 /**
  * @note Windows上，`path` 不要夹带变量名，因为最终 access() 不会帮你转换
+ *
+ * @memory SAFE
  */
 static bool
 xy_file_exist (const char *path)
@@ -1191,6 +1282,8 @@ xy_file_exist (const char *path)
 /**
  * @note `xy_file_exist()` 和 `xy_dir_exist()` 两个函数在所有平台默认都支持使用 '~'，
  *       但实现中都没有调用 `xy_normalize_path()`，以防万一，调用前可能需要用户手动调用它
+ *
+ * @memory SAFE
  */
 static bool
 xy_dir_exist (const char *path)
@@ -1252,6 +1345,9 @@ xy_dir_exist (const char *path)
  *      - 防止维护者多写了空白字符
  *   2. 将 ~ 转换为绝对路径
  *   3. 在Windows上，使用标准的 \ 作为路径分隔符
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 xy_normalize_path (const char *path)
@@ -1280,6 +1376,9 @@ xy_normalize_path (const char *path)
  * @note
  *   - 返回的是真正的 "目录名" (就像文件名一样)，而不是 "路径"，所以一定是不含末尾斜杠的
  *   - 在Windows上，使用标准的 \ 作为路径分隔符
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 xy_parent_dir (const char *path)
@@ -1314,6 +1413,8 @@ xy_parent_dir (const char *path)
 
 /**
  * @internal 仅由 xy_init () 调用
+ *
+ * @memory SAFE
  */
 void
 _xy_detect_os ()
@@ -1415,6 +1516,9 @@ _xy_detect_os ()
 }
 
 
+/**
+ * @memory SAFE
+ */
 void
 xy_use_utf8 ()
 {
@@ -1426,6 +1530,8 @@ xy_use_utf8 ()
 
 /**
  * @note 该函数必须被首先调用，方能使用各个跨操作系统的函数
+ *
+ * @memory SAFE
  */
 void
 xy_init ()
@@ -1465,6 +1571,10 @@ typedef struct XySeq_t
 XySeq_t;
 
 
+/**
+ * @memory SAFE
+ *   return caller-free
+ */
 XySeq_t*
 xy_seq_new (void)
 {
@@ -1479,6 +1589,8 @@ xy_seq_new (void)
 
 /**
  * @flavor Python: len()
+ *
+ * @memory SAFE
  */
 uint32_t
 xy_seq_len (XySeq_t *seq)
@@ -1489,6 +1601,9 @@ xy_seq_len (XySeq_t *seq)
 
 /**
  * @flavor Ruby: Enumerable#first
+ *
+ * @memory SAFE
+ *   return caller-dont-care
  */
 void *
 xy_seq_first (XySeq_t *seq)
@@ -1499,6 +1614,9 @@ xy_seq_first (XySeq_t *seq)
 
 /**
  * @flavor Ruby: Enumerable#last
+ *
+ * @memory SAFE
+ *   return caller-dont-care
  */
 void *
 xy_seq_last (XySeq_t *seq)
@@ -1513,6 +1631,9 @@ xy_seq_last (XySeq_t *seq)
  * @note 序号从1开始
  *
  * @return 如果seq中并没有第n个数据，则返回NULL
+ *
+ * @memory SAFE
+ *   return caller-dont-care
  */
 void *
 xy_seq_at (XySeq_t *seq, int n)
@@ -1534,6 +1655,8 @@ xy_seq_at (XySeq_t *seq, int n)
 
 /**
  * @flavor Perl: push
+ *
+ * @memory SAFE
  */
 void
 xy_seq_push (XySeq_t *seq, void *data)
@@ -1565,6 +1688,9 @@ xy_seq_push (XySeq_t *seq, void *data)
 
 /**
  * @flavor Perl: pop
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 void *
 xy_seq_pop (XySeq_t *seq)
@@ -1594,6 +1720,8 @@ xy_seq_pop (XySeq_t *seq)
 
 /**
  * @flavor Ruby: Array#each
+ *
+ * @memory SAFE
  */
 void
 xy_seq_each (XySeq_t *seq, void (*func) (void *, void *), void *user_data)
@@ -1609,6 +1737,9 @@ xy_seq_each (XySeq_t *seq, void (*func) (void *, void *), void *user_data)
 
 /**
  * @flavor Ruby: Enumerable#find
+ *
+ * @memory SAFE
+ *   return caller-dont-care
  */
 void *
 xy_seq_find (XySeq_t *seq, bool (*func) (void *, void *), void *user_data)
@@ -1646,6 +1777,10 @@ typedef struct XyMap_t
 XyMap_t;
 
 
+/**
+ * @memory SAFE
+ *   return caller-free
+ */
 XyMap_t *
 xy_map_new ()
 {
@@ -1658,6 +1793,9 @@ xy_map_new ()
 }
 
 
+/**
+ * @memory SAFE
+ */
 uint32_t
 xy_map_len (XyMap_t *map)
 {
@@ -1666,6 +1804,9 @@ xy_map_len (XyMap_t *map)
 }
 
 
+/**
+ * @memory SAFE
+ */
 unsigned long
 xy_hash (const char* str)
 {
@@ -1679,6 +1820,8 @@ xy_hash (const char* str)
 
 /**
  * @flavor JavaScript: map.set
+ *
+ * @memory SAFE
  */
 void
 xy_map_set (XyMap_t *map, const char *key, void *value)
@@ -1715,6 +1858,9 @@ xy_map_set (XyMap_t *map, const char *key, void *value)
 
 /**
  * @flavor JavaScript: map.get
+ *
+ * @memory SAFE
+ *   return caller-dont-care
  */
 void *
 xy_map_get (XyMap_t *map, const char *key)
@@ -1740,6 +1886,8 @@ xy_map_get (XyMap_t *map, const char *key)
 
 /**
  * @flavor Ruby: Hash#each
+ *
+ * @memory SAFE
  */
 void
 xy_map_each (
