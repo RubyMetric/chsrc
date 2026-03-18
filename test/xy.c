@@ -145,6 +145,7 @@ main (int argc, char const *argv[])
 
   println (xy_normalize_path (" \n ~/haha/test/123 \n\r "));
   assert_str (xy_normalize_path ("~/haha/test"), xy_parent_dir (" ~/haha/test/123"));
+  assert_str (".", xy_parent_dir ("abc"));
 
 
 
