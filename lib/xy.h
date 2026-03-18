@@ -473,8 +473,6 @@ static char *
 _xy_str_to_terminal_style (int style, const char *str)
 {
   char *color_fmt_str = NULL;
-  size_t len;
-  char *buf;
 
   if (!xy.enable_color)
     {
@@ -510,7 +508,9 @@ _xy_str_to_terminal_style (int style, const char *str)
       color_fmt_str = "\e[9m%s\e[0m"; break;
     }
 
-
+  // 标签后第一句必须为statement，否则会编译不通过
+  size_t len;
+  char *buf;
 new_str:
   // -2 把中间%s减掉
   len = strlen (color_fmt_str) - 2;
