@@ -510,11 +510,10 @@ _xy_str_to_terminal_style (int style, const char *str)
 
   // 标签后第一句必须为statement，否则会编译不通过
   size_t len;
-  char *buf;
 new_str:
   // -2 把中间%s减掉
   len = strlen (color_fmt_str) - 2;
-  buf = malloc (strlen (str) + len + 1);
+  char *buf = malloc (strlen (str) + len + 1);
   sprintf (buf, color_fmt_str, str);
   return buf;
 }
