@@ -11,11 +11,11 @@ pl_rust_cargo_prelude (void)
 
   chef_set_recipe_created_on   (this, "2023-08-30");
   chef_set_recipe_last_updated (this, "2025-12-31");
-  chef_set_sources_last_updated (this, "2026-01-21");
+  chef_set_sources_last_updated (this, "2026-03-21");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 2, "@Mikachu2333", "@ccmywish");
-  chef_set_sauciers (this, 1, "@happy-game");
+  chef_set_sauciers (this, 2, "@happy-game", "@AnonTokio");
 
   chef_set_scope_cap (this, ProjectScope, ScopeCap_Able_But_Not_Implemented);
   chef_set_scope_cap (this, UserScope,    ScopeCap_Able_And_Implemented);
@@ -78,12 +78,29 @@ pl_rust_cargo_note_get_src_mirror (char *url, bool sparse)
   say (xy_2strcat (url, sparse ? " (sparse)" : ""));
 }
 
+static char *
+pl_rust_cargo_config_file (void)
+{
+  char *file = NULL;
+  char *cargo_home = getenv ("CARGO_HOME");
+  if (cargo_home && *cargo_home)
+    {
+      file = xy_path_join (cargo_home, "config.toml");
+    }
+  else
+    {
+      file = xy_normalize_path ("~/.cargo/config.toml");
+    }
+  return file;
+}
+
 void
 pl_rust_cargo_getsrc (char *option)
 {
-  char *cargo_config_file = xy_normalize_path ("~/.cargo/config.toml");
+  char *cargo_config_file = pl_rust_cargo_config_file ();
 
   char *raw_content = xy_file_read (cargo_config_file);
+  free (cargo_config_file);
   char *formatted_content = xy_str_gsub (raw_content, " ", "");
   formatted_content = xy_str_gsub (formatted_content, "'", "\"");
 
@@ -136,12 +153,7 @@ pl_rust_cargo_setsrc (char *option)
   chsrc_use_this_source (pl_rust_cargo);
 
   char *default_content = RAWSTR_pl_rust_cargo_config;
-  char *cargo_config_dir = "~/.cargo/";
-  char *cargo_config_file = xy_2strcat (cargo_config_dir, "config.toml");
-
-  chsrc_ensure_dir (cargo_config_dir);
-
-  cargo_config_file = xy_normalize_path (cargo_config_file);
+  char *cargo_config_file = pl_rust_cargo_config_file ();
 
   if (xy_file_exist (cargo_config_file))
     {
@@ -188,6 +200,7 @@ pl_rust_cargo_setsrc (char *option)
     goto finish;
 
 finish:
+  free (cargo_config_file);
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
