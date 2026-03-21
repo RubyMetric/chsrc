@@ -25,6 +25,7 @@ case "$1" in
         chmod +x /usr/bin/chsrc
 
         echo "chsrc has been successfully installed!"
+        echo "Please restart your terminal or open a new terminal to enjoy autocompletion"
         echo "Run 'chsrc help' to get started."
         ;;
 
