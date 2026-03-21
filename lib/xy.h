@@ -1370,6 +1370,30 @@ xy_normalize_path (const char *path)
   return new;
 }
 
+/**
+ * @flavor Ruby: Pathname#join
+ *
+ * @memory SAFE
+ *   return caller-free
+ */
+static char *
+xy_path_join (const char *path1, const char *path2)
+{
+  char *sep = xy.on_windows ? "\\" : "/";
+  char *path1_norm = xy_normalize_path (path1);
+  char *path2_norm = xy_normalize_path (path2);
+  if (!xy_str_end_with (path1_norm, sep))
+    {
+      char *tmp = xy_2strcat (path1_norm, sep);
+      free (path1_norm);
+      path1_norm = tmp;
+    }
+  char *path_joined = xy_2strcat (path1_norm, path2_norm);
+  free (path1_norm);
+  free (path2_norm);
+  return path_joined;
+}
+
 
 /**
  * @brief 返回一个路径的父目录名
