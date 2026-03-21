@@ -219,6 +219,7 @@ clean-deb:
 install: $(ReleaseMode-Target-Name)
 	install -D -m 755 $(ReleaseMode-Target-Name) $(DESTDIR)/usr/bin/chsrc
 	install -D -m 644 doc/chsrc.1 $(DESTDIR)/usr/share/man/man1/chsrc.1
+	install -D -m 644 tool/completion/bash_completion.sh  $(DESTDIR)/usr/share/bash-completion/completions/chsrc
 
 # 这样还是太麻烦，不用，我们还是靠 just 来调用吧
 #
