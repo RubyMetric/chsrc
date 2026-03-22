@@ -42,7 +42,7 @@ chsrc_register_contributors ()
 {
   /* 项目创建者 */
   chef_register_contributor ("@ccmywish",       "曾奥然",         "ccmywish@qq.com",                NULL);
-  // 该 ID 为 Gitee ID
+  // 该注释下一行的用户 ID 为 Gitee ID
   chef_register_contributor ("@G_I_Y",          "郭恒",           "2085471348@qq.com",              NULL);
 
   /* 所有贡献者 (按参与贡献时间排序) */
@@ -72,12 +72,12 @@ chsrc_register_contributors ()
   chef_register_contributor ("@Mikachu2333",    "Mikachu2333",    "mikachu.23333@zohomail.com",     NULL);
   chef_register_contributor ("@techoc",         "Rui Yang",       "techoc@foxmail.com",             NULL);
   chef_register_contributor ("@BingChunMoLi",   "BingChunMoLi",   "bingchunmoli@bingchunmoli.com",  NULL);
-  chef_register_contributor ("@AnonTokio",      "Anon Tokio",     "anontokio@163.com",              NULL);
-  // 该 ID 为 Gitee ID
+  // 该注释下一行的用户 ID 为 Gitee ID
   chef_register_contributor ("@hezonglun",      "HeZongLun",      "hezonglun123456@outlook.com",    NULL);
   chef_register_contributor ("@Young-Lord",     "LY",             "ly-niko@qq.com",                 NULL);
   chef_register_contributor ("@MingriLingran",  "MingriLingran",  "i@linran.moe",                   NULL);
   chef_register_contributor ("@usernameisnull", "MaBing",         "cumt_ttr@163.com",               NULL);
+  chef_register_contributor ("@AnonTokio",      "Anon Tokio",     "anontokio@163.com",              NULL);
 
   /**
    * AI贡献者：

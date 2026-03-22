@@ -4,12 +4,13 @@
  * -------------------------------------------------------------
  * Lib Authors   :  曾奥然 <ccmywish@qq.com>
  *               |   郭恒  <2085471348@qq.com>
- * Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
- *               | juzeon <skyjuzheng@gmail.com>
+ * Contributors  : Mikachu2333  <mikachu.23333@zohomail.com>
+ *               | juzeon       <skyjuzheng@gmail.com>
  *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
+ *               | AnonTokio    <anontokio@163.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2026-03-18>
+ * Last Modified : <2026-03-21>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -32,7 +33,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.2.2.2-2026/03/18"
+#define _XY_Version       "v0.2.3.0-2026/03/21"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 

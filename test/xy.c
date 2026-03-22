@@ -5,7 +5,7 @@
  * Test Authors  : 曾奥然 <ccmywish@qq.com>
  * Contributors  : Mikachu2333  <mikachu.23333@zohomail.com>
  * Created On    : <2023-08-30>
- * Last Modified : <2025-08-27>
+ * Last Modified : <2026-03-22>
  *
  * Test xy.h
  * ------------------------------------------------------------*/
@@ -146,6 +146,16 @@ main (int argc, char const *argv[])
   println (xy_normalize_path (" \n ~/haha/test/123 \n\r "));
   assert_str (xy_normalize_path ("~/haha/test"), xy_parent_dir (" ~/haha/test/123"));
   assert_str (".", xy_parent_dir ("abc"));
+
+  if (xy.on_windows)
+    {
+      assert_str ("C:\\Users\\chsrc", xy_path_join ("C:\\Users",   "chsrc"));
+    }
+  else
+    {
+      assert_str ("/usr/local/bin", xy_path_join ("/usr/local",  "bin"));
+      assert_str ("/usr/local/lib", xy_path_join ("/usr/local/", "lib"));
+    }
 
 
 
