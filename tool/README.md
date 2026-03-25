@@ -3,12 +3,12 @@
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
  ! Doc Name      : (Tools Introduction).md
- ! Doc Authors   : 曾奥然  <ccmywish@qq.com>
- !               |  xuan   <wick.dynex@qq.com>
- ! Contributors  : ChatGPT <https://chatgpt.com>
+ ! Doc Authors   : @ccmywish
+ !               | @wickdynex
+ ! Contributors  : @ChatGPT
  !               |
  ! Created On    : <2024-10-25>
- ! Last Modified : <2025-07-21>
+ ! Last Modified : <2026-03-25>
  !
  ! tool 目录说明
  ! ---------------------------------------------------------- -->
@@ -26,6 +26,10 @@
 3. `download-pre-on-GitHub.ps1`
 
     从 GitHub `pre` release 上下载所有附件
+
+4. `completion/` 目录
+
+    Shell 自动补全文件
 
 <br>
 

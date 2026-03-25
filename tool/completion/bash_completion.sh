@@ -1,21 +1,21 @@
-# --------------------------------------------------------------
+# ---------------------------------------------------------------
 # SPDX-License-Identifier: GPL-3.0-or-later
-# --------------------------------------------------------------
-# Build File    : chsrc_completion.sh
+# ---------------------------------------------------------------
+# Shell File    : completion.sh
 # File Authors  : 郭恒 <2085471348@qq.com>
-# Contributors  :   Nil Null   <nil@null.org>
+# Contributors  : Nil Null <nil@null.org>
 #	              |
 # Created On    : <2026-03-19>
 # Last Modified : <2026-03-21>
 #
-# ------------------------------------------------------------------------------
-# chsrc 的 Bash 自动补全脚本（当前仅在Linux Ubuntu中测试过）
-#
-# 目标操作系统：Linux
+# ----------
+# chsrc 的 Shell 自动补全脚本（当前仅在 Ubuntu 中测试过）
+#   1. Bash 已测试
+#   2. Zsh 暂未测试
 #
 # @issue https://github.com/RubyMetric/chsrc/issues/204
-# source chsrc_completion.sh   # 当前终端立即生效
-# ------------------------------------------------------------------------------
+# source completion.sh   # 当前终端立即生效
+# ---------------------------------------------------------------
 
 _chsrc() {
 
