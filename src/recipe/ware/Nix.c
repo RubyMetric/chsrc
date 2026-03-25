@@ -28,7 +28,7 @@ wr_nix_prelude ()
   chef_prep_this (wr_nix, s);
 
   chef_set_recipe_created_on   (this, "2023-09-26");
-  chef_set_recipe_last_updated (this, "2026-02-24");
+  chef_set_recipe_last_updated (this, "2026-03-25");
   chef_set_sources_last_updated (this, "2025-07-13");
 
   chef_set_chef (this, NULL);
@@ -91,6 +91,8 @@ wr_nix_setsrc (char *option)
   if (wr_nix_is_multi_user_installation_mode ())
     {
       config_file = system_scope_nix_config;
+      // https://github.com/RubyMetric/chsrc/issues/337#issuecomment-3979352975
+      chsrc_ensure_root ();
     }
   else
     {
