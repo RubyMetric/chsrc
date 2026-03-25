@@ -3,12 +3,13 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # --------------------------------------------------------------
 # Build File    : Makefile
-# File Authors  : 曾奥然 <ccmywish@qq.com>
-# Contributors  : Yangmoooo <yangmoooo@outlook.com>
-#								| sanchuanhehe <wyihe5520@gmail.com>
-#								|
+# File Authors  : @ccmywish
+# Contributors  : @Yangmoooo
+#								| @sanchuanhehe
+#								| @G_I_Y
+#               |
 # Created On    : <2023-08-28>
-# Last Modified : <2025-10-15>
+# Last Modified : <2026-03-21>
 #
 # 请阅读 ./doc/01-开发与构建.md 来使用
 # --------------------------------------------------------------

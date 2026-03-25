@@ -3,9 +3,9 @@
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
  ! Doc Name      : README.md
- ! Doc Authors   : 曾奥然 <ccmywish@qq.com>
- ! Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
- !               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
+ ! Doc Authors   : @ccmywish
+ ! Contributors  : @Mikachu2333
+ !               | @BingChunMoLi
  !               |
  ! Created On    : <2023-12-28>
  ! Last Modified : <2026-02-24>

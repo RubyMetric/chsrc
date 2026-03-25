@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # --------------------------------------------------------------
 # Build File    : justfile
-# File Authors  : 曾奥然      <ccmywish@qq.com>
-# Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
+# File Authors  : @ccmywish
+# Contributors  : @Mikachu2333
 #               |
 # Created On    : <2025-06-18>
 # Last Modified : <2025-10-15>
