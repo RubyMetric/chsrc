@@ -1,3 +1,3 @@
-# 向 chsrc 项目贡献
+# 向 `chsrc` 项目贡献
 
-请阅读 [./doc/02-提交与贡献.md](./doc/02-提交与贡献.md)
+请阅读 [./doc/README.md](./doc/README.md)
