@@ -33,7 +33,7 @@ pl_python_group_prelude (void)
   chef_prep_this (pl_python_group, gsr);
 
   chef_set_recipe_created_on   (this, "2023-09-03");
-  chef_set_recipe_last_updated (this, "2025-12-31");
+  chef_set_recipe_last_updated (this, "2026-03-31");
   chef_set_sources_last_updated (this, "2025-09-30");
 
   chef_set_chef (this, "@happy-game");
@@ -105,6 +105,13 @@ pl_python_get_py_program_name (char **prog_name)
    */
   py_exist = chsrc_check_program ("python3");
 
+  bool python3_is_winstore_placeholder = false;
+
+  const int winstore_python_status_code = 9009;
+
+  const char *winstore_placeholder_cn = "是微软商店的占位符，并非真正可用的 Python";
+  const char *winstore_placeholder_en = "a placeholder of Microsoft Store, not the real Python";
+
   if (py_exist)
     {
       *prog_name = "python3";
@@ -113,16 +120,19 @@ pl_python_get_py_program_name (char **prog_name)
       if (xy.on_windows)
         {
           int status = xy_run_get_status ("python3 --version");
-          if (status == 9009)
+          if (status == winstore_python_status_code)
             {
-              chsrc_error2 (CHINESE ? "用户环境中的 `python3` 命令，是微软商店的占位符，并非真正可用的 Python。请安装真正的 Python 后重试！"
-                                    : "`python3` in your environment is a placeholder of Microsoft Store, not the real Python which can be used, please install the real Python and try again!");
-              exit (Exit_UserCause);
+              python3_is_winstore_placeholder = true;
+              *prog_name = NULL;
+              // https://github.com/RubyMetric/chsrc/issues/351
+              // 仅警告，不要直接退出，因为用户环境中还可能存在真正的 `python` 命令
+              chsrc_warn2 (CHINESE ? xy_2strcat ("用户环境中的 `python3` 命令，", winstore_placeholder_cn)
+                                   : xy_2strcat ("`python3` in your environment is ", winstore_placeholder_en));
             }
         }
-
     }
-  else
+
+  if (!py_exist || python3_is_winstore_placeholder)
     {
       /**
        * 不要直接:
@@ -134,7 +144,22 @@ pl_python_get_py_program_name (char **prog_name)
        */
       py_exist = chsrc_check_program ("python");
 
-      if (py_exist) *prog_name = "python";
+      if (py_exist)
+        {
+          if (xy.on_windows)
+            {
+              int status = xy_run_get_status ("python --version");
+              if (status == winstore_python_status_code)
+                {
+                  chsrc_warn2 (CHINESE ? xy_2strcat ("用户环境中的 `python` 命令，也", winstore_placeholder_cn)
+                                       : xy_2strcat ("`python` in your environment is also ", winstore_placeholder_en));
+                  chsrc_error (CHINESE ? "请安装真正的 Python 后重试！"
+                                       : "Please install the real Python and try again!");
+                  exit (Exit_UserCause);
+                }
+            }
+          *prog_name = "python";
+        }
       else
         {
           chsrc_error ("未找到 Python 相关命令，请检查是否存在");
