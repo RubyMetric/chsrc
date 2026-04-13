@@ -129,14 +129,14 @@ jobs:
 
     - name: 上传附件到GitHub Releases(the newly created release)
       if: github.event_name == 'release'
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       with:
         # 用 * 省略版本号，以及指代各种架构
         files: dist/chsrc_*.deb
 
     - name: 上传附件到GitHub Releases(the 'pre' release)
       if: github.event_name == 'push'
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       with:
         tag_name: pre
         # 用 * 指代各种架构
