@@ -1,8 +1,8 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors   : Aoran Zeng <ccmywish@qq.com>
- * Contributors   : happy game <happygame1024@gmail.com>
+ * File Authors   : @ccmywish
+ * Contributors   : @happy-game
  *                |
  * Created On     : <2024-06-14>
  * Major Revision :      3
