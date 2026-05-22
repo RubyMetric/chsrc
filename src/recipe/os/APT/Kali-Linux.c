@@ -31,6 +31,7 @@ os_kali_prelude ()
   /* 不启用原因: (2026-05-22) https://github.com/RubyMetric/chsrc/issues/357 */
   // {&Ali,              "https://mirrors.aliyun.com/kali",    DelegateToMirror},
 
+  {&Huawei,           "https://mirrors.huaweicloud.com/kali", DelegateToMirror},
   {&Volcengine,       "https://mirrors.volces.com/kali",    DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/kali",   DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/kali",   DelegateToMirror},
@@ -67,7 +68,7 @@ os_kali_setsrc (char *option)
   chsrc_run (cmd, RunOpt_Default);
   chsrc_run ("apt-get update", RunOpt_No_Last_New_Line);
 
-  chsrc_determine_chgtype (ChgType_Untested);
+  chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
 }
 
