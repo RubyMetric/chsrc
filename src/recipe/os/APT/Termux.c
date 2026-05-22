@@ -20,7 +20,7 @@ os_termux_prelude ()
   chef_set_os_scope (this);
 
   chef_deny_english(this);
-  chef_deny_user_define(this);
+  chef_allow_user_define(this);
 
   chef_set_note(this, "该 recipe 存在对应的 bootstrapper", "This recipe has a corresponding bootstrapper");
 

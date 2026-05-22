@@ -30,7 +30,7 @@ wr_emacs_prelude ()
   chef_set_default_scope (this, UserScope);
 
   chef_deny_english(this);
-  chef_deny_user_define(this);
+  chef_allow_user_define(this);
 
   chef_set_note (this, "Emacs用户往往只需要一次性换源，只会极少次调用 chsrc，我们只给用户提供文档",
                        "Emacs users typically only need to switch sources once and rarely call chsrc, so we only provide documentation to users");

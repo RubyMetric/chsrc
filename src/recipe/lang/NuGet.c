@@ -23,7 +23,7 @@ pl_nuget_prelude ()
   chef_set_default_scope (this, UserScope);
 
   chef_deny_english(this);
-  chef_deny_user_define(this);
+  chef_allow_user_define(this);
 
   def_sources_begin()
   {&UpstreamProvider, "https://www.nuget.org/api/v3/", DelegateToUpstream},

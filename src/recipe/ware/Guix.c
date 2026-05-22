@@ -23,7 +23,7 @@ wr_guix_prelude ()
   chef_set_default_scope (this, UserScope);
 
   chef_deny_english(this);
-  chef_deny_user_define(this);
+  chef_allow_user_define(this);
 
   chef_set_note (this, "目前只有一个源, guixcn 的源不知道是否可用",
                        "Currently only one source available, guixcn source availability unknown");

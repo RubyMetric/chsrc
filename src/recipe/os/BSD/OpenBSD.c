@@ -19,7 +19,7 @@ os_openbsd_prelude ()
 
   chef_set_os_scope (this);
   chef_deny_english(this);
-  chef_deny_user_define(this);
+  chef_allow_user_define(this);
 
   def_sources_begin()
   {&UpstreamProvider, "https://cdn.openbsd.org/pub/OpenBSD/",   DelegateToUpstream},

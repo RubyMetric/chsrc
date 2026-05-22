@@ -20,7 +20,7 @@ os_linuxmint_prelude ()
   chef_set_os_scope (this);
 
   chef_deny_english(this);
-  chef_deny_user_define(this);
+  chef_allow_user_define(this);
 
 
   /* @note 实际上镜像站里的内容和Ubuntu的不太一样 */
