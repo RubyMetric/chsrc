@@ -383,7 +383,7 @@ chef_deny_user_define (Target_t *target)
 
   target->can_user_define = false;
 
-  char *reason = CHINESE ? "URL将会根据内部实现重写,因此不能自定义"
+  char *reason = CHINESE ? "URL将会根据内部实现重写，因此不能自定义"
                          : "The URL will be rewritten based on internal implementation, so it cannot be customized";
   target->can_user_define_explain = reason;
 }

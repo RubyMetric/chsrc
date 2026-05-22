@@ -11,7 +11,7 @@
  *               | @Mikachu2333
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2026-02-24>
+ * Last Modified : <2026-05-22>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -1045,6 +1045,13 @@ chsrc_yield_source (Target_t *t, char *option)
     }
   else if (hp_is_url (option))
     {
+      if (!(t->can_user_define))
+        {
+          char *en_msg = "Using user-defined sources for this target is not supported.";
+          char *zh_msg = t->can_user_define_explain ? xy_2strcat ("暂不支持对该目标使用用户自定义源，", t->can_user_define_explain) : "暂不支持对该目标使用用户自定义源";
+          chsrc_error (ENGLISH ? en_msg : zh_msg);
+          exit (Exit_Unsupported);
+        }
       Source_t tmp = { &UserDefinedProvider, option };
       source = tmp;
     }
