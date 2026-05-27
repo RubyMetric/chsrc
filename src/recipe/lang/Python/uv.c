@@ -408,7 +408,7 @@ pl_python_uv_setsrc (char *option)
           return;
         }
 
-      /* 读内容, 清理, 直接写回 */
+      /* 读内容, 清理, 写回 */
       char *content = xy_file_read (uv_config);
       if (!content)
         {
@@ -419,13 +419,7 @@ pl_python_uv_setsrc (char *option)
 
       char *cleaned = cleanup_config_for_reset (content);
       free (content);
-
-      FILE *f = fopen (uv_config, "w");
-      if (f)
-        {
-          fwrite (cleaned, 1, strlen (cleaned), f);
-          fclose (f);
-        }
+      chsrc_overwrite_file (cleaned, uv_config);
       free (cleaned);
 
       free (uv_config);
