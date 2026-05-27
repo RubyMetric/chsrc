@@ -32,7 +32,7 @@ pl_python_uv_prelude (void)
 /**
  * chsrc get uv
  *
- * uv 配置文件查找优先级 (代码仅涵盖 ①②，③④为 uv 自身支持):
+ * uv 配置文件查找优先级：
  * ① ./uv.toml                 (项目级)
  * ② ~/.config/uv/uv.toml      (用户级, Windows: %APPDATA%\uv\uv.toml)
  * ③ $workspace/pyproject.toml (项目级, 未实现)
