@@ -196,69 +196,97 @@ static Target_t gh_release_target = {
 };
 
 
-static void
-pl_python_uv_write_pypi_index (const char *uv_config, const char *url)
+/**
+ * 在 content 中找到 [[index]] 段并替换其 url = "..." 行。
+ * 找不到 [[index]] 则追加整个段到末尾。
+ *
+ * @return 新内容 (caller-free)
+ */
+static char *
+replace_pypi_index_url (const char *content, const char *url)
 {
-  char *source_content = xy_str_gsub (RAWSTR_pl_python_uv_config_source_content, "@url@", url);
+  const char *index_tag = "[[index]]";
 
-  if (!xy_file_exist (uv_config))
+  char *index_pos = strstr (content, index_tag);
+  if (!index_pos || (index_pos != content && index_pos[-1] != '\n'))
     {
-      chsrc_append_to_file (source_content, uv_config);
-      free (source_content);
-      return;
-    }
-
-  char *cmd = NULL;
-  if (xy.on_windows)
-    cmd = xy_str_gsub (RAWSTR_pl_python_test_uv_if_set_source_on_windows, "@f@", uv_config);
-  else
-    cmd = xy_str_gsub (RAWSTR_pl_python_test_uv_if_set_source, "@f@", uv_config);
-
-  int status = xy_run_get_status (cmd);
-  free (cmd);
-
-  if (0 == status)
-    {
-      if (xy.on_windows)
-        {
-          char *ps_cmd = xy_str_gsub (RAWSTR_pl_python_set_uv_config_on_windows, "@f@", uv_config);
-          char *tmp = xy_str_gsub (ps_cmd, "@url@", url);
-          free (ps_cmd);
-          chsrc_run (tmp, RunOpt_Default);
-          free (tmp);
-        }
+      /* 文件中尚无 [[index]] 段，追加到末尾 */
+      bool need_sep = (content[0] != '\0');
+      size_t len = strlen (content) + strlen (url) + 80;
+      char *ret = xy_malloc0 (len);
+      if (need_sep)
+        snprintf (ret, len, "%s\n[[index]]\nurl = \"%s\"\ndefault = true\n", content, url);
       else
-        {
-#if defined(XY_Build_On_macOS) || defined(XY_Build_On_BSD)
-          char *sed_prefix = "sed -i '' ";
-#else
-          char *sed_prefix = "sed -i ";
-#endif
-          char *cmd2 = xy_str_gsub (RAWSTR_pl_python_set_uv_config, "@sed@", sed_prefix);
-          char *tmp  = xy_str_gsub (cmd2, "@f@", uv_config);
-          free (cmd2);
-          cmd2 = xy_str_gsub (tmp, "@url@", url);
-          free (tmp);
-          chsrc_run (cmd2, RunOpt_Default);
-          free (cmd2);
-        }
-    }
-  else
-    {
-      chsrc_append_to_file (source_content, uv_config);
+        snprintf (ret, len, "[[index]]\nurl = \"%s\"\ndefault = true\n", url);
+      return ret;
     }
 
-  free (source_content);
+  /* 找到 [[index]] 后紧跟的 url = "..." 行 (允许被 default = true 行隔开) */
+  const char *search_start = index_pos + strlen (index_tag);
+  const char *url_key = "url = \"";
+  char *url_line = NULL;
+
+  /* 只在当前 [[index]] 段内搜索: 遇到下一个 [[ 开头的行或文件结尾就停止 */
+  const char *next_section = strstr (search_start, "\n[[");
+  const char *limit = next_section ? next_section + 1 : content + strlen (content);
+
+  for (const char *p = search_start; p < limit; p++)
+    {
+      if (*p == 'u' && xy_str_start_with (p, url_key) && (p == content || p[-1] == '\n'))
+        {
+          url_line = (char *)p;
+          break;
+        }
+    }
+
+  if (!url_line)
+    {
+      /* 有 [[index]] 段但没有 url = "..." 行，追加 url 行 */
+      size_t len = strlen (content) + strlen (url) + 32;
+      char *ret = xy_malloc0 (len);
+      size_t pos = 0;
+
+      /* 在 [[index]] 行的下一行插入 url */
+      const char *insert_at = search_start;
+      while (*insert_at == '\n') insert_at++;
+
+      pos += snprintf (ret + pos, len - pos, "%.*s",
+                       (int)(insert_at - content), content);
+      pos += snprintf (ret + pos, len - pos, "url = \"%s\"\n", url);
+      strcpy (ret + pos, insert_at);
+      return ret;
+    }
+
+  /* 替换 url = "..." 行 */
+  /* 找到该行结尾 */
+  char *url_end = strchr (url_line, '\n');
+  if (!url_end) url_end = (char *)content + strlen (content);
+
+  size_t est = strlen (content) + strlen (url) + 32;
+  char *ret = xy_malloc0 (est);
+  size_t pos = 0;
+
+  /* 拷贝 url_line 之前的内容 */
+  pos += snprintf (ret + pos, est - pos, "%.*s",
+                   (int)(url_line - content), content);
+  /* 写入新的 url 行 */
+  pos += snprintf (ret + pos, est - pos, "url = \"%s\"", url);
+  /* 拷贝 url_line 之后的内容 (从该行原换行符开始, 保留 \n) */
+  strcpy (ret + pos, url_end);
+
+  return ret;
 }
 
 
-static void
-pl_python_uv_write_python_download_mirror (const char *uv_config, Source_t gh_source)
+/**
+ * 过滤 content 中的 python-install-mirror 行，追加新值。
+ *
+ * @return 新内容 (caller-free)
+ */
+static char *
+replace_python_install_mirror (const char *content, const char *url)
 {
-  char *content = xy_file_read (uv_config);
-  if (!content) content = xy_strdup ("");
-
-  size_t estimate = strlen (content) + strlen (gh_source.url) + 128;
+  size_t estimate = strlen (content) + strlen (url) + 128;
   char *new_content = xy_malloc0 (estimate);
   size_t pos = 0;
 
@@ -278,13 +306,29 @@ pl_python_uv_write_python_download_mirror (const char *uv_config, Source_t gh_so
     }
 
   pos += snprintf (new_content + pos, estimate - pos,
-                   "python-install-mirror = \"%s\"\n", gh_source.url);
+                   "python-install-mirror = \"%s\"\n", url);
   new_content[pos] = '\0';
+  return new_content;
+}
 
-  chsrc_overwrite_file (new_content, uv_config);
 
+/**
+ * 一次性完成uv配置文件的全部文件操作
+ */
+static void
+pl_python_uv_write_all (const char *uv_config, const char *pypi_url, const char *py_dl_url)
+{
+  char *content = xy_file_read (uv_config);
+  if (!content) content = xy_strdup ("");
+
+  char *updated = replace_pypi_index_url (content, pypi_url);
   free (content);
-  free (new_content);
+
+  char *final = replace_python_install_mirror (updated, py_dl_url);
+  free (updated);
+
+  chsrc_overwrite_file (final, uv_config);
+  free (final);
 }
 
 
@@ -316,10 +360,9 @@ pl_python_uv_setsrc (char *option)
   if (chsrc_in_standalone_mode())
     chsrc_confirm_source (&source);
 
-  /* ---- 2. 写入文件 ---- */
+  /* ---- 2. 写入文件 (纯C, 无 shell 依赖) ---- */
   chsrc_backup (uv_config);
-  pl_python_uv_write_pypi_index (uv_config, source.url);
-  pl_python_uv_write_python_download_mirror (uv_config, gh_source);
+  pl_python_uv_write_all (uv_config, source.url, gh_source.url);
 
   free (uv_config);
 
