@@ -313,8 +313,8 @@ replace_python_install_mirror (const char *content, const char *url)
 
 
 /**
- * reset 专用: 删除所有 [[index]] 段内的 url 行 (连带 [[index]] 头与
- * default 行一起删除), 删除 python-install-mirror 行, 其余内容原样保留。
+ * reset 专用: 删除所有 [[index]] 段内的 url/default 行 (保留 [[index]] 头
+ * 与 name 等其余字段), 删除 python-install-mirror 行, 其余内容原样保留。
  *
  * @return 新内容 (caller-free)
  */
@@ -328,60 +328,28 @@ cleanup_config_for_reset (const char *content)
   const char *p = content;
   while (*p)
     {
-      if (xy_str_start_with (p, "[[index]]"))
+      bool skip = false;
+
+      if (xy_str_start_with (p, "url = \"") ||
+          xy_str_start_with (p, "default = "))
         {
-          /* 扫描这个 [[index]] 段, 查找是否包含 url = "..." 行 */
-          const char *scan = p;
-          while (*scan && *scan != '\n') scan++;
-          if (*scan == '\n') scan++;
-
-          bool has_url = false;
-          const char *scan2 = scan;
-          while (*scan2 && !xy_str_start_with (scan2, "[[") && !xy_str_start_with (scan2, "["))
-            {
-              if (*scan2 != '\n' && xy_str_start_with (scan2, "url = \""))
-                {
-                  has_url = true;
-                  break;
-                }
-              while (*scan2 && *scan2 != '\n') scan2++;
-              if (*scan2 == '\n') scan2++;
-            }
-
-          if (has_url)
-            {
-              /* 跳过整个 [[index]] 段 (包括 [[index]] 头 + url/default 行) */
-              p = scan;
-              while (*p && !xy_str_start_with (p, "[[") && !xy_str_start_with (p, "["))
-                {
-                  if (xy_str_start_with (p, "url = \"") ||
-                      xy_str_start_with (p, "default = "))
-                    {
-                      while (*p && *p != '\n') p++;
-                      if (*p == '\n') p++;
-                    }
-                  else
-                    {
-                      /* 遇到非 url/default 行, 段结束 */
-                      break;
-                    }
-                }
-              continue;
-            }
-          /* [[index]] 段没有 url, 保留不动, 继续正常拷贝 */
+          skip = true;
+        }
+      else if (xy_str_start_with (p, "python-install-mirror"))
+        {
+          skip = true;
         }
 
-      /* 跳过 python-install-mirror 行 */
-      if (xy_str_start_with (p, "python-install-mirror"))
+      if (skip)
         {
           while (*p && *p != '\n') p++;
           if (*p == '\n') p++;
-          continue;
         }
-
-      /* 拷贝当前行 */
-      while (*p && *p != '\n') ret[pos++] = *p++;
-      if (*p == '\n') ret[pos++] = *p++;
+      else
+        {
+          while (*p && *p != '\n') ret[pos++] = *p++;
+          if (*p == '\n') ret[pos++] = *p++;
+        }
     }
 
   ret[pos] = '\0';
