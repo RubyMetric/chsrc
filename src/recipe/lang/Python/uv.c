@@ -68,7 +68,9 @@ pl_python_find_uv_config (bool mkdir)
             {
               chsrc_ensure_dir (config_dir);
             }
-          return xy_2strcat (config_dir, PL_Python_uv_ConfigFile);
+          char *result = xy_2strcat (config_dir, PL_Python_uv_ConfigFile);
+          free (config_dir);
+          return result;
         }
       else
         {
@@ -93,6 +95,7 @@ pl_python_uv_getsrc (char *option)
         chsrc_error2 ("无法获取 uv 配置文件路径");
       else
         chsrc_error2 ("未找到 uv 配置文件");
+      free (uv_config);
       return;
     }
 
@@ -101,11 +104,13 @@ pl_python_uv_getsrc (char *option)
     {
       char *script = xy_str_gsub (RAWSTR_pl_python_get_uv_config_on_windows, "@f@", uv_config);
       chsrc_run_as_powershell_file (script);
+      free (script);
     }
   else
     {
       char *cmd = xy_str_gsub (RAWSTR_pl_python_get_uv_config, "@f@", uv_config);
       chsrc_run (cmd, RunOpt_Default);
+      free (cmd);
     }
 
   /* 检查 Python 下载镜像 */
@@ -121,6 +126,8 @@ pl_python_uv_getsrc (char *option)
         }
       free (content);
     }
+
+  free (uv_config);
 }
 
 
@@ -139,7 +146,7 @@ Py_GHRelease_NJU =
    ACCURATE}
 };
 
-// 中科大的镜像由于仅保留最新的Latest且文件链接内含动态版本号导致无法测速
+/* 中科大的镜像由于仅保留最新的 Latest 且文件链接内含动态版本号导致无法精准测速 */
 static MirrorSite_t
 Py_GHRelease_USTC =
 {
@@ -197,6 +204,7 @@ pl_python_uv_write_pypi_index (const char *uv_config, const char *url)
   if (!xy_file_exist (uv_config))
     {
       chsrc_append_to_file (source_content, uv_config);
+      free (source_content);
       return;
     }
 
@@ -207,6 +215,8 @@ pl_python_uv_write_pypi_index (const char *uv_config, const char *url)
     cmd = xy_str_gsub (RAWSTR_pl_python_test_uv_if_set_source, "@f@", uv_config);
 
   int status = xy_run_get_status (cmd);
+  free (cmd);
+
   if (0 == status)
     {
       if (xy.on_windows)
@@ -215,6 +225,7 @@ pl_python_uv_write_pypi_index (const char *uv_config, const char *url)
           char *tmp = xy_str_gsub (ps_cmd, "@url@", url);
           free (ps_cmd);
           chsrc_run (tmp, RunOpt_Default);
+          free (tmp);
         }
       else
         {
@@ -229,12 +240,15 @@ pl_python_uv_write_pypi_index (const char *uv_config, const char *url)
           cmd2 = xy_str_gsub (tmp, "@url@", url);
           free (tmp);
           chsrc_run (cmd2, RunOpt_Default);
+          free (cmd2);
         }
     }
   else
     {
       chsrc_append_to_file (source_content, uv_config);
     }
+
+  free (source_content);
 }
 
 
@@ -306,6 +320,8 @@ pl_python_uv_setsrc (char *option)
   chsrc_backup (uv_config);
   pl_python_uv_write_pypi_index (uv_config, source.url);
   pl_python_uv_write_python_download_mirror (uv_config, gh_source);
+
+  free (uv_config);
 
   if (chsrc_in_standalone_mode())
     {
