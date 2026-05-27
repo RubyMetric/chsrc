@@ -313,7 +313,84 @@ replace_python_install_mirror (const char *content, const char *url)
 
 
 /**
- * 一次性完成uv配置文件的全部文件操作
+ * reset 专用: 删除所有 [[index]] 段内的 url 行 (连带 [[index]] 头与
+ * default 行一起删除), 删除 python-install-mirror 行, 其余内容原样保留。
+ *
+ * @return 新内容 (caller-free)
+ */
+static char *
+cleanup_config_for_reset (const char *content)
+{
+  size_t est = strlen (content) + 128;
+  char *ret = xy_malloc0 (est);
+  size_t pos = 0;
+
+  const char *p = content;
+  while (*p)
+    {
+      if (xy_str_start_with (p, "[[index]]"))
+        {
+          /* 扫描这个 [[index]] 段, 查找是否包含 url = "..." 行 */
+          const char *scan = p;
+          while (*scan && *scan != '\n') scan++;
+          if (*scan == '\n') scan++;
+
+          bool has_url = false;
+          const char *scan2 = scan;
+          while (*scan2 && !xy_str_start_with (scan2, "[[") && !xy_str_start_with (scan2, "["))
+            {
+              if (*scan2 != '\n' && xy_str_start_with (scan2, "url = \""))
+                {
+                  has_url = true;
+                  break;
+                }
+              while (*scan2 && *scan2 != '\n') scan2++;
+              if (*scan2 == '\n') scan2++;
+            }
+
+          if (has_url)
+            {
+              /* 跳过整个 [[index]] 段 (包括 [[index]] 头 + url/default 行) */
+              p = scan;
+              while (*p && !xy_str_start_with (p, "[[") && !xy_str_start_with (p, "["))
+                {
+                  if (xy_str_start_with (p, "url = \"") ||
+                      xy_str_start_with (p, "default = "))
+                    {
+                      while (*p && *p != '\n') p++;
+                      if (*p == '\n') p++;
+                    }
+                  else
+                    {
+                      /* 遇到非 url/default 行, 段结束 */
+                      break;
+                    }
+                }
+              continue;
+            }
+          /* [[index]] 段没有 url, 保留不动, 继续正常拷贝 */
+        }
+
+      /* 跳过 python-install-mirror 行 */
+      if (xy_str_start_with (p, "python-install-mirror"))
+        {
+          while (*p && *p != '\n') p++;
+          if (*p == '\n') p++;
+          continue;
+        }
+
+      /* 拷贝当前行 */
+      while (*p && *p != '\n') ret[pos++] = *p++;
+      if (*p == '\n') ret[pos++] = *p++;
+    }
+
+  ret[pos] = '\0';
+  return ret;
+}
+
+
+/**
+ * 一次性完成uv配置文件的全部文件操作 (set 路径)
  */
 static void
 pl_python_uv_write_all (const char *uv_config, const char *pypi_url, const char *py_dl_url)
@@ -346,7 +423,6 @@ pl_python_uv_setsrc (char *option)
 {
   chsrc_ensure_program ("uv");
 
-  /* ---- 1. 先获取配置路径，再选取源 ---- */
   char *uv_config = pl_python_find_uv_config (true);
   if (NULL == uv_config)
     {
@@ -354,13 +430,47 @@ pl_python_uv_setsrc (char *option)
       return;
     }
 
+  /* reset: 清理 [[index]] 段 url 与 python-install-mirror 行 */
+  if (chsrc_in_reset_mode ())
+    {
+      if (!chsrc_check_file (uv_config))
+        {
+          chsrc_info ("没有 uv 配置文件, 无需重置");
+          free (uv_config);
+          return;
+        }
+
+      /* 读内容, 清理, 直接写回 */
+      char *content = xy_file_read (uv_config);
+      if (!content)
+        {
+          chsrc_error2 ("无法读取 uv 配置文件");
+          free (uv_config);
+          return;
+        }
+
+      char *cleaned = cleanup_config_for_reset (content);
+      free (content);
+
+      FILE *f = fopen (uv_config, "w");
+      if (f)
+        {
+          fwrite (cleaned, 1, strlen (cleaned), f);
+          fclose (f);
+        }
+      free (cleaned);
+
+      free (uv_config);
+      return;
+    }
+
+  /* set: 选取源并写入 */
   Source_t source    = chsrc_yield_source (&pl_python_group_target, option);
   Source_t gh_source = chsrc_yield_source (&gh_release_target, NULL);
 
   if (chsrc_in_standalone_mode())
     chsrc_confirm_source (&source);
 
-  /* ---- 2. 写入文件 (纯C, 无 shell 依赖) ---- */
   chsrc_backup (uv_config);
   pl_python_uv_write_all (uv_config, source.url, gh_source.url);
 
