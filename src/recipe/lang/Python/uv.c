@@ -102,12 +102,14 @@ pl_python_uv_getsrc (char *option)
   /* 获取 [[index]] 配置项的 url */
   if (xy.on_windows)
     {
+      /* 在 Windows 上使用 PowerShell 替代 grep */
       char *script = xy_str_gsub (RAWSTR_pl_python_get_uv_config_on_windows, "@f@", uv_config);
       chsrc_run_as_powershell_file (script);
       free (script);
     }
   else
     {
+      /* 在类 Unix 系统上使用 grep */
       char *cmd = xy_str_gsub (RAWSTR_pl_python_get_uv_config, "@f@", uv_config);
       chsrc_run (cmd, RunOpt_Default);
       free (cmd);
