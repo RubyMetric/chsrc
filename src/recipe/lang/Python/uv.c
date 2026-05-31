@@ -4,6 +4,10 @@
 
 def_target(pl_python_uv, "uv");
 
+/* 内部 target 前置声明 (定义在文件末尾 def_target 处) */
+void pl_uv_github_release_prelude (void);
+extern Target_t pl_uv_github_release_target;
+
 void
 pl_python_uv_prelude (void)
 {
@@ -26,6 +30,9 @@ pl_python_uv_prelude (void)
   chef_allow_user_define(this);
 
   chef_use_other_target_sources (this, &pl_python_group_target);
+
+  /* 内部 target 的 prelude 未通过 menu.c 的 add() 注册, 手动挂载 */
+  pl_uv_github_release_target.preludefn = pl_uv_github_release_prelude;
 }
 
 
@@ -135,67 +142,54 @@ pl_python_uv_getsrc (char *option)
 
 /*
  * Python下载镜像 (python-install-mirror)
+ *
+ * 内部 target, 不注册到 menu, 仅用于 chsrc_yield_source 自动测速选取。
+ * 针对 python-build-standalone 的测速链接。
 */
 
-static MirrorSite_t
-Py_GHRelease_NJU =
+def_target (pl_uv_github_release, NULL);
+
+/* 内部 target, 无 CLI 入口, 以下为占位 */
+void pl_uv_github_release_getsrc (char *o) { (void)o; }
+void pl_uv_github_release_setsrc (char *o) { (void)o; }
+void pl_uv_github_release_resetsrc (char *o) { (void)o; }
+
+void
+pl_uv_github_release_prelude (void)
 {
-  IS_DedicatedMirrorSite,
-  "nju", "NJU GitHub Release", "南京大学 GitHub 发布镜像",
-  "https://mirrors.nju.edu.cn/github-release/astral-sh/python-build-standalone",
-  {NotSkip, NA, NA,
-   "https://mirror.nju.edu.cn/github-release/astral-sh/python-build-standalone/20260510/cpython-3.14.5+20260510-i686-pc-windows-msvc-install_only_stripped.tar.gz",
-   ACCURATE}
-};
+  chef_prep_this (pl_uv_github_release, gsr);
 
-/* 中科大的镜像由于仅保留最新的 Latest 且文件链接内含动态版本号导致无法精准测速 */
-static MirrorSite_t
-Py_GHRelease_USTC =
-{
-  IS_DedicatedMirrorSite,
-  "ustc", "USTC GitHub Release", "中科大 GitHub 发布镜像",
-  "https://mirrors.ustc.edu.cn/github-release/astral-sh/python-build-standalone",
-  {NotSkip, NA, NA,
-   "https://mirrors.ustc.edu.cn/github-release/astral-sh/python-build-standalone/LatestRelease/SHA256SUMS",
-   ROUGH}
-};
+  chef_set_recipe_created_on   (this, "2026-05-31");
+  chef_set_recipe_last_updated (this, "2026-05-31");
+  chef_set_sources_last_updated (this, "2026-05-31");
 
-static MirrorSite_t
-Py_GHRelease_LZU =
-{
-  IS_DedicatedMirrorSite,
-  "lzu", "LZUOSS GitHub Release", "兰州大学 GitHub 发布镜像",
-  "https://mirror.lzu.edu.cn/github-release/astral-sh/python-build-standalone",
-  {NotSkip, NA, NA,
-   "https://mirror.lzu.edu.cn/github-release/astral-sh/python-build-standalone/20260510/cpython-3.14.5+20260510-i686-pc-windows-msvc-install_only_stripped.tar.gz",
-   ACCURATE}
-};
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@Mikachu2333");
+  chef_set_sauciers (this, 0);
 
-static MirrorSite_t
-Py_GHRelease_Aliyun =
-{
-  IS_DedicatedMirrorSite,
-  "ali", "Aliyun GitHub Release", "阿里云 GitHub 发布镜像",
-  "https://mirrors.aliyun.com/github/releases/astral-sh/python-build-standalone",
-  {NotSkip, NA, NA,
-   "https://mirrors.aliyun.com/github/releases/astral-sh/python-build-standalone/20260510/cpython-3.14.5+20260510-i686-pc-windows-msvc-install_only_stripped.tar.gz",
-   ACCURATE}
-};
+  chef_allow_english (this);
+  chef_allow_user_define (this);
 
-/* 内部 target，不注册到 menu，仅用于 chsrc_yield_source 自动测速选取 */
-static Source_t gh_release_sources[] = {
-  {&UpstreamProvider,      "https://github.com/astral-sh/python-build-standalone/releases/download",  DelegateToUpstream},
-  {&Py_GHRelease_NJU,      "https://mirrors.nju.edu.cn/github-release/astral-sh/python-build-standalone",    DelegateToMirror},
-  {&Py_GHRelease_USTC,     "https://mirrors.ustc.edu.cn/github-release/astral-sh/python-build-standalone",   DelegateToMirror},
-  {&Py_GHRelease_LZU,      "https://mirror.lzu.edu.cn/github-release/astral-sh/python-build-standalone",     DelegateToMirror},
-  {&Py_GHRelease_Aliyun,   "https://mirrors.aliyun.com/github/releases/astral-sh/python-build-standalone",  DelegateToMirror}
-};
+  def_sources_begin ()
+  {&UpstreamProvider, "https://github.com/astral-sh/python-build-standalone/releases/download",   DelegateToUpstream},
+  {&Nju,              "https://mirrors.nju.edu.cn/github-release/astral-sh/python-build-standalone",     FeedByPrelude},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/github-release/astral-sh/python-build-standalone",    FeedByPrelude},
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/github-release/astral-sh/python-build-standalone",      FeedByPrelude},
+  {&Ali,              "https://mirrors.aliyun.com/github/releases/astral-sh/python-build-standalone",   FeedByPrelude}
+  def_sources_end ()
 
-static Target_t gh_release_target = {
-  .sources_n = xy_c_array_len (gh_release_sources),
-  .sources   = gh_release_sources,
-  .inited    = true
-};
+#define GH_SM_POSTFIX  "/20260510/cpython-3.14.5+20260510-i686-pc-windows-msvc-install_only_stripped.tar.gz"
+  chef_set_smURL_with_postfix (this, &Nju,    GH_SM_POSTFIX);
+  chef_set_smURL_with_postfix (this, &Lzuoss, GH_SM_POSTFIX);
+  chef_set_smURL_with_postfix (this, &Ali,    GH_SM_POSTFIX);
+#undef GH_SM_POSTFIX
+
+  /* 2026-5-31: USTC 仅保留 Latest, 只能用 SHA256SUMS 粗略测速 */
+  chef_set_smURL_with_postfix (this, &Ustc, "/LatestRelease/SHA256SUMS");
+
+  /* 中科大仅保留 Latest 且文件内含动态版本号, 使用模糊测速 */
+  chef_set_provider_sm_accuracy (&Ustc, ROUGH);
+}
 
 
 /**
@@ -243,18 +237,20 @@ replace_pypi_index_url (const char *content, const char *url)
 
   if (!url_line)
     {
-      /* 有 [[index]] 段但没有 url = "..." 行，追加 url 行 */
-      size_t len = strlen (content) + strlen (url) + 32;
+      /* 有 [[index]] 段但没有 url = "..." 行，追加 url 和 default 行 */
+      bool has_default = (strstr (search_start, "default = ") != NULL);
+      size_t len = strlen (content) + strlen (url) + 64;
       char *ret = xy_malloc0 (len);
       size_t pos = 0;
 
-      /* 在 [[index]] 行的下一行插入 url */
       const char *insert_at = search_start;
       while (*insert_at == '\n') insert_at++;
 
       pos += snprintf (ret + pos, len - pos, "%.*s",
                        (int)(insert_at - content), content);
       pos += snprintf (ret + pos, len - pos, "url = \"%s\"\n", url);
+      if (!has_default)
+        pos += snprintf (ret + pos, len - pos, "default = true\n");
       strcpy (ret + pos, insert_at);
       return ret;
     }
@@ -430,7 +426,7 @@ pl_python_uv_setsrc (char *option)
 
   /* set: 选取源并写入 */
   Source_t source    = chsrc_yield_source (&pl_python_group_target, option);
-  Source_t gh_source = chsrc_yield_source (&gh_release_target, NULL);
+  Source_t gh_source = chsrc_yield_source (&pl_uv_github_release_target, NULL);
 
   if (chsrc_in_standalone_mode())
     chsrc_confirm_source (&source);
