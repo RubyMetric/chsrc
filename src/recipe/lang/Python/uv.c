@@ -33,10 +33,10 @@ pl_python_uv_prelude (void)
  * chsrc get uv
  *
  * uv 配置文件查找优先级：
- * ① ./uv.toml                 (项目级)
- * ② ~/.config/uv/uv.toml      (用户级, Windows: %APPDATA%\uv\uv.toml)
- * ③ $workspace/pyproject.toml (项目级, 未实现)
- * ④ /etc/uv/uv.toml           (系统级, 未实现)
+ * 1 ./uv.toml                    (项目级，已实现)
+ * 2. $workspaces/pyproject.toml  (项目级，未实现，因过于罕见不考虑适配)
+ * 3. ~/.config/uv/uv.toml        (用户级，已实现)
+ * 4. /etc/uv/uv.toml             (系统级，考虑到权限问题不予考虑)
  */
 
 #define PL_Python_uv_ConfigFile       "uv.toml"
