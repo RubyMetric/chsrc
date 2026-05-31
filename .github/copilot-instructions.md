@@ -95,7 +95,7 @@ Strictly check all memory allocations for leaks. Functions marked `return caller
 
 ## Code Review Checklist
 
-When reviewing changes, check:
+When performing a code review, check:
 
 1. **Pointers, bounds & memory** — NULL dereferences, buffer overflows, use-after-free.
 2. **Logic flaws & structural design** — Incorrect assumptions, fragile coupling, missing edge cases.
