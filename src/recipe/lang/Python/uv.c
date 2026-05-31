@@ -77,7 +77,6 @@ pl_python_find_uv_config (bool mkdir)
               chsrc_ensure_dir (config_dir);
             }
           char *result = xy_2strcat (config_dir, PL_Python_uv_ConfigFile);
-          free (config_dir);
           return result;
         }
       else
@@ -104,7 +103,6 @@ pl_python_uv_getsrc (char *option)
         chsrc_error2 ("无法获取 uv 配置文件路径");
       else
         chsrc_error2 ("未找到 uv 配置文件");
-      free (uv_config);
       return;
     }
 
@@ -114,14 +112,12 @@ pl_python_uv_getsrc (char *option)
       /* 在 Windows 上使用 PowerShell 替代 grep */
       char *script = xy_str_gsub (RAWSTR_pl_python_get_uv_config_on_windows, "@f@", uv_config);
       chsrc_run_as_powershell_file (script);
-      free (script);
     }
   else
     {
       /* 在类 Unix 系统上使用 grep */
       char *cmd = xy_str_gsub (RAWSTR_pl_python_get_uv_config, "@f@", uv_config);
       chsrc_run (cmd, RunOpt_Default);
-      free (cmd);
     }
 
   /* 检查 Python 下载镜像 */
@@ -135,10 +131,7 @@ pl_python_uv_getsrc (char *option)
           if (!end) end = line + strlen (line);
           printf ("%.*s\n", (int)(end - line), line);
         }
-      free (content);
     }
-
-  free (uv_config);
 }
 
 
@@ -367,13 +360,10 @@ pl_python_uv_write_all (const char *uv_config, const char *pypi_url, const char 
   if (!content) content = xy_strdup ("");
 
   char *updated = replace_pypi_index_url (content, pypi_url);
-  free (content);
 
   char *final = replace_python_install_mirror (updated, py_dl_url);
-  free (updated);
 
   chsrc_overwrite_file (final, uv_config);
-  free (final);
 }
 
 
@@ -404,7 +394,6 @@ pl_python_uv_setsrc (char *option)
       if (!chsrc_check_file (uv_config))
         {
           chsrc_info ("没有 uv 配置文件, 无需重置");
-          free (uv_config);
           return;
         }
 
@@ -413,16 +402,12 @@ pl_python_uv_setsrc (char *option)
       if (!content)
         {
           chsrc_error2 ("无法读取 uv 配置文件");
-          free (uv_config);
           return;
         }
 
       char *cleaned = cleanup_config_for_reset (content);
-      free (content);
       chsrc_overwrite_file (cleaned, uv_config);
-      free (cleaned);
 
-      free (uv_config);
       return;
     }
 
@@ -435,8 +420,6 @@ pl_python_uv_setsrc (char *option)
 
   chsrc_backup (uv_config);
   pl_python_uv_write_all (uv_config, source.url, gh_source.url);
-
-  free (uv_config);
 
   if (chsrc_in_standalone_mode())
     {
