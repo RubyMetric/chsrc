@@ -173,11 +173,11 @@ pl_uv_github_release_prelude (void)
   chef_allow_user_define (this);
 
   def_sources_begin ()
-  {&UpstreamProvider, "https://github.com/astral-sh/python-build-standalone/releases/download",   DelegateToUpstream},
-  {&Nju,              "https://mirrors.nju.edu.cn/github-release/astral-sh/python-build-standalone",     FeedByPrelude},
-  {&Ustc,             "https://mirrors.ustc.edu.cn/github-release/astral-sh/python-build-standalone",    FeedByPrelude},
-  {&Lzuoss,           "https://mirror.lzu.edu.cn/github-release/astral-sh/python-build-standalone",      FeedByPrelude},
-  {&Ali,              "https://mirrors.aliyun.com/github/releases/astral-sh/python-build-standalone",   FeedByPrelude}
+  {&UpstreamProvider, "https://github.com/astral-sh/python-build-standalone/releases/download",       DelegateToUpstream},
+  {&Nju,              "https://mirrors.nju.edu.cn/github-release/astral-sh/python-build-standalone",  FeedByPrelude},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/github-release/astral-sh/python-build-standalone", FeedByPrelude},
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/github-release/astral-sh/python-build-standalone",   FeedByPrelude},
+  {&Ali,              "https://mirrors.aliyun.com/github/releases/astral-sh/python-build-standalone", FeedByPrelude}
   def_sources_end ()
 
 #define GH_SM_POSTFIX  "/20260510/cpython-3.14.5+20260510-i686-pc-windows-msvc-install_only_stripped.tar.gz"
