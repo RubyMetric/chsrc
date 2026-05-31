@@ -62,6 +62,7 @@ pl_python_find_uv_config (bool mkdir)
     {
       if (xy.on_windows)
         {
+          /* config path on Windows */
           char *appdata = getenv ("APPDATA");
 
           if (!appdata)
@@ -81,6 +82,7 @@ pl_python_find_uv_config (bool mkdir)
         }
       else
         {
+          /* config path on Linux or macOS */
           if (mkdir)
             {
               chsrc_ensure_dir (PL_Python_uv_User_ConfigPath);
