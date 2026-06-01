@@ -1,9 +1,9 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * File Authors   : 曾奥然 <ccmywish@qq.com>
- * Contributors   : Mikachu2333 <mikachu.23333@zohomail.com>
- *                | BingChunMoLi <bingchunmoli@bingchunmoli.com>
+ * File Authors   : 曾奥然        <ccmywish@qq.com>
+ * Contributors   : Mikachu2333   <linkchou@yandex.com>
+ *                | BingChunMoLi  <bingchunmoli@bingchunmoli.com>
  *                |
  * Created On     : <2023-09-01>
  * Major Revision :      5
