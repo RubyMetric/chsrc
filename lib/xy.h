@@ -2,9 +2,9 @@
  * Copyright © 2023-2026 曾奥然, 郭恒
  * SPDX-License-Identifier: MIT
  * -------------------------------------------------------------
- * Lib Authors   :  曾奥然 <ccmywish@qq.com>
- *               |   郭恒  <2085471348@qq.com>
- * Contributors  : Mikachu2333  <mikachu.23333@zohomail.com>
+ * Lib Authors   :  曾奥然      <ccmywish@qq.com>
+ *               |   郭恒       <2085471348@qq.com>
+ * Contributors  : Mikachu2333  <linkchou@yandex.com>
  *               | juzeon       <skyjuzheng@gmail.com>
  *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *               | AnonTokio    <anontokio@163.com>
