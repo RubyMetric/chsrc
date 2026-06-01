@@ -156,7 +156,7 @@ pl_uv_github_release_prelude (void)
 
   chef_set_recipe_created_on   (this, "2026-05-31");
   chef_set_recipe_last_updated (this, "2026-05-31");
-  chef_set_sources_last_updated (this, "2026-05-31");
+  chef_set_sources_last_updated (this, "2026-06-01");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@Mikachu2333");
@@ -169,14 +169,12 @@ pl_uv_github_release_prelude (void)
   {&UpstreamProvider, "https://github.com/astral-sh/python-build-standalone/releases/download",       DelegateToUpstream},
   {&Nju,              "https://mirrors.nju.edu.cn/github-release/astral-sh/python-build-standalone",  FeedByPrelude},
   {&Ustc,             "https://mirrors.ustc.edu.cn/github-release/astral-sh/python-build-standalone", FeedByPrelude},
-  {&Lzuoss,           "https://mirror.lzu.edu.cn/github-release/astral-sh/python-build-standalone",   FeedByPrelude},
-  {&Ali,              "https://mirrors.aliyun.com/github/releases/astral-sh/python-build-standalone", FeedByPrelude}
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/github-release/astral-sh/python-build-standalone",   FeedByPrelude}
   def_sources_end ()
 
 #define GH_SM_POSTFIX  "/20260510/cpython-3.14.5+20260510-i686-pc-windows-msvc-install_only_stripped.tar.gz"
   chef_set_smURL_with_postfix (this, &Nju,    GH_SM_POSTFIX);
   chef_set_smURL_with_postfix (this, &Lzuoss, GH_SM_POSTFIX);
-  chef_set_smURL_with_postfix (this, &Ali,    GH_SM_POSTFIX);
 #undef GH_SM_POSTFIX
 
   /* 2026-5-31: USTC 仅保留 Latest, 只能用 SHA256SUMS 粗略测速 */
@@ -412,8 +410,21 @@ pl_python_uv_setsrc (char *option)
     }
 
   /* set: 选取源并写入 */
-  Source_t source    = chsrc_yield_source (&pl_python_group_target, option);
-  Source_t gh_source = chsrc_yield_source (&pl_uv_github_release_target, NULL);
+  Source_t source = chsrc_yield_source (&pl_python_group_target, option);
+
+  /* 若 option 命中了 GitHub release 源则直接用, 否则自动测速 */
+  char *gh_opt = option;
+  if (gh_opt && !chsrc_in_reset_mode () && !hp_is_url (gh_opt))
+    {
+      bool found = false;
+      if (!pl_uv_github_release_target.inited)
+        pl_uv_github_release_target.preludefn ();
+      for (int i = 0; i < pl_uv_github_release_target.sources_n; i++)
+        if (xy_streql (pl_uv_github_release_target.sources[i].mirror->code, gh_opt))
+          { found = true; break; }
+      if (!found) gh_opt = NULL;
+    }
+  Source_t gh_source = chsrc_yield_source (&pl_uv_github_release_target, gh_opt);
 
   if (chsrc_in_standalone_mode())
     chsrc_confirm_source (&source);
