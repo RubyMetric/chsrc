@@ -148,13 +148,13 @@ get_arch() {
 }
 
 get_platform() {
-  echo $(uname -s | awk '{print tolower($0)}')
+  uname -s | tr '[:upper:]' '[:lower:]'
 }
 
 # Linux   -> GNU/Linux
 # Android -> Android
 get_os() {
-  echo $(uname -o | awk '{print tolower($0)}')
+  uname -o | tr '[:upper:]' '[:lower:]'
 }
 
 
