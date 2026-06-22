@@ -10,7 +10,7 @@
  *               | AnonTokio    <anontokio@163.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2026-03-21>
+ * Last Modified : <2026-06-22>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -33,7 +33,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.2.3.0-2026/03/21"
+#define _XY_Version       "v0.2.3.1-2026/06/22"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -1454,7 +1454,11 @@ _xy_detect_os ()
   if (drive)
     {
       char path[256];
-      snprintf (path, sizeof (path), "%s\\Users", drive);
+      /**
+       * C:\Users 目录都可能不存在！
+       * https://github.com/RubyMetric/chsrc/issues/361
+       */
+      snprintf (path, sizeof (path), "%s\\Windows", drive);
       DIR *d = opendir (path);
       if (d)
         {
