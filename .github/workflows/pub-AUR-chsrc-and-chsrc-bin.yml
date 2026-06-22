@@ -45,7 +45,7 @@ jobs:
         sed -i "s/pkgver=.*/pkgver=$version/" PKGBUILD_bin
     - name: Publish chsrc-bin to AUR
       if: env.valid == '1'
-      uses: KSXGitHub/github-actions-deploy-aur@v4.1.1
+      uses: KSXGitHub/github-actions-deploy-aur@v4.1.3
       with:
         pkgname: chsrc-bin
         pkgbuild: ./PKGBUILD_bin
@@ -63,7 +63,7 @@ jobs:
         sed -i "s/pkgver=.*/pkgver=$version/" PKGBUILD
     - name: Publish chsrc to AUR
       if: env.valid == '1'
-      uses: KSXGitHub/github-actions-deploy-aur@v4.1.1
+      uses: KSXGitHub/github-actions-deploy-aur@v4.1.3
       with:
         pkgname: chsrc
         pkgbuild: ./PKGBUILD
