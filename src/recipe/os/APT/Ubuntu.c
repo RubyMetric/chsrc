@@ -11,12 +11,12 @@ os_ubuntu_prelude ()
   chef_prep_this (os_ubuntu, gsr);
 
   chef_set_recipe_created_on   (this, "2023-08-30");
-  chef_set_recipe_last_updated (this, "2026-01-21");
+  chef_set_recipe_last_updated (this, "2026-06-26");
   chef_set_sources_last_updated (this, "2026-01-21");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
-  chef_set_sauciers (this, 2, "@XUANJI233", "@usernameisnull");
+  chef_set_sauciers (this, 3, "@XUANJI233", "@usernameisnull", "@wcbing");
 
   chef_set_os_scope (this);
 
@@ -85,6 +85,8 @@ os_ubuntu_setsrc_for_deb822 (char *option)
 {
   chsrc_use_this_source (os_ubuntu);
 
+  check_https_support (&source);
+
   chsrc_backup (OS_Ubuntu_SourceList_DEB822);
 
   char *arch = chsrc_get_cpuarch ();
@@ -127,6 +129,8 @@ os_ubuntu_setsrc (char *option)
   bool sourcelist_exist = ensure_debian_or_ubuntu_old_sourcelist (OS_Is_Ubuntu);
 
   chsrc_use_this_source (os_ubuntu);
+
+  check_https_support (&source);
 
   /* 不存在的时候，用的是我们生成的无效文件，不要备份 */
   if (sourcelist_exist)
