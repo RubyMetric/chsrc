@@ -2,11 +2,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors   : @ccmywish
- * Contributors   : @happy-game
+ * Contributors   : @happy-game @wcbing
  *                |
  * Created On     : <2024-06-14>
- * Major Revision :      3
- * Last Modified  : <2025-07-14>
+ * Major Revision :      4
+ * Last Modified  : <2026-06-26>
  * ------------------------------------------------------------*/
 
 #include "rawstr4c.h"
@@ -118,3 +118,26 @@ ensure_debian_or_ubuntu_old_sourcelist (int debian_type)
   fclose (f);
   return false;
 }
+
+
+/**
+ * 检测是否支持 HTTPS 源，若 ca-certificates 安装则支持，否则将 HTTPS 源临时换为 HTTP 源
+ *
+ * @note Debian 10 Buster 以上版本的 APT 默认支持 HTTPS 源，无需安装 apt-transport-https 包。
+ *       如果遇到无法拉取 HTTPS 源的情况，请先使用 HTTP 源并执行 apt install ca-certificates
+ */
+void
+check_https_support (Source_t *source)
+{
+  bool has_ca = xy_file_exist ("/usr/share/doc/ca-certificates/copyright") || xy_file_exist ("/usr/sbin/update-ca-certificates");
+  if (!has_ca && strncmp (source->url, "https://", 8) == 0)
+    {
+      chsrc_warn2 (ENGLISH ? "ca-certificates is not installed, temporarily using http source instead"
+                           : "未检测到 ca-certificates，将临时换为 http 源");
+      source->url = xy_strcat (2, "http://", source->url + 8);
+
+      chsrc_warn2 (ENGLISH ? "Suggest running `apt install ca-certificates` later and change source again to support HTTPS sources"
+                           : "建议稍后执行 `apt install ca-certificates` 并重新换源以支持 HTTPS 源");
+    }
+}
+
