@@ -2,8 +2,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Name     : recipe-template.c
- * File Authors  : 曾奥然 <ccmywish@qq.com>
- * Contributors  : Mikachu2333 <mikachu.23333@zohomail.com>
+ * File Authors  : 曾奥然        <ccmywish@qq.com>
+ * Contributors  : Mikachu2333   <linkchou@yandex.com>
  *               |
  * Created On    : <2024-08-09>
  * Last Modified : <2026-02-24>

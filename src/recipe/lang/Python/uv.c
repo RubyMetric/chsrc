@@ -4,18 +4,22 @@
 
 def_target(pl_python_uv, "uv");
 
+/* 内部 target 前置声明 (定义在文件末尾 def_target 处) */
+void pl_uv_github_release_prelude (void);
+extern Target_t pl_uv_github_release_target;
+
 void
 pl_python_uv_prelude (void)
 {
   chef_prep_this (pl_python_uv, gsr);
 
   chef_set_recipe_created_on   (this, "2024-12-11");
-  chef_set_recipe_last_updated (this, "2025-12-29");
-  chef_set_sources_last_updated (this, "2025-08-09");
+  chef_set_recipe_last_updated (this, "2026-05-27");
+  chef_set_sources_last_updated (this, "2026-05-27");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 2, "@happy-game", "@MingriLingran");
-  chef_set_sauciers (this, 2, "@Kattos", "@ccmywish");
+  chef_set_sauciers (this, 3, "@Kattos", "@ccmywish", "@Mikachu2333");
 
   chef_set_scope_cap (this, ProjectScope, ScopeCap_Able_And_Implemented);
   chef_set_scope_cap (this, UserScope,    ScopeCap_Able_And_Implemented);
@@ -26,17 +30,20 @@ pl_python_uv_prelude (void)
   chef_allow_user_define(this);
 
   chef_use_other_target_sources (this, &pl_python_group_target);
+
+  /* 内部 target 的 prelude 未通过 menu.c 的 add() 注册, 手动挂载 */
+  pl_uv_github_release_target.preludefn = pl_uv_github_release_prelude;
 }
 
 
 /**
  * chsrc get uv
  *
- * uv的配置优先级顺序如下(高到低):
- * 1. $workspaces/uv.toml
- * 2. $workspaces/pyproject.toml
- * 3. ~/.config/uv/uv.toml
- * 4. /etc/uv/uv.toml
+ * uv 配置文件查找优先级：
+ * 1 ./uv.toml                    (项目级，已实现)
+ * 2. $workspaces/pyproject.toml  (项目级，未实现，因过于罕见不考虑适配)
+ * 3. ~/.config/uv/uv.toml        (用户级，已实现)
+ * 4. /etc/uv/uv.toml             (系统级，考虑到权限问题不予考虑)
  */
 
 #define PL_Python_uv_ConfigFile       "uv.toml"
@@ -69,7 +76,8 @@ pl_python_find_uv_config (bool mkdir)
             {
               chsrc_ensure_dir (config_dir);
             }
-          return xy_2strcat (config_dir, PL_Python_uv_ConfigFile);
+          char *result = xy_2strcat (config_dir, PL_Python_uv_ConfigFile);
+          return result;
         }
       else
         {
@@ -83,14 +91,18 @@ pl_python_find_uv_config (bool mkdir)
     }
 }
 
+
 void
 pl_python_uv_getsrc (char *option)
 {
   char *uv_config = pl_python_find_uv_config (false);
 
-  if (!chsrc_check_file (uv_config))
+  if (!uv_config || !chsrc_check_file (uv_config))
     {
-      chsrc_error2 ("未找到 uv 配置文件");
+      if (!uv_config)
+        chsrc_error2 ("无法获取 uv 配置文件路径");
+      else
+        chsrc_error2 ("未找到 uv 配置文件");
       return;
     }
 
@@ -107,81 +119,318 @@ pl_python_uv_getsrc (char *option)
       char *cmd = xy_str_gsub (RAWSTR_pl_python_get_uv_config, "@f@", uv_config);
       chsrc_run (cmd, RunOpt_Default);
     }
+
+  /* 检查 Python 下载镜像 */
+  char *content = xy_file_read (uv_config);
+  if (content)
+    {
+      char *line = strstr (content, "python-install-mirror");
+      if (line && (line == content || line[-1] == '\n'))
+        {
+          char *end = strchr (line, '\n');
+          if (!end) end = line + strlen (line);
+          printf ("%.*s\n", (int)(end - line), line);
+        }
+    }
+}
+
+
+/*
+ * Python下载镜像 (python-install-mirror)
+ *
+ * 内部 target, 不注册到 menu, 仅用于 chsrc_yield_source 自动测速选取。
+ * 针对 python-build-standalone 的测速链接。
+*/
+
+def_target (pl_uv_github_release, NULL);
+
+/* 内部 target, 无 CLI 入口, 以下为占位 */
+void pl_uv_github_release_getsrc (char *o) { (void)o; }
+void pl_uv_github_release_setsrc (char *o) { (void)o; }
+void pl_uv_github_release_resetsrc (char *o) { (void)o; }
+
+void
+pl_uv_github_release_prelude (void)
+{
+  chef_prep_this (pl_uv_github_release, gsr);
+
+  chef_set_recipe_created_on   (this, "2026-05-31");
+  chef_set_recipe_last_updated (this, "2026-05-31");
+  chef_set_sources_last_updated (this, "2026-06-01");
+
+  chef_set_chef (this, NULL);
+  chef_set_cooks (this, 1, "@Mikachu2333");
+  chef_set_sauciers (this, 0);
+
+  chef_allow_english (this);
+  chef_allow_user_define (this);
+
+  def_sources_begin ()
+  {&UpstreamProvider, "https://github.com/astral-sh/python-build-standalone/releases/download",       DelegateToUpstream},
+  {&Nju,              "https://mirrors.nju.edu.cn/github-release/astral-sh/python-build-standalone",  FeedByPrelude},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/github-release/astral-sh/python-build-standalone", FeedByPrelude},
+  {&Lzuoss,           "https://mirror.lzu.edu.cn/github-release/astral-sh/python-build-standalone",   FeedByPrelude}
+  def_sources_end ()
+
+#define GH_SM_POSTFIX  "/20260510/cpython-3.14.5+20260510-i686-pc-windows-msvc-install_only_stripped.tar.gz"
+  chef_set_smURL_with_postfix (this, &Nju,    GH_SM_POSTFIX);
+  chef_set_smURL_with_postfix (this, &Lzuoss, GH_SM_POSTFIX);
+#undef GH_SM_POSTFIX
+
+  /* 2026-5-31: USTC 仅保留 Latest, 只能用 SHA256SUMS 粗略测速 */
+  chef_set_smURL_with_postfix (this, &Ustc, "/LatestRelease/SHA256SUMS");
+
+  /* 中科大仅保留 Latest 且文件内含动态版本号, 使用模糊测速 */
+  chef_set_provider_sm_accuracy (&Ustc, ROUGH);
 }
 
 
 /**
- * @consult https://docs.astral.sh/uv/configuration/files/
- *          https://github.com/RubyMetric/chsrc/issues/139
+ * 在 content 中找到 [[index]] 段并替换其 url = "..." 行。
+ * 找不到 [[index]] 则追加整个段到末尾。
+ *
+ * @return 新内容 (caller-free)
+ */
+static char *
+replace_pypi_index_url (const char *content, const char *url)
+{
+  const char *index_tag = "[[index]]";
+
+  char *index_pos = strstr (content, index_tag);
+  if (!index_pos || (index_pos != content && index_pos[-1] != '\n'))
+    {
+      /* 文件中尚无 [[index]] 段，追加到末尾 */
+      bool need_sep = (content[0] != '\0');
+      size_t len = strlen (content) + strlen (url) + 80;
+      char *ret = xy_malloc0 (len);
+      if (need_sep)
+        snprintf (ret, len, "%s\n[[index]]\nurl = \"%s\"\ndefault = true\n", content, url);
+      else
+        snprintf (ret, len, "[[index]]\nurl = \"%s\"\ndefault = true\n", url);
+      return ret;
+    }
+
+  /* 找到 [[index]] 后紧跟的 url = "..." 行 (允许被 default = true 行隔开) */
+  const char *search_start = index_pos + strlen (index_tag);
+  const char *url_key = "url = \"";
+  char *url_line = NULL;
+
+  /* 只在当前 [[index]] 段内搜索: 遇到下一个 [[ 开头的行或文件结尾就停止 */
+  const char *next_section = strstr (search_start, "\n[[");
+  const char *limit = next_section ? next_section + 1 : content + strlen (content);
+
+  for (const char *p = search_start; p < limit; p++)
+    {
+      if (*p == 'u' && xy_str_start_with (p, url_key) && (p == content || p[-1] == '\n'))
+        {
+          url_line = (char *)p;
+          break;
+        }
+    }
+
+  if (!url_line)
+    {
+      /* 有 [[index]] 段但没有 url = "..." 行，追加 url 和 default 行 */
+      bool has_default = (strstr (search_start, "default = ") != NULL);
+      size_t len = strlen (content) + strlen (url) + 64;
+      char *ret = xy_malloc0 (len);
+      size_t pos = 0;
+
+      const char *insert_at = search_start;
+      while (*insert_at == '\n') insert_at++;
+
+      pos += snprintf (ret + pos, len - pos, "%.*s",
+                       (int)(insert_at - content), content);
+      pos += snprintf (ret + pos, len - pos, "url = \"%s\"\n", url);
+      if (!has_default)
+        pos += snprintf (ret + pos, len - pos, "default = true\n");
+      strcpy (ret + pos, insert_at);
+      return ret;
+    }
+
+  /* 替换 url = "..." 行 */
+  /* 找到该行结尾 */
+  char *url_end = strchr (url_line, '\n');
+  if (!url_end) url_end = (char *)content + strlen (content);
+
+  size_t est = strlen (content) + strlen (url) + 32;
+  char *ret = xy_malloc0 (est);
+  size_t pos = 0;
+
+  /* 拷贝 url_line 之前的内容 */
+  pos += snprintf (ret + pos, est - pos, "%.*s",
+                   (int)(url_line - content), content);
+  /* 写入新的 url 行 */
+  pos += snprintf (ret + pos, est - pos, "url = \"%s\"", url);
+  /* 拷贝 url_line 之后的内容 (从该行原换行符开始, 保留 \n) */
+  strcpy (ret + pos, url_end);
+
+  return ret;
+}
+
+
+/**
+ * 过滤 content 中的 python-install-mirror 行，追加新值。
+ *
+ * @return 新内容 (caller-free)
+ */
+static char *
+replace_python_install_mirror (const char *content, const char *url)
+{
+  size_t estimate = strlen (content) + strlen (url) + 128;
+  char *new_content = xy_malloc0 (estimate);
+  size_t pos = 0;
+
+  const char *p = content;
+  while (*p)
+    {
+      if (xy_str_start_with (p, "python-install-mirror"))
+        {
+          while (*p && *p != '\n') p++;
+          if (*p == '\n') p++;
+        }
+      else
+        {
+          while (*p && *p != '\n') new_content[pos++] = *p++;
+          if (*p == '\n') new_content[pos++] = *p++;
+        }
+    }
+
+  pos += snprintf (new_content + pos, estimate - pos,
+                   "python-install-mirror = \"%s\"\n", url);
+  new_content[pos] = '\0';
+  return new_content;
+}
+
+
+/**
+ * reset 专用: 删除所有 [[index]] 段内的 url/default 行 (保留 [[index]] 头
+ * 与 name 等其余字段), 删除 python-install-mirror 行, 其余内容原样保留。
+ *
+ * @return 新内容 (caller-free)
+ */
+static char *
+cleanup_config_for_reset (const char *content)
+{
+  size_t est = strlen (content) + 128;
+  char *ret = xy_malloc0 (est);
+  size_t pos = 0;
+
+  const char *p = content;
+  while (*p)
+    {
+      bool skip = false;
+
+      if (xy_str_start_with (p, "url = \"") ||
+          xy_str_start_with (p, "default = "))
+        {
+          skip = true;
+        }
+      else if (xy_str_start_with (p, "python-install-mirror"))
+        {
+          skip = true;
+        }
+
+      if (skip)
+        {
+          while (*p && *p != '\n') p++;
+          if (*p == '\n') p++;
+        }
+      else
+        {
+          while (*p && *p != '\n') ret[pos++] = *p++;
+          if (*p == '\n') ret[pos++] = *p++;
+        }
+    }
+
+  ret[pos] = '\0';
+  return ret;
+}
+
+
+/**
+ * 一次性完成uv配置文件的全部文件操作 (set 路径)
+ */
+static void
+pl_python_uv_write_all (const char *uv_config, const char *pypi_url, const char *py_dl_url)
+{
+  char *content = xy_file_read (uv_config);
+  if (!content) content = xy_strdup ("");
+
+  char *updated = replace_pypi_index_url (content, pypi_url);
+
+  char *final = replace_python_install_mirror (updated, py_dl_url);
+
+  chsrc_overwrite_file (final, uv_config);
+}
+
+
+/**
+ * chsrc set uv
+ *
+ * 同时更换两部分:
+ *   1. PyPI 索引源              ([[index]] 表)
+ *   2. Python 解释器下载源       (python-install-mirror)
+ *
+ * @consult https://docs.astral.sh/uv/reference/settings/#python-install-mirror
  */
 void
 pl_python_uv_setsrc (char *option)
 {
   chsrc_ensure_program ("uv");
 
-  Source_t source = chsrc_yield_source (&pl_python_group_target, option);
-  if (chsrc_in_standalone_mode())
-    chsrc_confirm_source(&source);
-
   char *uv_config = pl_python_find_uv_config (true);
-  if (NULL==uv_config)
+  if (NULL == uv_config)
     {
       chsrc_error2 ("无法获取 uv 配置文件路径");
       return;
     }
+
+  /* reset: 清理 [[index]] 段 url 与 python-install-mirror 行 */
+  if (chsrc_in_reset_mode ())
+    {
+      if (!chsrc_check_file (uv_config))
+        {
+          chsrc_info ("没有 uv 配置文件, 无需重置");
+          return;
+        }
+
+      /* 读内容, 清理, 写回 */
+      char *content = xy_file_read (uv_config);
+      if (!content)
+        {
+          chsrc_error2 ("无法读取 uv 配置文件");
+          return;
+        }
+
+      char *cleaned = cleanup_config_for_reset (content);
+      chsrc_overwrite_file (cleaned, uv_config);
+
+      return;
+    }
+
+  /* set: 选取源并写入 */
+  Source_t source = chsrc_yield_source (&pl_python_group_target, option);
+
+  /* 若 option 命中了 GitHub release 源则直接用, 否则自动测速 */
+  char *gh_opt = option;
+  if (gh_opt && !chsrc_in_reset_mode () && !hp_is_url (gh_opt))
+    {
+      bool found = false;
+      if (!pl_uv_github_release_target.inited)
+        pl_uv_github_release_target.preludefn ();
+      for (int i = 0; i < pl_uv_github_release_target.sources_n; i++)
+        if (xy_streql (pl_uv_github_release_target.sources[i].mirror->code, gh_opt))
+          { found = true; break; }
+      if (!found) gh_opt = NULL;
+    }
+  Source_t gh_source = chsrc_yield_source (&pl_uv_github_release_target, gh_opt);
+
+  if (chsrc_in_standalone_mode())
+    chsrc_confirm_source (&source);
+
   chsrc_backup (uv_config);
-
-  const char *source_content = xy_str_gsub (RAWSTR_pl_python_uv_config_source_content, "@url@", source.url);
-
-  if (!xy_file_exist (uv_config))
-    {
-      /* 当 uv_config 不存在，直接写入文件 */
-      chsrc_append_to_file (source_content, uv_config);
-    }
-  else
-    {
-      /* 当 uv_config 存在，如果存在 [[index]] 则更新，否则追加到文件末尾 */
-      char *cmd = NULL;
-      if (xy.on_windows)
-        {
-          /* 在 Windows 上使用 PowerShell 替代 grep */
-          cmd = xy_str_gsub (RAWSTR_pl_python_test_uv_if_set_source_on_windows, "@f@", uv_config);
-        }
-      else
-        {
-          cmd = xy_str_gsub (RAWSTR_pl_python_test_uv_if_set_source, "@f@", uv_config);
-        }
-
-      int status = xy_run_get_status (cmd);
-      if (0==status)
-        {
-          if (xy.on_windows)
-            {
-              /* 在 Windows 上使用 PowerShell 替代 sed */
-              char *powershell_cmd_with_file = xy_str_gsub(RAWSTR_pl_python_set_uv_config_on_windows, "@f@", uv_config);
-              char *powershell_cmd = xy_str_gsub(powershell_cmd_with_file, "@url@", source.url);
-              chsrc_run (powershell_cmd, RunOpt_Default);
-            }
-          else
-            {
-              /* 非 Windows 系统使用 sed */
-              char *sed_cmd = NULL;
-#if defined(XY_Build_On_macOS) || defined(XY_Build_On_BSD)
-              sed_cmd = "sed -i '' ";
-#else
-              sed_cmd = "sed -i ";
-#endif
-              char *update_config_cmd = xy_str_gsub (RAWSTR_pl_python_set_uv_config, "@sed@", sed_cmd);
-                    update_config_cmd = xy_str_gsub (update_config_cmd, "@f@", uv_config);
-                    update_config_cmd = xy_str_gsub (update_config_cmd, "@url@", source.url);
-              chsrc_run (update_config_cmd, RunOpt_Default);
-            }
-        }
-      else
-        {
-          chsrc_append_to_file (source_content, uv_config);
-        }
-    }
+  pl_python_uv_write_all (uv_config, source.url, gh_source.url);
 
   if (chsrc_in_standalone_mode())
     {
