@@ -2,7 +2,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
  * File Authors   : @ccmywish
- * Contributors   : @happy-game @wcbing
+ * Contributors   : @happy-game
+ *                | @wcbing
  *                |
  * Created On     : <2024-06-14>
  * Major Revision :      4
