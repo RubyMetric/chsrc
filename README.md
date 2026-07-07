@@ -33,6 +33,9 @@
   <td>
     <a href="https://hellogithub.com/repository/7666ba91e01e4a59be5809b02d9e8ff6" target="_blank"><img src="https://abroad.hellogithub.com/v1/widgets/recommend.svg?rid=7666ba91e01e4a59be5809b02d9e8ff6&claim_uid=H6YVMUy7ulev8R4&theme=dark" alt="Featured｜HelloGitHub" style="width: 250px; height: 54px;" width="250" height="54" /></a>
   </td>
+  <td>
+    <a href="https://atomgit.com/RubyMetric/chsrc"><img src="https://atomgit.com/RubyMetric/chsrc/star/badge.svg" /></a>
+  </td>
   </tr>
 </table>
 
