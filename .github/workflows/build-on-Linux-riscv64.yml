@@ -40,7 +40,7 @@ jobs:
             cp ./chsrc-riscv64-linux /artifacts
 
       - name: 上传至 'pre' release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: pre
           files: |

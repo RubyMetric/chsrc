@@ -39,7 +39,7 @@ jobs:
       run: ls *-macos
 
     - name: 上传至 'pre' release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       # if: startsWith(github.ref, 'refs/tags/')
       with:
         tag_name: pre
@@ -73,7 +73,7 @@ jobs:
       run: ls *-macos
 
     - name: 上传至 'pre' release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       # if: startsWith(github.ref, 'refs/tags/')
       with:
         tag_name: pre
