@@ -10,12 +10,12 @@ os_debian_prelude ()
   chef_prep_this (os_debian, gsr);
 
   chef_set_recipe_created_on   (this, "2023-09-02");
-  chef_set_recipe_last_updated (this, "2025-11-09");
+  chef_set_recipe_last_updated (this, "2026-06-26");
   chef_set_sources_last_updated (this, "2025-07-11");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 2, "@ccmywish", "@G_I_Y");
-  chef_set_sauciers (this, 1, "@Yangmoooo");
+  chef_set_sauciers (this, 2, "@Yangmoooo", "@wcbing");
 
   chef_set_os_scope (this);
 
@@ -86,6 +86,8 @@ os_debian_setsrc_for_deb822 (char *option)
 {
   chsrc_use_this_source (os_debian);
 
+  check_https_support (&source);
+
   chsrc_backup (OS_Debian_SourceList_DEB822);
 
   char *cmd = xy_strcat (3, "sed -E -i 's@https?://.*/debian/?@", source.url, "@g' " OS_Debian_SourceList_DEB822);
@@ -102,12 +104,6 @@ os_debian_setsrc_for_deb822 (char *option)
 }
 
 
-/**
- * 处理旧版(非DEB822) sourcelist 的换源
- *
- * Debian 10 Buster 以上版本默认支持 HTTPS 源。如果遇到无法拉取 HTTPS 源的情况，请先使用 HTTP 源并安装
- * apt install apt-transport-https ca-certificates
- */
 void
 os_debian_setsrc (char *option)
 {
@@ -147,8 +143,7 @@ os_debian_setsrc (char *option)
 
   chsrc_use_this_source (os_debian);
 
-  chsrc_alert2 ("如果遇到无法拉取 HTTPS 源的情况，请手动运行:");
-  say ("apt install apt-transport-https ca-certificates");
+  check_https_support (&source);
 
   /* 不存在的时候，用的是我们生成的用来填充占位的无效文件，不要备份 */
   if (sourcelist_exist)

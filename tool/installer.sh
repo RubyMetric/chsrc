@@ -6,12 +6,13 @@
 # File Authors  :    GnixAij     <gaojiaxing0220@gmail.com>
 #               |     xuan       <wick.dynex@qq.com>
 #               |    ChatGPT     <https://chatgpt.com>
-#               |   Aoran Zeng   <ccmywish@qq.com>
-# Contributors  : GitHub Copilot <https://github.com/copilot>
+#               |    曾奥然      <ccmywish@qq.com>
+# Contributors  :    boilcy      <0x6c6379@gmail.com>
+#               | GitHub Copilot <https://github.com/copilot>
 #               |   DeepSeek     <https://chat.deepseek.com/>
 #               |
 # Created On    : <2024-10-25>
-# Last Modified : <2025-07-12>
+# Last Modified : <2026-06-15>
 #
 #         chsrc installer for POSIX (mainly Linux & macOS)
 # ---------------------------------------------------------------
@@ -144,17 +145,19 @@ let_user_compile() {
 
 
 get_arch() {
-  echo $(uname -m | tr '[:upper:]' '[:lower:]')
+  uname -m | tr '[:upper:]' '[:lower:]'
 }
 
 get_platform() {
-  echo $(uname -s | awk '{print tolower($0)}')
+  # 去除对 awk 的依赖 https://github.com/RubyMetric/chsrc/pull/362
+  # echo $(uname -s | awk '{print tolower($0)}')
+  uname -s | tr '[:upper:]' '[:lower:]'
 }
 
 # Linux   -> GNU/Linux
 # Android -> Android
 get_os() {
-  echo $(uname -o | awk '{print tolower($0)}')
+  uname -o | tr '[:upper:]' '[:lower:]'
 }
 
 
