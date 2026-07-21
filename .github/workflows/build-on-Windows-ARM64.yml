@@ -1,0 +1,55 @@
+# ---------------------------------------------------------------
+# Workflow File : build-on-Windows-ARM64.yml
+# File Authors  : NewbieXvwu <newbiexvwu@gmail.com>
+# Contributors  : Nul None <nul@none.org>
+#               |
+# Created On    : <2026-07-21>
+# Last Modified : <2026-07-21>
+#
+# Build chsrc on Windows (ARM64/WoA) and upload it to GitHub: the 'pre' release
+# ---------------------------------------------------------------
+
+name: 构建于 Windows ARM64
+
+on:
+  push:
+    branches: [ "gh-build" ]
+
+jobs:
+  build-and-upload:
+    # windows-11-arm 为原生 WoA (Windows on ARM) runner，已 GA
+    runs-on: windows-11-arm
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+
+    - name: 检出代码
+      uses: actions/checkout@v6
+
+    - name: 安装 Clang (CLANGARM64)
+      uses: msys2/setup-msys2@v2
+      with:
+        # CLANGARM64 提供原生 AArch64 的 clang 工具链
+        msystem: CLANGARM64
+        update: true
+        install: |
+          mingw-w64-clang-aarch64-clang
+          mingw-w64-clang-aarch64-make
+
+    - name: 为 arm64 (AArch64) 构建
+      run: |
+        mingw32-make.exe build-in-ci-release-mode
+        mv chsrc-ci-release.exe chsrc-aarch64-windows.exe
+
+    - name: List files
+      run: ls *.exe
+
+    - name: 上传至 'pre' release
+      uses: softprops/action-gh-release@v2
+      # if: startsWith(github.ref, 'refs/tags/')
+      with:
+        tag_name: pre
+        files: |
+          chsrc-aarch64-windows.exe

@@ -6,9 +6,10 @@
 #               | ChatGPT <https://chatgpt.com/>
 #               | 曾奥然  <ccmywish@qq.com>
 # Contributors  : GitHub Copilot <https://github.com/copilot>
+#               | NewbieXvwu <newbiexvwu@gmail.com>
 #               |
 # Created On    : <2024-10-26>
-# Last Modified : <2026-01-06>
+# Last Modified : <2026-07-21>
 #
 #         chsrc installer for Windows
 # ---------------------------------------------------------------
@@ -155,8 +156,9 @@ function Set_URL {
                 $script:arch = "x86"
             }
         }
+        12 { $script:arch = "aarch64" }
         default {
-            Output_Error "Unsupported architecture '$cpuArchitecture'. Only x86 or x64 architectures are supported."
+            Output_Error "Unsupported architecture '$cpuArchitecture'. Only x86, x64 or ARM64 architectures are supported."
         }
     }
     Output_Info "Get my CPU architecture: $script:arch"

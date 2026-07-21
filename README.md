@@ -192,6 +192,9 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-windo
 
 # x86
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windows.exe -o chsrc.exe
+
+# arm64/aarch64 (WoA, Windows on ARM)
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-aarch64-windows.exe -o chsrc.exe
 ```
 
 </details>
