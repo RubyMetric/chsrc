@@ -9,9 +9,10 @@
  *               | @Yangmoooo
  *               | @BingChunMoLi
  *               | @Mikachu2333
+ *               | @NewbieXvwu
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2026-05-22>
+ * Last Modified : <2026-07-21>
  *
  * chsrc framework
  * ------------------------------------------------------------*/
@@ -1989,12 +1990,14 @@ chsrc_get_cpuarch ()
 
 #if XY_Build_On_Windows
   SYSTEM_INFO info;
-  GetSystemInfo (&info);
+  GetNativeSystemInfo (&info);
   WORD num = info.wProcessorArchitecture;
   switch (num)
     {
       case PROCESSOR_ARCHITECTURE_AMD64:
         ret = "x86_64"; break;
+      case PROCESSOR_ARCHITECTURE_ARM64:
+        ret = "aarch64"; break;
       case PROCESSOR_ARCHITECTURE_ARM:
         ret = "arm";    break;
       case PROCESSOR_ARCHITECTURE_INTEL:
