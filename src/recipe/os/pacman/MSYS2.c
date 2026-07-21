@@ -10,7 +10,7 @@ os_msys2_prelude ()
   chef_prep_this (os_msys2, s);
 
   chef_set_recipe_created_on   (this, "2023-09-06");
-  chef_set_recipe_last_updated (this, "2025-08-10");
+  chef_set_recipe_last_updated (this, "2026-07-21");
   chef_set_sources_last_updated (this, "2025-06-20");
 
   chef_set_chef (this, NULL);
@@ -47,6 +47,9 @@ os_msys2_setsrc (char *option)
 
   chsrc_backup ("/etc/pacman.d/mirrorlist.mingw32");
   chsrc_backup ("/etc/pacman.d/mirrorlist.mingw64");
+  chsrc_backup ("/etc/pacman.d/mirrorlist.ucrt64");
+  chsrc_backup ("/etc/pacman.d/mirrorlist.clang64");
+  chsrc_backup ("/etc/pacman.d/mirrorlist.clangarm64");
   chsrc_backup ("/etc/pacman.d/mirrorlist.msys");
 
   char *prev = xy_strcat (3, "请针对你的架构下载安装此目录下的文件:",
