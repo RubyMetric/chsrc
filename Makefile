@@ -60,7 +60,11 @@ endif
 CFLAGS += -Iinclude -Ilib
 
 ifeq ($(On-Windows), 1)
-	CLANG_FLAGS = -target x86_64-pc-windows-gnu
+	# 依据 MSYS2 环境的目标架构选择 clang 的 target triple
+	# MSYSTEM_CARCH 由 MSYS2 提供: x86_64 (MINGW64/UCRT64/CLANG64) / i686 (MINGW32) / aarch64 (CLANGARM64)
+	# 非 MSYS2 环境 (独立 LLVM) 下回退到 x86_64
+	Windows-Clang-Arch = $(if $(MSYSTEM_CARCH),$(MSYSTEM_CARCH),x86_64)
+	CLANG_FLAGS = -target $(Windows-Clang-Arch)-pc-windows-gnu
 endif
 
 ifeq ($(CC), clang)

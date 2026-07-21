@@ -48,7 +48,8 @@ DEBUGGER := if os() == 'windows' {
 
 CFLAGS_chk_Clang := if os() == 'windows' {
   if CC == 'clang' {
-    '-target x86_64-pc-windows-gnu'
+    # arch() 返回当前架构 (x86_64 / aarch64)，以适配原生 WoA 环境
+    '-target ' + arch() + '-pc-windows-gnu'
   } else {''}
 } else {''}
 
