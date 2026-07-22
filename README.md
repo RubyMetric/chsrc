@@ -6,9 +6,10 @@
  ! Doc Authors   : @ccmywish
  ! Contributors  : @Mikachu2333
  !               | @BingChunMoLi
+ !               | @NewbieXvwu
  !               |
  ! Created On    : <2023-12-28>
- ! Last Modified : <2026-02-24>
+ ! Last Modified : <2026-07-22>
  ! ---------------------------------------------------------- -->
 
 <div align="center">
@@ -193,8 +194,8 @@ curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x64-windo
 # x86
 curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-x86-windows.exe -o chsrc.exe
 
-# arm64/aarch64 (WoA, Windows on ARM)
-curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-aarch64-windows.exe -o chsrc.exe
+# Arm64 (WoA, Windows on Arm)
+curl -L https://gitee.com/RubyMetric/chsrc/releases/download/pre/chsrc-arm64-windows.exe -o chsrc.exe
 ```
 
 </details>

@@ -9,7 +9,7 @@
 #               | NewbieXvwu <newbiexvwu@gmail.com>
 #               |
 # Created On    : <2024-10-26>
-# Last Modified : <2026-07-21>
+# Last Modified : <2026-07-22>
 #
 #         chsrc installer for Windows
 # ---------------------------------------------------------------
@@ -156,9 +156,9 @@ function Set_URL {
                 $script:arch = "x86"
             }
         }
-        12 { $script:arch = "aarch64" }
+        12 { $script:arch = "arm64" }
         default {
-            Output_Error "Unsupported architecture '$cpuArchitecture'. Only x86, x64 or ARM64 architectures are supported."
+            Output_Error "Unsupported architecture '$cpuArchitecture'. Only x86, x64 or Arm64 architectures are supported."
         }
     }
     Output_Info "Get my CPU architecture: $script:arch"
