@@ -79,6 +79,7 @@ chsrc_register_contributors ()
   chef_register_contributor ("@MingriLingran",  "MingriLingran",  "i@linran.moe",                   NULL);
   chef_register_contributor ("@usernameisnull", "MaBing",         "cumt_ttr@163.com",               NULL);
   chef_register_contributor ("@AnonTokio",      "Anon Tokio",     "anontokio@163.com",              NULL);
+  chef_register_contributor ("@NewbieXvwu",     "Mingzhe Jiang",   "newbiexvwu@gmail.com",           NULL);
 
   /**
    * AI贡献者：
