@@ -1,15 +1,15 @@
 # ---------------------------------------------------------------
-# Workflow File : build-on-Windows-x64x86.yml
+# Workflow File : build-on-Windows.yml
 # File Authors  : 曾奥然 <ccmywish@qq.com>
-# Contributors  : NewbieXvwu <newbiexvwu@gmail.com>
+# Contributors  : Nul None <nul@none.org>
 #               |
 # Created On    : <2023-09-14>
-# Last Modified : <2026-07-21>
+# Last Modified : <2025-09-12>
 #
 # Build chsrc on Windows and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
 
-name: 构建于 Windows x64x86
+name: 构建于 Windows
 on:
   push:
     branches: [ "gh-build" ]
