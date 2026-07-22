@@ -1,15 +1,15 @@
 # ---------------------------------------------------------------
-# Workflow File : build-on-Windows-ARM64.yml
+# Workflow File : build-on-Windows-Arm64.yml
 # File Authors  : NewbieXvwu <newbiexvwu@gmail.com>
 # Contributors  : Nul None <nul@none.org>
 #               |
 # Created On    : <2026-07-21>
-# Last Modified : <2026-07-21>
+# Last Modified : <2026-07-22>
 #
-# Build chsrc on Windows (ARM64/WoA) and upload it to GitHub: the 'pre' release
+# Build chsrc on Windows (Arm64/WoA) and upload it to GitHub: the 'pre' release
 # ---------------------------------------------------------------
 
-name: 构建于 Windows ARM64
+name: 构建于 Windows Arm64
 
 on:
   push:
@@ -17,7 +17,7 @@ on:
 
 jobs:
   build-and-upload:
-    # windows-11-arm 为原生 WoA (Windows on ARM) runner，已 GA
+    # windows-11-arm 为原生 WoA (Windows on Arm) runner，已 GA
     runs-on: windows-11-arm
     defaults:
       run:
@@ -31,17 +31,17 @@ jobs:
     - name: 安装 Clang (CLANGARM64)
       uses: msys2/setup-msys2@v2
       with:
-        # CLANGARM64 提供原生 AArch64 的 clang 工具链
+        # CLANGARM64 提供原生 Arm64 的 clang 工具链
         msystem: CLANGARM64
         update: true
         install: |
           mingw-w64-clang-aarch64-clang
           mingw-w64-clang-aarch64-make
 
-    - name: 为 arm64 (AArch64) 构建
+    - name: 为 Arm64 构建
       run: |
         mingw32-make.exe build-in-ci-release-mode
-        mv chsrc-ci-release.exe chsrc-aarch64-windows.exe
+        mv chsrc-ci-release.exe chsrc-arm64-windows.exe
 
     - name: List files
       run: ls *.exe
@@ -52,4 +52,4 @@ jobs:
       with:
         tag_name: pre
         files: |
-          chsrc-aarch64-windows.exe
+          chsrc-arm64-windows.exe
