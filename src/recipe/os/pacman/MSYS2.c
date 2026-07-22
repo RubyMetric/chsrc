@@ -10,12 +10,12 @@ os_msys2_prelude ()
   chef_prep_this (os_msys2, s);
 
   chef_set_recipe_created_on   (this, "2023-09-06");
-  chef_set_recipe_last_updated (this, "2026-07-21");
+  chef_set_recipe_last_updated (this, "2026-07-22");
   chef_set_sources_last_updated (this, "2025-06-20");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@G_I_Y");
-  chef_set_sauciers (this, 2, "@ccmywish", "@hezonglun");
+  chef_set_sauciers (this, 3, "@ccmywish", "@hezonglun", "@NewbieXvwu");
 
   chef_set_os_scope (this);
   chef_deny_english(this);
