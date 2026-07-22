@@ -10,8 +10,8 @@ os_alpine_prelude ()
   chef_prep_this (os_alpine, gs);
 
   chef_set_recipe_created_on   (this, "2023-09-24");
-  chef_set_recipe_last_updated (this, "2025-08-10");
-  chef_set_sources_last_updated (this, "2024-09-14");
+  chef_set_recipe_last_updated (this, "2026-07-22");
+  chef_set_sources_last_updated (this, "2026-07-22");
 
   chef_set_chef (this, NULL);
   chef_set_cooks (this, 1, "@ccmywish");
@@ -28,7 +28,6 @@ os_alpine_prelude ()
   {&UpstreamProvider, "http://dl-cdn.alpinelinux.org/alpine", FeedByPrelude},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/alpine", FeedByPrelude},
   {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/alpine", FeedByPrelude},
-  {&Sustech,          "https://mirrors.sustech.edu.cn/alpine", FeedByPrelude},
   {&Zju,              "https://mirrors.zju.edu.cn/alpine", FeedByPrelude},
   {&Lzuoss,           "https://mirror.lzu.edu.cn/alpine", FeedByPrelude},
   {&Ali,              "https://mirrors.aliyun.com/alpine", FeedByPrelude},
@@ -36,7 +35,7 @@ os_alpine_prelude ()
   {&Huawei,           "https://mirrors.huaweicloud.com/alpine", FeedByPrelude}
   def_sources_end()
 
-  chef_set_rest_smURL_with_postfix (this, "/latest-stable/releases/x86_64/alpine-standard-3.21.0-x86_64.iso");
+  chef_set_rest_smURL_with_postfix (this, "/latest-stable/releases/x86_64/netboot/initramfs-lts");
 }
 
 
