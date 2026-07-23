@@ -2,8 +2,8 @@
  * SPDX-License-Identifier: MIT
  * -------------------------------------------------------------
  * Test File     : xy.c
- * Test Authors  : 曾奥然 <ccmywish@qq.com>
- * Contributors  : Mikachu2333  <mikachu.23333@zohomail.com>
+ * Test Authors  : 曾奥然       <ccmywish@qq.com>
+ * Contributors  : Mikachu2333  <linkchou@yandex.com>
  * Created On    : <2023-08-30>
  * Last Modified : <2026-03-22>
  *
