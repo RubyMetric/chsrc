@@ -12,7 +12,8 @@ def_target(pl_python_group, "python/pypi/py");
  *
  * @note 2025-09-29 更新了测试的 pkg 链接，换用了一个 40M 的文件
  *
- * @warning 2025-09-29 Sjtug 需要特殊处理
+ * @warning 2026-08-01 Sjtug 的索引地址为 /pypi/web/simple，
+ * 实际文件仍位于 /pypi-packages，需要特殊处理
  */
 static char *
 pl_python_speed_url_constructor (const char *url, const char *user_data)
@@ -21,7 +22,7 @@ pl_python_speed_url_constructor (const char *url, const char *user_data)
   str = xy_2strcat (str, "/packages/fa/80/eb88edc2e2b11cd2dd2e56f1c80b5784d11d6e6b7f04a1145df64df40065/opencv_python-4.12.0.88-cp37-abi3-win_amd64.whl");
   if (strstr (url, "mirror.sjtu.edu.cn"))
     // e.g. https://mirror.sjtu.edu.cn/pypi-packages/fa/80/eb88edc2e2b11cd2dd2e56f1c80b5784d11d6e6b7f04a1145df64df40065/opencv_python-4.12.0.88-cp37-abi3-win_amd64.whl
-    str = xy_str_gsub (str, "pypi-packages/packages", "pypi-packages");// 针对 Sjtug
+    str = xy_str_gsub (str, "pypi/web/packages", "pypi-packages");// 针对 Sjtug
 
   return str;
 }
@@ -33,13 +34,13 @@ pl_python_group_prelude (void)
   chef_prep_this (pl_python_group, gsr);
 
   chef_set_recipe_created_on   (this, "2023-09-03");
-  chef_set_recipe_last_updated (this, "2026-03-31");
-  chef_set_sources_last_updated (this, "2025-09-30");
+  chef_set_recipe_last_updated (this, "2026-08-01");
+  chef_set_sources_last_updated (this, "2026-08-01");
 
   chef_set_chef (this, "@happy-game");
   // 组换源的 leader target 应把所有 follower target 的贡献者都记录过来
   chef_set_cooks (this, 2, "@ccmywish", "@happy-game");
-  chef_set_sauciers (this, 3, "@xyx1926885268", "@Kattos", "@Mikachu2333");
+  chef_set_sauciers (this, 4, "@xyx1926885268", "@Kattos", "@Mikachu2333", "@Yangmoooo");
 
   /* 部分包管理器支持 ProjectScope，但是为了让流程执行下去，我们这里都写 ScopeCap_Able_And_Implemented */
   chef_set_scope_cap (this, ProjectScope, ScopeCap_Able_And_Implemented);
@@ -60,8 +61,9 @@ pl_python_group_prelude (void)
   // 2025-09-29 此源已停用
   // @ref https://mirrors.jlu.edu.cn/_news/#2025-04-06-pypi-repo-down
   // {&Jlu,              "https://mirrors.jlu.edu.cn/pypi/web/simple", FeedByPrelude},
-  {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn/pypi-packages",      FeedByPrelude},
-  {&Tuna,             "https://pypi.tuna.tsinghua.edu.cn/simple",      FeedByPrelude},
+  {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn/pypi/web/simple",    FeedByPrelude},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple",FeedByPrelude},
+  {&Ustc,             "https://mirrors.ustc.edu.cn/pypi/simple",       FeedByPrelude},
   {&Ali,              "https://mirrors.aliyun.com/pypi/simple",        FeedByPrelude},
   {&Nju,              "https://mirror.nju.edu.cn/pypi/web/simple",     FeedByPrelude},
   {&Pku,              "https://mirrors.pku.edu.cn/pypi/web/simple",    FeedByPrelude},
