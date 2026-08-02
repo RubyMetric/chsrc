@@ -8,8 +8,9 @@
  * Last Modified : <2026-08-02>
  *
  *
- * uv 配置 (uv.toml / pyproject.toml) 字符串改写工具
- * (由 uv.c #include, 可被 test 单独 #include)
+ * @file uv-helper.c
+ * @brief uv 配置 (uv.toml / pyproject.toml) 字符串改写工具
+ *        (由 uv.c #include, 可被 test 单独 #include)
  *
  * 仅处理 chsrc 关心的 uv 配置子集, 不是完整 TOML 解析器:
  *   - uv.toml:        顶层 [[index]] 数组表、顶层 python-install-mirror 键
@@ -17,8 +18,8 @@
  *                     python-install-mirror 键
  *
  * 刻意不处理: 多行字符串、数组/内联表值、字符串转义 ——
- * 因为所有改写都按"整行替换/删除"进行, 无需解析值本身。
- * 已知限制: 多行字符串 (""") 内若出现行首 '[' 会被误认为段头, 罕见可忽略。
+ * 因为所有改写都按“整行替换/删除”进行, 无需解析值本身。
+ * 已知限制: 多行字符串 (`"""`) 内若出现行首 `[` 会被误认为段头, 罕见可忽略。
  *
  * 所有函数均为 static, 依赖调用方所在翻译单元提供 stdlib/string.h。
  * ------------------------------------------------------------*/
@@ -29,18 +30,43 @@
 #include <stdbool.h>
 
 /**
- * 判断行首 (调用方必须保证 p 位于行首) 是否以 key 作为键开始。
- * 键名后必须紧跟 =、空白或行尾, 避免误匹配 urlx 之类前缀键。
+ * @brief 判断行首是否以 key 作为键开始。
+ *
+ * 支持 bare key 与单/双引号 quoted key (如 "url" 或 'url')。
+ * 调用方必须保证 p 位于行首。键名后必须紧跟 =、空白或行尾,
+ * 避免误匹配 urlx 之类前缀键。
+ *
+ * @param p   待检查的字符串, 必须位于行首
+ * @param key 键名
+ *
+ * @return 行首以 key 开始且满足键边界时为 true, 否则为 false
  */
 static bool
 uvh_key_prefix (const char *p, const char *key)
 {
   size_t kl = strlen (key);
-  if (strncmp (p, key, kl) != 0) return false;
-  char c = p[kl];
+  const char *end = NULL;
+  if (strncmp (p, key, kl) == 0)
+    end = p + kl;
+  else if ((*p == '"' || *p == '\'')
+           && strncmp (p + 1, key, kl) == 0 && p[kl + 1] == *p)
+    end = p + kl + 2;
+  else
+    return false;
+
+  char c = *end;
   return c == '=' || c == ' ' || c == '\t' || c == '\n' || c == '\0';
 }
 
+/**
+ * @brief 跳过行首的空白字符 (空格与 Tab), 返回首个非空白字符位置。
+ *
+ * 不修改原字符串, 返回的是原字符串内部的指针。
+ *
+ * @param p 输入字符串
+ *
+ * @return 原字符串中第一个非空白字符的指针
+ */
 static const char *
 uvh_skip_indent (const char *p)
 {
@@ -49,20 +75,45 @@ uvh_skip_indent (const char *p)
 }
 
 /**
- * 判断行首 (调用方必须保证 p 位于行首) 是否为指定表头文本。
- * 允许缩进、CRLF 和行尾注释。
+ * @brief 判断行首是否为指定表头文本。
+ *
+ * 允许缩进、CRLF 和行尾注释; 额外把 [tool."uv"] / [tool.'uv'] 识别为
+ * [tool.uv] 的等价形式。调用方必须保证 p 位于行首。
+ *
+ * @param p      待检查的字符串, 必须位于行首
+ * @param header 表头文本, 如 "[[index]]" 或 "[tool.uv]"
+ *
+ * @return 匹配时返回 true, 否则返回 false
  */
 static bool
 uvh_header_match (const char *p, const char *header)
 {
   p = uvh_skip_indent (p);
   size_t hl = strlen (header);
-  if (strncmp (p, header, hl) != 0) return false;
-  char c = p[hl];
-  return c == '\n' || c == '\r' || c == '\0' || c == ' ' || c == '\t' || c == '#';
+  if (strncmp (p, header, hl) == 0)
+    {
+      char c = p[hl];
+      return c == '\n' || c == '\r' || c == '\0' || c == ' ' || c == '\t' || c == '#';
+    }
+  if (strcmp (header, "[tool.uv]") == 0
+      && (strncmp (p, "[tool.\"uv\"]", 11) == 0
+          || strncmp (p, "[tool.'uv']", 11) == 0))
+    {
+      char c = p[11];
+      return c == '\n' || c == '\r' || c == '\0' || c == ' ' || c == '\t' || c == '#';
+    }
+  return false;
 }
 
-/* 跳过当前行 (含换行符), 返回下一行的行首 */
+/**
+ * @brief 跳过当前行 (含换行符), 返回下一行的行首。
+ *
+ * 若当前行是最后一行 (无换行符), 返回指向字符串结尾 '\0' 的指针。
+ *
+ * @param p 当前行的行首
+ *
+ * @return 下一行的行首指针 (或字符串结尾)
+ */
 static const char *
 uvh_next_line (const char *p)
 {
@@ -72,8 +123,11 @@ uvh_next_line (const char *p)
 }
 
 /**
- * 从 start 开始找下一个段头行 (行首 '[') 的位置。
- * 返回 NULL 表示直到文件结尾都没有新段头。
+ * @brief 从 start 开始查找下一个段头行 (行首 '[') 的位置。
+ *
+ * @param start 搜索起点
+ *
+ * @return 下一个段头行的位置; 直到文件结尾都没有新段头时返回 NULL
  */
 static const char *
 uvh_find_section_end (const char *start)
@@ -88,7 +142,12 @@ uvh_find_section_end (const char *start)
 }
 
 /**
- * 全文件查找第一个行首匹配 header 的表头位置; 未找到返回 NULL。
+ * @brief 全文件查找第一个行首匹配 header 的表头位置。
+ *
+ * @param content 文件内容
+ * @param header  要查找的表头文本
+ *
+ * @return 匹配的表头行位置; 未找到返回 NULL
  */
 static const char *
 uvh_find_table (const char *content, const char *header)
@@ -104,7 +163,13 @@ uvh_find_table (const char *content, const char *header)
 }
 
 /**
- * 在 [first, end) 行区间内查找以 key 开头的键行; end 为 NULL 时到文件尾。
+ * @brief 在 [first, end) 行区间内查找以 key 开头的键行。
+ *
+ * @param first 区间起点 (行首)
+ * @param end   区间终点 (不含); 为 NULL 时搜索到文件结尾
+ * @param key   键名
+ *
+ * @return 匹配的键行位置; 未找到返回 NULL
  */
 static const char *
 uvh_find_key_in_section (const char *first, const char *end, const char *key)
@@ -117,8 +182,121 @@ uvh_find_key_in_section (const char *first, const char *end, const char *key)
 }
 
 /**
- * 从 "key = \"value\"" 或 "key = 'value'" 行提取字符串值。
- * @return malloc 的 caller-free 字符串; 值不是字符串时返回 NULL。
+ * @brief 将字符串转义为 TOML basic string 的双引号内容。
+ *
+ * 对反斜杠、双引号与 \b \t \n \f \r 进行转义, 其余字符原样保留;
+ * 返回值直接放入 "..." 中即为合法 TOML 字符串。
+ *
+ * @param value 原始字符串
+ *
+ * @return malloc 的 caller-free 转义后字符串
+ *
+ * @memory SAFE
+ *   return caller-free
+ */
+static char *
+uvh_escape_basic_string (const char *value)
+{
+  size_t n = 0;
+  for (const char *p = value; *p; p++)
+    {
+      switch (*p)
+        {
+        case '\\': case '"': case '\b': case '\t': case '\n':
+        case '\f': case '\r': n += 2; break;
+        default: n++;
+        }
+    }
+
+  char *ret = malloc (n + 1);
+  size_t pos = 0;
+  for (const char *p = value; *p; p++)
+    {
+      switch (*p)
+        {
+        case '\\': ret[pos++] = '\\'; ret[pos++] = '\\'; break;
+        case '"':  ret[pos++] = '\\'; ret[pos++] = '"'; break;
+        case '\b': ret[pos++] = '\\'; ret[pos++] = 'b'; break;
+        case '\t': ret[pos++] = '\\'; ret[pos++] = 't'; break;
+        case '\n': ret[pos++] = '\\'; ret[pos++] = 'n'; break;
+        case '\f': ret[pos++] = '\\'; ret[pos++] = 'f'; break;
+        case '\r': ret[pos++] = '\\'; ret[pos++] = 'r'; break;
+        default: ret[pos++] = *p;
+        }
+    }
+  ret[pos] = '\0';
+  return ret;
+}
+
+/**
+ * @brief 将单个十六进制字符转换为数值。
+ *
+ * @param c 十六进制字符 (0-9, a-f, A-F)
+ *
+ * @return 对应的数值 0-15; 不是合法十六进制字符时返回 -1
+ */
+static int
+uvh_hex_digit (char c)
+{
+  if (c >= '0' && c <= '9') return c - '0';
+  if (c >= 'a' && c <= 'f') return c - 'a' + 10;
+  if (c >= 'A' && c <= 'F') return c - 'A' + 10;
+  return -1;
+}
+
+/**
+ * @brief 将 Unicode code point 编码为 UTF-8 并追加到输出缓冲区。
+ *
+ * 编码后为 1~4 字节; 代理区 (U+D800-U+DFFF) 与超出 U+10FFFF 的
+ * 无效 code point 返回 false 且不写入任何字节。
+ *
+ * @param out       输出缓冲区 (调用方保证足够容纳 4 字节)
+ * @param pos       输出缓冲区的当前写入位置 (会递增)
+ * @param codepoint Unicode code point
+ *
+ * @return 编码成功返回 true, 无效 code point 返回 false
+ */
+static bool
+uvh_append_utf8 (char **out, size_t *pos, unsigned long codepoint)
+{
+  if (codepoint <= 0x7f)
+    (*out)[(*pos)++] = (char)codepoint;
+  else if (codepoint <= 0x7ff)
+    {
+      (*out)[(*pos)++] = (char)(0xc0 | (codepoint >> 6));
+      (*out)[(*pos)++] = (char)(0x80 | (codepoint & 0x3f));
+    }
+  else if (codepoint <= 0xffff)
+    {
+      if (codepoint >= 0xd800 && codepoint <= 0xdfff) return false;
+      (*out)[(*pos)++] = (char)(0xe0 | (codepoint >> 12));
+      (*out)[(*pos)++] = (char)(0x80 | ((codepoint >> 6) & 0x3f));
+      (*out)[(*pos)++] = (char)(0x80 | (codepoint & 0x3f));
+    }
+  else if (codepoint <= 0x10ffff)
+    {
+      (*out)[(*pos)++] = (char)(0xf0 | (codepoint >> 18));
+      (*out)[(*pos)++] = (char)(0x80 | ((codepoint >> 12) & 0x3f));
+      (*out)[(*pos)++] = (char)(0x80 | ((codepoint >> 6) & 0x3f));
+      (*out)[(*pos)++] = (char)(0x80 | (codepoint & 0x3f));
+    }
+  else return false;
+  return true;
+}
+
+/**
+ * @brief 从 "key = \"value\"" 或 "key = 'value'" 行提取字符串值。
+ *
+ * 支持 TOML basic string 的常见转义 (\", \\, \b, \t, \n, \f, \r,
+ * \uXXXX, \UXXXXXXXX); literal string (单引号) 不处理转义。
+ * 未闭合字符串、非法转义或值不是字符串时返回 NULL。
+ *
+ * @param line 包含 "key = value" 的行
+ *
+ * @return malloc 的 caller-free 解码后字符串; 失败返回 NULL
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 uvh_extract_string_value (const char *line)
@@ -128,17 +306,71 @@ uvh_extract_string_value (const char *line)
   const char *v = eq + 1;
   while (*v == ' ' || *v == '\t') v++;
   if (*v != '"' && *v != '\'') return NULL;
-  char quote = *v;
-  v++;
-  const char *val = v;
-  while (*v && *v != quote && *v != '\n') v++;
-  size_t vl = v - val;
-  char *ret = malloc (vl + 1);
-  memcpy (ret, val, vl);
-  ret[vl] = '\0';
+  char quote = *v++;
+
+  size_t max_len = strcspn (v, "\n") + 1;
+  char *ret = malloc (max_len * 4);
+  size_t pos = 0;
+  bool closed = false;
+  while (*v && *v != '\n')
+    {
+      if (*v == quote)
+        {
+          closed = true;
+          break;
+        }
+      if (quote == '"' && *v == '\\')
+        {
+          v++;
+          if (*v == 'u' || *v == 'U')
+            {
+              int digits = (*v == 'u') ? 4 : 8;
+              unsigned long codepoint = 0;
+              v++;
+              for (int i = 0; i < digits; i++, v++)
+                {
+                  int digit = uvh_hex_digit (*v);
+                  if (digit < 0) { free (ret); return NULL; }
+                  codepoint = (codepoint << 4) | (unsigned)digit;
+                }
+              if (!uvh_append_utf8 (&ret, &pos, codepoint))
+                { free (ret); return NULL; }
+              continue;
+            }
+          switch (*v)
+            {
+            case '"': ret[pos++] = '"'; break;
+            case '\\': ret[pos++] = '\\'; break;
+            case 'b': ret[pos++] = '\b'; break;
+            case 't': ret[pos++] = '\t'; break;
+            case 'n': ret[pos++] = '\n'; break;
+            case 'f': ret[pos++] = '\f'; break;
+            case 'r': ret[pos++] = '\r'; break;
+            default: free (ret); return NULL;
+            }
+          if (*v) v++;
+          continue;
+        }
+      ret[pos++] = *v++;
+    }
+  if (!closed)
+    {
+      free (ret);
+      return NULL;
+    }
+  ret[pos] = '\0';
   return ret;
 }
 
+/**
+ * @brief 判断行中布尔值是否为 true。
+ *
+ * 仅当值为小写 true 且后随空白、注释、行尾或结尾时返回 true。
+ *
+ * @param line 包含 "key = value" 的行
+ *
+ * @return 值为 true 时返回 true, 否则返回 false
+ */
 static bool
 uvh_value_is_true (const char *line)
 {
@@ -150,8 +382,15 @@ uvh_value_is_true (const char *line)
 }
 
 /**
- * 查找要管理的 index。多个 index 中优先选择 default = true，
- * 否则选择第一个；表可以位于 [tool.uv.sources] 等子表之后。
+ * @brief 查找要管理的 index 段。
+ *
+ * 多个 index 中优先选择 default = true 的段, 不存在 default 时回退到
+ * 第一个; 段可以位于 [tool.uv.sources] 等子表之后。
+ *
+ * @param content      文件内容
+ * @param index_header index 段头文本, 如 "[[index]]" 或 "[[tool.uv.index]]"
+ *
+ * @return 选中的 index 段头位置; 不存在 index 段时返回 NULL
  */
 static const char *
 uvh_find_managed_index (const char *content, const char *index_header)
@@ -170,7 +409,15 @@ uvh_find_managed_index (const char *content, const char *index_header)
   return first;
 }
 
-/* 文件是否使用 CRLF 换行。 */
+/**
+ * @brief 检测文件内容是否使用 CRLF 换行。
+ *
+ * 以第一个换行符前是否有 '\r' 判断; 混合换行风格时结果取决于首个换行。
+ *
+ * @param content 文件内容
+ *
+ * @return 使用 CRLF 时返回 true, 否则返回 false
+ */
 static bool
 uvh_detect_crlf (const char *content)
 {
@@ -179,10 +426,18 @@ uvh_detect_crlf (const char *content)
 }
 
 /**
- * 按 content 的换行风格转换 str 中的 LF；content 为 CRLF 时返回 CRLF 版本。
- * 仅用于追加的纯 LF 文本，不要传入已含 CRLF 的 content 本身。
+ * @brief 按 content 的换行风格转换 str 中的 LF。
  *
- * @return caller-free
+ * content 为 CRLF 时返回 CRLF 版本, 否则原样返回。仅用于追加的纯 LF 文本,
+ * 不要传入已含 CRLF 的 content 本身。
+ *
+ * @param content 用于判断换行风格的内容
+ * @param str     纯 LF 的待转换文本
+ *
+ * @return malloc 的 caller-free 转换后字符串
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 uvh_apply_eol (const char *content, const char *str)
@@ -201,10 +456,18 @@ uvh_apply_eol (const char *content, const char *str)
 }
 
 /**
- * 用 new_line_text (不含换行) 替换 content 中从 line 开始的整行，
- * 保留原行缩进、行尾风格 (CRLF/LF) 与后续内容。
+ * @brief 用 new_line_text 替换 content 中从 line 开始的整行。
  *
- * @return 新内容 (caller-free)
+ * 保留原行缩进、行尾风格 (CRLF/LF) 与后续内容; new_line_text 不含换行。
+ *
+ * @param content       原始内容
+ * @param line          content 中待替换行的行首指针
+ * @param new_line_text 新行文本 (不含换行)
+ *
+ * @return malloc 的 caller-free 新内容
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 uvh_replace_line (const char *content, const char *line, const char *new_line_text)
@@ -231,10 +494,19 @@ uvh_replace_line (const char *content, const char *line, const char *new_line_te
 }
 
 /**
- * 在 insert_at 位置之前插入 insert_text (以 '\n' 结尾)。
- * 内容为 CRLF 时，插入文本与分隔换行同样转换为 CRLF。
+ * @brief 在 insert_at 位置之前插入 insert_text (以 '\n' 结尾)。
  *
- * @return 新内容 (caller-free)
+ * 内容为 CRLF 时, 插入文本与分隔换行同样转换为 CRLF; insert_at 之前
+ * 没有换行时会先补一个分隔换行。
+ *
+ * @param content     原始内容
+ * @param insert_at   content 内的插入位置指针
+ * @param insert_text 以 '\n' 结尾的待插入文本
+ *
+ * @return malloc 的 caller-free 新内容
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 uvh_insert_before (const char *content, const char *insert_at, const char *insert_text)
@@ -267,7 +539,10 @@ uvh_insert_before (const char *content, const char *insert_at, const char *inser
 
 
 /**
- * 替换/创建 index 数组表 (如 [[index]] 或 [[tool.uv.index]]) 的 url 值。
+ * @brief 替换/创建 index 数组表 (如 [[index]] 或 [[tool.uv.index]]) 的 url 值。
+ *
+ * 优先修改 default = true 的 index (uv 的 PyPI 替代源), 不存在时回退到
+ * 第一个; 作用域内无 index 段时新建, 父表不存在时一并创建。
  *
  * @param content      原始内容
  * @param url          新的索引 URL
@@ -275,7 +550,10 @@ uvh_insert_before (const char *content, const char *insert_at, const char *inser
  * @param parent_table 父表头, 如 NULL (顶层) 或 "[tool.uv]";
  *                     父表不存在时会在文件末尾创建父表并写入 index 段
  *
- * @return 新内容 (caller-free)
+ * @return malloc 的 caller-free 新内容
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 replace_index_url (const char *content, const char *url, const char *index_header, const char *parent_table)
@@ -292,10 +570,12 @@ replace_index_url (const char *content, const char *url, const char *index_heade
            * 换行风格与 content 保持一致 */
           size_t clen = strlen (content);
           const char *sep = (clen > 0) ? "\n" : "";
-          size_t seg_len = strlen (parent_table) + strlen (index_header) + strlen (url) + 48;
+          char *escaped_url = uvh_escape_basic_string (url);
+          size_t seg_len = strlen (parent_table) + strlen (index_header) + strlen (escaped_url) + 48;
           char *seg = calloc (seg_len, 1);
           snprintf (seg, seg_len, "%s\n%s\nurl = \"%s\"\ndefault = true\n",
-                    parent_table, index_header, url);
+                    parent_table, index_header, escaped_url);
+          free (escaped_url);
           char *seg_eol = uvh_apply_eol (content, seg);
           free (seg);
           char *sep_eol = uvh_apply_eol (content, sep);
@@ -311,9 +591,11 @@ replace_index_url (const char *content, const char *url, const char *index_heade
   /* 作用域内无 index 段: 追加到边界之前 */
   if (!ih)
     {
-      size_t seglen = strlen (index_header) + strlen (url) + 48;
+      char *escaped_url = uvh_escape_basic_string (url);
+      size_t seglen = strlen (index_header) + strlen (escaped_url) + 48;
       char *seg = malloc (seglen);
-      snprintf (seg, seglen, "%s\nurl = \"%s\"\ndefault = true\n", index_header, url);
+      snprintf (seg, seglen, "%s\nurl = \"%s\"\ndefault = true\n", index_header, escaped_url);
+      free (escaped_url);
       char *ret = uvh_insert_before (content, boundary, seg);
       free (seg);
       return ret;
@@ -328,37 +610,46 @@ replace_index_url (const char *content, const char *url, const char *index_heade
   if (!url_line)
     {
       bool has_default = uvh_find_key_in_section (first, end, "default") != NULL;
-      size_t seglen = strlen (url) + (has_default ? 24 : 48);
+      char *escaped_url = uvh_escape_basic_string (url);
+      size_t seglen = strlen (escaped_url) + (has_default ? 24 : 48);
       char *seg = malloc (seglen);
       size_t spos = 0;
-      spos += snprintf (seg + spos, seglen - spos, "url = \"%s\"\n", url);
+      spos += snprintf (seg + spos, seglen - spos, "url = \"%s\"\n", escaped_url);
       if (!has_default)
         spos += snprintf (seg + spos, seglen - spos, "default = true\n");
       char *ret = uvh_insert_before (content, first, seg);
       free (seg);
+      free (escaped_url);
       return ret;
     }
 
   /* 替换 url 行 */
-  size_t newlen = strlen (url) + 32;
+  char *escaped_url = uvh_escape_basic_string (url);
+  size_t newlen = strlen (escaped_url) + 32;
   char *new_line = malloc (newlen);
-  snprintf (new_line, newlen, "url = \"%s\"", url);
+  snprintf (new_line, newlen, "url = \"%s\"", escaped_url);
   char *ret = uvh_replace_line (content, url_line, new_line);
   free (new_line);
+  free (escaped_url);
   return ret;
 }
 
 
 /**
- * 替换/创建顶层键或指定表内键 (如 python-install-mirror) 的字符串值。
+ * @brief 替换/创建顶层键或指定表内键 (如 python-install-mirror) 的字符串值。
  *
- * @param content     原始内容
- * @param key         键名
- * @param url         新值
+ * 键已存在时原地替换, 不存在时追加到作用域末尾; 父表不存在时一并创建。
+ *
+ * @param content      原始内容
+ * @param key          键名
+ * @param url          新值
  * @param parent_table 父表头, 如 NULL (顶层) 或 "[tool.uv]";
  *                     父表不存在时会在文件末尾创建父表并写入键
  *
- * @return 新内容 (caller-free)
+ * @return malloc 的 caller-free 新内容
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 replace_key_value (const char *content, const char *key, const char *url, const char *parent_table)
@@ -375,9 +666,11 @@ replace_key_value (const char *content, const char *key, const char *url, const 
            * 换行风格与 content 保持一致 */
           size_t clen = strlen (content);
           const char *sep = (clen > 0) ? "\n" : "";
-          size_t seg_len = strlen (parent_table) + strlen (key) + strlen (url) + 16;
+          char *escaped_url = uvh_escape_basic_string (url);
+          size_t seg_len = strlen (parent_table) + strlen (key) + strlen (escaped_url) + 16;
           char *seg = calloc (seg_len, 1);
-          snprintf (seg, seg_len, "%s\n%s = \"%s\"\n", parent_table, key, url);
+          snprintf (seg, seg_len, "%s\n%s = \"%s\"\n", parent_table, key, escaped_url);
+          free (escaped_url);
           char *seg_eol = uvh_apply_eol (content, seg);
           free (seg);
           char *sep_eol = uvh_apply_eol (content, sep);
@@ -419,28 +712,41 @@ replace_key_value (const char *content, const char *key, const char *url, const 
   if (old_line)
     {
       /* 替换旧值行 */
-      size_t newlen = strlen (key) + strlen (url) + 32;
+      char *escaped_url = uvh_escape_basic_string (url);
+      size_t newlen = strlen (key) + strlen (escaped_url) + 32;
       char *new_line = malloc (newlen);
-      snprintf (new_line, newlen, "%s = \"%s\"", key, url);
+      snprintf (new_line, newlen, "%s = \"%s\"", key, escaped_url);
       char *ret = uvh_replace_line (content, old_line, new_line);
       free (new_line);
+      free (escaped_url);
       return ret;
     }
 
   /* 键不存在: 追加到作用域末尾 */
-  size_t seglen = strlen (key) + strlen (url) + 32;
+  char *escaped_url = uvh_escape_basic_string (url);
+  size_t seglen = strlen (key) + strlen (escaped_url) + 32;
   char *seg = malloc (seglen);
-  snprintf (seg, seglen, "%s = \"%s\"\n", key, url);
+  snprintf (seg, seglen, "%s = \"%s\"\n", key, escaped_url);
   char *ret = uvh_insert_before (content, insert_at, seg);
   free (seg);
+  free (escaped_url);
   return ret;
 }
 
 
 /**
- * 在指定表 (parent_table 为 NULL 表示顶层) 内提取键的字符串值。
+ * @brief 在指定表 (parent_table 为 NULL 表示顶层) 内提取键的字符串值。
  *
- * @return malloc 的 caller-free 字符串; 未找到返回 NULL。
+ * 搜索范围限制在该表到下一个段头之间。
+ *
+ * @param content      文件内容
+ * @param key          键名
+ * @param parent_table 父表头, 如 NULL (顶层) 或 "[tool.uv]"
+ *
+ * @return malloc 的 caller-free 解码后字符串; 未找到返回 NULL
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 uvh_get_value_in_table (const char *content, const char *key, const char *parent_table)
@@ -463,18 +769,25 @@ uvh_get_value_in_table (const char *content, const char *key, const char *parent
 
 
 /**
- * 提取 chsrc 管理的 index URL：优先 default = true，否则取第一个。
+ * @brief 提取 chsrc 管理的 index URL。
  *
+ * 优先 default = true 的 index, 否则取第一个; fully-qualified
+ * [[tool.uv.index]] 会隐式创建父路径, 不要求显式 [tool.uv]。
+ *
+ * @param content      文件内容
  * @param index_header 段头文本, 如 "[[index]]" 或 "[[tool.uv.index]]"
  * @param parent_table 父表头, 如 NULL (顶层) 或 "[tool.uv]"
  *
- * @return malloc 的 caller-free 字符串; 未找到返回 NULL。
+ * @return malloc 的 caller-free 解码后 URL; 未找到返回 NULL
+ *
+ * @memory SAFE
+ *   return caller-free
  */
 static char *
 uvh_get_index_url (const char *content, const char *index_header, const char *parent_table)
 {
-  if (parent_table && !uvh_find_table (content, parent_table)) return NULL;
-
+  /* fully-qualified [[tool.uv.index]] 会隐式创建父路径，不要求显式 [tool.uv]。 */
+  (void)parent_table;
   const char *ih = uvh_find_managed_index (content, index_header);
   if (!ih) return NULL;
 
@@ -488,18 +801,51 @@ uvh_get_index_url (const char *content, const char *index_header, const char *pa
 
 /* ============ uv.toml 便捷包装 (保持原函数名) ============ */
 
+/**
+ * @brief uv.toml 便捷包装: 替换/创建顶层 [[index]] 段的 url。
+ *
+ * @param content 原始内容
+ * @param url     新的索引 URL
+ *
+ * @return malloc 的 caller-free 新内容
+ *
+ * @memory SAFE
+ *   return caller-free
+ */
 static char *
 replace_pypi_index_url (const char *content, const char *url)
 {
   return replace_index_url (content, url, "[[index]]", NULL);
 }
 
+/**
+ * @brief uv.toml 便捷包装: 替换/创建顶层 python-install-mirror 键。
+ *
+ * @param content 原始内容
+ * @param url     新的 Python 下载镜像基址
+ *
+ * @return malloc 的 caller-free 新内容
+ *
+ * @memory SAFE
+ *   return caller-free
+ */
 static char *
 replace_python_install_mirror (const char *content, const char *url)
 {
   return replace_key_value (content, "python-install-mirror", url, NULL);
 }
 
+/**
+ * @brief uv.toml 便捷包装: 提取顶层键的字符串值。
+ *
+ * @param content 文件内容
+ * @param key     键名
+ *
+ * @return malloc 的 caller-free 解码后字符串; 未找到返回 NULL
+ *
+ * @memory SAFE
+ *   return caller-free
+ */
 static char *
 uvh_get_top_level_value (const char *content, const char *key)
 {

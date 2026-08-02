@@ -329,6 +329,46 @@ test_uvh_get_value_pyproject (void)
 }
 
 
+static void
+test_uvh_edge_cases (void)
+{
+  char *r;
+
+  r = replace_pypi_index_url ("", "https://example.test/a\\b\"c");
+  CHECK_STR (r, "[[index]]\nurl = \"https://example.test/a\\\\b\\\"c\"\ndefault = true\n");
+  free (r);
+
+  r = replace_pypi_index_url (
+      "[[index]]\n\"url\" = \"https://old\"\ndefault = true\n",
+      "https://new");
+  CHECK_STR (r, "[[index]]\nurl = \"https://new\"\ndefault = true\n");
+  free (r);
+
+  r = replace_key_value (
+      "[tool.\"uv\"]\npython-install-mirror = \"https://old\"\n",
+      "python-install-mirror", "https://new", "[tool.uv]");
+  CHECK_STR (r, "[tool.\"uv\"]\npython-install-mirror = \"https://new\"\n");
+  free (r);
+
+  r = replace_key_value (
+      "[tool.'uv']\n'python-install-mirror' = \"https://old\"\n",
+      "python-install-mirror", "https://new", "[tool.uv]");
+  CHECK_STR (r, "[tool.'uv']\npython-install-mirror = \"https://new\"\n");
+  free (r);
+
+  char *v = uvh_get_index_url (
+      "[[index]]\nurl = \"https://example/\\u0073imple/\\U0001F600\"\ndefault = true\n",
+      "[[index]]", NULL);
+  CHECK (v != NULL);
+  if (v) { CHECK_STR (v, "https://example/simple/\xF0\x9F\x98\x80"); free (v); }
+
+  r = replace_pypi_index_url (
+      "[[index]]\nurl = \"https://old\"", "https://new");
+  CHECK_STR (r, "[[index]]\nurl = \"https://new\"");
+  free (r);
+}
+
+
 int
 main (void)
 {
@@ -338,6 +378,7 @@ main (void)
   test_replace_index_url_pyproject ();
   test_replace_key_value_pyproject ();
   test_uvh_get_value_pyproject ();
+  test_uvh_edge_cases ();
 
   if (failures)
     {
