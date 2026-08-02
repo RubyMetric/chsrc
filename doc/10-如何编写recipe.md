@@ -116,6 +116,10 @@
 
     `chsrc` 主程序不提供配置文件，不提供数据文件，干净无污染。那么在实现 `recipe` 的时候，除了备份文件外，也不要污染用户环境。
 
+## 其它
+
+如果你借助 AI 进行开发，让 AI 阅读 [copilot-instructions.md](../.github/copilot-instructions.md) 并将它作为项目规范，该文件明确了很多在 AI 辅助开发时需要注意的问题。
+
 <br>
 
 [rawstr4c]: https://github.com/RubyMetric/rawstr4c
