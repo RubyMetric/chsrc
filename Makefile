@@ -163,7 +163,7 @@ build-in-ci-release-mode:
 debug: build-in-debug-mode
 	@$(DEBUGGER) $(DebugMode-Target-Name)
 
-test: test-make-env test-xy test-fw test-uv-helper
+test: test-make-env test-xy test-fw
 
 test-make-env:
 	@echo "On-Linux: $(On-Linux)"
@@ -193,10 +193,6 @@ test-fw:
 	@$(CC) test/fw.c $(CFLAGS) -o fw
 	@./fw
 
-test-uv-helper:
-	@$(CC) test/uv-helper-test.c $(CFLAGS) -o uv-helper-test
-	@./uv-helper-test
-
 check: test
 
 # AUR package 安装时将执行此 target
@@ -211,7 +207,6 @@ clean:
 	-@rm *.res  2>/dev/null
 	-@rm xy     2>/dev/null
 	-@rm fw     2>/dev/null
-	-@rm uv-helper-test 2>/dev/null
 	-@rm README.md.bak*    2>/dev/null
 
 	-@rm chsrc  					 2>/dev/null
