@@ -93,6 +93,7 @@ CFLAGS_release_mode := CFLAGS_release_mode_prompt + ' ' + CFLAGS_warn
 
 BIN_xy := if os() == 'windows' {'xy.exe'} else {'./xy'}
 BIN_fw := if os() == 'windows' {'fw.exe'} else {'./fw'}
+BIN_uv-helper-test := if os() == 'windows' {'uv-helper-test.exe'} else {'./uv-helper-test'}
 BIN_rm := if os() == 'windows' {'del'}    else {'rm'}
 #=======================
 alias b := build-in-dev-mode
@@ -132,7 +133,7 @@ build-in-release-mode:
 debug: build-in-debug-mode
   @{{DEBUGGER}} {{DebugMode-Target-Name}}
 
-test: test-xy test-fw
+test: test-xy test-fw test-uv-helper
 
 # 这两个测试文件都用 DEBUG mode
 test-xy:
@@ -142,6 +143,10 @@ test-xy:
 test-fw:
 	@{{CC}} test/fw.c {{CFLAGS_debug_mode}} -o fw
 	@{{BIN_fw}}
+
+test-uv-helper:
+	@{{CC}} test/uv-helper-test.c -o uv-helper-test
+	@{{BIN_uv-helper-test}}
 
 fastcheck:
 	@perl ./test/cli.pl fastcheck
@@ -154,6 +159,7 @@ clean:
 	-@{{BIN_rm}} *.res
 	-@{{BIN_rm}} xy
 	-@{{BIN_rm}} fw
+	-@{{BIN_rm}} uv-helper-test
 	-@{{BIN_rm}} chsrc
 	-@{{BIN_rm}} chsrc-debug
 	-@{{BIN_rm}} chsrc-release
