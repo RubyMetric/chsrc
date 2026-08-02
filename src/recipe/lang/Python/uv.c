@@ -10,7 +10,7 @@ pl_python_uv_prelude (void)
   chef_prep_this (pl_python_uv, gsr);
 
   chef_set_recipe_created_on   (this, "2024-12-11");
-  chef_set_recipe_last_updated (this, "2025-12-29");
+  chef_set_recipe_last_updated (this, "2026-08-02");
 
   chef_set_chefs (this, 2, "@happy-game", "@MingriLingran");
   chef_set_sauciers (this, 2, "@Kattos", "@ccmywish");
