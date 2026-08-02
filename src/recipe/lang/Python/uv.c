@@ -114,10 +114,7 @@ pl_python_uv_read_config (const char *path)
     }
   raw[nread] = '\0';
 
-  char *content = xy_str_gsub (raw, "\r\n", "\n");
-  free (raw);
-  xy_ptr_replace (&content, xy_str_gsub (content, "\r", "\n"));
-  return content;
+  return raw;
 }
 
 

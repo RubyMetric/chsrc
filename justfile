@@ -29,7 +29,8 @@
 # 而不清楚 just 在 MINGW32 中的情况，所以我们在此 justfile 中并不实现关于 CI 的功能
 # --------------------------------------------------------------
 
-set windows-shell := ['cmd', '/c']
+[windows]
+set shell := ['cmd', '/c']
 
 CC := if os() == 'windows' {
 	"gcc"
@@ -145,7 +146,7 @@ test-fw:
 	@{{BIN_fw}}
 
 test-uv-helper:
-	@{{CC}} test/uv-helper-test.c -o uv-helper-test
+	@{{CC}} test/uv-helper-test.c {{CFLAGS_debug_mode}} -o uv-helper-test
 	@{{BIN_uv-helper-test}}
 
 fastcheck:
