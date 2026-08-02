@@ -60,16 +60,16 @@ pl_python_group_prelude (void)
   // @ref https://mirrors.jlu.edu.cn/_news/#2025-04-06-pypi-repo-down
   // {&Jlu,              "https://mirrors.jlu.edu.cn/pypi/web/simple", FeedByPrelude},
   {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn/pypi/web/simple",    FeedByPrelude},
-  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple",FeedByPrelude},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple",   FeedByPrelude},
   {&Ustc,             "https://mirrors.ustc.edu.cn/pypi/simple",       FeedByPrelude},
   {&Ali,              "https://mirrors.aliyun.com/pypi/simple",        FeedByPrelude},
   {&Nju,              "https://mirror.nju.edu.cn/pypi/web/simple",     FeedByPrelude},
   {&Pku,              "https://mirrors.pku.edu.cn/pypi/web/simple",    FeedByPrelude},
   {&Tencent,          "https://mirrors.cloud.tencent.com/pypi/simple", FeedByPrelude},
 
-  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/pypi/simple",FeedByPrelude}
-  {&Huawei,           "https://mirrors.huaweicloud.com/repository/pypi/simple",FeedByPrelude},
-  {&Hust,             "https://mirrors.hust.edu.cn/pypi/web/simple",FeedByPrelude}
+  // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/pypi/simple", FeedByPrelude}
+  {&Huawei,           "https://mirrors.huaweicloud.com/repository/pypi/simple", FeedByPrelude},
+  {&Hust,             "https://mirrors.hust.edu.cn/pypi/web/simple",   FeedByPrelude}
 
   /* 不启用原因：24小时更新一次 */
   // {&Netease,       "https://mirrors.163.com/.help/pypi.html", NULL}
