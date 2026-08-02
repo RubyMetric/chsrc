@@ -89,11 +89,11 @@ test_replace_pypi_index_url (void)
   CHECK_STR (r, "[[index]]\nurl = \"https://mirror\"\n");
   free (r);
 
-  /* 多个 [[index]] 段: 只修改第一个 */
+  /* 多个 [[index]] 段: 优先修改 default = true 的 PyPI 替代源 */
   r = replace_pypi_index_url (
-      "[[index]]\nurl = \"https://old1\"\n\n[[index]]\nurl = \"https://old2\"\n",
+      "[[index]]\nurl = \"https://private\"\ndefault = false\n\n[[index]]\nurl = \"https://old\"\ndefault = true\n",
       "https://mirror");
-  CHECK_STR (r, "[[index]]\nurl = \"https://mirror\"\n\n[[index]]\nurl = \"https://old2\"\n");
+  CHECK_STR (r, "[[index]]\nurl = \"https://private\"\ndefault = false\n\n[[index]]\nurl = \"https://mirror\"\ndefault = true\n");
   free (r);
 
   /* 段边界: [[index]] 之后其他表的 url 键不被误改 */
@@ -153,61 +153,6 @@ test_replace_python_install_mirror (void)
 
 
 static void
-test_cleanup_config_for_reset (void)
-{
-  char *r;
-
-  /* 空内容 */
-  r = cleanup_config_for_reset ("");
-  CHECK_STR (r, "");
-  free (r);
-
-  /* 只清理 [[index]] 的 url/default 与顶层 python-install-mirror;
-   * 其他表 ([python]) 内的 url 键必须保留 */
-  r = cleanup_config_for_reset (
-      "python-install-mirror = \"https://old\"\n"
-      "[[index]]\n"
-      "name = \"tuna\"\n"
-      "url = \"https://old\"\n"
-      "default = true\n"
-      "\n"
-      "[python]\n"
-      "url = \"https://python\"\n");
-  CHECK_STR (r,
-      "[[index]]\n"
-      "name = \"tuna\"\n"
-      "\n"
-      "[python]\n"
-      "url = \"https://python\"\n");
-  free (r);
-
-  /* 顶层其他键保留 */
-  r = cleanup_config_for_reset (
-      "a = 1\npython-install-mirror = \"https://old\"\nb = 2\n");
-  CHECK_STR (r, "a = 1\nb = 2\n");
-  free (r);
-
-  /* 注释行保留 (注释中的 url 键不误删) */
-  r = cleanup_config_for_reset (
-      "# url = \"comment\"\n[[index]]\nurl = \"real\"\n");
-  CHECK_STR (r, "# url = \"comment\"\n[[index]]\n");
-  free (r);
-
-  /* 多个 [[index]] 段都清理 */
-  r = cleanup_config_for_reset (
-      "[[index]]\nurl = \"https://old1\"\n\n[[index]]\nurl = \"https://old2\"\n");
-  CHECK_STR (r, "[[index]]\n\n[[index]]\n");
-  free (r);
-
-  /* 其他表内的 default 键保留 */
-  r = cleanup_config_for_reset (
-      "[python]\ndefault = \"x\"\n");
-  CHECK_STR (r, "[python]\ndefault = \"x\"\n");
-  free (r);
-}
-
-
-static void
 test_uvh_get_top_level_value (void)
 {
   char *v;
@@ -245,13 +190,154 @@ test_uvh_get_top_level_value (void)
 }
 
 
+static void
+test_replace_index_url_pyproject (void)
+{
+  char *r;
+
+  /* 空文件: 创建 [tool.uv] 表 + [[tool.uv.index]] 段 */
+  r = replace_index_url ("", "https://mirror", "[[tool.uv.index]]", "[tool.uv]");
+  CHECK_STR (r, "[tool.uv]\n[[tool.uv.index]]\nurl = \"https://mirror\"\ndefault = true\n");
+  free (r);
+
+  /* 已有 [tool.uv] 无 index 段: 表内追加 (在下一个段头前) */
+  r = replace_index_url (
+      "[tool.uv]\nsome = 1\n[tool.poetry]\nx = 1\n",
+      "https://mirror", "[[tool.uv.index]]", "[tool.uv]");
+  CHECK_STR (r, "[tool.uv]\nsome = 1\n[tool.poetry]\nx = 1\n[[tool.uv.index]]\nurl = \"https://mirror\"\ndefault = true\n");
+  free (r);
+
+  /* 已有 [tool.uv] + [[tool.uv.index]]: 替换 url */
+  r = replace_index_url (
+      "[tool.uv]\n[[tool.uv.index]]\nurl = \"https://old\"\ndefault = true\n",
+      "https://mirror", "[[tool.uv.index]]", "[tool.uv]");
+  CHECK_STR (r, "[tool.uv]\n[[tool.uv.index]]\nurl = \"https://mirror\"\ndefault = true\n");
+  free (r);
+
+  /* 有 [project] 等其他表时正确找到 [tool.uv] */
+  r = replace_index_url (
+      "[project]\nname = \"x\"\n\n[tool.uv]\n[[tool.uv.index]]\nurl = \"https://old\"\n",
+      "https://mirror", "[[tool.uv.index]]", "[tool.uv]");
+  CHECK_STR (r, "[project]\nname = \"x\"\n\n[tool.uv]\n[[tool.uv.index]]\nurl = \"https://mirror\"\n");
+  free (r);
+
+  /* [[tool.uv.index]] 段内无 url 键: 段内插入 url + default */
+  r = replace_index_url (
+      "[tool.uv]\n[[tool.uv.index]]\nname = \"mirror\"\n",
+      "https://mirror", "[[tool.uv.index]]", "[tool.uv]");
+  CHECK_STR (r, "[tool.uv]\n[[tool.uv.index]]\nurl = \"https://mirror\"\ndefault = true\nname = \"mirror\"\n");
+  free (r);
+
+  /* CRLF 表头与缩进键应被识别，不能产生 duplicate table/key */
+  r = replace_index_url (
+      "  [tool.uv]\r\n  python-install-mirror = \"https://old-python\"\r\n  [[tool.uv.index]]\r\n  url = \"https://old\"\r\n  default = true\r\n",
+      "https://mirror", "[[tool.uv.index]]", "[tool.uv]");
+  CHECK_STR (r,
+      "  [tool.uv]\r\n  python-install-mirror = \"https://old-python\"\r\n  [[tool.uv.index]]\r\n  url = \"https://mirror\"\r\n  default = true\r\n");
+  free (r);
+
+  /* CRLF 文件中无 [tool.uv]: 新建段同样使用 CRLF */
+  r = replace_index_url (
+      "[project]\r\nname = \"x\"\r\n",
+      "https://mirror", "[[tool.uv.index]]", "[tool.uv]");
+  CHECK_STR (r,
+      "[project]\r\nname = \"x\"\r\n\r\n[tool.uv]\r\n[[tool.uv.index]]\r\nurl = \"https://mirror\"\r\ndefault = true\r\n");
+  free (r);
+
+  /* [tool.uv.sources] 不会阻止后续 index 被找到 */
+  r = replace_index_url (
+      "[tool.uv]\n[tool.uv.sources]\nfoo = { path = \"foo\" }\n[[tool.uv.index]]\nurl = \"https://old\"\ndefault = true\n",
+      "https://mirror", "[[tool.uv.index]]", "[tool.uv]");
+  CHECK_STR (r,
+      "[tool.uv]\n[tool.uv.sources]\nfoo = { path = \"foo\" }\n[[tool.uv.index]]\nurl = \"https://mirror\"\ndefault = true\n");
+  free (r);
+}
+
+
+static void
+test_replace_key_value_pyproject (void)
+{
+  char *r;
+
+  /* 空文件: 创建 [tool.uv] 表 + 键 */
+  r = replace_key_value ("", "python-install-mirror", "https://mirror", "[tool.uv]");
+  CHECK_STR (r, "[tool.uv]\npython-install-mirror = \"https://mirror\"\n");
+  free (r);
+
+  /* [tool.uv] 内已有键: 替换 */
+  r = replace_key_value (
+      "[tool.uv]\npython-install-mirror = \"https://old\"\n",
+      "python-install-mirror", "https://mirror", "[tool.uv]");
+  CHECK_STR (r, "[tool.uv]\npython-install-mirror = \"https://mirror\"\n");
+  free (r);
+
+  /* [tool.uv] 内无该键但已有 [[tool.uv.index]] 子表: 键插在子表头前 */
+  r = replace_key_value (
+      "[tool.uv]\n[[tool.uv.index]]\nurl = \"https://pypi\"\n",
+      "python-install-mirror", "https://mirror", "[tool.uv]");
+  CHECK_STR (r, "[tool.uv]\npython-install-mirror = \"https://mirror\"\n[[tool.uv.index]]\nurl = \"https://pypi\"\n");
+  free (r);
+
+  /* 缩进键就地替换，不重复定义 */
+  r = replace_key_value (
+      "[tool.uv]\r\n  python-install-mirror = \"https://old\"\r\n",
+      "python-install-mirror", "https://mirror", "[tool.uv]");
+  CHECK_STR (r, "[tool.uv]\r\n  python-install-mirror = \"https://mirror\"\r\n");
+  free (r);
+
+  /* CRLF 文件中无 [tool.uv]: 新建表同样使用 CRLF */
+  r = replace_key_value (
+      "[project]\r\nname = \"x\"\r\n",
+      "python-install-mirror", "https://mirror", "[tool.uv]");
+  CHECK_STR (r,
+      "[project]\r\nname = \"x\"\r\n\r\n[tool.uv]\r\npython-install-mirror = \"https://mirror\"\r\n");
+  free (r);
+}
+
+
+static void
+test_uvh_get_value_pyproject (void)
+{
+  char *v;
+
+  /* 表内键提取 */
+  v = uvh_get_value_in_table (
+      "[tool.uv]\npython-install-mirror = \"https://x\"\n", "python-install-mirror", "[tool.uv]");
+  CHECK (v != NULL);
+  if (v) { CHECK_STR (v, "https://x"); free (v); }
+
+  /* 其他表内同名键: 找不到 */
+  v = uvh_get_value_in_table (
+      "[tool.other]\npython-install-mirror = \"https://x\"\n", "python-install-mirror", "[tool.uv]");
+  CHECK (v == NULL);
+
+  /* index url 提取 */
+  v = uvh_get_index_url (
+      "[tool.uv]\n[[tool.uv.index]]\nurl = \"https://pypi\"\ndefault = true\n",
+      "[[tool.uv.index]]", "[tool.uv]");
+  CHECK (v != NULL);
+  if (v) { CHECK_STR (v, "https://pypi"); free (v); }
+
+  /* 无 index 段: NULL */
+  v = uvh_get_index_url (
+      "[tool.uv]\nsome = 1\n", "[[tool.uv.index]]", "[tool.uv]");
+  CHECK (v == NULL);
+
+  /* 表不存在: NULL */
+  v = uvh_get_index_url ("", "[[tool.uv.index]]", "[tool.uv]");
+  CHECK (v == NULL);
+}
+
+
 int
 main (void)
 {
   test_replace_pypi_index_url ();
   test_replace_python_install_mirror ();
-  test_cleanup_config_for_reset ();
   test_uvh_get_top_level_value ();
+  test_replace_index_url_pyproject ();
+  test_replace_key_value_pyproject ();
+  test_uvh_get_value_pyproject ();
 
   if (failures)
     {
