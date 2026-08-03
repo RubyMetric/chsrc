@@ -84,38 +84,19 @@ pl_python_uv_read_config (const char *path)
 {
   if (!xy_file_exist (path)) return xy_strdup ("");
 
-  char *normalized = xy_normalize_path (path);
-  FILE *fp = fopen (normalized, "rb");
-  free (normalized);
-  if (!fp || fseek (fp, 0, SEEK_END) != 0)
+  char *file = xy_normalize_path (path);
+  FILE *f = fopen (file, "rb");
+  if (!f)
     {
-      if (fp) fclose (fp);
-      chsrc_error2 ("无法读取 uv 配置文件");
+      free (file);
       return NULL;
     }
+  fclose (f);
 
-  long size = ftell (fp);
-  if (size < 0)
-    {
-      fclose (fp);
-      chsrc_error2 ("无法读取 uv 配置文件");
-      return NULL;
-    }
-  rewind (fp);
-
-  char *raw = xy_malloc0 ((size_t)size + 1);
-  size_t nread = fread (raw, 1, (size_t)size, fp);
-  bool failed = ferror (fp) != 0;
-  fclose (fp);
-  if (failed)
-    {
-      free (raw);
-      chsrc_error2 ("无法读取 uv 配置文件");
-      return NULL;
-    }
-  raw[nread] = '\0';
-
-  return raw;
+  /* xy_file_read 会把 CRLF 与孤立 CR 统一为 LF。 */
+  char *content = xy_file_read (file);
+  free (file);
+  return content;
 }
 
 
@@ -203,7 +184,7 @@ pl_python_uv_getsrc (char *option)
   const char *index_header = pyproject ? "[[tool.uv.index]]" : "[[index]]";
   const char *parent_table = pyproject ? "[tool.uv]" : NULL;
 
-  char *url = uvh_get_index_url (content, index_header, parent_table);
+  char *url = uvh_get_index_url (content, index_header);
   if (url)
     {
       say (url);
@@ -219,9 +200,7 @@ pl_python_uv_getsrc (char *option)
       say (default_source.url);
     }
 
-  char *mirror = pyproject
-               ? uvh_get_value_in_table (content, "python-install-mirror", parent_table)
-               : uvh_get_top_level_value (content, "python-install-mirror");
+  char *mirror = uvh_get_value_in_table (content, "python-install-mirror", parent_table);
   if (mirror)
     {
       say (mirror);
@@ -294,31 +273,30 @@ pl_uv_github_release_prelude (void)
 /**
  * 一次性完成uv配置文件的全部文件操作 (set 路径)
  */
-static void
+static bool
 pl_python_uv_write_all (const char *uv_config, const char *pypi_url, const char *py_dl_url)
 {
   char *content = pl_python_uv_read_config (uv_config);
-  if (!content) return;
-
-  char *final = NULL;
-  if (xy_str_end_with (uv_config, PL_Python_uv_PyprojectConfigFile))
+  if (!content)
     {
-      // `pyproject.toml`: 配置位于 `[tool.uv]` 表内
-      char *updated = replace_index_url (content, pypi_url, "[[tool.uv.index]]", "[tool.uv]");
-      final = replace_key_value (updated, "python-install-mirror", py_dl_url, "[tool.uv]");
-      free (updated);
-    }
-  else
-    {
-      // `uv.toml`: 配置位于顶层
-      char *updated = replace_pypi_index_url (content, pypi_url);
-      final = replace_python_install_mirror (updated, py_dl_url);
-      free (updated);
+      chsrc_error2 ("无法读取 uv 配置文件");
+      return false;
     }
 
+  bool pyproject = xy_str_end_with (uv_config, PL_Python_uv_PyprojectConfigFile);
+  const char *index_header = pyproject ? "[[tool.uv.index]]" : "[[index]]";
+  const char *parent_table = pyproject ? "[tool.uv]" : NULL;
+
+  char *updated = replace_index_url (content, pypi_url, index_header, parent_table);
+  char *final = replace_key_value (updated, "python-install-mirror", py_dl_url, parent_table);
+  free (updated);
+
+  /* final 仍为纯 LF。框架最终以文本模式写入：Windows 写盘时转换为 CRLF，
+   * 其他平台保持 LF。 */
   chsrc_overwrite_file (final, uv_config);
   free (final);
   free (content);
+  return true;
 }
 
 
@@ -360,7 +338,11 @@ pl_python_uv_setsrc (char *option)
       Source_t default_gh   = pl_python_uv_yield_target_source (&pl_uv_github_release_target, "upstream");
 
       chsrc_backup (uv_config);
-      pl_python_uv_write_all (uv_config, default_pypi.url, default_gh.url);
+      if (!pl_python_uv_write_all (uv_config, default_pypi.url, default_gh.url))
+        {
+          free (uv_config);
+          return;
+        }
       free (uv_config);
 
       return;
@@ -405,7 +387,11 @@ pl_python_uv_setsrc (char *option)
     chsrc_confirm_source (&source);
 
   chsrc_backup (uv_config);
-  pl_python_uv_write_all (uv_config, source.url, gh_source.url);
+  if (!pl_python_uv_write_all (uv_config, source.url, gh_source.url))
+    {
+      free (uv_config);
+      return;
+    }
   free (uv_config);
 
   if (chsrc_in_standalone_mode())

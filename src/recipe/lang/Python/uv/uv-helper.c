@@ -410,55 +410,10 @@ uvh_find_managed_index (const char *content, const char *index_header)
 }
 
 /**
- * @brief 检测文件内容是否使用 CRLF 换行。
- *
- * 以第一个换行符前是否有 '\r' 判断; 混合换行风格时结果取决于首个换行。
- *
- * @param content 文件内容
- *
- * @return 使用 CRLF 时返回 true, 否则返回 false
- */
-static bool
-uvh_detect_crlf (const char *content)
-{
-  const char *nl = strchr (content, '\n');
-  return nl && nl > content && nl[-1] == '\r';
-}
-
-/**
- * @brief 按 content 的换行风格转换 str 中的 LF。
- *
- * content 为 CRLF 时返回 CRLF 版本, 否则原样返回。仅用于追加的纯 LF 文本,
- * 不要传入已含 CRLF 的 content 本身。
- *
- * @param content 用于判断换行风格的内容
- * @param str     纯 LF 的待转换文本
- *
- * @return malloc 的 caller-free 转换后字符串
- *
- * @memory SAFE
- *   return caller-free
- */
-static char *
-uvh_apply_eol (const char *content, const char *str)
-{
-  bool crlf = uvh_detect_crlf (content);
-  size_t n = strlen (str);
-  char *ret = malloc (n + (crlf ? n : 0) + 1);
-  size_t pos = 0;
-  for (const char *s = str; *s; s++)
-    {
-      if (crlf && *s == '\n') ret[pos++] = '\r';
-      ret[pos++] = *s;
-    }
-  ret[pos] = '\0';
-  return ret;
-}
-
-/**
  * @brief 用 new_line_text 替换 content 中从 line 开始的整行。
  *
- * 保留原行缩进、行尾风格 (CRLF/LF) 与后续内容; new_line_text 不含换行。
+ * 保留原行缩进与后续内容; new_line_text 不含换行。中间改写统一使用 LF,
+ * 行尾由调用方在最终写盘前按系统平台转换 (Windows 为 CRLF, 其余 LF)。
  *
  * @param content       原始内容
  * @param line          content 中待替换行的行首指针
@@ -475,9 +430,6 @@ uvh_replace_line (const char *content, const char *line, const char *new_line_te
   const char *line_end = strchr (line, '\n');
   if (!line_end) line_end = content + strlen (content);
 
-  /* 原行为 CRLF 时，新行同样使用 CRLF */
-  bool crlf = (*line_end == '\n' && line_end > line && line_end[-1] == '\r');
-
   /* 复用原行缩进 */
   const char *indent_end = uvh_skip_indent (line);
   size_t ind = indent_end - line;
@@ -488,7 +440,6 @@ uvh_replace_line (const char *content, const char *line, const char *new_line_te
   pos += snprintf (ret + pos, len - pos, "%.*s", (int)(line - content), content);
   pos += snprintf (ret + pos, len - pos, "%.*s", (int)ind, line);
   pos += snprintf (ret + pos, len - pos, "%s", new_line_text);
-  if (crlf) ret[pos++] = '\r';
   strcpy (ret + pos, line_end);
   return ret;
 }
@@ -496,8 +447,8 @@ uvh_replace_line (const char *content, const char *line, const char *new_line_te
 /**
  * @brief 在 insert_at 位置之前插入 insert_text (以 '\n' 结尾)。
  *
- * 内容为 CRLF 时, 插入文本与分隔换行同样转换为 CRLF; insert_at 之前
- * 没有换行时会先补一个分隔换行。
+ * 中间改写统一使用 LF, 行尾由调用方在最终写盘前按系统平台转换;
+ * insert_at 之前没有换行时会先补一个分隔换行。
  *
  * @param content     原始内容
  * @param insert_at   content 内的插入位置指针
@@ -514,27 +465,31 @@ uvh_insert_before (const char *content, const char *insert_at, const char *inser
   size_t head = insert_at - content;
 
   bool need_sep = (head > 0 && content[head - 1] != '\n');
-  bool crlf = need_sep ? uvh_detect_crlf (content)
-                       : (head >= 2 && content[head - 1] == '\n' && content[head - 2] == '\r');
 
   size_t text_len = strlen (insert_text);
-  size_t extra = (crlf ? text_len : 0) + (need_sep ? 1 : 0);
-  size_t len = strlen (content) + text_len + extra + 16;
+  size_t len = strlen (content) + text_len + (need_sep ? 1 : 0) + 16;
   char *ret = calloc (len, 1);
   size_t pos = 0;
   pos += snprintf (ret + pos, len - pos, "%.*s", (int)head, content);
   if (need_sep)
     {
-      if (crlf) ret[pos++] = '\r';
       ret[pos++] = '\n';
     }
-  for (const char *t = insert_text; *t; t++)
-    {
-      if (crlf && *t == '\n') ret[pos++] = '\r';
-      ret[pos++] = *t;
-    }
+  memcpy (ret + pos, insert_text, text_len);
+  pos += text_len;
   strcpy (ret + pos, content + head);
   return ret;
+}
+
+/**
+ * @brief 以 LF 分隔，将完整 TOML 片段追加到文件末尾。
+ *
+ * @return malloc 的 caller-free 新内容
+ */
+static char *
+uvh_append_segment (const char *content, const char *segment)
+{
+  return uvh_insert_before (content, content + strlen (content), segment);
 }
 
 
@@ -567,23 +522,15 @@ replace_index_url (const char *content, const char *url, const char *index_heade
       if (!table)
         {
           /* 父表不存在: 在文件末尾创建父表并在其中创建 index 段,
-           * 换行风格与 content 保持一致 */
-          size_t clen = strlen (content);
-          const char *sep = (clen > 0) ? "\n" : "";
+           * 中间改写统一 LF, 行尾由最终写入前按系统平台转换 */
           char *escaped_url = uvh_escape_basic_string (url);
           size_t seg_len = strlen (parent_table) + strlen (index_header) + strlen (escaped_url) + 48;
           char *seg = calloc (seg_len, 1);
           snprintf (seg, seg_len, "%s\n%s\nurl = \"%s\"\ndefault = true\n",
                     parent_table, index_header, escaped_url);
           free (escaped_url);
-          char *seg_eol = uvh_apply_eol (content, seg);
+          char *ret = uvh_append_segment (content, seg);
           free (seg);
-          char *sep_eol = uvh_apply_eol (content, sep);
-          size_t len = clen + strlen (sep_eol) + strlen (seg_eol) + 1;
-          char *ret = calloc (len, 1);
-          snprintf (ret, len, "%s%s%s", content, sep_eol, seg_eol);
-          free (sep_eol);
-          free (seg_eol);
           return ret;
         }
     }
@@ -663,22 +610,14 @@ replace_key_value (const char *content, const char *key, const char *url, const 
       if (!table)
         {
           /* 父表不存在: 在文件末尾创建父表并写入键,
-           * 换行风格与 content 保持一致 */
-          size_t clen = strlen (content);
-          const char *sep = (clen > 0) ? "\n" : "";
+           * 中间改写统一 LF, 行尾由最终写入前按系统平台转换 */
           char *escaped_url = uvh_escape_basic_string (url);
           size_t seg_len = strlen (parent_table) + strlen (key) + strlen (escaped_url) + 16;
           char *seg = calloc (seg_len, 1);
           snprintf (seg, seg_len, "%s\n%s = \"%s\"\n", parent_table, key, escaped_url);
           free (escaped_url);
-          char *seg_eol = uvh_apply_eol (content, seg);
+          char *ret = uvh_append_segment (content, seg);
           free (seg);
-          char *sep_eol = uvh_apply_eol (content, sep);
-          size_t len = clen + strlen (sep_eol) + strlen (seg_eol) + 1;
-          char *ret = calloc (len, 1);
-          snprintf (ret, len, "%s%s%s", content, sep_eol, seg_eol);
-          free (sep_eol);
-          free (seg_eol);
           return ret;
         }
 
@@ -776,7 +715,6 @@ uvh_get_value_in_table (const char *content, const char *key, const char *parent
  *
  * @param content      文件内容
  * @param index_header 段头文本, 如 "[[index]]" 或 "[[tool.uv.index]]"
- * @param parent_table 父表头, 如 NULL (顶层) 或 "[tool.uv]"
  *
  * @return malloc 的 caller-free 解码后 URL; 未找到返回 NULL
  *
@@ -784,10 +722,9 @@ uvh_get_value_in_table (const char *content, const char *key, const char *parent
  *   return caller-free
  */
 static char *
-uvh_get_index_url (const char *content, const char *index_header, const char *parent_table)
+uvh_get_index_url (const char *content, const char *index_header)
 {
   /* fully-qualified [[tool.uv.index]] 会隐式创建父路径，不要求显式 [tool.uv]。 */
-  (void)parent_table;
   const char *ih = uvh_find_managed_index (content, index_header);
   if (!ih) return NULL;
 
@@ -796,58 +733,4 @@ uvh_get_index_url (const char *content, const char *index_header, const char *pa
   const char *url_line = uvh_find_key_in_section (first, end, "url");
   if (!url_line) return NULL;
   return uvh_extract_string_value (url_line);
-}
-
-
-/* ============ uv.toml 便捷包装 (保持原函数名) ============ */
-
-/**
- * @brief uv.toml 便捷包装: 替换/创建顶层 [[index]] 段的 url。
- *
- * @param content 原始内容
- * @param url     新的索引 URL
- *
- * @return malloc 的 caller-free 新内容
- *
- * @memory SAFE
- *   return caller-free
- */
-static char *
-replace_pypi_index_url (const char *content, const char *url)
-{
-  return replace_index_url (content, url, "[[index]]", NULL);
-}
-
-/**
- * @brief uv.toml 便捷包装: 替换/创建顶层 python-install-mirror 键。
- *
- * @param content 原始内容
- * @param url     新的 Python 下载镜像基址
- *
- * @return malloc 的 caller-free 新内容
- *
- * @memory SAFE
- *   return caller-free
- */
-static char *
-replace_python_install_mirror (const char *content, const char *url)
-{
-  return replace_key_value (content, "python-install-mirror", url, NULL);
-}
-
-/**
- * @brief uv.toml 便捷包装: 提取顶层键的字符串值。
- *
- * @param content 文件内容
- * @param key     键名
- *
- * @return malloc 的 caller-free 解码后字符串; 未找到返回 NULL
- *
- * @memory SAFE
- *   return caller-free
- */
-static char *
-uvh_get_top_level_value (const char *content, const char *key)
-{
-  return uvh_get_value_in_table (content, key, NULL);
 }
