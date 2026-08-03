@@ -6,10 +6,11 @@ def_target(pl_python_uv, "uv");
 
 #include "uv-helper.c"
 
-/* 内部 target 前置声明 (定义在文件末尾 def_target 处) */
+// 内部 target 前置声明 (定义在文件末尾 def_target 处)
 void pl_uv_github_release_prelude (void);
 extern Target_t pl_uv_github_release_target;
 
+// 调整 `python-install-mirror` 相关配置应在 `pl_uv_github_release` 处修改，本处仅为 uv 最常用的 `pypi` 镜像配置。
 void
 pl_python_uv_prelude (void)
 {
@@ -31,7 +32,7 @@ pl_python_uv_prelude (void)
 
   chef_use_other_target_sources (this, &pl_python_group_target);
 
-  /* 内部 target 的 prelude 未通过 menu.c 的 add() 注册, 手动挂载 */
+  // 内部 target 的 prelude 未通过 menu.c 的 add() 注册, 手动挂载
   pl_uv_github_release_target.preludefn = pl_uv_github_release_prelude;
 }
 
@@ -52,7 +53,7 @@ pl_python_uv_prelude (void)
 
 #define PL_Python_uv_ConfigFile          "uv.toml"
 #define PL_Python_uv_PyprojectConfigFile "pyproject.toml"
-/* 注意: 不能以 "./" 开头 —— Windows 上 chsrc_backup 的 copy 命令无法处理 */
+// 注意: 不能以 "./" 开头 —— Windows 上 chsrc_backup 的 copy 命令无法处理
 #define PL_Python_uv_Local_ConfigPath    ""
 #define PL_Python_uv_User_ConfigPath     "~/.config"
 
@@ -123,7 +124,7 @@ pl_python_find_uv_config (bool mkdir)
 {
   if (chsrc_in_project_scope_mode())
     {
-      /* uv.toml 与 pyproject.toml 并存时，uv 会忽略后者中的 [tool.uv]。 */
+      // uv.toml 与 pyproject.toml 并存时，uv 会忽略后者中的 [tool.uv]。
       char *uv_toml = xy_2strcat (PL_Python_uv_Local_ConfigPath, PL_Python_uv_ConfigFile);
       if (xy_file_exist (uv_toml))
         return uv_toml;
@@ -139,7 +140,7 @@ pl_python_find_uv_config (bool mkdir)
     {
       if (xy.on_windows)
         {
-          /* config path on Windows */
+          // config path on Windows
           char *appdata = getenv ("APPDATA");
 
           if (!appdata)
@@ -159,7 +160,7 @@ pl_python_find_uv_config (bool mkdir)
         }
       else
         {
-          /* config path on Linux or macOS */
+          // config path on Linux or macOS
           const char *config_path = pl_python_uv_user_config_path ();
           char *config_dir = xy_path_join (config_path, "uv");
           if (mkdir)
@@ -189,7 +190,7 @@ pl_python_uv_getsrc (char *option)
       return;
     }
 
-  /* uv.toml 与 pyproject.toml 均使用同一套受限 TOML 读取逻辑。 */
+  // uv.toml 与 pyproject.toml 均使用同一套受限 TOML 读取逻辑。
   char *content = pl_python_uv_read_config (uv_config);
   if (!content)
     {
@@ -241,18 +242,18 @@ pl_python_uv_getsrc (char *option)
 
 def_target (pl_uv_github_release, NULL);
 
-/* CNB (Cloud Native Build, 腾讯) 托管的 python-build-standalone releases 镜像 */
+// CNB (Cloud Native Build, 腾讯) 托管的 python-build-standalone releases 镜像
 static MirrorSite_t CnbPython =
 {
   IS_DedicatedMirrorSite,
   "cnb", "CNB", "Cloud Native Build (腾讯)", "https://cnb.cool/",
-  {NotSkip, NA, NA, "https://cnb.cool/astral-sh/python-build-standalone/-/releases/download/20260728/cpython-3.14.6+20260728-i686-pc-windows-msvc-install_only_stripped.tar.gz", ACCURATE}
+  {NotSkip, NA, NA, "https://cnb.cool/astral-sh/python-build-standalone/-/releases/download/20260728/cpython-3.15.0b4+20260728-x86_64_v4-unknown-linux-gnu-freethreaded-install_only.tar.gz", ACCURATE}
 };
 
-/* 内部 target, 无 CLI 入口, 以下为占位 */
-void pl_uv_github_release_getsrc (char *o) { (void)o; }
-void pl_uv_github_release_setsrc (char *o) { (void)o; }
-void pl_uv_github_release_resetsrc (char *o) { (void)o; }
+// 内部 target, 无 CLI 入口, 以下为占位
+void pl_uv_github_release_getsrc (char *o)   { (void) o; }
+void pl_uv_github_release_setsrc (char *o)   { (void) o; }
+void pl_uv_github_release_resetsrc (char *o) { (void) o; }
 
 void
 pl_uv_github_release_prelude (void)
@@ -282,10 +283,10 @@ pl_uv_github_release_prelude (void)
   chef_set_smURL_with_postfix (this, &CnbPython, GH_SM_POSTFIX);
 #undef GH_SM_POSTFIX
 
-  /* 2026-5-31: USTC 仅保留 Latest, 只能用 SHA256SUMS 粗略测速 */
+  // 2026-5-31: USTC 仅保留 Latest, 只能用 SHA256SUMS 粗略测速
   chef_set_smURL_with_postfix (this, &Ustc, "/LatestRelease/SHA256SUMS");
 
-  /* 中科大仅保留 Latest 且文件内含动态版本号, 使用模糊测速 */
+  // 中科大仅保留 Latest 且文件内含动态版本号, 使用模糊测速
   chef_set_provider_sm_accuracy (&Ustc, ROUGH);
 }
 
@@ -302,14 +303,14 @@ pl_python_uv_write_all (const char *uv_config, const char *pypi_url, const char 
   char *final = NULL;
   if (xy_str_end_with (uv_config, PL_Python_uv_PyprojectConfigFile))
     {
-      /* pyproject.toml: 配置位于 [tool.uv] 表内 */
+      // `pyproject.toml`: 配置位于 `[tool.uv]` 表内
       char *updated = replace_index_url (content, pypi_url, "[[tool.uv.index]]", "[tool.uv]");
       final = replace_key_value (updated, "python-install-mirror", py_dl_url, "[tool.uv]");
       free (updated);
     }
   else
     {
-      /* uv.toml: 配置位于顶层 */
+      // `uv.toml`: 配置位于顶层
       char *updated = replace_pypi_index_url (content, pypi_url);
       final = replace_python_install_mirror (updated, py_dl_url);
       free (updated);
@@ -325,8 +326,8 @@ pl_python_uv_write_all (const char *uv_config, const char *pypi_url, const char 
  * chsrc set uv
  *
  * 同时更换两部分:
- *   1. PyPI 索引源               ([[index]] 表)
- *   2. Python 解释器下载源       (python-install-mirror)
+ *   1. PyPI 索引源               (`[[index]]` 表)
+ *   2. Python 解释器下载源       (`python-install-mirror`)
  *
  * @consult https://docs.astral.sh/uv/reference/settings/#python-install-mirror
  */
@@ -367,7 +368,8 @@ pl_python_uv_setsrc (char *option)
 
   /**
    * set: 选取源并写入。
-   * 两个 URL 的语义不同：自定义 URL 只作为 PyPI index，Python 下载镜像仍自动测速。 */
+   * 两个 URL 的语义不同：自定义 URL 只作为 PyPI index，Python 下载镜像仍自动测速。
+   */
   char *pypi_opt = option;
   char *gh_opt = NULL;
 
@@ -392,11 +394,11 @@ pl_python_uv_setsrc (char *option)
           gh_opt = option;
         }
       else if (gh_found)
-        gh_opt = option; /* 共有 code: 两个 target 都使用同一 code */
+        gh_opt = option; // 共有 code: 两个 target 都使用同一 code
     }
 
   Source_t source = chsrc_yield_source (&pl_python_group_target, pypi_opt);
-  /* 内部 target 不得复用 Python group leader 的数组下标。 */
+  // 内部 target 不得复用 Python group leader 的数组下标。
   Source_t gh_source = pl_python_uv_yield_target_source (&pl_uv_github_release_target, gh_opt);
 
   if (chsrc_in_standalone_mode())
