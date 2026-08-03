@@ -1,8 +1,8 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
- * Lib Authors   :  Mikachu2333 <linkchou@yandex.com>
- * Contributors  :  EXAMPLE     <EXAMPLE@EXAMPLE.com>
+ * Lib Authors   :  Mikachu2333   <linkchou@yandex.com>
+ * Contributors  :  Nul None      <nul@none.org>
  *               |
  * Created On    : <2026-08-02>
  * Last Modified : <2026-08-02>

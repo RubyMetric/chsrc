@@ -762,7 +762,7 @@ xy_str_next_nonempty_line (const char *str)
 /**
  * @brief 读取文件内容并返回字符串，失败时返回空字符串
  *
- * @note 已处理 \r\n 和 \r，返回的字符串均为 \n 换行
+ * @note 已处理 `\r\n` 和 `\r`，返回的字符串均为 `\n` 换行
  *
  * @flavor Ruby: IO::read
  *

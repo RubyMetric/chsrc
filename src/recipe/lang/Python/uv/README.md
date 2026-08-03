@@ -65,7 +65,7 @@
 
 ## 实现边界
 
-配置改写器只解析 chsrc 使用的 TOML 子集，但支持常见的行首缩进、CRLF、行尾注释、多个 index，以及位于 `[tool.uv.sources]` 等子表之后的 `[[tool.uv.index]]`。改写会保留原有缩进与行尾风格（CRLF/LF）。多行字符串和完整 TOML 转义语义不属于该轻量改写器的支持范围。
+配置改写器只解析 chsrc 使用的 TOML 子集，但支持常见的行首缩进、CRLF、行尾注释、多个 index，以及位于 `[tool.uv.sources]` 等子表之后的 `[[tool.uv.index]]`。读取时换行统一为 LF 处理，写入时按系统平台输出行尾（Windows 为 CRLF，其余为 LF）。多行字符串和完整 TOML 转义语义不属于该轻量改写器的支持范围。
 
 参考：
 
