@@ -2,7 +2,7 @@
  ! SPDX-License-Identifier: GFDL-1.3-or-later
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
- ! Doc Name      : 12-uv换源实现说明.md
+ ! Doc Name      : uv换源实现说明.md
  ! Created On    : <2026-08-02>
  ! Last Modified : <2026-08-02>
  ! ---------------------------------------------------------- -->
