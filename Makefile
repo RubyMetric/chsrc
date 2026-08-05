@@ -103,6 +103,14 @@ ifeq ($(MAKECMDGOALS), build-in-ci-release-mode)
 
 	CFLAGS += $(CFLAGS_optimization)
 
+  # Windows 上嵌入图标与版本信息资源 (与 justfile 中 build-in-release-mode 一致)
+	# 注意: Android 交叉编译同样在 Windows/MSYS2 下进行, 必须排除, 不能链入 Windows 资源
+	ifeq ($(On-Windows), 1)
+		ifneq ($(CROSS_BUILD_WINDOWS_FOR_ANDROID), 1)
+			Windows-CI-Resource = chsrc.res
+		endif
+	endif
+
   # 仅在 Linux 上使用静态链接
 	ifeq ($(On-Linux), 1)
 		CFLAGS += $(CFLAGS_static)
@@ -156,7 +164,10 @@ build-in-release-mode:
 # CI release mode 的配置在该文件上方
 build-in-ci-release-mode:
 	@echo Starting: Build in CI-RELEASE mode: \'$(CC)\' $(CFLAGS) -o $(CIReleaseMode-Target-Name)
-	@$(CC) src/chsrc-main.c $(CFLAGS) $(_C_Warning_Flags) -o $(CIReleaseMode-Target-Name)
+ifeq ($(Windows-CI-Resource), chsrc.res)
+	@windres src/resource/chsrc.rc -O coff -o chsrc.res
+endif
+	@$(CC) src/chsrc-main.c $(Windows-CI-Resource) $(CFLAGS) $(_C_Warning_Flags) -o $(CIReleaseMode-Target-Name)
 	@echo Finished: Build in CI-RELEASE mode
 
 # 永远重新编译
