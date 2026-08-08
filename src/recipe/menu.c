@@ -18,7 +18,7 @@
   #include "lang/Python/Poetry.c"
   #include "lang/Python/PDM.c"
   #include "lang/Python/Rye.c"
-  #include "lang/Python/uv.c"
+  #include "lang/Python/uv/uv.c"
 #include "lang/Python/Python.c"
 
 #include "lang/JavaScript/common.h"

@@ -3,8 +3,8 @@
  ! -------------------------------------------------------------
  ! Doc Type      : Markdown
  ! Doc Name      : 10-如何编写recipe.md
- ! Doc Authors   : 曾奥然 <ccmywish@qq.com>
- ! Contributors  : Nul None <nul@none.org>
+ ! Doc Authors   : 曾奥然        <ccmywish@qq.com>
+ ! Contributors  : Mikachu2333   <linkchou@yandex.com>
  !               |
  ! Created On    : <2024-08-19>
  ! Last Modified : <2026-01-21>

@@ -24,4 +24,9 @@
     },
 
     "vscode-just.formatOnSave": false,
+
+    "clangd.enable": false,
+    "clangd.enableCodeCompletion": false,
+    "clangd.enableHover": false,
+    "clangd.detectExtensionConflicts": false
 }

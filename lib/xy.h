@@ -2,9 +2,9 @@
  * Copyright © 2023-2026 曾奥然, 郭恒
  * SPDX-License-Identifier: MIT
  * -------------------------------------------------------------
- * Lib Authors   :  曾奥然 <ccmywish@qq.com>
- *               |   郭恒  <2085471348@qq.com>
- * Contributors  : Mikachu2333  <mikachu.23333@zohomail.com>
+ * Lib Authors   :  曾奥然      <ccmywish@qq.com>
+ *               |   郭恒       <2085471348@qq.com>
+ * Contributors  : Mikachu2333  <linkchou@yandex.com>
  *               | juzeon       <skyjuzheng@gmail.com>
  *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *               | AnonTokio    <anontokio@163.com>
@@ -762,7 +762,7 @@ xy_str_next_nonempty_line (const char *str)
 /**
  * @brief 读取文件内容并返回字符串，失败时返回空字符串
  *
- * @note 已处理 \r\n 和 \r，返回的字符串均为 \n 换行
+ * @note 已处理 `\r\n` 和 `\r`，返回的字符串均为 `\n` 换行
  *
  * @flavor Ruby: IO::read
  *
