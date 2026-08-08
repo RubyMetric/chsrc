@@ -10,7 +10,7 @@ os_debian_prelude ()
   chef_prep_this (os_debian, gsr);
 
   chef_set_recipe_created_on   (this, "2023-09-02");
-  chef_set_recipe_last_updated (this, "2026-06-26");
+  chef_set_recipe_last_updated (this, "2026-08-08");
 
   chef_set_chefs (this, 2, "@ccmywish", "@G_I_Y");
   chef_set_sauciers (this, 2, "@Yangmoooo", "@wcbing");
@@ -95,6 +95,13 @@ os_debian_setsrc_for_deb822 (char *option)
   cmd = xy_strcat (3, "sed -E -i 's@https?://.*/debian-security/?@", source.url, "-security@g' " OS_Debian_SourceList_DEB822);
   chsrc_run (cmd, RunOpt_Default);
 
+  /* 清理 sources.list.d/ 下旧格式 deb-src.list 等残留的官方源 (deb.debian.org) */
+  chsrc_backup (OS_Apt_SourceList_D "deb-src.list");
+  cmd = xy_strcat (3,
+    "find " OS_Apt_SourceList_D " -name '*.list' -exec sed -i -E 's@https?://deb\\.debian\\.org/debian(-security)?@",
+    source.url, "\\1@g' {} +");
+  chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
+
   chsrc_run ("apt-get update", RunOpt_No_Last_New_Line);
 
   chsrc_determine_chgtype (ChgType_Auto);
@@ -152,6 +159,14 @@ os_debian_setsrc (char *option)
   char *cmd = xy_strcat (3, "sed -E -i \'s@https?://.*/debian/?@", source.url, "@g\' " OS_Debian_old_SourceList);
 
   chsrc_run (cmd, RunOpt_Default);
+
+  /* 清理 sources.list.d/ 下旧格式 deb-src.list 等残留的官方源 (deb.debian.org) */
+  chsrc_backup (OS_Apt_SourceList_D "deb-src.list");
+  cmd = xy_strcat (3,
+    "find " OS_Apt_SourceList_D " -name '*.list' -exec sed -i -E 's@https?://deb\\.debian\\.org/debian(-security)?@",
+    source.url, "\\1@g' {} +");
+  chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
+
   chsrc_run ("apt-get update", RunOpt_No_Last_New_Line);
 
   chsrc_determine_chgtype (ChgType_Auto);
