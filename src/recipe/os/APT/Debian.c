@@ -10,10 +10,10 @@ os_debian_prelude ()
   chef_prep_this (os_debian, gsr);
 
   chef_set_recipe_created_on   (this, "2023-09-02");
-  chef_set_recipe_last_updated (this, "2026-08-08");
+  chef_set_recipe_last_updated (this, "2026-08-11");
 
   chef_set_chefs (this, 2, "@ccmywish", "@G_I_Y");
-  chef_set_sauciers (this, 2, "@Yangmoooo", "@wcbing");
+  chef_set_sauciers (this, 3, "@Yangmoooo", "@wcbing", "@daocoder");
 
   chef_set_os_scope (this);
 
