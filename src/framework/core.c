@@ -132,6 +132,16 @@ ProgStatus =
   .user_agent = "chsrc/" Chsrc_Version,
 };
 
+/* Combo dish source resolution context.
+ * When a combo dish is being handled, each sub dish may use a different
+ * source list, but the user only supplied one mirror code. This context lets
+ * the framework decide whether a sub dish should use the code directly, or
+ * auto-select its fastest mirror because the code belongs to a sibling. */
+#define MaxComboSourceResolutionDepth 16
+static Dish_t *ComboSourceResolutionDishStack[MaxComboSourceResolutionDepth];
+static char  *ComboBackedUpPaths[MaxComboSourceResolutionDepth];
+static int    ComboSourceResolutionDepth = 0;
+
 
 /* Global Program Store */
 struct
@@ -150,8 +160,6 @@ ProgStore =
   .wr = NULL,
   .contributors = NULL,
 };
-
-
 
 #define Exit_OK               0
 #define Exit_Fatal            1
@@ -174,6 +182,32 @@ ProgStore =
 #define chsrc_verbose(str) xy_info(App_Name "(VERBOSE)",str)
 /* 多语句必须括起来，否则在不带 { } 的 if else 等语句中会出错 */
 #define chsrc_breakdown(reason) { xy_error(App_Name "(BREAKDOWN)",reason); exit(Exit_MaintainerCause); }
+
+bool
+chsrc_in_combo_source_resolution (void)
+{
+  return ComboSourceResolutionDepth > 0;
+}
+
+void
+chsrc_begin_combo_source_resolution (Dish_t *dish, char *option)
+{
+  if (ComboSourceResolutionDepth >= MaxComboSourceResolutionDepth)
+    chsrc_breakdown ("combo dish 嵌套层级过深");
+
+  ComboSourceResolutionDishStack[ComboSourceResolutionDepth] = dish;
+  ComboBackedUpPaths[ComboSourceResolutionDepth] = NULL;
+  ComboSourceResolutionDepth++;
+}
+
+void
+chsrc_end_combo_source_resolution (void)
+{
+  if (ComboSourceResolutionDepth <= 0)
+    chsrc_breakdown ("combo dish 解析上下文已为空");
+
+  ComboSourceResolutionDepth--;
+}
 
 #define faint(str)    xy_str2faint(str)
 #define red(str)      xy_str2red(str)
@@ -1039,6 +1073,66 @@ source_has_empty_url (Source_t *source)
   return source->url == NULL;
 }
 
+static bool
+combo_subdish_has_source_code (Dish_t *dish, const char *code)
+{
+  if (!dish || !dish->sources || !code)
+    return false;
+
+  for (int i=0; i < dish->sources_n; i++)
+    {
+      if (xy_streql (dish->sources[i].mirror->code, code))
+        return true;
+    }
+
+  return false;
+}
+
+static bool
+combo_sibling_has_source_code (Dish_t *current, const char *code)
+{
+  if (ComboSourceResolutionDepth <= 0)
+    return false;
+
+  Dish_t *combo = ComboSourceResolutionDishStack[ComboSourceResolutionDepth - 1];
+  if (!combo || !combo->sub_dishes)
+    return false;
+
+  for (size_t i=0; i < xy_seq_len(combo->sub_dishes); i++)
+    {
+      Dish_t *sub_dish = xy_seq_at (combo->sub_dishes, i);
+      if (sub_dish == current)
+        continue;
+
+      if (!sub_dish->inited)
+        sub_dish->preparefn ();
+
+      if (combo_subdish_has_source_code (sub_dish, code))
+        return true;
+    }
+
+  return false;
+}
+
+/**
+ * @brief 在 combo dish 中为当前 sub dish 解析源
+ *
+ * 用户只提供一个 code。若当前 sub dish 拥有该 code，直接使用它；否则，
+ * 若某个兄弟 sub dish 拥有该 code，说明该 code 仅属于另一类源，当前 sub
+ * dish 应自动测速选择其最快镜像。都不存在时走普通查询路径并报错。
+ */
+int
+chsrc_resolve_combo_subdish_source (Dish_t *dish, char *option)
+{
+  if (combo_subdish_has_source_code (dish, option))
+    return query_mirror_exist (dish->sources, dish->sources_n, dish->aliases, option);
+
+  if (combo_sibling_has_source_code (dish, option))
+    return auto_select_mirror (dish->sources, dish->sources_n, dish->aliases);
+
+  return query_mirror_exist (dish->sources, dish->sources_n, dish->aliases, option);
+}
+
 
 
 /**
@@ -1069,7 +1163,12 @@ chsrc_yield_source (Dish_t *dish, char *option)
   if (!dish->inited) dish->preparefn();
 
   Source_t source;
-  if (chsrc_in_dish_group_mode() && ProgStatus.leader_selected_index==-1)
+  if (chsrc_in_combo_source_resolution() && option && !hp_is_url (option))
+    {
+      int index = chsrc_resolve_combo_subdish_source (dish, option);
+      source = dish->sources[index];
+    }
+  else if (chsrc_in_dish_group_mode() && ProgStatus.leader_selected_index==-1)
     {
       ProgStatus.leader_selected_index = use_specific_mirror_or_auto_select (option, dish);
       source = dish->sources[ProgStatus.leader_selected_index];
@@ -1970,6 +2069,17 @@ chsrc_backup (const char *path)
       char *msg = ENGLISH ? "File doesn't exist, skip backup: " : "文件不存在,跳过备份: ";
       chsrc_alert2 (xy_2strcat (msg, path));
       return;
+    }
+
+  /* combo dish 中多个 sub dish 可能操作同一配置文件。首个 sub dish
+   * 已经保留原始内容后，后续 sub dish 不应再覆盖该备份。 */
+  if (chsrc_in_combo_source_resolution())
+    {
+      int depth = ComboSourceResolutionDepth - 1;
+      if (ComboBackedUpPaths[depth] && xy_streql (ComboBackedUpPaths[depth], path))
+        goto log_anyway;
+
+      ComboBackedUpPaths[depth] = xy_strdup (path);
     }
 
   if (xy.on_bsd || xy.on_macos)

@@ -814,6 +814,8 @@ chefs_handle_Set_Source (Dish_t *dish, const char *input, char *option)
 {
   if (dish_has_sub_dishes(dish))
     {
+      chsrc_begin_combo_source_resolution (dish, option);
+
       for (size_t i=0; i<xy_seq_len(dish->sub_dishes); i++)
         {
           Dish_t *sub_dish = xy_seq_at (dish->sub_dishes, i);
@@ -822,6 +824,8 @@ chefs_handle_Set_Source (Dish_t *dish, const char *input, char *option)
           chefs_handle_Set_Source (sub_dish, dish_get_first_alias(sub_dish), option);
           br();
         }
+
+      chsrc_end_combo_source_resolution ();
       return;
     }
 
