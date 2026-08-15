@@ -31,6 +31,11 @@ pl_uv_python_build_prepare (void)
   chef_set_chefs (this, 2, "@Mikachu2333", "@ccmywish");
   chef_set_sauciers (this, 0);
 
+  chef_set_scope_cap (this, ProjectScope, ScopeCap_Able_And_Implemented);
+  chef_set_scope_cap (this, UserScope,    ScopeCap_Able_And_Implemented);
+  chef_set_scope_cap (this, SystemScope,  ScopeCap_Able_But_Not_Implemented);
+  chef_set_default_scope (this, UserScope);
+
   chef_deny_english (this);
   chef_allow_user_define (this);
 
