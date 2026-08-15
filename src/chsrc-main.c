@@ -671,7 +671,7 @@ typedef enum {
 void
 chefs_handle_List_Info (Dish_t *dish, const char *input, char *option)
 {
-  /* group dish 直接展开并展示所有 sub dishes 的完整信息 */
+  /* group dish 仅展示维护信息 */
   if (dish_has_sub_dishes(dish))
     {
       int sub_count = xy_seq_len (dish->sub_dishes);
@@ -693,8 +693,16 @@ chefs_handle_List_Info (Dish_t *dish, const char *input, char *option)
           Dish_t *sub_dish = xy_seq_at (dish->sub_dishes, i);
           sub_dish->preparefn();
           println (bdpurple (sub_dish->aliases));
-          chefs_handle_List_Info (sub_dish, dish_get_first_alias(sub_dish), option);
-          br();
+          /* 嵌套的 group dish 的处理 */
+          if (dish_has_sub_dishes(sub_dish))
+            {
+              chefs_handle_List_Info (sub_dish, dish_get_first_alias(sub_dish), option);
+            }
+          else
+            {
+              cli_print_dish_maintain_info (sub_dish, input);
+              br();
+            }
         }
       return;
     }
@@ -775,12 +783,6 @@ chefs_handle_Get_Source (Dish_t *dish, const char *input, char *option)
 {
   if (dish_has_sub_dishes(dish))
     {
-      if (dish->getfn)
-        {
-          dish->getfn(option);
-          return;
-        }
-
       for (size_t i=0; i<xy_seq_len(dish->sub_dishes); i++)
         {
           Dish_t *sub_dish = xy_seq_at (dish->sub_dishes, i);
@@ -812,13 +814,6 @@ chefs_handle_Set_Source (Dish_t *dish, const char *input, char *option)
 {
   if (dish_has_sub_dishes(dish))
     {
-      if (dish->setfn)
-        {
-          chsrc_check_scope_capability (dish);
-          dish->setfn(option);
-          return;
-        }
-
       for (size_t i=0; i<xy_seq_len(dish->sub_dishes); i++)
         {
           Dish_t *sub_dish = xy_seq_at (dish->sub_dishes, i);
@@ -867,12 +862,6 @@ chefs_handle_Reset_Source (Dish_t *dish, const char *input, char *option)
 {
   if (dish_has_sub_dishes(dish))
     {
-      if (dish->resetfn)
-        {
-          dish->resetfn(option);
-          return;
-        }
-
       for (size_t i=0; i<xy_seq_len(dish->sub_dishes); i++)
         {
           Dish_t *sub_dish = xy_seq_at (dish->sub_dishes, i);
