@@ -178,7 +178,7 @@ ProgStore =
 #define chsrc_breakdown(reason) { xy_error(App_Name "(BREAKDOWN)",reason); exit(Exit_MaintainerCause); }
 
 bool
-chsrc_in_combo_source_resolution (void)
+chsrc_in_dish_group_mode (void)
 {
   return ProgStatus.ComboStackDepth > 0;
 }
@@ -1145,7 +1145,7 @@ chsrc_yield_source (Dish_t *dish, char *option)
   if (!dish->inited) dish->preparefn();
 
   Source_t source;
-  if (chsrc_in_combo_source_resolution() && option)
+  if (chsrc_in_dish_group_mode() && option)
     {
       if (hp_is_url (option))
         {
@@ -2065,7 +2065,7 @@ chsrc_backup (const char *path)
 
   /* combo dish 中多个 sub dish 可能操作同一配置文件。首个 sub dish
    * 已经保留原始内容后，后续 sub dish 不应再覆盖该备份。 */
-  if (chsrc_in_combo_source_resolution())
+  if (chsrc_in_dish_group_mode())
     {
       int depth = ProgStatus.ComboStackDepth - 1;
       XySeq_t *backed_up_paths = ProgStatus.ComboBackedUpPaths[depth];
