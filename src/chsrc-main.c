@@ -788,7 +788,6 @@ chefs_handle_Get_Source (Dish_t *dish, const char *input, char *option)
           Dish_t *sub_dish = xy_seq_at (dish->sub_dishes, i);
           sub_dish->preparefn();
           println (bdpurple(sub_dish->aliases));
-          chsrc_set_dish_group_mode();
           chefs_handle_Get_Source (sub_dish, dish_get_first_alias(sub_dish), option);
           br();
         }
@@ -814,7 +813,7 @@ chefs_handle_Set_Source (Dish_t *dish, const char *input, char *option)
 {
   if (dish_has_sub_dishes(dish))
     {
-      chsrc_begin_combo_source_resolution (dish, option);
+      chsrc_begin_combo_source_resolution (dish);
 
       for (size_t i=0; i<xy_seq_len(dish->sub_dishes); i++)
         {

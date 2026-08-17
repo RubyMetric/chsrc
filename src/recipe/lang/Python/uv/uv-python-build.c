@@ -37,7 +37,10 @@ pl_uv_python_build_prepare (void)
   chef_set_default_scope (this, UserScope);
 
   chef_deny_english (this);
-  chef_allow_user_define (this);
+  chef_deny_user_define (this);
+  this->can_user_define_explain =
+    CHINESE ? "python-install-mirror 不支持手动指定，chsrc 会自动选择"
+            : "python-install-mirror cannot be specified manually; chsrc selects it automatically";
 
   def_sources_begin ()
   {&UpstreamProvider, "https://github.com/astral-sh/python-build-standalone/releases/download",       DelegateToUpstream},

@@ -35,6 +35,9 @@
 
 static int chsrc_get_cpucore ();
 
+/* 定义于 dish.c，core.c 在 combo 源解析时需要提前声明 */
+bool dish_has_source_from_mirror (Dish_t *dish, const char *code);
+
 
 /* Global Program Mode */
 struct
@@ -42,9 +45,6 @@ struct
   // 用户命令
   bool MeasureMode;
   bool ResetMode;
-
-  // 内部实现
-  bool DishGroupMode;
 
   // 用户命令选项
   bool Ipv6Mode;
@@ -57,7 +57,6 @@ ProgMode =
 {
   .MeasureMode = false,
   .ResetMode   = false,
-  .DishGroupMode = false,
   .Ipv6Mode = false,
   .Scope = ImplementationDefinedScope,
   .EnglishMode = false,
@@ -66,10 +65,9 @@ ProgMode =
 };
 
 /* recipe 相关 mode */
-bool chsrc_in_dish_group_mode() {return ProgMode.DishGroupMode;}
-// 并非作为 sub dish，而是自身作为一个独立的 dish 执行
-bool chsrc_in_standalone_mode() {return !ProgMode.DishGroupMode;}
-void chsrc_set_dish_group_mode(){ProgMode.DishGroupMode = true;}
+// combo dish 递归不再复用旧的 DishGroupMode；每个 leaf dish 仍负责自己的
+// 确认和收尾输出。
+bool chsrc_in_standalone_mode() {return true;}
 
 bool chsrc_in_reset_mode(){return ProgMode.ResetMode;}
 /* 默认换源作用域就是 ImplementationDefinedScope */
@@ -113,34 +111,30 @@ typedef enum ChgType_t
   ChgType_Untested
 } ChgType_t;
 
+#define MaxComboStackDepth 16
 
 /* Global Program Status */
 struct
 {
-  int leader_selected_index;   /* combo dish 选中的索引 */
-  ChgType_t chgtype;           /* 换源实现的类型 */
+  ChgType_t chgtype; /* 换源实现的类型 */
 
   /* 此时 chsrc_run() 不再是recipe中指定要运行的一个外部命令，而是作为一个功能实现的支撑 */
   bool chsrc_run_faas;
   char *user_agent;
+
+  /* combo dish 源解析上下文。用户只给一个 code/URL，但不同 sub dish 可能
+   * 使用不同的源列表；该栈记录当前正在处理的 combo dish。 */
+  Dish_t *ComboStack[MaxComboStackDepth];
+  XySeq_t *ComboBackedUpPaths[MaxComboStackDepth];
+  int ComboStackDepth;
 }
 ProgStatus =
 {
-  .leader_selected_index = -1,
   .chgtype = ChgType_Auto,
   .chsrc_run_faas = false,
   .user_agent = "chsrc/" Chsrc_Version,
+  .ComboStackDepth = 0,
 };
-
-/* Combo dish source resolution context.
- * When a combo dish is being handled, each sub dish may use a different
- * source list, but the user only supplied one mirror code. This context lets
- * the framework decide whether a sub dish should use the code directly, or
- * auto-select its fastest mirror because the code belongs to a sibling. */
-#define MaxComboSourceResolutionDepth 16
-static Dish_t *ComboSourceResolutionDishStack[MaxComboSourceResolutionDepth];
-static char  *ComboBackedUpPaths[MaxComboSourceResolutionDepth];
-static int    ComboSourceResolutionDepth = 0;
 
 
 /* Global Program Store */
@@ -186,27 +180,28 @@ ProgStore =
 bool
 chsrc_in_combo_source_resolution (void)
 {
-  return ComboSourceResolutionDepth > 0;
+  return ProgStatus.ComboStackDepth > 0;
 }
 
 void
-chsrc_begin_combo_source_resolution (Dish_t *dish, char *option)
+chsrc_begin_combo_source_resolution (Dish_t *dish)
 {
-  if (ComboSourceResolutionDepth >= MaxComboSourceResolutionDepth)
+  if (ProgStatus.ComboStackDepth >= MaxComboStackDepth)
     chsrc_breakdown ("combo dish 嵌套层级过深");
 
-  ComboSourceResolutionDishStack[ComboSourceResolutionDepth] = dish;
-  ComboBackedUpPaths[ComboSourceResolutionDepth] = NULL;
-  ComboSourceResolutionDepth++;
+  int depth = ProgStatus.ComboStackDepth;
+  ProgStatus.ComboStack[depth] = dish;
+  ProgStatus.ComboBackedUpPaths[depth] = xy_seq_new ();
+  ProgStatus.ComboStackDepth++;
 }
 
 void
 chsrc_end_combo_source_resolution (void)
 {
-  if (ComboSourceResolutionDepth <= 0)
+  if (ProgStatus.ComboStackDepth <= 0)
     chsrc_breakdown ("combo dish 解析上下文已为空");
 
-  ComboSourceResolutionDepth--;
+  ProgStatus.ComboStackDepth--;
 }
 
 #define faint(str)    xy_str2faint(str)
@@ -1074,27 +1069,12 @@ source_has_empty_url (Source_t *source)
 }
 
 static bool
-combo_subdish_has_source_code (Dish_t *dish, const char *code)
+subdish_sibling_has_source_from_mirror (Dish_t *current, const char *code)
 {
-  if (!dish || !dish->sources || !code)
+  if (ProgStatus.ComboStackDepth <= 0)
     return false;
 
-  for (int i=0; i < dish->sources_n; i++)
-    {
-      if (xy_streql (dish->sources[i].mirror->code, code))
-        return true;
-    }
-
-  return false;
-}
-
-static bool
-combo_sibling_has_source_code (Dish_t *current, const char *code)
-{
-  if (ComboSourceResolutionDepth <= 0)
-    return false;
-
-  Dish_t *combo = ComboSourceResolutionDishStack[ComboSourceResolutionDepth - 1];
+  Dish_t *combo = ProgStatus.ComboStack[ProgStatus.ComboStackDepth - 1];
   if (!combo || !combo->sub_dishes)
     return false;
 
@@ -1107,7 +1087,7 @@ combo_sibling_has_source_code (Dish_t *current, const char *code)
       if (!sub_dish->inited)
         sub_dish->preparefn ();
 
-      if (combo_subdish_has_source_code (sub_dish, code))
+      if (dish_has_source_from_mirror (sub_dish, code))
         return true;
     }
 
@@ -1124,13 +1104,16 @@ combo_sibling_has_source_code (Dish_t *current, const char *code)
 int
 chsrc_resolve_combo_subdish_source (Dish_t *dish, char *option)
 {
-  if (combo_subdish_has_source_code (dish, option))
+  if (dish_has_source_from_mirror (dish, option))
     return query_mirror_exist (dish->sources, dish->sources_n, dish->aliases, option);
 
-  if (combo_sibling_has_source_code (dish, option))
+  if (subdish_sibling_has_source_from_mirror (dish, option))
     return auto_select_mirror (dish->sources, dish->sources_n, dish->aliases);
 
-  return query_mirror_exist (dish->sources, dish->sources_n, dish->aliases, option);
+  chsrc_breakdown (ENGLISH
+                   ? "This combo sub dish has no source from the requested mirror"
+                   : "该 combo sub dish 没有所请求镜像站的源");
+  return 0;
 }
 
 
@@ -1145,10 +1128,9 @@ chsrc_resolve_combo_subdish_source (Dish_t *dish, char *option)
  *   3. 用户什么都没指定，          即 chsrc set <dish>
  *   4. 用户正在重置源，            即 chsrc reset <dish>
  *
- * 如果处于 Dish Group 模式下，combo dish 已经测速过了，sub dish
- * 不能再次测速，而是直接选择 combo dish 测过的结果
- *
- *   5. combo dish 测速出来的某个源
+ * 如果处于 combo source resolution 上下文中，则按 sub dish 与 sibling
+ * 的源列表集中决定：code 命中本 dish 则直接使用；命中 sibling 则本 dish
+ * 自动测速；传入 URL 时，支持自定义 URL 的 sub dish 使用 URL，其余自动测速。
  *
  */
 Source_t
@@ -1163,19 +1145,29 @@ chsrc_yield_source (Dish_t *dish, char *option)
   if (!dish->inited) dish->preparefn();
 
   Source_t source;
-  if (chsrc_in_combo_source_resolution() && option && !hp_is_url (option))
+  if (chsrc_in_combo_source_resolution() && option)
     {
-      int index = chsrc_resolve_combo_subdish_source (dish, option);
-      source = dish->sources[index];
-    }
-  else if (chsrc_in_dish_group_mode() && ProgStatus.leader_selected_index==-1)
-    {
-      ProgStatus.leader_selected_index = use_specific_mirror_or_auto_select (option, dish);
-      source = dish->sources[ProgStatus.leader_selected_index];
-    }
-  else if (chsrc_in_dish_group_mode() && ProgStatus.leader_selected_index!=-1)
-    {
-      source = dish->sources[ProgStatus.leader_selected_index];
+      if (hp_is_url (option))
+        {
+          /* combo dish 传入 URL 时，支持该 sub dish 自定义 URL 的则直接使用；
+           * 不支持则自动选择该 sub dish 的最快源。这样 uv 可只把 URL 当作
+           * PyPI index，而 python-install-mirror 仍自动选择。 */
+          if (dish->can_user_define)
+            {
+              Source_t tmp = { &UserDefinedProvider, option };
+              source = tmp;
+            }
+          else
+            {
+              int index = auto_select_mirror (dish->sources, dish->sources_n, dish->aliases);
+              source = dish->sources[index];
+            }
+        }
+      else
+        {
+          int index = chsrc_resolve_combo_subdish_source (dish, option);
+          source = dish->sources[index];
+        }
     }
   else if (hp_is_url (option))
     {
@@ -2075,11 +2067,16 @@ chsrc_backup (const char *path)
    * 已经保留原始内容后，后续 sub dish 不应再覆盖该备份。 */
   if (chsrc_in_combo_source_resolution())
     {
-      int depth = ComboSourceResolutionDepth - 1;
-      if (ComboBackedUpPaths[depth] && xy_streql (ComboBackedUpPaths[depth], path))
-        goto log_anyway;
+      int depth = ProgStatus.ComboStackDepth - 1;
+      XySeq_t *backed_up_paths = ProgStatus.ComboBackedUpPaths[depth];
 
-      ComboBackedUpPaths[depth] = xy_strdup (path);
+      for (size_t i=0; i < xy_seq_len(backed_up_paths); i++)
+        {
+          if (xy_streql (xy_seq_at (backed_up_paths, i), path))
+            goto log_anyway;
+        }
+
+      xy_seq_push (backed_up_paths, xy_strdup (path));
     }
 
   if (xy.on_bsd || xy.on_macos)

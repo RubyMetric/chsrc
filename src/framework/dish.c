@@ -35,3 +35,26 @@ dish_has_sub_dishes (Dish_t *dish)
 {
   return (dish->sub_dishes && xy_seq_len(dish->sub_dishes) > 1);
 }
+
+
+
+bool
+dish_has_source_from_mirror (Dish_t *dish, const char *code)
+{
+  if (!dish || !dish->sources || !code)
+    return false;
+
+  if (xy_streql (code, "upstream"))
+    return dish->sources_n > 0;
+
+  if (xy_streql (code, "first"))
+    return dish->sources_n > 1;
+
+  for (int i=0; i < dish->sources_n; i++)
+    {
+      if (xy_streql (dish->sources[i].mirror->code, code))
+        return true;
+    }
+
+  return false;
+}
