@@ -118,7 +118,7 @@ parse_and_say_curl_result (char *curl_buf)
 
   // say(curl_buf); say(split+1);
   int  http_code = xy_str2int (curl_buf);
-  double   speed = xy_str2float (split+1);
+  double   speed = split ? xy_str2float (split+1) : 0.0;
   char *speedstr = to_human_readable_speed (speed);
 
   /* xy_str2int() 可能会返回0，表示转换失败 */
