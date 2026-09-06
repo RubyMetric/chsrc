@@ -48,9 +48,9 @@ void
 chsrc_register_chefs_and_sauciers ()
 {
   /* 项目创建者 */
-  chef_register_contributor ("@ccmywish",       "曾奥然",         "ccmywish@qq.com",                NULL);
+  chef_register_contributor ("@ccmywish",       "曾奥然",          "ccmywish@qq.com",                NULL);
   // 该注释下一行的用户 ID 为 Gitee ID
-  chef_register_contributor ("@G_I_Y",          "郭恒",           "2085471348@qq.com",              NULL);
+  chef_register_contributor ("@G_I_Y",          "郭恒",            "2085471348@qq.com",              NULL);
 
   /* 项目协作者 */
   chef_register_contributor ("@happy-game",     "Happy Game",     "happygame1024@gmail.com",        NULL);
@@ -60,7 +60,7 @@ chsrc_register_chefs_and_sauciers ()
   chef_register_contributor ("@Aaron-212",      "Aaron Ruan",     "aaron212cn@outlook.com",         NULL);
   chef_register_contributor ("@chenrui333",     "Rui Chen",       "rui@chenrui.dev",                NULL);
   chef_register_contributor ("@livelycode36",   "Shengwei Chen",  "414685209@qq.com",               NULL);
-  chef_register_contributor ("@rocascent",       "Peng Gao",       "gn3po4g@outlook.com",            NULL);
+  chef_register_contributor ("@rocascent",       "Peng Gao",      "gn3po4g@outlook.com",            NULL);
   chef_register_contributor ("@BlockLune",      "BlockLune",      "blocklune@gmail.com",            NULL);
   chef_register_contributor ("@MrWillCom",      "Mr. Will",       "mr.will.com@outlook.com",        NULL);
   chef_register_contributor ("@Jerry-Terrasse", "Terrasse",       "terrasse@qq.com",                NULL);
@@ -72,7 +72,7 @@ chsrc_register_chefs_and_sauciers ()
   chef_register_contributor ("@XUANJI233",      "XUANJI233",      "xuanji233@outlook.com",          NULL);
   chef_register_contributor ("@Yangmoooo",      "Yangmoooo",      "yangmoooo@outlook.com",          NULL);
   chef_register_contributor ("@zouri",          "Zouri",          "guoshuaisun@outlook.com",        NULL);
-  chef_register_contributor ("@ReachForStar",  "徐永祥",          "1926885268@qq.com",              NULL);
+  chef_register_contributor ("@ReachForStar",   "徐永祥",          "1926885268@qq.com",              NULL);
   chef_register_contributor ("@YU-7",           "YU-7",           "2747046473@qq.com",              NULL);
   chef_register_contributor ("@juzeon",         "juzeon",         "skyjuzheng@gmail.com",           NULL);
   chef_register_contributor ("@jialinlvcn",     "Jialin Lyu",     "jialinlvcn@aliyun.com",          NULL);
@@ -88,7 +88,7 @@ chsrc_register_chefs_and_sauciers ()
   chef_register_contributor ("@MingriLingran",  "MingriLingran",  "i@linran.moe",                   NULL);
   chef_register_contributor ("@usernameisnull", "MaBing",         "cumt_ttr@163.com",               NULL);
   chef_register_contributor ("@AnonTokio",      "Anon Tokio",     "anontokio@163.com",              NULL);
-  chef_register_contributor ("@NewbieXvwu",     "Mingzhe Jiang",   "newbiexvwu@gmail.com",          NULL);
+  chef_register_contributor ("@NewbieXvwu",     "Mingzhe Jiang",  "newbiexvwu@gmail.com",           NULL);
   chef_register_contributor ("@daocoder",       "daocoder",       "daocoder@foxmail.com",           NULL);
   chef_register_contributor ("@JIAFALSEDREAM",  "假发",           "jiafa@hello-happy.world",         NULL);
   chef_register_contributor ("@yayoinoyume",    "YAYOI27",        "yayoi27@yayoi.uk",               NULL);
