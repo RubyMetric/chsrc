@@ -32,15 +32,18 @@ pl_rust_rustup_prepare (void)
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/rustup",  FeedByPrepare},
   {&Ustc,             "https://mirrors.ustc.edu.cn/rust-static",      FeedByPrepare},
   {&Nju,              "https://mirror.nju.edu.cn/rustup",             FeedByPrepare},
-  {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/rust-static",       FeedByPrepare},
   {&Zju,              "https://mirrors.zju.edu.cn/rustup",            FeedByPrepare},
-  {&Iscas,            "https://mirror.iscas.ac.cn/rustup",            FeedByPrepare},
-  {&Ali,              "https://mirrors.aliyun.com/rustup",            FeedByPrepare},
+  {&Ha,               "https://mirrors.ha.edu.cn/rustup",             FeedByPrepare},
   {&RsProxyCN,        "https://rsproxy.cn",                           FeedByPrepare}
+  // 2026-09-06 以下镜像源因长期不更新而弃用
+  //{&Iscas,            "https://mirror.iscas.ac.cn/rustup",            FeedByPrepare},
+  //{&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/rust-static",       FeedByPrepare},
+  //{&Ali,              "https://mirrors.aliyun.com/rustup",            FeedByPrepare},
+
   def_sources_end()
 
-  // 20MB大小
-  chef_set_rest_smURL_with_postfix (this, "/dist/2025-06-26/cargo-1.88.0-x86_64-unknown-illumos.tar.gz");
+  // 40MB大小
+  chef_set_rest_smURL_with_postfix (this, "/rustup/dist/x86_64-unknown-linux-gnu/rustup-init");
 }
 
 
