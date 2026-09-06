@@ -137,7 +137,7 @@ chsrc_init_menu ()
   add(Xjtu);
   add(Hust);   add(Iscas); add(Hit); add(Scau);
   add(NJTech); add(Nyist); add(Sdu); add(Qlu);
-  add(Cqupt);  add(Cqu);   add(Ha);  add(Neosoft);
+  add(Cqupt);  add(Ha);    add(Neosoft);
 
   /* ------------------------ 商业公司(通用镜像站) ------------------------ */
   add(Ali);     // add(Ali_ECS_VPC); add(Ali_ECS_classic);
