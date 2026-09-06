@@ -210,6 +210,13 @@ Neosoft =
   IS_GeneralMirrorSite,
   "neosoft", "Neosoft", "大连东软信息学院开源镜像站", "https://mirrors.neusoft.edu.cn/",
   {NotSkip, NA, NA, "https://mirrors.neusoft.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
+},
+
+Ha =
+{
+  IS_GeneralMirrorSite,
+  "ha", "HERNET", "河南省教育科研网", "https://mirrors.ha.edu.cn/",
+  {NotSkip, NA, NA, "https://mirrors.ha.edu.cn/archlinux" Big_File_archlinux, ROUGH}
 };
 
 
