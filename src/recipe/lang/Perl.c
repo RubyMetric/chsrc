@@ -10,7 +10,7 @@ pl_perl_prepare ()
   chef_prep_this_dish (pl_perl, gs);
 
   chef_set_recipe_created_on   (this, "2023-09-31");
-  chef_set_recipe_last_updated (this, "2025-10-07");
+  chef_set_recipe_last_updated (this, "2026-09-06");
 
   chef_set_chefs    (this, 1, "@ccmywish");
   chef_set_sauciers (this, 2, "@hezonglun", "@Mikachu2333");
@@ -28,7 +28,6 @@ pl_perl_prepare ()
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/CPAN/",        FeedByPrepare},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/CPAN/", FeedByPrepare},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/CPAN/",          FeedByPrepare},
-  {&Cqu,              "https://mirrors.cqu.edu.cn/CPAN/",           FeedByPrepare},
   {&Bjtu,             "https://mirror.bjtu.edu.cn/cpan/",           FeedByPrepare},
   {&Nju,              "https://mirrors.nju.edu.cn/CPAN/",           FeedByPrepare},
   {&Nyist,            "https://mirror.nyist.edu.cn/CPAN/",          FeedByPrepare},
@@ -39,6 +38,8 @@ pl_perl_prepare ()
   {&Lzuoss,           "https://mirrors.lzu.edu.cn/CPAN/",           FeedByPrepare},
   {&Hust,             "https://mirrors.hust.edu.cn/CPAN/",          FeedByPrepare},
   {&Ali,              "https://mirrors.aliyun.com/CPAN/",           FeedByPrepare}
+  // @note 2026-09-06 CQU 全面封杀校外ip，弃用
+  //{&Cqu,              "https://mirrors.cqu.edu.cn/CPAN/",           FeedByPrepare},
   def_sources_end()
 
   chef_set_rest_smURL_with_postfix (this, "authors/id/D/DB/DBAURAIN/Bio-MUST-Apps-FortyTwo-0.213470.tar.gz");

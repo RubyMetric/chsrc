@@ -10,7 +10,7 @@
  *               | @BingChunMoLi
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2025-10-07>
+ * Last Modified : <2026-09-06>
  *
  * 通用镜像站
  * ------------------------------------------------------------*/
@@ -195,16 +195,15 @@ Cqupt =
   {NotSkip, NA, NA, "https://mirrors.cqupt.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
 
-/**
- * @note 2023-09-05 封杀策略过严，谨慎使用
- */
+// @note 2026-09-06 CQU 全面封杀校外ip，弃用
+/*
 Cqu =
 {
   IS_GeneralMirrorSite,
   "cqu", "CQU", "重庆大学开源软件镜像站", "https://mirrors.cqu.edu.cn/",
   {NotSkip, NA, NA, "https://mirrors.cqu.edu.cn/ubuntu-releases" Big_File_ubuntu, ROUGH}
 },
-
+ */
 Neosoft =
 {
   IS_GeneralMirrorSite,

@@ -13,7 +13,7 @@ pl_rust_rustup_prepare (void)
   chef_prep_this_dish (pl_rust_rustup, gsr);
 
   chef_set_recipe_created_on   (this, "2024-10-02");
-  chef_set_recipe_last_updated (this, "2025-08-07");
+  chef_set_recipe_last_updated (this, "2026-09-06");
 
   chef_set_chefs (this, 1, "@ccmywish");
   chef_set_sauciers (this, 2, "@Yangmoooo", "@Mikachu2333");

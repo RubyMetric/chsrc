@@ -10,7 +10,7 @@ pl_rust_cargo_prepare (void)
   chef_prep_this_dish (pl_rust_cargo, gsr);
 
   chef_set_recipe_created_on   (this, "2023-08-30");
-  chef_set_recipe_last_updated (this, "2026-03-21");
+  chef_set_recipe_last_updated (this, "2026-09-06");
 
   chef_set_chefs (this, 2, "@Mikachu2333", "@ccmywish");
   chef_set_sauciers (this, 2, "@happy-game", "@AnonTokio");
@@ -49,8 +49,8 @@ pl_rust_cargo_prepare (void)
 
   /* 注释原因: (2025-06-17) 镜像同步失败，多数包都不可用 */
   // {&Hust,       "https://mirrors.hust.edu.cn/crates.io-index/", FeedByPrepare},
-
-  {&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/",  NULL}
+  // @note 2026-09-06 CQU 全面封杀校外ip，弃用
+  //{&Cqu,           "https://mirrors.cqu.edu.cn/crates.io-index/",  NULL}
   def_sources_end()
 
 #undef url_postfix
