@@ -91,6 +91,7 @@ chsrc_register_chefs_and_sauciers ()
   chef_register_contributor ("@NewbieXvwu",     "Mingzhe Jiang",   "newbiexvwu@gmail.com",          NULL);
   chef_register_contributor ("@daocoder",       "daocoder",       "daocoder@foxmail.com",           NULL);
   chef_register_contributor ("@JIAFALSEDREAM",  "假发",           "jiafa@hello-happy.world",         NULL);
+  chef_register_contributor ("@yayoinoyume",    "YAYOI27",        "yayoi27@yayoi.uk",               NULL);
 
   /**
    * AI贡献者：

@@ -4,6 +4,7 @@
  * File Authors   : @ccmywish
  * Contributors   : @Mikachu2333
  *                | @BingChunMoLi
+ *                | @yayoinoyume
  *                |
  * Created On     : <2023-09-01>
  * Major Revision :      6
@@ -86,6 +87,7 @@
 #include "os/YUM/Anolis-OS.c"
 
 #include "os/pacman/Arch-Linux.c"
+#include "os/pacman/Omarchy.c"
 #include "os/pacman/Manjaro-Linux.c"
 #include "os/pacman/MSYS2.c"
 
@@ -209,6 +211,7 @@ chsrc_init_menu ()
   add (arch);
   add (archlinuxcn);
   add (manjaro);
+  add (omarchy);
   add (gentoo);
   add (rockylinux);
   add (almalinux);
