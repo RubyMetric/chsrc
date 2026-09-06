@@ -11,7 +11,7 @@
 
 #define Chsrc_Version "chsrc-framework-tester"
 
-#include "../src/framework/foundation.c"
+#include "../src/framework/base.c"
 #include "../src/framework/OS.c"
 
 int
