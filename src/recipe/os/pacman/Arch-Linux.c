@@ -7,16 +7,19 @@ def_dish(os_arch, "arch/archlinux");
 #define OS_Pacman_MirrorList "/etc/pacman.d/mirrorlist"
 #define OS_Pacman_ArchLinuxCN_MirrorList "/etc/pacman.conf"
 
+/* Arch 官方源(geo 自动选最近镜像)，换源后作兜底 */
+#define OS_Arch_Upstream "https://geo.mirror.pkgbuild.com"
+
 void
 os_arch_prepare ()
 {
-  chef_prep_this_dish (os_arch, gs);
+  chef_prep_this_dish (os_arch, gsr);
 
   chef_set_recipe_created_on   (this, "2023-09-05");
-  chef_set_recipe_last_updated (this, "2025-10-30");
+  chef_set_recipe_last_updated (this, "2026-09-06");
 
   chef_set_chefs (this, 2, "@ccmywish", "@G_I_Y");
-  chef_set_sauciers (this, 2, "@happy-game", "@Young-Lord");
+  chef_set_sauciers (this, 3, "@happy-game", "@Young-Lord", "@yayoinoyume");
 
   chef_set_os_scope (this);
   chef_deny_english(this);
@@ -30,7 +33,7 @@ os_arch_prepare ()
    * @note 不要给后面加 / ，因为ARM情况下，还要额外加一个 arm 后缀
    */
   def_sources_begin()
-  {&UpstreamProvider, "https://repo.archlinux.org",            DelegateToUpstream},
+  {&UpstreamProvider, "https://geo.mirror.pkgbuild.com",       DelegateToUpstream},
   {&Ali,              "https://mirrors.aliyun.com/archlinux",  DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/archlinux", DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/archlinux", DelegateToMirror},
@@ -77,6 +80,12 @@ os_arch_setsrc (char *option)
     {
       is_x86 = true;
       to_write = xy_strcat (3, "Server = ", source.url, "/$repo/os/$arch\n");
+      /* 新源后补官方兜底(目标即官方时不重复) */
+      if (!xy_streql (source.url, OS_Arch_Upstream))
+        to_write = xy_strcat (2, to_write, "Server = " OS_Arch_Upstream "/$repo/os/$arch\n");
+
+      /* 换源前先清掉已累积的 Server 行再写入，保证幂等(仅 x86) */
+      chsrc_run ("sed -i '/^Server = /d' " OS_Pacman_MirrorList, RunOpt_Default);
     }
   else
     {
@@ -100,6 +109,13 @@ os_arch_setsrc (char *option)
   chsrc_conclude (&source);
 }
 
+
+/* reset = 恢复官方源，走同一 setsrc（框架会令 source 落到官方源） */
+void
+os_arch_resetsrc (char *option)
+{
+  os_arch_setsrc (option);
+}
 
 
 /** ------------------------------------------------------------
