@@ -16,14 +16,14 @@ os_arch_prepare ()
   chef_prep_this_dish (os_arch, gsr);
 
   chef_set_recipe_created_on   (this, "2023-09-05");
-  chef_set_recipe_last_updated (this, "2026-09-06");
+  chef_set_recipe_last_updated (this, "2026-09-07");
 
-  chef_set_chefs (this, 2, "@ccmywish", "@G_I_Y");
-  chef_set_sauciers (this, 3, "@happy-game", "@Young-Lord", "@yayoinoyume");
+  chef_set_chefs (this, 3, "@yayoinoyume", "@ccmywish", "@G_I_Y");
+  chef_set_sauciers (this, 2, "@happy-game", "@Young-Lord");
 
   chef_set_os_scope (this);
   chef_deny_english(this);
-  chef_allow_user_define(this);
+  chef_deny_user_define(this);
 
   chef_set_note (this,
     "可额外使用 chsrc set archlinuxcn 来更换 Arch Linux CN Repository 源",
@@ -33,20 +33,14 @@ os_arch_prepare ()
    * @note 不要给后面加 / ，因为ARM情况下，还要额外加一个 arm 后缀
    */
   def_sources_begin()
-  {&UpstreamProvider, "https://geo.mirror.pkgbuild.com",       DelegateToUpstream},
+  {&UpstreamProvider,  OS_Arch_Upstream,                       DelegateToUpstream},
   {&Ali,              "https://mirrors.aliyun.com/archlinux",  DelegateToMirror},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/archlinux", DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/archlinux", DelegateToMirror},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/archlinux", DelegateToMirror},
   {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn/archlinux", DelegateToMirror},
   {&Tencent,          "https://mirrors.tencent.com/archlinux", DelegateToMirror},
-  // {&Tencent_Intra, "https://mirrors.tencentyun.com/archlinux", DelegateToMirror},
   {&Huawei,           "https://mirrors.huaweicloud.com/archlinux", DelegateToMirror},
-
-  /* 不启用原因：过慢 */
-  // {&Netease,          "https://mirrors.163.com/archlinux", DelegateToMirror},
-  /* 不启用原因：过慢 */
-  // {&Sohu,          "https://mirrors.sohu.com/archlinux",   DelegateToMirror}
   def_sources_end()
 }
 
@@ -80,9 +74,12 @@ os_arch_setsrc (char *option)
     {
       is_x86 = true;
       to_write = xy_strcat (3, "Server = ", source.url, "/$repo/os/$arch\n");
-      /* 新源后补官方兜底(目标即官方时不重复) */
-      if (!xy_streql (source.url, OS_Arch_Upstream))
-        to_write = xy_strcat (2, to_write, "Server = " OS_Arch_Upstream "/$repo/os/$arch\n");
+
+      /* 在新源后面追加官方源兜底，但当新源就是官方源时不再重复) */
+      if (!xy_streql (OS_Arch_Upstream, source.url))
+        {
+          to_write = xy_2strcat (to_write, "Server = " OS_Arch_Upstream "/$repo/os/$arch\n");
+        }
 
       /* 换源前先清掉已累积的 Server 行再写入，保证幂等(仅 x86) */
       chsrc_run ("sed -i '/^Server = /d' " OS_Pacman_MirrorList, RunOpt_Default);
