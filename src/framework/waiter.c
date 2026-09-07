@@ -7,7 +7,7 @@
  * Contributors  : Nul None <nul@none.org>
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2026-09-01>
+ * Last Modified : <2026-09-07>
  *
  * 由 chsrc-main.c 拆分而来
  * ------------------------------------------------------------*/
@@ -174,18 +174,18 @@ cli_print_menu (char *menu)
  * 用于 chsrc list <dish>
  */
 void
-cli_print_dish_available_sources (Source_t sources[], size_t size)
+cli_print_dish_available_sources (Dish_t *dish)
 {
+  size_t size = dish->sources_n;
   for (int i=0; i<size; i++)
     {
-      Source_t src = sources[i];
+      Source_t src = dish->sources[i];
       const MirrorSite_t *mir = src.mirror;
       if (NULL == src.url)
         {
           src.url = "Please help to add the upstream url!";
         }
-      printf ("%-14s%-18s%-50s ", mir->code, mir->abbr, src.url);
-      say (mir->name);
+      printf ("%-12s %-55s %-4s %s\n", mir->code, src.url, " ", mir->name);
     }
 }
 
@@ -696,29 +696,32 @@ waiter_handle_List_Info (Dish_t *dish, const char *input, char *option)
     }
 
   {
-  char *msg = ENGLISH ? "To specify a source, use chsrc set " : "指定使用某源，请使用 chsrc set ";
+  char *msg = CHINESE ? "指定使用某源，请使用 chsrc set " : "To specify a source, use chsrc set ";
   say (bdblue(xy_strcat (3, msg, input, " <code>\n")));
   }
 
   {
-  char *msg = ENGLISH ? "Available Sources: \n" : "可用源: \n";
+  char *msg = CHINESE ? "可用源: \n" : "Available Sources: \n";
   say (bdgreen(msg));
   }
 
   {
-  char *msg1 = ENGLISH ? "Mirror abbr" : "镜像站简写";
-  char *msg2 = ENGLISH ? "Source URL"  : "换源链接";
-  char *msg3 = ENGLISH ? "Mirror Name" : "镜像站";
-  char *format = ENGLISH ? "  %-13s%-33s%-38s%s\n" : "  %-13s%-36s%-46s%s\n";
-  printf (format, "code", msg1, msg2, msg3);
-  say    ("---------    --------------    -----------------------------------------------    ---------------------");
+  char *msg1 = CHINESE ? "换源链接" : "Source URL";
+  char *msg2 = CHINESE ? "镜像站"   : "Mirror Name";
+  char *format = CHINESE ?
+    "  %-13s %-18s %-38s %-10s %s\n" :
+    "  %-13s %-18s %-38s %-10s %s\n";
+  printf (format,
+    "code",  " ",  msg1, " ", msg2);
+
+  say    ("---------    ---------------------------------------------------------    ------------------------");
+  cli_print_dish_available_sources (dish);
   }
 
-  cli_print_dish_available_sources (dish->sources, dish->sources_n);
   cli_print_dish_features (dish, input);
 
   {
-  char *msg = ENGLISH ? "Maintainer Information:\n" : "维护信息:\n";
+  char *msg = CHINESE ? "维护信息:\n" : "Maintainer Information:\n";
   say (bdgreen(msg));
   cli_print_dish_maintain_info (dish, input, 0);
   }
