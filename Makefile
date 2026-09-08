@@ -202,6 +202,12 @@ build-in-release-mode:
 	@$(call Build-Command-For-Release,   $(ReleaseMode-Target-Name))
 	@$(call Finished-Echo-Info, RELEASE)
 
+# `install` depends on the release binary by filename.  Build it on demand
+# when installing from a clean source tree; packaging flows that already ran
+# build-in-release-mode can reuse the existing artifact.
+$(ReleaseMode-Target-Name):
+	@$(MAKE) build-in-release-mode
+
 build-in-ci-release-mode:
 	@$(call Starting-Echo-Info, CI-RELEASE, $(CIReleaseMode-Target-Name))
 	@$(call Build-Command-For-Release,      $(CIReleaseMode-Target-Name))
