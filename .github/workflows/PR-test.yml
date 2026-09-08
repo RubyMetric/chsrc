@@ -25,6 +25,10 @@ on:
     paths:
       - "src/**"
       - "lib/**"
+      - "Makefile"
+      - "tool/completion/**"
+      - "test/zsh-completion*"
+      - "pkg/deb/**"
 
 jobs:
   test-on-ubuntu:
@@ -36,13 +40,18 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v7
 
+      - name: 安装Zsh补全测试依赖
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zsh
+
       - name: 测试构建情况
         run: |
           make
 
       - name: 测试test情况
         run: |
-          make test
+          make test REQUIRE_ZSH=1
 
   test-on-windows:
     name: 在Windows上测试

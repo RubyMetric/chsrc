@@ -1,0 +1,321 @@
+#compdef chsrc
+# -----------------------------------------------------------------------------
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Native Zsh completion for chsrc.  Keep the dish aliases in sync with the
+# registered menus in src/recipe/menu.c; test/zsh-completion-sync.pl checks it.
+# -----------------------------------------------------------------------------
+
+emulate -L zsh
+setopt extendedglob
+
+local -a commands options scope_options list_targets
+local -a dishes_lang dishes_os dishes_ware mirror_choices
+
+# Keep menus concise by offering one canonical spelling for commands, options,
+# and list targets.  Accepted aliases remain in the parser states below, so an
+# alias typed explicitly still receives context-aware completion.
+commands=(
+  'help:show help (aliases: h, -h, -help, --help)'
+  'issue:show related issue links (aliases: issues, isue, i)'
+  'list:list mirrors or supported dishes (aliases: ls, l)'
+  'measure:measure all sources for a dish (aliases: mea, m, cesu, ce, c)'
+  'get:show the current source for a dish (alias: g)'
+  'set:change the source for a dish (alias: s)'
+  'reset:reset a dish to its upstream source (aliases: rest, r)'
+  'version:show version information (aliases: ver, -v, -version, --version)'
+  '-dry:simulate changes before a help or version flag'
+  '-ipv6:use IPv6 before a help or version flag'
+  '-en:use English before a help or version flag (alias: -english)'
+  '-no-color:disable colored output before a help or version flag (alias: -no-colour)'
+)
+
+options=(
+  '-dry:simulate changes without running them'
+  '-ipv6:use IPv6 for speed measurements'
+  '-en:use English output (alias: -english)'
+  '-no-color:disable colored output (alias: -no-colour)'
+  '-h:show help (aliases: -help, --help)'
+  '-v:show version information'
+)
+
+scope_options=(
+  'default:use the scope selected by the recipe'
+  'project:change the current project only'
+  'user:change the current user only'
+  'system:change the whole system'
+)
+
+list_targets=(
+  'mirror:list all mirror sites (alias: mirrors)'
+  'dish:list all supported dishes (aliases: dishes, dishs)'
+  'os:list operating-system dishes'
+  'lang:list programming-language dishes (aliases: pl, language)'
+  'ware:list software dishes (alias: software)'
+)
+
+dishes_lang=(
+  'gem:Ruby and RubyGems'
+  'ruby:Ruby and RubyGems'
+  'rb:Ruby and RubyGems'
+  'rubygem:Ruby and RubyGems'
+  'rubygems:Ruby and RubyGems'
+  'bundler:Ruby and RubyGems'
+  'py:Python package tools'
+  'python:Python package tools'
+  'pip:Python pip'
+  'poetry:Python Poetry'
+  'pdm:Python PDM'
+  'rye:Python Rye'
+  'uv:Python uv tools'
+  'uv-pypi-index:uv package index'
+  'uv-python-build:uv Python downloads'
+  'js:JavaScript package tools'
+  'javascript:JavaScript package tools'
+  'node:JavaScript package tools'
+  'nodejs:JavaScript package tools'
+  'bun:Bun'
+  'npm:npm'
+  'yarn:Yarn'
+  'pnpm:pnpm'
+  'nvm:nvm'
+  'perl:Perl and CPAN'
+  'cpan:Perl and CPAN'
+  'php:PHP and Composer'
+  'composer:PHP and Composer'
+  'lua:Lua and LuaRocks'
+  'luarocks:Lua and LuaRocks'
+  'go:Go modules'
+  'golang:Go modules'
+  'goproxy:Go modules'
+  'rust:Rust crates'
+  'cargo:Rust crates'
+  'crate:Rust crates'
+  'crates:Rust crates'
+  'rustup:Rust toolchains'
+  'java:Java build tools'
+  'maven:Java build tools'
+  'mvn:Java build tools'
+  'maven-daemon:Java build tools'
+  'mvnd:Java build tools'
+  'gradle:Java build tools'
+  'clojure:Clojure tools'
+  'clojars:Clojure tools'
+  'cloj:Clojure tools'
+  'lein:Clojure tools'
+  'dart:Dart packages'
+  'pub:Dart packages'
+  'flutter:Flutter packages'
+  'nuget:NuGet'
+  'net:NuGet'
+  '.net:NuGet'
+  'dotnet:NuGet'
+  'haskell:Haskell packages'
+  'cabal:Haskell packages'
+  'stack:Haskell packages'
+  'hackage:Haskell packages'
+  'ocaml:OCaml packages'
+  'opam:OCaml packages'
+  'r:R and CRAN'
+  'cran:R and CRAN'
+  'julia:Julia packages'
+)
+
+dishes_os=(
+  'ubuntu:Ubuntu'
+  'zorinos:Zorin OS'
+  'linuxmint:Linux Mint'
+  'debian:Debian'
+  'fedora:Fedora Linux'
+  'opensuse:openSUSE'
+  'opensuse-leap:openSUSE Leap'
+  'opensuse-tumbleweed:openSUSE Tumbleweed'
+  'kali:Kali Linux'
+  'msys2:MSYS2'
+  'msys:MSYS2'
+  'arch:Arch Linux'
+  'archlinux:Arch Linux'
+  'archlinuxcn:Arch Linux CN repository'
+  'archcn:Arch Linux CN repository'
+  'manjaro:Manjaro Linux'
+  'omarchy:Omarchy OPR repository'
+  'gentoo:Gentoo Linux'
+  'rocky:Rocky Linux'
+  'rockylinux:Rocky Linux'
+  'alma:AlmaLinux'
+  'almalinux:AlmaLinux'
+  'alpine:Alpine Linux'
+  'voidlinux:Void Linux'
+  'solus:Solus'
+  'trisquel:Trisquel'
+  'linuxlite:Linux Lite'
+  'ros:Robot Operating System'
+  'ros2:Robot Operating System'
+  'raspi:Raspberry Pi OS'
+  'raspberrypi:Raspberry Pi OS'
+  'armbian:Armbian'
+  'openwrt:OpenWrt'
+  'opkg:OpenWrt'
+  'LEDE:OpenWrt'
+  'termux:Termux'
+  'openkylin:openKylin'
+  'openeuler:openEuler'
+  'anolis:Anolis OS'
+  'openanolis:Anolis OS'
+  'deepin:deepin'
+  'freebsd:FreeBSD'
+  'netbsd:NetBSD'
+  'openbsd:OpenBSD'
+)
+
+dishes_ware=(
+  'winget:WinGet'
+  'brew:Homebrew'
+  'homebrew:Homebrew'
+  'cocoa:CocoaPods'
+  'cocoapods:CocoaPods'
+  'cocoapod:CocoaPods'
+  'docker:Docker Hub'
+  'dockerhub:Docker Hub'
+  'flatpak:Flatpak and Flathub'
+  'flathub:Flatpak and Flathub'
+  'nix:Nix channels'
+  'guix:GNU Guix'
+  'emacs:Emacs packages'
+  'elpa:Emacs packages'
+  'latex:TeX packages'
+  'ctan:TeX packages'
+  'tex:TeX packages'
+  'texlive:TeX packages'
+  'miktex:TeX packages'
+  'tlmgr:TeX packages'
+  'mpm:TeX packages'
+  'conda:Anaconda'
+  'anaconda:Anaconda'
+)
+
+mirror_choices=(
+  'first:use the first source selected by the maintainers'
+  'upstream:use the upstream source'
+)
+
+if (( CURRENT == 2 )); then
+  if [[ ${words[CURRENT]} == -scope=* ]]; then
+    compset -P '-scope='
+    _describe -t scopes 'scope' scope_options
+    return
+  fi
+
+  local command_ret=1
+  _describe -t commands 'chsrc command' commands && command_ret=0
+  compadd -S '' -X 'option with an attached value' -- '-scope=' && command_ret=0
+  return command_ret
+fi
+
+local command=${words[2]}
+local current_word=${words[CURRENT]}
+
+# Locate the first positional argument before the cursor.  Options belong
+# between the command and dish; offering them after a dish would shift the
+# dish position in chsrc's current parser.
+local dish=''
+local mirror=''
+local expect_scope=0
+local ret=1
+local token
+integer i
+[[ ${command} == -scope ]] && expect_scope=1
+for (( i = 3; i < CURRENT; i++ )); do
+  token=${words[i]}
+  if (( expect_scope )); then
+    expect_scope=0
+    continue
+  fi
+  case ${token} in
+    -scope)
+      expect_scope=1
+      ;;
+    -*)
+      ;;
+    *)
+      if [[ -z ${dish} ]]; then
+        dish=${token}
+      elif [[ -z ${mirror} ]]; then
+        mirror=${token}
+      fi
+      ;;
+  esac
+done
+
+# Both spellings are accepted by the CLI: "-scope=value" and
+# "-scope value".  Complete only scope values while one is expected, and do
+# not suggest an option after the dish positional argument.
+if [[ -z ${dish} && ${current_word} == -scope=* ]]; then
+  compset -P '-scope='
+  _describe -t scopes 'scope' scope_options
+  return
+fi
+
+if [[ -z ${dish} ]] && (( expect_scope )); then
+  _describe -t scopes 'scope' scope_options
+  return
+fi
+
+case ${command} in
+  -dry|-scope|-scope=*|-ipv6|-local|-en|-english|-no-color|-no-colour)
+    if [[ -z ${dish} ]]; then
+      _describe -t options 'option' options && ret=0
+      compadd -S '' -X 'option with an attached value' -- '-scope=' && ret=0
+      return ret
+    else
+      _message 'only a help or version flag may follow leading options'
+    fi
+    ;;
+
+  help|h|-h|-help|--help|issue|issues|isue|i|version|ver|-v|-version|--version)
+    _describe -t options 'option' options
+    ;;
+
+  list|ls|l)
+    if [[ -z ${dish} ]]; then
+      _describe -t list-targets 'list target' list_targets && ret=0
+      _describe -t dishes-lang 'programming-language dish' dishes_lang && ret=0
+      _describe -t dishes-os 'operating-system dish' dishes_os && ret=0
+      _describe -t dishes-ware 'software dish' dishes_ware && ret=0
+      _describe -t options 'option' options && ret=0
+      compadd -S '' -X 'option with an attached value' -- '-scope=' && ret=0
+      return ret
+    else
+      _message 'no more arguments'
+    fi
+    ;;
+
+  measure|mea|m|cesu|ce|c|get|g|reset|rest|r)
+    if [[ -z ${dish} ]]; then
+      _describe -t dishes-lang 'programming-language dish' dishes_lang && ret=0
+      _describe -t dishes-os 'operating-system dish' dishes_os && ret=0
+      _describe -t dishes-ware 'software dish' dishes_ware && ret=0
+      _describe -t options 'option' options && ret=0
+      compadd -S '' -X 'option with an attached value' -- '-scope=' && ret=0
+      return ret
+    else
+      _message 'no more arguments'
+    fi
+    ;;
+
+  set|s)
+    if [[ -z ${dish} ]]; then
+      _describe -t dishes-lang 'programming-language dish' dishes_lang && ret=0
+      _describe -t dishes-os 'operating-system dish' dishes_os && ret=0
+      _describe -t dishes-ware 'software dish' dishes_ware && ret=0
+      _describe -t options 'option' options && ret=0
+      compadd -S '' -X 'option with an attached value' -- '-scope=' && ret=0
+      return ret
+    elif [[ -z ${mirror} ]]; then
+      _describe -t mirrors 'mirror selection' mirror_choices ||
+        _message 'mirror code or source URL'
+    else
+      _message 'no more arguments'
+    fi
+    ;;
+esac

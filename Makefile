@@ -215,7 +215,7 @@ debug: build-in-debug-mode
 
 
 
-test: test-make-var test-xy test-fw
+test: test-make-var test-xy test-fw test-zsh-completion
 
 test-make-var:
 	@echo "On-Linux: $(On-Linux)"
@@ -244,6 +244,19 @@ test-fw: CFLAGS += $(CFLAGS_debug)
 test-fw:
 	@$(CC) test/fw.c $(CFLAGS) -o fw
 	@./fw
+
+test-zsh-completion:
+	@perl ./test/zsh-completion-sync.pl
+	@if command -v zsh >/dev/null 2>&1; then \
+	  zsh -n ./tool/completion/_chsrc ./test/zsh-completion.zsh ./test/zsh-completion-integration.zsh && \
+	  zsh -f ./test/zsh-completion.zsh && \
+	  zsh -f ./test/zsh-completion-integration.zsh; \
+	elif [ "$(REQUIRE_ZSH)" = "1" ]; then \
+	  echo "zsh is required for Zsh completion tests" >&2; \
+	  exit 1; \
+	else \
+	  echo "zsh not found; skipped Zsh completion runtime tests"; \
+	fi
 
 check: test
 
@@ -276,10 +289,13 @@ build-deb:
 clean-deb:
 	@$(MAKE) -C pkg/deb deb-clean
 
+ZSH_COMPLETION_DIR ?= /usr/share/zsh/site-functions
+
 install: $(ReleaseMode-Target-Name)
 	install -D -m 755 $(ReleaseMode-Target-Name) $(DESTDIR)/usr/bin/chsrc
 	install -D -m 644 doc/chsrc.1 $(DESTDIR)/usr/share/man/man1/chsrc.1
 	install -D -m 644 tool/completion/bash_completion.sh  $(DESTDIR)/usr/share/bash-completion/completions/chsrc
+	install -D -m 644 tool/completion/_chsrc $(DESTDIR)$(ZSH_COMPLETION_DIR)/_chsrc
 
 
 
@@ -291,4 +307,4 @@ install: $(ReleaseMode-Target-Name)
 
 .PHONY: all b build bd br bcir d t check c \
 	build-in-dev-mode build-in-debug-mode build-in-release-mode build-in-ci-release-mode \
-	debug test test-make-var test-xy test-fw fastcheck test-cli clean install build-deb clean-deb rawstr4c
+	debug test test-make-var test-xy test-fw test-zsh-completion fastcheck test-cli clean install build-deb clean-deb rawstr4c
