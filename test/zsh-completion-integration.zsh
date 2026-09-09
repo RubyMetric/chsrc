@@ -1,11 +1,19 @@
 #!/usr/bin/env zsh
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------
 # SPDX-License-Identifier: GPL-3.0-or-later
+# ---------------------------------------------------------------
+# Test File     : zsh-completion-integration.zsh
+# Test Authors  : @swim233
+# Contributors  : Nil Null <nil@null.org>
+#               |
+# Created On    : <2026-09-08>
+# Last Modified : <2026-09-09>
 #
-# Exercise real ZLE completion matching and insertion in an isolated child Zsh.
-# The child uses a temporary ZDOTDIR and compinit -D, so neither user nor system
-# completion configuration is read or written.
-# -----------------------------------------------------------------------------
+# 在隔离的子 Zsh 中测试真实的 ZLE 补全匹配与插入行为。
+# 子进程使用临时 ZDOTDIR 和 compinit -D，不读取或修改用户及系统配置。
+#
+#    $ zsh -f test/zsh-completion-integration.zsh
+# ---------------------------------------------------------------
 
 emulate -L zsh
 setopt errexit nounset pipefail extendedglob
@@ -41,10 +49,9 @@ trap cleanup EXIT HUP INT TERM
   print -r -- 'setopt autolist beep'
 } > "${temp_zdotdir}/.zshrc"
 
-# Keep the captured ZLE transcript independent of the terminal running the
-# tests.  Rich terminals add ANSI attributes around the automatically inserted
-# suffix, which breaks the plain-text assertions below even when completion is
-# correct.
+# 使用 TERM=dumb，避免运行测试的终端影响捕获到的 ZLE 输出。
+# 功能较丰富的终端会给自动插入的后缀增加 ANSI 属性，即使补全行为正确，
+# 也会导致下面的纯文本断言失败。
 zpty -b chsrc_completion_shell env TERM=dumb ZDOTDIR="${temp_zdotdir}" zsh -d
 child_started=1
 
@@ -91,8 +98,8 @@ complete_and_expect 'chsrc -scope=p' 'chsrc -scope=project '
 complete_and_expect 'chsrc set ruby fi' 'chsrc set ruby first '
 complete_and_expect 'chsrc -en -no-' 'chsrc -en -no-color '
 
-# A completed mirror occupies the final positional slot.  Pressing Tab in the
-# next empty slot must not list first/upstream again.
+# 镜像占据最后一个位置参数；在后续空参数处按 Tab 不应再次列出
+# first/upstream。
 zpty -wn chsrc_completion_shell $'chsrc set ruby first \t'
 wait_for_output $'\a'
 collect_pending_output
@@ -102,9 +109,8 @@ if [[ ${REPLY} == *upstream* ]]; then
 fi
 clear_input
 
-# A non-empty token in the same invalid slot must not uniquely expand to
-# upstream either.  This catches the case even when candidate listing styles
-# suppress the menu for an empty prefix.
+# 在同一个无效位置输入非空内容，也不应被唯一扩展为 upstream。
+# 即使候选项样式隐藏了空前缀菜单，该断言仍可捕获重复镜像补全。
 zpty -wn chsrc_completion_shell $'chsrc set ruby first u\t'
 wait_for_output $'\a'
 collect_pending_output

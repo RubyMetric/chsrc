@@ -1,10 +1,17 @@
 #compdef chsrc
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------
 # SPDX-License-Identifier: GPL-3.0-or-later
+# ---------------------------------------------------------------
+# Shell File    : _chsrc
+# File Authors  : @swim233
+# Contributors  : Nil Null <nil@null.org>
+#               |
+# Created On    : <2026-09-08>
+# Last Modified : <2026-09-09>
 #
-# Native Zsh completion for chsrc.  Keep the dish aliases in sync with the
-# registered menus in src/recipe/menu.c; test/zsh-completion-sync.pl checks it.
-# -----------------------------------------------------------------------------
+# chsrc 原生 Zsh 补全。菜品别名应与 src/recipe/menu.c 中注册的菜单保持一致，
+# test/verify-sync-state-of-zsh-completion 会校验两者的同步状态。
+# ---------------------------------------------------------------
 
 emulate -L zsh
 setopt extendedglob
@@ -12,9 +19,8 @@ setopt extendedglob
 local -a commands options scope_options list_targets
 local -a dishes_lang dishes_os dishes_ware mirror_choices
 
-# Keep menus concise by offering one canonical spelling for commands, options,
-# and list targets.  Accepted aliases remain in the parser states below, so an
-# alias typed explicitly still receives context-aware completion.
+# 命令、选项和 list 目标仅展示一种规范写法，避免补全菜单重复。
+# 解析状态仍接受所有别名，因此用户手动输入别名后仍可获得上下文补全。
 commands=(
   'help:show help (aliases: h, -h, -help, --help)'
   'issue:show related issue links (aliases: issues, isue, i)'
@@ -215,9 +221,8 @@ fi
 local command=${words[2]}
 local current_word=${words[CURRENT]}
 
-# Locate the first positional argument before the cursor.  Options belong
-# between the command and dish; offering them after a dish would shift the
-# dish position in chsrc's current parser.
+# 查找光标前的第一个位置参数。选项应位于命令与菜品之间；如果在菜品后
+# 继续提供选项，会改变 chsrc 当前解析器所识别的菜品位置。
 local dish=''
 local mirror=''
 local expect_scope=0
@@ -247,9 +252,8 @@ for (( i = 3; i < CURRENT; i++ )); do
   esac
 done
 
-# Both spellings are accepted by the CLI: "-scope=value" and
-# "-scope value".  Complete only scope values while one is expected, and do
-# not suggest an option after the dish positional argument.
+# CLI 同时接受 "-scope=value" 和 "-scope value"。等待作用域时只补全
+# 作用域值，并且不在菜品位置参数后继续建议选项。
 if [[ -z ${dish} && ${current_word} == -scope=* ]]; then
   compset -P '-scope='
   _describe -t scopes 'scope' scope_options

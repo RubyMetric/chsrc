@@ -1,10 +1,19 @@
 #!/usr/bin/env zsh
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------
 # SPDX-License-Identifier: GPL-3.0-or-later
+# ---------------------------------------------------------------
+# Test File     : simulate-zsh-completion.zsh
+# Test Authors  : @swim233
+# Contributors  : Nil Null <nil@null.org>
+#               |
+# Created On    : <2026-09-08>
+# Last Modified : <2026-09-09>
 #
-# Lightweight tests for the completion state machine.  Completion widgets are
-# mocked so the test does not touch the user's Zsh setup.
-# -----------------------------------------------------------------------------
+# 使用同名函数覆盖 Zsh 补全组件，模拟并测试 _chsrc 的状态机。
+# 测试不会读取或修改用户的 Zsh 配置。
+#
+#    $ zsh -f test/simulate-zsh-completion.zsh
+# ---------------------------------------------------------------
 
 emulate -L zsh
 setopt errexit nounset pipefail extendedglob
@@ -15,6 +24,7 @@ autoload -Uz _chsrc
 
 typeset -ga captured
 
+# 模拟 _describe，将符合 PREFIX 的候选项记录到 captured
 _describe() {
   local array_name=${argv[-1]}
   local -a specs
@@ -28,6 +38,7 @@ _describe() {
   done
 }
 
+# 模拟 compadd，仅记录 -- 分隔符之后且符合 PREFIX 的候选项
 compadd() {
   local after_separator=0 arg
   for arg in ${argv}; do
@@ -41,14 +52,17 @@ compadd() {
   done
 }
 
+# 模拟 compset -P，从 PREFIX 中移除已经输入的固定前缀
 compset() {
   if [[ $1 == -P ]]; then
     PREFIX=${PREFIX#$2}
   fi
 }
 
+# 测试无需展示补全提示信息
 _message() { return 0 }
 
+# 构造 Zsh 补全上下文并执行 _chsrc
 capture() {
   captured=()
   words=("${(@)argv}")
@@ -59,6 +73,8 @@ capture() {
 
 assert_has() {
   local expected=$1
+  # (I) 返回最后一个匹配元素的下标，未匹配时返回 0；
+  # (e) 使用字符串精确匹配，避免将候选项当作模式解析。
   if (( ! ${captured[(Ie)${expected}]} )); then
     print -u2 -- "Expected completion '$expected' in: ${captured[*]}"
     return 1
@@ -67,6 +83,7 @@ assert_has() {
 
 assert_lacks() {
   local unexpected=$1
+  # 与 assert_has 相同，使用 (Ie) 取得精确匹配元素的下标。
   if (( ${captured[(Ie)${unexpected}]} )); then
     print -u2 -- "Unexpected completion '$unexpected' in: ${captured[*]}"
     return 1

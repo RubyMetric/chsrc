@@ -2,9 +2,10 @@
 # Workflow File : PR-test.yml
 # File Authors  : 曾奥然      <ccmywish@qq.com>
 # Contributors  : Mikachu2333 <linkchou@yandex.com>
+#               | @swim233
 #               |
 # Created On    : <2025-06-19>
-# Last Modified : <2025-08-17>
+# Last Modified : <2026-09-09>
 #
 # Test PR
 # ---------------------------------------------------------------
@@ -27,7 +28,7 @@ on:
       - "lib/**"
       - "Makefile"
       - "tool/completion/**"
-      - "test/zsh-completion*"
+      - "test/*zsh-completion*"
       - "pkg/deb/**"
 
 jobs:

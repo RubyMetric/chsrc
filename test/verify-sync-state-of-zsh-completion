@@ -1,11 +1,19 @@
 #!/usr/bin/env perl
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------
 # SPDX-License-Identifier: GPL-3.0-or-later
+# ---------------------------------------------------------------
+# Test File     : verify-sync-state-of-zsh-completion
+# Test Authors  : @swim233
+# Contributors  : Nil Null <nil@null.org>
+#               |
+# Created On    : <2026-09-08>
+# Last Modified : <2026-09-09>
 #
-# Check that the native Zsh completion contains every alias of every dish
-# registered in src/recipe/menu.c.  Internal sources-only dishes are not menu
-# entries and therefore must not be offered to users.
-# -----------------------------------------------------------------------------
+# 校验原生 Zsh 补全中的菜品别名与 src/recipe/menu.c 注册菜单保持一致。
+# 仅供内部使用的 sources-only dish 不属于注册菜单，不应出现在补全中。
+#
+#    $ perl test/verify-sync-state-of-zsh-completion
+# ---------------------------------------------------------------
 
 use strict;
 use warnings;

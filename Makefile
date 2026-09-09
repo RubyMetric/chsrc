@@ -9,9 +9,10 @@
 #								| @G_I_Y
 #               | @NewbieXvwu
 #               | @Mikachu2333
+#               | @swim233
 #               |
 # Created On    : <2023-08-28>
-# Last Modified : <2026-08-14>
+# Last Modified : <2026-09-09>
 #
 # 请阅读 ./doc/01-开发与构建.md 来使用
 # --------------------------------------------------------------
@@ -202,11 +203,8 @@ build-in-release-mode:
 	@$(call Build-Command-For-Release,   $(ReleaseMode-Target-Name))
 	@$(call Finished-Echo-Info, RELEASE)
 
-# `install` depends on the release binary by filename.  Build it on demand
-# when installing from a clean source tree; packaging flows that already ran
-# build-in-release-mode can reuse the existing artifact.
-$(ReleaseMode-Target-Name):
-	@$(MAKE) build-in-release-mode
+# 确保从干净源码树执行 install 时已构建 RELEASE mode 二进制
+$(ReleaseMode-Target-Name): build-in-release-mode
 
 build-in-ci-release-mode:
 	@$(call Starting-Echo-Info, CI-RELEASE, $(CIReleaseMode-Target-Name))
@@ -252,10 +250,10 @@ test-fw:
 	@./fw
 
 test-zsh-completion:
-	@perl ./test/zsh-completion-sync.pl
+	@perl ./test/verify-sync-state-of-zsh-completion
 	@if command -v zsh >/dev/null 2>&1; then \
-	  zsh -n ./tool/completion/_chsrc ./test/zsh-completion.zsh ./test/zsh-completion-integration.zsh && \
-	  zsh -f ./test/zsh-completion.zsh && \
+	  zsh -n ./tool/completion/_chsrc ./test/simulate-zsh-completion.zsh ./test/zsh-completion-integration.zsh && \
+	  zsh -f ./test/simulate-zsh-completion.zsh && \
 	  zsh -f ./test/zsh-completion-integration.zsh; \
 	elif [ "$(REQUIRE_ZSH)" = "1" ]; then \
 	  echo "zsh is required for Zsh completion tests" >&2; \
@@ -295,6 +293,8 @@ build-deb:
 clean-deb:
 	@$(MAKE) -C pkg/deb deb-clean
 
+# 源码安装使用 Zsh 通用的 site-functions 目录；Debian 打包时会将其
+# 覆盖为 /usr/share/zsh/vendor-completions，以符合 Debian 的目录约定
 ZSH_COMPLETION_DIR ?= /usr/share/zsh/site-functions
 
 install: $(ReleaseMode-Target-Name)
