@@ -4,7 +4,7 @@
  ! Doc Type      : Markdown
  ! Doc Name      : (Shell Completion Introduction).md
  ! Doc Authors   : @swim233
- ! Contributors  : Nil Null <nil@null.org>
+ ! Contributors  : TheSw1m <swim853279614@163.com>
  !               |
  ! Created On    : <2026-09-09>
  ! Last Modified : <2026-09-09>

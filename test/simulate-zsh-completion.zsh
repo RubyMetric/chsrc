@@ -4,7 +4,7 @@
 # ---------------------------------------------------------------
 # Test File     : simulate-zsh-completion.zsh
 # Test Authors  : @swim233
-# Contributors  : Nil Null <nil@null.org>
+# Contributors  : TheSw1m <swim853279614@163.com>
 #               |
 # Created On    : <2026-09-08>
 # Last Modified : <2026-09-09>
