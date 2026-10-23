@@ -10,7 +10,7 @@ pl_bun_prepare (void)
   chef_prep_this_dish (pl_bun, gsr);
 
   chef_set_recipe_created_on   (this, "2024-09-29");
-  chef_set_recipe_last_updated (this, "2025-07-22");
+  chef_set_recipe_last_updated (this, "2026-10-23");
 
   chef_set_chefs (this, 1, "@ccmywish");
   chef_set_sauciers (this, 1, "@lontten");
@@ -46,8 +46,7 @@ pl_bun_getsrc (char *option)
 void
 pl_bun_setsrc (char *option)
 {
-  // 用的是 npm Registry 的源
-  Source_t source = chsrc_yield_source_and_confirm (&pl_js_group_dish, option);
+  chsrc_use_this_source (pl_bun);
 
   char *content = RAWSTR_pl_bun_config;
 
