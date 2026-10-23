@@ -7,7 +7,7 @@
  *                |
  * Created On     : <2024-06-14>
  * Major Revision :      4
- * Last Modified  : <2026-06-26>
+ * Last Modified  : <2026-10-23>
  * ------------------------------------------------------------*/
 
 #include "rawstr4c.h"
@@ -114,9 +114,20 @@ ensure_debian_or_ubuntu_old_sourcelist (int debian_type)
         }
     }
 
-  FILE *f = fopen (OS_Apt_SourceList, "w");
-  fwrite (makeup, strlen (makeup), 1, f);
-  fclose (f);
+
+
+  /**
+   * 根据 https://github.com/RubyMetric/chsrc/issues/396
+   *
+   *   FILE *f = fopen (OS_Apt_SourceList, "w");
+   *   fwrite (makeup, strlen (makeup), 1, f);
+   *   fclose (f);
+   *
+   * 这段代码在 Dry Run 模式下，依然会写进内容，这是不合适的，
+   * 因此，我们改用 chsrc_overwrite_file()，它会正确对待 Dry Run 模式
+   */
+  chsrc_overwrite_file (makeup, OS_Apt_SourceList);
+
   return false;
 }
 
