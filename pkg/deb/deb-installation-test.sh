@@ -36,7 +36,20 @@ else
   echo "✓ chsrc man page exists"
 fi
 
-# Test 3: Test basic functionality
+# Test 3: Check if shell completion files exist
+if [ ! -f "/usr/share/bash-completion/completions/chsrc" ]; then
+  echo "ERROR: Bash completion not found at /usr/share/bash-completion/completions/chsrc"
+  exit 1
+fi
+
+if [ ! -f "/usr/share/zsh/vendor-completions/_chsrc" ]; then
+  echo "ERROR: Zsh completion not found at /usr/share/zsh/vendor-completions/_chsrc"
+  exit 1
+fi
+
+echo "✓ Bash and Zsh completion files exist"
+
+# Test 4: Test basic functionality
 echo "Testing basic chsrc functionality..."
 if /usr/bin/chsrc help >/dev/null 2>&1; then
   echo "✓ command 'chsrc help' works"

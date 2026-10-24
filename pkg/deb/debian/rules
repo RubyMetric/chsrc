@@ -46,4 +46,6 @@ override_dh_auto_build:
 	@$(MAKE) -C $(Chsrc-Root-Dir) build-in-release-mode
 
 override_dh_auto_install:
-	@$(MAKE) -C $(Chsrc-Root-Dir) install DESTDIR=$(CURDIR)/debian/chsrc
+	@$(MAKE) -C $(Chsrc-Root-Dir) install \
+		DESTDIR=$(CURDIR)/debian/chsrc \
+		ZSH_COMPLETION_DIR=/usr/share/zsh/vendor-completions

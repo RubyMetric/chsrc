@@ -82,6 +82,7 @@ chsrc_register_chefs_and_sauciers ()
   chef_register_contributor ("@techoc",         "Rui Yang",       "techoc@foxmail.com",             NULL);
   chef_register_contributor ("@BingChunMoLi",   "BingChunMoLi",   "bingchunmoli@bingchunmoli.com",  NULL);
   chef_register_contributor ("@wcbing",         "wcbing",         "i@wcbing.top",                   NULL);
+  chef_register_contributor ("@swim233",        "TheSw1m",        "swim853279614@163.com",          NULL);
   // 该注释下一行的用户 ID 为 Gitee ID
   chef_register_contributor ("@hezonglun",      "HeZongLun",      "hezonglun123456@outlook.com",    NULL);
   chef_register_contributor ("@Young-Lord",     "LY",             "ly-niko@qq.com",                 NULL);
