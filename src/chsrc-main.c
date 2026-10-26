@@ -96,7 +96,7 @@ chsrc_register_chefs_and_sauciers ()
   /**
    * AI贡献者：
    *
-   *    ChatGPT、GitHub Copilot、DeepSeek、Claude
+   *    ChatGPT、GitHub Copilot、DeepSeek、Claude、Qwen
    *
    * 这几位是贡献者显式说明的，也许还有隐式使用的一些AI并没有被记录下来，可以添加在这里
    */
