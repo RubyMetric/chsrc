@@ -113,6 +113,7 @@
 #include "ware/Flatpak.c"
 #include "ware/Docker/Docker.c"
 #include "ware/Anaconda/Anaconda.c"
+#include "ware/Huggingface.c"
 
 
 void
@@ -154,6 +155,7 @@ chsrc_init_menu ()
   add(RubyChina); // Ruby China 镜像站实际上已于2026年7月21日停用，但由于其是持续数十年的由社区维护驱动的镜像站，我们保留表示致敬
   add(EmacsChina);
   add(NpmMirror); add(GoProxyIO); add(GoProxyCN); add(RsProxyCN); add(FlutterCN);
+  add(HFMirror);
   /* 暂不支持 &NugetOrg */
 
 
@@ -245,6 +247,7 @@ chsrc_init_menu ()
   add (emacs);
   add (tex);
   add (anaconda);
+  add (huggingface_cli);
 #undef add
 
   chef_set_preparefn_for_sources_only_dish (pl_pypi);
