@@ -75,6 +75,7 @@ my $version_str_en = qr|chsrc .*\n\nCopyright .*\nLicense GPLv3\+: GNU GPL versi
 like `$CHSRC -v -en`,     $version_str_en,  'chsrc -v -en';
 like `$CHSRC -en -v`,     $version_str_en,  'chsrc -en -v';
 like `$CHSRC --version -en`,  $version_str_en,  'chsrc --version -en';
+like `$CHSRC -en --version`,  $version_str_en,  'chsrc -en --version';
 like `$CHSRC version -en`,    $version_str_en,  'chsrc version -en';
 
 my $help_str = qr/^   (help|list|get|set|reset)/m;
@@ -139,6 +140,8 @@ like `$CHSRC measure -no-color js`, $measure_js, 'chsrc measure -no-color js';
 
 my $list_js = qr/食谱创建.*食谱创建.*食谱创建.*/s;
 like `$CHSRC list -no-color js`, $list_js, 'chsrc list -no-color js';
+
+like `$CHSRC set -scope 2>&1`,                 qr/缺少参数/,       'chsrc set -scope missing arg';
 
 
 

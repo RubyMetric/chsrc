@@ -4,8 +4,9 @@
  * File Name     : chef.c
  * File Authors  : @ccmywish
  * Contributors  : @BingChunMoLi
+ *               | @Mikachu2333
  * Created On    : <2025-08-09>
- * Last Modified : <2026-09-01>
+ * Last Modified : <2026-10-28>
  *
  * 本文件的函数能够帮助 chefs 为一个 dish 定义 recipe
  * ------------------------------------------------------------*/
@@ -390,7 +391,7 @@ chef_set_default_scope (Dish_t *dish, Scope_t scope)
     }
 
   /* 防止 chef 们写错 */
-  if (cap != ScopeCap_Able_And_Implemented)
+  if (!scope_cap_is_runnable (cap))
     {
       chsrc_breakdown ("该作用域未被明确支持，无法设置为默认作用域");
     }

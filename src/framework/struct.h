@@ -5,9 +5,10 @@
  * File Authors  : @ccmywish
  *               | @G_I_Y
  * Contributors  : @livelycode36
+ *               | @Mikachu2333
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2026-09-01>
+ * Last Modified : <2026-10-28>
  *
  * chsrc struct
  * ------------------------------------------------------------*/
@@ -142,9 +143,17 @@ typedef enum ScopeCapability_t
   ScopeCap_Unknown,                  /* 未知，缺乏对该 dish 的细致了解 */
   ScopeCap_Unable,                   /* 不支持该作用域 */
   ScopeCap_Able_But_Not_Implemented, /* 支持但chsrc尚未实现 */
+  ScopeCap_Able_But_Just_Docs,       /* 支持但chsrc仅提供文档指引 */
   ScopeCap_Able_And_Implemented      /* 支持且chsrc已经实现 */
 }
 ScopeCapability_t;
+
+static inline bool
+scope_cap_is_runnable (ScopeCapability_t cap)
+{
+  return (   cap == ScopeCap_Able_And_Implemented
+          || cap == ScopeCap_Able_But_Just_Docs);
+}
 
 typedef enum Capability_t
 {

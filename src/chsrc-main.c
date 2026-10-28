@@ -160,16 +160,24 @@ main (int argc, char const *argv[])
                                   : " -local is deprecated, please use -scope=project";
               chsrc_warn (msg);
             }
-          else if (xy_str_start_with (argv[i], "-scope"))
+          else if (    xy_streql (argv[i], "-scope")
+                    || xy_str_start_with (argv[i], "-scope="))
             {
               const char *scope = NULL;
               if (xy_streql (argv[i], "-scope"))
                 {
-                  scope = argv[i+1];
+                  if (i + 1 > argc)
+                    {
+                      char *msg = ENGLISH ? "Option -scope requires an argument. Valid scopes are: default, project, user, system"
+                                          : "-scope 选项缺少参数。有效的换源作用域为: default, project, user, system";
+                      chsrc_error (msg);
+                      return Exit_Unknown;
+                    }
+                  scope = argv[++i];
                   cli_arg_Dish_pos++;
                   cli_arg_Mirror_pos++;
                 }
-              else if (xy_str_start_with (argv[i], "-scope="))
+              else
                 {
                   scope = argv[i] + 7;
                 }
@@ -224,8 +232,8 @@ main (int argc, char const *argv[])
               command = "help"; /* 交到下方处理 */
             }
           else if (    xy_streql (argv[i], "-v")
-                    || xy_streql (command, "-version")
-                    || xy_streql (command, "--version"))
+                    || xy_streql (argv[i], "-version")
+                    || xy_streql (argv[i], "--version"))
             {
               command = "version"; /* 交到下方处理 */
             }

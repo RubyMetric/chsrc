@@ -6,7 +6,7 @@
  * Contributors  : @Mikachu2333
  *               |
  * Created On    : <2024-08-09>
- * Last Modified : <2026-08-14>
+ * Last Modified : <2026-10-28>
  * -------------------------------------------------------------
  * 本文件作为一个通用模板：
  *
@@ -68,8 +68,10 @@ void
   // 做了贡献？将自己的信息加在这里！
   chef_set_sauciers (this, 2, "@nulnone", "@someone");
 
+  /* 可选枚举: ScopeCap_Unknown | ScopeCap_Unable | ScopeCap_Able_But_Not_Implemented
+   *           ScopeCap_Able_But_Just_Docs | ScopeCap_Able_And_Implemented */
   chef_set_scope_cap (this, ProjectScope, ScopeCap_Able_And_Implemented);
-  chef_set_scope_cap (this, UserScope,    ScopeCap_Able_But_NotImplemented);
+  chef_set_scope_cap (this, UserScope,    ScopeCap_Able_But_Not_Implemented);
   chef_set_scope_cap (this, SystemScope,  ScopeCap_Unable);
   chef_set_default_scope (this, UserScope);
 
