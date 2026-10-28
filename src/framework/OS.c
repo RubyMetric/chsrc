@@ -19,6 +19,12 @@
 #define NoMark "x"
 #define HalfYesMark "⍻"
 
+#ifdef XY_Build_On_Windows
+#include <ntsecapi.h>
+#include <fcntl.h>
+#include <io.h>
+#endif
+
 static void
 log_for_file_write (const char *filename, bool is_overwrite)
 {
@@ -411,8 +417,39 @@ chsrc_run_directly (const char *cmd)
 }
 
 
+#ifdef XY_Build_On_Windows
 /**
- * @brief 在本目录创建一个临时文件
+ * @brief 生成十六进制随机串（CSPRNG）
+ *
+ * @param[out] out    输出缓冲区，需要 2 * nbytes + 1 字节
+ * @param[in]  nbytes 随机字节数，上限 64
+ *
+ * @return 成功与否
+ */
+static bool
+_chsrc_random_hex (char *out, size_t nbytes)
+{
+  unsigned char rnd[64];
+  if (nbytes > sizeof (rnd))
+    return false;
+
+  if (!RtlGenRandom (rnd, (ULONG) nbytes))
+    return false;
+
+  static const char hex_digits[] = "0123456789abcdef";
+  for (size_t i = 0; i < nbytes; i++)
+    {
+      out[2 * i]     = hex_digits[rnd[i] >> 4];
+      out[2 * i + 1] = hex_digits[rnd[i] & 0x0F];
+    }
+  out[2 * nbytes] = '\0';
+  return true;
+}
+#endif
+
+
+/**
+ * @brief 在系统临时目录创建一个临时文件
  *
  * @param[in]  filename    文件名，不包含后缀名
  * @param[in]  postfix     后缀名，需要自己加 '.'
@@ -422,81 +459,217 @@ chsrc_run_directly (const char *cmd)
  * @return 返回一个 FILE*，调用者需要关闭该文件
  */
 FILE *
-chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilepath)
+chsrc_make_tmpfile (const char *filename, const char *postfix, bool loud, char **tmpfilepath)
 {
   char *tmpfile = NULL;
   FILE *f = NULL;
 
 #ifdef XY_Build_On_Windows
   /**
-   * Windows 上使用 GetTempPathW 和 GetTempFileNameW 创建临时文件
+   * Windows 上自行生成不可预测的临时文件名，并通过 CREATE_NEW 原子创建。
    *
-   * 由于 GetTempFileName 不支持自定义后缀，我们需要：
-   * 1. 使用 GetTempFileName 生成唯一的临时文件名
-   * 2. 重建带正确后缀的文件名（PowerShell 需要 .ps1 后缀）
-   *
-   * 全程使用宽字符 API，临时目录含非 ASCII 字符时也能正常工作
+   * GetTempFileNameW() 不支持指定后缀；若先创建、删除再用目标后缀重建，
+   * 删除和重新创建之间会产生竞态。因此这里直接生成随机文件名。
    */
-  wchar_t temp_path[MAX_PATH];
-  wchar_t temp_filename[MAX_PATH];
+  WCHAR temp_dir[MAX_PATH + 1];
+  DWORD temp_dir_len = GetTempPathW (MAX_PATH + 1, temp_dir);
 
-  /* 获取系统临时目录 */
-  DWORD ret = GetTempPathW (MAX_PATH, temp_path);
-  if (ret == 0 || ret > MAX_PATH)
+  if (0 == temp_dir_len || temp_dir_len > MAX_PATH)
     {
-      char *msg = CHINESE ? "无法获取系统临时目录" : "Unable to get system temp directory";
-      chsrc_error2 (msg);
+      chsrc_error2 (CHINESE
+        ? "无法获取系统临时目录"
+        : "Unable to get system temp directory");
       exit (Exit_ExternalError);
     }
 
-  /* 生成唯一的临时文件名 (会自动创建文件) */
-  ret = GetTempFileNameW (temp_path, L"chsrc_", 0, temp_filename);
-  if (ret == 0)
+  bool has_sep = (L'\\' == temp_dir[temp_dir_len - 1]
+                  || L'/' == temp_dir[temp_dir_len - 1]);
+
+  /*
+   * CREATE_NEW 保证文件名已存在时不会覆盖原文件。
+   * 极小概率随机名碰撞时重新生成名字。
+   */
+  for (int attempt = 0; attempt < 8; attempt++)
     {
-      char *msg = CHINESE ? "无法生成临时文件名" : "Unable to generate temporary filename";
-      chsrc_error2 (msg);
-      exit (Exit_ExternalError);
+      char hex[17];
+
+      if (!_chsrc_random_hex (hex, 8))
+        {
+          chsrc_error2 (CHINESE
+            ? "无法生成随机临时文件名"
+            : "Unable to generate a random temporary filename");
+          exit (Exit_ExternalError);
+        }
+
+      char *name = xy_strcat (5, "chsrc_", hex, "_", filename, postfix);
+
+      int wname_len = MultiByteToWideChar (CP_UTF8, 0, name, -1, NULL, 0);
+      if (wname_len <= 0)
+        {
+          free (name);
+          chsrc_error2 (CHINESE
+            ? "无法转换临时文件名"
+            : "Unable to convert the temporary filename");
+          exit (Exit_ExternalError);
+        }
+
+      WCHAR *wname = xy_malloc0 ((size_t) wname_len * sizeof (WCHAR));
+
+      if (0 == MultiByteToWideChar (CP_UTF8, 0, name, -1,
+                                    wname, wname_len))
+        {
+          free (wname);
+          free (name);
+          chsrc_error2 (CHINESE
+            ? "无法转换临时文件名"
+            : "Unable to convert the temporary filename");
+          exit (Exit_ExternalError);
+        }
+
+      free (name);
+
+      size_t wpath_cap =
+        (size_t) temp_dir_len + (has_sep ? 0 : 1)
+        + (size_t) wname_len;
+
+      WCHAR *wpath = xy_malloc0 (wpath_cap * sizeof (WCHAR));
+
+      size_t wl = 0;
+
+      for (DWORD i = 0; i < temp_dir_len; i++)
+        wpath[wl++] = temp_dir[i];
+
+      if (!has_sep)
+        wpath[wl++] = L'\\';
+
+      for (int i = 0; wname[i]; i++)
+        wpath[wl++] = wname[i];
+
+      wpath[wl] = L'\0';
+
+      free (wname);
+
+      HANDLE h = CreateFileW (
+        wpath,
+        GENERIC_READ | GENERIC_WRITE,
+        0,
+        NULL,
+        CREATE_NEW,
+        FILE_ATTRIBUTE_NORMAL,
+        NULL
+      );
+
+      if (INVALID_HANDLE_VALUE == h)
+        {
+          DWORD err = GetLastError ();
+
+          free (wpath);
+
+          if (ERROR_FILE_EXISTS == err || ERROR_ALREADY_EXISTS == err)
+            continue;
+
+          char *err_s = xy_int2str ((int) err);
+          char *msg = CHINESE
+            ? xy_2strcat ("无法创建临时文件，错误码: ", err_s)
+            : xy_2strcat ("Unable to create temporary file, error: ", err_s);
+
+          free (err_s);
+          chsrc_error2 (msg);
+          exit (Exit_ExternalError);
+        }
+
+      int fd = _open_osfhandle ((intptr_t) h, _O_RDWR | _O_TEXT);
+      if (-1 == fd)
+        {
+          CloseHandle (h);
+          DeleteFileW (wpath);
+          free (wpath);
+
+          chsrc_error2 (CHINESE
+            ? "无法创建临时文件"
+            : "Unable to create temporary file");
+          exit (Exit_ExternalError);
+        }
+
+      f = _fdopen (fd, "w+");
+      if (!f)
+        {
+          /*
+           * _open_osfhandle() 成功后 fd 拥有 HANDLE，
+           * 因此这里只需关闭 fd，不能再次 CloseHandle(h)。
+           */
+          _close (fd);
+          DeleteFileW (wpath);
+          free (wpath);
+
+          chsrc_error2 (CHINESE
+            ? "无法打开临时文件"
+            : "Unable to open temporary file");
+          exit (Exit_ExternalError);
+        }
+
+      int u8_len = WideCharToMultiByte (
+        CP_UTF8, 0, wpath, -1, NULL, 0, NULL, NULL);
+
+      if (u8_len <= 0)
+        {
+          fclose (f);
+          DeleteFileW (wpath);
+          free (wpath);
+
+          chsrc_error2 (CHINESE
+            ? "无法转换临时文件路径"
+            : "Unable to convert temporary file path");
+          exit (Exit_ExternalError);
+        }
+
+      tmpfile = xy_malloc0 ((size_t) u8_len);
+
+      if (0 == WideCharToMultiByte (
+                 CP_UTF8, 0, wpath, -1,
+                 tmpfile, u8_len, NULL, NULL))
+        {
+          fclose (f);
+          DeleteFileW (wpath);
+          free (wpath);
+          free (tmpfile);
+
+          chsrc_error2 (CHINESE
+            ? "无法转换临时文件路径"
+            : "Unable to convert temporary file path");
+          exit (Exit_ExternalError);
+        }
+
+      free (wpath);
+      break;
     }
-
-  char *temp_filename_utf8 = _xy_win_utf8 (temp_filename);
-  if (!temp_filename_utf8)
-    {
-      char *msg = CHINESE ? "无法转换临时文件名" : "Unable to convert temporary filename";
-      chsrc_error2 (msg);
-      exit (Exit_ExternalError);
-    }
-
-  tmpfile = xy_strcat (4, temp_filename_utf8, "_", filename, postfix);
-  free (temp_filename_utf8);
-
-  /* 删除 GetTempFileName 自动创建的文件 */
-  DeleteFileW (temp_filename);
-
-  /* 创建带有正确后缀的文件 */
-  f = xy_fopen (tmpfile, "w+");
 
   if (!f)
     {
-      char *msg = CHINESE ? "无法创建临时文件: " : "Unable to create temporary file: ";
-            msg = xy_2strcat (msg, tmpfile);
-      chsrc_error2 (msg);
+      chsrc_error2 (CHINESE
+        ? "无法创建具有唯一名称的临时文件"
+        : "Unable to create a uniquely named temporary file");
       exit (Exit_ExternalError);
     }
+
 #else
   /**
-   * 非 Windows 平台使用 mkstemps() 创建临时文件
-   * 这是 POSIX 标准方法，可以指定后缀名
+   * 非 Windows 平台使用 mkstemps() 创建临时文件。
+   * mkstemps() 可以原子创建文件，同时保留指定后缀。
    */
-  tmpfile = xy_strcat (5, "/tmp/", "chsrc_tmp_", filename, "_XXXXXX", postfix);
+  tmpfile = xy_strcat (
+    5, "/tmp/", "chsrc_tmp_", filename, "_XXXXXX", postfix);
+
   size_t postfix_len = strlen (postfix);
 
-  /* mkstemps() 会原子性地创建文件并返回文件描述符 */
   int fd = mkstemps (tmpfile, postfix_len);
 
-  if (fd == -1)
+  if (-1 == fd)
     {
-      char *msg = CHINESE ? "无法创建临时文件: " : "Unable to create temporary file: ";
-            msg = xy_2strcat (msg, tmpfile);
+      char *msg = CHINESE
+        ? xy_2strcat ("无法创建临时文件: ", tmpfile)
+        : xy_2strcat ("Unable to create temporary file: ", tmpfile);
+
       chsrc_error2 (msg);
       exit (Exit_ExternalError);
     }
@@ -505,9 +678,12 @@ chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilepath
 
   if (!f)
     {
-      close (fd);  /* 关闭文件描述符以避免泄漏 */
-      char *msg = CHINESE ? "无法打开临时文件: " : "Unable to open temporary file: ";
-            msg = xy_2strcat (msg, tmpfile);
+      close (fd);
+
+      char *msg = CHINESE
+        ? xy_2strcat ("无法打开临时文件: ", tmpfile)
+        : xy_2strcat ("Unable to open temporary file: ", tmpfile);
+
       chsrc_error2 (msg);
       exit (Exit_ExternalError);
     }
@@ -515,20 +691,24 @@ chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilepath
 
   if (loud)
     {
-      char *msg = CHINESE ? "已创建临时文件: " : "Temporary file created: ";
-            msg = xy_2strcat (msg, tmpfile);
+      char *msg = CHINESE
+        ? xy_2strcat ("已创建临时文件: ", tmpfile)
+        : xy_2strcat ("Temporary file created: ", tmpfile);
+
       chsrc_succ2 (msg);
     }
 
   /**
-   * 允许生成文件后不了解其文件名，调用者只了解 FILE*
-   * 这样的话，其实是无法删除该文件的，但是生成在 /tmp 目录下我们恰好可以不用清理
-   * 但是在 Windows 上，就没有办法了，所以我们禁止在 Windows 上不指定返回出的临时文件名
+   * Windows 上调用者必须取得文件名，以便之后能够删除临时文件。
    */
   if (xy.on_windows && !tmpfilepath)
     {
+      fclose (f);
+      xy_file_remove (tmpfile);
+      free (tmpfile);
+
       chsrc_error2 ("在 Windows 上，创建临时文件时必须指定返回的临时文件名");
-      xy_unreached();
+      xy_unreached ();
     }
 
   if (tmpfilepath)
@@ -536,7 +716,170 @@ chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilepath
       *tmpfilepath = xy_normalize_path (xy_strdup (tmpfile));
     }
 
+  free (tmpfile);
+
   return f;
+}
+
+
+/**
+ * @brief 在系统临时目录下创建一个本进程独占、名字不可预测的目录
+ *
+ * @details
+ *   Windows 上用 RtlGenRandom 生成名字，POSIX 上用 mkdtemp；无论哪个平台，目录都必须由本进程
+ *   创建成功（重名换名重试），绝不复用已存在的目录。可预测的名字（如 PID、操作序号）可能被
+ *   提前占位，或以 junction / symlink 重定向，使后续写入落到攻击者指定的位置
+ *
+ * @param[in]  prefix  目录名前缀（UTF-8）
+ * @param[out] out_err 失败原因，可为 NULL
+ *
+ * @return 目录路径，调用者需要 free；失败返回 NULL
+ */
+char *
+chsrc_make_tmpdir (const char *prefix, char **out_err)
+{
+#ifdef XY_Build_On_Windows
+  WCHAR temp_dir[MAX_PATH + 16];
+  DWORD tlen = GetTempPathW (MAX_PATH + 1, temp_dir);
+  if (0 == tlen || tlen > MAX_PATH + 1)
+    {
+      if (out_err)
+        {
+          *out_err = ENGLISH
+            ? xy_strdup ("Failed to locate the system temp directory (GetTempPathW)")
+            : xy_strdup ("无法获取系统临时目录路径");
+        }
+      return NULL;
+    }
+
+  bool has_sep = (L'\\' == temp_dir[tlen - 1] || L'/' == temp_dir[tlen - 1]);
+
+  for (int attempt = 0; attempt < 8; attempt++)
+    {
+      char hex[17];
+      if (!_chsrc_random_hex (hex, 8))
+        {
+          if (out_err)
+            {
+              *out_err = ENGLISH
+                ? xy_strdup ("Failed to generate a random temporary directory name (RtlGenRandom)")
+                : xy_strdup ("无法生成临时目录的随机名称 (RtlGenRandom)");
+            }
+          return NULL;
+        }
+
+      char   name[64];
+      size_t n = 0;
+      for (const char *p = prefix; *p && n < 40; p++)
+        name[n++] = *p;
+      name[n++] = '-';
+      for (size_t i = 0; hex[i]; i++)
+        name[n++] = hex[i];
+      name[n] = '\0';
+
+      WCHAR wname[64];
+      if (0 == MultiByteToWideChar (CP_UTF8, 0, name, -1, wname,
+                                    (int) (sizeof (wname) / sizeof (WCHAR))))
+        {
+          if (out_err)
+            {
+              *out_err = ENGLISH
+                ? xy_strdup ("Failed to convert the temporary directory name to UTF-16")
+                : xy_strdup ("无法将临时目录名转换为 UTF-16");
+            }
+          return NULL;
+        }
+
+      WCHAR wpath[MAX_PATH + 160];
+      DWORD wl = 0;
+      for (DWORD i = 0; i < tlen; i++)
+        wpath[wl++] = temp_dir[i];
+      if (!has_sep)
+        wpath[wl++] = L'\\';
+      for (size_t i = 0; wname[i]; i++)
+        wpath[wl++] = wname[i];
+      wpath[wl] = L'\0';
+
+      if (CreateDirectoryW (wpath, NULL))
+        {
+          int u8_len = WideCharToMultiByte (CP_UTF8, 0, wpath, -1, NULL, 0, NULL, NULL);
+          if (u8_len <= 0)
+            {
+              if (out_err)
+                {
+                  *out_err = ENGLISH
+                    ? xy_strdup ("Failed to convert the temporary directory path to UTF-8")
+                    : xy_strdup ("无法将临时目录路径转换为 UTF-8");
+                }
+              return NULL;
+            }
+          char *u8 = xy_malloc0 ((size_t) u8_len);
+          WideCharToMultiByte (CP_UTF8, 0, wpath, -1, u8, u8_len, NULL, NULL);
+          return u8;
+        }
+
+      DWORD err = GetLastError ();
+      if (ERROR_ALREADY_EXISTS != err)
+        {
+          char *err_s = xy_int2str ((int) err);
+          if (out_err)
+            {
+              *out_err = ENGLISH
+                ? xy_strcat (4, "Failed to create temporary directory `", name, "` (Win32 error ", err_s)
+                : xy_strcat (4, "无法创建临时目录 `", name, "`，错误码: ", err_s);
+            }
+          free (err_s);
+          return NULL;
+        }
+
+      /* 名字已被占位（预先放置的目录或 junction），换一个随机名重试 */
+    }
+
+  if (out_err)
+    {
+      *out_err = ENGLISH
+        ? xy_strdup ("Failed to create a uniquely named temporary directory")
+        : xy_strdup ("无法创建具有唯一名称的临时目录");
+    }
+  return NULL;
+#else
+  const char *tmp = getenv ("TMPDIR");
+  if (!tmp || '\0' == tmp[0])
+    tmp = "/tmp";
+
+  char *tmpl = xy_strcat (4, tmp, "/", prefix, "-XXXXXX");
+  if (!mkdtemp (tmpl))
+    {
+      if (out_err)
+        {
+          *out_err = ENGLISH
+            ? xy_strcat (3, "Failed to create temporary directory `", tmpl, "`")
+            : xy_strcat (3, "无法创建临时目录 `", tmpl, "`");
+        }
+      free (tmpl);
+      return NULL;
+    }
+  return tmpl;
+#endif
+}
+
+
+static void
+chsrc_run_as_script_file (const char *script_content, const char *filename, const char *postfix,
+                          const char *cmd_prefix, const char *msg)
+{
+  char *tmpfile = NULL;
+  FILE *f = chsrc_make_tmpfile (filename, postfix, false, &tmpfile);
+  fwrite (script_content, strlen (script_content), 1, f);
+  fclose (f);
+
+  chsrc_note2 (msg);
+  println (faint(script_content));
+  char *cmd = xy_strcat (3, cmd_prefix, tmpfile, "\"");
+  chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
+  free (cmd);
+  xy_file_remove (tmpfile);
+  free (tmpfile);
 }
 
 
@@ -546,18 +889,8 @@ chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilepath
 void
 chsrc_run_as_bash_file (const char *script_content)
 {
-  char *tmpfile = NULL;
-  FILE *f = chsrc_make_tmpfile ("bash_script", ".bash", false, &tmpfile);
-  fwrite (script_content, strlen (script_content), 1, f);
-  fclose (f);
-  // chmod (tmpfile, 0700);
-  char *msg = CHINESE ? "即将执行 Bash 脚本内容:" : "The Bash script content will be executed:";
-  chsrc_note2 (msg);
-  println (faint(script_content));
-  char *cmd = xy_2strcat ("bash ", tmpfile);
-  chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
-  xy_file_remove (tmpfile);
-  free (tmpfile);  /* 释放 tmpfile 路径内存 */
+  chsrc_run_as_script_file (script_content, "bash_script", ".bash", "bash \"",
+                            CHINESE ? "即将执行 Bash 脚本内容:" : "The Bash script content will be executed:");
 }
 
 
@@ -567,18 +900,8 @@ chsrc_run_as_bash_file (const char *script_content)
 void
 chsrc_run_as_sh_file (const char *script_content)
 {
-  char *tmpfile = NULL;
-  FILE *f = chsrc_make_tmpfile ("sh_script", ".sh", false, &tmpfile);
-  fwrite (script_content, strlen (script_content), 1, f);
-  fclose (f);
-  // chmod (tmpfile, 0700);
-  char *msg = CHINESE ? "即将执行 sh 脚本内容:" : "The sh script content will be executed:";
-  chsrc_note2 (msg);
-  println (faint(script_content));
-  char *cmd = xy_2strcat ("sh ", tmpfile);
-  chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
-  xy_file_remove (tmpfile);
-  free (tmpfile);
+  chsrc_run_as_script_file (script_content, "sh_script", ".sh", "sh \"",
+                            CHINESE ? "即将执行 sh 脚本内容:" : "The sh script content will be executed:");
 }
 
 
@@ -588,17 +911,8 @@ chsrc_run_as_sh_file (const char *script_content)
 void
 chsrc_run_as_pwsh_file (const char *script_content)
 {
-  char *tmpfile = NULL;
-  FILE *f = chsrc_make_tmpfile ("pwsh_script", ".ps1", false, &tmpfile);
-  fwrite (script_content, strlen (script_content), 1, f);
-  fclose (f);
-  char *msg = CHINESE ? "即将执行 PowerShell (v7以上) 脚本内容:" : "The PowerShell script content will be executed:";
-  chsrc_note2 (msg);
-  println (faint(script_content));
-  char *cmd = xy_2strcat ("pwsh ", tmpfile);
-  chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
-  xy_file_remove (tmpfile);
-  free (tmpfile);
+  chsrc_run_as_script_file (script_content, "pwsh_script", ".ps1", "pwsh -ExecutionPolicy Bypass -File \"",
+                            CHINESE ? "即将执行 PowerShell (v7以上) 脚本内容:" : "The PowerShell script content will be executed:");
 }
 
 
@@ -608,18 +922,8 @@ chsrc_run_as_pwsh_file (const char *script_content)
 void
 chsrc_run_as_powershellv5_file (const char *script_content)
 {
-  char *tmpfile = NULL;
-  FILE *f = chsrc_make_tmpfile ("psv5_script", ".ps1", false, &tmpfile);
-  fwrite (script_content, strlen (script_content), 1, f);
-  fclose (f);
-  char *msg = CHINESE ? "即将执行 PowerShell v5 脚本内容:" : "The PowerShell v5 script content will be executed:";
-  chsrc_note2 (msg);
-  println (faint(script_content));
-  // -ExecutionPolicy Bypass
-  char *cmd = xy_2strcat ("powershell -File ", tmpfile);
-  chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
-  xy_file_remove (tmpfile);
-  free (tmpfile);
+  chsrc_run_as_script_file (script_content, "psv5_script", ".ps1", "powershell -ExecutionPolicy Bypass -File \"",
+                            CHINESE ? "即将执行 PowerShell v5 脚本内容:" : "The PowerShell v5 script content will be executed:");
 }
 
 
