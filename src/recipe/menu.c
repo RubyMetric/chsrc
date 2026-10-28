@@ -155,7 +155,6 @@ chsrc_init_menu ()
   add(RubyChina); // Ruby China 镜像站实际上已于2026年7月21日停用，但由于其是持续数十年的由社区维护驱动的镜像站，我们保留表示致敬
   add(EmacsChina);
   add(NpmMirror); add(GoProxyIO); add(GoProxyCN); add(RsProxyCN); add(FlutterCN);
-  add(HFMirror);
   /* 暂不支持 &NugetOrg */
 
 
