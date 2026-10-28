@@ -10,7 +10,7 @@
  *               | AnonTokio    <anontokio@163.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2026-08-13>
+ * Last Modified : <2026-11-08>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -56,8 +56,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <dirent.h> // opendir() closedir()
+#ifndef _WIN32
+  #include <unistd.h>
+  #include <dirent.h> // opendir() closedir()
+#endif
 
 #if defined(__STDC__) && __STDC_VERSION__ >= 202311
   #define XY_Deprecate_This(msg) [[deprecated(msg)]]
@@ -108,6 +110,11 @@ xy =
 
 
 
+/**
+ * 平台判定约定：
+ *   1. 编译期 `#ifdef XY_Build_On_Windows` 仅用于包裹 Win32 SDK 专有头文件、类型与 API 调用
+ *   2. 运行期 `if (xy.on_windows)` 用于纯 C 跨平台分支逻辑，二者真值严格一致
+ */
 #ifdef _WIN32
   #define XY_Build_On_Windows 1
 
@@ -968,6 +975,7 @@ xy_file_remove (const char *path)
 static bool
 xy_path_exist (const char *path)
 {
+  if (!path) return false;
 #ifdef XY_Build_On_Windows
   wchar_t *wpath = xy_utf8_to_wstr (path);
   bool exist = (NULL != wpath) && (INVALID_FILE_ATTRIBUTES != GetFileAttributesW (wpath));
@@ -985,6 +993,7 @@ xy_path_exist (const char *path)
 static bool
 xy_path_is_dir (const char *path)
 {
+  if (!path) return false;
 #ifdef XY_Build_On_Windows
   wchar_t *wpath = xy_utf8_to_wstr (path);
   DWORD attr = wpath ? GetFileAttributesW (wpath) : INVALID_FILE_ATTRIBUTES;
@@ -1022,7 +1031,7 @@ xy_system (const char *cmd)
 /**
  * @brief 以管道执行命令
  *
- * @return 同 popen()，需要以 pclose() 关闭
+ * @return 同 popen()，需要以 xy_pclose() 关闭
  */
 static FILE *
 xy_popen (const char *cmd, const char *mode)
@@ -1036,6 +1045,17 @@ xy_popen (const char *cmd, const char *mode)
   return f;
 #else
   return popen (cmd, mode);
+#endif
+}
+
+
+static int
+xy_pclose (FILE *stream)
+{
+#ifdef XY_Build_On_Windows
+  return _pclose (stream);
+#else
+  return pclose (stream);
 #endif
 }
 
@@ -1362,7 +1382,7 @@ xy_run_iter_lines (const char *cmd,  unsigned long n,  bool (*func) (const char 
     }
 
   free (buf);
-  pclose (stream);
+  xy_pclose (stream);
   return ret;
 }
 
@@ -1438,7 +1458,7 @@ xy_run_get_stdout (const char *cmd, char **output)
     }
   buf[size] = '\0';
 
-  int status = pclose (stream);
+  int status = xy_pclose (stream);
 
   if (output)
     *output = buf;
@@ -1567,6 +1587,10 @@ _xy_win_powershellv5_profile ()
 #define xy_bashrc "~/.bashrc"
 #define xy_fishrc "~/.config/fish/config.fish"
 
+static char *
+xy_normalize_path (const char *path);
+
+
 /**
  * @note Windows上，`path` 不要夹带变量名，因为最终不会帮你转换
  *
@@ -1575,41 +1599,30 @@ _xy_win_powershellv5_profile ()
 static bool
 xy_file_exist (const char *path)
 {
-  char *expanded_path = NULL;
-  const char *check_path = path;
+  if (!path)
+    return false;
 
-  if (xy_str_start_with (path, "~"))
-    {
-      expanded_path = xy_2strcat (xy_os_home, path + 1);
-      check_path = expanded_path;
-    }
-
-  bool result = xy_path_exist (check_path);
-  if (expanded_path) free (expanded_path);
+  char *normalized_path = xy_normalize_path (path);
+  bool result = xy_path_exist (normalized_path);
+  free (normalized_path);
   return result;
 }
 
 /**
- * @note `xy_file_exist()` 和 `xy_dir_exist()` 两个函数在所有平台默认都支持使用 '~'，
- *       但实现中都没有调用 `xy_normalize_path()`，以防万一，调用前可能需要用户手动调用它
+ * @note `xy_file_exist()` 和 `xy_dir_exist()` 使用 `xy_normalize_path()` 展开 `~`；
+ *       Windows 上也支持 `%VAR%` 环境变量。
  *
  * @memory SAFE
  */
 static bool
 xy_dir_exist (const char *path)
 {
-  char *allocated_dir = NULL;
-  const char *dir = path;
+  if (!path)
+    return false;
 
-  if (xy_str_start_with (path, "~"))
-    {
-      allocated_dir = xy_2strcat (xy_os_home, path + 1);
-      dir = allocated_dir;
-    }
-
-  bool result = xy_path_is_dir (dir);
-
-  if (allocated_dir) free (allocated_dir);
+  char *normalized_path = xy_normalize_path (path);
+  bool result = xy_path_is_dir (normalized_path);
+  free (normalized_path);
   return result;
 }
 
@@ -1620,8 +1633,9 @@ xy_dir_exist (const char *path)
  *   1. 删除路径左右两边多出来的空白符
  *      - 防止通过间接方式得到的路径包含了空白字符 (如 grep 出来的结果)
  *      - 防止维护者多写了空白字符
- *   2. 将 ~ 转换为绝对路径
- *   3. 在Windows上，使用标准的 \ 作为路径分隔符
+ *   2. 将开头的 ~ 转换为当前用户的 HOME/USERPROFILE
+ *   3. Windows 上展开 %NAME% 环境变量
+ *   4. 在Windows上，使用标准的 \ 作为路径分隔符
  *
  * @memory SAFE
  *   return caller-free
@@ -1631,13 +1645,33 @@ xy_normalize_path (const char *path)
 {
   char *new = xy_str_strip (path);
 
-  if (xy_str_start_with (new, "~"))
+  if ('~' == new[0] && ('\0' == new[1] || '/' == new[1] || '\\' == new[1]))
     {
-      char *tmp = xy_str_delete_prefix (new, "~");
-      char *joined = xy_2strcat (xy_os_home, tmp);
-      free (tmp);
-      xy_ptr_replace (&new, joined);
+      const char *home = xy_os_home;
+      if (home)
+        xy_ptr_replace (&new, xy_2strcat (home, new + 1));
     }
+
+#ifdef XY_Build_On_Windows
+  wchar_t *wpath = _xy_win_wstr (new);
+  if (wpath && wcschr (wpath, L'%'))
+    {
+      DWORD needed = ExpandEnvironmentStringsW (wpath, NULL, 0);
+      if (needed > 0)
+        {
+          wchar_t *wexpanded = xy_malloc0 ((size_t) needed * sizeof (wchar_t));
+          DWORD written = ExpandEnvironmentStringsW (wpath, wexpanded, needed);
+          if (written > 0 && written <= needed)
+            {
+              char *utf8 = _xy_win_utf8 (wexpanded);
+              if (utf8)
+                xy_ptr_replace (&new, utf8);
+            }
+          free (wexpanded);
+        }
+    }
+  free (wpath);
+#endif
 
   if (xy.on_windows)
     {
@@ -1720,29 +1754,24 @@ xy_parent_dir (const char *path)
 void
 _xy_detect_os ()
 {
+#ifdef XY_Build_On_Windows
   /**
-   * 首先判断是否为 Windows
-   *
-   * SystemDrive 为 C:
+   * Windows 原生编译目标 (_WIN32)
+   * 使运行期 xy.on_windows 与编译期 XY_Build_On_Windows 严格等价
    */
-  char *drive = getenv ("SystemDrive");
-  if (drive)
-    {
-      char path[256];
-      /**
-       * C:\Users 目录都可能不存在！
-       * https://github.com/RubyMetric/chsrc/issues/361
-       */
-      snprintf (path, sizeof (path), "%s\\Windows", drive);
-      DIR *d = opendir (path);
-      if (d)
-        {
-          xy.on_windows = true;
-          xy.os_family = "windows";
-          closedir (d);
-          return;
-        }
-    }
+  xy.on_windows = true;
+  xy.os_family = "windows";
+#else
+
+#if defined(__CYGWIN__) || defined(__MSYS__)
+  /**
+   * Cygwin / MSYS2 POSIX 运行时未定义 _WIN32，无 Win32 SDK 头与注册表约定，
+   * 归入 Unix 分支处理
+   */
+  xy.on_linux = true;
+  xy.os_family = "unix";
+  return;
+#endif
 
   /* 判断 Linux */
   FILE *fp = fopen ("/proc/version", "r");
@@ -1796,7 +1825,7 @@ _xy_detect_os ()
     {
       char buf[256];
       fgets (buf, sizeof (buf), fp);
-      pclose (fp);
+      xy_pclose (fp);
       if (strstr (buf, "BSD") != NULL)
         {
           xy.on_bsd = true;
@@ -1818,6 +1847,7 @@ _xy_detect_os ()
 
   if (!(xy.on_windows || xy.on_linux || xy.on_android || xy.on_macos || xy.on_bsd))
     xy_throw ("Unknown operating system");
+#endif
 }
 
 
