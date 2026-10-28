@@ -10,7 +10,7 @@
  *               | @JIAFALSEDREAM
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2026-08-20>
+ * Last Modified : <2026-10-28>
  *
  * 源的确定
  * ------------------------------------------------------------*/
@@ -790,17 +790,11 @@ chsrc_conclude (Source_t *source)
 
 /**
  * @brief 检测该 dish 是否实现了用户所指定的 scope 能力
- *
- * @note 此函数目前只支持中文
  */
 void
 chsrc_check_scope_capability (Dish_t *dish)
 {
   ScopeCapability_t cap = ScopeCap_Unknown;
-
-  char *msg1 = "不支持";
-  char *msg2 = "换源，请使用 chsrc ls ";
-  char *msg3 = " 查看支持的作用域以及默认作用域";
 
   char *aliases = dish->aliases;
   char *scope_name = NULL;
@@ -809,10 +803,11 @@ chsrc_check_scope_capability (Dish_t *dish)
     {
       cap = dish->scope_caps[ScopeCap_Slot_Project];
 
-      if (cap != ScopeCap_Able_And_Implemented)
+      if (!scope_cap_is_runnable (cap))
         {
-          scope_name = "项目级";
-          char* msg = xy_strcat (5, msg1, scope_name, msg2, aliases, msg3);
+          scope_name = CHINESE ? "项目级" : "Project";
+          char *msg = CHINESE ? xy_strcat (5, "不支持", scope_name, "换源，请使用 chsrc ls ", aliases, " 查看支持的作用域以及默认作用域")
+                              : xy_strcat (4, scope_name, " scope is not supported. Use `chsrc ls ", aliases, "` to view supported scopes and default scope");
           chsrc_error (msg);
           exit (Exit_UserCause);
         }
@@ -821,10 +816,11 @@ chsrc_check_scope_capability (Dish_t *dish)
     {
       cap = dish->scope_caps[ScopeCap_Slot_User];
 
-      if (cap != ScopeCap_Able_And_Implemented)
+      if (!scope_cap_is_runnable (cap))
         {
-          scope_name = "用户级";
-          char* msg = xy_strcat (5, msg1, scope_name, msg2, aliases, msg3);
+          scope_name = CHINESE ? "用户级" : "User";
+          char *msg = CHINESE ? xy_strcat (5, "不支持", scope_name, "换源，请使用 chsrc ls ", aliases, " 查看支持的作用域以及默认作用域")
+                              : xy_strcat (4, scope_name, " scope is not supported. Use `chsrc ls ", aliases, "` to view supported scopes and default scope");
           chsrc_error (msg);
           exit (Exit_UserCause);
         }
@@ -833,10 +829,11 @@ chsrc_check_scope_capability (Dish_t *dish)
     {
       cap = dish->scope_caps[ScopeCap_Slot_System];
 
-      if (cap != ScopeCap_Able_And_Implemented)
+      if (!scope_cap_is_runnable (cap))
         {
-          scope_name = "系统级";
-          char* msg = xy_strcat (5, msg1, scope_name, msg2, aliases, msg3);
+          scope_name = CHINESE ? "系统级" : "System";
+          char *msg = CHINESE ? xy_strcat (5, "不支持", scope_name, "换源，请使用 chsrc ls ", aliases, " 查看支持的作用域以及默认作用域")
+                              : xy_strcat (4, scope_name, " scope is not supported. Use `chsrc ls ", aliases, "` to view supported scopes and default scope");
           chsrc_error (msg);
           exit (Exit_UserCause);
         }

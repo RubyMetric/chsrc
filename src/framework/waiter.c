@@ -4,10 +4,10 @@
  * File Name     : source.c
  * File Authors  : @ccmywish
  *               | @G_I_Y
- * Contributors  : Nul None <nul@none.org>
+ * Contributors  : @Mikachu2333
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2026-09-07>
+ * Last Modified : <2026-10-28>
  *
  * 由 chsrc-main.c 拆分而来
  * ------------------------------------------------------------*/
@@ -250,20 +250,29 @@ cli_print_dish_features (Dish_t *dish, const char *input_dish_name)
       switch (cap)
         {
         case ScopeCap_Unknown:
-          msg = xy_strcat (6, " ", bdred(NoMark), scope_msg, " (", "是否支持该作用域尚不了解，欢迎贡献", ")");
+          msg = xy_strcat (6, " ", bdred(NoMark), scope_msg, " (",
+                           CHINESE ? "是否支持该作用域尚不了解，欢迎贡献" : "unknown, welcome to contribute", ")");
           puts (msg);
           break;
         case ScopeCap_Unable:
-          msg = xy_strcat (6, " ", bdred(NoMark), scope_msg, " (", "不支持", ")");
+          msg = xy_strcat (6, " ", bdred(NoMark), scope_msg, " (",
+                           CHINESE ? "不支持" : "unsupported", ")");
           puts (msg);
           break;
         case ScopeCap_Able_But_Not_Implemented:
-          msg = xy_strcat (6, " ", bdyellow(HalfYesMark), scope_msg, " (", "支持但未实现", ")");
+          msg = xy_strcat (6, " ", bdyellow(HalfYesMark), scope_msg, " (",
+                           CHINESE ? "支持但未实现" : "supported, but not implemented yet", ")");
+          puts (msg);
+          break;
+        case ScopeCap_Able_But_Just_Docs:
+          msg = xy_strcat (6, " ", bdyellow(HalfYesMark), scope_msg, " (",
+                           CHINESE ? "支持但仅提供文档指引" : "supported, docs guidance only", ")");
           puts (msg);
           break;
         case ScopeCap_Able_And_Implemented:
           msg = xy_strcat (3, " ", bdgreen(YesMark),
-            purple (xy_strcat (4, scope_msg, " (", "支持且已实现", ")")));
+            purple (xy_strcat (4, scope_msg, " (",
+                               CHINESE ? "支持且已实现" : "supported and implemented", ")")));
           puts (msg);
           break;
         default:
@@ -289,8 +298,10 @@ cli_print_dish_features (Dish_t *dish, const char *input_dish_name)
       default:
         xy_unreached();
       }
+    char *default_prefix = CHINESE ? "默认作用域 | chsrc set -scope=default "
+                                   : "Default Scope | chsrc set -scope=default ";
     char *msg = xy_strcat (2, bdblue (" = "),
-      purple (xy_strcat (5, "默认作用域 | chsrc set -scope=default ", input_dish_name, " (= ", default_scope_name ,")")));
+      purple (xy_strcat (5, default_prefix, input_dish_name, " (= ", default_scope_name, ")")));
     puts (msg);
     br();
   }
@@ -900,6 +911,7 @@ waiter_handle_Reset_Source (Dish_t *dish, const char *input, char *option)
 
   if (dish->resetfn)
     {
+      chsrc_check_scope_capability (dish);
       dish->resetfn(option);
     }
   else
