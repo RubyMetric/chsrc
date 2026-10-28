@@ -80,7 +80,7 @@ static char *
 pl_rust_cargo_config_file (void)
 {
   char *file = NULL;
-  char *cargo_home = getenv ("CARGO_HOME");
+  char *cargo_home = xy_env_get ("CARGO_HOME");
   if (cargo_home && *cargo_home)
     {
       file = xy_path_join (cargo_home, "config.toml");
@@ -89,6 +89,7 @@ pl_rust_cargo_config_file (void)
     {
       file = xy_normalize_path ("~/.cargo/config.toml");
     }
+  free (cargo_home);
   return file;
 }
 
@@ -133,7 +134,7 @@ pl_rust_cargo_getsrc (char *option)
 void
 pl_write_rust_config (const char *path, const char *url)
 {
-  remove (path);
+  xy_file_remove (path);
   char *content = RAWSTR_pl_rust_cargo_config;
   content = xy_str_gsub (content, "@url@", url);
   chsrc_overwrite_file (content, path);

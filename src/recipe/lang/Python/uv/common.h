@@ -55,7 +55,7 @@ pl_uv_find_uv_config (bool mkdir)
       if (xy.on_windows)
         {
           // config path on Windows
-          char *appdata = getenv ("APPDATA");
+          char *appdata = xy_env_get ("APPDATA");
 
           if (!appdata)
             {
@@ -64,6 +64,7 @@ pl_uv_find_uv_config (bool mkdir)
             }
 
           char *config_dir = xy_path_join (appdata, "uv");
+          free (appdata);
           if (mkdir)
             {
               chsrc_ensure_dir (config_dir);
