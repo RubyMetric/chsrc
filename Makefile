@@ -11,7 +11,7 @@
 #               | @Mikachu2333
 #               |
 # Created On    : <2023-08-28>
-# Last Modified : <2026-08-14>
+# Last Modified : <2026-10-28>
 #
 # 请阅读 ./doc/01-开发与构建.md 来使用
 # --------------------------------------------------------------
@@ -66,6 +66,11 @@ ifeq ($(On-Windows), 1)
   # 非 MSYS2 环境 (独立 LLVM) 下回退到 x86_64
 	Windows-Clang-Arch = $(if $(MSYSTEM_CARCH),$(MSYSTEM_CARCH),x86_64)
 	CFLAGS_clang = -target $(Windows-Clang-Arch)-pc-windows-gnu
+
+  # 注意: Android 交叉编译同样在 Windows/MSYS2 下进行, 必须排除 Windows 导入库
+	ifneq ($(CROSS_BUILD_WINDOWS_FOR_ANDROID), 1)
+		LDLIBS_win = -ladvapi32 -lkernel32 -luser32 -lshell32
+	endif
 endif
 
 ifeq ($(CC), clang)
@@ -161,13 +166,13 @@ c: clean
 #============ Target 定义开始 ================
 
 # 编译开始结束时的提示信息
-Starting-Echo-Info = echo Starting: Build in ${1} mode: \'$(CC)\' $(CFLAGS) -o ${2}
+Starting-Echo-Info = echo Starting: Build in ${1} mode: \'$(CC)\' $(CFLAGS) $(LDLIBS_win) -o ${2}
 Finished-Echo-Info = echo Finished: Build in ${1} mode
 
 # 真正的编译命令
-Build-Command = $(CC) src/chsrc-main.c $(CFLAGS) $(CFLAGS_warning) -o $(1)
+Build-Command = $(CC) src/chsrc-main.c $(CFLAGS) $(CFLAGS_warning) $(LDLIBS_win) -o $(1)
 
-Build-Command-For-Release = $(CC) src/chsrc-main.c ${Windows-Res-File} $(CFLAGS) $(CFLAGS_warning) -o $(1)
+Build-Command-For-Release = $(CC) src/chsrc-main.c ${Windows-Res-File} $(CFLAGS) $(CFLAGS_warning) $(LDLIBS_win) -o $(1)
 
 
 
@@ -237,12 +242,12 @@ test-make-var:
 # 这两个测试文件都用 DEBUG mode
 test-xy: CFLAGS += $(CFLAGS_debug)
 test-xy:
-	@$(CC) test/xy.c $(CFLAGS) -o xy
+	@$(CC) test/xy.c $(CFLAGS) $(LDLIBS_win) -o xy
 	@./xy
 
 test-fw: CFLAGS += $(CFLAGS_debug)
 test-fw:
-	@$(CC) test/fw.c $(CFLAGS) -o fw
+	@$(CC) test/fw.c $(CFLAGS) $(LDLIBS_win) -o fw
 	@./fw
 
 check: test
