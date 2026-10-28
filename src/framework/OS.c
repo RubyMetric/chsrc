@@ -276,26 +276,49 @@ chsrc_check_file (char *path)
 
 
 
+bool
+chsrc_is_root (void)
+{
+#ifdef XY_Build_On_Windows
+  BOOL is_admin = FALSE;
+  SID_IDENTIFIER_AUTHORITY nt_authority = SECURITY_NT_AUTHORITY;
+  PSID admin_group = NULL;
+
+  if (AllocateAndInitializeSid (&nt_authority, 2,
+                                SECURITY_BUILTIN_DOMAIN_RID,
+                                DOMAIN_ALIAS_RID_ADMINS,
+                                0, 0, 0, 0, 0, 0, &admin_group))
+    {
+      if (!CheckTokenMembership (NULL, admin_group, &is_admin))
+        {
+          is_admin = FALSE;
+        }
+      FreeSid (admin_group);
+    }
+  return (is_admin != FALSE);
+#else
+  return (0 == geteuid ());
+#endif
+}
+
+
 void
 chsrc_ensure_root ()
 {
-  char *euid = getenv ("$EUID");
-  if (NULL==euid)
+  if (chsrc_is_root ())
+    return;
+
+  char *msg = NULL;
+  if (xy.on_windows)
     {
-      char *buf = xy_run ("id -u", 0);
-      if (0!=xy_str2int(buf)) goto not_root;
-      else return;
+      msg = ENGLISH ? "Please run the terminal as Administrator to ensure the necessary permissions"
+                    : "请以管理员身份运行终端来保证必要的权限";
     }
   else
     {
-      if (0!=xy_str2int(euid)) goto not_root;
-      else return;
+      msg = ENGLISH ? "Use sudo before the command or switch to root to ensure the necessary permissions"
+                    : "请在命令前使用 sudo 或切换为root用户来保证必要的权限";
     }
-
-  char *msg = NULL;
-not_root:
-  msg = ENGLISH ? "Use sudo before the command or switch to root to ensure the necessary permissions"
-                         : "请在命令前使用 sudo 或切换为root用户来保证必要的权限";
   chsrc_error (msg);
   exit (Exit_UserCause);
 }
