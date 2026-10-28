@@ -132,7 +132,7 @@ query_program_exist (char *check_cmd, char *prog_name, int mode)
 {
   char *which = check_cmd;
 
-  int status = system (which);
+  int status = xy_system (which);
 
   // char buf[32] = {0}; sprintf(buf, "错误码: %d", status);
 
@@ -326,7 +326,7 @@ chsrc_run (const char *cmd, int run_option)
       return; // Dry Run 此时立即结束，并不真正执行
     }
 
-  int status = system (cmd);
+  int status = xy_system (cmd);
   bool use_yellow_for_error = (run_option & RunOpt_Dont_Abort_On_Failure) != 0;
 
   if (0==status)
@@ -383,7 +383,7 @@ chsrc_run_directly (const char *cmd)
     {
       return 0; // Dry Run 此时立即结束，并不真正执行
     }
-  int status = system (cmd);
+  int status = xy_system (cmd);
   return status;
 }
 
@@ -406,18 +406,19 @@ chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilepath
 
 #ifdef XY_Build_On_Windows
   /**
-   * Windows 上使用 GetTempPath 和 GetTempFileName 创建临时文件
-   * 这是 Windows API 推荐的标准方法
+   * Windows 上使用 GetTempPathW 和 GetTempFileNameW 创建临时文件
    *
    * 由于 GetTempFileName 不支持自定义后缀，我们需要：
    * 1. 使用 GetTempFileName 生成唯一的临时文件名
-   * 2. 将其重命名为带有正确后缀的文件名（PowerShell 需要 .ps1 后缀）
+   * 2. 重建带正确后缀的文件名（PowerShell 需要 .ps1 后缀）
+   *
+   * 全程使用宽字符 API，临时目录含非 ASCII 字符时也能正常工作
    */
-  char temp_path[MAX_PATH];
-  char temp_filename[MAX_PATH];
+  wchar_t temp_path[MAX_PATH];
+  wchar_t temp_filename[MAX_PATH];
 
   /* 获取系统临时目录 */
-  DWORD ret = GetTempPathA (MAX_PATH, temp_path);
+  DWORD ret = GetTempPathW (MAX_PATH, temp_path);
   if (ret == 0 || ret > MAX_PATH)
     {
       char *msg = CHINESE ? "无法获取系统临时目录" : "Unable to get system temp directory";
@@ -426,7 +427,7 @@ chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilepath
     }
 
   /* 生成唯一的临时文件名 (会自动创建文件) */
-  ret = GetTempFileNameA (temp_path, "chsrc_", 0, temp_filename);
+  ret = GetTempFileNameW (temp_path, L"chsrc_", 0, temp_filename);
   if (ret == 0)
     {
       char *msg = CHINESE ? "无法生成临时文件名" : "Unable to generate temporary filename";
@@ -434,13 +435,22 @@ chsrc_make_tmpfile (char *filename, char *postfix, bool loud, char **tmpfilepath
       exit (Exit_ExternalError);
     }
 
-  tmpfile = xy_strcat (4, temp_filename, "_", filename, postfix);
+  char *temp_filename_utf8 = _xy_win_utf8 (temp_filename);
+  if (!temp_filename_utf8)
+    {
+      char *msg = CHINESE ? "无法转换临时文件名" : "Unable to convert temporary filename";
+      chsrc_error2 (msg);
+      exit (Exit_ExternalError);
+    }
+
+  tmpfile = xy_strcat (4, temp_filename_utf8, "_", filename, postfix);
+  free (temp_filename_utf8);
 
   /* 删除 GetTempFileName 自动创建的文件 */
-  DeleteFileA (temp_filename);
+  DeleteFileW (temp_filename);
 
   /* 创建带有正确后缀的文件 */
-  f = fopen (tmpfile, "w+");
+  f = xy_fopen (tmpfile, "w+");
 
   if (!f)
     {
@@ -523,7 +533,7 @@ chsrc_run_as_bash_file (const char *script_content)
   println (faint(script_content));
   char *cmd = xy_2strcat ("bash ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
-  remove (tmpfile);
+  xy_file_remove (tmpfile);
   free (tmpfile);  /* 释放 tmpfile 路径内存 */
 }
 
@@ -544,7 +554,7 @@ chsrc_run_as_sh_file (const char *script_content)
   println (faint(script_content));
   char *cmd = xy_2strcat ("sh ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
-  remove (tmpfile);
+  xy_file_remove (tmpfile);
   free (tmpfile);
 }
 
@@ -564,7 +574,7 @@ chsrc_run_as_pwsh_file (const char *script_content)
   println (faint(script_content));
   char *cmd = xy_2strcat ("pwsh ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
-  remove (tmpfile);
+  xy_file_remove (tmpfile);
   free (tmpfile);
 }
 
@@ -585,7 +595,7 @@ chsrc_run_as_powershellv5_file (const char *script_content)
   // -ExecutionPolicy Bypass
   char *cmd = xy_2strcat ("powershell -File ", tmpfile);
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
-  remove (tmpfile);
+  xy_file_remove (tmpfile);
   free (tmpfile);
 }
 
@@ -686,7 +696,7 @@ chsrc_view_env (const char *var1, ...)
        * 这个错误过于醒目。我们应该像在 sh 一样，默默地没有输出即可，而不是报错
        */
       // chsrc_run (cmd, RunOpt_Dont_Notify_On_Success|RunOpt_No_Last_New_Line|RunOpt_Dont_Abort_On_Failure);
-      int status = system (cmd);
+      int status = xy_system (cmd);
       if (status!=0) { xy_noop(); }
     }
   else
@@ -756,7 +766,7 @@ chsrc_append_to_file (const char *str, const char *filename)
   char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
 
-  FILE *f = fopen (file, "a");
+  FILE *f = xy_fopen (file, "a");
   if (NULL==f)
     {
       char *msg = ENGLISH ? xy_2strcat ("Unable to open file to write: ", file)
@@ -812,7 +822,7 @@ chsrc_prepend_to_file (const char *str, const char *filename)
   char *file_content = xy_file_read (file);
   char *content = xy_2strcat (str, file_content);
 
-  FILE *f = fopen (file, "w");
+  FILE *f = xy_fopen (file, "w");
 
   if (f)
     {
@@ -842,7 +852,7 @@ chsrc_overwrite_file (const char *str, const char *filename)
   char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
 
-  FILE *f = fopen (file, "w");
+  FILE *f = xy_fopen (file, "w");
   if (NULL==f)
     {
       char *msg = ENGLISH ? xy_2strcat ("Unable to open file to overwrite: ", file)
