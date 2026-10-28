@@ -10,7 +10,7 @@
  *               | @NewbieXvwu
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2026-08-19>
+ * Last Modified : <2026-10-28>
  *
  * chsrc OS operations
  * ------------------------------------------------------------*/
@@ -1227,7 +1227,7 @@ chsrc_get_cpuarch ()
   char *ret;
   char *msg;
 
-#if XY_Build_On_Windows
+#ifdef XY_Build_On_Windows
   SYSTEM_INFO info;
   GetNativeSystemInfo (&info);
   WORD num = info.wProcessorArchitecture;
@@ -1282,7 +1282,7 @@ chsrc_get_cpucore ()
 {
   int cores = 2;
 
-#if XY_Build_On_Windows
+#ifdef XY_Build_On_Windows
   SYSTEM_INFO info;
   GetSystemInfo (&info);
   DWORD num = info.dwNumberOfProcessors;

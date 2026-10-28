@@ -130,6 +130,28 @@ main (int argc, char const *argv[])
 
   assert (xy_file_exist ("./doc/image/chsrc.png"));
   assert (xy_dir_exist ("~"));
+  assert (!xy_file_exist (NULL));
+  assert (!xy_dir_exist (NULL));
+  assert (!xy_path_exist (NULL));
+  assert (!xy_path_is_dir (NULL));
+
+  char *home_path = xy_normalize_path ("~");
+  assert_str (home_path, xy_os_home);
+  free (home_path);
+
+#ifdef XY_Build_On_Windows
+  char *appdata = xy_env_get ("APPDATA");
+  if (appdata)
+    {
+      char *normal_appdata = xy_normalize_path (appdata);
+      char *expanded_appdata = xy_normalize_path ("%APPDATA%");
+      assert_str (expanded_appdata, normal_appdata);
+      assert (xy_dir_exist ("%APPDATA%") == xy_dir_exist (appdata));
+      free (expanded_appdata);
+      free (normal_appdata);
+      free (appdata);
+    }
+#endif
   if (xy.on_windows)
     {
       say (xy_normalize_path ("~"));
