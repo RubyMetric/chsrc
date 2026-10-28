@@ -28,5 +28,7 @@
     "clangd.enable": false,
     "clangd.enableCodeCompletion": false,
     "clangd.enableHover": false,
-    "clangd.detectExtensionConflicts": false
+    "clangd.detectExtensionConflicts": false,
+
+    "markdownlint.appliesTo": "noFiles"
 }
