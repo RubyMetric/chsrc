@@ -113,6 +113,7 @@ xy =
 
   #include <windows.h>
   #include <shlobj.h>
+  #include <wchar.h>
 
 #elif defined(__linux__) || defined(__linux)
   #define XY_Build_On_Linux 1
@@ -860,6 +861,212 @@ xy_str_next_nonempty_line (const char *str)
 
 
 
+/******************************************************
+ *              UTF-8 / UTF-16 与系统调用封装
+ *
+ *  chsrc 内部统一使用 UTF-8。Windows 上 CRT 的文件、命令与环境变量接口
+ *  都按 ANSI 代码页解释 char*，非 ASCII 路径会失败或乱码，因此字符串在
+ *  跨出 C 运行时的每一处都先转为宽字符。
+ ******************************************************/
+#ifdef XY_Build_On_Windows
+/**
+ * @brief UTF-8 -> Windows 宽字符
+ *
+ * @memory SAFE
+ *   return caller-free
+ */
+static wchar_t *
+_xy_win_wstr (const char *utf8)
+{
+  if (!utf8)
+    return NULL;
+
+  int wlen = MultiByteToWideChar (CP_UTF8, 0, utf8, -1, NULL, 0);
+  if (wlen <= 0)
+    return NULL;
+
+  wchar_t *wstr = xy_malloc0 ((size_t) wlen * sizeof (wchar_t));
+  if (0 == MultiByteToWideChar (CP_UTF8, 0, utf8, -1, wstr, wlen))
+    {
+      free (wstr);
+      return NULL;
+    }
+  return wstr;
+}
+
+/**
+ * @brief Windows 宽字符 -> UTF-8
+ *
+ * @memory SAFE
+ *   return caller-free
+ */
+static char *
+_xy_win_utf8 (const wchar_t *wstr)
+{
+  if (!wstr)
+    return NULL;
+
+  int len = WideCharToMultiByte (CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL);
+  if (len <= 0)
+    return NULL;
+
+  char *utf8 = xy_malloc0 ((size_t) len);
+  if (0 == WideCharToMultiByte (CP_UTF8, 0, wstr, -1, utf8, len, NULL, NULL))
+    {
+      free (utf8);
+      return NULL;
+    }
+  return utf8;
+}
+#endif
+
+
+/**
+ * @brief 以 UTF-8 路径打开文件
+ *
+ * @memory SAFE
+ *   return caller-free
+ */
+static FILE *
+xy_fopen (const char *path, const char *mode)
+{
+#ifdef XY_Build_On_Windows
+  wchar_t *wpath = _xy_win_wstr (path);
+  wchar_t *wmode = _xy_win_wstr (mode);
+  FILE    *f     = (wpath && wmode) ? _wfopen (wpath, wmode) : NULL;
+  free (wmode);
+  free (wpath);
+  return f;
+#else
+  return fopen (path, mode);
+#endif
+}
+
+
+/**
+ * @brief 删除文件
+ *
+ * @return 同 remove()
+ */
+static int
+xy_file_remove (const char *path)
+{
+#ifdef XY_Build_On_Windows
+  wchar_t *wpath = _xy_win_wstr (path);
+  int ret = wpath ? _wremove (wpath) : -1;
+  free (wpath);
+  return ret;
+#else
+  return remove (path);
+#endif
+}
+
+
+/**
+ * @brief 路径是否存在（文件或目录）
+ */
+static bool
+xy_path_exist (const char *path)
+{
+#ifdef XY_Build_On_Windows
+  wchar_t *wpath = _xy_win_wstr (path);
+  bool exist = (NULL != wpath) && (INVALID_FILE_ATTRIBUTES != GetFileAttributesW (wpath));
+  free (wpath);
+  return exist;
+#else
+  return 0 == access (path, 0);   /* F_OK */
+#endif
+}
+
+
+/**
+ * @brief 路径是否为目录
+ */
+static bool
+xy_path_is_dir (const char *path)
+{
+#ifdef XY_Build_On_Windows
+  wchar_t *wpath = _xy_win_wstr (path);
+  DWORD attr = wpath ? GetFileAttributesW (wpath) : INVALID_FILE_ATTRIBUTES;
+  free (wpath);
+  return (INVALID_FILE_ATTRIBUTES != attr) && (attr & FILE_ATTRIBUTE_DIRECTORY);
+#else
+  DIR *d = opendir (path);
+  if (!d)
+    return false;
+  closedir (d);
+  return true;
+#endif
+}
+
+
+/**
+ * @brief 执行命令
+ *
+ * @return 同 system()
+ */
+static int
+xy_system (const char *cmd)
+{
+#ifdef XY_Build_On_Windows
+  wchar_t *wcmd = _xy_win_wstr (cmd);
+  int status = wcmd ? _wsystem (wcmd) : -1;
+  free (wcmd);
+  return status;
+#else
+  return system (cmd);
+#endif
+}
+
+
+/**
+ * @brief 以管道执行命令
+ *
+ * @return 同 popen()，需要以 pclose() 关闭
+ */
+static FILE *
+xy_popen (const char *cmd, const char *mode)
+{
+#ifdef XY_Build_On_Windows
+  wchar_t *wcmd  = _xy_win_wstr (cmd);
+  wchar_t *wmode = _xy_win_wstr (mode);
+  FILE    *f     = (wcmd && wmode) ? _wpopen (wcmd, wmode) : NULL;
+  free (wmode);
+  free (wcmd);
+  return f;
+#else
+  return popen (cmd, mode);
+#endif
+}
+
+
+/**
+ * @brief 读取环境变量
+ *
+ * @note Windows 上 getenv() 把环境块按 ANSI 代码页转换，非 ASCII 值会乱码，
+ *       这里改用 _wgetenv() 再转为 UTF-8
+ *
+ * @memory SAFE
+ *   return caller-free
+ */
+static char *
+xy_env_get (const char *name)
+{
+#ifdef XY_Build_On_Windows
+  wchar_t *wname = _xy_win_wstr (name);
+  if (!wname)
+    return NULL;
+
+  wchar_t *wval = _wgetenv (wname);
+  free (wname);
+  return wval ? _xy_win_utf8 (wval) : NULL;
+#else
+  const char *val = getenv (name);
+  return val ? xy_strdup (val) : NULL;
+#endif
+}
+
+
 /**
  * @brief 读取文件内容并返回字符串，失败时返回空字符串
  *
@@ -873,7 +1080,7 @@ xy_str_next_nonempty_line (const char *str)
 static char *
 xy_file_read (const char *path)
 {
-  FILE *fp = fopen (path, "rb");
+  FILE *fp = xy_fopen (path, "rb");
   if (!fp)
     return xy_strdup ("");
 
@@ -1126,7 +1333,7 @@ xy_run_iter_lines (const char *cmd,  unsigned long n,  bool (*func) (const char 
   const int size = 512;
   char *buf = (char *) malloc (size);
 
-  FILE *stream = popen (cmd, "r");
+  FILE *stream = xy_popen (cmd, "r");
   if (stream == NULL)
     {
       _xy_internal_warn ("xy_run_iter_lines(): popen() failed");
@@ -1186,7 +1393,7 @@ xy_run_get_status (char *cmd)
 {
   char * command = xy_quiet_cmd (cmd);
 
-  int status = system (command);
+  int status = xy_system (command);
   free (command);
   return status;
 }
@@ -1210,7 +1417,7 @@ xy_run_get_stdout (const char *cmd, char **output)
   int cap  = 8192; /* 假如1行100个字符，大约支持80行输出 */
   char *buf = (char *) xy_malloc0 (cap);
 
-  FILE *stream = popen (cmd, "r");
+  FILE *stream = xy_popen (cmd, "r");
   if (stream == NULL)
     {
       _xy_internal_warn ("xy_run_get_stdout(): popen() failed");
@@ -1272,11 +1479,12 @@ xy_os_depend_str (const char *str_for_win, const char *str_for_unix)
 static char *
 _xy_os_home ()
 {
-  char *home = NULL;
-  if (xy.on_windows)
-    home = getenv ("USERPROFILE");
-  else
-    home = getenv ("HOME");
+  /* 进程级缓存：返回值生命周期与进程相同，调用者无需释放 */
+  static char *home = NULL;
+  if (home)
+    return home;
+
+  home = xy_env_get (xy.on_windows ? "USERPROFILE" : "HOME");
   return home;
 }
 
@@ -1294,12 +1502,12 @@ static char *
 _xy_win_documents ()
 {
 #ifdef XY_Build_On_Windows
-  char documents_path[MAX_PATH];
-  HRESULT result = SHGetFolderPathA (NULL, CSIDL_MYDOCUMENTS, NULL,
+  wchar_t documents_path[MAX_PATH];
+  HRESULT result = SHGetFolderPathW (NULL, CSIDL_MYDOCUMENTS, NULL,
                                      SHGFP_TYPE_CURRENT, documents_path);
 
   if (SUCCEEDED (result))
-    return xy_strdup (documents_path);
+    return _xy_win_utf8 (documents_path);
 
   return xy_2strcat (xy_os_home, "\\Documents");
 #else
@@ -1360,7 +1568,7 @@ _xy_win_powershellv5_profile ()
 #define xy_fishrc "~/.config/fish/config.fish"
 
 /**
- * @note Windows上，`path` 不要夹带变量名，因为最终 access() 不会帮你转换
+ * @note Windows上，`path` 不要夹带变量名，因为最终不会帮你转换
  *
  * @memory SAFE
  */
@@ -1376,8 +1584,7 @@ xy_file_exist (const char *path)
       check_path = expanded_path;
     }
 
-  // 0 即 F_OK
-  bool result = (0 == access (check_path, 0)) ? true : false;
+  bool result = xy_path_exist (check_path);
   if (expanded_path) free (expanded_path);
   return result;
 }
@@ -1393,50 +1600,17 @@ xy_dir_exist (const char *path)
 {
   char *allocated_dir = NULL;
   const char *dir = path;
-  if (xy.on_windows)
+
+  if (xy_str_start_with (path, "~"))
     {
-      if (xy_str_start_with (path, "~"))
-        {
-          allocated_dir = xy_2strcat (xy_os_home, path + 1);
-          dir = allocated_dir;
-        }
+      allocated_dir = xy_2strcat (xy_os_home, path + 1);
+      dir = allocated_dir;
     }
 
-  if (xy.on_windows)
-    {
-#ifdef XY_Build_On_Windows
-      // 也可以用 opendir() #include <dirent.h>
-      DWORD attr = GetFileAttributesA (dir);
+  bool result = xy_path_is_dir (dir);
 
-      bool result = false;
-      if (attr == INVALID_FILE_ATTRIBUTES)
-        {
-          // Q: 我们应该报错吗？
-          result = false;
-        }
-      else if (attr & FILE_ATTRIBUTE_DIRECTORY)
-        {
-          result = true;
-        }
-      else
-        {
-          result = false;
-        }
-      if (allocated_dir) free (allocated_dir);
-      return result;
-#endif
-    }
-  else
-    {
-      char *tmp_cmd = xy_2strcat ("test -d ", dir);
-      int status = system (tmp_cmd);
-      free (tmp_cmd);
-      bool result = (0==status);
-      if (allocated_dir) free (allocated_dir);
-      return result;
-    }
-
-  return false;
+  if (allocated_dir) free (allocated_dir);
+  return result;
 }
 
 /**
@@ -1617,7 +1791,7 @@ _xy_detect_os ()
     }
 
   /* 最后判断 BSD */
-  fp = popen ("uname -s", "r");
+  fp = xy_popen ("uname -s", "r");
   if (fp)
     {
       char buf[256];
