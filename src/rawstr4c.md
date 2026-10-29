@@ -5,7 +5,7 @@
  ! Config Authors: @ccmywish
  ! Contributors  : Nil Null <nil@null.org>
  ! Created On    : <2025-07-22>
- ! Last Modified : <2026-09-05>
+ ! Last Modified : <2026-10-29>
  ! ---------------------------------------------------------- -->
 
 # [rawstr4c] input for chsrc
@@ -62,7 +62,7 @@
    reset  <dish>            重置，使用上游默认使用的源
 
 选项:
-   -dry                       Dry Run，模拟换源过程，命令仅打印并不运行
+   -dry                       Dry Run，不修改任何文件或配置，仅打印将要执行的变更命令 (仅 set/reset)
    -scope=project|user|system 仅对本项目换源 / 用户级换源 / 系统级换源 (通过ls <dish>查看)
    -ipv6                      使用IPv6测速
    -en(glish)                 使用英文输出
@@ -117,7 +117,7 @@ COMMANDS:
    reset  <dish>            Reset  source to the upstream's default
 
 OPTIONS:
-   -dry                       Dry Run. Simulate the source changing process, command only prints, not run
+   -dry                       Dry Run. Make no changes; only print the commands that would run (set/reset only)
    -scope=project|user|system Change source only for this project / user level / system level (Via `ls <dish>`)
    -ipv6                      Speed measurement using IPv6
    -en(glish)                 Output in English

@@ -107,7 +107,7 @@ _chsrc() {
         conda anaconda"
 
     local all_dishes="$dishes_lang $dishes_os $dishes_ware"
-    local options="-dry -scope= -ipv6 -english -en -no-color -h --help"
+    local options="-dry --dry --dry-run -scope= -ipv6 -english -en -no-color -h --help"
     local scope_options="project user system"
     local commands="help issue list ls measure cesu get set reset"
 
