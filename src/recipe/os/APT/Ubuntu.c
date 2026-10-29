@@ -124,7 +124,7 @@ os_ubuntu_setsrc (char *option)
 
   chsrc_alert2 ("将基于旧格式(非DEB822)换源");
 
-  bool sourcelist_exist = ensure_debian_or_ubuntu_old_sourcelist (OS_Is_Ubuntu);
+  bool sourcelist_exist = ensure_debian_or_ubuntu_old_sourcelist (OS_Is_Ubuntu, false);
 
   chsrc_use_this_source (os_ubuntu);
 

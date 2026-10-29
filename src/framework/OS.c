@@ -1218,6 +1218,47 @@ log_anyway:
 }
 
 
+static void
+log_for_file_delete_op (const char *filename)
+{
+  char *msg = ENGLISH ? "DELETE" : "删除";
+  xy_log_brkt (blue (App_Name), bdblue (msg), blue (filename));
+}
+
+
+/**
+ * @brief 删除文件
+ *
+ * @note Dry Run 下仅打印，不真正删除
+ *
+ * @return 是否删除成功；Dry Run 下返回 true，表示将会删除
+ */
+static bool
+chsrc_delete_file (const char *path)
+{
+  if (chsrc_in_dry_run_mode())
+    {
+      log_for_file_delete_op (path);
+      return true;
+    }
+
+  bool ok = (0 == remove (path));
+
+  if (ok)
+    {
+      log_for_file_delete_op (path);
+    }
+  else
+    {
+      char *msg = ENGLISH ? xy_2strcat ("Unable to delete file: ", path)
+                          : xy_2strcat ("无法删除文件: ", path);
+      chsrc_warn2 (msg);
+    }
+
+  return ok;
+}
+
+
 /**
  * @note 检查过程中全程保持安静
  */

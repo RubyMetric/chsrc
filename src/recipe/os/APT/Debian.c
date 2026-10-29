@@ -124,7 +124,7 @@ os_debian_setsrc (char *option)
   chsrc_alert2 ("将基于旧格式(非DEB822)换源");
 
   /* Docker环境下，Debian镜像可能不存在该文件 */
-  bool sourcelist_exist = ensure_debian_or_ubuntu_old_sourcelist (OS_Is_Debian_Literally);
+  bool sourcelist_exist = ensure_debian_or_ubuntu_old_sourcelist (OS_Is_Debian_Literally, false);
 
   /**
    * 处理带有CDROM源的sourcelist
@@ -137,12 +137,15 @@ os_debian_setsrc (char *option)
       if (use_cdrom)
         {
           chsrc_backup (OS_Debian_old_SourceList);
-          int rm_status = xy_run_get_status ("rm " OS_Debian_old_SourceList);
-          if (rm_status != 0) { /* Placate -Wunused-result */ }
+          chsrc_delete_file (OS_Debian_old_SourceList);
 
-          chsrc_warn2 ("旧版源配置文件中使用了 CDROM 源，已删除(但备份)该配置文件，重新配置");
-          /* 现在的情况是：系统中已经没有配置文件了 */
-          sourcelist_exist = ensure_debian_or_ubuntu_old_sourcelist (OS_Is_Debian_Literally);
+          if (chsrc_in_dry_run_mode())
+            chsrc_warn2 ("Dry Run: 旧版源配置文件中使用了 CDROM 源，实际运行时将删除(已备份)该配置文件，重新配置");
+          else
+            chsrc_warn2 ("旧版源配置文件中使用了 CDROM 源，已删除(但备份)该配置文件，重新配置");
+
+          /* 现在的情况是：系统中已经没有配置文件了（Dry Run 下仅模拟） */
+          sourcelist_exist = ensure_debian_or_ubuntu_old_sourcelist (OS_Is_Debian_Literally, chsrc_in_dry_run_mode());
         }
     }
 

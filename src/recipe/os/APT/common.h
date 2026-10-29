@@ -7,7 +7,7 @@
  *                |
  * Created On     : <2024-06-14>
  * Major Revision :      4
- * Last Modified  : <2026-10-23>
+ * Last Modified  : <2026-10-29>
  * ------------------------------------------------------------*/
 
 #include "rawstr4c.h"
@@ -52,12 +52,14 @@
  * 当不存在该文件时，我们只能拼凑一个假的出来，但该函数目前只适用于 Ubuntu 和 Debian
  * 因为其它的 Debian 变体可能不使用 OS_Apt_SourceList，也可能并不适用 `VERSION_CODENAME`
  *
+ * @param assume_missing  是否假定文件不存在，用于 Dry Run 下模拟已被删除的文件
+ *
  * @return 文件是否存在
  */
 bool
-ensure_debian_or_ubuntu_old_sourcelist (int debian_type)
+ensure_debian_or_ubuntu_old_sourcelist (int debian_type, bool assume_missing)
 {
-  bool exist = chsrc_check_file (OS_Apt_SourceList);
+  bool exist = assume_missing ? false : chsrc_check_file (OS_Apt_SourceList);
 
   if (exist)
     {

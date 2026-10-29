@@ -9,7 +9,7 @@
  *               | @Mikachu2333
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2026-09-05>
+ * Last Modified : <2026-10-29>
  *
  * framework foundation
  * ------------------------------------------------------------*/
@@ -64,6 +64,7 @@ bool chsrc_in_system_scope_mode(){return ProgMode.Scope == SystemScope;}
 
 bool chsrc_in_english_mode(){return ProgMode.EnglishMode;}
 bool chsrc_in_no_color_mode(){return ProgMode.NoColorMode;}
+bool chsrc_in_dry_run_mode(){return ProgMode.DryRunMode;}
 
 /* 仅 framework 相关 mode */
 static bool in_measure_mode(){return ProgMode.MeasureMode;}
