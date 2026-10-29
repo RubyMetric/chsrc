@@ -10,7 +10,7 @@
  *               | @JIAFALSEDREAM
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2026-10-28>
+ * Last Modified : <2026-10-29>
  *
  * 源的确定
  * ------------------------------------------------------------*/
@@ -340,8 +340,13 @@ dish_select_fastest_source (Dish_t *dish)
           Source_t shared = current_shared_source();
           if (shared.provider && shared.url)
             {
-              char *msg = CHINESE ? "使用上次测速的最快源"
-                                  : "Using last measured fastest source";
+              char *msg = NULL;
+              if (chsrc_in_dry_run_mode())
+                msg = CHINESE ? "复用 Dry Run 中已选定的源"
+                              : "Reusing the source selected in Dry Run";
+              else
+                msg = CHINESE ? "使用上次测速的最快源"
+                              : "Using last measured fastest source";
               xy_log_brkt (App_Name, bdpurple (CHINESE ? "测速" : "MEASURE"), msg);
               return shared;
             }
@@ -352,7 +357,7 @@ dish_select_fastest_source (Dish_t *dish)
   if (chsrc_in_reset_mode())
     return sources[0];
 
-  if (!in_dry_run_mode())
+  if (!chsrc_in_dry_run_mode())
   {
     char *msg = CHINESE ? "进行中" : "working";
     xy_log_brkt (App_Name, bdpurple (CHINESE ? "测速" : "MEASURE"), msg);
@@ -367,10 +372,25 @@ dish_select_fastest_source (Dish_t *dish)
       exit (Exit_MaintainerCause);
     }
 
-  if (in_dry_run_mode())
-  /* Dry Run 时，跳过测速 */
+  if (chsrc_in_dry_run_mode())
+  /* Dry Run 时，跳过测速，默认选择第一个镜像站 */
     {
-      return sources[1]; /* 原则第一个源 */
+      char *msg = CHINESE ? "Dry Run: 跳过测速，默认选择第一个镜像站"
+                          : "Dry Run: speed measurement skipped, selecting the first mirror site";
+      chsrc_alert2 (msg);
+
+      Source_t dry_source = sources[1]; /* 第一个镜像站 */
+
+      /* 与真实运行保持一致，combo dish 复用同一个源 */
+      if (chsrc_in_dish_group_mode())
+        {
+          if (current_combo_dish()->all_sub_dishes_use_same_source)
+            {
+              ProgStatus.SharedSource[current_combo_stack_depth() - 1] = dry_source;
+            }
+        }
+
+      return dry_source;
     }
 
   bool only_one = false;
@@ -661,6 +681,15 @@ chsrc_determine_chgtype (ChgType_t type)
 #define MSG_EN_STILL      "Still need to operate manually according to the above prompts. "
 #define MSG_ZH_STILL      "仍需按上述提示手工操作"
 
+#define MSG_EN_DRY_RUN    "Dry Run: no changes were made"
+#define MSG_ZH_DRY_RUN    "Dry Run: 未做任何修改"
+
+#define MSG_EN_DRY_MANUAL "Manual operations will still be required when actually running. "
+#define MSG_ZH_DRY_MANUAL "实际执行时仍需按上述提示手工操作。"
+
+#define MSG_EN_UNTESTED   "The method hasn't been tested or has any feedback, please report usage: chsrc issue"
+#define MSG_ZH_UNTESTED   "该换源步骤已实现但未经测试或存在任何反馈，请报告使用情况: chsrc issue"
+
 #define thank_mirror(msg) say(xy_2strcat(msg,purple(ENGLISH?source->mirror->abbr:source->mirror->name)))
 
 /**
@@ -672,6 +701,23 @@ void
 chsrc_conclude (Source_t *source)
 {
   hr();
+
+  if (chsrc_in_dry_run_mode())
+    {
+      chsrc_log (purple (ENGLISH ? MSG_EN_DRY_RUN : MSG_ZH_DRY_RUN));
+
+      if (ChgType_SemiAuto == ProgStatus.chgtype || ChgType_Manual == ProgStatus.chgtype)
+        {
+          chsrc_warn (ENGLISH ? MSG_EN_DRY_MANUAL : MSG_ZH_DRY_MANUAL);
+          chsrc_warn (ENGLISH ? MSG_EN_BETTER : MSG_ZH_BETTER);
+        }
+      else if (ChgType_Untested == ProgStatus.chgtype)
+        {
+          chsrc_warn (ENGLISH ? MSG_EN_UNTESTED : MSG_ZH_UNTESTED);
+        }
+
+      return;
+    }
 
   // fprintf (stderr, "chsrc: now change type: %d\n", ProgStatus.chgtype);
   if (chsrc_in_reset_mode())
@@ -777,8 +823,7 @@ chsrc_conclude (Source_t *source)
           chsrc_log (msg);
         }
 
-      char *msg = ENGLISH ? "The method hasn't been tested or has any feedback, please report usage: chsrc issue" : "该换源步骤已实现但未经测试或存在任何反馈，请报告使用情况: chsrc issue";
-      chsrc_warn (msg);
+      chsrc_warn (ENGLISH ? MSG_EN_UNTESTED : MSG_ZH_UNTESTED);
     }
   else
     {

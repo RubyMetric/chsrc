@@ -122,49 +122,34 @@ main (int argc, char const *argv[])
       return Exit_OK;
     }
 
-  const char *command = argv[1];
-
-  // chsrc set <dish-name> <mirror-code>
-  //        1        2             3
-  int cli_arg_Dish_pos = 2;
-  int cli_arg_Mirror_pos = cli_arg_Dish_pos + 1;
+  const char *command = NULL;
   const char *dish_name = NULL;
+  char *mirrorCode_or_url = NULL;
 
   Dish_t *the_found_dish = NULL;
 
-  /**
-   * (1)
-   * chsrc set -scope=project -en dish mirror
-   *        1        2         3    4    5
-   * argc = 5
-   *
-   * (2) 考虑到这种情况，i必须还是从1开始
-   * chsrc -en -h
-   *        1  2
-   *
-   * argc = 2
-   */
-  /* 从第一个参数遍历到最后一个参数 */
+  /* 选项可以出现在命令、菜品和镜像参数之间的任意位置 */
   for (int i=1; i<=argc; i++)
     {
-      if (xy_str_start_with (argv[i], "-"))
+      const char *arg = argv[i];
+
+      if (xy_str_start_with (arg, "-"))
         {
-          if (xy_streql (argv[i], "-ipv6"))
+          if (xy_streql (arg, "-ipv6"))
             {
               ProgMode.Ipv6Mode = true;
             }
-          else if (xy_streql (argv[i], "-local"))
+          else if (xy_streql (arg, "-local"))
             {
               ProgMode.Scope = ProjectScope;
               char *msg = CHINESE ? " -local 选项已弃用，请使用 -scope=project"
                                   : " -local is deprecated, please use -scope=project";
               chsrc_warn (msg);
             }
-          else if (    xy_streql (argv[i], "-scope")
-                    || xy_str_start_with (argv[i], "-scope="))
+          else if (xy_streql (arg, "-scope") || xy_str_start_with (arg, "-scope="))
             {
               const char *scope = NULL;
-              if (xy_streql (argv[i], "-scope"))
+              if (xy_streql (arg, "-scope"))
                 {
                   if (i + 1 > argc)
                     {
@@ -179,7 +164,7 @@ main (int argc, char const *argv[])
                 }
               else
                 {
-                  scope = argv[i] + 7;
+                  scope = arg + 7;
                 }
               if (xy_streql_ic (scope, "project"))
                 {
@@ -212,47 +197,81 @@ main (int argc, char const *argv[])
                   return Exit_Unknown;
                 }
             }
-          else if (xy_streql (argv[i], "-en") || xy_streql (argv[i], "-english"))
+          else if (xy_streql (arg, "-en") || xy_streql (arg, "-english"))
             {
               ProgMode.EnglishMode = true;
             }
-          else if (xy_streql (argv[i], "-dry"))
+          else if (   xy_streql (arg, "-dry")
+                   || xy_streql (arg, "--dry")
+                   || xy_streql (arg, "--dry-run"))
             {
               ProgMode.DryRunMode = true;
             }
-          else if (xy_streql (argv[i], "-no-color") || xy_streql (argv[i], "-no-colour"))
+          else if (xy_streql (arg, "-no-color") || xy_streql (arg, "-no-colour"))
             {
               ProgMode.NoColorMode = true;
               xy.enable_color = false;
             }
-          else if (    xy_streql (argv[i], "-h")
-                    || xy_streql (argv[i], "-help")
-                    || xy_streql (argv[i], "--help"))
+          else if (    xy_streql (arg, "-h")
+                    || xy_streql (arg, "-help")
+                    || xy_streql (arg, "--help"))
             {
               command = "help"; /* 交到下方处理 */
             }
-          else if (    xy_streql (argv[i], "-v")
-                    || xy_streql (argv[i], "-version")
-                    || xy_streql (argv[i], "--version"))
+          else if (    xy_streql (arg, "-v")
+                    || xy_streql (arg, "-version")
+                    || xy_streql (arg, "--version"))
             {
               command = "version"; /* 交到下方处理 */
             }
           else
             {
               char *msg = ENGLISH ? "Unknown option: " : "未识别的命令行选项 ";
-              chsrc_error (xy_2strcat (msg, argv[i])); return Exit_Unknown;
+              chsrc_error (xy_2strcat (msg, arg)); return Exit_Unknown;
             }
-          cli_arg_Dish_pos++;
-          cli_arg_Mirror_pos++;
+
+          continue;
         }
+
+      /* 位置参数依次为命令、菜品、镜像站/URL */
+      if (!command)
+        command = arg;
+      else if (!dish_name)
+        dish_name = arg;
+      else if (!mirrorCode_or_url)
+        mirrorCode_or_url = xy_strdup (arg);
     }
 
-  if (in_dry_run_mode())
+  if (!command)
+    {
+      cli_print_help ();
+      return Exit_OK;
+    }
+
+  bool is_set_or_reset =    xy_streql (command, "set")   || xy_streql (command, "s")
+                         || xy_streql (command, "reset") || xy_streql (command, "rest")
+                         || xy_streql (command, "r");
+
+  bool is_help_or_version =    xy_streql (command, "help")    || xy_streql (command, "h")
+                            || xy_streql (command, "-h")      || xy_streql (command, "-help")
+                            || xy_streql (command, "--help")
+                            || xy_streql (command, "version") || xy_streql (command, "-v")
+                            || xy_streql (command, "-version") || xy_streql (command, "--version");
+
+  if (chsrc_in_dry_run_mode() && !is_set_or_reset && !is_help_or_version)
+    {
+      char *msg = ENGLISH ? "-dry is only supported for `set` and `reset`"
+                          : "-dry 仅适用于 `set` 和 `reset` 命令";
+      chsrc_error (msg);
+      return Exit_Unknown;
+    }
+
+  if (chsrc_in_dry_run_mode() && is_set_or_reset)
     {
       char *dry_msg = ENGLISH ? "Enable [Dry Run] mode. "
-                                "Simulate the source changing process (skipping speed measurement). "
-                                "Commands only print but don't run\n"
-                              : "开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行\n";
+                                "No files or settings will be changed; only the commands that would run are printed "
+                                "(speed measurement is skipped)\n"
+                              : "开启Dry Run模式，不会修改任何文件或配置；仅打印将要执行的变更命令(跳过测速)\n";
       chsrc_log (bdyellow(dry_msg));
     }
 
@@ -283,7 +302,7 @@ main (int argc, char const *argv[])
            || xy_streql (command, "l")
            || xy_streql (command, "ls"))
     {
-      if (argc < cli_arg_Dish_pos)
+      if (!dish_name)
         {
           cli_print_all_mirror_sites ();
           br();
@@ -291,7 +310,6 @@ main (int argc, char const *argv[])
         }
       else
         {
-          dish_name = argv[cli_arg_Dish_pos];
           if (   xy_streql (dish_name, "mirrors")
               || xy_streql (dish_name, "mirror"))
             {
@@ -352,7 +370,7 @@ main (int argc, char const *argv[])
            || xy_streql (command, "ce")
            || xy_streql (command, "c"))
     {
-      if (argc < cli_arg_Dish_pos)
+      if (!dish_name)
         {
           char *msg = ENGLISH ? "Please provide the dish name you want to measure. " MSG_EN_USE_LIST_TARGETS
                               : "请提供想要测速的菜品名。" MSG_ZH_USE_LIST_TARGETS;
@@ -360,7 +378,6 @@ main (int argc, char const *argv[])
           return Exit_Unknown;
         }
       ProgMode.MeasureMode = true;
-      dish_name = argv[cli_arg_Dish_pos];
 
       the_found_dish = find_dish (dish_name);
       if (!the_found_dish)
@@ -379,14 +396,13 @@ main (int argc, char const *argv[])
   else if (   xy_streql (command, "get")
            || xy_streql (command, "g"))
     {
-      if (argc < cli_arg_Dish_pos)
+      if (!dish_name)
         {
           char *msg = ENGLISH ? "Please provide the dish name you want to view the source. " MSG_EN_USE_LIST_TARGETS
                               : "请提供想要查看源的菜品名。" MSG_ZH_USE_LIST_TARGETS;
           chsrc_error (msg);
           return Exit_Unknown;
         }
-      dish_name = argv[cli_arg_Dish_pos];
       the_found_dish = find_dish (dish_name);
       if (!the_found_dish)
         {
@@ -403,19 +419,12 @@ main (int argc, char const *argv[])
   else if (   xy_streql (command, "set")
            || xy_streql (command, "s"))
     {
-      if (argc < cli_arg_Dish_pos)
+      if (!dish_name)
         {
           char *msg = ENGLISH ? "Please provide the dish name you want to set the source. " MSG_EN_USE_LIST_TARGETS
                               : "请提供想要设置源的菜品名。" MSG_ZH_USE_LIST_TARGETS;
           chsrc_error (msg);
           return Exit_Unknown;
-        }
-
-      dish_name = argv[cli_arg_Dish_pos];
-      char *mirrorCode_or_url = NULL;
-      if (argc >= cli_arg_Mirror_pos)
-        {
-          mirrorCode_or_url = xy_strdup (argv[cli_arg_Mirror_pos]);
         }
 
       the_found_dish = find_dish (dish_name);
@@ -435,7 +444,7 @@ main (int argc, char const *argv[])
            || xy_streql (command, "rest")
            || xy_streql (command, "r"))
     {
-      if (argc < cli_arg_Dish_pos)
+      if (!dish_name)
         {
           char *msg = ENGLISH ? "Please provide the dish name you want to reset the source. " MSG_EN_USE_LIST_TARGETS
                               : "请提供想要重置源的菜品名。" MSG_ZH_USE_LIST_TARGETS;
@@ -444,7 +453,6 @@ main (int argc, char const *argv[])
         }
 
       ProgMode.ResetMode = true;
-      dish_name = argv[cli_arg_Dish_pos];
       the_found_dish = find_dish (dish_name);
       if (!the_found_dish)
         {
