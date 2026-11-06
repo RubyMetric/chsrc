@@ -32,7 +32,7 @@ os_omarchy_prepare ()
 {
   chef_prep_this_dish (os_omarchy, gsr);
 
-  chef_set_recipe_created_on   (this, "2026-09-04");
+  chef_set_recipe_created_on   (this, "2026-09-06");
   chef_set_recipe_last_updated (this, "2026-11-06");
 
   chef_set_chefs (this, 1, "@yayoinoyume");
@@ -44,9 +44,11 @@ os_omarchy_prepare ()
 
   chef_set_note (this,
     "仅更换 OPR 源；Arch 主仓库请勿使用 chsrc set arch。"
-    "Omarchy 4.5+ 中国区 Arch 镜像：将 /etc/omarchy/region 写为 cn，再运行 omarchy-refresh-pacman；它会覆盖本菜品设置，之后重跑 chsrc set omarchy omarchycn 即可。",
+    "Omarchy 4.5+ 中国区 Arch 镜像：将 /etc/omarchy/region 写为 cn，再运行 omarchy-refresh-pacman；它会覆盖本菜品设置，之后重跑 chsrc set omarchy omarchycn 即可。"
+    "不带镜像站参数执行 chsrc set omarchy 会选用阿里云中国镜像。",
     "Only switches the OPR source; do not use chsrc set arch for the Arch main repositories. "
-    "For China on Omarchy 4.5+, write cn to /etc/omarchy/region and run omarchy-refresh-pacman; it overwrites this dish's setting, so rerun chsrc set omarchy omarchycn afterward.");
+    "For China on Omarchy 4.5+, write cn to /etc/omarchy/region and run omarchy-refresh-pacman; it overwrites this dish's setting, so rerun chsrc set omarchy omarchycn afterward. "
+    "Running chsrc set omarchy without a mirror selects the Aliyun China mirror.");
 
   def_sources_begin()
   {&UpstreamProvider, OS_Omarchy_Upstream, DelegateToUpstream},
@@ -64,13 +66,13 @@ os_omarchy_getsrc (char *option)
 
 /**
  * @consult
- *   1. https://github.com/omacom/omarchy 官方 pacman.conf 模板 (仅 x86_64)
+ *   1. https://github.com/omacom/omarchy 官方 pacman.conf 模板 (本 recipe 仅 x86_64)
  *   2. https://pkgs.omarchy.cn/ OPR 官方中国镜像 (stable/rc/edge)
  */
 void
 os_omarchy_setsrc (char *option)
 {
-  /* Omarchy 官方仅发布 x86_64 仓库，非 x86_64 无 OPR */
+  /* 本 recipe 仅支持 x86_64 */
   char *arch = chsrc_get_cpuarch ();
   if (strncmp (arch, "x86_64", 6) != 0)
     {
@@ -92,11 +94,7 @@ os_omarchy_setsrc (char *option)
       exit (Exit_Unsupported);
     }
 
-  if (xy_streql (channel, "edge"))
-    channel = "edge";
-  else if (xy_streql (channel, "rc"))
-    channel = "rc";
-  else
+  if (!xy_streql (channel, "edge") && !xy_streql (channel, "rc"))
     channel = "stable";
 
   chsrc_backup (OS_Pacman_Omarchy_Conf);
@@ -130,6 +128,7 @@ os_omarchy_setsrc (char *option)
   write_cmd = xy_str_gsub (write_cmd, "@1@", target);
   chsrc_run (write_cmd, RunOpt_Default);
 
+  /* chsrc_run 已处理命令失败；这里额外检查写入内容，防止命令成功但段内容不对 */
   /* 写后校验: 首行必须是目标 URL；中国镜像还需要同通道兜底行 */
   if (!in_dry_run_mode())
     {
@@ -139,22 +138,19 @@ os_omarchy_setsrc (char *option)
 
       if (xy_run_get_status (validate_cmd) != 0)
         {
-          chsrc_error ("[omarchy] 段写入校验失败，请从 " OS_Pacman_Omarchy_Conf ".bak.* 恢复");
+          chsrc_error ("[omarchy] 段写入校验失败，请从 " OS_Pacman_Omarchy_Conf ".bak 恢复");
           exit (Exit_ExternalError);
         }
     }
 
-  /* 清理本地陈旧 omarchy.db 缓存: 残留旧 sig 会导致 -Syy 验签失败 */
-  chsrc_run ("rm -f /var/lib/pacman/sync/omarchy.db /var/lib/pacman/sync/omarchy.db.sig", RunOpt_Default);
-
   chsrc_run ("pacman -Syy", RunOpt_No_Last_New_Line);
-
-  chsrc_determine_chgtype (ChgType_Auto);
-  chsrc_conclude (&source);
 
   chsrc_note2 (ENGLISH
     ? xy_strcat (3, "Kept the current ", channel, " channel; the Arch main repositories are untouched.")
     : xy_strcat (3, "已保持当前 ", channel, " 通道，Arch 主仓库未改动。"));
+
+  chsrc_determine_chgtype (ChgType_Auto);
+  chsrc_conclude (&source);
 }
 
 
