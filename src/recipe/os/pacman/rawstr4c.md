@@ -1,8 +1,9 @@
 <!-- -----------------------------------------------------------
  ! SPDX-License-Identifier: GPL-3.0-or-later
- ! -----------------------------------------------------------
+ ! -------------------------------------------------------------
  ! Config Type   : rawstr4c (Markdown)
- ! Config Authors: @yayoinoyume
+ ! Config Authors: YAYOI27 <yayoi27@yayoi.uk>
+ ! Contributors  :  Nil Null  <nil@null.org>
  ! Created On    : <2026-11-06>
  ! Last Modified : <2026-11-06>
  ! ---------------------------------------------------------- -->
@@ -24,8 +25,8 @@
 
 ```sh
 awk '
-  /^\[omarchy\]/ { insec = 1; found = 1; next }
-  /^\[/          { insec = 0 }
+  /^[[:space:]]*\[omarchy\]/ { insec = 1; found = 1; next }
+  /^[[:space:]]*\[/          { insec = 0 }
   insec && /^[[:space:]]*Server[[:space:]]*=/ {
     if ($0 ~ /\/edge\//)     channel = "edge";
     else if ($0 ~ /\/rc\//)  channel = "rc";
@@ -47,17 +48,17 @@ awk '
 
 ```sh
 awk -v target='@1@' -v fallback='@2@' '
-  /^\[omarchy\]/ {
+  /^[[:space:]]*\[omarchy\]/ {
     print;
     print "Server = " target;
     if (fallback != "") print "Server = " fallback;
     insec = 1;
     next
   }
-  /^\[/ { insec = 0 }
+  /^[[:space:]]*\[/ { insec = 0 }
   insec && /^[[:space:]]*Server[[:space:]]*=/ { next }
   { print }
-' @f@ > @tmp@ && mv @tmp@ @f@
+' @f@ > @tmp@ && chmod --reference=@f@ @tmp@ && chown --reference=@f@ @tmp@ && mv @tmp@ @f@ || { rm -f @tmp@; exit 1; }
 ```
 
 ### Validate Omarchy section
@@ -68,8 +69,8 @@ awk -v target='@1@' -v fallback='@2@' '
 
 ```sh
 awk -v target='@1@' -v fallback='@2@' '
-  /^\[omarchy\]/ { insec = 1; next }
-  /^\[/          { insec = 0 }
+  /^[[:space:]]*\[omarchy\]/ { insec = 1; next }
+  /^[[:space:]]*\[/          { insec = 0 }
   insec && /^Server = / {
     if (!seen) { first = $0; seen = 1 }
     if (fallback != "" && $0 == "Server = " fallback) has_fallback = 1
