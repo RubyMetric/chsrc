@@ -2,23 +2,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * ------------------------------------------------------------*/
 
+#include "rawstr4c.h"
+
 #define OS_Pacman_Omarchy_Conf "/etc/pacman.conf"
 
 #define OS_Omarchy_Upstream "https://pkgs.omarchy.org"
 #define OS_Omarchy_CN       "https://pkgs.omarchy.cn"
-
-/* 仅取 [omarchy] 段内容，供通道检测与写后校验复用 */
-#define OS_Omarchy_Section_Cmd \
-  "awk '/^\\[omarchy\\]/{f=1;next} /^\\[/{f=0} f' " OS_Pacman_Omarchy_Conf
-
-/* 仅重写 [omarchy] 段: 删除段内全部 Server 行后，再按 target / fallback 写入 */
-#define OS_Omarchy_Awk_Rewrite \
-  "/^\\[omarchy\\]/{print; print \"Server = \" target; " \
-  "if (fallback != \"\") print \"Server = \" fallback; insec=1; next} " \
-  "/^\\[/{insec=0} " \
-  "insec && /^[[:space:]]*Server[[:space:]]*=/{next} " \
-  "{print}"
-
 
 /** ------------------------------------------------------------
  * omarchy dish (换 OPR 专属仓库)
@@ -44,7 +33,7 @@ os_omarchy_prepare ()
   chef_prep_this_dish (os_omarchy, gsr);
 
   chef_set_recipe_created_on   (this, "2026-09-04");
-  chef_set_recipe_last_updated (this, "2026-11-04");
+  chef_set_recipe_last_updated (this, "2026-11-06");
 
   chef_set_chefs (this, 1, "@yayoinoyume");
   chef_set_sauciers (this, 0);
@@ -93,22 +82,24 @@ os_omarchy_setsrc (char *option)
 
   chsrc_use_this_source (os_omarchy);
 
-  if (xy_run_get_status ("grep -q '^\\[omarchy\\]' " OS_Pacman_Omarchy_Conf) != 0)
+  /* 一次解析 [omarchy] 段: 缺失与通道均从同一份配置读出，缺省 stable */
+  char *channel_cmd = xy_str_gsub (RAWSTR_os_pacman_get_channel_cmd, "@f@", OS_Pacman_Omarchy_Conf);
+  char *channel     = xy_run (channel_cmd, 1);
+
+  if (!channel || xy_streql (channel, "missing"))
     {
       chsrc_error ("未在 " OS_Pacman_Omarchy_Conf " 中找到 [omarchy] 段");
       exit (Exit_Unsupported);
     }
 
-  chsrc_backup (OS_Pacman_Omarchy_Conf);
-
-  /* 从 [omarchy] 段反推当前通道，只看未注释的 Server 行，缺省为 stable */
-  char *server_lines = xy_2strcat (OS_Omarchy_Section_Cmd,
-                                    " | grep -E '^[[:space:]]*Server[[:space:]]*='");
-  char *channel = "stable";
-  if (xy_run_get_status (xy_2strcat (server_lines, " | grep -q '/edge/'")) == 0)
+  if (xy_streql (channel, "edge"))
     channel = "edge";
-  else if (xy_run_get_status (xy_2strcat (server_lines, " | grep -q '/rc/'")) == 0)
+  else if (xy_streql (channel, "rc"))
     channel = "rc";
+  else
+    channel = "stable";
+
+  chsrc_backup (OS_Pacman_Omarchy_Conf);
 
   /* 内置源跟随当前通道；用户自定义源原样使用，不做通道替换 */
   bool is_cn   = xy_streql (source.mirror->code, OmarchyCN.code);
@@ -132,27 +123,21 @@ os_omarchy_setsrc (char *option)
   char *fallback = is_cn ? xy_strcat (4, OS_Omarchy_Upstream, "/", channel, "/$arch") : "";
 
   /* 只重写 [omarchy] 段，不触碰 [core]、[archlinuxcn] 等其他段 */
-  char *tmp_conf   = xy_2strcat (OS_Pacman_Omarchy_Conf, ".chsrc-tmp");
-  char *awk_cmd    = xy_strcat (7, "awk -v target='", target, "' -v fallback='", fallback,
-                                   "' '", OS_Omarchy_Awk_Rewrite, "' " OS_Pacman_Omarchy_Conf);
-  char *write_cmd  = xy_strcat (6, awk_cmd, " > ", tmp_conf, " && mv ", tmp_conf,
-                                   " " OS_Pacman_Omarchy_Conf);
+  char *tmp_conf  = xy_2strcat (OS_Pacman_Omarchy_Conf, ".chsrc-tmp");
+  char *write_cmd = xy_str_gsub (RAWSTR_os_pacman_rewrite_cmd, "@f@", OS_Pacman_Omarchy_Conf);
+  write_cmd = xy_str_gsub (write_cmd, "@tmp@", tmp_conf);
+  write_cmd = xy_str_gsub (write_cmd, "@2@", fallback);
+  write_cmd = xy_str_gsub (write_cmd, "@1@", target);
   chsrc_run (write_cmd, RunOpt_Default);
 
-  /* 写后校验: [omarchy] 段首行必须是目标 URL，中国镜像还需带同通道兜底行 */
+  /* 写后校验: 首行必须是目标 URL；中国镜像还需要同通道兜底行 */
   if (!in_dry_run_mode())
     {
-      char *expected = xy_2strcat ("Server = ", target);
-      char *first    = xy_run (xy_2strcat (OS_Omarchy_Section_Cmd, " | grep -m1 '^Server = '"), 1);
-      bool  ok       = first && xy_streql (first, expected);
+      char *validate_cmd = xy_str_gsub (RAWSTR_os_pacman_validate_cmd, "@f@", OS_Pacman_Omarchy_Conf);
+      validate_cmd = xy_str_gsub (validate_cmd, "@2@", fallback);
+      validate_cmd = xy_str_gsub (validate_cmd, "@1@", target);
 
-      if (ok && is_cn)
-        {
-          char *fallback_cmd = xy_strcat (4, OS_Omarchy_Section_Cmd, " | grep -qxF 'Server = ", fallback, "'");
-          ok = xy_run_get_status (fallback_cmd) == 0;
-        }
-
-      if (!ok)
+      if (xy_run_get_status (validate_cmd) != 0)
         {
           chsrc_error ("[omarchy] 段写入校验失败，请从 " OS_Pacman_Omarchy_Conf ".bak.* 恢复");
           exit (Exit_ExternalError);
