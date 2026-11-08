@@ -10,10 +10,11 @@ pl_haskell_prepare ()
   chef_prep_this_dish (pl_haskell, s);
 
   chef_set_recipe_created_on   (this, "2023-09-10");
-  chef_set_recipe_last_updated (this, "2025-08-22");
+  chef_set_recipe_last_updated (this, "2026-11-08");
 
   chef_set_chefs (this, 1, "@ccmywish");
-  chef_set_sauciers (this, 1, "@hezonglun");
+  chef_set_sauciers (this, 2, "@hezonglun", "@Mikachu2333");
+
 
   chef_set_scope_cap (this, ProjectScope, ScopeCap_Unknown);
   chef_set_scope_cap (this, UserScope,    ScopeCap_Able_And_Implemented);
@@ -58,7 +59,13 @@ pl_haskell_setsrc (char *option)
   chsrc_note2 (xy_strcat (3, "请向 ", config, " 中手动添加:"));
   println (content);
 
-  config = xy_normalize_path ("~/.stack/config.yaml");
+  // 2026.11.08
+  // 根据 https://docs.haskellstack.org/en/stable/topics/stack_root/#__tabbed_1_2 的说明，win的配置文件与linux不同
+  if (xy.on_windows)
+    config = xy_normalize_path ("~/AppData/Roaming/stack/config.yaml");
+  else
+    config = "~/.stack/config.yaml";
+
   content = xy_str_gsub (RAWSTR_pl_haskell_stackage_yaml, "@url@", source.url);
   chsrc_note2 (xy_strcat (3, "请向 ", config, " 中手动添加:"));
   println (content);
