@@ -24,14 +24,14 @@ pl_npm_prepare (void)
   chef_allow_user_define(this);
 
   def_sources_begin()
-  {&UpstreamProvider, "https://registry.npmjs.org/",    FeedByPrepare}, /* @note 根据 pnpm 官网，有最后的斜线 */
-  {&NpmMirror,        "https://registry.npmmirror.com", FeedByPrepare},
+  {&UpstreamProvider, "https://registry.npmjs.org/",      FeedByPrepare}, /* @note 根据 pnpm 官网，有最后的斜线 */
+  {&NpmMirror,        "https://registry.npmmirror.com/",  FeedByPrepare},
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/npm/", FeedByPrepare},
-  {&Tencent,          "https://mirrors.cloud.tencent.com/npm/", FeedByPrepare}
+  {&Tencent,          "https://mirrors.tencent.com/npm/", FeedByPrepare}
   def_sources_end()
 
-  // 29MB 大小
-  chef_set_rest_smURL_with_postfix (this, "/@tensorflow/tfjs/-/tfjs-4.22.0.tgz");
+  // 65MB 大小
+  chef_set_rest_smURL_with_postfix (this, "@kenotron/100mb/-/100mb-100.0.0.tgz");
 }
 
 

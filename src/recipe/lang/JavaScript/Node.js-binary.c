@@ -31,7 +31,7 @@ pl_nodejs_binary_prepare (void)
   {&Bfsu,      "https://mirrors.bfsu.edu.cn/nodejs-release/",FeedByPrepare},
   {&Ustc,      "https://mirrors.ustc.edu.cn/node/",FeedByPrepare},
   {&Huawei,    "https://mirrors.huaweicloud.com/nodejs/",FeedByPrepare},
-  {&Tencent,   "https://mirrors.cloud.tencent.com/nodejs-release/", FeedByPrepare}
+  {&Tencent,   "https://mirrors.tencent.com/nodejs-release/", FeedByPrepare}
   def_sources_end()
 
   chef_set_rest_smURL_with_postfix (this, "/v23.4.0/node-v23.4.0-linux-x64.tar.xz");

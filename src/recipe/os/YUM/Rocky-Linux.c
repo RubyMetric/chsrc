@@ -27,7 +27,7 @@ os_rockylinux_prepare ()
   {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/rocky",          DelegateToMirror},
   {&Sustech,          "https://mirrors.sustech.edu.cn/rocky-linux", DelegateToMirror},
   {&Zju,              "https://mirrors.zju.edu.cn/rocky",          DelegateToMirror},
-  {&Lzuoss,           "https://mirror.lzu.edu.cn/rocky",           DelegateToMirror},
+  {&Lzuoss,           "https://mirrors.lzu.edu.cn/rocky",           DelegateToMirror},
   /* 不启用原因：过慢 */
   // {&Netease,          "https://mirrors.163.com/rocky",      DelegateToMirror},
   /* 不启用原因：过慢 */

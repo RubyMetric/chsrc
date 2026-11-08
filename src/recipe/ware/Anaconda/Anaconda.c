@@ -36,7 +36,7 @@ wr_anaconda_prepare ()
   {&NJTech,           "https://mirrors.njtech.edu.cn", DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn", DelegateToMirror},
   {&Sjtug_Siyuan,     "https://mirror.sjtu.edu.cn", DelegateToMirror},
-  {&Lzuoss,           "https://mirror.lzu.edu.cn", DelegateToMirror}
+  {&Lzuoss,           "https://mirrors.lzu.edu.cn", DelegateToMirror}
   def_sources_end()
 }
 

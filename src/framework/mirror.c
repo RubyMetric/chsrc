@@ -93,8 +93,8 @@ Jlu =
 Lzuoss =
 {
   IS_GeneralMirrorSite,
-  "lzu", "LZUOSS", "兰州大学开源社区镜像站", "https://mirror.lzu.edu.cn/",
-  {NotSkip, NA, NA, "https://mirror.lzu.edu.cn/CTAN" Big_File_ctan, ROUGH}
+  "lzu", "LZUOSS", "兰州大学开源社区镜像站", "https://mirrors.lzu.edu.cn/",
+  {NotSkip, NA, NA, "https://mirrors.lzu.edu.cn/CTAN" Big_File_ctan, ROUGH}
 },
 
 Pku =
@@ -251,7 +251,7 @@ Tencent =
 {
   IS_GeneralMirrorSite,
   "tencent", "Tencent Public", "腾讯软件源(公网)", "https://mirrors.tencent.com/",
-  {NotSkip, NA, NA, "https://mirrors.cloud.tencent.com/mariadb/mariadb-12.1.0/winx64-packages/mariadb-12.1.0-winx64-debugsymbols.zip", ROUGH} // 110MB左右
+  {NotSkip, NA, NA, "https://mirrors.tencent.com/mariadb/mariadb-12.3.3/winx64-packages/mariadb-12.3.3-winx64.zip", ROUGH} // 110MB左右
 },
 /*
 Tencent_Intra =

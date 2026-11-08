@@ -26,8 +26,8 @@ os_openwrt_prepare ()
   {&UpstreamProvider, "https://downloads.openwrt.org", DelegateToUpstream},
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/openwrt", DelegateToMirror},
   {&Ali,              "https://mirrors.aliyun.com/openwrt", DelegateToMirror},
-  {&Tencent,          "https://mirrors.cloud.tencent.com/openwrt", DelegateToMirror},
-  {&Tuna,             "https://mirror.tuna.tsinghua.edu.cn/openwrt", DelegateToMirror},
+  {&Tencent,          "https://mirrors.tencent.com/openwrt", DelegateToMirror},
+  {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/openwrt", DelegateToMirror},
   {&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/openwrt", DelegateToMirror},
   {&Ustc,             "https://mirrors.ustc.edu.cn/openwrt", DelegateToMirror},
   {&Pku,              "https://mirrors.pku.edu.cn/openwrt", DelegateToMirror},
@@ -48,7 +48,7 @@ os_openwrt_getsrc (char *option)
 
 /**
  * @consult
- *    1. https://mirror.tuna.tsinghua.edu.cn/help/openwrt/
+ *    1. https://mirrors.tuna.tsinghua.edu.cn/help/openwrt/
  *    2. https://github.com/RubyMetric/chsrc/issues/153#issuecomment-2543077933
  */
 void
