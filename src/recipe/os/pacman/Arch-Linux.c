@@ -148,7 +148,7 @@ os_archlinuxcn_prepare ()
   {&Ustc,             "https://mirrors.ustc.edu.cn/archlinuxcn/", DelegateToMirror},
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/", DelegateToMirror},
   {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/archlinux-cn/", DelegateToMirror},
-  {&Tencent,          "https://mirrors.cloud.tencent.com/archlinuxcn/",    DelegateToMirror},
+  {&Tencent,          "https://mirrors.tencent.com/archlinuxcn/",    DelegateToMirror},
   // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/archlinuxcn/", DelegateToMirror},
 
   /* 不启用原因：过慢 */

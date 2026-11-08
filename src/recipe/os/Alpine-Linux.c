@@ -27,9 +27,9 @@ os_alpine_prepare ()
   {&Tuna,             "https://mirrors.tuna.tsinghua.edu.cn/alpine", FeedByPrepare},
   {&Sjtug_Zhiyuan,    "https://mirrors.sjtug.sjtu.edu.cn/alpine", FeedByPrepare},
   {&Zju,              "https://mirrors.zju.edu.cn/alpine", FeedByPrepare},
-  {&Lzuoss,           "https://mirror.lzu.edu.cn/alpine", FeedByPrepare},
+  {&Lzuoss,           "https://mirrors.lzu.edu.cn/alpine", FeedByPrepare},
   {&Ali,              "https://mirrors.aliyun.com/alpine", FeedByPrepare},
-  {&Tencent,          "https://mirrors.cloud.tencent.com/alpine", FeedByPrepare},
+  {&Tencent,          "https://mirrors.tencent.com/alpine", FeedByPrepare},
   {&Huawei,           "https://mirrors.huaweicloud.com/alpine", FeedByPrepare}
   def_sources_end()
 

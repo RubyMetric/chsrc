@@ -46,7 +46,7 @@ pl_pypi_prepare (void)
   {&MirrorZ,          "https://mirrors.cernet.edu.cn/pypi/web/simple", FeedByPrepare},
   {&Bfsu,             "https://mirrors.bfsu.edu.cn/pypi/web/simple",   FeedByPrepare},
   // 不要添加Zju，浙大的PyPI服务在校外访问会自动转向Tuna
-  {&Lzuoss,           "https://mirror.lzu.edu.cn/pypi/web/simple",     FeedByPrepare},
+  {&Lzuoss,           "https://mirrors.lzu.edu.cn/pypi/web/simple",     FeedByPrepare},
   // 2025-09-29 此源已停用
   // @ref https://mirrors.jlu.edu.cn/_news/#2025-04-06-pypi-repo-down
   // {&Jlu,              "https://mirrors.jlu.edu.cn/pypi/web/simple", FeedByPrepare},
@@ -56,7 +56,7 @@ pl_pypi_prepare (void)
   {&Ali,              "https://mirrors.aliyun.com/pypi/simple",        FeedByPrepare},
   {&Nju,              "https://mirror.nju.edu.cn/pypi/web/simple",     FeedByPrepare},
   {&Pku,              "https://mirrors.pku.edu.cn/pypi/web/simple",    FeedByPrepare},
-  {&Tencent,          "https://mirrors.cloud.tencent.com/pypi/simple", FeedByPrepare},
+  {&Tencent,          "https://mirrors.tencent.com/pypi/simple",       FeedByPrepare},
 
   // {&Tencent_Intra, "https://mirrors.cloud.tencentyun.com/pypi/simple", FeedByPrepare}
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/pypi/simple", FeedByPrepare},

@@ -10,7 +10,7 @@ pl_java_prepare ()
   chef_prep_this_dish (pl_java, gsr);
 
   chef_set_recipe_created_on   (this, "2023-08-31");
-  chef_set_recipe_last_updated (this, "2025-08-27");
+  chef_set_recipe_last_updated (this, "2026-11-08");
 
   chef_set_chefs (this, 2, "@BingChunMoLi", "@ccmywish");
   chef_set_sauciers (this, 0);
@@ -36,13 +36,13 @@ pl_java_prepare ()
   {&Ali,              "https://maven.aliyun.com/repository/public/",                     FeedByPrepare},
   {&Huawei,           "https://mirrors.huaweicloud.com/repository/maven/",               FeedByPrepare},
   {&HuaweiCDN,        "https://repo.huaweicloud.com/repository/maven/",                  FeedByPrepare},
-  {&Tencent,          "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/",FeedByPrepare},
+  {&Tencent,          "https://mirrors.tencent.com/nexus/repository/maven-public/",FeedByPrepare},
   // 网易的24小时更新一次
   {&Netease,          "http://mirrors.163.com/maven/repository/maven-public/",           FeedByPrepare}
   def_sources_end()
 
-  // 220MB
-  chef_set_rest_smURL_with_postfix (this, "com/tencentcloudapi/tencentcloud-sdk-java/3.1.1033/tencentcloud-sdk-java-3.1.1033-javadoc.jar");
+  // 75MB
+  chef_set_rest_smURL_with_postfix (this, "com/tencentcloudapi/tencentcloud-sdk-java/3.2.53/tencentcloud-sdk-java-3.2.53-sources.jar");
 }
 
 

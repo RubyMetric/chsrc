@@ -43,7 +43,7 @@ pl_uv_python_build_prepare (void)
   {&UpstreamProvider, "https://github.com/astral-sh/python-build-standalone/releases/download",       DelegateToUpstream},
   {&Nju,              "https://mirrors.nju.edu.cn/github-release/astral-sh/python-build-standalone",  FeedByPrepare},
   {&Ustc,             "https://mirrors.ustc.edu.cn/github-release/astral-sh/python-build-standalone", FeedByPrepare},
-  {&Lzuoss,           "https://mirror.lzu.edu.cn/github-release/astral-sh/python-build-standalone",   FeedByPrepare},
+  {&Lzuoss,           "https://mirrors.lzu.edu.cn/github-release/astral-sh/python-build-standalone",   FeedByPrepare},
   {&CnbUvPython,      "https://cnb.cool/astral-sh/python-build-standalone/-/releases/download",       FeedByPrepare}
   def_sources_end ()
 
