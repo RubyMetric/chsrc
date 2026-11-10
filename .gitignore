@@ -45,6 +45,7 @@ chsrc-ci-release
 #        Test files
 ##############################
 xy
+xy-path
 fw
 README.md.bak*
 *.tmp
