@@ -132,7 +132,8 @@ main (int argc, char const *argv[])
   assert (xy_dir_exist ("~"));
   assert (!xy_file_exist (NULL));
   assert (!xy_dir_exist (NULL));
-  assert (!xy_path_exist (NULL));
+  assert (!xy_path_is_exist (NULL));
+  assert (!xy_path_is_file (NULL));
   assert (!xy_path_is_dir (NULL));
 
   char *home_path = xy_normalize_path ("~");

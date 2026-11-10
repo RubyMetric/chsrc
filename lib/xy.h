@@ -10,7 +10,7 @@
  *               | AnonTokio    <anontokio@163.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2026-11-08>
+ * Last Modified : <2026-11-10>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -59,6 +59,7 @@
 #ifndef _WIN32
   #include <unistd.h>
   #include <dirent.h> // opendir() closedir()
+  #include <sys/stat.h>
 #endif
 
 #if defined(__STDC__) && __STDC_VERSION__ >= 202311
@@ -970,46 +971,6 @@ xy_file_remove (const char *path)
 
 
 /**
- * @brief 路径是否存在（文件或目录）
- */
-static bool
-xy_path_exist (const char *path)
-{
-  if (!path) return false;
-#ifdef XY_Build_On_Windows
-  wchar_t *wpath = xy_utf8_to_wstr (path);
-  bool exist = (NULL != wpath) && (INVALID_FILE_ATTRIBUTES != GetFileAttributesW (wpath));
-  free (wpath);
-  return exist;
-#else
-  return 0 == access (path, 0);   /* F_OK */
-#endif
-}
-
-
-/**
- * @brief 路径是否为目录
- */
-static bool
-xy_path_is_dir (const char *path)
-{
-  if (!path) return false;
-#ifdef XY_Build_On_Windows
-  wchar_t *wpath = xy_utf8_to_wstr (path);
-  DWORD attr = wpath ? GetFileAttributesW (wpath) : INVALID_FILE_ATTRIBUTES;
-  free (wpath);
-  return (INVALID_FILE_ATTRIBUTES != attr) && (attr & FILE_ATTRIBUTE_DIRECTORY);
-#else
-  DIR *d = opendir (path);
-  if (!d)
-    return false;
-  closedir (d);
-  return true;
-#endif
-}
-
-
-/**
  * @brief 执行命令
  *
  * @return 同 system()
@@ -1591,39 +1552,184 @@ static char *
 xy_normalize_path (const char *path);
 
 
+enum _XyPathType
+{
+  _XY_Path_Error,
+  _XY_Path_Missing,
+  _XY_Path_File,
+  _XY_Path_Dir,
+  _XY_Path_Other
+};
+
+
 /**
- * @note Windows上，`path` 不要夹带变量名，因为最终不会帮你转换
+ * @internal 规范化路径后跟随链接查询目标类型，区分不存在与查询错误
+ *
+ * @memory SAFE
+ */
+static enum _XyPathType
+_xy_path_type (const char *path)
+{
+  if (!path)
+    return _XY_Path_Error;
+
+  char *normalized_path = xy_normalize_path (path);
+  enum _XyPathType result = _XY_Path_Error;
+  if (!normalized_path[0])
+    {
+      free (normalized_path);
+      return result;
+    }
+
+#ifdef XY_Build_On_Windows
+  wchar_t *wpath = _xy_win_wstr (normalized_path);
+  if (wpath)
+    {
+      /* 不请求读写权限；允许目录，且不使用 OPEN_REPARSE_POINT，以跟随链接和 junction。 */
+      HANDLE handle = CreateFileW (wpath, 0, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                                   NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
+      if (INVALID_HANDLE_VALUE == handle)
+        {
+          DWORD error = GetLastError ();
+          if (ERROR_FILE_NOT_FOUND == error || ERROR_PATH_NOT_FOUND == error || ERROR_DIRECTORY == error)
+            result = _XY_Path_Missing;
+        }
+      else
+        {
+          SetLastError (ERROR_SUCCESS);
+          DWORD type = GetFileType (handle);
+          if (FILE_TYPE_DISK == type)
+            {
+              BY_HANDLE_FILE_INFORMATION info;
+              if (GetFileInformationByHandle (handle, &info))
+                result = (info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? _XY_Path_Dir : _XY_Path_File;
+            }
+          else if (FILE_TYPE_UNKNOWN != type || ERROR_SUCCESS == GetLastError ())
+            {
+              result = _XY_Path_Other;
+            }
+          CloseHandle (handle);
+        }
+      free (wpath);
+    }
+#else
+  struct stat info;
+  if (0 == stat (normalized_path, &info))
+    {
+      if (S_ISDIR (info.st_mode))
+        result = _XY_Path_Dir;
+      else if (S_ISREG (info.st_mode))
+        result = _XY_Path_File;
+      else
+        result = _XY_Path_Other;
+    }
+  else if (ENOENT == errno || ENOTDIR == errno)
+    {
+      result = _XY_Path_Missing;
+    }
+#endif
+
+  free (normalized_path);
+  return result;
+}
+
+
+/**
+ * @brief 路径指向的对象是否存在，包括目录、普通文件及 socket 等特殊文件
+ *
+ * @note 先调用 xy_normalize_path()，再跟随符号链接（Windows 上包括 junction）查询目标。
+ *       断链、NULL 或规范化后的空路径返回 false。
+ *       权限不足等查询错误也可能返回 false；recipe 维护者可按需调用 xy_path_has_error() 检查。
+ *       本函数不保证目标可读、可写或可执行。
+ *
+ * @memory SAFE
+ */
+static bool
+xy_path_is_exist (const char *path)
+{
+  enum _XyPathType type = _xy_path_type (path);
+  return _XY_Path_Error != type && _XY_Path_Missing != type;
+}
+
+
+/**
+ * @brief 路径指向的对象是否为目录，仅判断类型，不检查目录能否读取或写入
+ *
+ * @note 先调用 xy_normalize_path()，再跟随符号链接（Windows 上包括 junction）查询目标。
+ *       不存在、类型不符、断链、NULL 或规范化后的空路径返回 false。
+ *       权限不足等查询错误也可能返回 false；recipe 维护者可按需调用 xy_path_has_error() 检查。
+ *
+ * @memory SAFE
+ */
+static bool
+xy_path_is_dir (const char *path)
+{
+  return _XY_Path_Dir == _xy_path_type (path);
+}
+
+
+/**
+ * @brief 路径指向的对象是否为普通文件，仅判断类型，不检查文件能否读取、写入或执行
+ *
+ * @note 先调用 xy_normalize_path()，再跟随符号链接查询目标。
+ *       目录、socket、FIFO、设备等均不是普通文件。
+ *       不存在、类型不符、断链、NULL 或规范化后的空路径返回 false。
+ *       权限不足等查询错误也可能返回 false；recipe 维护者可按需调用 xy_path_has_error() 检查。
+ *
+ * @memory SAFE
+ */
+static bool
+xy_path_is_file (const char *path)
+{
+  return _XY_Path_File == _xy_path_type (path);
+}
+
+
+/**
+ * @brief 检查路径查询是否因权限不足等原因失败，而不是单纯不存在或类型不符
+ *
+ * @return 查询成功、目标不存在（包括断链）或中间组件不是目录时返回 false。
+ *         权限不足、链接循环、I/O 错误等查询错误返回 true；NULL 和规范化后的空路径也返回 true。
+ *
+ * @note 先调用 xy_normalize_path()，再跟随符号链接查询目标；不检查读写权限。
+ *       本函数重新查询路径，不读取此前调用的错误状态；两次查询之间文件系统状态可能变化。
+ *       仅供 recipe 维护者按需调用，不自动打印错误或中断流程。
+ *
+ * @memory SAFE
+ */
+static bool
+xy_path_has_error (const char *path)
+{
+  return _XY_Path_Error == _xy_path_type (path);
+}
+
+
+/**
+ * @brief xy_path_is_file() 的语法糖，判断普通文件是否存在
+ *
+ * @note 一次查询同时确认存在性和类型，先规范化路径并跟随链接；目录和特殊文件返回 false。
+ *       权限不足等查询错误也可能返回 false；recipe 维护者可按需调用 xy_path_has_error() 检查。
  *
  * @memory SAFE
  */
 static bool
 xy_file_exist (const char *path)
 {
-  if (!path)
-    return false;
-
-  char *normalized_path = xy_normalize_path (path);
-  bool result = xy_path_exist (normalized_path);
-  free (normalized_path);
-  return result;
+  return xy_path_is_file (path);
 }
 
+
 /**
- * @note `xy_file_exist()` 和 `xy_dir_exist()` 使用 `xy_normalize_path()` 展开 `~`；
- *       Windows 上也支持 `%VAR%` 环境变量。
+ * @brief xy_path_is_dir() 的语法糖，先规范化路径并跟随链接，仅判断目标是否为目录
+ *
+ * @note 权限不足等查询错误也可能返回 false；recipe 维护者可按需调用 xy_path_has_error() 检查。
  *
  * @memory SAFE
  */
 static bool
 xy_dir_exist (const char *path)
 {
-  if (!path)
-    return false;
-
-  char *normalized_path = xy_normalize_path (path);
-  bool result = xy_path_is_dir (normalized_path);
-  free (normalized_path);
-  return result;
+  return xy_path_is_dir (path);
 }
 
 /**
@@ -1653,29 +1759,36 @@ xy_normalize_path (const char *path)
     }
 
 #ifdef XY_Build_On_Windows
-  wchar_t *wpath = _xy_win_wstr (new);
-  if (wpath && wcschr (wpath, L'%'))
+  /* '%' 是 ASCII 字符，可直接在 UTF-8 中检查；普通路径无需进行编码转换。 */
+  if (strchr (new, '%'))
     {
-      DWORD needed = ExpandEnvironmentStringsW (wpath, NULL, 0);
-      if (needed > 0)
+      wchar_t *wpath = _xy_win_wstr (new);
+      if (wpath)
         {
-          wchar_t *wexpanded = xy_malloc0 ((size_t) needed * sizeof (wchar_t));
-          DWORD written = ExpandEnvironmentStringsW (wpath, wexpanded, needed);
-          if (written > 0 && written <= needed)
+          DWORD needed = ExpandEnvironmentStringsW (wpath, NULL, 0);
+          if (needed > 0)
             {
-              char *utf8 = _xy_win_utf8 (wexpanded);
-              if (utf8)
-                xy_ptr_replace (&new, utf8);
+              wchar_t *wexpanded = xy_malloc0 ((size_t) needed * sizeof (wchar_t));
+              DWORD written = ExpandEnvironmentStringsW (wpath, wexpanded, needed);
+              if (written > 0 && written <= needed)
+                {
+                  char *utf8 = _xy_win_utf8 (wexpanded);
+                  if (utf8)
+                    xy_ptr_replace (&new, utf8);
+                }
+              free (wexpanded);
             }
-          free (wexpanded);
+          free (wpath);
         }
     }
-  free (wpath);
 #endif
 
   if (xy.on_windows)
     {
-      xy_ptr_replace (&new, xy_str_gsub (new, "/", "\\"));
+      /* 分隔符替换不改变长度，直接复用规范化过程分配的缓冲区。 */
+      for (char *p = new; *p; p++)
+        if ('/' == *p)
+          *p = '\\';
     }
   return new;
 }
