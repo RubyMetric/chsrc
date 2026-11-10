@@ -8,7 +8,7 @@
 #               | @NewbieXvwu
 #               |
 # Created On    : <2025-06-18>
-# Last Modified : <2026-10-28>
+# Last Modified : <2026-11-10>
 #
 # 该文件主要用于在原生Windows上执行项目的基本任务，而不借助于
 # GNU make 以及相应的 MSYS2、Cygwin 环境
@@ -86,13 +86,13 @@ LDLIBS_win := if os() == 'windows' {
 } else { '' }
 
 
-CFLAGS_dev_mode_prompt 	   := CFLAGS_base + ' ' + LDLIBS_win
-CFLAGS_debug_mode_prompt 	 := CFLAGS_base + ' ' + CFLAGS_debug + ' ' + LDLIBS_win
-CFLAGS_release_mode_prompt := CFLAGS_base + ' ' + CFLAGS_optimization + ' ' + CFLAGS_chk_static + ' ' + LDLIBS_win
+CFLAGS_dev_mode_prompt 	   := CFLAGS_base
+CFLAGS_debug_mode_prompt 	 := CFLAGS_base + ' ' + CFLAGS_debug
+CFLAGS_release_mode_prompt := CFLAGS_base + ' ' + CFLAGS_optimization + ' ' + CFLAGS_chk_static
 
-CFLAGS_dev_mode     := CFLAGS_dev_mode_prompt     + ' ' + CFLAGS_warn
-CFLAGS_debug_mode   := CFLAGS_debug_mode_prompt   + ' ' + CFLAGS_warn
-CFLAGS_release_mode := CFLAGS_release_mode_prompt + ' ' + CFLAGS_warn
+CFLAGS_dev_mode     := CFLAGS_dev_mode_prompt     + ' ' + LDLIBS_win + ' ' + CFLAGS_warn
+CFLAGS_debug_mode   := CFLAGS_debug_mode_prompt   + ' ' + LDLIBS_win + ' ' + CFLAGS_warn
+CFLAGS_release_mode := CFLAGS_release_mode_prompt + ' ' + LDLIBS_win + ' ' + CFLAGS_warn
 
 #=======================
 
