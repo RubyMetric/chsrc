@@ -11,7 +11,7 @@
 #               | @Mikachu2333
 #               |
 # Created On    : <2023-08-28>
-# Last Modified : <2026-10-28>
+# Last Modified : <2026-11-10>
 #
 # 请阅读 ./doc/01-开发与构建.md 来使用
 # --------------------------------------------------------------
@@ -166,7 +166,7 @@ c: clean
 #============ Target 定义开始 ================
 
 # 编译开始结束时的提示信息
-Starting-Echo-Info = echo Starting: Build in ${1} mode: \'$(CC)\' $(CFLAGS) $(LDLIBS_win) -o ${2}
+Starting-Echo-Info = echo Starting: Build in ${1} mode: \'$(CC)\' $(CFLAGS) -o ${2}
 Finished-Echo-Info = echo Finished: Build in ${1} mode
 
 # 真正的编译命令
