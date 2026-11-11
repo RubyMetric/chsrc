@@ -10,7 +10,7 @@
  *               | AnonTokio    <anontokio@163.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2026-11-10>
+ * Last Modified : <2026-11-11>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -1562,14 +1562,77 @@ enum _XyStat
 };
 
 
+enum XyStatError
+{
+  XY_Stat_Ok,
+  XY_Stat_Not_Found,
+  XY_Stat_Not_Directory,
+  XY_Stat_Not_File,
+  XY_Stat_Invalid_Path,
+  XY_Stat_Access_Denied,
+  XY_Stat_Link_Loop,
+  XY_Stat_Name_Too_Long,
+  XY_Stat_IO_Error,
+  XY_Stat_Busy,
+  XY_Stat_Resource_Limit,
+  XY_Stat_Query_Error
+};
+
+
+static enum XyStatError
+_xy_stat_error (unsigned long code)
+{
+  switch (code)
+    {
+#ifdef XY_Build_On_Windows
+    case ERROR_FILE_NOT_FOUND:
+    case ERROR_PATH_NOT_FOUND:       return XY_Stat_Not_Found;
+    case ERROR_DIRECTORY:           return XY_Stat_Not_Directory;
+    case ERROR_INVALID_NAME:
+    case ERROR_BAD_PATHNAME:
+    case ERROR_INVALID_PARAMETER:
+    case ERROR_NO_UNICODE_TRANSLATION: return XY_Stat_Invalid_Path;
+    case ERROR_ACCESS_DENIED:
+    case ERROR_PRIVILEGE_NOT_HELD:   return XY_Stat_Access_Denied;
+    case ERROR_CANT_RESOLVE_FILENAME: return XY_Stat_Link_Loop;
+    case ERROR_FILENAME_EXCED_RANGE: return XY_Stat_Name_Too_Long;
+    case ERROR_IO_DEVICE:
+    case ERROR_READ_FAULT:
+    case ERROR_GEN_FAILURE:         return XY_Stat_IO_Error;
+    case ERROR_SHARING_VIOLATION:
+    case ERROR_LOCK_VIOLATION:       return XY_Stat_Busy;
+    case ERROR_NOT_ENOUGH_MEMORY:
+    case ERROR_OUTOFMEMORY:
+    case ERROR_TOO_MANY_OPEN_FILES:  return XY_Stat_Resource_Limit;
+#else
+    case ENOENT:                    return XY_Stat_Not_Found;
+    case ENOTDIR:                   return XY_Stat_Not_Directory;
+    case EINVAL:                    return XY_Stat_Invalid_Path;
+    case EACCES:
+    case EPERM:                     return XY_Stat_Access_Denied;
+    case ELOOP:                     return XY_Stat_Link_Loop;
+    case ENAMETOOLONG:               return XY_Stat_Name_Too_Long;
+    case EIO:                       return XY_Stat_IO_Error;
+    case EBUSY:                     return XY_Stat_Busy;
+    case ENOMEM:
+    case EMFILE:
+    case ENFILE:                    return XY_Stat_Resource_Limit;
+#endif
+    default:                        return XY_Stat_Query_Error;
+    }
+}
+
+
 /**
  * @internal 规范化路径后跟随链接查询目标类型，区分不存在与查询错误
  *
  * @memory SAFE
  */
 static enum _XyStat
-xy_stat() (const char *path)
+xy_stat (const char *path, enum XyStatError *error)
 {
+  if (error)
+    *error = XY_Stat_Invalid_Path;
   if (!path)
     return _XY_Path_Error;
 
@@ -1581,6 +1644,7 @@ xy_stat() (const char *path)
       return result;
     }
 
+  enum XyStatError status = XY_Stat_Ok;
 #ifdef XY_Build_On_Windows
   wchar_t *wpath = _xy_win_wstr (normalized_path);
   if (wpath)
@@ -1589,29 +1653,30 @@ xy_stat() (const char *path)
       HANDLE handle = CreateFileW (wpath, 0, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
                                    NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
       if (INVALID_HANDLE_VALUE == handle)
-        {
-          DWORD error = GetLastError ();
-          if (ERROR_FILE_NOT_FOUND == error || ERROR_PATH_NOT_FOUND == error || ERROR_DIRECTORY == error)
-            result = _XY_Path_Missing;
-        }
+        status = _xy_stat_error (GetLastError ());
       else
         {
-          SetLastError (ERROR_SUCCESS);
-          DWORD type = GetFileType (handle);
-          if (FILE_TYPE_DISK == type)
+          BY_HANDLE_FILE_INFORMATION info;
+          if (GetFileInformationByHandle (handle, &info))
+            result = (info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? _XY_Path_Dir : _XY_Path_File;
+          else
             {
-              BY_HANDLE_FILE_INFORMATION info;
-              if (GetFileInformationByHandle (handle, &info))
-                result = (info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? _XY_Path_Dir : _XY_Path_File;
-            }
-          else if (FILE_TYPE_UNKNOWN != type || ERROR_SUCCESS == GetLastError ())
-            {
-              result = _XY_Path_Other;
+              status = _xy_stat_error (GetLastError ());
+              SetLastError (ERROR_SUCCESS);
+              DWORD type = GetFileType (handle);
+              /* 磁盘元数据查询失败不能被后续成功的类型查询掩盖。 */
+              if (FILE_TYPE_DISK != type && (FILE_TYPE_UNKNOWN != type || ERROR_SUCCESS == GetLastError ()))
+                {
+                  result = _XY_Path_Other;
+                  status = XY_Stat_Ok;
+                }
             }
           CloseHandle (handle);
         }
       free (wpath);
     }
+  else
+    status = XY_Stat_Invalid_Path;
 #else
   struct stat info;
   if (0 == stat (normalized_path, &info))
@@ -1623,12 +1688,14 @@ xy_stat() (const char *path)
       else
         result = _XY_Path_Other;
     }
-  else if (ENOENT == errno || ENOTDIR == errno)
-    {
-      result = _XY_Path_Missing;
-    }
+  else
+    status = _xy_stat_error (errno);
 #endif
 
+  if (XY_Stat_Not_Found == status || XY_Stat_Not_Directory == status)
+    result = _XY_Path_Missing;
+  if (error)
+    *error = status;
   free (normalized_path);
   return result;
 }
@@ -1639,7 +1706,7 @@ xy_stat() (const char *path)
  *
  * @note 先调用 xy_normalize_path()，再跟随符号链接（Windows 上包括 junction）查询目标。
  *       断链、NULL 或规范化后的空路径返回 false。
- *       权限不足等查询错误也可能返回 false；recipe 维护者可按需调用 xy_path_has_error() 检查。
+ *       权限不足等查询错误也可能返回 false；需要区分时可直接调用 xy_stat()。
  *       本函数不保证目标可读、可写或可执行。
  *
  * @memory SAFE
@@ -1647,7 +1714,7 @@ xy_stat() (const char *path)
 static bool
 xy_path_exist (const char *path)
 {
-  enum _XyStat type = xy_stat() (path);
+  enum _XyStat type = xy_stat (path, NULL);
   return _XY_Path_Error != type && _XY_Path_Missing != type;
 }
 
@@ -1655,81 +1722,70 @@ xy_path_exist (const char *path)
 /**
  * @brief 路径指向的对象是否为目录，仅判断类型，不检查目录能否读取或写入
  *
+ * @param[out] error 可传 NULL；返回 true 时置为 XY_Stat_Ok，否则返回具体的 XyStatError。
+ *
  * @note 先调用 xy_normalize_path()，再跟随符号链接（Windows 上包括 junction）查询目标。
- *       不存在、类型不符、断链、NULL 或规范化后的空路径返回 false。
- *       权限不足等查询错误也可能返回 false；recipe 维护者可按需调用 xy_path_has_error() 检查。
+ *       不存在、类型不符或查询出错时返回 false；类型和错误信息来自同一次查询。
  *
  * @memory SAFE
  */
 static bool
-xy_path_is_dir (const char *path)
+xy_stat_is_dir (const char *path, enum XyStatError *error)
 {
-  return _XY_Path_Dir == xy_stat() (path);
+  enum _XyStat type = xy_stat (path, error);
+  if (error && (_XY_Path_File == type || _XY_Path_Other == type))
+    *error = XY_Stat_Not_Directory;
+  return _XY_Path_Dir == type;
 }
 
 
 /**
  * @brief 路径指向的对象是否为普通文件，仅判断类型，不检查文件能否读取、写入或执行
  *
+ * @param[out] error 可传 NULL；错误语义同 xy_stat_is_dir()。
+ *
  * @note 先调用 xy_normalize_path()，再跟随符号链接查询目标。
  *       目录、socket、FIFO、设备等均不是普通文件。
- *       不存在、类型不符、断链、NULL 或规范化后的空路径返回 false。
- *       权限不足等查询错误也可能返回 false；recipe 维护者可按需调用 xy_path_has_error() 检查。
+ *       不存在、类型不符或查询出错时返回 false；类型和错误信息来自同一次查询。
  *
  * @memory SAFE
  */
 static bool
-xy_path_is_file (const char *path)
+xy_stat_is_file (const char *path, enum XyStatError *error)
 {
-  return _XY_Path_File == xy_stat() (path);
+  enum _XyStat type = xy_stat (path, error);
+  if (error && (_XY_Path_Dir == type || _XY_Path_Other == type))
+    *error = XY_Stat_Not_File;
+  return _XY_Path_File == type;
 }
 
 
 /**
- * @brief 检查路径查询是否因权限不足等原因失败，而不是单纯不存在或类型不符
- *
- * @return 查询成功、目标不存在（包括断链）或中间组件不是目录时返回 false。
- *         权限不足、链接循环、I/O 错误等查询错误返回 true；NULL 和规范化后的空路径也返回 true。
- *
- * @note 先调用 xy_normalize_path()，再跟随符号链接查询目标；不检查读写权限。
- *       本函数重新查询路径，不读取此前调用的错误状态；两次查询之间文件系统状态可能变化。
- *       仅供 recipe 维护者按需调用，不自动打印错误或中断流程。
- *
- * @memory SAFE
- */
-static bool
-xy_path_has_error (const char *path)
-{
-  return _XY_Path_Error == xy_stat() (path);
-}
-
-
-/**
- * @brief xy_path_is_file() 的语法糖，判断普通文件是否存在
+ * @brief xy_stat_is_file() 的语法糖，判断普通文件是否存在
  *
  * @note 一次查询同时确认存在性和类型，先规范化路径并跟随链接；目录和特殊文件返回 false。
- *       权限不足等查询错误也可能返回 false；recipe 维护者可按需调用 xy_path_has_error() 检查。
+ *       权限不足等查询错误也可能返回 false；需要区分时可使用 xy_stat_is_file() 的 error 参数。
  *
  * @memory SAFE
  */
 static bool
 xy_file_exist (const char *path)
 {
-  return xy_path_is_file (path);
+  return xy_stat_is_file (path, NULL);
 }
 
 
 /**
- * @brief xy_path_is_dir() 的语法糖，先规范化路径并跟随链接，仅判断目标是否为目录
+ * @brief xy_stat_is_dir() 的语法糖，先规范化路径并跟随链接，仅判断目标是否为目录
  *
- * @note 权限不足等查询错误也可能返回 false；recipe 维护者可按需调用 xy_path_has_error() 检查。
+ * @note 权限不足等查询错误也可能返回 false；需要区分时可使用 xy_stat_is_dir() 的 error 参数。
  *
  * @memory SAFE
  */
 static bool
 xy_dir_exist (const char *path)
 {
-  return xy_path_is_dir (path);
+  return xy_stat_is_dir (path, NULL);
 }
 
 /**

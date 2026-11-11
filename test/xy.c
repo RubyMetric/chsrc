@@ -5,7 +5,7 @@
  * Test Authors  : 曾奥然       <ccmywish@qq.com>
  * Contributors  : Mikachu2333  <linkchou@yandex.com>
  * Created On    : <2023-08-30>
- * Last Modified : <2026-08-13>
+ * Last Modified : <2026-11-11>
  *
  * Test xy.h
  * ------------------------------------------------------------*/
@@ -133,8 +133,60 @@ main (int argc, char const *argv[])
   assert (!xy_file_exist (NULL));
   assert (!xy_dir_exist (NULL));
   assert (!xy_path_exist (NULL));
-  assert (!xy_path_is_file (NULL));
-  assert (!xy_path_is_dir (NULL));
+  assert (!xy_stat_is_file (NULL, NULL));
+  assert (!xy_stat_is_dir (NULL, NULL));
+
+  enum XyStatError error = XY_Stat_Ok;
+  assert (!xy_stat_is_file (NULL, &error) && XY_Stat_Invalid_Path == error);
+  assert (xy_stat_is_file ("./doc/image/chsrc.png", &error) && XY_Stat_Ok == error);
+  assert (!xy_stat_is_dir (NULL, &error) && XY_Stat_Invalid_Path == error);
+  assert (xy_stat_is_dir ("~", &error) && XY_Stat_Ok == error);
+
+  assert (!xy_stat_is_file ("~", &error) && XY_Stat_Not_File == error);
+  assert (!xy_stat_is_dir ("./doc/image/chsrc.png", &error) && XY_Stat_Not_Directory == error);
+  assert (xy_stat_is_file (" ./doc/image/chsrc.png \t", &error) && XY_Stat_Ok == error);
+  assert (!xy_stat_is_file ("~", NULL));
+  assert (!xy_stat_is_dir ("./doc/image/chsrc.png", NULL));
+
+  assert (!xy_stat_is_file ("", &error) && XY_Stat_Invalid_Path == error);
+  assert (!xy_stat_is_dir ("", &error) && XY_Stat_Invalid_Path == error);
+  assert (!xy_stat_is_file (" \t\n", &error) && XY_Stat_Invalid_Path == error);
+  assert (!xy_stat_is_dir (" \t\n", &error) && XY_Stat_Invalid_Path == error);
+  assert (!xy_stat_is_file ("./doc/image/xy-stat-nonexistent", &error) && XY_Stat_Not_Found == error);
+  assert (!xy_stat_is_dir ("./doc/image/xy-stat-nonexistent", &error) && XY_Stat_Not_Found == error);
+  assert (!xy_stat_is_file ("./doc/image/chsrc.png/missing", &error));
+#ifdef XY_Build_On_Windows
+  assert (XY_Stat_Not_Found == error || XY_Stat_Not_Directory == error);
+#else
+  assert (XY_Stat_Not_Directory == error);
+#endif
+  enum XyStatError component_error = error;
+  assert (!xy_stat_is_dir ("./doc/image/chsrc.png/missing", &error) && component_error == error);
+
+#ifdef XY_Build_On_Windows
+  assert (xy_path_exist ("NUL"));
+  assert (!xy_stat_is_file ("NUL", &error) && XY_Stat_Not_File == error);
+  assert (!xy_stat_is_dir ("NUL", &error) && XY_Stat_Not_Directory == error);
+  assert (!xy_stat_is_file ("invalid<path", &error) && XY_Stat_Invalid_Path == error);
+  assert (!xy_stat_is_dir ("invalid<path", &error) && XY_Stat_Invalid_Path == error);
+  assert (XY_Stat_Access_Denied == _xy_stat_error (ERROR_ACCESS_DENIED));
+  assert (XY_Stat_Link_Loop == _xy_stat_error (ERROR_CANT_RESOLVE_FILENAME));
+  assert (XY_Stat_Name_Too_Long == _xy_stat_error (ERROR_FILENAME_EXCED_RANGE));
+  assert (XY_Stat_IO_Error == _xy_stat_error (ERROR_IO_DEVICE));
+  assert (XY_Stat_Busy == _xy_stat_error (ERROR_SHARING_VIOLATION));
+  assert (XY_Stat_Resource_Limit == _xy_stat_error (ERROR_TOO_MANY_OPEN_FILES));
+#else
+  assert (xy_path_exist ("/dev/null"));
+  assert (!xy_stat_is_file ("/dev/null", &error) && XY_Stat_Not_File == error);
+  assert (!xy_stat_is_dir ("/dev/null", &error) && XY_Stat_Not_Directory == error);
+  assert (XY_Stat_Access_Denied == _xy_stat_error (EACCES));
+  assert (XY_Stat_Link_Loop == _xy_stat_error (ELOOP));
+  assert (XY_Stat_Name_Too_Long == _xy_stat_error (ENAMETOOLONG));
+  assert (XY_Stat_IO_Error == _xy_stat_error (EIO));
+  assert (XY_Stat_Busy == _xy_stat_error (EBUSY));
+  assert (XY_Stat_Resource_Limit == _xy_stat_error (EMFILE));
+#endif
+  assert (XY_Stat_Query_Error == _xy_stat_error (ULONG_MAX));
 
   char *home_path = xy_normalize_path ("~");
   assert_str (home_path, xy_os_home);
