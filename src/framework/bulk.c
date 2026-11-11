@@ -654,19 +654,59 @@ bulk_item_actionable (BulkItem_t *item, BulkOptions_t *opt)
  * 有些 recipe 使用环境变量（如 CARGO_HOME）或系统路径，即使 scope 是
  * 用户级，也可能写到 HOME 外。setup 是批量操作，必须先识别这种风险。
  */
+/**
+ * @brief 判断 recipe 是否会写入 HOME 之外
+ *
+ * @note 只针对「用户级但实际写到系统路径或专用环境变量」的情况。
+ *       这里用运行时信息判断，而不是硬编码名单。
+ */
 static bool
 bulk_dish_writes_outside_home (const char *dish_name)
 {
-  /* 已知使用专用环境变量或系统路径的 recipe */
-  static const char *risky[] =
+  if (xy_streql (dish_name, "cargo"))
+    {
+      const char *cargo_home = getenv ("CARGO_HOME");
+      if (!cargo_home || !cargo_home[0])
+        return false;   /* 默认写 ~/.cargo，在 HOME 内 */
+
+      char *home = xy_normalize_path ("~");
+      bool outside = !xy_str_start_with (xy_normalize_path (cargo_home), home);
+      free (home);
+      return outside;
+    }
+
+  if (xy_streql (dish_name, "docker"))
+    return xy.on_linux || xy.on_bsd;   /* 写 /etc/docker */
+
+  if (xy_streql (dish_name, "homebrew"))
+    return false;   /* 写 shell profile，在 HOME 内 */
+
+  return false;
+}
+
+
+/**
+ * @brief 判断 recipe 是否有 chsrc 可管理的、可回滚的备份
+ *
+ * @note 这类 recipe 通过 setx / winget / nix 等外部工具改状态，
+ *       不产生 .bak 文件，失败后无法用文件回滚，因此不纳入批量。
+ */
+static bool
+bulk_dish_has_no_file_backup (const char *dish_name)
+{
+  static const char *no_backup[] =
   {
-    "cargo", "rustup", "docker", "homebrew", "winget", "nix", "guix",
-    "emacs", "tex", "conda", "huggingface-cli"
+    "rustup",   /* setx 写注册表 */
+    "winget",   /* winget source 子命令 */
+    "nix",      /* nix-channel */
+    "guix",     /* guix pull */
+    "emacs",    /* 外部包管理 */
+    "tex",      /* tlmgr */
   };
 
-  for (size_t i = 0; i < sizeof (risky) / sizeof (risky[0]); i++)
+  for (size_t i = 0; i < sizeof (no_backup) / sizeof (no_backup[0]); i++)
     {
-      if (xy_streql (dish_name, risky[i]))
+      if (xy_streql (dish_name, no_backup[i]))
         return true;
     }
 
@@ -688,10 +728,7 @@ bulk_skip_reason (BulkItem_t *item, BulkOptions_t *opt)
                   : "所选镜像站不支持该菜品";
     }
 
-  if (bulk_dish_writes_outside_home (item->dish))
-    return en ? "recipe may write outside HOME; run `chsrc set` individually"
-              : "该 recipe 可能写入 HOME 之外，请单独执行 chsrc set";
-
+  /* tier 判断优先，避免把「半自动」误报成其他原因 */
   if (item->tier == BulkTier_System)
     {
       if (!opt->all)
@@ -705,6 +742,14 @@ bulk_skip_reason (BulkItem_t *item, BulkOptions_t *opt)
   if (item->tier == BulkTier_Manual)
     return en ? "semi-auto/manual recipe; run `chsrc set` manually"
               : "半自动/手工 recipe；请单独执行 chsrc set";
+
+  if (bulk_dish_writes_outside_home (item->dish))
+    return en ? "recipe writes outside HOME; run `chsrc set` individually"
+              : "该 recipe 会写入 HOME 之外，请单独执行 chsrc set";
+
+  if (bulk_dish_has_no_file_backup (item->dish))
+    return en ? "recipe has no restorable file backup; run `chsrc set` individually"
+              : "该 recipe 无文件备份、失败不可回滚，请单独执行 chsrc set";
 
   if (item->state == BulkSrc_Custom && !opt->force)
     return en ? "custom source detected; use --force to overwrite"
