@@ -12,7 +12,7 @@ def_dish(wr_nix, "nix");
 bool
 wr_nix_is_multi_user_installation_mode ()
 {
-  if (xy_path_is_exist ("/nix/var/nix/daemon-socket/socket"))
+  if (xy_path_exist ("/nix/var/nix/daemon-socket/socket"))
     {
      return true;
     }

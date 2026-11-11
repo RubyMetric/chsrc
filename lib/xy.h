@@ -1645,7 +1645,7 @@ xy_stat() (const char *path)
  * @memory SAFE
  */
 static bool
-xy_path_is_exist (const char *path)
+xy_path_exist (const char *path)
 {
   enum _XyStat type = xy_stat() (path);
   return _XY_Path_Error != type && _XY_Path_Missing != type;
