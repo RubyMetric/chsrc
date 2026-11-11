@@ -876,7 +876,7 @@ xy_str_next_nonempty_line (const char *str)
  *   return caller-free
  */
 static wchar_t *
-_xy_win_wstr (const char *utf8)
+xy_utf8_to_wstr (const char *utf8)
 {
   if (!utf8)
     return NULL;
@@ -901,7 +901,7 @@ _xy_win_wstr (const char *utf8)
  *   return caller-free
  */
 static char *
-_xy_win_utf8 (const wchar_t *wstr)
+xy_wstr_to_utf8 (const wchar_t *wstr)
 {
   if (!wstr)
     return NULL;
@@ -931,8 +931,8 @@ static FILE *
 xy_fopen (const char *path, const char *mode)
 {
 #ifdef XY_Build_On_Windows
-  wchar_t *wpath = _xy_win_wstr (path);
-  wchar_t *wmode = _xy_win_wstr (mode);
+  wchar_t *wpath = xy_utf8_to_wstr (path);
+  wchar_t *wmode = xy_utf8_to_wstr (mode);
   FILE    *f     = (wpath && wmode) ? _wfopen (wpath, wmode) : NULL;
   free (wmode);
   free (wpath);
@@ -952,7 +952,7 @@ static int
 xy_file_remove (const char *path)
 {
 #ifdef XY_Build_On_Windows
-  wchar_t *wpath = _xy_win_wstr (path);
+  wchar_t *wpath = xy_utf8_to_wstr (path);
   int ret = wpath ? _wremove (wpath) : -1;
   free (wpath);
   return ret;
@@ -969,7 +969,7 @@ static bool
 xy_path_exist (const char *path)
 {
 #ifdef XY_Build_On_Windows
-  wchar_t *wpath = _xy_win_wstr (path);
+  wchar_t *wpath = xy_utf8_to_wstr (path);
   bool exist = (NULL != wpath) && (INVALID_FILE_ATTRIBUTES != GetFileAttributesW (wpath));
   free (wpath);
   return exist;
@@ -986,7 +986,7 @@ static bool
 xy_path_is_dir (const char *path)
 {
 #ifdef XY_Build_On_Windows
-  wchar_t *wpath = _xy_win_wstr (path);
+  wchar_t *wpath = xy_utf8_to_wstr (path);
   DWORD attr = wpath ? GetFileAttributesW (wpath) : INVALID_FILE_ATTRIBUTES;
   free (wpath);
   return (INVALID_FILE_ATTRIBUTES != attr) && (attr & FILE_ATTRIBUTE_DIRECTORY);
@@ -1009,7 +1009,7 @@ static int
 xy_system (const char *cmd)
 {
 #ifdef XY_Build_On_Windows
-  wchar_t *wcmd = _xy_win_wstr (cmd);
+  wchar_t *wcmd = xy_utf8_to_wstr (cmd);
   int status = wcmd ? _wsystem (wcmd) : -1;
   free (wcmd);
   return status;
@@ -1028,8 +1028,8 @@ static FILE *
 xy_popen (const char *cmd, const char *mode)
 {
 #ifdef XY_Build_On_Windows
-  wchar_t *wcmd  = _xy_win_wstr (cmd);
-  wchar_t *wmode = _xy_win_wstr (mode);
+  wchar_t *wcmd  = xy_utf8_to_wstr (cmd);
+  wchar_t *wmode = xy_utf8_to_wstr (mode);
   FILE    *f     = (wcmd && wmode) ? _wpopen (wcmd, wmode) : NULL;
   free (wmode);
   free (wcmd);
@@ -1053,13 +1053,13 @@ static char *
 xy_env_get (const char *name)
 {
 #ifdef XY_Build_On_Windows
-  wchar_t *wname = _xy_win_wstr (name);
+  wchar_t *wname = xy_utf8_to_wstr (name);
   if (!wname)
     return NULL;
 
   wchar_t *wval = _wgetenv (wname);
   free (wname);
-  return wval ? _xy_win_utf8 (wval) : NULL;
+  return wval ? xy_wstr_to_utf8 (wval) : NULL;
 #else
   const char *val = getenv (name);
   return val ? xy_strdup (val) : NULL;
@@ -1507,7 +1507,7 @@ _xy_win_documents ()
                                      SHGFP_TYPE_CURRENT, documents_path);
 
   if (SUCCEEDED (result))
-    return _xy_win_utf8 (documents_path);
+    return xy_wstr_to_utf8 (documents_path);
 
   return xy_2strcat (xy_os_home, "\\Documents");
 #else

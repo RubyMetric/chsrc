@@ -22,6 +22,11 @@
 #   warning "chsrc recommends a C17 or later compiler"
 #endif
 
+#if defined(_WIN32) && !defined(NTDDI_VERSION)
+  /* GetTempPath2W() 的声明从 Windows 10 FE SDK 目标开始提供。 */
+  #define NTDDI_VERSION NTDDI_WIN10_FE
+#endif
+
 #include "xy.h"
 #include "struct.h"
 #include "mirror.c"
