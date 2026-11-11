@@ -1552,7 +1552,7 @@ static char *
 xy_normalize_path (const char *path);
 
 
-enum _XyPathType
+enum _XyStat
 {
   _XY_Path_Error,
   _XY_Path_Missing,
@@ -1567,14 +1567,14 @@ enum _XyPathType
  *
  * @memory SAFE
  */
-static enum _XyPathType
-_xy_path_type (const char *path)
+static enum _XyStat
+xy_stat() (const char *path)
 {
   if (!path)
     return _XY_Path_Error;
 
   char *normalized_path = xy_normalize_path (path);
-  enum _XyPathType result = _XY_Path_Error;
+  enum _XyStat result = _XY_Path_Error;
   if (!normalized_path[0])
     {
       free (normalized_path);
@@ -1647,7 +1647,7 @@ _xy_path_type (const char *path)
 static bool
 xy_path_is_exist (const char *path)
 {
-  enum _XyPathType type = _xy_path_type (path);
+  enum _XyStat type = xy_stat() (path);
   return _XY_Path_Error != type && _XY_Path_Missing != type;
 }
 
@@ -1664,7 +1664,7 @@ xy_path_is_exist (const char *path)
 static bool
 xy_path_is_dir (const char *path)
 {
-  return _XY_Path_Dir == _xy_path_type (path);
+  return _XY_Path_Dir == xy_stat() (path);
 }
 
 
@@ -1681,7 +1681,7 @@ xy_path_is_dir (const char *path)
 static bool
 xy_path_is_file (const char *path)
 {
-  return _XY_Path_File == _xy_path_type (path);
+  return _XY_Path_File == xy_stat() (path);
 }
 
 
@@ -1700,7 +1700,7 @@ xy_path_is_file (const char *path)
 static bool
 xy_path_has_error (const char *path)
 {
-  return _XY_Path_Error == _xy_path_type (path);
+  return _XY_Path_Error == xy_stat() (path);
 }
 
 
