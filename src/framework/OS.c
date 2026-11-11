@@ -419,23 +419,33 @@ chsrc_run_directly (const char *cmd)
 
 #ifdef XY_Build_On_Windows
 /**
- * @brief 生成十六进制随机串（CSPRNG）
+ * @brief 使用加密安全随机源生成十六进制字符串
  *
- * @param[out] out    输出缓冲区，需要 2 * nbytes + 1 字节
- * @param[in]  nbytes 随机字节数，上限 64
+ * @param[in] nbytes 随机字节数，上限 64，越界时终止程序
  *
- * @return 成功与否
+ * @return 长度为 2 * nbytes 的随机字符串，调用者需要 free
  */
-static bool
-_chsrc_random_hex (char *out, size_t nbytes)
+static char *
+_chsrc_random_hex_string (size_t nbytes)
 {
   unsigned char rnd[64];
   if (nbytes > sizeof (rnd))
-    return false;
+    {
+      chsrc_error2 (CHINESE
+        ? "随机字符串的随机字节数不能超过 64"
+        : "The random byte count for a random string must not exceed 64");
+      abort ();
+    }
 
   if (!RtlGenRandom (rnd, (ULONG) nbytes))
-    return false;
+    {
+      chsrc_error2 (CHINESE
+        ? "无法生成随机字符串"
+        : "Unable to generate a random string");
+      exit (Exit_ExternalError);
+    }
 
+  char *out = xy_malloc0 (2 * nbytes + 1);
   static const char hex_digits[] = "0123456789abcdef";
   for (size_t i = 0; i < nbytes; i++)
     {
@@ -443,7 +453,7 @@ _chsrc_random_hex (char *out, size_t nbytes)
       out[2 * i + 1] = hex_digits[rnd[i] & 0x0F];
     }
   out[2 * nbytes] = '\0';
-  return true;
+  return out;
 }
 #endif
 
@@ -471,10 +481,10 @@ chsrc_make_tmpfile (const char *filename, const char *postfix, bool loud, char *
    * GetTempFileNameW() 不支持指定后缀；若先创建、删除再用目标后缀重建，
    * 删除和重新创建之间会产生竞态。因此这里直接生成随机文件名。
    */
-  WCHAR temp_dir[MAX_PATH + 1];
-  DWORD temp_dir_len = GetTempPathW (MAX_PATH + 1, temp_dir);
+  WCHAR temp_dir[MAX_PATH + 2];
+  DWORD temp_dir_len = GetTempPath2W (MAX_PATH + 2, temp_dir);
 
-  if (0 == temp_dir_len || temp_dir_len > MAX_PATH)
+  if (0 == temp_dir_len || temp_dir_len >= MAX_PATH + 2)
     {
       chsrc_error2 (CHINESE
         ? "无法获取系统临时目录"
@@ -482,8 +492,14 @@ chsrc_make_tmpfile (const char *filename, const char *postfix, bool loud, char *
       exit (Exit_ExternalError);
     }
 
-  bool has_sep = (L'\\' == temp_dir[temp_dir_len - 1]
-                  || L'/' == temp_dir[temp_dir_len - 1]);
+  char *temp_path = xy_wstr_to_utf8 (temp_dir);
+  if (!temp_path)
+    {
+      chsrc_error2 (CHINESE
+        ? "无法转换系统临时目录"
+        : "Unable to convert the system temp directory");
+      exit (Exit_ExternalError);
+    }
 
   /*
    * CREATE_NEW 保证文件名已存在时不会覆盖原文件。
@@ -491,63 +507,19 @@ chsrc_make_tmpfile (const char *filename, const char *postfix, bool loud, char *
    */
   for (int attempt = 0; attempt < 8; attempt++)
     {
-      char hex[17];
+      char *hex = _chsrc_random_hex_string (8);
+      char *path = xy_strcat (6, temp_path, "chsrc_", hex, "_", filename, postfix);
+      free (hex);
 
-      if (!_chsrc_random_hex (hex, 8))
+      WCHAR *wpath = xy_utf8_to_wstr (path);
+      if (!wpath)
         {
+          free (path);
           chsrc_error2 (CHINESE
-            ? "无法生成随机临时文件名"
-            : "Unable to generate a random temporary filename");
+            ? "无法转换临时文件路径"
+            : "Unable to convert the temporary file path");
           exit (Exit_ExternalError);
         }
-
-      char *name = xy_strcat (5, "chsrc_", hex, "_", filename, postfix);
-
-      int wname_len = MultiByteToWideChar (CP_UTF8, 0, name, -1, NULL, 0);
-      if (wname_len <= 0)
-        {
-          free (name);
-          chsrc_error2 (CHINESE
-            ? "无法转换临时文件名"
-            : "Unable to convert the temporary filename");
-          exit (Exit_ExternalError);
-        }
-
-      WCHAR *wname = xy_malloc0 ((size_t) wname_len * sizeof (WCHAR));
-
-      if (0 == MultiByteToWideChar (CP_UTF8, 0, name, -1,
-                                    wname, wname_len))
-        {
-          free (wname);
-          free (name);
-          chsrc_error2 (CHINESE
-            ? "无法转换临时文件名"
-            : "Unable to convert the temporary filename");
-          exit (Exit_ExternalError);
-        }
-
-      free (name);
-
-      size_t wpath_cap =
-        (size_t) temp_dir_len + (has_sep ? 0 : 1)
-        + (size_t) wname_len;
-
-      WCHAR *wpath = xy_malloc0 (wpath_cap * sizeof (WCHAR));
-
-      size_t wl = 0;
-
-      for (DWORD i = 0; i < temp_dir_len; i++)
-        wpath[wl++] = temp_dir[i];
-
-      if (!has_sep)
-        wpath[wl++] = L'\\';
-
-      for (int i = 0; wname[i]; i++)
-        wpath[wl++] = wname[i];
-
-      wpath[wl] = L'\0';
-
-      free (wname);
 
       HANDLE h = CreateFileW (
         wpath,
@@ -564,6 +536,7 @@ chsrc_make_tmpfile (const char *filename, const char *postfix, bool loud, char *
           DWORD err = GetLastError ();
 
           free (wpath);
+          free (path);
 
           if (ERROR_FILE_EXISTS == err || ERROR_ALREADY_EXISTS == err)
             continue;
@@ -584,6 +557,7 @@ chsrc_make_tmpfile (const char *filename, const char *postfix, bool loud, char *
           CloseHandle (h);
           DeleteFileW (wpath);
           free (wpath);
+          free (path);
 
           chsrc_error2 (CHINESE
             ? "无法创建临时文件"
@@ -601,6 +575,7 @@ chsrc_make_tmpfile (const char *filename, const char *postfix, bool loud, char *
           _close (fd);
           DeleteFileW (wpath);
           free (wpath);
+          free (path);
 
           chsrc_error2 (CHINESE
             ? "无法打开临时文件"
@@ -608,41 +583,11 @@ chsrc_make_tmpfile (const char *filename, const char *postfix, bool loud, char *
           exit (Exit_ExternalError);
         }
 
-      int u8_len = WideCharToMultiByte (
-        CP_UTF8, 0, wpath, -1, NULL, 0, NULL, NULL);
-
-      if (u8_len <= 0)
-        {
-          fclose (f);
-          DeleteFileW (wpath);
-          free (wpath);
-
-          chsrc_error2 (CHINESE
-            ? "无法转换临时文件路径"
-            : "Unable to convert temporary file path");
-          exit (Exit_ExternalError);
-        }
-
-      tmpfile = xy_malloc0 ((size_t) u8_len);
-
-      if (0 == WideCharToMultiByte (
-                 CP_UTF8, 0, wpath, -1,
-                 tmpfile, u8_len, NULL, NULL))
-        {
-          fclose (f);
-          DeleteFileW (wpath);
-          free (wpath);
-          free (tmpfile);
-
-          chsrc_error2 (CHINESE
-            ? "无法转换临时文件路径"
-            : "Unable to convert temporary file path");
-          exit (Exit_ExternalError);
-        }
-
+      tmpfile = path;
       free (wpath);
       break;
     }
+  free (temp_path);
 
   if (!f)
     {
@@ -654,14 +599,15 @@ chsrc_make_tmpfile (const char *filename, const char *postfix, bool loud, char *
 
 #else
   /**
-   * 非 Windows 平台使用 mkstemps() 创建临时文件。
-   * mkstemps() 可以原子创建文件，同时保留指定后缀。
+   * 非 Windows 平台使用 mkstemps() 创建临时文件
+   * 这是 Unix 系统上常见的扩展接口（非 POSIX 标准），可以指定后缀名
    */
   tmpfile = xy_strcat (
     5, "/tmp/", "chsrc_tmp_", filename, "_XXXXXX", postfix);
 
   size_t postfix_len = strlen (postfix);
 
+  /* mkstemps() 会原子性地创建文件并返回文件描述符 */
   int fd = mkstemps (tmpfile, postfix_len);
 
   if (-1 == fd)
@@ -678,7 +624,7 @@ chsrc_make_tmpfile (const char *filename, const char *postfix, bool loud, char *
 
   if (!f)
     {
-      close (fd);
+      close (fd);  /* 关闭文件描述符以避免泄漏 */
 
       char *msg = CHINESE
         ? xy_2strcat ("无法打开临时文件: ", tmpfile)
@@ -699,7 +645,9 @@ chsrc_make_tmpfile (const char *filename, const char *postfix, bool loud, char *
     }
 
   /**
-   * Windows 上调用者必须取得文件名，以便之后能够删除临时文件。
+   * 允许生成文件后不了解其文件名，调用者只了解 FILE*
+   * 这样的话，其实是无法删除该文件的，但是生成在 /tmp 目录下我们恰好可以不用清理
+   * 但是在 Windows 上，就没有办法了，所以我们禁止在 Windows 上不指定返回出的临时文件名
    */
   if (xy.on_windows && !tmpfilepath)
     {
@@ -739,86 +687,64 @@ char *
 chsrc_make_tmpdir (const char *prefix, char **out_err)
 {
 #ifdef XY_Build_On_Windows
-  WCHAR temp_dir[MAX_PATH + 16];
-  DWORD tlen = GetTempPathW (MAX_PATH + 1, temp_dir);
-  if (0 == tlen || tlen > MAX_PATH + 1)
+  WCHAR temp_dir[MAX_PATH + 2];
+  DWORD tlen = GetTempPath2W (MAX_PATH + 2, temp_dir);
+  if (0 == tlen || tlen >= MAX_PATH + 2)
     {
       if (out_err)
         {
           *out_err = ENGLISH
-            ? xy_strdup ("Failed to locate the system temp directory (GetTempPathW)")
+            ? xy_strdup ("Failed to locate the system temp directory (GetTempPath2W)")
             : xy_strdup ("无法获取系统临时目录路径");
         }
       return NULL;
     }
 
-  bool has_sep = (L'\\' == temp_dir[tlen - 1] || L'/' == temp_dir[tlen - 1]);
+  char *temp_path = xy_wstr_to_utf8 (temp_dir);
+  if (!temp_path)
+    {
+      if (out_err)
+        {
+          *out_err = ENGLISH
+            ? xy_strdup ("Failed to convert the system temp directory to UTF-8")
+            : xy_strdup ("无法将系统临时目录转换为 UTF-8");
+        }
+      return NULL;
+    }
 
   for (int attempt = 0; attempt < 8; attempt++)
     {
-      char hex[17];
-      if (!_chsrc_random_hex (hex, 8))
+      char *hex = _chsrc_random_hex_string (8);
+      char *name = xy_strcat (3, prefix, "-", hex);
+      char *path = xy_2strcat (temp_path, name);
+      free (hex);
+
+      WCHAR *wpath = xy_utf8_to_wstr (path);
+      if (!wpath)
         {
+          free (path);
+          free (name);
+          free (temp_path);
           if (out_err)
             {
               *out_err = ENGLISH
-                ? xy_strdup ("Failed to generate a random temporary directory name (RtlGenRandom)")
-                : xy_strdup ("无法生成临时目录的随机名称 (RtlGenRandom)");
+                ? xy_strdup ("Failed to convert the temporary directory path to UTF-16")
+                : xy_strdup ("无法将临时目录路径转换为 UTF-16");
             }
           return NULL;
         }
-
-      char   name[64];
-      size_t n = 0;
-      for (const char *p = prefix; *p && n < 40; p++)
-        name[n++] = *p;
-      name[n++] = '-';
-      for (size_t i = 0; hex[i]; i++)
-        name[n++] = hex[i];
-      name[n] = '\0';
-
-      WCHAR wname[64];
-      if (0 == MultiByteToWideChar (CP_UTF8, 0, name, -1, wname,
-                                    (int) (sizeof (wname) / sizeof (WCHAR))))
-        {
-          if (out_err)
-            {
-              *out_err = ENGLISH
-                ? xy_strdup ("Failed to convert the temporary directory name to UTF-16")
-                : xy_strdup ("无法将临时目录名转换为 UTF-16");
-            }
-          return NULL;
-        }
-
-      WCHAR wpath[MAX_PATH + 160];
-      DWORD wl = 0;
-      for (DWORD i = 0; i < tlen; i++)
-        wpath[wl++] = temp_dir[i];
-      if (!has_sep)
-        wpath[wl++] = L'\\';
-      for (size_t i = 0; wname[i]; i++)
-        wpath[wl++] = wname[i];
-      wpath[wl] = L'\0';
 
       if (CreateDirectoryW (wpath, NULL))
         {
-          int u8_len = WideCharToMultiByte (CP_UTF8, 0, wpath, -1, NULL, 0, NULL, NULL);
-          if (u8_len <= 0)
-            {
-              if (out_err)
-                {
-                  *out_err = ENGLISH
-                    ? xy_strdup ("Failed to convert the temporary directory path to UTF-8")
-                    : xy_strdup ("无法将临时目录路径转换为 UTF-8");
-                }
-              return NULL;
-            }
-          char *u8 = xy_malloc0 ((size_t) u8_len);
-          WideCharToMultiByte (CP_UTF8, 0, wpath, -1, u8, u8_len, NULL, NULL);
-          return u8;
+          free (wpath);
+          free (name);
+          free (temp_path);
+          return path;
         }
 
       DWORD err = GetLastError ();
+      free (wpath);
+      free (path);
       if (ERROR_ALREADY_EXISTS != err)
         {
           char *err_s = xy_int2str ((int) err);
@@ -829,11 +755,15 @@ chsrc_make_tmpdir (const char *prefix, char **out_err)
                 : xy_strcat (4, "无法创建临时目录 `", name, "`，错误码: ", err_s);
             }
           free (err_s);
+          free (name);
+          free (temp_path);
           return NULL;
         }
+      free (name);
 
       /* 名字已被占位（预先放置的目录或 junction），换一个随机名重试 */
     }
+  free (temp_path);
 
   if (out_err)
     {
