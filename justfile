@@ -97,7 +97,6 @@ CFLAGS_release_mode := CFLAGS_release_mode_prompt + ' ' + LDLIBS_win + ' ' + CFL
 #=======================
 
 BIN_xy := if os() == 'windows' {'xy.exe'} else {'./xy'}
-BIN_xy_path := if os() == 'windows' {'xy-path.exe'} else {'./xy-path'}
 BIN_fw := if os() == 'windows' {'fw.exe'} else {'./fw'}
 BIN_rm := if os() == 'windows' {'del'}    else {'rm'}
 #=======================
@@ -138,16 +137,12 @@ build-in-release-mode:
 debug: build-in-debug-mode
   @{{DEBUGGER}} {{DebugMode-Target-Name}}
 
-test: test-xy test-xy-path test-fw
+test: test-xy test-fw
 
 # 这些测试文件都用 DEBUG mode
 test-xy:
 	@{{CC}} test/xy.c {{CFLAGS_debug_mode}} -o xy
 	@{{BIN_xy}}
-
-test-xy-path:
-	@{{CC}} test/xy-path.c {{CFLAGS_debug_mode}} -o xy-path
-	@{{BIN_xy_path}}
 
 test-fw:
 	@{{CC}} test/fw.c {{CFLAGS_debug_mode}} -o fw
@@ -163,7 +158,6 @@ clean:
 	-@{{BIN_rm}} *.exe
 	-@{{BIN_rm}} *.res
 	-@{{BIN_rm}} xy
-	-@{{BIN_rm}} xy-path
 	-@{{BIN_rm}} fw
 	-@{{BIN_rm}} chsrc
 	-@{{BIN_rm}} chsrc-debug

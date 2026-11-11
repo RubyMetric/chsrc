@@ -220,7 +220,7 @@ debug: build-in-debug-mode
 
 
 
-test: test-make-var test-xy test-xy-path test-fw
+test: test-make-var test-xy test-fw
 
 test-make-var:
 	@echo "On-Linux: $(On-Linux)"
@@ -245,11 +245,6 @@ test-xy:
 	@$(CC) test/xy.c $(CFLAGS) $(LDLIBS_win) -o xy
 	@./xy
 
-test-xy-path: CFLAGS += $(CFLAGS_debug)
-test-xy-path:
-	@$(CC) test/xy-path.c $(CFLAGS) -o xy-path
-	@./xy-path
-
 test-fw: CFLAGS += $(CFLAGS_debug)
 test-fw:
 	@$(CC) test/fw.c $(CFLAGS) $(LDLIBS_win) -o fw
@@ -268,7 +263,6 @@ clean:
 	-@rm *.exe  2>/dev/null
 	-@rm *.res  2>/dev/null
 	-@rm xy     2>/dev/null
-	-@rm xy-path 2>/dev/null
 	-@rm fw     2>/dev/null
 	-@rm README.md.bak*    2>/dev/null
 
@@ -302,4 +296,4 @@ install: $(ReleaseMode-Target-Name)
 
 .PHONY: all b build bd br bcir d t check c \
 	build-in-dev-mode build-in-debug-mode build-in-release-mode build-in-ci-release-mode \
-	debug test test-make-var test-xy test-xy-path test-fw fastcheck test-cli clean install build-deb clean-deb rawstr4c
+	debug test test-make-var test-xy test-fw fastcheck test-cli clean install build-deb clean-deb rawstr4c
