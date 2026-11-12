@@ -1,6 +1,13 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
+ * File Name     : file-update.c
+ * File Authors  : @Mikachu2333
+ * Contributors  : @ccmywish
+ *               |
+ * Created On    : <2026-11-12>
+ * Last Modified : <2026-11-12>
+ *
  * 通用文件更新测试：刻意不引入 env.c 或任何配置格式解析器。
  * ------------------------------------------------------------*/
 
@@ -11,8 +18,11 @@
 #include "../src/framework/OS.c"
 #include "../src/framework/file-update.c"
 
-#ifndef XY_Build_On_Windows
+#ifdef XY_Build_On_Windows
+static char Test_Root[32768];
+#else
 static char Test_Root[] = "/tmp/chsrc_file_update_XXXXXX";
+#endif
 
 static char *
 new_path (const char *name)
@@ -23,7 +33,7 @@ new_path (const char *name)
 static void
 overwrite_file_with_bytes (const char *path, const char *bytes, size_t len)
 {
-  FILE *fp = fopen (path, "wb");
+  FILE *fp = xy_fopen (path, "wb");
   assert (NULL != fp);
   assert (len == fwrite (bytes, 1, len, fp));
   assert (0 == fclose (fp));
@@ -53,6 +63,120 @@ plan_file_update (char *path, char *content, size_t len)
   return op;
 }
 
+static void
+remove_file (const char *path)
+{
+  assert (0 == xy_file_remove (path));
+}
+
+#ifdef XY_Build_On_Windows
+
+static void
+remove_tree_w (const wchar_t *dir)
+{
+  size_t dir_len = wcslen (dir);
+  wchar_t *pattern = xy_malloc0 ((dir_len + 3) * sizeof (wchar_t));
+  wcscpy (pattern, dir);
+  size_t len = dir_len;
+  if (len > 0 && L'\\' != pattern[len - 1]) pattern[len++] = L'\\';
+  pattern[len++] = L'*';
+  pattern[len] = L'\0';
+
+  WIN32_FIND_DATAW data;
+  HANDLE find = FindFirstFileW (pattern, &data);
+  free (pattern);
+  if (INVALID_HANDLE_VALUE != find)
+    {
+      do
+        {
+          if (0 == wcscmp (data.cFileName, L".") || 0 == wcscmp (data.cFileName, L"..")) continue;
+          size_t name_len = wcslen (data.cFileName);
+          wchar_t *child = xy_malloc0 ((dir_len + name_len + 2) * sizeof (wchar_t));
+          wcscpy (child, dir);
+          size_t child_len = wcslen (child);
+          if (child_len > 0 && L'\\' != child[child_len - 1]) wcscat (child, L"\\");
+          wcscat (child, data.cFileName);
+          if (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+            remove_tree_w (child);
+          else
+            {
+              if (data.dwFileAttributes & FILE_ATTRIBUTE_READONLY)
+                SetFileAttributesW (child, FILE_ATTRIBUTE_NORMAL);
+              DeleteFileW (child);
+            }
+          free (child);
+        }
+      while (FindNextFileW (find, &data));
+      FindClose (find);
+    }
+  RemoveDirectoryW (dir);
+}
+
+static void
+init_test_root (void)
+{
+  wchar_t temp[MAX_PATH];
+  DWORD len = GetTempPathW (MAX_PATH, temp);
+  assert (len > 0 && len < MAX_PATH);
+
+  wchar_t tmpl[MAX_PATH];
+  assert (len + 25 < MAX_PATH);
+  wcscpy (tmpl, temp);
+  wcscat (tmpl, L"chsrc_file_update_XXXXXX");
+  assert (0 == _wmktemp_s (tmpl, MAX_PATH));
+  assert (CreateDirectoryW (tmpl, NULL));
+
+  char *utf8 = _xy_win_utf8 (tmpl);
+  assert (NULL != utf8 && strlen (utf8) < sizeof (Test_Root));
+  strcpy (Test_Root, utf8);
+  free (utf8);
+}
+
+static size_t
+get_TestRootDir_entries_count (void)
+{
+  char *pattern = xy_path_join (Test_Root, "*");
+  wchar_t *wpattern = _xy_win_wstr (pattern);
+  free (pattern);
+  assert (NULL != wpattern);
+
+  WIN32_FIND_DATAW data;
+  HANDLE find = FindFirstFileW (wpattern, &data);
+  free (wpattern);
+  if (INVALID_HANDLE_VALUE == find)
+    {
+      assert (ERROR_FILE_NOT_FOUND == GetLastError ());
+      return 0;
+    }
+
+  size_t count = 0;
+  do
+    {
+      if (0 == wcscmp (data.cFileName, L".") || 0 == wcscmp (data.cFileName, L"..")) continue;
+      /* 暂存及回滚临时文件不能在成功或已处理的失败后残留。 */
+      char *name = _xy_win_utf8 (data.cFileName);
+      assert (NULL != name);
+      assert (NULL == strstr (name, ".chsrc-"));
+      free (name);
+      count++;
+    }
+  while (FindNextFileW (find, &data));
+  assert (ERROR_NO_MORE_FILES == GetLastError ());
+  assert (FindClose (find));
+  return count;
+}
+
+static void
+cleanup_test_root (void)
+{
+  wchar_t *root = _xy_win_wstr (Test_Root);
+  assert (NULL != root);
+  remove_tree_w (root);
+  free (root);
+}
+
+#else
+
 static size_t
 get_TestRootDir_entries_count (void)
 {
@@ -72,6 +196,17 @@ get_TestRootDir_entries_count (void)
 }
 
 static void
+cleanup_test_root (void)
+{
+  /* Test_Root 只能来自上面的固定 mkdtemp 模板；失败时保留现场。 */
+  char *cleanup = xy_strcat (3, "rm -rf -- \"", Test_Root, "\"");
+  assert (0 == system (cleanup));
+  free (cleanup);
+}
+
+#endif
+
+static void
 test_binary_update_and_noop (void)
 {
   char old[9001], desired[9001];
@@ -87,14 +222,18 @@ test_binary_update_and_noop (void)
   free (op.old_content);
 
   op = plan_file_update (path, desired, sizeof (desired));
+#ifndef XY_Build_On_Windows
   struct stat before, after;
   assert (0 == stat (path, &before));
+#endif
   size_t entries = get_TestRootDir_entries_count ();
   assert (FileUpdate_Unchanged == chsrc_update_files (&op, 1, &err));
   assert (NULL == err);
   assert (entries == get_TestRootDir_entries_count ());
+#ifndef XY_Build_On_Windows
   assert (0 == stat (path, &after));
   assert (before.st_ino == after.st_ino && before.st_mtime == after.st_mtime);
+#endif
   assert (FileUpdate_Unchanged == chsrc_update_files (NULL, 0, &err));
   free (op.old_content);
   free (path);
@@ -134,7 +273,10 @@ test_commit_rollback (void)
   char *second = new_path ("commit-second");
   overwrite_file_with_bytes (first, "first original\n", 15);
   overwrite_file_with_bytes (second, "second original\n", 16);
+#ifndef XY_Build_On_Windows
   assert (0 == chmod (first, 0640));
+  struct stat st;
+#endif
   FileUpdate_t ops[2] = { plan_file_update (first, "new\n", 4), plan_file_update (second, "new\n", 4) };
   char *err = NULL;
   FileUpdate_Test_Fail_Commit = 1;
@@ -143,13 +285,14 @@ test_commit_rollback (void)
   free (err);
   assert_file_with_bytes (first, "first original\n", 15);
   assert_file_with_bytes (second, "second original\n", 16);
-  struct stat st;
+#ifndef XY_Build_On_Windows
   assert (0 == stat (first, &st));
   assert (0640 == (st.st_mode & 0777));
+#endif
   get_TestRootDir_entries_count ();
 
   /* 新建文件在后续失败时回滚为不存在。 */
-  assert (0 == unlink (first));
+  remove_file (first);
   free (ops[0].old_content);
   ops[0] = plan_file_update (first, "new\n", 4);
   assert (FileUpdate_Failed == chsrc_update_files (ops, 2, &err));
@@ -158,14 +301,19 @@ test_commit_rollback (void)
   assert_file_with_bytes (second, "second original\n", 16);
   get_TestRootDir_entries_count ();
   FileUpdate_Test_Fail_Commit = -1;
+#ifndef XY_Build_On_Windows
   mode_t old_mask = umask (0022);
+#endif
   assert (FileUpdate_OK == chsrc_update_files (ops, 2, &err));
+#ifndef XY_Build_On_Windows
   umask (old_mask);
-  assert (NULL == err);
   assert (0 == stat (first, &st));
   assert (0644 == (st.st_mode & 0777));
+#endif
+  assert (NULL == err);
   assert_file_with_bytes (first, "new\n", 4);
   assert_file_with_bytes (second, "new\n", 4);
+  free (ops[0].old_content);
   free (ops[1].old_content);
   free (first);
   free (second);
@@ -193,6 +341,33 @@ test_stale_snapshot_rejects_batch (void)
   free (first);
   free (second);
 }
+
+static void
+test_duplicate_existing_targets (void)
+{
+  char *path = new_path ("duplicate-existing");
+  overwrite_file_with_bytes (path, "old", 3);
+  FileUpdate_t ops[] = { plan_file_update (path, "first", 5),
+                         plan_file_update (path, "second", 6) };
+  size_t entries = get_TestRootDir_entries_count ();
+  char *err = NULL;
+  assert (FileUpdate_Failed == chsrc_update_files (ops, 2, &err));
+  assert (NULL != err);
+  free (err);
+  assert_file_with_bytes (path, "old", 3);
+  assert (entries == get_TestRootDir_entries_count ());
+
+  ops[1].new_content = ops[0].new_content;
+  ops[1].new_len = ops[0].new_len;
+  assert (FileUpdate_OK == chsrc_update_files (ops, 2, &err));
+  assert (NULL == err);
+  assert_file_with_bytes (path, "first", 5);
+  free (ops[0].old_content);
+  free (ops[1].old_content);
+  free (path);
+}
+
+#ifndef XY_Build_On_Windows
 
 static void
 test_symlink_and_duplicate_targets (void)
@@ -229,6 +404,8 @@ test_symlink_and_duplicate_targets (void)
   free (link);
 }
 
+#endif
+
 /* 两个不同路径指向同一个新建文件时，内容冲突必须整批拒绝。 */
 static void
 test_duplicate_new_paths (void)
@@ -263,6 +440,8 @@ test_empty_content (void)
   free (path);
 }
 
+#ifndef XY_Build_On_Windows
+
 /* 悬空符号链接不能被跟随，也不能顺带创建其目标。 */
 static void
 test_dangling_symlink_target (void)
@@ -283,6 +462,37 @@ test_dangling_symlink_target (void)
   free (missing);
 }
 
+#endif
+
+#ifdef XY_Build_On_Windows
+
+/* Windows 只读属性必须让写入在暂存阶段失败，不能先备份再破坏目标。 */
+static void
+test_readonly_target_rejected (void)
+{
+  char *path = new_path ("readonly-config");
+  overwrite_file_with_bytes (path, "old", 3);
+  wchar_t *wpath = _xy_win_wstr (path);
+  assert (NULL != wpath);
+  assert (SetFileAttributesW (wpath, FILE_ATTRIBUTE_READONLY));
+
+  FileUpdate_t op = plan_file_update (path, "new", 3);
+  size_t entries = get_TestRootDir_entries_count ();
+  char *err = NULL;
+  assert (FileUpdate_Failed == chsrc_update_files (&op, 1, &err));
+  assert (NULL != err);
+  free (err);
+  assert_file_with_bytes (path, "old", 3);
+  assert (entries == get_TestRootDir_entries_count ());
+
+  assert (SetFileAttributesW (wpath, FILE_ATTRIBUTE_NORMAL));
+  free (wpath);
+  free (op.old_content);
+  free (path);
+}
+
+#endif
+
 /* 缺失计划或把目录当作文件时，必须在写入前拒绝。 */
 static void
 test_invalid_update_plans (void)
@@ -300,33 +510,37 @@ test_invalid_update_plans (void)
   free (err);
   assert (entries == get_TestRootDir_entries_count ());
 }
-#endif
 
 int
 main (void)
 {
-#ifndef XY_Build_On_Windows
+#ifdef XY_Build_On_Windows
+  init_test_root ();
+#else
   assert (NULL != mkdtemp (Test_Root));
   assert (0 == setenv ("HOME", Test_Root, 1));
+#endif
   xy_init ();
   setvbuf (stdout, NULL, _IOLBF, 0);
   test_binary_update_and_noop ();
   test_dry_run_has_no_side_effects ();
   test_commit_rollback ();
   test_stale_snapshot_rejects_batch ();
+  test_duplicate_existing_targets ();
+#ifndef XY_Build_On_Windows
   test_symlink_and_duplicate_targets ();
+#endif
   test_duplicate_new_paths ();
   test_empty_content ();
+#ifndef XY_Build_On_Windows
   test_dangling_symlink_target ();
+#endif
+#ifdef XY_Build_On_Windows
+  test_readonly_target_rejected ();
+#endif
   test_invalid_update_plans ();
   get_TestRootDir_entries_count ();
-  /* Test_Root 只能来自上面的固定 mkdtemp 模板；失败时保留现场。 */
-  char *cleanup = xy_strcat (3, "rm -rf -- \"", Test_Root, "\"");
-  assert (0 == system (cleanup));
-  free (cleanup);
-  puts ("file-update: all 9 test groups passed");
-#else
-  puts ("file-update: POSIX update tests skipped on Windows");
-#endif
+  cleanup_test_root ();
+  puts ("file-update: all test groups passed");
   return 0;
 }
