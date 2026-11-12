@@ -8,12 +8,11 @@
  * Created On    : <2026-10-28>
  * Last Modified : <2026-11-12>
  *
- * 通用文件内容读取与 POSIX 批量更新；在 OS.c 之后引入。
+ * 文件更新统一入口；按平台包含 POSIX 或 Win32 后端。
  * 本层只处理字节，不解释配置语法、镜像地址或管理区块。
  * ------------------------------------------------------------*/
 
 #include <errno.h>
-#include <sys/stat.h>
 
 typedef enum FileUpdateResult_t
 {
@@ -24,7 +23,7 @@ typedef enum FileUpdateResult_t
 FileUpdateResult_t;
 
 /* 路径与缓冲区均由调用方持有，提交完成前不得修改或释放。
- * norm_path 是规范化后的路径；长度不包含用于方便文本处理的尾部 NUL。
+ * norm_path 是平台相关路径；长度不包含用于方便文本处理的尾部 NUL。
  * 已有文件的新内容为空时截断文件；不存在且新内容为空时不创建文件。
  * 不提供删除文件操作，也不负责判断某条配置是否由 chsrc 管理。 */
 typedef struct FileUpdate_t
@@ -39,8 +38,6 @@ typedef struct FileUpdate_t
 }
 FileUpdate_t;
 
-#ifndef XY_Build_On_Windows
-
 #ifdef CHSRC_TESTING
 /* 仅测试构建可用：把批次中下标等于该值的提交强制判为失败，用于验证回滚；
  * -1 表示不注入。测试在调用前设为目标下标，验证完成后立即恢复为 -1。 */
@@ -52,9 +49,14 @@ typedef struct StagedFileUpdate_t
   char *target;
   char *replacement;
   char *rollback;
-  bool committed;
-  bool keep_rollback;
-  bool duplicate;
+  bool  committed;
+  bool  keep_rollback;
+  bool  duplicate;
+#ifdef XY_Build_On_Windows
+  wchar_t *target_w;
+  wchar_t *replacement_w;
+  wchar_t *rollback_w;
+#endif
 }
 StagedFileUpdate_t;
 
@@ -65,123 +67,16 @@ file_update_changed (const FileUpdate_t *op)
     || (op->old_len > 0 && 0 != memcmp (op->old_content, op->new_content, op->old_len));
 }
 
-static bool
-file_update_create_parent_dirs (const char *path)
-{
-  char *dir = xy_parent_dir (path);
-  for (char *p = dir + 1; *p; p++)
-    {
-      if ('/' != *p) continue;
-      *p = '\0';
-      int retcode = mkdir (dir, 0777);
-      *p = '/';
-      if (0 != retcode && EEXIST != errno) { free (dir); return false; }
-    }
-  bool ok = 0 == mkdir (dir, 0777) || EEXIST == errno;
-  free (dir);
-  return ok;
-}
-
-/* 在目标文件同目录创建临时文件并写入指定字节；保留原文件的属主与权限。
- * 失败时删除临时文件并返回 NULL，errno 保持失败原因。 */
-static char *
-file_update_write_temp_file (const char *target, const char *bytes, size_t len,
-                             const struct stat *original)
-{
-  char *path = xy_2strcat (target, ".chsrc-XXXXXX");
-  int fd = mkstemp (path);
-  if (fd < 0) { free (path); return NULL; }
-  bool ok = true;
-  if (original)
-    {
-      struct stat created;
-      ok = 0 == fstat (fd, &created);
-      if (ok && (created.st_uid != original->st_uid || created.st_gid != original->st_gid))
-        ok = 0 == fchown (fd, original->st_uid, original->st_gid);
-      if (ok) ok = 0 == fchmod (fd, original->st_mode & 07777);
-    }
-  else
-    {
-      /* 与普通配置文件的创建方式保持一致：/etc/environment 必须能被
-       * 登录会话读取。本 CLI 为单线程，读取并恢复 umask 不会产生竞争。 */
-      mode_t mask = umask (0);
-      umask (mask);
-      ok = 0 == fchmod (fd, 0666 & ~mask);
-    }
-  FILE *fp = ok ? fdopen (fd, "wb") : NULL;
-  if (!fp)
-    {
-      int err = errno;
-      close (fd);
-      unlink (path);
-      free (path);
-      errno = err;
-      return NULL;
-    }
-  ok = 0 == len || len == fwrite (bytes, 1, len, fp);
-  if (ok) ok = 0 == fflush (fp);
-  if (ok) ok = 0 == fsync (fd);
-  int err = errno;
-  if (0 != fclose (fp)) { ok = false; err = errno; }
-  if (!ok)
-    {
-      unlink (path);
-      free (path);
-      errno = err;
-      return NULL;
-    }
-  return path;
-}
-
-/* 解析已有符号链接，替换其目标以保留链接本身；再把新内容与回滚内容
- * 写入同目录临时文件。旧快照已被外部修改时以 EAGAIN 拒绝整批更新。 */
-static bool
-file_update_stage (const FileUpdate_t *op, StagedFileUpdate_t *stage)
-{
-  struct stat st;
-  if (op->existed)
-    {
-      stage->target = realpath (op->norm_path, NULL);
-      if (!stage->target || 0 != stat (stage->target, &st)) return false;
-      if (!S_ISREG (st.st_mode)) { errno = EINVAL; return false; }
-      if (0 != access (stage->target, W_OK)) return false;
-      char *current = NULL;
-      size_t len = 0;
-      if (!xy_file_read_bytes (stage->target, &current, &len)) return false;
-      bool same = len == op->old_len && (0 == len || 0 == memcmp (current, op->old_content, len));
-      free (current);
-      if (!same) { errno = EAGAIN; return false; }
-    }
-  else
-    {
-      /* 不替换悬空符号链接，也不替换计划生成后才出现的路径。 */
-      if (0 == lstat (op->norm_path, &st)) { errno = EEXIST; return false; }
-      if (ENOENT != errno || !file_update_create_parent_dirs (op->norm_path)) return false;
-      char *dir = xy_parent_dir (op->norm_path);
-      char *resolved = realpath (dir, NULL);
-      free (dir);
-      if (!resolved) return false;
-      const char *name = strrchr (op->norm_path, '/');
-      stage->target = xy_path_join (resolved, name ? name + 1 : op->norm_path);
-      free (resolved);
-    }
-  stage->replacement = file_update_write_temp_file (stage->target, op->new_content, op->new_len,
-                                                    op->existed ? &st : NULL);
-  if (!stage->replacement) return false;
-  if (op->existed)
-    {
-      stage->rollback = file_update_write_temp_file (stage->target, op->old_content, op->old_len, &st);
-      if (!stage->rollback) return false;
-    }
-  return true;
-}
+#ifdef XY_Build_On_Windows
+#include "file-update-win32.c"
+#else
+#include "file-update-posix.c"
+#endif
 
 /* 全部内容由调用方预先生成。本层比较字节并复核旧快照，再暂存、备份、替换。
  * 无变化时不写入、不备份；Dry Run 只显示将要修改的文件。
  * 每个文件原子替换，后续失败回滚已替换文件；不保证崩溃时的多文件原子性。
- * 保留符号链接和目标的属主、属组、权限位；尚不复制 ACL 与扩展属性。
- * 复核快照不能消除外部写入竞态，调用方仍应避免并发修改同一配置。
- * out_err 可为 NULL，否则失败文案由调用方释放。 */
+ * 平台后端负责保留符号链接及权限/ACL；复核快照不能消除外部写入竞态。 */
 static FileUpdateResult_t
 chsrc_update_files (const FileUpdate_t *ops, size_t count, char **out_err)
 {
@@ -227,7 +122,7 @@ chsrc_update_files (const FileUpdate_t *ops, size_t count, char **out_err)
       /* Shell 启动文件可能互为符号链接：相同更新合并，冲突更新拒绝。 */
       for (size_t j = 0; j < i; j++)
         {
-          if (stages[j].target && xy_streql (stages[j].target, stages[i].target))
+          if (stages[j].target && file_update_same_target (&stages[j], &stages[i]))
             {
               if (ops[j].new_len != ops[i].new_len
                   || (ops[i].new_len > 0 && 0 != memcmp (ops[j].new_content, ops[i].new_content, ops[i].new_len)))
@@ -254,7 +149,7 @@ chsrc_update_files (const FileUpdate_t *ops, size_t count, char **out_err)
       if ((int) i == FileUpdate_Test_Fail_Commit) { errno = EIO; retcode = -1; }
       else
 #endif
-        retcode = rename (stages[i].replacement, stages[i].target);
+        retcode = file_update_commit (&stages[i], &ops[i]) ? 0 : -1;
       if (0 != retcode) { failed = i; err = errno; ok = false; break; }
       stages[i].committed = true;
     }
@@ -265,9 +160,7 @@ chsrc_update_files (const FileUpdate_t *ops, size_t count, char **out_err)
         {
           size_t i = n - 1;
           if (!stages[i].committed) continue;
-          int retcode = ops[i].existed ? rename (stages[i].rollback, stages[i].target)
-                                      : unlink (stages[i].target);
-          if (0 != retcode)
+          if (!file_update_rollback (&stages[i], &ops[i]))
             {
               rollback_ok = false;
               stages[i].keep_rollback = true;
@@ -291,15 +184,7 @@ chsrc_update_files (const FileUpdate_t *ops, size_t count, char **out_err)
     }
 
   for (size_t i = 0; i < count; i++)
-    {
-      if (stages[i].replacement) unlink (stages[i].replacement);
-      if (stages[i].rollback && !stages[i].keep_rollback) unlink (stages[i].rollback);
-      free (stages[i].target);
-      free (stages[i].replacement);
-      free (stages[i].rollback);
-    }
+    file_update_discard (&stages[i]);
   free (stages);
   return ok ? FileUpdate_OK : FileUpdate_Failed;
 }
-
-#endif /* !XY_Build_On_Windows */
