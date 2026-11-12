@@ -481,10 +481,11 @@ chsrc_make_tmpfile (const char *filename, const char *postfix, bool loud, char *
    * GetTempFileNameW() 不支持指定后缀；若先创建、删除再用目标后缀重建，
    * 删除和重新创建之间会产生竞态。因此这里直接生成随机文件名。
    */
-  WCHAR temp_dir[MAX_PATH + 2];
-  DWORD temp_dir_len = GetTempPath2W (MAX_PATH + 2, temp_dir);
+  /* 与 chsrc_make_tmpdir() 相同：返回值 MAX_PATH + 1 表示缓冲区不足，路径不保证以 NUL 结尾。 */
+  WCHAR temp_dir[MAX_PATH + 2] = {0};
+  DWORD temp_dir_len = GetTempPathW (MAX_PATH + 1, temp_dir);
 
-  if (0 == temp_dir_len || temp_dir_len >= MAX_PATH + 2)
+  if (0 == temp_dir_len || temp_dir_len >= MAX_PATH + 1)
     {
       chsrc_error2 (CHINESE
         ? "无法获取系统临时目录"
@@ -687,14 +688,19 @@ char *
 chsrc_make_tmpdir (const char *prefix, char **out_err)
 {
 #ifdef XY_Build_On_Windows
-  WCHAR temp_dir[MAX_PATH + 2];
-  DWORD tlen = GetTempPath2W (MAX_PATH + 2, temp_dir);
-  if (0 == tlen || tlen >= MAX_PATH + 2)
+  /*
+   * GetTempPathW() 成功时返回不含结尾 NUL 的长度；缓冲区不足时返回所需长度（含 NUL），
+   * 最大为 MAX_PATH + 1。故返回值等于 MAX_PATH + 1 一定是失败而非有效长度：若接受它，
+   * temp_dir 可能没有 NUL 结尾，xy_wstr_to_utf8() 会越界读取。
+   */
+  WCHAR temp_dir[MAX_PATH + 2] = {0};
+  DWORD tlen = GetTempPathW (MAX_PATH + 1, temp_dir);
+  if (0 == tlen || tlen >= MAX_PATH + 1)
     {
       if (out_err)
         {
           *out_err = ENGLISH
-            ? xy_strdup ("Failed to locate the system temp directory (GetTempPath2W)")
+            ? xy_strdup ("Failed to locate the system temp directory (GetTempPathW)")
             : xy_strdup ("无法获取系统临时目录路径");
         }
       return NULL;
