@@ -142,7 +142,7 @@ cli_print_supported_dishes ()
 void
 cli_print_menu (char *menu)
 {
-  if (xy_streql (menu, "pl"))
+  if (xy_streql_ic (menu, "pl"))
     {
       char *msg =
         CHINESE ? "支持对以下编程语言生态换源 (同一行表示这几个菜品兼容)\n"
@@ -150,7 +150,7 @@ cli_print_menu (char *menu)
       say (bdgreen(msg));
       cli_print_dishes_for_menu (ProgStore.pl);
     }
-  else if (xy_streql (menu, "os"))
+  else if (xy_streql_ic (menu, "os"))
     {
       char *msg =
         CHINESE ? "支持对以下操作系统换源 (同一行表示这几个菜品兼容)\n"
@@ -158,7 +158,7 @@ cli_print_menu (char *menu)
       say (bdgreen(msg));
       cli_print_dishes_for_menu (ProgStore.os);
     }
-  else if (xy_streql (menu, "wr"))
+  else if (xy_streql_ic (menu, "wr"))
     {
       char *msg =
         CHINESE ? "支持对以下软件换源 (同一行表示这几个菜品兼容)\n"

@@ -17,7 +17,7 @@
 int
 main (int argc, char const *argv[])
 {
-  if (argc == 2 && xy_streql (argv[1], "--version"))
+  if (argc == 2 && xy_streql_ic (argv[1], "--version"))
     {
       say (Chsrc_Version);
       return 0;

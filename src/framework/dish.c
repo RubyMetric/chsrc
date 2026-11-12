@@ -107,10 +107,10 @@ dish_has_source_from_mirror (Dish_t *dish, const char *mirror_code)
   if (!dish || !dish->sources || !mirror_code)
     return false;
 
-  if (xy_streql (mirror_code, "upstream"))
+  if (xy_streql_ic (mirror_code, "upstream"))
     return dish->sources_n > 0;
 
-  if (xy_streql (mirror_code, "first"))
+  if (xy_streql_ic (mirror_code, "first"))
     return dish->sources_n > 1;
 
   for (int i=0; i < dish->sources_n; i++)
@@ -250,7 +250,7 @@ dish_select_source_by_mirror_code (Dish_t *dish, char *mirror_code)
       chsrc_succ (xy_strcat (4, name, msg1, dish_name, msg2));
     }
 
-  if (xy_streql ("first", mirror_code))
+  if (xy_streql_ic ("first", mirror_code))
     {
       char *msg = ENGLISH ? "Will use the first speedy source measured by maintainers" : "将使用维护团队测速第一的源";
       say (msg);

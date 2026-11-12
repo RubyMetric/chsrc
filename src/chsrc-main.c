@@ -135,21 +135,21 @@ main (int argc, char const *argv[])
 
       if (xy_str_start_with (arg, "-"))
         {
-          if (xy_streql (arg, "-ipv6"))
+          if (xy_streql_ic (arg, "-ipv6"))
             {
               ProgMode.Ipv6Mode = true;
             }
-          else if (xy_streql (arg, "-local"))
+          else if (xy_streql_ic (arg, "-local"))
             {
               ProgMode.Scope = ProjectScope;
               char *msg = CHINESE ? " -local 选项已弃用，请使用 -scope=project"
                                   : " -local is deprecated, please use -scope=project";
               chsrc_warn (msg);
             }
-          else if (xy_streql (arg, "-scope") || xy_str_start_with (arg, "-scope="))
+          else if (xy_streql_ic (arg, "-scope") || xy_str_start_with (arg, "-scope="))
             {
               const char *scope = NULL;
-              if (xy_streql (arg, "-scope"))
+              if (xy_streql_ic (arg, "-scope"))
                 {
                   if (i + 1 > argc)
                     {
@@ -159,8 +159,6 @@ main (int argc, char const *argv[])
                       return Exit_Unknown;
                     }
                   scope = argv[++i];
-                  cli_arg_Dish_pos++;
-                  cli_arg_Mirror_pos++;
                 }
               else
                 {
@@ -197,30 +195,30 @@ main (int argc, char const *argv[])
                   return Exit_Unknown;
                 }
             }
-          else if (xy_streql (arg, "-en") || xy_streql (arg, "-english"))
+          else if (xy_streql_ic (arg, "-en") || xy_streql_ic (arg, "-english"))
             {
               ProgMode.EnglishMode = true;
             }
-          else if (   xy_streql (arg, "-dry")
-                   || xy_streql (arg, "--dry")
-                   || xy_streql (arg, "--dry-run"))
+          else if (   xy_streql_ic (arg, "-dry")
+                   || xy_streql_ic (arg, "--dry")
+                   || xy_streql_ic (arg, "--dry-run"))
             {
               ProgMode.DryRunMode = true;
             }
-          else if (xy_streql (arg, "-no-color") || xy_streql (arg, "-no-colour"))
+          else if (xy_streql_ic (arg, "-no-color") || xy_streql_ic (arg, "-no-colour"))
             {
               ProgMode.NoColorMode = true;
               xy.enable_color = false;
             }
-          else if (    xy_streql (arg, "-h")
-                    || xy_streql (arg, "-help")
-                    || xy_streql (arg, "--help"))
+          else if (    xy_streql_ic (arg, "-h")
+                    || xy_streql_ic (arg, "-help")
+                    || xy_streql_ic (arg, "--help"))
             {
               command = "help"; /* 交到下方处理 */
             }
-          else if (    xy_streql (arg, "-v")
-                    || xy_streql (arg, "-version")
-                    || xy_streql (arg, "--version"))
+          else if (    xy_streql_ic (arg, "-v")
+                    || xy_streql_ic (arg, "-version")
+                    || xy_streql_ic (arg, "--version"))
             {
               command = "version"; /* 交到下方处理 */
             }
@@ -248,15 +246,15 @@ main (int argc, char const *argv[])
       return Exit_OK;
     }
 
-  bool is_set_or_reset =    xy_streql (command, "set")   || xy_streql (command, "s")
-                         || xy_streql (command, "reset") || xy_streql (command, "rest")
-                         || xy_streql (command, "r");
+  bool is_set_or_reset =    xy_streql_ic (command, "set")   || xy_streql_ic (command, "s")
+                         || xy_streql_ic (command, "reset") || xy_streql_ic (command, "rest")
+                         || xy_streql_ic (command, "r");
 
-  bool is_help_or_version =    xy_streql (command, "help")    || xy_streql (command, "h")
-                            || xy_streql (command, "-h")      || xy_streql (command, "-help")
-                            || xy_streql (command, "--help")
-                            || xy_streql (command, "version") || xy_streql (command, "-v")
-                            || xy_streql (command, "-version") || xy_streql (command, "--version");
+  bool is_help_or_version =    xy_streql_ic (command, "help")     || xy_streql_ic (command, "h")
+                            || xy_streql_ic (command, "-h")       || xy_streql_ic (command, "-help")
+                            || xy_streql_ic (command, "--help")
+                            || xy_streql_ic (command, "version")  || xy_streql_ic (command, "-v")
+                            || xy_streql_ic (command, "-version") || xy_streql_ic (command, "--version");
 
   if (chsrc_in_dry_run_mode() && !is_set_or_reset && !is_help_or_version)
     {
@@ -276,31 +274,31 @@ main (int argc, char const *argv[])
     }
 
   /* chsrc help */
-  if (   xy_streql (command, "h")
-      || xy_streql (command, "-h")
-      || xy_streql (command, "help")
-      || xy_streql (command, "-help")
-      || xy_streql (command, "--help"))
+  if (   xy_streql_ic (command, "h")
+      || xy_streql_ic (command, "-h")
+      || xy_streql_ic (command, "help")
+      || xy_streql_ic (command, "-help")
+      || xy_streql_ic (command, "--help"))
     {
       cli_print_help ();
       return Exit_OK;
     }
 
   /* chsrc -v */
-  else if (   xy_streql (command, "-v")
-           || xy_streql (command, "-version")
-           || xy_streql (command, "--version")
-           || xy_streql (command, "ver")
-           || xy_streql (command, "version"))
+  else if (   xy_streql_ic (command, "-v")
+           || xy_streql_ic (command, "-version")
+           || xy_streql_ic (command, "--version")
+           || xy_streql_ic (command, "ver")
+           || xy_streql_ic (command, "version"))
     {
       cli_print_version ();
       return Exit_OK;
     }
 
   /* chsrc list */
-  else if (   xy_streql (command, "list")
-           || xy_streql (command, "l")
-           || xy_streql (command, "ls"))
+  else if (   xy_streql_ic (command, "list")
+           || xy_streql_ic (command, "l")
+           || xy_streql_ic (command, "ls"))
     {
       if (!dish_name)
         {
@@ -310,37 +308,37 @@ main (int argc, char const *argv[])
         }
       else
         {
-          if (   xy_streql (dish_name, "mirrors")
-              || xy_streql (dish_name, "mirror"))
+          if (   xy_streql_ic (dish_name, "mirrors")
+              || xy_streql_ic (dish_name, "mirror"))
             {
               cli_print_all_mirror_sites ();
               return Exit_OK;
             }
 
-          else if (   xy_streql (dish_name, "dishes")
-                   || xy_streql (dish_name, "dish")
-                   || xy_streql (dish_name, "dishs")) /* 防止有人错误拼写 */
+          else if (   xy_streql_ic (dish_name, "dishes")
+                   || xy_streql_ic (dish_name, "dish")
+                   || xy_streql_ic (dish_name, "dishs")) /* 防止有人错误拼写 */
             {
               cli_print_supported_dishes ();
               return Exit_OK;
             }
 
-          else if (xy_streql (dish_name, "os"))
+          else if (xy_streql_ic (dish_name, "os"))
             {
               cli_print_menu ("os");
               return Exit_OK;
             }
 
-          else if (   xy_streql (dish_name, "lang")
-                   || xy_streql (dish_name, "pl")
-                   || xy_streql (dish_name, "language"))
+          else if (   xy_streql_ic (dish_name, "lang")
+                   || xy_streql_ic (dish_name, "pl")
+                   || xy_streql_ic (dish_name, "language"))
             {
               cli_print_menu ("pl");
               return Exit_OK;
             }
 
-          else if (   xy_streql (dish_name, "ware")
-                   || xy_streql (dish_name, "software"))
+          else if (   xy_streql_ic (dish_name, "ware")
+                   || xy_streql_ic (dish_name, "software"))
             {
               cli_print_menu ("wr");
               return Exit_OK;
@@ -363,12 +361,12 @@ main (int argc, char const *argv[])
 #define MSG_ZH_USE_LIST_TARGETS "使用 chsrc list dishes 查看所有支持的菜品"
 
   /* chsrc measure */
-  else if (   xy_streql (command, "measure")
-           || xy_streql (command, "mea")
-           || xy_streql (command, "m")
-           || xy_streql (command, "cesu")
-           || xy_streql (command, "ce")
-           || xy_streql (command, "c"))
+  else if (   xy_streql_ic (command, "measure")
+           || xy_streql_ic (command, "mea")
+           || xy_streql_ic (command, "m")
+           || xy_streql_ic (command, "cesu")
+           || xy_streql_ic (command, "ce")
+           || xy_streql_ic (command, "c"))
     {
       if (!dish_name)
         {
@@ -393,8 +391,8 @@ main (int argc, char const *argv[])
 
 
   /* chsrc get */
-  else if (   xy_streql (command, "get")
-           || xy_streql (command, "g"))
+  else if (   xy_streql_ic (command, "get")
+           || xy_streql_ic (command, "g"))
     {
       if (!dish_name)
         {
@@ -416,8 +414,8 @@ main (int argc, char const *argv[])
     }
 
   /* chsrc set */
-  else if (   xy_streql (command, "set")
-           || xy_streql (command, "s"))
+  else if (   xy_streql_ic (command, "set")
+           || xy_streql_ic (command, "s"))
     {
       if (!dish_name)
         {
@@ -440,9 +438,9 @@ main (int argc, char const *argv[])
     }
 
   /* chsrc reset */
-  else if (   xy_streql (command, "reset")
-           || xy_streql (command, "rest")
-           || xy_streql (command, "r"))
+  else if (   xy_streql_ic (command, "reset")
+           || xy_streql_ic (command, "rest")
+           || xy_streql_ic (command, "r"))
     {
       if (!dish_name)
         {
@@ -466,10 +464,10 @@ main (int argc, char const *argv[])
     }
 
   /* chsrc issue */
-  else if (   xy_streql (command, "issue")
-           || xy_streql (command, "issues")
-           || xy_streql (command, "isue")
-           || xy_streql (command, "i"))
+  else if (   xy_streql_ic (command, "issue")
+           || xy_streql_ic (command, "issues")
+           || xy_streql_ic (command, "isue")
+           || xy_streql_ic (command, "i"))
     {
       cli_print_issues ();
       return Exit_OK;

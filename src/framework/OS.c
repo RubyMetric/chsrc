@@ -311,10 +311,11 @@ chsrc_is_root (void)
 void
 chsrc_ensure_root ()
 {
+  char *msg = NULL;
   if (chsrc_in_dry_run_mode())
     {
-      char *msg = ENGLISH ? "Dry Run: root permission is not checked"
-                          : "Dry Run: 未检查 root 权限";
+      msg = ENGLISH ? "Dry Run: root permission is not checked"
+                    : "Dry Run: 未检查 root 权限";
       chsrc_note2 (msg);
       return;
     }
@@ -331,6 +332,7 @@ chsrc_ensure_root ()
                     : "请在命令前使用 sudo 或切换为root用户来保证必要的权限";
     }
   chsrc_error (msg);
+  free (msg);
   exit (Exit_UserCause);
 }
 
