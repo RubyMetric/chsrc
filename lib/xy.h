@@ -1118,6 +1118,63 @@ xy_file_read (const char *path)
 }
 
 
+/**
+ * @brief 以二进制读取整个文件，并在末尾补一个 NUL
+ *
+ * @note 不做换行转换，按原始字节返回，适合配置文件的比较与回写
+ *
+ * @param[out] out_buf 文件内容；成功时由调用方释放，失败时置为 NULL
+ * @param[out] out_len 文件字节数，不含末尾补充的 NUL
+ *
+ * @return 是否读取成功；失败时保留 errno
+ *
+ * @memory SAFE
+ *   param[out] `out_buf` caller-free
+ */
+static bool
+xy_file_read_bytes (const char *path, char **out_buf, size_t *out_len)
+{
+  *out_buf = NULL;
+  *out_len = 0;
+  FILE *fp = xy_fopen (path, "rb");
+  if (!fp)
+    return false;
+
+  size_t cap = 4096;
+  size_t len = 0;
+  char *buf = xy_malloc0 (cap);
+  bool ok = true;
+  int err = 0;
+  for (;;)
+    {
+      if (len == cap - 1)
+        {
+          if (cap > SIZE_MAX / 2) { ok = false; err = EOVERFLOW; break; }
+          size_t next_cap = cap * 2;
+          char *grown = realloc (buf, next_cap);
+          if (!grown) { ok = false; err = ENOMEM; break; }
+          buf = grown;
+          cap = next_cap;
+        }
+      size_t n = fread (buf + len, 1, cap - len - 1, fp);
+      len += n;
+      if (ferror (fp)) { ok = false; err = errno; break; }
+      if (feof (fp)) break;
+    }
+  if (0 != fclose (fp)) { ok = false; err = errno; }
+  if (!ok)
+    {
+      free (buf);
+      errno = err;
+      return false;
+    }
+  buf[len] = '\0';
+  *out_buf = buf;
+  *out_len = len;
+  return true;
+}
+
+
 
 /******************************************************
  *                      Logging

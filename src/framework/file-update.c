@@ -1,6 +1,13 @@
 /** ------------------------------------------------------------
  * SPDX-License-Identifier: GPL-3.0-or-later
  * -------------------------------------------------------------
+ * File Name     : file-update.c
+ * File Authors  : @Mikachu2333
+ * Contributors  : @ccmywish
+ *               |
+ * Created On    : <2026-10-28>
+ * Last Modified : <2026-11-12>
+ *
  * 通用文件内容读取与 POSIX 批量更新；在 OS.c 之后引入。
  * 本层只处理字节，不解释配置语法、镜像地址或管理区块。
  * ------------------------------------------------------------*/
@@ -31,49 +38,6 @@ typedef struct FileUpdate_t
   size_t      new_len;
 }
 FileUpdate_t;
-
-/* 二进制读取，额外补一个 NUL；成功时 *out_buf 由调用方释放。 */
-static bool
-chsrc_read_file_bytes (const char *path, char **out_buf, size_t *out_len)
-{
-  *out_buf = NULL;
-  *out_len = 0;
-  FILE *fp = xy_fopen (path, "rb");
-  if (!fp) return false;
-
-  size_t cap = 4096;
-  size_t len = 0;
-  char *buf = xy_malloc0 (cap);
-  bool ok = true;
-  int err = 0;
-  for (;;)
-    {
-      if (len == cap - 1)
-        {
-          if (cap > SIZE_MAX / 2) { ok = false; err = EOVERFLOW; break; }
-          size_t next_cap = cap * 2;
-          char *grown = realloc (buf, next_cap);
-          if (!grown) { ok = false; err = ENOMEM; break; }
-          buf = grown;
-          cap = next_cap;
-        }
-      size_t n = fread (buf + len, 1, cap - len - 1, fp);
-      len += n;
-      if (ferror (fp)) { ok = false; err = errno; break; }
-      if (feof (fp)) break;
-    }
-  if (0 != fclose (fp)) { ok = false; err = errno; }
-  if (!ok)
-    {
-      free (buf);
-      errno = err;
-      return false;
-    }
-  buf[len] = '\0';
-  *out_buf = buf;
-  *out_len = len;
-  return true;
-}
 
 #ifndef XY_Build_On_Windows
 
@@ -109,18 +73,20 @@ file_update_create_parent_dirs (const char *path)
     {
       if ('/' != *p) continue;
       *p = '\0';
-      int rc = mkdir (dir, 0777);
+      int retcode = mkdir (dir, 0777);
       *p = '/';
-      if (0 != rc && EEXIST != errno) { free (dir); return false; }
+      if (0 != retcode && EEXIST != errno) { free (dir); return false; }
     }
   bool ok = 0 == mkdir (dir, 0777) || EEXIST == errno;
   free (dir);
   return ok;
 }
 
+/* 在目标文件同目录创建临时文件并写入指定字节；保留原文件的属主与权限。
+ * 失败时删除临时文件并返回 NULL，errno 保持失败原因。 */
 static char *
-file_update_stage_bytes (const char *target, const char *bytes, size_t len,
-                  const struct stat *original)
+file_update_write_temp_file (const char *target, const char *bytes, size_t len,
+                             const struct stat *original)
 {
   char *path = xy_2strcat (target, ".chsrc-XXXXXX");
   int fd = mkstemp (path);
@@ -136,8 +102,8 @@ file_update_stage_bytes (const char *target, const char *bytes, size_t len,
     }
   else
     {
-      /* Match normal configuration-file creation; /etc/environment must
-       * remain readable by login sessions. This CLI is single-threaded. */
+      /* 与普通配置文件的创建方式保持一致：/etc/environment 必须能被
+       * 登录会话读取。本 CLI 为单线程，读取并恢复 umask 不会产生竞争。 */
       mode_t mask = umask (0);
       umask (mask);
       ok = 0 == fchmod (fd, 0666 & ~mask);
@@ -154,7 +120,7 @@ file_update_stage_bytes (const char *target, const char *bytes, size_t len,
     }
   ok = 0 == len || len == fwrite (bytes, 1, len, fp);
   if (ok) ok = 0 == fflush (fp);
-  if (ok) ok = 0 == fsync (fileno (fp));
+  if (ok) ok = 0 == fsync (fd);
   int err = errno;
   if (0 != fclose (fp)) { ok = false; err = errno; }
   if (!ok)
@@ -167,9 +133,10 @@ file_update_stage_bytes (const char *target, const char *bytes, size_t len,
   return path;
 }
 
-/* Resolve existing symlinks so replacing the target preserves the link. */
+/* 解析已有符号链接，替换其目标以保留链接本身；再把新内容与回滚内容
+ * 写入同目录临时文件。旧快照已被外部修改时以 EAGAIN 拒绝整批更新。 */
 static bool
-file_update_prepare (const FileUpdate_t *op, StagedFileUpdate_t *stage)
+file_update_stage (const FileUpdate_t *op, StagedFileUpdate_t *stage)
 {
   struct stat st;
   if (op->existed)
@@ -180,14 +147,14 @@ file_update_prepare (const FileUpdate_t *op, StagedFileUpdate_t *stage)
       if (0 != access (stage->target, W_OK)) return false;
       char *current = NULL;
       size_t len = 0;
-      if (!chsrc_read_file_bytes (stage->target, &current, &len)) return false;
+      if (!xy_file_read_bytes (stage->target, &current, &len)) return false;
       bool same = len == op->old_len && (0 == len || 0 == memcmp (current, op->old_content, len));
       free (current);
       if (!same) { errno = EAGAIN; return false; }
     }
   else
     {
-      /* Do not replace a dangling symlink or a target created after planning. */
+      /* 不替换悬空符号链接，也不替换计划生成后才出现的路径。 */
       if (0 == lstat (op->norm_path, &st)) { errno = EEXIST; return false; }
       if (ENOENT != errno || !file_update_create_parent_dirs (op->norm_path)) return false;
       char *dir = xy_parent_dir (op->norm_path);
@@ -198,12 +165,12 @@ file_update_prepare (const FileUpdate_t *op, StagedFileUpdate_t *stage)
       stage->target = xy_path_join (resolved, name ? name + 1 : op->norm_path);
       free (resolved);
     }
-  stage->replacement = file_update_stage_bytes (stage->target, op->new_content, op->new_len,
-                                        op->existed ? &st : NULL);
+  stage->replacement = file_update_write_temp_file (stage->target, op->new_content, op->new_len,
+                                                    op->existed ? &st : NULL);
   if (!stage->replacement) return false;
   if (op->existed)
     {
-      stage->rollback = file_update_stage_bytes (stage->target, op->old_content, op->old_len, &st);
+      stage->rollback = file_update_write_temp_file (stage->target, op->old_content, op->old_len, &st);
       if (!stage->rollback) return false;
     }
   return true;
@@ -255,23 +222,25 @@ chsrc_update_files (const FileUpdate_t *ops, size_t count, char **out_err)
   for (size_t i = 0; i < count; i++)
     {
       if (!file_update_changed (&ops[i])) continue;
-      if (!file_update_prepare (&ops[i], &stages[i]))
+      if (!file_update_stage (&ops[i], &stages[i]))
         { failed = i; err = errno; ok = false; break; }
       /* Shell 启动文件可能互为符号链接：相同更新合并，冲突更新拒绝。 */
       for (size_t j = 0; j < i; j++)
-        if (stages[j].target && xy_streql (stages[j].target, stages[i].target))
-          {
-            if (ops[j].new_len != ops[i].new_len
-                || (ops[i].new_len > 0 && 0 != memcmp (ops[j].new_content, ops[i].new_content, ops[i].new_len)))
-              { failed = i; err = EINVAL; ok = false; }
-            else
-              stages[i].duplicate = true;
-            break;
-          }
+        {
+          if (stages[j].target && xy_streql (stages[j].target, stages[i].target))
+            {
+              if (ops[j].new_len != ops[i].new_len
+                  || (ops[i].new_len > 0 && 0 != memcmp (ops[j].new_content, ops[i].new_content, ops[i].new_len)))
+                { failed = i; err = EINVAL; ok = false; }
+              else
+                stages[i].duplicate = true;
+              break;
+            }
+        }
       if (!ok) break;
     }
 
-  /* Finish all preparation and backups before touching the first target. */
+  /* 先完成全部暂存与备份，再开始写入第一个目标文件。 */
   if (ok)
     for (size_t i = 0; i < count; i++)
       if (file_update_changed (&ops[i]) && !stages[i].duplicate && ops[i].existed)
@@ -280,13 +249,13 @@ chsrc_update_files (const FileUpdate_t *ops, size_t count, char **out_err)
   for (size_t i = 0; ok && i < count; i++)
     {
       if (!file_update_changed (&ops[i]) || stages[i].duplicate) continue;
-      int rc;
+      int retcode;
 #ifdef CHSRC_TESTING
-      if ((int) i == FileUpdate_Test_Fail_Commit) { errno = EIO; rc = -1; }
+      if ((int) i == FileUpdate_Test_Fail_Commit) { errno = EIO; retcode = -1; }
       else
 #endif
-        rc = rename (stages[i].replacement, stages[i].target);
-      if (0 != rc) { failed = i; err = errno; ok = false; break; }
+        retcode = rename (stages[i].replacement, stages[i].target);
+      if (0 != retcode) { failed = i; err = errno; ok = false; break; }
       stages[i].committed = true;
     }
 
@@ -296,9 +265,9 @@ chsrc_update_files (const FileUpdate_t *ops, size_t count, char **out_err)
         {
           size_t i = n - 1;
           if (!stages[i].committed) continue;
-          int rc = ops[i].existed ? rename (stages[i].rollback, stages[i].target)
-                                 : unlink (stages[i].target);
-          if (0 != rc)
+          int retcode = ops[i].existed ? rename (stages[i].rollback, stages[i].target)
+                                      : unlink (stages[i].target);
+          if (0 != retcode)
             {
               rollback_ok = false;
               stages[i].keep_rollback = true;
