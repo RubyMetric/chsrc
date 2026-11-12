@@ -34,7 +34,7 @@ assert_file_with_bytes (const char *path, const char *expected, size_t expected_
 {
   char *actual = NULL;
   size_t len = 0;
-  assert (chsrc_read_file_bytes (path, &actual, &len));
+  assert (xy_file_read_bytes (path, &actual, &len));
   assert (expected_len == len);
   assert (0 == len || 0 == memcmp (actual, expected, len));
   assert ('\0' == actual[len]);
@@ -49,7 +49,7 @@ plan_file_update (char *path, char *content, size_t len)
     .new_content = content, .new_len = len
   };
   if (op.existed)
-    assert (chsrc_read_file_bytes (path, &op.old_content, &op.old_len));
+    assert (xy_file_read_bytes (path, &op.old_content, &op.old_len));
   return op;
 }
 
