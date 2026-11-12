@@ -78,6 +78,8 @@ chsrc_read_file_bytes (const char *path, char **out_buf, size_t *out_len)
 #ifndef XY_Build_On_Windows
 
 #ifdef CHSRC_TESTING
+/* 仅测试构建可用：把批次中下标等于该值的提交强制判为失败，用于验证回滚；
+ * -1 表示不注入。测试在调用前设为目标下标，验证完成后立即恢复为 -1。 */
 static int FileUpdate_Test_Fail_Commit = -1;
 #endif
 
