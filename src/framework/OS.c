@@ -1135,7 +1135,7 @@ log_anyway:
 }
 
 /**
- * @brief 尝试覆写文件，失败时返回 false 而不直接 exit，供底层模块错误码处理与单测使用
+ * @brief 尝试覆写文件，失败时返回 false 而不直接 exit，供单测使用
  */
 static bool
 chsrc_try_overwrite_file (const char *str, const char *filename)
