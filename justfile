@@ -86,9 +86,10 @@ LDLIBS_win := if os() == 'windows' {
 } else { '' }
 
 
-CFLAGS_dev_mode_prompt 	   := CFLAGS_base
-CFLAGS_debug_mode_prompt 	 := CFLAGS_base + ' ' + CFLAGS_debug
-CFLAGS_release_mode_prompt := CFLAGS_base + ' ' + CFLAGS_optimization + ' ' + CFLAGS_chk_static
+
+CFLAGS_dev_mode_prompt 	   := CFLAGS_base + ' ' + LDLIBS_win
+CFLAGS_debug_mode_prompt 	 := CFLAGS_base + ' ' + CFLAGS_debug + ' ' + LDLIBS_win
+CFLAGS_release_mode_prompt := CFLAGS_base + ' ' + CFLAGS_optimization + ' ' + CFLAGS_chk_static + ' ' + LDLIBS_win
 
 CFLAGS_dev_mode     := CFLAGS_dev_mode_prompt     + ' ' + LDLIBS_win + ' ' + CFLAGS_warn
 CFLAGS_debug_mode   := CFLAGS_debug_mode_prompt   + ' ' + LDLIBS_win + ' ' + CFLAGS_warn
@@ -152,6 +153,10 @@ test-fw:
 test-file-update:
 	@{{CC}} test/file-update.c {{CFLAGS_debug_mode}} -o {{BIN_file_update}}
 	@{{BIN_file_update}}
+
+[unix]
+test-env: build-in-dev-mode test-fw
+	@python3 test/env.py
 
 fastcheck:
 	@perl ./test/cli.pl fastcheck

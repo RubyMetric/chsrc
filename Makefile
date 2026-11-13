@@ -222,6 +222,13 @@ debug: build-in-debug-mode
 
 test: test-make-var test-xy test-fw test-file-update
 
+ifneq ($(On-Windows), 1)
+test: test-env test-file-update
+endif
+
+test-env: build-in-dev-mode test-fw
+	@python3 test/env.py
+
 test-make-var:
 	@echo "On-Linux: $(On-Linux)"
 	@echo "On-Windows: $(On-Windows)"
@@ -302,4 +309,4 @@ install: $(ReleaseMode-Target-Name)
 
 .PHONY: all b build bd br bcir d t check c \
 	build-in-dev-mode build-in-debug-mode build-in-release-mode build-in-ci-release-mode \
-	debug test test-make-var test-xy test-fw test-file-update fastcheck test-cli clean install build-deb clean-deb rawstr4c
+	debug test test-make-var test-xy test-fw test-file-update test-env fastcheck test-cli clean install build-deb clean-deb rawstr4c

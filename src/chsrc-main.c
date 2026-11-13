@@ -37,6 +37,7 @@
 #include "framework/base.c"
 #include "framework/OS.c"
 #include "framework/file-update.c"
+#include "framework/env.c"
 #include "framework/dish.c"
 #include "framework/chef.c"
 #include "framework/source.c"
