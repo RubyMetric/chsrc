@@ -26,9 +26,10 @@ just test / test-cli / fastcheck
 ## 架构速览
 
 - `src/chsrc-main.c` — 入口：`main()`、CLI 解析、输出显示
-- `src/framework/` — 核心骨架：`struct.h`（`Dish_t`/`Source_t`/`MirrorSite_t`/Chef DSL 宏定义）、`core.c`（全局状态、测速）、`chef.c`（Chef DSL 实现）、`helper.c`（`hp_*` 辅助函数）、`mirror.c`（通用镜像站）
+- `src/framework/` — 核心骨架：`struct.h`（`Dish_t`/`Source_t`/`MirrorSite_t`/Chef DSL 宏定义）、`base.c`/`OS.c`/`source.c`/`waiter.c`（全局状态、系统与文件操作、测速与命令分派）、`env.c`（跨平台环境变量幂等持久化读写：`chsrc_set_env`/`chsrc_set_env_block`/`chsrc_get_env`）、`chef.c`（Chef DSL 实现）、`helper.c`（`hp_*` 辅助函数）、`mirror.c`（通用镜像站）
 - `src/recipe/{lang,os,ware}/` — 按类别（`pl`/`os`/`wr`）组织的 recipe；新 recipe 须在 `src/recipe/menu.c` 中注册（`#include` + `add()`）才会出现在菜单中
 - `lib/xy.h` — 独立 C11 工具库（MIT）：字符串、系统检测、日志、数据结构、文件 I/O。约定 `return caller-free` 表示调用方必须释放返回值
+- `src/framework/file-update.c` — 通用字节读取与 POSIX 文件更新，在 `OS.c` 之后引入；接收旧快照和目标内容，负责幂等判断、暂存与回滚，不依赖 env 或具体配置格式。接口与配置归属方案见 `doc/12-配置文件更新.md`。
 - 执行流程：`main()` → `chsrc_init_framework()` → 解析 CLI → 在 `pl`/`os`/`wr` 菜单中匹配 dish → `preparefn()` → 按操作分派 `getfn`/`setfn`/`resetfn`
 
 概念（`Dish_t`/`Scope_t`/`SourceProvider_t`/`MirrorSite_t`/Chef DSL）与编写步骤详见 `doc/10-如何编写recipe.md`；换源/测速链接设置详见 `doc/11-如何设置换源链接与测速链接.md`。
