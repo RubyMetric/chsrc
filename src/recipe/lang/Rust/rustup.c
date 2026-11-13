@@ -107,7 +107,11 @@ pl_rust_rustup_setsrc (char *option)
 
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
-  chsrc_alert2 ("请重启终端使rustup环境变量生效");
+
+  if (chsrc_in_dry_run_mode())
+    chsrc_note2 ("Dry Run: 实际运行后请重启终端使 rustup 环境变量生效");
+  else
+    chsrc_alert2 ("请重启终端使rustup环境变量生效");
 }
 
 

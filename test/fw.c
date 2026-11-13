@@ -4,7 +4,7 @@
  * File Authors  : @ccmywish
  * Contributors  : @Mikachu2333
  * Created On    : <2024-12-14>
- * Last Modified : <2026-08-20>
+ * Last Modified : <2026-10-29>
  *
  * 该文件最好启用 DEBUG mode 编译
  * ------------------------------------------------------------*/
@@ -17,7 +17,7 @@
 int
 main (int argc, char const *argv[])
 {
-  if (argc == 2 && xy_streql (argv[1], "--version"))
+  if (argc == 2 && xy_streql_ic (argv[1], "--version"))
     {
       say (Chsrc_Version);
       return 0;
@@ -75,6 +75,24 @@ main (int argc, char const *argv[])
 
   chsrc_overwrite_file ("Line999 \nLine998\nLine997\n", tmpfile);
   assert_str (xy_file_read (tmpfile), "Line999 \nLine998\nLine997\n");
+
+  /* Dry Run 下不得修改或删除文件，也不得创建备份 */
+  ProgMode.DryRunMode = true;
+
+  chsrc_overwrite_file ("DryRun\n", tmpfile);
+  assert_str (xy_file_read (tmpfile), "Line999 \nLine998\nLine997\n");
+
+  chsrc_append_to_file ("DryRun\n", tmpfile);
+  assert_str (xy_file_read (tmpfile), "Line999 \nLine998\nLine997\n");
+
+  remove (tmpfile_bk);
+  chsrc_backup (tmpfile);
+  assert (!xy_file_exist (tmpfile_bk));
+
+  chsrc_delete_file (tmpfile);
+  assert (xy_file_exist (tmpfile));
+
+  ProgMode.DryRunMode = false;
 
   chsrc_log (xy_2strcat ("CPU arch = ", chsrc_get_cpuarch ()));
   print ("chsrc: CPU cores = ");

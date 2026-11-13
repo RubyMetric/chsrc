@@ -100,7 +100,8 @@ wr_docker_setsrc (char *option)
                   cmd = xy_str_gsub (RAWSTR_wr_docker_insert_cmd, "@1@", source.url);
                   cmd = xy_str_gsub (cmd, "@2@", WR_Docker_ConfigFile);
                   chsrc_run (cmd, RunOpt_Default);
-                  chsrc_succ2 ("源已添加");
+                  if (!chsrc_in_dry_run_mode())
+                    chsrc_succ2 ("源已添加");
                 }
             }
           else

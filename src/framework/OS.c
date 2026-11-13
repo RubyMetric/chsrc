@@ -10,7 +10,7 @@
  *               | @NewbieXvwu
  *               |
  * Created On    : <2023-08-29>
- * Last Modified : <2026-10-28>
+ * Last Modified : <2026-10-29>
  *
  * chsrc OS operations
  * ------------------------------------------------------------*/
@@ -311,11 +311,17 @@ chsrc_is_root (void)
 void
 chsrc_ensure_root ()
 {
-  if (chsrc_is_root ())
-    return;
-
   char *msg = NULL;
-  if (xy.on_windows)
+  if (chsrc_in_dry_run_mode())
+    {
+      msg = ENGLISH ? "Dry Run: root permission is not checked"
+                    : "Dry Run: 未检查 root 权限";
+      chsrc_note2 (msg);
+      return;
+    }
+
+  char *euid = getenv ("$EUID");
+  if (NULL==euid)
     {
       msg = ENGLISH ? "Please run the terminal as Administrator to ensure the necessary permissions"
                     : "请以管理员身份运行终端来保证必要的权限";
@@ -326,6 +332,7 @@ chsrc_ensure_root ()
                     : "请在命令前使用 sudo 或切换为root用户来保证必要的权限";
     }
   chsrc_error (msg);
+  free (msg);
   exit (Exit_UserCause);
 }
 
@@ -336,6 +343,19 @@ chsrc_ensure_root ()
 #define RunOpt_Dont_Abort_On_Failure  0x1000  // 命令运行失败也不退出
 
 static void
+log_for_run_cmd (const char *cmd)
+{
+  char *msg = NULL;
+  if (chsrc_in_dry_run_mode())
+    msg = ENGLISH ? "DRY RUN" : "模拟运行";
+  else
+    msg = ENGLISH ? "RUN" : "运行";
+
+  xy_log_brkt (blue (App_Name), bdblue (msg), blue (cmd));
+}
+
+
+static void
 chsrc_run (const char *cmd, int run_option)
 {
   if (ProgStatus.chsrc_run_faas)
@@ -344,14 +364,13 @@ chsrc_run (const char *cmd, int run_option)
     }
   else
     {
-      if (ENGLISH)
-        xy_log_brkt (blue (App_Name), bdblue ("RUN"), blue (cmd));
-      else
-        xy_log_brkt (blue (App_Name), bdblue ("运行"), blue (cmd));
+      log_for_run_cmd (cmd);
     }
 
-  if (in_dry_run_mode())
+  if (chsrc_in_dry_run_mode())
     {
+      if (! (RunOpt_No_Last_New_Line & run_option))
+        br();
       return; // Dry Run 此时立即结束，并不真正执行
     }
 
@@ -403,12 +422,9 @@ chsrc_run_as_a_service (const char *cmd)
 int
 chsrc_run_directly (const char *cmd)
 {
-  if (ENGLISH)
-    xy_log_brkt (blue (App_Name), bdblue ("RUN"), blue (cmd));
-  else
-    xy_log_brkt (blue (App_Name), bdblue ("运行"), blue (cmd));
+  log_for_run_cmd (cmd);
 
-  if (in_dry_run_mode())
+  if (chsrc_in_dry_run_mode())
     {
       return 0; // Dry Run 此时立即结束，并不真正执行
     }
@@ -1012,7 +1028,12 @@ chsrc_ensure_dir (const char *dir)
 
   chsrc_run_as_a_service (cmd);
 
-  char *msg = ENGLISH ? "Directory doesn't exist, created automatically " : "目录不存在，已自动创建 ";
+  char *msg = NULL;
+  if (chsrc_in_dry_run_mode())
+    msg = ENGLISH ? "Directory doesn't exist, will be created " : "目录不存在，将自动创建 ";
+  else
+    msg = ENGLISH ? "Directory doesn't exist, created automatically " : "目录不存在，已自动创建 ";
+
   chsrc_alert2 (xy_2strcat (msg, dir));
 }
 
@@ -1020,14 +1041,14 @@ chsrc_ensure_dir (const char *dir)
 static void
 chsrc_append_to_file (const char *str, const char *filename)
 {
-  if (in_dry_run_mode())
-    {
-      goto log_anyway;
-    }
-
   char *file = xy_normalize_path (filename);
   char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
+
+  if (chsrc_in_dry_run_mode())
+    {
+      goto log_anyway;
+    }
 
   FILE *f = xy_fopen (file, "a");
   if (NULL==f)
@@ -1075,7 +1096,7 @@ log_anyway:
 static void
 chsrc_prepend_to_file (const char *str, const char *filename)
 {
-  if (in_dry_run_mode())
+  if (chsrc_in_dry_run_mode())
     {
       goto log_anyway;
     }
@@ -1106,14 +1127,14 @@ log_anyway:
 static void
 chsrc_overwrite_file (const char *str, const char *filename)
 {
-  if (in_dry_run_mode())
-    {
-      goto log_anyway;
-    }
-
   char *file = xy_normalize_path (filename);
   char *dir = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
+
+  if (chsrc_in_dry_run_mode())
+    {
+      goto log_anyway;
+    }
 
   FILE *f = xy_fopen (file, "w");
   if (NULL==f)
@@ -1145,11 +1166,6 @@ log_anyway:
 static void
 chsrc_backup (const char *path)
 {
-  if (in_dry_run_mode())
-    {
-      goto log_anyway;
-    }
-
   char *cmd = NULL;
   bool exist = xy_file_exist (path);
 
@@ -1174,6 +1190,11 @@ chsrc_backup (const char *path)
         }
 
       xy_seq_push (backed_up_paths, xy_strdup (path));
+    }
+
+  if (chsrc_in_dry_run_mode())
+    {
+      goto log_anyway;
     }
 
   if (xy.on_bsd || xy.on_macos)
@@ -1215,6 +1236,47 @@ chsrc_backup (const char *path)
 
 log_anyway:
   log_for_file_backup_op (path);
+}
+
+
+static void
+log_for_file_delete_op (const char *filename)
+{
+  char *msg = ENGLISH ? "DELETE" : "删除";
+  xy_log_brkt (blue (App_Name), bdblue (msg), blue (filename));
+}
+
+
+/**
+ * @brief 删除文件
+ *
+ * @note Dry Run 下仅打印，不真正删除
+ *
+ * @return 是否删除成功；Dry Run 下返回 true，表示将会删除
+ */
+static bool
+chsrc_delete_file (const char *path)
+{
+  if (chsrc_in_dry_run_mode())
+    {
+      log_for_file_delete_op (path);
+      return true;
+    }
+
+  bool ok = (0 == remove (path));
+
+  if (ok)
+    {
+      log_for_file_delete_op (path);
+    }
+  else
+    {
+      char *msg = ENGLISH ? xy_2strcat ("Unable to delete file: ", path)
+                          : xy_2strcat ("无法删除文件: ", path);
+      chsrc_warn2 (msg);
+    }
+
+  return ok;
 }
 
 

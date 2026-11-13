@@ -130,7 +130,7 @@ os_omarchy_setsrc (char *option)
 
   /* chsrc_run 已处理命令失败；这里额外检查写入内容，防止命令成功但段内容不对 */
   /* 写后校验: 首行必须是目标 URL；中国镜像还需要同通道兜底行 */
-  if (!in_dry_run_mode())
+  if (!chsrc_in_dry_run_mode())
     {
       char *validate_cmd = xy_str_gsub (RAWSTR_os_pacman_validate_cmd, "@f@", OS_Pacman_Omarchy_Conf);
       validate_cmd = xy_str_gsub (validate_cmd, "@2@", fallback);

@@ -4,7 +4,7 @@
 # Test Authors  : @ccmywish
 # Contributors  : Nil Null <nil@null.org>
 # Created On    : <2024-06-05>
-# Last Modified : <2026-08-20>
+# Last Modified : <2026-10-29>
 #
 # 测试 chsrc 可执行文件
 #
@@ -43,6 +43,7 @@ use v5.42;
 use utf8;
 # v5.38 还不用强制 utf8，现在代码里（包括注释）只要有其他字符，都必须强制使用 utf8
 use Test::More;
+use File::Temp qw(tempdir);
 # `` 执行命令以后，返回的全部是字节流，而不是字符串，
 # chsrc 已经输出的是 UTF-8 字符串了，所以我们在这里需要
 # 设置该选项，将这些字节流编码为 UTF-8 才能得到我们想要的结果
@@ -66,12 +67,12 @@ use open qw(:std :encoding(UTF-8));
 
 my $CHSRC = ($^O eq 'MSWin32') ? '.\chsrc' : './chsrc';
 
-my $version_str_cn = qr|chsrc .*\n\nCopyright .*\n许可证 GPLv3\+：GNU GPL 第 3 版或更高版本|;
+my $version_str_cn = qr|chsrc .*\r?\n\r?\nCopyright .*\r?\n许可证 GPLv3\+：GNU GPL 第 3 版或更高版本|;
 like `$CHSRC -v`,         $version_str_cn,  'chsrc -v';
 like `$CHSRC --version`,  $version_str_cn,  'chsrc --version';
 like `$CHSRC version`,    $version_str_cn,  'chsrc version';
 
-my $version_str_en = qr|chsrc .*\n\nCopyright .*\nLicense GPLv3\+: GNU GPL version 3 or later|;
+my $version_str_en = qr|chsrc .*\r?\n\r?\nCopyright .*\r?\nLicense GPLv3\+: GNU GPL version 3 or later|;
 like `$CHSRC -v -en`,     $version_str_en,  'chsrc -v -en';
 like `$CHSRC -en -v`,     $version_str_en,  'chsrc -en -v';
 like `$CHSRC --version -en`,  $version_str_en,  'chsrc --version -en';
@@ -135,7 +136,7 @@ my $set_js_url = qr/食谱更新.*\n食谱更新.*\n食谱更新/;
 # 如果有 npm, yarn, pnpm 这三个子菜品，再打开此测试
 # like `$CHSRC set js $URL`,  $set_js_url, "chsrc set js $URL";
 
-my $measure_js = qr/js 由以下3个子菜品组成.*\nnpm\nyarn\npnpm/;
+my $measure_js = qr/js 由以下3个子菜品组成.*\r?\nnpm\r?\nyarn\r?\npnpm/;
 like `$CHSRC measure -no-color js`, $measure_js, 'chsrc measure -no-color js';
 
 my $list_js = qr/食谱创建.*食谱创建.*食谱创建.*/s;
@@ -145,6 +146,58 @@ like `$CHSRC set -scope 2>&1`,                 qr/缺少参数/,       'chsrc se
 
 
 
+
+
+=begin comment
+
+测试 Dry Run
+
+=end comment
+=cut
+my $dry_set_npm = qr/npm config set registry.*Dry Run: 未做任何修改/s;
+like `$CHSRC set -dry -no-color npm 2>&1`,  $dry_set_npm, 'chsrc set -dry npm';
+like `$CHSRC set npm -dry -no-color 2>&1`,  $dry_set_npm, 'chsrc set npm -dry';
+like `$CHSRC -dry set npm -no-color 2>&1`,  $dry_set_npm, 'chsrc -dry set npm';
+
+my $dry_scope_err = qr/-dry 仅适用于 `set` 和 `reset` 命令/;
+like `$CHSRC get -dry -no-color npm 2>&1`,      $dry_scope_err, 'chsrc get -dry rejected';
+like `$CHSRC measure -dry -no-color npm 2>&1`,  $dry_scope_err, 'chsrc measure -dry rejected';
+
+=begin comment
+
+Cargo 的 Dry Run 不得删除已有配置文件
+
+=end comment
+=cut
+my $dry_root = tempdir (CLEANUP => 1);
+my $dry_bin = "$dry_root/bin";
+my $dry_cargo_home = "$dry_root/cargo-home";
+mkdir $dry_bin        or die "$dry_bin: $!";
+mkdir $dry_cargo_home or die "$dry_cargo_home: $!";
+my $dry_cargo_config = "$dry_cargo_home/config.toml";
+
+open (my $dry_fh, '>', $dry_cargo_config) or die $!;
+print $dry_fh "[source.crates-io]\nreplace-with = \"tuna\"\n";
+close $dry_fh;
+
+my $fake_cargo = $^O eq 'MSWin32' ? "$dry_bin/cargo.bat" : "$dry_bin/cargo";
+open ($dry_fh, '>', $fake_cargo) or die $!;
+if ($^O eq 'MSWin32') {
+    print $dry_fh "\@echo off\r\nexit /b 0\r\n";
+} else {
+    print $dry_fh "#!/bin/sh\nexit 0\n";
+}
+close $dry_fh;
+chmod 0755, $fake_cargo unless $^O eq 'MSWin32';
+
+my $path_sep = $^O eq 'MSWin32' ? ';' : ':';
+{
+    local $ENV{PATH} = "$dry_bin$path_sep$ENV{PATH}";
+    local $ENV{CARGO_HOME} = $dry_cargo_home;
+    like `$CHSRC set -dry -no-color cargo 2>&1`, qr/Dry Run: 未做任何修改/, 'chsrc set -dry cargo';
+}
+ok (-e $dry_cargo_config,        'cargo config not deleted by dry run');
+ok (! -e "$dry_cargo_config.bak", 'cargo dry run does not create backup');
 
 
 if ((defined $ARGV[0]) && ($ARGV[0] eq 'fastcheck')) {
