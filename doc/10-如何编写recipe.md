@@ -7,7 +7,7 @@
  ! Contributors  : @Mikachu2333
  !               |
  ! Created On    : <2024-08-19>
- ! Last Modified : <2026-09-01>
+ ! Last Modified : <2026-10-28>
  ! ---------------------------------------------------------- -->
 
 # Write A Recipe Even If You Don't Know C
@@ -82,6 +82,7 @@
     1. 看一眼就能上手的参照物是 [PHP recipe](../src/recipe/lang/PHP.c)
     2. 最好的参照物是 [Ruby recipe](../src/recipe/lang/Ruby/Ruby.c)
     3. 组换源参照物是 [JS combo recipe](../src/recipe/lang/JavaScript/JavaScript.c)
+    4. 环境变量型换源参照物是单变量的 [Pub recipe](../src/recipe/lang/Dart/Pub.c) 与多变量的 [rustup recipe](../src/recipe/lang/Rust/rustup.c)
 
 5. 在 [Wiki] 中记录的镜像站中寻找可用源；可以额外补充镜像站
 
@@ -95,6 +96,15 @@
 
     1. `framework/*.c` 中以 `chsrc_`, `chef_`, `hp_` 开头的所有函数或宏
     2. `xy.h` 中以 `xy_` 开头的所有函数或宏
+    3. 若菜品通过**环境变量**持久化换源，请统一使用 `framework/env.c` 提供的跨平台幂等接口，**切勿**手工向 `.bashrc`/`.zshrc` 追加字符串或直接调用 Windows `setx`：
+        - `chsrc_set_env (name, value)`：写入或更新单个持久化环境变量（传入 `NULL` 表示删除该变量，常用于 `_resetsrc()`）
+        - `chsrc_set_env_block (name1, value1, ..., NULL)`：批量写入或删除多个环境变量。POSIX 先暂存全部内容，再逐文件原子替换；后续失败会回滚已替换文件。Windows 使用注册表快照回滚，操作结束统一提示/广播。多文件更新不保证进程崩溃或断电时的整体原子性。
+        - `chsrc_get_env (var1, ..., NULL)`：读取并打印已持久化的环境变量值（持久化缺失时回退当前终端值；两者同时存在且不一致时会提示）
+        - 作用域声明上，若某作用域官方支持但 `chsrc` 仅输出手工配置指引，可标记为 `ScopeCap_Able_But_Just_Docs`
+
+    4. 普通配置文件可复用 `framework/file-update.c`：在内存中完成格式解析与内容转换后，
+       使用 `chsrc_update_files()` 批量提交。当前提交后端支持 POSIX，接口、限制和配置归属策略见
+       [12-配置文件更新.md](./12-配置文件更新.md)。文件层不负责识别镜像、区块或 JSON 字段。
 
     一个简单的方法是，在 VS Code 中按快捷键 `Ctrl-T` 搜索上述三种前缀
 
