@@ -222,6 +222,13 @@ debug: build-in-debug-mode
 
 test: test-make-var test-xy test-fw
 
+ifneq ($(On-Windows), 1)
+test: test-env test-file-update
+endif
+
+test-env: build-in-dev-mode test-fw
+	@python3 test/env.py
+
 test-make-var:
 	@echo "On-Linux: $(On-Linux)"
 	@echo "On-Windows: $(On-Windows)"
@@ -250,6 +257,11 @@ test-fw:
 	@$(CC) test/fw.c $(CFLAGS) $(LDLIBS_win) -o fw
 	@./fw
 
+test-file-update: CFLAGS += $(CFLAGS_debug)
+test-file-update:
+	@$(CC) test/file-update.c $(CFLAGS) $(LDLIBS_win) -o file-update-test.out
+	@./file-update-test.out
+
 check: test
 
 # AUR package 安装时将执行此 target
@@ -264,6 +276,7 @@ clean:
 	-@rm *.res  2>/dev/null
 	-@rm xy     2>/dev/null
 	-@rm fw     2>/dev/null
+	-@rm file-update-test.out 2>/dev/null
 	-@rm README.md.bak*    2>/dev/null
 
 	-@rm chsrc  					 2>/dev/null
@@ -296,4 +309,4 @@ install: $(ReleaseMode-Target-Name)
 
 .PHONY: all b build bd br bcir d t check c \
 	build-in-dev-mode build-in-debug-mode build-in-release-mode build-in-ci-release-mode \
-	debug test test-make-var test-xy test-fw fastcheck test-cli clean install build-deb clean-deb rawstr4c
+	debug test test-make-var test-xy test-fw test-file-update test-env fastcheck test-cli clean install build-deb clean-deb rawstr4c
