@@ -88,6 +88,8 @@ struct
   bool inited;
 
   bool on_windows;
+  bool on_cygwin_like;
+  bool on_msys;
   bool on_linux;
   bool on_macos;
   bool on_bsd;
@@ -106,6 +108,8 @@ xy =
   .inited = false,
 
   .on_windows = false,
+  .on_cygwin_like = false,
+  .on_msys  = false,
   .on_linux = false,
   .on_macos = false,
   .on_bsd = false,
@@ -117,16 +121,22 @@ xy =
 
 
 
-/**
- * 平台判定约定：
- *   1. 编译期 `#ifdef XY_Build_On_Windows` 仅用于包裹 Win32 SDK 专有头文件、类型与 API 调用
- *   2. 运行期 `if (xy.on_windows)` 用于纯 C 跨平台分支逻辑，二者真值严格一致
- */
 #ifdef _WIN32
   #define XY_Build_On_Windows 1
 
+  // #pragma message("Build for _WIN32")
   #include <windows.h>
   #include <shlobj.h>
+
+#elif defined(__CYGWIN__) /* 与 _WIN32 互斥 */
+
+  // #pragma message("Build for Cygwin")
+  #define XY_Build_For_Cygwin_Like  1
+
+  #if defined(__MSYS__)
+    // #pragma message("Build for MSYS")
+    #define XY_Build_For_MSYS 1
+  #endif
 
 #elif defined(__linux__) || defined(__linux)
   #define XY_Build_On_Linux 1
@@ -139,7 +149,9 @@ xy =
 #elif defined(__OpenBSD__) || defined(__NetBSD__) || defined(__FreeBSD__)
   #define XY_Build_On_BSD  1
   #define XY_Build_On_Unix 1
+
 #endif
+
 
 
 
@@ -877,9 +889,9 @@ xy_str_next_nonempty_line (const char *str)
 /******************************************************
  *              UTF-8 / UTF-16 与系统调用封装
  *
- *  chsrc 内部统一使用 UTF-8。Windows 上 CRT 的文件、命令与环境变量接口
- *  都按 ANSI 代码页解释 char*，非 ASCII 路径会失败或乱码，因此字符串在
- *  跨出 C 运行时的每一处都先转为宽字符。
+ *  xy 内部统一使用 UTF-8。Windows 上 CRT 的文件、命令与
+ *  环境变量接口都按 ANSI 代码页解释 char*，非 ASCII 路径会
+ *  失败或乱码，因此字符串在跨出 C 运行时的每一处都先转为宽字符。
  ******************************************************/
 #ifdef XY_Build_On_Windows
 /**
@@ -1928,24 +1940,47 @@ xy_parent_dir (const char *path)
 void
 _xy_detect_os ()
 {
-#ifdef XY_Build_On_Windows
   /**
-   * Windows 原生编译目标 (_WIN32)
-   * 使运行期 xy.on_windows 与编译期 XY_Build_On_Windows 严格等价
+   * 首先要判断是否在 MSYS 环境 (原始 Cygwin 环境暂不支持)
+   *
+   * 这里的困难就在于：为 Windows 编译的程序，可能被放在 MSYS 环境中运行
+   *
+   * 因为 MSYSTEM 为 UCRT64 时，也会通过下面的 Windows 测试，
+   * 而 MSYSTEM 为其他时，则不会通过下面的 Windows 测试，固
+   * 需要放置到 Windows 之前测试
    */
-  xy.on_windows = true;
-  xy.os_family = "windows";
-#else
+  const char *msystem = getenv ("MSYSTEM");
+  if (msystem) /* MINGW64 MINGW32 MSYS2 等 */
+    {
+      xy.on_cygwin_like = true;
+      xy.on_msys = true;
+      xy.os_family = "unix";
+      return;
+    }
 
-#if defined(__CYGWIN__) || defined(__MSYS__)
   /**
-   * Cygwin / MSYS2 POSIX 运行时未定义 _WIN32，无 Win32 SDK 头与注册表约定，
-   * 归入 Unix 分支处理
+   * 其次判断是否为 Windows
+   *
+   * SystemDrive 为 C:
    */
-  xy.on_linux = true;
-  xy.os_family = "unix";
-  return;
-#endif
+  const char *system_drive = getenv ("SystemDrive");
+  if (system_drive)
+    {
+      char path[256];
+      /**
+       * C:\Users 目录都可能不存在！
+       * https://github.com/RubyMetric/chsrc/issues/361
+       */
+      snprintf (path, sizeof (path), "%s\\Windows", system_drive);
+      DIR *d = opendir (path);
+      if (d)
+        {
+          xy.on_windows = true;
+          xy.os_family = "windows";
+          closedir (d);
+          return;
+        }
+    }
 
   /* 判断 Linux */
   FILE *fp = fopen ("/proc/version", "r");
@@ -2019,9 +2054,8 @@ _xy_detect_os ()
         }
     }
 
-  if (!(xy.on_windows || xy.on_linux || xy.on_android || xy.on_macos || xy.on_bsd))
+  if (!(xy.on_msys || xy.on_cygwin_like || xy.on_windows || xy.on_linux || xy.on_android || xy.on_macos || xy.on_bsd))
     xy_throw ("Unknown operating system");
-#endif
 }
 
 

@@ -3,7 +3,8 @@
  * -------------------------------------------------------------
  * Test File     : xy.c
  * Test Authors  : 曾奥然       <ccmywish@qq.com>
- * Contributors  : Mikachu2333  <linkchou@yandex.com>
+ *               | Mikachu2333 <linkchou@yandex.com>
+ * Contributors  : Nul None    <nul@none.org>
  * Created On    : <2023-08-30>
  * Last Modified : <2026-11-11>
  *
@@ -32,6 +33,10 @@ main (int argc, char const *argv[])
 
   // 关闭颜色
   // xy.enable_color = false;
+
+  print ("Windows: ");     println(xy.on_windows);
+  print ("Cygwin Like: "); println(xy.on_cygwin_like);
+  print ("MSYS: ");        println(xy.on_msys);
 
   println (xy_os_depend_str ("Hello, Windows!", "Hello, Unix!"));
 
