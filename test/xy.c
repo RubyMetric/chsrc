@@ -194,7 +194,11 @@ main (int argc, char const *argv[])
   assert (XY_Stat_Query_Error == _xy_stat_error (ULONG_MAX));
 
   char *home_path = xy_normalize_path ("~");
-  assert_str (home_path, xy_os_home);
+#ifdef XY_Build_On_Windows
+  assert_str (home_path, xy_2strcat ("\\\\\?\\", xy_os_home));
+  home_path = xy_path_display_text (home_path);
+#endif
+  assert_str (home_path , xy_os_home);
   free (home_path);
 
 #ifdef XY_Build_On_Windows
@@ -215,8 +219,8 @@ main (int argc, char const *argv[])
       say (xy_normalize_path ("~"));
       say (xy_normalize_path ("~/"));
       // xy_parent_dir() 得到的结果一定是不包含尾斜杠的目录名
-      assert_str (xy_parent_dir (xy_normalize_path ("~")), "C:\\Users");
-      assert_str (xy_parent_dir (xy_normalize_path ("~/")), "C:\\Users");
+      assert_str (xy_path_display (xy_parent_dir (xy_normalize_path ("~"))), "C:\\Users");
+      assert_str (xy_path_display (xy_parent_dir (xy_normalize_path ("~/"))), "C:\\Users");
       assert (xy_dir_exist ("C:\\Users"));
 
       say (xy_win_powershell_profile);
@@ -224,7 +228,7 @@ main (int argc, char const *argv[])
       assert (xy_file_exist (xy_win_powershell_profile));
       assert (true == xy_file_exist (xy_win_powershellv5_profile));
 
-      assert_str (xy_normalize_path ("C:\\a bc\\def\\"), "C:\\a bc\\def\\");
+      assert_str (xy_path_display (xy_normalize_path ("C:\\a bc\\def\\")), "C:\\a bc\\def\\");
       assert_str (xy_normalize_path ("a/b c/d"), "a\\b c\\d");
       assert_str (xy_normalize_path ("a/b c/d/"), "a\\b c\\d\\");
       assert_str (xy_parent_dir ("a/b c/d"), "a\\b c");
@@ -249,7 +253,7 @@ main (int argc, char const *argv[])
 
   if (xy.on_windows)
     {
-      assert_str ("C:\\Users\\chsrc", xy_path_join ("C:\\Users",   "chsrc"));
+      assert_str ("C:\\Users\\chsrc", xy_path_display (xy_path_join ("C:\\Users",   "chsrc")));
     }
   else
     {

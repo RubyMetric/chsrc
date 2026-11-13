@@ -98,26 +98,14 @@ file_update_win32_final_path (const wchar_t *path, BY_HANDLE_FILE_INFORMATION *o
 }
 
 
+/* 复用 xy.h 的宽字符绝对路径实现，这里只补 errno 映射。 */
 static wchar_t *
 file_update_win32_full_path (const wchar_t *path)
 {
-  DWORD need = GetFullPathNameW (path, 0, NULL, NULL);
-  if (0 == need)
-    {
-      file_update_win32_seterrno (GetLastError ());
-      return NULL;
-    }
-
-  wchar_t *buf = xy_malloc0 ((size_t) need * sizeof (wchar_t));
-  DWORD len = GetFullPathNameW (path, need, buf, NULL);
-  if (0 == len || len >= need)
-    {
-      DWORD error = GetLastError ();
-      free (buf);
-      file_update_win32_seterrno (error);
-      return NULL;
-    }
-  return buf;
+  wchar_t *ret = _xy_win_full_path (path);
+  if (!ret)
+    file_update_win32_seterrno (GetLastError ());
+  return ret;
 }
 
 
