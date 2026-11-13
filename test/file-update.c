@@ -556,6 +556,97 @@ test_readonly_target_rejected (void)
   free (path);
 }
 
+
+/* Windows 上普通绝对路径必须自动获得 \\?\ 前缀，且展示时能自动去掉。 */
+static void
+test_path_prefix_and_display (void)
+{
+  char *norm = xy_normalize_path ("C:\\Windows\\System32\\..\\Temp\\.");
+  assert (0 == strcmp (norm, "\\\\?\\C:\\Windows\\Temp"));
+
+  char *again = xy_normalize_path (norm);
+  assert (0 == strcmp (norm, again));
+  free (again);
+
+  char *shown = xy_path_display (norm);
+  assert (0 == strcmp (shown, "C:\\Windows\\Temp"));
+  free (shown);
+
+  char *unc = xy_path_display ("\\\\?\\UNC\\server\\share\\x");
+  assert (0 == strcmp (unc, "\\\\server\\share\\x"));
+  free (unc);
+
+  char *relative = xy_normalize_path ("foo\\bar");
+  assert (0 == strcmp (relative, "foo\\bar"));
+
+  char *text = xy_path_display_text ("write \\\\?\\C:\\a\\b failed");
+  assert (NULL != text && 0 == strcmp (text, "write C:\\a\\b failed"));
+  free (text);
+  assert (NULL == xy_path_display_text ("no prefix here"));
+
+  free (relative);
+  free (norm);
+}
+
+
+/* 超过 MAX_PATH 的目标必须能够新建、写入并读回。 */
+static void
+test_long_path_target (void)
+{
+  char *dir = xy_strdup (Test_Root);
+  for (int i = 0; i < 6; i++)
+    {
+      char *next = xy_path_join (dir, "01234567890123456789012345678901234567890123456789");
+      free (dir);
+      dir = next;
+    }
+  assert (strlen (dir) > 300);
+
+  /* 逐级创建；CreateDirectoryW 支持 \\?\ 前缀 */
+  wchar_t *wdir = _xy_win_wstr (dir);
+  assert (NULL != wdir);
+  size_t wlen = wcslen (wdir);
+  wchar_t *buf = xy_malloc0 ((wlen + 1) * sizeof (wchar_t));
+  wcscpy (buf, wdir);
+  for (wchar_t *p = buf + 4; *p; ++p)
+    {
+      if (L'\\' != *p) continue;
+      *p = L'\0';
+      CreateDirectoryW (buf, NULL);
+      *p = L'\\';
+    }
+  CreateDirectoryW (buf, NULL);
+  free (buf);
+  free (wdir);
+
+  char *path = xy_path_join (dir, "deep.conf");
+  FileUpdate_t op = plan_file_update (path, "deep", 4);
+  char *err = NULL;
+  assert (FileUpdate_OK == chsrc_update_files (&op, 1, &err));
+  assert (NULL == err);
+  assert_file_with_bytes (path, "deep", 4);
+  free (op.old_content);
+
+  wchar_t *wpath = _xy_win_wstr (path);
+  assert (NULL != wpath && DeleteFileW (wpath));
+  free (wpath);
+
+  char *root = xy_normalize_path (Test_Root);
+  while (strlen (dir) > strlen (root))
+    {
+      wchar_t *wdeep = _xy_win_wstr (dir);
+      assert (NULL != wdeep);
+      RemoveDirectoryW (wdeep);
+      free (wdeep);
+      char *slash = strrchr (dir, '\\');
+      assert (NULL != slash);
+      *slash = '\0';
+    }
+  free (root);
+  free (dir);
+  free (path);
+}
+
 #endif
 
 /* 缺失计划或把目录当作文件时，必须在写入前拒绝。 */
@@ -603,6 +694,8 @@ main (void)
   test_long_basename_target ();
 #endif
 #ifdef XY_Build_On_Windows
+  test_path_prefix_and_display ();
+  test_long_path_target ();
   test_readonly_target_rejected ();
 #endif
   test_invalid_update_plans ();
