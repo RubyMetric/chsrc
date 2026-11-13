@@ -6,13 +6,17 @@
  * Contributors  : @ccmywish
  *               |
  * Created On    : <2026-10-28>
- * Last Modified : <2026-11-12>
+ * Last Modified : <2026-11-13>
  *
  * 文件更新统一入口；按平台包含 POSIX 或 Win32 后端。
  * 本层只处理字节，不解释配置语法、镜像地址或管理区块。
  * ------------------------------------------------------------*/
 
 #include <errno.h>
+
+#ifndef XY_Build_On_Windows
+#include <sys/types.h>
+#endif
 
 typedef enum FileUpdateResult_t
 {
@@ -21,6 +25,15 @@ typedef enum FileUpdateResult_t
   FileUpdate_Failed
 }
 FileUpdateResult_t;
+
+/* 两个暂存项的关系：路径相同可直接合并，inode 相同只能用于冲突检测。 */
+typedef enum FileUpdateIdentity_t
+{
+  FileUpdate_Different,
+  FileUpdate_SamePath,
+  FileUpdate_SameFile
+}
+FileUpdateIdentity_t;
 
 /* 路径与缓冲区均由调用方持有，提交完成前不得修改或释放。
  * norm_path 是平台相关路径；长度不包含用于方便文本处理的尾部 NUL。
@@ -52,10 +65,18 @@ typedef struct StagedFileUpdate_t
   bool  committed;
   bool  keep_rollback;
   bool  duplicate;
+  /* has_id 与平台 id 用于识别硬链接；新建文件没有 id。 */
+  bool  has_id;
 #ifdef XY_Build_On_Windows
+  DWORD    volume;
+  DWORD    index_high;
+  DWORD    index_low;
   wchar_t *target_w;
   wchar_t *replacement_w;
   wchar_t *rollback_w;
+#else
+  dev_t    dev;
+  ino_t    ino;
 #endif
 }
 StagedFileUpdate_t;
@@ -113,24 +134,31 @@ chsrc_update_files (const FileUpdate_t *ops, size_t count, char **out_err)
   size_t failed = 0;
   bool ok = true;
   bool rollback_ok = true;
+  bool duplicate_conflict = false;
   int err = 0;
   for (size_t i = 0; i < count; i++)
     {
       if (!file_update_changed (&ops[i])) continue;
       if (!file_update_stage (&ops[i], &stages[i]))
         { failed = i; err = errno; ok = false; break; }
-      /* Shell 启动文件可能互为符号链接：相同更新合并，冲突更新拒绝。 */
+      /* Shell 启动文件可能互为符号链接：相同更新合并，冲突更新拒绝。
+       * 硬链接解析出的路径不同但 inode 相同，必须分别提交，否则会漏写。 */
       for (size_t j = 0; j < i; j++)
         {
-          if (stages[j].target && file_update_same_target (&stages[j], &stages[i]))
+          FileUpdateIdentity_t identity = file_update_identity (&stages[j], &stages[i]);
+          if (FileUpdate_Different == identity) continue;
+
+          if (ops[j].new_len != ops[i].new_len
+              || (ops[i].new_len > 0 && 0 != memcmp (ops[j].new_content, ops[i].new_content, ops[i].new_len)))
             {
-              if (ops[j].new_len != ops[i].new_len
-                  || (ops[i].new_len > 0 && 0 != memcmp (ops[j].new_content, ops[i].new_content, ops[i].new_len)))
-                { failed = i; err = EINVAL; ok = false; }
-              else
-                stages[i].duplicate = true;
-              break;
+              failed = i;
+              err = EINVAL;
+              duplicate_conflict = true;
+              ok = false;
             }
+          else if (FileUpdate_SamePath == identity)
+            stages[i].duplicate = true;
+          break;
         }
       if (!ok) break;
     }
@@ -170,11 +198,27 @@ chsrc_update_files (const FileUpdate_t *ops, size_t count, char **out_err)
             }
         }
       if (out_err)
-        *out_err = xy_strcat (6,
-          ENGLISH ? "Unable to update file: " : "无法更新文件: ", ops[failed].norm_path,
-          " (", strerror (err), ")",
-          rollback_ok ? (ENGLISH ? "; configuration changes rolled back" : "；配置修改已回滚")
-                      : (ENGLISH ? "; rollback incomplete, see recovery paths above" : "；回滚未完成，请使用上述恢复路径"));
+        {
+          char reason_buf[128];
+          const char *reason;
+          if (duplicate_conflict)
+            reason = ENGLISH ? "another path in the plan updates the same file with different content"
+                             : "计划中另有路径更新同一文件且内容不同";
+          else if (EAGAIN == err)
+            reason = ENGLISH ? "file changed on disk before it could be updated"
+                             : "文件在写入前已被其他程序修改";
+          else
+            {
+              snprintf (reason_buf, sizeof reason_buf, "%s", strerror (err));
+              reason = reason_buf;
+            }
+
+          *out_err = xy_strcat (6,
+            ENGLISH ? "Unable to update file: " : "无法更新文件: ", ops[failed].norm_path,
+            " (", reason, ")",
+            rollback_ok ? (ENGLISH ? "; configuration changes rolled back" : "；配置修改已回滚")
+                        : (ENGLISH ? "; rollback incomplete, see recovery paths above" : "；回滚未完成，请使用上述恢复路径"));
+        }
     }
   else
     {
