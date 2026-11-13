@@ -6,10 +6,11 @@
  * Contributors  : @ccmywish
  *               |
  * Created On    : <2026-11-12>
- * Last Modified : <2026-11-12>
+ * Last Modified : <2026-11-13>
  *
  * Win32 后端：使用 ReplaceFileW/MoveFileExW 暂存并原子替换目标文件。
  * 已有文件通过 ReplaceFileW 保留目标 ACL；新建文件继承父目录 ACL。
+ * 文件系统操作保留 \\?\ 前缀，使超过 MAX_PATH 的路径仍可更新。
  * ------------------------------------------------------------*/
 
 #ifdef XY_Build_On_Windows
@@ -20,9 +21,11 @@ file_update_win32_seterrno (DWORD error)
   switch (error)
     {
     case ERROR_FILE_NOT_FOUND:
-    case ERROR_PATH_NOT_FOUND:       errno = ENOENT; break;
+    case ERROR_PATH_NOT_FOUND:
+    case ERROR_INVALID_DRIVE:        errno = ENOENT; break;
     case ERROR_ACCESS_DENIED:
-    case ERROR_PRIVILEGE_NOT_HELD:   errno = EACCES; break;
+    case ERROR_PRIVILEGE_NOT_HELD:
+    case ERROR_CANT_ACCESS_FILE:     errno = EACCES; break;
     case ERROR_ALREADY_EXISTS:
     case ERROR_FILE_EXISTS:          errno = EEXIST; break;
     case ERROR_SHARING_VIOLATION:
@@ -33,32 +36,24 @@ file_update_win32_seterrno (DWORD error)
     case ERROR_NOT_SAME_DEVICE:      errno = EXDEV;  break;
     case ERROR_INVALID_NAME:
     case ERROR_INVALID_PARAMETER:    errno = EINVAL; break;
-    case ERROR_OUTOFMEMORY:          errno = ENOMEM; break;
-    case ERROR_FILENAME_EXCED_RANGE: errno = ENAMETOOLONG; break;
+    case ERROR_DIRECTORY:            errno = ENOTDIR; break;
+    case ERROR_OUTOFMEMORY:
+    case ERROR_NOT_ENOUGH_MEMORY:    errno = ENOMEM; break;
+    case ERROR_TOO_MANY_OPEN_FILES:  errno = EMFILE; break;
+    case ERROR_FILENAME_EXCED_RANGE:
+    case ERROR_BUFFER_OVERFLOW:      errno = ENAMETOOLONG; break;
     default:                         errno = EIO;    break;
     }
 }
 
-static void
-file_update_win32_strip_prefix (wchar_t *path)
-{
-  if (0 == wcsncmp (path, L"\\\\?\\UNC\\", 8))
-    {
-      size_t len = wcslen (path + 8);
-      memmove (path + 2, path + 8, (len + 1) * sizeof (wchar_t));
-      path[0] = L'\\';
-      path[1] = L'\\';
-    }
-  else if (0 == wcsncmp (path, L"\\\\?\\", 4)
-           && 0 != wcsncmp (path, L"\\\\?\\Volume{", 11))
-    {
-      size_t len = wcslen (path + 4);
-      memmove (path, path + 4, (len + 1) * sizeof (wchar_t));
-    }
-}
 
+/* 返回带 \\?\ 前缀的最终路径，并输出文件信息。
+ * 保留前缀是有意的：去掉后超过 MAX_PATH 的路径会重新受长度限制。
+ * @param path 目标路径
+ * @param out_info 可为 NULL；非空时写入文件信息
+ * @return 调用方负责 free 的宽字符路径；失败返回 NULL 并设置 errno */
 static wchar_t *
-file_update_win32_final_path (const wchar_t *path, DWORD *out_attrs)
+file_update_win32_final_path (const wchar_t *path, BY_HANDLE_FILE_INFORMATION *out_info)
 {
   HANDLE handle = CreateFileW (path, 0,
                                FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
@@ -77,7 +72,7 @@ file_update_win32_final_path (const wchar_t *path, DWORD *out_attrs)
       file_update_win32_seterrno (error);
       return NULL;
     }
-  if (out_attrs) *out_attrs = info.dwFileAttributes;
+  if (out_info) *out_info = info;
 
   DWORD cap = 512;
   wchar_t *buf = NULL;
@@ -99,9 +94,9 @@ file_update_win32_final_path (const wchar_t *path, DWORD *out_attrs)
       cap = len + 1;
     }
   CloseHandle (handle);
-  file_update_win32_strip_prefix (buf);
   return buf;
 }
+
 
 static wchar_t *
 file_update_win32_full_path (const wchar_t *path)
@@ -125,6 +120,9 @@ file_update_win32_full_path (const wchar_t *path)
   return buf;
 }
 
+
+/* 逐级创建 path 的父目录；已存在的目录视为成功。
+ * 失败返回 false 并设置 errno。 */
 static bool
 file_update_win32_create_parent_dirs (const wchar_t *path)
 {
@@ -181,6 +179,7 @@ file_update_win32_create_parent_dirs (const wchar_t *path)
   return true;
 }
 
+
 /* 在目标文件同目录生成 chsrc-XXXXXX 临时文件；CREATE_NEW 保证不会覆盖
  * 其他进程刚创建的文件，命名冲突时重新生成。 */
 static bool
@@ -227,6 +226,7 @@ file_update_win32_make_temp (const wchar_t *target, HANDLE *out_handle, wchar_t 
   errno = EEXIST;
   return false;
 }
+
 
 /* 写入并 FlushFileBuffers；已有文件复制目标属性，ACL 由 ReplaceFileW 合并。 */
 static bool
@@ -288,8 +288,10 @@ file_update_win32_write_temp_file (const wchar_t *target, const char *bytes, siz
   return true;
 }
 
+
 /* 解析已有符号链接/重解析点，替换最终目标以保留链接本身；再把新内容与
- * 回滚内容写入同目录临时文件。旧快照已被外部修改时以 EAGAIN 拒绝整批更新。 */
+ * 回滚内容写入同目录临时文件。旧快照已被外部修改时以 EAGAIN 拒绝整批更新。
+ * 记录卷序列号与文件索引，供重复检测识别硬链接。 */
 static bool
 file_update_stage (const FileUpdate_t *op, StagedFileUpdate_t *stage)
 {
@@ -302,10 +304,15 @@ file_update_stage (const FileUpdate_t *op, StagedFileUpdate_t *stage)
   bool ok = false;
   if (op->existed)
     {
-      DWORD attrs = 0;
-      wchar_t *target = file_update_win32_final_path (wnorm, &attrs);
+      BY_HANDLE_FILE_INFORMATION info;
+      wchar_t *target = file_update_win32_final_path (wnorm, &info);
       if (!target) goto done;
-      if (attrs & FILE_ATTRIBUTE_DIRECTORY) { errno = EINVAL; free (target); goto done; }
+      if (info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+        {
+          errno = EINVAL;
+          free (target);
+          goto done;
+        }
 
       HANDLE access = CreateFileW (target, GENERIC_WRITE,
                                    FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
@@ -322,6 +329,11 @@ file_update_stage (const FileUpdate_t *op, StagedFileUpdate_t *stage)
       stage->target = _xy_win_utf8 (target);
       if (!stage->target) { errno = ENOMEM; goto done; }
 
+      stage->has_id = true;
+      stage->volume = info.dwVolumeSerialNumber;
+      stage->index_high = info.nFileIndexHigh;
+      stage->index_low = info.nFileIndexLow;
+
       char *current = NULL;
       size_t current_len = 0;
       if (!xy_file_read_bytes (stage->target, &current, &current_len)) goto done;
@@ -331,12 +343,14 @@ file_update_stage (const FileUpdate_t *op, StagedFileUpdate_t *stage)
       if (!same) { errno = EAGAIN; goto done; }
 
       if (!file_update_win32_write_temp_file (target, op->new_content, op->new_len,
-                                              true, attrs, &stage->replacement_w)) goto done;
+                                              true, info.dwFileAttributes,
+                                              &stage->replacement_w)) goto done;
       stage->replacement = _xy_win_utf8 (stage->replacement_w);
       if (!stage->replacement) { errno = ENOMEM; goto done; }
 
       if (!file_update_win32_write_temp_file (target, op->old_content, op->old_len,
-                                              true, attrs, &stage->rollback_w)) goto done;
+                                              true, info.dwFileAttributes,
+                                              &stage->rollback_w)) goto done;
       stage->rollback = _xy_win_utf8 (stage->rollback_w);
       if (!stage->rollback) { errno = ENOMEM; goto done; }
     }
@@ -351,9 +365,26 @@ file_update_stage (const FileUpdate_t *op, StagedFileUpdate_t *stage)
           goto done;
         }
 
+      /* GetFileAttributesW 对悬空重解析点也返回失败，这里用
+       * OPEN_REPARSE_POINT 再确认路径没有被占用。 */
+      HANDLE occupied = CreateFileW (
+        wnorm, 0, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL,
+        OPEN_EXISTING, FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS, NULL);
+      if (INVALID_HANDLE_VALUE != occupied)
+        {
+          CloseHandle (occupied);
+          errno = EEXIST;
+          goto done;
+        }
+      error = GetLastError ();
+      if (ERROR_FILE_NOT_FOUND != error && ERROR_PATH_NOT_FOUND != error)
+        {
+          file_update_win32_seterrno (error);
+          goto done;
+        }
+
       wchar_t *full = file_update_win32_full_path (wnorm);
       if (!full) goto done;
-      if (!file_update_win32_create_parent_dirs (full)) { free (full); goto done; }
 
       wchar_t *parent = _wcsdup (full);
       if (!parent) { free (full); errno = ENOMEM; goto done; }
@@ -366,6 +397,14 @@ file_update_stage (const FileUpdate_t *op, StagedFileUpdate_t *stage)
           free (parent);
           free (full);
           errno = EINVAL;
+          goto done;
+        }
+
+      /* 先校验最终组件，再创建父目录，避免非法计划留下空目录。 */
+      if (!file_update_win32_create_parent_dirs (full))
+        {
+          free (parent);
+          free (full);
           goto done;
         }
 
@@ -400,6 +439,7 @@ done:
   return ok;
 }
 
+
 /* ReplaceFileW 合并目标 ACL 失败时返回 ERROR_ACCESS_DENIED。受限环境可能
  * 注入无法合并的拒绝 ACE；此时退回忽略 ACL 合并，由新文件继承目录 ACL。
  * 正常 ACL 下仍走第一条路径，保留目标 ACL。 */
@@ -419,6 +459,7 @@ file_update_win32_replace (const wchar_t *target, const wchar_t *replacement)
                        REPLACEFILE_WRITE_THROUGH | REPLACEFILE_IGNORE_ACL_ERRORS, NULL, NULL);
 }
 
+
 static bool
 file_update_commit (StagedFileUpdate_t *stage, const FileUpdate_t *op)
 {
@@ -436,6 +477,7 @@ file_update_commit (StagedFileUpdate_t *stage, const FileUpdate_t *op)
   stage->replacement_w = NULL;
   return true;
 }
+
 
 static bool
 file_update_rollback (StagedFileUpdate_t *stage, const FileUpdate_t *op)
@@ -458,6 +500,7 @@ file_update_rollback (StagedFileUpdate_t *stage, const FileUpdate_t *op)
   return true;
 }
 
+
 static void
 file_update_discard (StagedFileUpdate_t *stage)
 {
@@ -471,13 +514,28 @@ file_update_discard (StagedFileUpdate_t *stage)
   free (stage->rollback_w);
 }
 
-static bool
-file_update_same_target (const StagedFileUpdate_t *a, const StagedFileUpdate_t *b)
+
+/* 判断两个暂存项是否指向同一文件。
+ * 路径相同（大小写不敏感）表示同一条目录项；路径不同但卷序列号与文件
+ * 索引相同表示硬链接。硬链接必须分别提交，因此仅在冲突检测时使用。 */
+static FileUpdateIdentity_t
+file_update_identity (const StagedFileUpdate_t *a, const StagedFileUpdate_t *b)
 {
-  if (!a->target_w || !b->target_w) return false;
-  int result = CompareStringOrdinal (a->target_w, -1, b->target_w, -1, TRUE);
-  if (0 == result) return 0 == _wcsicmp (a->target_w, b->target_w);
-  return CSTR_EQUAL == result;
+  if (a->target_w && b->target_w)
+    {
+      int result = CompareStringOrdinal (a->target_w, -1, b->target_w, -1, TRUE);
+      bool same_path = 0 == result ? 0 == _wcsicmp (a->target_w, b->target_w)
+                                   : CSTR_EQUAL == result;
+      if (same_path) return FileUpdate_SamePath;
+    }
+
+  if (a->has_id && b->has_id
+      && a->volume == b->volume
+      && a->index_high == b->index_high
+      && a->index_low == b->index_low)
+    return FileUpdate_SameFile;
+
+  return FileUpdate_Different;
 }
 
 #endif /* XY_Build_On_Windows */

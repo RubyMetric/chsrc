@@ -6,7 +6,7 @@
  * Contributors  : @ccmywish
  *               |
  * Created On    : <2026-11-12>
- * Last Modified : <2026-11-12>
+ * Last Modified : <2026-11-13>
  *
  * 通用文件更新测试：刻意不引入 env.c 或任何配置格式解析器。
  * ------------------------------------------------------------*/
@@ -462,6 +462,71 @@ test_dangling_symlink_target (void)
   free (missing);
 }
 
+/* 硬链接的两个目录项必须合并为同一次提交：内容不同时拒绝整批，
+ * 内容相同时分别替换两个目录项，避免漏写其中一个路径。 */
+static void
+test_hardlink_targets (void)
+{
+  char *first = new_path ("hardlink-first");
+  char *second = new_path ("hardlink-second");
+  overwrite_file_with_bytes (first, "old", 3);
+  if (0 != link (first, second))
+    {
+      /* 文件系统不支持硬链接时跳过。 */
+      free (first);
+      free (second);
+      return;
+    }
+
+  size_t entries = get_TestRootDir_entries_count ();
+
+  FileUpdate_t conflict[] = { plan_file_update (first, "aaa", 3),
+                              plan_file_update (second, "bbb", 3) };
+  char *err = NULL;
+  assert (FileUpdate_Failed == chsrc_update_files (conflict, 2, &err));
+  assert (NULL != err);
+  free (err);
+  assert_file_with_bytes (first, "old", 3);
+  assert (entries == get_TestRootDir_entries_count ());
+  free (conflict[0].old_content);
+  free (conflict[1].old_content);
+
+  FileUpdate_t same[] = { plan_file_update (first, "new", 3),
+                          plan_file_update (second, "new", 3) };
+  err = NULL;
+  assert (FileUpdate_OK == chsrc_update_files (same, 2, &err));
+  assert (NULL == err);
+  assert_file_with_bytes (first, "new", 3);
+  assert_file_with_bytes (second, "new", 3);
+  free (same[0].old_content);
+  free (same[1].old_content);
+  free (first);
+  free (second);
+}
+
+/* 目标 basename 接近 NAME_MAX 时，临时文件不得再拼接目标名。 */
+static void
+test_long_basename_target (void)
+{
+  char name[251];
+  memset (name, 'a', 245);
+  memcpy (name + 245, ".conf", 6);
+
+  char *path = new_path (name);
+  FileUpdate_t op = plan_file_update (path, "v1", 2);
+  char *err = NULL;
+  assert (FileUpdate_OK == chsrc_update_files (&op, 1, &err));
+  assert (NULL == err);
+  assert_file_with_bytes (path, "v1", 2);
+
+  op = plan_file_update (path, "v2", 2);
+  assert (FileUpdate_OK == chsrc_update_files (&op, 1, &err));
+  assert (NULL == err);
+  assert_file_with_bytes (path, "v2", 2);
+  free (op.old_content);
+  free (path);
+}
+
 #endif
 
 #ifdef XY_Build_On_Windows
@@ -534,6 +599,8 @@ main (void)
   test_empty_content ();
 #ifndef XY_Build_On_Windows
   test_dangling_symlink_target ();
+  test_hardlink_targets ();
+  test_long_basename_target ();
 #endif
 #ifdef XY_Build_On_Windows
   test_readonly_target_rejected ();
