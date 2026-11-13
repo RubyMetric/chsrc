@@ -194,7 +194,11 @@ main (int argc, char const *argv[])
   assert (XY_Stat_Query_Error == _xy_stat_error (ULONG_MAX));
 
   char *home_path = xy_normalize_path ("~");
-  assert_str (home_path, xy_os_home);
+#ifdef XY_Build_On_Windows
+  assert_str (home_path, xy_2strcat ("\\\\\?\\", xy_os_home));
+  home_path = xy_path_display_text (home_path);
+#endif
+  assert_str (home_path , xy_os_home);
   free (home_path);
 
 #ifdef XY_Build_On_Windows
