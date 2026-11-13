@@ -285,7 +285,7 @@ file_update_stage (const FileUpdate_t *op, StagedFileUpdate_t *stage)
 {
   char *norm = xy_normalize_path (op->norm_path);
   if (!norm) { errno = ENOMEM; return false; }
-  wchar_t *wnorm = _xy_win_wstr (norm);
+  wchar_t *wnorm = xy_utf8_to_wstr (norm);
   free (norm);
   if (!wnorm) { errno = ENOMEM; return false; }
 
@@ -314,7 +314,7 @@ file_update_stage (const FileUpdate_t *op, StagedFileUpdate_t *stage)
       CloseHandle (access);
 
       stage->target_w = target;
-      stage->target = _xy_win_utf8 (target);
+      stage->target = xy_wstr_to_utf8 (target);
       if (!stage->target) { errno = ENOMEM; goto done; }
 
       stage->has_id = true;
@@ -333,13 +333,13 @@ file_update_stage (const FileUpdate_t *op, StagedFileUpdate_t *stage)
       if (!file_update_win32_write_temp_file (target, op->new_content, op->new_len,
                                               true, info.dwFileAttributes,
                                               &stage->replacement_w)) goto done;
-      stage->replacement = _xy_win_utf8 (stage->replacement_w);
+      stage->replacement = xy_wstr_to_utf8 (stage->replacement_w);
       if (!stage->replacement) { errno = ENOMEM; goto done; }
 
       if (!file_update_win32_write_temp_file (target, op->old_content, op->old_len,
                                               true, info.dwFileAttributes,
                                               &stage->rollback_w)) goto done;
-      stage->rollback = _xy_win_utf8 (stage->rollback_w);
+      stage->rollback = xy_wstr_to_utf8 (stage->rollback_w);
       if (!stage->rollback) { errno = ENOMEM; goto done; }
     }
   else
@@ -412,12 +412,12 @@ file_update_stage (const FileUpdate_t *op, StagedFileUpdate_t *stage)
       free (full);
 
       stage->target_w = target;
-      stage->target = _xy_win_utf8 (target);
+      stage->target = xy_wstr_to_utf8 (target);
       if (!stage->target) { errno = ENOMEM; goto done; }
 
       if (!file_update_win32_write_temp_file (target, op->new_content, op->new_len,
                                               false, 0, &stage->replacement_w)) goto done;
-      stage->replacement = _xy_win_utf8 (stage->replacement_w);
+      stage->replacement = xy_wstr_to_utf8 (stage->replacement_w);
       if (!stage->replacement) { errno = ENOMEM; goto done; }
     }
   ok = true;

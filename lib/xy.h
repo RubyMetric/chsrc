@@ -1950,7 +1950,7 @@ xy_path_extend (const char *path)
   if (!drive && !unc)
     return xy_strdup (path);
 
-  wchar_t *wpath = _xy_win_wstr (path);
+  wchar_t *wpath = xy_utf8_to_wstr (path);
   if (!wpath)
     return xy_strdup (path);
 
@@ -1976,7 +1976,7 @@ xy_path_extend (const char *path)
     }
   free (wfull);
 
-  char *ret = _xy_win_utf8 (wout);
+  char *ret = xy_wstr_to_utf8 (wout);
   free (wout);
 
   return ret ? ret : xy_strdup (path);

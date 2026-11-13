@@ -126,7 +126,7 @@ init_test_root (void)
   assert (0 == _wmktemp_s (tmpl, MAX_PATH));
   assert (CreateDirectoryW (tmpl, NULL));
 
-  char *utf8 = _xy_win_utf8 (tmpl);
+  char *utf8 = xy_wstr_to_utf8 (tmpl);
   assert (NULL != utf8 && strlen (utf8) < sizeof (Test_Root));
   strcpy (Test_Root, utf8);
   free (utf8);
@@ -136,7 +136,7 @@ static size_t
 get_TestRootDir_entries_count (void)
 {
   char *pattern = xy_path_join (Test_Root, "*");
-  wchar_t *wpattern = _xy_win_wstr (pattern);
+  wchar_t *wpattern = xy_utf8_to_wstr (pattern);
   free (pattern);
   assert (NULL != wpattern);
 
@@ -154,7 +154,7 @@ get_TestRootDir_entries_count (void)
     {
       if (0 == wcscmp (data.cFileName, L".") || 0 == wcscmp (data.cFileName, L"..")) continue;
       /* 暂存及回滚临时文件不能在成功或已处理的失败后残留。 */
-      char *name = _xy_win_utf8 (data.cFileName);
+      char *name = xy_wstr_to_utf8 (data.cFileName);
       assert (NULL != name);
       assert (NULL == strstr (name, ".chsrc-"));
       free (name);
@@ -169,7 +169,7 @@ get_TestRootDir_entries_count (void)
 static void
 cleanup_test_root (void)
 {
-  wchar_t *root = _xy_win_wstr (Test_Root);
+  wchar_t *root = xy_utf8_to_wstr (Test_Root);
   assert (NULL != root);
   remove_tree_w (root);
   free (root);
@@ -537,7 +537,7 @@ test_readonly_target_rejected (void)
 {
   char *path = new_path ("readonly-config");
   overwrite_file_with_bytes (path, "old", 3);
-  wchar_t *wpath = _xy_win_wstr (path);
+  wchar_t *wpath = xy_utf8_to_wstr (path);
   assert (NULL != wpath);
   assert (SetFileAttributesW (wpath, FILE_ATTRIBUTE_READONLY));
 
@@ -603,7 +603,7 @@ test_long_path_target (void)
   assert (strlen (dir) > 300);
 
   /* 逐级创建；CreateDirectoryW 支持 \\?\ 前缀 */
-  wchar_t *wdir = _xy_win_wstr (dir);
+  wchar_t *wdir = xy_utf8_to_wstr (dir);
   assert (NULL != wdir);
   size_t wlen = wcslen (wdir);
   wchar_t *buf = xy_malloc0 ((wlen + 1) * sizeof (wchar_t));
@@ -627,14 +627,14 @@ test_long_path_target (void)
   assert_file_with_bytes (path, "deep", 4);
   free (op.old_content);
 
-  wchar_t *wpath = _xy_win_wstr (path);
+  wchar_t *wpath = xy_utf8_to_wstr (path);
   assert (NULL != wpath && DeleteFileW (wpath));
   free (wpath);
 
   char *root = xy_normalize_path (Test_Root);
   while (strlen (dir) > strlen (root))
     {
-      wchar_t *wdeep = _xy_win_wstr (dir);
+      wchar_t *wdeep = xy_utf8_to_wstr (dir);
       assert (NULL != wdeep);
       RemoveDirectoryW (wdeep);
       free (wdeep);
