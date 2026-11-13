@@ -1646,7 +1646,7 @@ xy_stat (const char *path, enum XyStatError *error)
 
   enum XyStatError status = XY_Stat_Ok;
 #ifdef XY_Build_On_Windows
-  wchar_t *wpath = _xy_win_wstr (normalized_path);
+  wchar_t *wpath = xy_utf8_to_wstr (normalized_path);
   if (wpath)
     {
       /* 不请求读写权限；允许目录，且不使用 OPEN_REPARSE_POINT，以跟随链接和 junction。 */
@@ -1818,7 +1818,7 @@ xy_normalize_path (const char *path)
   /* '%' 是 ASCII 字符，可直接在 UTF-8 中检查；普通路径无需进行编码转换。 */
   if (strchr (new, '%'))
     {
-      wchar_t *wpath = _xy_win_wstr (new);
+      wchar_t *wpath = xy_utf8_to_wstr (new);
       if (wpath)
         {
           DWORD needed = ExpandEnvironmentStringsW (wpath, NULL, 0);
@@ -1828,7 +1828,7 @@ xy_normalize_path (const char *path)
               DWORD written = ExpandEnvironmentStringsW (wpath, wexpanded, needed);
               if (written > 0 && written <= needed)
                 {
-                  char *utf8 = _xy_win_utf8 (wexpanded);
+                  char *utf8 = xy_wstr_to_utf8 (wexpanded);
                   if (utf8)
                     xy_ptr_replace (&new, utf8);
                 }
