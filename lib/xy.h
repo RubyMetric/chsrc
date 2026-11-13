@@ -4,13 +4,13 @@
  * -------------------------------------------------------------
  * Lib Authors   :  曾奥然      <ccmywish@qq.com>
  *               |   郭恒       <2085471348@qq.com>
- * Contributors  : Mikachu2333  <linkchou@yandex.com>
- *               | juzeon       <skyjuzheng@gmail.com>
+ *               | Mikachu2333  <linkchou@yandex.com>
+ * Contributors  : juzeon       <skyjuzheng@gmail.com>
  *               | BingChunMoLi <bingchunmoli@bingchunmoli.com>
  *               | AnonTokio    <anontokio@163.com>
  *               |
  * Created On    : <2023-08-28>
- * Last Modified : <2026-11-11>
+ * Last Modified : <2026-11-13>
  *
  *
  *                     xy: 襄阳、咸阳
@@ -33,7 +33,7 @@
 #ifndef XY_H
 #define XY_H
 
-#define _XY_Version       "v0.2.4-2026/08/13"
+#define _XY_Version       "v0.2.5-2026/11/13"
 #define _XY_Maintain_URL  "https://github.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 #define _XY_Maintain_URL2 "https://gitee.com/RubyMetric/chsrc/blob/dev/lib/xy.h"
 
@@ -46,21 +46,27 @@
 #endif
 
 #include <assert.h>
-#include <ctype.h>
 #include <errno.h>
 #include <limits.h>
 #include <stdarg.h>
 #include <stdbool.h>
+#include <ctype.h>
 #include <stddef.h>
+#include <wchar.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#ifndef _WIN32
-  #include <unistd.h>
-  #include <dirent.h> // opendir() closedir()
-  #include <sys/stat.h>
-#endif
+
+/**
+ * 关于 Windows:
+ *   xy.h 不支持在 MSVC 中编译，仅支持在 MinGW-w64 中编译，所以
+ *   可以直接 #include 以下 POSIX 头文件
+ */
+#include <unistd.h> /* POSIX: access(), read(), write(), close() */
+#include <dirent.h> /* POSIX: opendir() closedir() */
+#include <sys/stat.h>
+
 
 #if defined(__STDC__) && __STDC_VERSION__ >= 202311
   #define XY_Deprecate_This(msg) [[deprecated(msg)]]
@@ -121,7 +127,6 @@ xy =
 
   #include <windows.h>
   #include <shlobj.h>
-  #include <wchar.h>
 
 #elif defined(__linux__) || defined(__linux)
   #define XY_Build_On_Linux 1
