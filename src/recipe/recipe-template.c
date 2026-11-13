@@ -102,6 +102,7 @@ void
 <category>_<dish>_getsrc (char *option)
 {
   // chsrc get <dish>
+  // 若为环境变量型 recipe，可调用: chsrc_get_env ("VAR_NAME", NULL);
 }
 
 
@@ -120,7 +121,7 @@ void
   /* 你可能想要指定不同的 dish 来使用它的源 */
   // Source_t source = chsrc_yield_source_and_confirm (&pl_pypi_dish, option);
 
-  /* 具体的换源步骤，如调用第三方命令... */
+  /* 具体的换源步骤，如调用第三方命令，或使用 chsrc_set_env / chsrc_set_env_block 持久化环境变量... */
 
   /* 最后总结输出 */
   chsrc_determine_chgtype (ChgType_xxx);
