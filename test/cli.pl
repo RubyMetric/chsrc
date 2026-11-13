@@ -2,9 +2,9 @@
 # ---------------------------------------------------------------
 # Test File     : cli.pl
 # Test Authors  : @ccmywish
-# Contributors  : Nil Null <nil@null.org>
+# Contributors  : @Mikachu2333
 # Created On    : <2024-06-05>
-# Last Modified : <2026-08-20>
+# Last Modified : <2026-10-28>
 #
 # 测试 chsrc 可执行文件
 #
@@ -42,6 +42,7 @@
 use v5.42;
 use utf8;
 # v5.38 还不用强制 utf8，现在代码里（包括注释）只要有其他字符，都必须强制使用 utf8
+use File::Temp qw(tempdir);
 use Test::More;
 # `` 执行命令以后，返回的全部是字节流，而不是字符串，
 # chsrc 已经输出的是 UTF-8 字符串了，所以我们在这里需要
@@ -142,6 +143,102 @@ my $list_js = qr/食谱创建.*食谱创建.*食谱创建.*/s;
 like `$CHSRC list -no-color js`, $list_js, 'chsrc list -no-color js';
 
 like `$CHSRC set -scope 2>&1`,                 qr/缺少参数/,       'chsrc set -scope missing arg';
+
+
+=begin comment
+
+测试 -scope 参数校验与环境变量型 recipes (rustup / pub / flutter / nvm / brew)
+
+=end comment
+=cut
+
+like `$CHSRC set -scope 2>&1`,                 qr/缺少参数/,       'chsrc set -scope missing arg';
+like `$CHSRC set -scope=project rustup 2>&1`,  qr/不支持项目级换源/, 'chsrc set -scope=project rustup rejected';
+like `$CHSRC reset -scope=project rustup 2>&1`,qr/不支持项目级换源/, 'chsrc reset -scope=project rustup rejected';
+like `$CHSRC ls -en -no-color rustup`,         qr/system scope.*supported and implemented/, 'chsrc ls -en rustup shows system scope';
+
+if ($^O ne 'MSWin32') {
+    my $tmp_home = tempdir (CLEANUP => 1);
+    local $ENV{HOME} = $tmp_home;
+
+    # 未知 shell 精确拒绝执行
+    {
+        local $ENV{SHELL} = '/usr/bin/nu';
+        like `$CHSRC set rustup tuna 2>&1`, qr/无法精确确认当前 Shell 类型/, 'unknown shell set rejected';
+        like `$CHSRC get rustup 2>&1`,      qr/无法精确确认当前 Shell 类型/, 'unknown shell get rejected';
+    }
+
+    # Bash 下 5 个迁移 recipe 的幂等写入、无双斜杠、持久化查看与重置
+    {
+        local $ENV{SHELL} = '/bin/bash';
+        open my $fh, '>', "$tmp_home/.bashrc" or die $!;
+        print {$fh} "# user header\n";
+        close $fh;
+
+        like `$CHSRC set -en -no-color rustup tuna`, qr/Thanks to the mirror site.*TUNA/s, 'rustup set tuna';
+        open my $rc1, '<', "$tmp_home/.bashrc" or die $!;
+        my $content1 = do { local $/; <$rc1> };
+        close $rc1;
+
+        # 重复执行幂等，文件内容与重启提示不重复产生
+        my $out2 = `$CHSRC set -en -no-color rustup tuna`;
+        unlike $out2, qr/source ~\/\.bashrc/, 'rustup repeat set skips restart hint';
+        open my $rc2, '<', "$tmp_home/.bashrc" or die $!;
+        my $content2 = do { local $/; <$rc2> };
+        close $rc2;
+        is $content2, $content1, 'rustup repeat set is byte-for-byte idempotent';
+
+        like `$CHSRC get -no-color rustup`, qr|RUSTUP_DIST_SERVER=https://mirrors\.tuna\.tsinghua\.edu\.cn/rustup|, 'rustup get persisted';
+
+        # Homebrew URL 无双斜杠
+        like `$CHSRC set -en -no-color brew tuna`, qr/Thanks to the mirror site.*TUNA/s, 'brew set tuna';
+        my $brew_get = `$CHSRC get -no-color brew`;
+        like   $brew_get, qr|HOMEBREW_BREW_GIT_REMOTE=https://mirrors\.tuna\.tsinghua\.edu\.cn/git/homebrew/brew\.git|, 'brew url clean single slash';
+        unlike $brew_get, qr|tsinghua\.edu\.cn//|, 'brew url has no double slash';
+
+        # Pub / Flutter / nvm 基本闭环
+        like `$CHSRC set -en -no-color pub tuna`,     qr/TUNA/, 'pub set tuna';
+        like `$CHSRC set -en -no-color flutter tuna`, qr/TUNA/, 'flutter set tuna';
+        like `$CHSRC set -en -no-color nvm tuna`,     qr/TUNA/, 'nvm set tuna';
+        like `$CHSRC get -no-color nvm`,              qr|NVM_NODEJS_ORG_MIRROR=https://mirrors\.tuna\.tsinghua\.edu\.cn/nodejs-release|, 'nvm get persisted';
+
+        # 危险字符注入拦截
+        like `$CHSRC set rustup 'https://evil.org/\$inj' 2>&1`, qr/不安全字符/, 'dangerous char in custom url rejected';
+
+        # 重置全部变量并确认清空
+        like `$CHSRC reset -en -no-color rustup`,  qr/reset to the upstream/, 'rustup reset';
+        like `$CHSRC reset -en -no-color brew`,    qr/reset to the upstream/, 'brew reset';
+        like `$CHSRC reset -en -no-color pub`,     qr/reset to the upstream/, 'pub reset';
+        like `$CHSRC reset -en -no-color flutter`, qr/reset to the upstream/, 'flutter reset';
+        like `$CHSRC reset -en -no-color nvm`,     qr/reset to the upstream/, 'nvm reset';
+        # 断言"持久化已清空"时，同时清掉父进程可能继承来的同名变量，
+        # 否则 chsrc_get_env 的 getenv 回退会把会话值打印出来，使结果依赖运行环境
+        {
+            local $ENV{RUSTUP_UPDATE_ROOT} = undef;
+            local $ENV{RUSTUP_DIST_SERVER} = undef;
+            like `$CHSRC get -no-color rustup`, qr/^RUSTUP_UPDATE_ROOT=\nRUSTUP_DIST_SERVER=$/m, 'rustup empty after reset';
+        }
+    }
+
+    # Fish 下 conf.d/chsrc.fish 写入与 config.fish 旧配置一次性清理
+    {
+        local $ENV{SHELL} = '/usr/bin/fish';
+        mkdir "$tmp_home/.config";
+        mkdir "$tmp_home/.config/fish";
+        open my $ffh, '>', "$tmp_home/.config/fish/config.fish" or die $!;
+        print {$ffh} "# keep comment\nset -x PUB_HOSTED_URL https://old.mirror\n";
+        close $ffh;
+
+        like `$CHSRC set -en -no-color pub tuna`, qr/TUNA/, 'fish pub set tuna';
+        ok -f "$tmp_home/.config/fish/conf.d/chsrc.fish", 'fish conf.d/chsrc.fish created';
+
+        open my $oldf, '<', "$tmp_home/.config/fish/config.fish" or die $!;
+        my $old_fish_txt = do { local $/; <$oldf> };
+        close $oldf;
+        unlike $old_fish_txt, qr/PUB_HOSTED_URL/, 'legacy PUB_HOSTED_URL cleaned from config.fish';
+        like   $old_fish_txt, qr/# keep comment/, 'unrelated comment preserved in config.fish';
+    }
+}
 
 
 
