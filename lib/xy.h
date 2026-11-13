@@ -2063,10 +2063,10 @@ _xy_detect_os ()
  * @memory SAFE
  */
 void
-xy_use_utf8 ()
+xy_console_use_utf8 ()
 {
 #ifdef XY_Build_On_Windows
-  SetConsoleOutputCP (65001);
+  SetConsoleOutputCP (CP_UTF8); /* 即著名的 65001 */
 #endif
 }
 
@@ -2086,7 +2086,7 @@ xy_init ()
   else
     xy.os_devnull = "/dev/null";
 
-  xy_use_utf8 ();
+  xy_console_use_utf8 ();
 
   xy.inited = true;
 }
