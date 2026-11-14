@@ -220,11 +220,7 @@ debug: build-in-debug-mode
 
 
 
-test: test-make-var test-xy test-fw
-
-ifneq ($(On-Windows), 1)
-test: test-file-update
-endif
+test: test-make-var test-xy test-fw test-file-update
 
 test-make-var:
 	@echo "On-Linux: $(On-Linux)"

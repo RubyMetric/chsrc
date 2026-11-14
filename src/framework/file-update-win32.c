@@ -132,7 +132,18 @@ file_update_win32_create_parent_dirs (const wchar_t *path)
     }
   else if (len >= 2 && L'\\' == dir[0] && L'\\' == dir[1])
     {
-      wchar_t *share = wcschr (dir + 2, L'\\');
+      /* 扩展长度 UNC 路径形如 \\?\UNC\server\share\...，server/share 位于
+       * UNC\ 标记之后，不能像 \\?\C:\ 那样把前两段直接当作根前缀跳过。 */
+      size_t offset = 2;
+      if (len >= 8 && (L'?' == dir[2] || L'.' == dir[2]) && L'\\' == dir[3]
+          && (L'U' == dir[4] || L'u' == dir[4])
+          && (L'N' == dir[5] || L'n' == dir[5])
+          && (L'C' == dir[6] || L'c' == dir[6]) && L'\\' == dir[7])
+        {
+          offset = 8;
+        }
+
+      wchar_t *share = wcschr (dir + offset, L'\\');
       if (share)
         {
           wchar_t *next = wcschr (share + 1, L'\\');
@@ -168,8 +179,9 @@ file_update_win32_create_parent_dirs (const wchar_t *path)
 }
 
 
-/* 在目标文件同目录生成 chsrc-XXXXXX 临时文件；CREATE_NEW 保证不会覆盖
- * 其他进程刚创建的文件，命名冲突时重新生成。 */
+/* 在目标文件同目录生成 .chsrc-XXXXXX 临时文件；CREATE_NEW 保证不会覆盖
+ * 其他进程刚创建的文件，命名冲突时重新生成。前导点与 POSIX 后端一致，
+ * 便于用户和测试识别残留的临时文件。 */
 static bool
 file_update_win32_make_temp (const wchar_t *target, HANDLE *out_handle, wchar_t **out_path)
 {
@@ -179,7 +191,7 @@ file_update_win32_make_temp (const wchar_t *target, HANDLE *out_handle, wchar_t 
   wchar_t *slash = wcsrchr (pattern, L'\\');
   if (!slash) { free (pattern); errno = EINVAL; return false; }
   slash[1] = L'\0';
-  wcscat (pattern, L"chsrc-XXXXXX");
+  wcscat (pattern, L".chsrc-XXXXXX");
 
   for (int i = 0; i < 16; i++)
     {
