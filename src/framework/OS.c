@@ -1145,16 +1145,19 @@ log_anyway:
 static void
 chsrc_backup (const char *path)
 {
+  xy_cant_be_null (path);
+
   if (in_dry_run_mode())
     {
       goto log_anyway;
     }
 
-  char *cmd = NULL;
-  bool exist = xy_file_exist (path);
+  char *norm_path = xy_normalize_path (path);
+  bool exist = xy_file_exist (norm_path);
 
   if (!exist)
     {
+      free (norm_path);
       char *msg = ENGLISH ? "File doesn't exist, skip backup: " : "文件不存在,跳过备份: ";
       chsrc_alert2 (xy_2strcat (msg, path));
       return;
@@ -1169,17 +1172,21 @@ chsrc_backup (const char *path)
 
       for (size_t i=0; i < xy_seq_len(backed_up_paths); i++)
         {
-          if (xy_streql (xy_seq_at (backed_up_paths, i), path))
-            goto log_anyway;
+          if (xy_streql (xy_seq_at (backed_up_paths, i), norm_path))
+            {
+              free (norm_path);
+              goto log_anyway;
+            }
         }
 
-      xy_seq_push (backed_up_paths, xy_strdup (path));
+      xy_seq_push (backed_up_paths, xy_strdup (norm_path));
     }
 
+  char *cmd = NULL;
   if (xy.on_bsd || xy.on_macos)
     {
       /* BSD 和 macOS 的 cp 不支持 --backup 选项 */
-      cmd = xy_strcat (5, "cp -f ", path, " ", path, ".bak");
+      cmd = xy_strcat (5, "cp -f \"", norm_path, "\" \"", norm_path, ".bak\"");
     }
   else if (xy.on_windows)
     {
@@ -1187,7 +1194,7 @@ chsrc_backup (const char *path)
        * @note /Y 表示覆盖
        * @note 默认情况下会输出一个 "已复制  1个文件"
        */
-      cmd = xy_strcat (5, "copy /Y ", path, " ", path, ".bak 1>nul");
+      cmd = xy_strcat (5, "copy /Y \"", norm_path, "\" \"", norm_path, ".bak\" 1>nul");
     }
   else
     {
@@ -1200,18 +1207,21 @@ chsrc_backup (const char *path)
        */
       char *ver = xy_run ("cp --version 2>&1", 1);
       /* cp (GNU coreutils) 9.4 */
-      if (strstr (ver, "GNU coreutils"))
+      if (ver && strstr (ver, "GNU coreutils"))
         {
-          cmd = xy_strcat (5, "cp ", path, " ", path, ".bak --backup='t'");
+          cmd = xy_strcat (5, "cp \"", norm_path, "\" \"", norm_path, ".bak\" --backup='t'");
         }
       else
         {
           /* 非 GNU 的 cp 可能不支持 --backup ，如 busybox cp */
-          cmd = xy_strcat (5, "cp -f ", path, " ", path, ".bak");
+          cmd = xy_strcat (5, "cp -f \"", norm_path, "\" \"", norm_path, ".bak\"");
         }
+      if (ver) free (ver);
     }
 
   chsrc_run_as_a_service (cmd);
+  free (cmd);
+  free (norm_path);
 
 log_anyway:
   log_for_file_backup_op (path);

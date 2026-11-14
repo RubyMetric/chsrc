@@ -1118,6 +1118,64 @@ xy_file_read (const char *path)
 }
 
 
+/**
+ * @brief 以二进制读取整个文件，并在末尾补一个 NUL
+ *
+ * @note 不做换行转换，按原始字节返回，适合配置文件的比较与回写
+ *
+ * @param[out] out_buf 文件内容；成功时由调用方释放，失败时置为 NULL
+ * @param[out] out_len 文件字节数，不含末尾补充的 NUL
+ *
+ * @return 是否读取成功；失败时保留 errno
+ *
+ * @memory SAFE
+ *   param[out] `out_buf` caller-free
+ */
+static bool
+xy_file_read_bytes (const char *path, char **out_buf, size_t *out_len)
+{
+  *out_buf = NULL;
+  *out_len = 0;
+  FILE *fp = xy_fopen (path, "rb");
+  if (!fp)
+    return false;
+
+  size_t cap = 4096;
+  size_t len = 0;
+  char *buf = xy_malloc0 (cap);
+  bool ok = true;
+  int err = 0;
+  for (;;)
+    {
+      if (len == cap - 1)
+        {
+          if (cap > SIZE_MAX / 2) { ok = false; err = EOVERFLOW; break; }
+          size_t next_cap = cap * 2;
+          char *grown = realloc (buf, next_cap);
+          if (!grown) { ok = false; err = ENOMEM; break; }
+          buf = grown;
+          cap = next_cap;
+        }
+      size_t n = fread (buf + len, 1, cap - len - 1, fp);
+      len += n;
+      /* 读失败时 errno 可能未被设置，补一个兜底以免上层报告 "Success"。 */
+      if (ferror (fp)) { ok = false; err = errno; if (0 == err) err = EIO; break; }
+      if (feof (fp)) break;
+    }
+  if (0 != fclose (fp)) { ok = false; err = errno; if (0 == err) err = EIO; }
+  if (!ok)
+    {
+      free (buf);
+      errno = err;
+      return false;
+    }
+  buf[len] = '\0';
+  *out_buf = buf;
+  *out_len = len;
+  return true;
+}
+
+
 
 /******************************************************
  *                      Logging
@@ -1134,6 +1192,9 @@ xy_file_read (const char *path)
 #define xy_info(prompt,str)  _xy_log (_XY_Log_Info,    prompt, str)
 #define xy_warn(prompt,str)  _xy_log (_XY_Log_Warn,    prompt, str)
 #define xy_error(prompt,str) _xy_log (_XY_Log_Error,   prompt, str)
+
+static char *xy_path_display_text (const char *text);
+
 
 /**
  * @memory LEAK
@@ -1177,6 +1238,13 @@ _xy_log (int level, const char *prompt, const char *content)
       xy_unreached();
     }
 
+  char *display = xy_path_display_text (str);
+  if (display)
+    {
+      free (str);
+      str = display;
+    }
+
   if (to_stderr)
     {
       fprintf (stderr, "%s\n", str);
@@ -1212,6 +1280,14 @@ static void
 xy_log_brkt_to (const char *prompt, const char *content, FILE *stream)
 {
   char *str = xy_strcat (4, "[", prompt, "] ", content);
+
+  char *display = xy_path_display_text (str);
+  if (display)
+    {
+      free (str);
+      str = display;
+    }
+
   fprintf (stream, "%s\n", str);
   free (str);
 }
@@ -1268,6 +1344,13 @@ _xy_log_brkt (int level, const char *prompt1, const char *prompt2, const char *c
   else
     {
       xy_unreached();
+    }
+
+  char *display = xy_path_display_text (str);
+  if (display)
+    {
+      free (str);
+      str = display;
     }
 
   if (to_stderr)
@@ -1805,6 +1888,190 @@ xy_dir_exist (const char *path)
   return xy_stat_is_dir (path, NULL);
 }
 
+#ifdef XY_Build_On_Windows
+/**
+ * @brief 将宽字符路径展开为绝对路径，并消除其中的 . 与 ..
+ *
+ * @note 失败时返回 NULL，同时保留 GetLastError() 供调用方映射为 errno
+ *
+ * @memory SAFE
+ *   return caller-free
+ */
+static wchar_t *
+_xy_win_full_path (const wchar_t *path)
+{
+  DWORD need = GetFullPathNameW (path, 0, NULL, NULL);
+  if (0 == need)
+    return NULL;
+
+  wchar_t *buf = xy_malloc0 ((size_t) need * sizeof (wchar_t));
+  DWORD len = GetFullPathNameW (path, need, buf, NULL);
+  if (0 == len || len >= need)
+    {
+      DWORD error = GetLastError ();
+      free (buf);
+      SetLastError (error);
+      return NULL;
+    }
+  return buf;
+}
+
+
+/**
+ * @brief 将绝对路径转换为带 \\?\ 前缀的扩展长度路径
+ *
+ * @details
+ *   1. 使用 GetFullPathNameW() 消除路径中的 . 与 ..，并展开为绝对路径
+ *      - 扩展长度路径不会做此类规范化，必须先自行处理
+ *   2. 普通盘符路径转换为 \\?\C:\...
+ *   3. UNC 路径转换为 \\?\UNC\server\share\...
+ *   4. 已带 \\?\ 或 \\.\ 前缀的路径原样返回，保证多次调用结果一致
+ *   5. 相对路径不做处理
+ *      - 避免 xy_path_join() 的第二个参数被意外转换为绝对路径
+ *
+ * @note 该前缀是 Win32 API 的路径标记，不会改变文件本身；即使系统未启用
+ *       长路径策略，Win32 文件 API 也会因该前缀而接受超过 MAX_PATH 的路径
+ *
+ * @memory SAFE
+ *   return caller-free
+ */
+static char *
+xy_path_extend (const char *path)
+{
+  if (!path)
+    return NULL;
+
+  if (xy_str_start_with (path, "\\\\?\\") || xy_str_start_with (path, "\\\\.\\"))
+    return xy_strdup (path);
+
+  bool drive = ((path[0] >= 'A' && path[0] <= 'Z') || (path[0] >= 'a' && path[0] <= 'z'))
+               && path[1] == ':' && path[2] == '\\';
+  bool unc = path[0] == '\\' && path[1] == '\\';
+
+  if (!drive && !unc)
+    return xy_strdup (path);
+
+  wchar_t *wpath = xy_utf8_to_wstr (path);
+  if (!wpath)
+    return xy_strdup (path);
+
+  wchar_t *wfull = _xy_win_full_path (wpath);
+  free (wpath);
+  if (!wfull)
+    return xy_strdup (path);
+
+  size_t wlen = wcslen (wfull);
+  wchar_t *wout = NULL;
+
+  if (wfull[0] == L'\\' && wfull[1] == L'\\')
+    {
+      wout = xy_malloc0 ((wlen + 8) * sizeof (wchar_t));
+      wcscpy (wout, L"\\\\?\\UNC\\");
+      wcscat (wout, wfull + 2);
+    }
+  else
+    {
+      wout = xy_malloc0 ((wlen + 5) * sizeof (wchar_t));
+      wcscpy (wout, L"\\\\?\\");
+      wcscat (wout, wfull);
+    }
+  free (wfull);
+
+  char *ret = xy_wstr_to_utf8 (wout);
+  free (wout);
+
+  return ret ? ret : xy_strdup (path);
+}
+#else
+/**
+ * @brief 非 Windows 平台直接返回路径副本 (仅用于保持调用点统一)
+ *
+ * @memory SAFE
+ *   return caller-free
+ */
+static char *
+xy_path_extend (const char *path)
+{
+  return xy_strdup (path);
+}
+#endif
+
+
+/**
+ * @brief 去掉 Win32 扩展长度路径前缀，得到面向用户的路径表示
+ *
+ * @details
+ *   - \\?\UNC\server\share -> \\server\share
+ *   - \\?\C:\...           -> C:\...
+ *   - 非 Windows 平台或没有前缀时返回副本
+ *
+ * @memory SAFE
+ *   return caller-free
+ */
+static char *
+xy_path_display (const char *path)
+{
+  if (!path)
+    return NULL;
+
+#ifdef XY_Build_On_Windows
+  if (xy_str_start_with (path, "\\\\?\\UNC\\"))
+    {
+      char *rest = xy_strdup (path + 8);
+      char *ret = xy_2strcat ("\\\\", rest);
+      free (rest);
+      return ret;
+    }
+
+  if (xy_str_start_with (path, "\\\\?\\"))
+    return xy_strdup (path + 4);
+#endif
+
+  return xy_strdup (path);
+}
+
+
+/**
+ * @brief 把日志文本中出现的 \\?\ 前缀全部去掉
+ *
+ * @return 若文本不含该前缀则返回 NULL，调用方应继续使用原文本
+ *
+ * @memory SAFE
+ *   return caller-free
+ */
+static char *
+xy_path_display_text (const char *text)
+{
+  if (!text || !xy.on_windows || !strstr (text, "\\\\?\\"))
+    return NULL;
+
+  size_t len = strlen (text);
+  char *out = xy_malloc0 (len + 1);
+  size_t src = 0;
+  size_t dst = 0;
+
+  while (src < len)
+    {
+      if (0 == strncmp (text + src, "\\\\?\\UNC\\", 8))
+        {
+          out[dst++] = '\\';
+          out[dst++] = '\\';
+          src += 8;
+        }
+      else if (0 == strncmp (text + src, "\\\\?\\", 4))
+        {
+          src += 4;
+        }
+      else
+        {
+          out[dst++] = text[src++];
+        }
+    }
+  out[dst] = '\0';
+  return out;
+}
+
+
 /**
  * @brief 规范化路径
  *
@@ -1812,9 +2079,10 @@ xy_dir_exist (const char *path)
  *   1. 删除路径左右两边多出来的空白符
  *      - 防止通过间接方式得到的路径包含了空白字符 (如 grep 出来的结果)
  *      - 防止维护者多写了空白字符
- *   2. 将开头的 ~ 转换为当前用户的 HOME/USERPROFILE
- *   3. Windows 上展开 %NAME% 环境变量
- *   4. 在Windows上，使用标准的 \ 作为路径分隔符
+ *   2. 将 ~ 转换为绝对路径
+ *   3. 在Windows上，使用标准的 \ 作为路径分隔符
+ *   4. 在Windows上，为绝对路径添加 \\?\ 前缀以支持长路径
+ *      - 面向用户展示时应使用 xy_path_display() 去掉该前缀
  *
  * @memory SAFE
  *   return caller-free
@@ -1858,10 +2126,8 @@ xy_normalize_path (const char *path)
 
   if (xy.on_windows)
     {
-      /* 分隔符替换不改变长度，直接复用规范化过程分配的缓冲区。 */
-      for (char *p = new; *p; p++)
-        if ('/' == *p)
-          *p = '\\';
+      xy_ptr_replace (&new, xy_str_gsub (new, "/", "\\"));
+      xy_ptr_replace (&new, xy_path_extend (new));
     }
   return new;
 }
