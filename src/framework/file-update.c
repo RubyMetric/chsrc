@@ -94,9 +94,27 @@ file_update_changed (const FileUpdate_t *op)
 #include "file-update-posix.c"
 #endif
 
+/* 暂存完成后若进程被 exit() 终止（例如备份命令失败会直接退出），临时文件
+ * 不应留在用户目录里；这里记录当前批次，退出时复用各后端的 discard 清理。
+ * 单线程模型：同一时刻只有一个批次处于暂存状态。 */
+static StagedFileUpdate_t *FileUpdate_Active_Stages = NULL;
+static size_t FileUpdate_Active_Count = 0;
+static bool FileUpdate_Exit_Hook_Installed = false;
+
+static void
+file_update_cleanup_active_stages (void)
+{
+  for (size_t i = 0; i < FileUpdate_Active_Count; i++)
+    file_update_discard (&FileUpdate_Active_Stages[i]);
+
+  FileUpdate_Active_Stages = NULL;
+  FileUpdate_Active_Count = 0;
+}
+
 /* 全部内容由调用方预先生成。本层比较字节并复核旧快照，再暂存、备份、替换。
  * 无变化时不写入、不备份；Dry Run 只显示将要修改的文件。
  * 每个文件原子替换，后续失败回滚已替换文件；不保证崩溃时的多文件原子性。
+ * 目标若为硬链接，只会重建其中一条目录项，其余链接仍指向旧内容。
  * 平台后端负责保留符号链接及权限/ACL；复核快照不能消除外部写入竞态。 */
 static FileUpdateResult_t
 chsrc_update_files (const FileUpdate_t *ops, size_t count, char **out_err)
@@ -131,6 +149,15 @@ chsrc_update_files (const FileUpdate_t *ops, size_t count, char **out_err)
     }
 
   StagedFileUpdate_t *stages = xy_malloc0 (count * sizeof (StagedFileUpdate_t));
+  if (!FileUpdate_Exit_Hook_Installed)
+    {
+      /* 批次结束时指针会复位，正常退出时钩子不会访问已释放的内存。 */
+      atexit (file_update_cleanup_active_stages);
+      FileUpdate_Exit_Hook_Installed = true;
+    }
+  FileUpdate_Active_Stages = stages;
+  FileUpdate_Active_Count = count;
+
   size_t failed = 0;
   bool ok = true;
   bool rollback_ok = true;
@@ -192,9 +219,11 @@ chsrc_update_files (const FileUpdate_t *ops, size_t count, char **out_err)
             {
               rollback_ok = false;
               stages[i].keep_rollback = true;
-              chsrc_error2 (xy_2strcat (
+              char *recover = xy_2strcat (
                 ENGLISH ? "Rollback failed; recover using backup: " : "回滚失败，请使用备份恢复: ",
-                stages[i].rollback ? stages[i].rollback : stages[i].target));
+                stages[i].rollback ? stages[i].rollback : stages[i].target);
+              chsrc_error2 (recover);
+              free (recover);
             }
         }
       if (out_err)
@@ -227,6 +256,8 @@ chsrc_update_files (const FileUpdate_t *ops, size_t count, char **out_err)
           log_for_file_write (ops[i].display_path, true);
     }
 
+  FileUpdate_Active_Stages = NULL;
+  FileUpdate_Active_Count = 0;
   for (size_t i = 0; i < count; i++)
     file_update_discard (&stages[i]);
   free (stages);

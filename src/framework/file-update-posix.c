@@ -231,6 +231,8 @@ file_update_stage (const FileUpdate_t *op, StagedFileUpdate_t *stage)
       if (!stage->target) goto done;
       if (0 != stat (stage->target, &st)) goto done;
       if (!S_ISREG (st.st_mode)) { errno = EINVAL; goto done; }
+      /* access() 按真实 UID 判断，root 或 ACL 场景可能偏乐观；这里只作为
+       * 尽早失败的前置检查，最终权限由临时文件写入与替换决定。 */
       if (0 != access (stage->target, W_OK)) goto done;
 
       char *current = NULL;
@@ -294,9 +296,32 @@ done:
 static bool
 file_update_commit (StagedFileUpdate_t *stage, const FileUpdate_t *op)
 {
-  (void) op;   /* 保持与 Win32 后端一致的函数签名。 */
-
-  if (0 != rename (stage->replacement, stage->target)) return false;
+  if (op->existed)
+    {
+      if (0 != rename (stage->replacement, stage->target)) return false;
+    }
+  else
+    {
+      /* 目标可能在计划生成后被其他程序创建。Win32 后端的 MoveFileExW 不带
+       * REPLACE_EXISTING，会拒绝覆盖；这里用 link 取得同样的不覆盖语义。 */
+      if (0 != link (stage->replacement, stage->target))
+        {
+          int err = errno;
+          /* 不支持硬链接的文件系统退回 rename，行为与旧实现一致。 */
+          if (ENOTSUP != err && EOPNOTSUPP != err && EPERM != err && EXDEV != err)
+            {
+              errno = err;
+              return false;
+            }
+          if (0 != rename (stage->replacement, stage->target)) return false;
+        }
+      else if (0 != unlink (stage->replacement))
+        {
+          /* 目标已建立、提交已经生效；临时名留给 discard 再清理一次。 */
+          file_update_sync_parent_dir (stage->target);
+          return true;
+        }
+    }
 
   /* 提交成功后清空指针，避免 discard 误删已不存在的临时路径。 */
   free (stage->replacement);

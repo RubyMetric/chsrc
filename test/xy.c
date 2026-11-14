@@ -195,10 +195,18 @@ main (int argc, char const *argv[])
 
   char *home_path = xy_normalize_path ("~");
 #ifdef XY_Build_On_Windows
-  assert_str (home_path, xy_2strcat ("\\\\\?\\", xy_os_home));
-  home_path = xy_path_display_text (home_path);
+  {
+    char *home_expected = xy_2strcat ("\\\\?\\", xy_os_home);
+    assert_str (home_path, home_expected);
+    free (home_expected);
+
+    char *home_display = xy_path_display_text (home_path);
+    assert (NULL != home_display);
+    free (home_path);
+    home_path = home_display;
+  }
 #endif
-  assert_str (home_path , xy_os_home);
+  assert_str (home_path, xy_os_home);
   free (home_path);
 
 #ifdef XY_Build_On_Windows
@@ -219,8 +227,21 @@ main (int argc, char const *argv[])
       say (xy_normalize_path ("~"));
       say (xy_normalize_path ("~/"));
       // xy_parent_dir() 得到的结果一定是不包含尾斜杠的目录名
-      assert_str (xy_path_display (xy_parent_dir (xy_normalize_path ("~"))), "C:\\Users");
-      assert_str (xy_path_display (xy_parent_dir (xy_normalize_path ("~/"))), "C:\\Users");
+      char *home_norm = xy_normalize_path ("~");
+      char *home_parent = xy_parent_dir (home_norm);
+      char *home_parent_display = xy_path_display (home_parent);
+      assert_str (home_parent_display, "C:\\Users");
+      free (home_parent_display);
+      free (home_parent);
+      free (home_norm);
+
+      char *home_slash_norm = xy_normalize_path ("~/");
+      char *home_slash_parent = xy_parent_dir (home_slash_norm);
+      char *home_slash_display = xy_path_display (home_slash_parent);
+      assert_str (home_slash_display, "C:\\Users");
+      free (home_slash_display);
+      free (home_slash_parent);
+      free (home_slash_norm);
       assert (xy_dir_exist ("C:\\Users"));
 
       say (xy_win_powershell_profile);
@@ -228,7 +249,11 @@ main (int argc, char const *argv[])
       assert (xy_file_exist (xy_win_powershell_profile));
       assert (true == xy_file_exist (xy_win_powershellv5_profile));
 
-      assert_str (xy_path_display (xy_normalize_path ("C:\\a bc\\def\\")), "C:\\a bc\\def\\");
+      char *spaced = xy_normalize_path ("C:\\a bc\\def\\");
+      char *spaced_display = xy_path_display (spaced);
+      assert_str (spaced_display, "C:\\a bc\\def\\");
+      free (spaced_display);
+      free (spaced);
       assert_str (xy_normalize_path ("a/b c/d"), "a\\b c\\d");
       assert_str (xy_normalize_path ("a/b c/d/"), "a\\b c\\d\\");
       assert_str (xy_parent_dir ("a/b c/d"), "a\\b c");

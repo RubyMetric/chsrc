@@ -1158,10 +1158,11 @@ xy_file_read_bytes (const char *path, char **out_buf, size_t *out_len)
         }
       size_t n = fread (buf + len, 1, cap - len - 1, fp);
       len += n;
-      if (ferror (fp)) { ok = false; err = errno; break; }
+      /* 读失败时 errno 可能未被设置，补一个兜底以免上层报告 "Success"。 */
+      if (ferror (fp)) { ok = false; err = errno; if (0 == err) err = EIO; break; }
       if (feof (fp)) break;
     }
-  if (0 != fclose (fp)) { ok = false; err = errno; }
+  if (0 != fclose (fp)) { ok = false; err = errno; if (0 == err) err = EIO; }
   if (!ok)
     {
       free (buf);
