@@ -108,6 +108,9 @@ chsrc_register_chefs_and_sauciers ()
 
 #include "framework/waiter.c"
 
+/* scan / plan / setup 三件套，见 framework/bulk.c */
+#include "framework/bulk.c"
+
 int
 main (int argc, char const *argv[])
 {
@@ -123,6 +126,14 @@ main (int argc, char const *argv[])
     }
 
   const char *command = argv[1];
+
+  /* scan / plan / setup 有独立的选项集，提前分派，避免落入通用选项解析 */
+  if (   xy_streql (command, "scan")
+      || xy_streql (command, "plan")
+      || xy_streql (command, "setup"))
+    {
+      return bulk_command_main (argc + 1, argv, 1);
+    }
 
   // chsrc set <dish-name> <mirror-code>
   //        1        2             3

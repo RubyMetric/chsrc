@@ -104,6 +104,34 @@ like `$CHSRC list ware`,  qr/brew\s*homebrew/,   'chsrc list ware';
 
 =end comment
 =cut
+=begin comment
+
+测试 scan / plan / setup 三件套
+
+这三条命令只做检测、生成方案或 dry run，不应修改用户配置。
+注意：在真实机器上执行时，setup 必须带 -dry，避免改动配置。
+
+=end comment
+=cut
+
+my $scan_has_dish = qr/可用|managed|检测到|Detected/i;
+like `$CHSRC scan`,  $scan_has_dish,  'chsrc scan';
+
+my $plan_has_apply = qr/\[执行\]|\[APPLY\]/;
+like `$CHSRC plan`,  $plan_has_apply,  'chsrc plan';
+
+my $setup_dry = qr/Dry Run|Dry run/;
+like `$CHSRC setup -dry`,  $setup_dry,  'chsrc setup -dry';
+
+my $scan_lang = qr/编程语言|Languages/;
+like `$CHSRC scan --lang`,  $scan_lang,  'chsrc scan --lang';
+
+my $scan_en = qr/Sources detected|Summary/;
+like `$CHSRC scan -en`,  $scan_en,  'chsrc scan -en';
+
+my $bad_opt = qr/未识别|Unknown option/;
+like `$CHSRC scan --bogus 2>&1`,  $bad_opt,  'chsrc scan --bogus';
+
 my $get_null = qr/chsrc: 请提供想要查看源的菜品名/u;
 like `$CHSRC get -no-color 2>&1`,  $get_null,    'chsrc get -no-color';
 

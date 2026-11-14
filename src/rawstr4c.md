@@ -61,6 +61,10 @@
    set    <dish>  <URL>     换源，用户自定义源URL
    reset  <dish>            重置，使用上游默认使用的源
 
+   scan                     只读检测本机可换源项目与当前源
+   plan                     生成换源方案（只读，不执行）
+   setup                    扫描并执行换源；默认只处理用户级全自动项
+
 选项:
    -dry                       Dry Run，模拟换源过程，命令仅打印并不运行
    -scope=project|user|system 仅对本项目换源 / 用户级换源 / 系统级换源 (通过ls <dish>查看)
@@ -115,6 +119,10 @@ COMMANDS:
    set    <dish> <mirror>   Change source, specify a mirror site (Via `list <dish>`)
    set    <dish>  <URL>     Change source, using user-defined source URL
    reset  <dish>            Reset  source to the upstream's default
+
+   scan                     Read-only detection of manageable sources on this machine
+   plan                     Build a setup plan (read-only)
+   setup                    Scan and apply; user-level automatic items only by default
 
 OPTIONS:
    -dry                       Dry Run. Simulate the source changing process, command only prints, not run
