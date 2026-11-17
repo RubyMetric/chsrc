@@ -2,6 +2,7 @@
  * Win32 registry regressions with an in-memory Reg*W boundary.
  * Real backup files are checked; no user registry values or broadcasts change. */
 #define Chsrc_Version "chsrc-env-win32-tester"
+#define CHSRC_TESTING
 #include "../src/framework/base.c"
 #include "../src/framework/OS.c"
 #include "../src/framework/file-update.c"
@@ -110,6 +111,41 @@ test_broadcast (HWND window, UINT message, WPARAM wparam, LPARAM lparam,
 #undef SendMessageTimeoutW
 
 static void
+test_reg_serializer (void)
+{
+  /* 2. .reg UTF-16LE + BOM 序列化校验（覆盖 REG_SZ 转义、删除标记与 hex(2)） */
+  unsigned char expand_raw[] = { '%', 0x00, 'T', 0x00, '%', 0x00, 0x00, 0x00 };
+  EnvRegSnapshot_t snaps[3] = {
+    { "RUSTUP_DIST_SERVER", true,  1, "https://a.org/path\\\"q", NULL,       0                   },
+    { "NEW_ADDED_VAR",      false, 0, NULL,                      NULL,       0                   },
+    { "EXPAND_VAR",         true,  2, NULL,                      expand_raw, sizeof (expand_raw) }
+  };
+
+  size_t         reg_len   = 0;
+  unsigned char *reg_bytes = env_build_reg_backup_bytes (
+    "HKEY_CURRENT_USER\\Environment", snaps, 3, &reg_len);
+
+  assert (reg_len >= 4);
+  assert (0xFF == reg_bytes[0] && 0xFE == reg_bytes[1]);
+
+  size_t    units = (reg_len - 2) / 2;
+  wchar_t *dec   = xy_malloc0 ((units + 1) * sizeof (wchar_t));
+  for (size_t i = 0; i < units; i++)
+    {
+      dec[i] = (uint16_t) reg_bytes[2 + i * 2] | ((uint16_t) reg_bytes[2 + i * 2 + 1] << 8);
+    }
+  char *reg_txt = xy_wstr_to_utf8 (dec);
+  free (dec);
+  free (reg_bytes);
+
+  assert (NULL != strstr (reg_txt, "Windows Registry Editor Version 5.00\r\n\r\n[HKEY_CURRENT_USER\\Environment]\r\n"));
+  assert (NULL != strstr (reg_txt, "\"RUSTUP_DIST_SERVER\"=\"https://a.org/path\\\\\\\"q\"\r\n"));
+  assert (NULL != strstr (reg_txt, "\"NEW_ADDED_VAR\"=-\r\n"));
+  assert (NULL != strstr (reg_txt, "\"EXPAND_VAR\"=hex(2):25,00,54,00,25,00,00,00\r\n"));
+  free (reg_txt);
+}
+
+static void
 assert_value (const char *name, const char *expected)
 {
   bool found = false;
@@ -160,13 +196,86 @@ test_combo_backups_cover_later_variables (void)
       size_t len = 0;
       assert (xy_file_read_bytes (path, &bytes, &len));
       assert (len > 2 && (unsigned char) bytes[0] == 0xff && (unsigned char) bytes[1] == 0xfe);
-      char *text = env_utf16le_to_utf8 ((uint16_t *) (bytes + 2), (len - 2) / 2);
+      wchar_t *wide = xy_malloc0 (len);
+      memcpy (wide, bytes + 2, len - 2);
+      char *text = xy_wstr_to_utf8 (wide);
+      free (wide);
       assert (strstr (text, i ? "\"LATER_ADDED\"=-" : "\"FIRST_ADDED\"=-"));
       free (text);
       free (bytes);
       free (path);
     }
   ProgStatus.ComboStackDepth = 0;
+}
+
+static void
+test_invalid_utf8_rejects_whole_batch (void)
+{
+  EnvKV_t kvs[] = { { "VALID_NEW", "valid" }, { "INVALID_NEW", "\xed\xa0\x80" } };
+  char *err = NULL;
+  unsigned seq = Env_Win_Backup_Seq;
+  int broadcasts = Test_Broadcasts;
+  assert (Env_BadValue == env_apply_kvs (kvs, 2, NULL, &err));
+  assert (err);
+  free (err);
+  assert_value ("VALID_NEW", NULL);
+  assert_value ("INVALID_NEW", NULL);
+  assert (seq == Env_Win_Backup_Seq && broadcasts == Test_Broadcasts);
+}
+
+static void
+test_shared_backup_failure_preserves_registry (void)
+{
+  EnvKV_t kv = { "BACKUP_FAILURE", "new" };
+  char *err = NULL;
+  int broadcasts = Test_Broadcasts;
+  FileUpdate_Test_Fail_Commit = 0;
+  assert (Env_TargetUnwritable == env_apply_kvs (&kv, 1, NULL, &err));
+  FileUpdate_Test_Fail_Commit = -1;
+  assert (err);
+  free (err);
+  assert_value (kv.name, NULL);
+  assert (broadcasts == Test_Broadcasts);
+  char filename[64];
+  snprintf (filename, sizeof filename, "env-hkcu-%u.reg", Env_Win_Backup_Seq);
+  char *path = xy_path_join (Env_Win_Backup_Dir, filename);
+  assert (!xy_path_exist (path));
+  free (path);
+}
+
+static void
+test_registry_strings_use_bounded_shared_conversion (void)
+{
+  /* 未终止的 REG_SZ 必须读取完整；不能读取提供长度以外的内存。 */
+  const wchar_t unterminated[] = { L'a', 0x4e2d, 0xd83e, 0xdd80 };
+  assert (ERROR_SUCCESS == test_set_value ((HKEY) 1, L"RAW_STRING", 0, REG_SZ,
+            (const BYTE *) unterminated, sizeof unterminated));
+  assert_value ("RAW_STRING", "a中🦀");
+
+  const wchar_t malformed[][3] = { { 0xd800, 0, 0 }, { L'a', 0, L'b' } };
+  for (size_t i = 0; i < xy_c_array_len (malformed); i++)
+    {
+      assert (ERROR_SUCCESS == test_set_value ((HKEY) 1, L"RAW_STRING", 0, REG_SZ,
+                (const BYTE *) malformed[i], sizeof malformed[i]));
+      char *err = NULL, *value = NULL;
+      bool found = false;
+      assert (Env_AmbiguousTarget == env_query_persisted ("RAW_STRING", &found, &value, &err));
+      assert (!found && !value && err);
+      free (err);
+      EnvRegSnapshot_t snap;
+      assert (Env_OK == env_read_win_snapshot_one ((HKEY) 1, "RAW_STRING", &snap, NULL));
+      assert (!snap.utf8_sz_val);
+      assert (sizeof malformed[i] == snap.raw_len);
+      assert (0 == memcmp (snap.raw_bytes, malformed[i], snap.raw_len));
+      size_t len;
+      unsigned char *bytes = env_build_reg_backup_bytes (ENV_WIN_HKCU_REGPATH, &snap, 1, &len);
+      assert (bytes && len > 2);
+      char *text = xy_wstr_to_utf8 ((wchar_t *) (bytes + 2));
+      assert (text && strstr (text, "\"RAW_STRING\"=hex(1):"));
+      free (text);
+      free (bytes);
+      free (snap.raw_bytes);
+    }
 }
 
 static void
@@ -202,8 +311,12 @@ int main (void)
   xy_init ();
   ProgMode.Scope = UserScope;
   ProgMode.EnglishMode = true;
+  test_reg_serializer ();
   test_roundtrip_and_case_aliases ();
   test_combo_backups_cover_later_variables ();
+  test_invalid_utf8_rejects_whole_batch ();
+  test_shared_backup_failure_preserves_registry ();
+  test_registry_strings_use_bounded_shared_conversion ();
   test_write_failure_and_rollback_failure ();
   for (int i = 0; i < 32; i++)
     {

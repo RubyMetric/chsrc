@@ -31,53 +31,6 @@ test_isolate_home (void)
 }
 #endif
 
-static void
-test_env_utf16_and_reg_serializer (void)
-{
-  /* 1. UTF-8 <-> UTF-16LE 往返测试（覆盖 ASCII、中文与代理对 Emoji） */
-  const char *sample = "C:\\Users\\张三\\Mirror🦀Test";
-  uint16_t   *u16    = NULL;
-  size_t      u16_n  = 0;
-  env_utf8_to_utf16le (sample, &u16, &u16_n);
-  assert (NULL != u16);
-  assert (u16_n > 0);
-
-  char *roundtrip = env_utf16le_to_utf8 (u16, u16_n);
-  assert_str (roundtrip, sample);
-  free (roundtrip);
-  free (u16);
-
-  /* 2. .reg UTF-16LE + BOM 序列化校验（覆盖 REG_SZ 转义、删除标记与 hex(2)） */
-  unsigned char expand_raw[] = { '%', 0x00, 'T', 0x00, '%', 0x00, 0x00, 0x00 };
-  EnvRegSnapshot_t snaps[3] = {
-    { "RUSTUP_DIST_SERVER", true,  1, "https://a.org/path\\\"q", NULL,       0                   },
-    { "NEW_ADDED_VAR",      false, 0, NULL,                      NULL,       0                   },
-    { "EXPAND_VAR",         true,  2, NULL,                      expand_raw, sizeof (expand_raw) }
-  };
-
-  size_t         reg_len   = 0;
-  unsigned char *reg_bytes = env_build_reg_backup_bytes (
-    "HKEY_CURRENT_USER\\Environment", snaps, 3, &reg_len);
-
-  assert (reg_len >= 4);
-  assert (0xFF == reg_bytes[0] && 0xFE == reg_bytes[1]);
-
-  size_t    units = (reg_len - 2) / 2;
-  uint16_t *dec   = xy_malloc0 ((units + 1) * sizeof (uint16_t));
-  for (size_t i = 0; i < units; i++)
-    {
-      dec[i] = (uint16_t) reg_bytes[2 + i * 2] | ((uint16_t) reg_bytes[2 + i * 2 + 1] << 8);
-    }
-  char *reg_txt = env_utf16le_to_utf8 (dec, units);
-  free (dec);
-  free (reg_bytes);
-
-  assert (NULL != strstr (reg_txt, "Windows Registry Editor Version 5.00\r\n\r\n[HKEY_CURRENT_USER\\Environment]\r\n"));
-  assert (NULL != strstr (reg_txt, "\"RUSTUP_DIST_SERVER\"=\"https://a.org/path\\\\\\\"q\"\r\n"));
-  assert (NULL != strstr (reg_txt, "\"NEW_ADDED_VAR\"=-\r\n"));
-  assert (NULL != strstr (reg_txt, "\"EXPAND_VAR\"=hex(2):25,00,54,00,25,00,00,00\r\n"));
-  free (reg_txt);
-}
 
 #ifndef XY_Build_On_Windows
 static void
@@ -457,8 +410,6 @@ main (int argc, char const *argv[])
   if (xy_file_exist ("/dev/full"))
     assert (!chsrc_try_overwrite_file ("buffered output", "/dev/full"));
 #endif
-
-  test_env_utf16_and_reg_serializer ();
 
 #ifndef XY_Build_On_Windows
   /* Test_Home 只能来自上面的 mkdtemp 模板，失败时保留现场便于诊断。 */

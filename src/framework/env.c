@@ -704,7 +704,7 @@ env_classify_line (const char *line, size_t line_len,
       const char *commands[] = { "readonly", "declare", "typeset", "local", "unset",
                                  "export", "set", "builtin", "command", "eval" };
       bool mutates = false;
-      for (size_t i = 0; i < sizeof commands / sizeof *commands; i++)
+      for (size_t i = 0; i < xy_c_array_len (commands); i++)
         {
           size_t n = strlen (commands[i]);
           if (0 == strncmp (p, commands[i], n) && (' ' == p[n] || '\t' == p[n]))
@@ -721,7 +721,7 @@ env_classify_line (const char *line, size_t line_len,
           if (!single && !doub && strchr (";|&", c))
             {
               const char *next = env_skip_ws (p + i + 1);
-              for (size_t j = 0; j < sizeof commands / sizeof *commands; j++)
+              for (size_t j = 0; j < xy_c_array_len (commands); j++)
                 {
                   size_t n = strlen (commands[j]);
                   if (0 == strncmp (next, commands[j], n)
@@ -972,17 +972,14 @@ env_get_parent_comm (void)
   /* Linux 优先直读 /proc/<ppid>/comm，零子进程开销且安静 */
   char proc_path[64];
   snprintf (proc_path, sizeof (proc_path), "/proc/%d/comm", (int) ppid);
-  FILE *fp = fopen (proc_path, "r");
-  if (fp)
+  char *comm = xy_file_read (proc_path);
+  char *name = xy_str_strip (comm);
+  free (comm);
+  if (*name)
     {
-      char line[128];
-      if (fgets (line, sizeof (line), fp))
-        {
-          fclose (fp);
-          return xy_str_strip (line);
-        }
-      fclose (fp);
+      return name;
     }
+  free (name);
 
   /* macOS / BSD 回退至 ps */
   char ps_cmd[96];
@@ -1046,7 +1043,7 @@ env_is_migrated_legacy_fish_var (const char *name)
     "HOMEBREW_CORE_GIT_REMOTE"
   };
 
-  for (size_t i = 0; i < sizeof (legacy_vars) / sizeof (legacy_vars[0]); i++)
+  for (size_t i = 0; i < xy_c_array_len (legacy_vars); i++)
     {
       if (xy_streql (name, legacy_vars[i]))
         return true;
@@ -1210,20 +1207,35 @@ env_free_prepared_ops (FileUpdate_t *ops, size_t count)
   free (ops);
 }
 
+/* 可选配置只允许“普通文件”或“确实不存在”；查询失败和目录不能当作空配置。 */
+static EnvOp_t
+env_read_optional_file (const char *path, bool *existed, char **content, size_t *len,
+                        char **out_err)
+{
+  *content = NULL;
+  *len = 0;
+  enum XyStatError error;
+  *existed = xy_stat_is_file (path, &error);
+  if (*existed && xy_file_read_bytes (path, content, len)) return Env_OK;
+  if (!*existed && XY_Stat_Not_Found == error)
+    {
+      *content = xy_strdup ("");
+      return Env_OK;
+    }
+  if (out_err)
+    *out_err = xy_2strcat (ENGLISH ? "Unable to read configuration file: " : "无法读取配置文件: ", path);
+  return Env_TargetUnwritable;
+}
+
 static bool
 env_file_mentions_any_kv (const char *display_path, EnvDialect_t dialect,
                           const EnvKV_t *kvs, size_t kv_count)
 {
   char *norm = xy_normalize_path (display_path);
-  if (!xy_file_exist (norm))
-    {
-      free (norm);
-      return false;
-    }
-
   char  *content = NULL;
   size_t len     = 0;
-  if (!xy_file_read_bytes (norm, &content, &len))
+  bool existed = false;
+  if (Env_OK != env_read_optional_file (norm, &existed, &content, &len, NULL))
     {
       free (norm);
       return false;
@@ -1297,27 +1309,14 @@ env_apply_posix (const EnvKV_t *kvs, size_t kv_count, PosixShell_t *out_shell, c
         }
 
       char  *norm_path   = xy_normalize_path (etc_path);
-      bool   existed     = xy_file_exist (norm_path);
-      char  *old_content = NULL;
-      size_t old_len     = 0;
-
-      if (existed)
+      bool existed = false;
+      char *old_content = NULL;
+      size_t old_len = 0;
+      EnvOp_t read_result = env_read_optional_file (norm_path, &existed, &old_content, &old_len, out_err);
+      if (Env_OK != read_result)
         {
-          if (!xy_file_read_bytes (norm_path, &old_content, &old_len))
-            {
-              if (out_err)
-                {
-                  *out_err = ENGLISH ? xy_2strcat ("Unable to read file: ", norm_path)
-                                     : xy_2strcat ("无法读取文件: ", norm_path);
-                }
-              free (norm_path);
-              return Env_TargetUnwritable;
-            }
-        }
-      else
-        {
-          old_content = xy_strdup ("");
-          old_len     = 0;
+          free (norm_path);
+          return read_result;
         }
 
       char  *new_content = NULL;
@@ -1416,35 +1415,22 @@ env_apply_posix (const EnvKV_t *kvs, size_t kv_count, PosixShell_t *out_shell, c
   for (size_t i = 0; i < write_count; i++)
     {
       char *norm = xy_normalize_path (write_specs[i].display_path);
-      bool existed = xy_file_exist (norm);
-
-      if (!existed && !write_specs[i].create_if_missing)
+      bool existed = false;
+      char *old_content = NULL;
+      size_t old_len = 0;
+      EnvOp_t read_result = env_read_optional_file (norm, &existed, &old_content, &old_len, out_err);
+      if (Env_OK != read_result)
         {
           free (norm);
+          env_free_prepared_ops (ops, op_count);
+          env_free_file_specs (write_specs, write_count);
+          return read_result;
+        }
+      if (!existed && !write_specs[i].create_if_missing)
+        {
+          free (old_content);
+          free (norm);
           continue;
-        }
-
-      char  *old_content = NULL;
-      size_t old_len     = 0;
-      if (existed)
-        {
-          if (!xy_file_read_bytes (norm, &old_content, &old_len))
-            {
-              if (out_err)
-                {
-                  *out_err = ENGLISH ? xy_2strcat ("Unable to read file: ", norm)
-                                     : xy_2strcat ("无法读取文件: ", norm);
-                }
-              free (norm);
-              env_free_prepared_ops (ops, op_count);
-              env_free_file_specs (write_specs, write_count);
-              return Env_TargetUnwritable;
-            }
-        }
-      else
-        {
-          old_content = xy_strdup ("");
-          old_len     = 0;
         }
 
       char  *new_content = NULL;
@@ -1501,25 +1487,21 @@ env_apply_posix (const EnvKV_t *kvs, size_t kv_count, PosixShell_t *out_shell, c
         {
           char       *fishrc_disp = env_fish_path ("config.fish");
           char       *fishrc_norm = xy_normalize_path (fishrc_disp);
-          if (xy_file_exist (fishrc_norm))
+          bool existed = false;
+          char *old_content = NULL;
+          size_t old_len = 0;
+          EnvOp_t read_result = env_read_optional_file (fishrc_norm, &existed, &old_content, &old_len, out_err);
+          if (Env_OK != read_result)
             {
-              char  *old_content = NULL;
-              size_t old_len     = 0;
-              if (!xy_file_read_bytes (fishrc_norm, &old_content, &old_len))
-                {
-                  if (out_err)
-                    {
-                      *out_err = ENGLISH ? xy_2strcat ("Unable to read file: ", fishrc_norm)
-                                         : xy_2strcat ("无法读取文件: ", fishrc_norm);
-                    }
-                  free (fishrc_norm);
-                  free (fishrc_disp);
-                  free (cleanup_kvs);
-                  free (non_legacy_fish_kvs);
-                  env_free_prepared_ops (ops, op_count);
-                  return Env_TargetUnwritable;
-                }
-
+              free (fishrc_norm);
+              free (fishrc_disp);
+              free (cleanup_kvs);
+              free (non_legacy_fish_kvs);
+              env_free_prepared_ops (ops, op_count);
+              return read_result;
+            }
+          if (existed)
+            {
               char  *new_content = NULL;
               size_t new_len     = 0;
               bool   changed     = false;
@@ -1549,6 +1531,7 @@ env_apply_posix (const EnvKV_t *kvs, size_t kv_count, PosixShell_t *out_shell, c
             }
           else
             {
+              free (old_content);
               free (fishrc_norm);
             }
           free (fishrc_disp);
@@ -1617,25 +1600,12 @@ env_query_single_posix_file (const char *display_path, EnvDialect_t dialect,
   *out_val   = NULL;
 
   char *norm = xy_normalize_path (display_path);
-  if (!xy_file_exist (norm))
-    {
-      free (norm);
-      return Env_OK;
-    }
-
-  char  *content = NULL;
-  size_t len     = 0;
-  if (!xy_file_read_bytes (norm, &content, &len))
-    {
-      if (out_err)
-        {
-          *out_err = ENGLISH ? xy_2strcat ("Unable to read file: ", norm)
-                             : xy_2strcat ("无法读取文件: ", norm);
-        }
-      free (norm);
-      return Env_TargetUnwritable;
-    }
+  char *content = NULL;
+  size_t len = 0;
+  bool existed = false;
+  EnvOp_t read_result = env_read_optional_file (norm, &existed, &content, &len, out_err);
   free (norm);
+  if (Env_OK != read_result) return read_result;
 
   size_t pos    = 0;
   size_t lineno = 0;
@@ -1795,156 +1765,8 @@ env_query_persisted_posix (const char *name, bool *out_found, char **out_val, ch
 #endif /* !XY_Build_On_Windows */
 
 
-/* ============================================================
- * UTF-8 <-> UTF-16LE 编解码与 .reg 备份序列化（纯 C 跨平台可单测）
- * ============================================================ */
-
-static void
-env_u16_push (uint16_t **buf, size_t *len, size_t *cap, uint16_t unit)
-{
-  if (*len + 2 > *cap)
-    {
-      *cap *= 2;
-      uint16_t *grown = realloc (*buf, (*cap) * sizeof (uint16_t));
-      if (!grown)
-        xy_throw ("Memory allocation failed in env_u16_push");
-      *buf = grown;
-    }
-  (*buf)[(*len)++] = unit;
-}
-
-static void
-env_utf8_to_utf16le (const char *utf8, uint16_t **out_u16, size_t *out_u16_len)
-{
-  size_t    cap = 64;
-  size_t    len = 0;
-  uint16_t *buf = xy_malloc0 (cap * sizeof (uint16_t));
-
-  const unsigned char *s = (const unsigned char *) (utf8 ? utf8 : "");
-  size_t i = 0;
-
-  while ('\0' != s[i])
-    {
-      uint32_t cp = 0;
-      unsigned char b0 = s[i];
-
-      if (b0 < 0x80)
-        {
-          cp = b0;
-          i += 1;
-        }
-      else if ((b0 & 0xE0) == 0xC0 && (s[i + 1] & 0xC0) == 0x80)
-        {
-          cp = ((uint32_t) (b0 & 0x1F) << 6) | (uint32_t) (s[i + 1] & 0x3F);
-          if (cp < 0x80)
-            cp = 0xFFFD;
-          i += 2;
-        }
-      else if (   (b0 & 0xF0) == 0xE0
-               && (s[i + 1] & 0xC0) == 0x80
-               && (s[i + 2] & 0xC0) == 0x80)
-        {
-          cp =   ((uint32_t) (b0 & 0x0F) << 12)
-               | ((uint32_t) (s[i + 1] & 0x3F) << 6)
-               |  (uint32_t) (s[i + 2] & 0x3F);
-          if (cp < 0x800 || (cp >= 0xD800 && cp <= 0xDFFF))
-            cp = 0xFFFD;
-          i += 3;
-        }
-      else if (   (b0 & 0xF8) == 0xF0
-               && (s[i + 1] & 0xC0) == 0x80
-               && (s[i + 2] & 0xC0) == 0x80
-               && (s[i + 3] & 0xC0) == 0x80)
-        {
-          cp =   ((uint32_t) (b0 & 0x07) << 18)
-               | ((uint32_t) (s[i + 1] & 0x3F) << 12)
-               | ((uint32_t) (s[i + 2] & 0x3F) << 6)
-               |  (uint32_t) (s[i + 3] & 0x3F);
-          if (cp < 0x10000 || cp > 0x10FFFF)
-            cp = 0xFFFD;
-          i += 4;
-        }
-      else
-        {
-          cp = 0xFFFD;
-          i += 1;
-        }
-
-      if (cp <= 0xFFFF)
-        {
-          env_u16_push (&buf, &len, &cap, (uint16_t) cp);
-        }
-      else
-        {
-          uint32_t v = cp - 0x10000;
-          env_u16_push (&buf, &len, &cap, (uint16_t) (0xD800 + (v >> 10)));
-          env_u16_push (&buf, &len, &cap, (uint16_t) (0xDC00 + (v & 0x3FF)));
-        }
-    }
-
-  buf[len] = 0;
-  *out_u16     = buf;
-  *out_u16_len = len;
-}
-
-static char *
-env_utf16le_to_utf8 (const uint16_t *u16, size_t u16_len)
-{
-  while (u16_len > 0 && 0 == u16[u16_len - 1])
-    {
-      u16_len--;
-    }
-
-  EnvBuf_t out;
-  env_buf_init (&out);
-
-  size_t i = 0;
-  while (i < u16_len)
-    {
-      uint32_t cp = u16[i++];
-      if (cp >= 0xD800 && cp <= 0xDBFF)
-        {
-          if (i < u16_len && u16[i] >= 0xDC00 && u16[i] <= 0xDFFF)
-            {
-              uint32_t low = u16[i++];
-              cp = 0x10000 + (((cp - 0xD800) << 10) | (low - 0xDC00));
-            }
-          else
-            {
-              cp = 0xFFFD;
-            }
-        }
-      else if (cp >= 0xDC00 && cp <= 0xDFFF)
-        {
-          cp = 0xFFFD;
-        }
-
-      if (cp < 0x80)
-        {
-          env_buf_append_char (&out, (char) cp);
-        }
-      else if (cp < 0x800)
-        {
-          env_buf_append_char (&out, (char) (0xC0 | (cp >> 6)));
-          env_buf_append_char (&out, (char) (0x80 | (cp & 0x3F)));
-        }
-      else if (cp < 0x10000)
-        {
-          env_buf_append_char (&out, (char) (0xE0 | (cp >> 12)));
-          env_buf_append_char (&out, (char) (0x80 | ((cp >> 6) & 0x3F)));
-          env_buf_append_char (&out, (char) (0x80 | (cp & 0x3F)));
-        }
-      else
-        {
-          env_buf_append_char (&out, (char) (0xF0 | (cp >> 18)));
-          env_buf_append_char (&out, (char) (0x80 | ((cp >> 12) & 0x3F)));
-          env_buf_append_char (&out, (char) (0x80 | ((cp >> 6) & 0x3F)));
-          env_buf_append_char (&out, (char) (0x80 | (cp & 0x3F)));
-        }
-    }
-
-  return env_buf_take (&out);
-}
+/* Windows 字符串转换统一复用 xy.h；这里只处理 .reg 格式与注册表语义。 */
+#ifdef XY_Build_On_Windows
 
 typedef struct EnvRegSnapshot_t
 {
@@ -1996,7 +1818,9 @@ env_build_reg_backup_bytes (const char             *key_path,
         {
           env_buf_append_str (&txt, "-\r\n");
         }
-      else if (1 == snaps[i].reg_type && NULL != snaps[i].utf8_sz_val)
+      /* 实际快照优先按原始字节导出，保留非法编码、内嵌 NUL 和换行；
+       * 只有没有字节快照的调用方才使用 .reg 字符串字面量。 */
+      else if (1 == snaps[i].reg_type && NULL != snaps[i].utf8_sz_val && !snaps[i].raw_bytes)
         {
           env_buf_append_char (&txt, '"');
           env_append_reg_escaped_str (&txt, snaps[i].utf8_sz_val);
@@ -2019,10 +1843,10 @@ env_build_reg_backup_bytes (const char             *key_path,
 
   env_buf_append_str (&txt, "\r\n");
 
-  uint16_t *u16     = NULL;
-  size_t    u16_len = 0;
-  env_utf8_to_utf16le (txt.data, &u16, &u16_len);
+  wchar_t *u16 = xy_utf8_to_wstr (txt.data);
   env_buf_free (&txt);
+  if (!u16) { *out_byte_len = 0; return NULL; }
+  size_t u16_len = wcslen (u16);
 
   size_t         total_bytes = 2 + u16_len * 2;
   unsigned char *bytes       = xy_malloc0 (total_bytes + 2);
@@ -2046,8 +1870,6 @@ env_build_reg_backup_bytes (const char             *key_path,
 /* ============================================================
  * Windows 注册表后端（Reg*W + .reg 备份与失败自动回滚 + WM_SETTINGCHANGE）
  * ============================================================ */
-
-#ifdef XY_Build_On_Windows
 
 #define ENV_WIN_HKCU_SUBKEY   L"Environment"
 #define ENV_WIN_HKLM_SUBKEY   L"SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"
@@ -2083,10 +1905,13 @@ env_read_win_snapshot_one (HKEY hkey, const char *name, EnvRegSnapshot_t *snap, 
   if (!hkey)
     return Env_OK;
 
-  uint16_t *wname     = NULL;
-  size_t    wname_len = 0;
-  env_utf8_to_utf16le (name, &wname, &wname_len);
-  (void) wname_len;
+  wchar_t *wname = xy_utf8_to_wstr (name);
+  if (!wname)
+    {
+      if (out_err) *out_err = xy_strdup (ENGLISH ? "Unable to encode Registry value name"
+                                               : "无法转换注册表变量名");
+      return Env_TargetUnwritable;
+    }
 
   DWORD reg_type = 0;
   DWORD cb_data  = 0;
@@ -2135,17 +1960,15 @@ env_read_win_snapshot_one (HKEY hkey, const char *name, EnvRegSnapshot_t *snap, 
   snap->raw_bytes = raw;
   snap->raw_len   = (size_t) cb_read;
 
-  if (REG_SZ == reg_type || REG_EXPAND_SZ == reg_type)
+  if ((REG_SZ == reg_type || REG_EXPAND_SZ == reg_type) && 0 == cb_read % sizeof (WCHAR))
     {
-      size_t u16_units = (size_t) cb_read / sizeof (WCHAR);
-      uint16_t *u16_aligned = xy_malloc0 ((u16_units + 1) * sizeof (uint16_t));
-      for (size_t u = 0; u < u16_units; u++)
-        {
-          u16_aligned[u] =   (uint16_t) raw[u * 2]
-                           | ((uint16_t) raw[u * 2 + 1] << 8);
-        }
-      snap->utf8_sz_val = env_utf16le_to_utf8 (u16_aligned, u16_units);
-      free (u16_aligned);
+      /* RegQueryValueExW 的字符串可能未以 NUL 结尾；raw 已额外分配一个
+       * WCHAR。只接受单个字符串，异常内容保留原始字节供备份恢复。 */
+      const wchar_t *wide = (const wchar_t *) raw;
+      size_t units = cb_read / sizeof (WCHAR);
+      size_t len = wcslen (wide);
+      while (len < units && 0 == wide[len]) len++;
+      if (len == units) snap->utf8_sz_val = xy_wstr_to_utf8 (wide);
     }
 
   return Env_OK;
@@ -2176,56 +1999,29 @@ env_write_win_reg_backup (bool                    is_system,
   snprintf (file_name, sizeof (file_name), "env-%s-%u.reg",
             is_system ? "hklm" : "hkcu", Env_Win_Backup_Seq);
 
-  char *reg_utf8 = xy_strcat (3, Env_Win_Backup_Dir, "\\", file_name);
-
-  size_t         reg_byte_len = 0;
+  char *reg_utf8 = xy_path_join (Env_Win_Backup_Dir, file_name);
+  size_t reg_byte_len = 0;
   unsigned char *reg_bytes = env_build_reg_backup_bytes (
     is_system ? ENV_WIN_HKLM_REGPATH : ENV_WIN_HKCU_REGPATH,
     snaps, snap_count, &reg_byte_len);
-
-  uint16_t *reg_w     = NULL;
-  size_t    reg_w_len = 0;
-  env_utf8_to_utf16le (reg_utf8, &reg_w, &reg_w_len);
-  (void) reg_w_len;
-
-  HANDLE hf = CreateFileW ((LPCWSTR) reg_w, GENERIC_WRITE, 0, NULL,
-                           CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-  free (reg_w);
-
-  if (INVALID_HANDLE_VALUE == hf)
+  if (!reg_bytes)
     {
-      DWORD err = GetLastError ();
-      char *err_s = xy_int2str ((int) err);
-      if (out_err)
-        {
-          *out_err = ENGLISH
-            ? xy_strcat (4, "Failed to create Registry backup file `", reg_utf8, "` (Win32 error ", err_s)
-            : xy_strcat (4, "无法创建注册表备份文件 `", reg_utf8, "`（请检查磁盘空间与权限），错误码: ", err_s);
-        }
-      free (err_s);
-      free (reg_bytes);
+      if (out_err) *out_err = xy_strdup (ENGLISH ? "Unable to encode Registry backup"
+                                               : "无法编码注册表备份");
       free (reg_utf8);
       return false;
     }
 
-  DWORD written = 0;
-  BOOL  wok     = WriteFile (hf, reg_bytes, (DWORD) reg_byte_len, &written, NULL);
-  DWORD werr    = wok ? 0 : GetLastError ();
-  if (wok && written != reg_byte_len) { wok = FALSE; werr = ERROR_WRITE_FAULT; }
-  if (wok && !FlushFileBuffers (hf)) { wok = FALSE; werr = GetLastError (); }
-  if (!CloseHandle (hf) && wok) { wok = FALSE; werr = GetLastError (); }
+  /* 二进制备份也使用统一暂存、刷盘和提交逻辑。此目录由本进程独占创建，
+   * 目标必须是新文件；写入失败不开始修改注册表。 */
+  FileUpdate_t op = {
+    .display_path = reg_utf8, .norm_path = reg_utf8,
+    .new_content = (char *) reg_bytes, .new_len = reg_byte_len
+  };
+  FileUpdateResult_t result = chsrc_update_files (&op, 1, out_err);
   free (reg_bytes);
-
-  if (!wok)
+  if (FileUpdate_OK != result)
     {
-      char *err_s = xy_int2str ((int) werr);
-      if (out_err)
-        {
-          *out_err = ENGLISH
-            ? xy_strcat (4, "Failed to write Registry backup file `", reg_utf8, "` (Win32 error ", err_s)
-            : xy_strcat (4, "写入注册表备份文件 `", reg_utf8, "` 失败（磁盘可能已满），错误码: ", err_s);
-        }
-      free (err_s);
       free (reg_utf8);
       return false;
     }
@@ -2246,10 +2042,8 @@ env_rollback_win_registry (HKEY hkey_write, const EnvRegSnapshot_t *snaps, size_
   bool ok = true;
   for (size_t i = 0; i < count; i++)
     {
-      uint16_t *wname     = NULL;
-      size_t    wname_len = 0;
-      env_utf8_to_utf16le (snaps[i].name, &wname, &wname_len);
-      (void) wname_len;
+      wchar_t *wname = xy_utf8_to_wstr (snaps[i].name);
+      if (!wname) { ok = false; continue; }
 
       LONG st;
       if (!snaps[i].existed)
@@ -2288,15 +2082,18 @@ env_apply_windows (const EnvKV_t *kvs, size_t kv_count, char **out_err)
 
   for (size_t k = 0; k < kv_count; k++)
     {
-      if (!env_validate_value (kvs[k].value, EnvDialect_WinRegistry, NULL))
+      wchar_t *wide = kvs[k].value ? xy_utf8_to_wstr (kvs[k].value) : NULL;
+      bool valid_encoding = !kvs[k].value || wide;
+      free (wide);
+      if (!valid_encoding || !env_validate_value (kvs[k].value, EnvDialect_WinRegistry, NULL))
         {
           if (out_err)
             {
               *out_err = ENGLISH
                 ? xy_strcat (3, "Value for `", kvs[k].name,
-                             "` contains invalid control characters or newlines for Windows Registry")
+                             "` contains invalid UTF-8, control characters or newlines for Windows Registry")
                 : xy_strcat (3, "变量 `", kvs[k].name,
-                             "` 的值含有换行或非法控制字符，无法写入 Windows 注册表");
+                             "` 的值含有非法 UTF-8、换行或控制字符，无法写入 Windows 注册表");
             }
           return Env_BadValue;
         }
@@ -2435,13 +2232,11 @@ env_apply_windows (const EnvKV_t *kvs, size_t kv_count, char **out_err)
 
   for (size_t k = 0; k < kv_count; k++)
     {
-      uint16_t *wname     = NULL;
-      size_t    wname_len = 0;
-      env_utf8_to_utf16le (kvs[k].name, &wname, &wname_len);
-      (void) wname_len;
-
+      wchar_t *wname = xy_utf8_to_wstr (kvs[k].name);
       LONG op_st = ERROR_SUCCESS;
-      if (NULL == kvs[k].value)
+      if (!wname)
+        op_st = ERROR_NOT_ENOUGH_MEMORY;
+      else if (NULL == kvs[k].value)
         {
           op_st = RegDeleteValueW (hkey_write, (LPCWSTR) wname);
           if (ERROR_FILE_NOT_FOUND == op_st)
@@ -2449,13 +2244,15 @@ env_apply_windows (const EnvKV_t *kvs, size_t kv_count, char **out_err)
         }
       else
         {
-          uint16_t *wval     = NULL;
-          size_t    wval_len = 0;
-          env_utf8_to_utf16le (kvs[k].value, &wval, &wval_len);
-          DWORD cb = (DWORD) ((wval_len + 1) * sizeof (WCHAR));
-          op_st = RegSetValueExW (hkey_write, (LPCWSTR) wname, 0, REG_SZ,
-                                  (const BYTE *) wval, cb);
-          free (wval);
+          wchar_t *wval = xy_utf8_to_wstr (kvs[k].value);
+          if (!wval)
+            op_st = ERROR_NOT_ENOUGH_MEMORY;
+          else
+            {
+              DWORD cb = (DWORD) ((wcslen (wval) + 1) * sizeof (WCHAR));
+              op_st = RegSetValueExW (hkey_write, wname, 0, REG_SZ, (const BYTE *) wval, cb);
+              free (wval);
+            }
         }
       free (wname);
 
@@ -2548,15 +2345,15 @@ env_query_persisted_windows (const char *name, bool *out_found, char **out_val, 
   if (!snap.existed)
     return Env_OK;
 
-  if (REG_SZ != snap.reg_type && REG_EXPAND_SZ != snap.reg_type)
+  if ((REG_SZ != snap.reg_type && REG_EXPAND_SZ != snap.reg_type) || !snap.utf8_sz_val)
     {
       if (snap.raw_bytes) free (snap.raw_bytes);
       if (snap.utf8_sz_val) free (snap.utf8_sz_val);
       if (out_err)
         {
           *out_err = ENGLISH
-            ? xy_strcat (3, "Windows Registry value `", name, "` has unsupported non-string type")
-            : xy_strcat (3, "Windows 注册表变量 `", name, "` 为非字符串类型，无法作为镜像地址解析");
+            ? xy_strcat (3, "Windows Registry value `", name, "` has unsupported type or invalid string encoding")
+            : xy_strcat (3, "Windows 注册表变量 `", name, "` 的类型或字符串编码无效，无法作为镜像地址解析");
         }
       return Env_AmbiguousTarget;
     }

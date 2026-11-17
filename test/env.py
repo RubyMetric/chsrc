@@ -54,6 +54,33 @@ class EnvironmentTests(unittest.TestCase):
                          sorted(fixtures))
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_config_directory_is_not_treated_as_missing(self):
+        path = self.home / '.bashrc'
+        path.mkdir()
+        for action in ('get', 'reset', 'set'):
+            args = [action, '-en', '-no-color', 'pub']
+            if action == 'set':
+                args.append('tuna')
+            result = self.run_cli(*args)
+            self.assertNotEqual(result.returncode, 0, result.stdout)
+            self.assertTrue(path.is_dir())
+            self.assertEqual(list(self.home.iterdir()), [path])
+
+    @unittest.skipIf(hasattr(os, 'geteuid') and os.geteuid() == 0, 'root bypasses file permissions')
+    def test_inaccessible_config_parent_is_not_treated_as_missing(self):
+        self.env['SHELL'] = '/usr/bin/fish'
+        config = self.home / '.config'
+        config.mkdir()
+        config.chmod(0)
+        self.addCleanup(config.chmod, 0o700)
+        for action in ('get', 'reset', 'set'):
+            args = [action, '-en', '-no-color', 'pub']
+            if action == 'set':
+                args.append('tuna')
+            result = self.run_cli(*args)
+            self.assertNotEqual(result.returncode, 0, result.stdout)
+            self.assertIn('Unable to read configuration file', result.stderr)
+
     def test_complex_shell_definitions_are_unchanged(self):
         cases = [
             'if false; then\n  export PUB_HOSTED_URL=old\nelse\n  export PUB_HOSTED_URL=fallback\nfi\n',
