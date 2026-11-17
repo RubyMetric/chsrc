@@ -440,23 +440,11 @@ done:
 }
 
 
-/* ReplaceFileW 合并目标 ACL 失败时返回 ERROR_ACCESS_DENIED。受限环境可能
- * 注入无法合并的拒绝 ACE；此时退回忽略 ACL 合并，由新文件继承目录 ACL。
- * 正常 ACL 下仍走第一条路径，保留目标 ACL。 */
+/* 无法保留目标 ACL 时必须失败，不能以继承目录权限替代文件原有权限。 */
 static BOOL
 file_update_win32_replace (const wchar_t *target, const wchar_t *replacement)
 {
-  if (ReplaceFileW (target, replacement, NULL, REPLACEFILE_WRITE_THROUGH, NULL, NULL))
-    return TRUE;
-
-  DWORD error = GetLastError ();
-  if (ERROR_ACCESS_DENIED != error)
-    {
-      SetLastError (error);
-      return FALSE;
-    }
-  return ReplaceFileW (target, replacement, NULL,
-                       REPLACEFILE_WRITE_THROUGH | REPLACEFILE_IGNORE_ACL_ERRORS, NULL, NULL);
+  return ReplaceFileW (target, replacement, NULL, 0, NULL, NULL);
 }
 
 
