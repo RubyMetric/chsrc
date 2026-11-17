@@ -4,7 +4,7 @@
  * File Authors  : @ccmywish
  * Contributors  : @Mikachu2333
  * Created On    : <2024-12-14>
- * Last Modified : <2026-08-20>
+ * Last Modified : <2026-10-28>
  *
  * 该文件最好启用 DEBUG mode 编译
  * ------------------------------------------------------------*/
@@ -76,6 +76,9 @@ main (int argc, char const *argv[])
   chsrc_overwrite_file ("Line999 \nLine998\nLine997\n", tmpfile);
   assert_str (xy_file_read (tmpfile), "Line999 \nLine998\nLine997\n");
 
+  chsrc_overwrite_file ("", tmpfile);
+  assert_str (xy_file_read (tmpfile), "");
+
   chsrc_log (xy_2strcat ("CPU arch = ", chsrc_get_cpuarch ()));
   print ("chsrc: CPU cores = ");
   println (chsrc_get_cpucore ());
@@ -97,6 +100,11 @@ main (int argc, char const *argv[])
       chsrc_run_as_sh_file ("echo Hello from sh file");
       chsrc_run_as_bash_file ("echo Hello from Bash file");
     }
+
+#ifndef XY_Build_On_Windows
+  if (xy_file_exist ("/dev/full"))
+    assert (!chsrc_try_overwrite_file ("buffered output", "/dev/full"));
+#endif
 
   chsrc_run ("echo " Chsrc_Version " test pass!", RunOpt_Dont_Notify_On_Success);
   return 0;
