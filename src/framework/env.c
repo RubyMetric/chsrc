@@ -681,17 +681,67 @@ env_classify_line (const char *line, size_t line_len,
 {
   if (out_val) *out_val = NULL;
 
+  EnvLineMatch_t match;
   switch (dialect)
     {
     case EnvDialect_PosixShell:
     case EnvDialect_EtcEnv:
-      return env_classify_posix_or_etc_line (line, line_len, name, dialect, out_val);
+      match = env_classify_posix_or_etc_line (line, line_len, name, dialect, out_val);
+      break;
     case EnvDialect_Fish:
-      return env_classify_fish_line (line, line_len, name, out_val);
+      match = env_classify_fish_line (line, line_len, name, out_val);
+      break;
     default:
       xy_unreached ();
       return EnvLine_NoMatch;
     }
+  /* 未匹配的命令仍可能改动目标变量。复杂赋值、取消导出或删除不能当作
+   * 无关行跳过，否则 reset 会漏删，get 也会报告错误的持久化值。 */
+  if (EnvLine_NoMatch == match && EnvDialect_EtcEnv != dialect)
+    {
+      char *copy = env_strndup (line, line_len);
+      const char *p = env_skip_ws (copy);
+      const char *commands[] = { "readonly", "declare", "typeset", "local", "unset",
+                                 "export", "set", "builtin", "command", "eval" };
+      bool mutates = false;
+      for (size_t i = 0; i < sizeof commands / sizeof *commands; i++)
+        {
+          size_t n = strlen (commands[i]);
+          if (0 == strncmp (p, commands[i], n) && (' ' == p[n] || '\t' == p[n]))
+            { mutates = true; break; }
+        }
+      bool single = false, doub = false;
+      size_t name_len = strlen (name);
+      for (size_t i = 0; p[i]; i++)
+        {
+          char c = p[i];
+          if (!single && '\\' == c && p[i + 1]) { i++; continue; }
+          if (!single && !doub && '#' == c
+              && (0 == i || strchr (" \t;|&", p[i - 1]))) break;
+          if (!single && !doub && strchr (";|&", c))
+            {
+              const char *next = env_skip_ws (p + i + 1);
+              for (size_t j = 0; j < sizeof commands / sizeof *commands; j++)
+                {
+                  size_t n = strlen (commands[j]);
+                  if (0 == strncmp (next, commands[j], n)
+                      && (' ' == next[n] || '\t' == next[n])) mutates = true;
+                }
+            }
+          if (!doub && '\'' == c) { single = !single; continue; }
+          if (!single && '"' == c) { doub = !doub; continue; }
+          if ((mutates || (!single && !doub)) && (0 == i || !env_is_ident_char (p[i - 1]))
+              && 0 == strncmp (p + i, name, name_len)
+              && !env_is_ident_char (p[i + name_len])
+              && (mutates || '=' == p[i + name_len]))
+            {
+              match = EnvLine_ComplexMatch;
+              break;
+            }
+        }
+      free (copy);
+    }
+  return match;
 }
 
 static char *
@@ -1173,7 +1223,7 @@ env_file_mentions_any_kv (const char *display_path, EnvDialect_t dialect,
 
   char  *content = NULL;
   size_t len     = 0;
-  if (!chsrc_read_file_bytes (norm, &content, &len))
+  if (!xy_file_read_bytes (norm, &content, &len))
     {
       free (norm);
       return false;
@@ -1253,7 +1303,7 @@ env_apply_posix (const EnvKV_t *kvs, size_t kv_count, PosixShell_t *out_shell, c
 
       if (existed)
         {
-          if (!chsrc_read_file_bytes (norm_path, &old_content, &old_len))
+          if (!xy_file_read_bytes (norm_path, &old_content, &old_len))
             {
               if (out_err)
                 {
@@ -1378,7 +1428,7 @@ env_apply_posix (const EnvKV_t *kvs, size_t kv_count, PosixShell_t *out_shell, c
       size_t old_len     = 0;
       if (existed)
         {
-          if (!chsrc_read_file_bytes (norm, &old_content, &old_len))
+          if (!xy_file_read_bytes (norm, &old_content, &old_len))
             {
               if (out_err)
                 {
@@ -1455,7 +1505,7 @@ env_apply_posix (const EnvKV_t *kvs, size_t kv_count, PosixShell_t *out_shell, c
             {
               char  *old_content = NULL;
               size_t old_len     = 0;
-              if (!chsrc_read_file_bytes (fishrc_norm, &old_content, &old_len))
+              if (!xy_file_read_bytes (fishrc_norm, &old_content, &old_len))
                 {
                   if (out_err)
                     {
@@ -1575,7 +1625,7 @@ env_query_single_posix_file (const char *display_path, EnvDialect_t dialect,
 
   char  *content = NULL;
   size_t len     = 0;
-  if (!chsrc_read_file_bytes (norm, &content, &len))
+  if (!xy_file_read_bytes (norm, &content, &len))
     {
       if (out_err)
         {
@@ -2005,10 +2055,7 @@ env_build_reg_backup_bytes (const char             *key_path,
 #define ENV_WIN_HKLM_REGPATH  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"
 
 static unsigned int Env_Win_Backup_Seq       = 0;
-static bool         Env_Win_Combo_HKCU_Saved = false;
-static bool         Env_Win_Combo_HKLM_Saved = false;
-static int          Env_Win_Last_Combo_Depth = 0;
-static char        *Env_Win_Backup_Dir       = NULL;  /* 进程级备份目录，随进程结束回收 */
+static char        *Env_Win_Backup_Dir       = NULL;  /* 保留备份供用户恢复 */
 
 static void
 env_free_reg_snapshots (EnvRegSnapshot_t *snaps, size_t count)
@@ -2105,11 +2152,10 @@ env_read_win_snapshot_one (HKEY hkey, const char *name, EnvRegSnapshot_t *snap, 
 }
 
 /**
- * 将整个当前注册表键的原有值连同本次新增变量的删除标记 ("NAME"=-) 导出到 %TEMP%\chsrc-<随机名>\env-hkcu|hklm-<seq>.reg
+ * 将本批变量的原有值连同本次新增变量的删除标记 ("NAME"=-) 导出到 %TEMP%\chsrc-<随机名>\env-hkcu|hklm-<seq>.reg
  */
 static bool
-env_write_win_reg_backup (HKEY                    hkey_read,
-                          bool                    is_system,
+env_write_win_reg_backup (bool                    is_system,
                           const EnvRegSnapshot_t *snaps,
                           size_t                  snap_count,
                           char                  **out_reg_utf8_path,
@@ -2117,26 +2163,7 @@ env_write_win_reg_backup (HKEY                    hkey_read,
 {
   *out_reg_utf8_path = NULL;
 
-  /* Combo dish 同一根键去重：若同一轮 combo 已完整导出过该根键原始镜像，无需重复覆盖 */
-  if (chsrc_in_dish_group_mode ())
-    {
-      if (ProgStatus.ComboStackDepth != Env_Win_Last_Combo_Depth)
-        {
-          Env_Win_Last_Combo_Depth = ProgStatus.ComboStackDepth;
-          Env_Win_Combo_HKCU_Saved = false;
-          Env_Win_Combo_HKLM_Saved = false;
-        }
-      if (!is_system && Env_Win_Combo_HKCU_Saved)
-        return true;
-      if (is_system && Env_Win_Combo_HKLM_Saved)
-        return true;
-    }
-  else
-    {
-      Env_Win_Combo_HKCU_Saved = false;
-      Env_Win_Combo_HKLM_Saved = false;
-    }
-
+  /* 每批保存本批修改前的值；组合操作按序号倒序恢复，后续新增变量也有删除标记。 */
   if (NULL == Env_Win_Backup_Dir)
     {
       Env_Win_Backup_Dir = chsrc_make_tmpdir ("chsrc", out_err);
@@ -2151,72 +2178,10 @@ env_write_win_reg_backup (HKEY                    hkey_read,
 
   char *reg_utf8 = xy_strcat (3, Env_Win_Backup_Dir, "\\", file_name);
 
-  /* 若处于 combo 模式，尽量把该键下全部现有值也一并纳入首次完整快照 */
-  EnvRegSnapshot_t *export_snaps = NULL;
-  size_t            export_count = 0;
-  bool              own_export   = false;
-
-  if (chsrc_in_dish_group_mode () && NULL != hkey_read)
-    {
-      DWORD val_count    = 0;
-      DWORD max_name_len = 0;
-      DWORD max_data_len = 0;
-      if (ERROR_SUCCESS == RegQueryInfoKeyW (hkey_read, NULL, NULL, NULL, NULL, NULL, NULL,
-                                             &val_count, &max_name_len, &max_data_len, NULL, NULL))
-        {
-          export_snaps = xy_malloc0 ((val_count + snap_count + 1) * sizeof (EnvRegSnapshot_t));
-          own_export   = true;
-
-          WCHAR *wname_buf = xy_malloc0 ((max_name_len + 4) * sizeof (WCHAR));
-          for (DWORD idx = 0; idx < val_count; idx++)
-            {
-              DWORD cch_name = max_name_len + 2;
-              LONG  est      = RegEnumValueW (hkey_read, idx, wname_buf, &cch_name,
-                                              NULL, NULL, NULL, NULL);
-              if (ERROR_SUCCESS != est)
-                continue;
-              char *ename = env_utf16le_to_utf8 ((const uint16_t *) wname_buf, (size_t) cch_name);
-              if (Env_OK == env_read_win_snapshot_one (hkey_read, ename, &export_snaps[export_count], NULL))
-                {
-                  export_snaps[export_count].name = ename;
-                  export_count++;
-                }
-              else
-                {
-                  free (ename);
-                }
-            }
-          free (wname_buf);
-
-          /* 追加本次将写入但原先不存在的变量（导出为 "NAME"=-） */
-          for (size_t s = 0; s < snap_count; s++)
-            {
-              if (!snaps[s].existed)
-                {
-                  export_snaps[export_count].name    = xy_strdup (snaps[s].name);
-                  export_snaps[export_count].existed = false;
-                  export_count++;
-                }
-            }
-        }
-    }
-
-  const EnvRegSnapshot_t *src_snaps = own_export ? export_snaps : snaps;
-  size_t                  src_count = own_export ? export_count : snap_count;
-
   size_t         reg_byte_len = 0;
-  unsigned char *reg_bytes    = env_build_reg_backup_bytes (
+  unsigned char *reg_bytes = env_build_reg_backup_bytes (
     is_system ? ENV_WIN_HKLM_REGPATH : ENV_WIN_HKCU_REGPATH,
-    src_snaps, src_count, &reg_byte_len);
-
-  if (own_export)
-    {
-      for (size_t i = 0; i < export_count; i++)
-        {
-          free ((void *) export_snaps[i].name);
-        }
-      env_free_reg_snapshots (export_snaps, export_count);
-    }
+    snaps, snap_count, &reg_byte_len);
 
   uint16_t *reg_w     = NULL;
   size_t    reg_w_len = 0;
@@ -2246,10 +2211,12 @@ env_write_win_reg_backup (HKEY                    hkey_read,
   DWORD written = 0;
   BOOL  wok     = WriteFile (hf, reg_bytes, (DWORD) reg_byte_len, &written, NULL);
   DWORD werr    = wok ? 0 : GetLastError ();
-  CloseHandle (hf);
+  if (wok && written != reg_byte_len) { wok = FALSE; werr = ERROR_WRITE_FAULT; }
+  if (wok && !FlushFileBuffers (hf)) { wok = FALSE; werr = GetLastError (); }
+  if (!CloseHandle (hf) && wok) { wok = FALSE; werr = GetLastError (); }
   free (reg_bytes);
 
-  if (!wok || written != (DWORD) reg_byte_len)
+  if (!wok)
     {
       char *err_s = xy_int2str ((int) werr);
       if (out_err)
@@ -2263,12 +2230,6 @@ env_write_win_reg_backup (HKEY                    hkey_read,
       return false;
     }
 
-  if (chsrc_in_dish_group_mode ())
-    {
-      if (is_system) Env_Win_Combo_HKLM_Saved = true;
-      else           Env_Win_Combo_HKCU_Saved = true;
-    }
-
   char *bk_msg = ENGLISH
     ? xy_2strcat ("Backed up Windows Registry environment to: ", reg_utf8)
     : xy_2strcat ("已备份 Windows 注册表环境变量至: ", reg_utf8);
@@ -2279,9 +2240,10 @@ env_write_win_reg_backup (HKEY                    hkey_read,
   return true;
 }
 
-static void
+static bool
 env_rollback_win_registry (HKEY hkey_write, const EnvRegSnapshot_t *snaps, size_t count)
 {
+  bool ok = true;
   for (size_t i = 0; i < count; i++)
     {
       uint16_t *wname     = NULL;
@@ -2289,19 +2251,23 @@ env_rollback_win_registry (HKEY hkey_write, const EnvRegSnapshot_t *snaps, size_
       env_utf8_to_utf16le (snaps[i].name, &wname, &wname_len);
       (void) wname_len;
 
+      LONG st;
       if (!snaps[i].existed)
         {
-          RegDeleteValueW (hkey_write, (LPCWSTR) wname);
+          st = RegDeleteValueW (hkey_write, (LPCWSTR) wname);
+          if (ERROR_FILE_NOT_FOUND == st) st = ERROR_SUCCESS;
         }
       else
         {
-          RegSetValueExW (hkey_write, (LPCWSTR) wname, 0,
+          st = RegSetValueExW (hkey_write, (LPCWSTR) wname, 0,
                           (DWORD) snaps[i].reg_type,
                           (const BYTE *) snaps[i].raw_bytes,
                           (DWORD) snaps[i].raw_len);
         }
       free (wname);
+      if (ERROR_SUCCESS != st) ok = false;
     }
+  return ok;
 }
 
 static EnvOp_t
@@ -2423,7 +2389,7 @@ env_apply_windows (const EnvKV_t *kvs, size_t kv_count, char **out_err)
     }
 
   char *backup_path = NULL;
-  if (!env_write_win_reg_backup (hkey_read, is_system, snaps, kv_count, &backup_path, out_err))
+  if (!env_write_win_reg_backup (is_system, snaps, kv_count, &backup_path, out_err))
     {
       if (hkey_read) RegCloseKey (hkey_read);
       env_free_reg_snapshots (snaps, kv_count);
@@ -2496,20 +2462,22 @@ env_apply_windows (const EnvKV_t *kvs, size_t kv_count, char **out_err)
       if (ERROR_SUCCESS != op_st)
         {
           /* 立即回滚已修改的前序键值 */
-          env_rollback_win_registry (hkey_write, snaps, k);
+          bool restored = env_rollback_win_registry (hkey_write, snaps, k);
           RegCloseKey (hkey_write);
 
           char *code_s  = xy_int2str ((int) op_st);
-          const char *b = backup_path ? backup_path : "(combo backup)";
+          const char *b = backup_path;
           if (out_err)
             {
               *out_err = ENGLISH
                 ? xy_strcat (6, "Failed to update Registry value `", kvs[k].name,
                              "` (error ", code_s,
-                             "); rolled back previous changes. Backup saved at: ", b)
+                             restored ? "); rolled back previous changes. Backup saved at: "
+                                      : "); rollback incomplete. Recover using: ", b)
                 : xy_strcat (6, "更新注册表变量 `", kvs[k].name,
                              "` 失败（错误码 ", code_s,
-                             "），已自动回滚前序修改。原始备份位于: ", b);
+                             restored ? "），已自动回滚前序修改。原始备份位于: "
+                                      : "），回滚未完成，请使用备份恢复: ", b);
             }
           free (code_s);
           if (backup_path) free (backup_path);
@@ -2672,7 +2640,13 @@ env_apply_kvs (const EnvKV_t *raw_kvs, size_t raw_count,
       bool updated = false;
       for (size_t j = 0; j < kv_count; j++)
         {
-          if (xy_streql (kvs[j].name, raw_kvs[i].name))
+          if (
+#ifdef XY_Build_On_Windows
+              xy_streql_ic (kvs[j].name, raw_kvs[i].name)
+#else
+              xy_streql (kvs[j].name, raw_kvs[i].name)
+#endif
+             )
             {
               kvs[j].value = raw_kvs[i].value;
               updated      = true;
@@ -2744,11 +2718,17 @@ env_query_persisted (const char *name, bool *out_found, char **out_val, char **o
       return Env_BadName;
     }
 
+  bool found = false;
+  char *value = NULL;
 #ifdef XY_Build_On_Windows
-  return env_query_persisted_windows (name, out_found, out_val, out_err);
+  EnvOp_t rc = env_query_persisted_windows (name, &found, &value, out_err);
 #else
-  return env_query_persisted_posix (name, out_found, out_val, out_err);
+  EnvOp_t rc = env_query_persisted_posix (name, &found, &value, out_err);
 #endif
+  if (out_found) *out_found = found;
+  if (out_val) *out_val = value;
+  else free (value);
+  return rc;
 }
 
 static void

@@ -210,6 +210,7 @@ test_env_posix_backend (void)
   assert (q_found);
   assert_str (q_val, "https://mirrors.tuna.tsinghua.edu.cn/rustup");
   free (q_val); q_val = NULL;
+  assert (Env_OK == env_query_persisted ("RUSTUP_DIST_SERVER", NULL, NULL, &err));
 
   assert (Env_OK == env_query_persisted ("RUSTUP_DIST_SERVER_EXTRA", &q_found, &q_val, &err));
   assert (q_found);

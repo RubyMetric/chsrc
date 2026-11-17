@@ -89,6 +89,41 @@ class EnvironmentTests(unittest.TestCase):
         self.assertEqual(path.read_text(), original +
                          'export PUB_HOSTED_URL="https://mirrors.tuna.tsinghua.edu.cn/dart-pub"\n')
 
+    def test_indirect_and_chained_assignments_are_protected(self):
+        for content in (
+            'readonly PUB_HOSTED_URL=old\n',
+            'declare -x PUB_HOSTED_URL=old\n',
+            'declare -x "PUB_HOSTED_URL=old"\n',
+            'true; export PUB_HOSTED_URL=old\n',
+            'export PUB_HOSTED_URL=old\nunset PUB_HOSTED_URL\n',
+        ):
+            with self.subTest(content=content):
+                path = self.home / '.bashrc'
+                path.write_text(content)
+                for action in ('set', 'reset', 'get'):
+                    args = [action, '-en', '-no-color', 'pub']
+                    if action == 'set':
+                        args.append('tuna')
+                    result = self.run_cli(*args)
+                    self.assertNotEqual(result.returncode, 0, result.stdout)
+                    self.assertEqual(path.read_text(), content)
+                self.assertFalse((self.home / '.profile').exists())
+
+    def test_fish_chained_assignment_is_protected(self):
+        self.env['SHELL'] = '/usr/bin/fish'
+        path = self.home / '.config/fish/config.fish'
+        path.parent.mkdir(parents=True)
+        content = 'true; set -gx PUB_HOSTED_URL old\n'
+        path.write_text(content)
+        for action in ('set', 'reset', 'get'):
+            args = [action, '-en', '-no-color', 'pub']
+            if action == 'set':
+                args.append('tuna')
+            result = self.run_cli(*args)
+            self.assertNotEqual(result.returncode, 0, result.stdout)
+            self.assertEqual(path.read_text(), content)
+        self.assertFalse((path.parent / 'conf.d/chsrc.fish').exists())
+
     def test_fish_conditional_is_preserved(self):
         self.env['SHELL'] = '/usr/bin/fish'
         path = self.home / '.config/fish/config.fish'

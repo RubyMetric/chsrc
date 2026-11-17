@@ -223,11 +223,18 @@ debug: build-in-debug-mode
 test: test-make-var test-xy test-fw test-file-update
 
 ifneq ($(On-Windows), 1)
-test: test-env test-file-update
+test: test-env
+else
+test: test-env-win32
 endif
 
 test-env: build-in-dev-mode test-fw
 	@python3 test/env.py
+
+test-env-win32: CFLAGS += $(CFLAGS_debug)
+test-env-win32:
+	@$(CC) test/env-win32.c $(CFLAGS) $(LDLIBS_win) -o env-win32-test.out
+	@./env-win32-test.out
 
 test-make-var:
 	@echo "On-Linux: $(On-Linux)"
@@ -277,6 +284,7 @@ clean:
 	-@rm xy     2>/dev/null
 	-@rm fw     2>/dev/null
 	-@rm file-update-test.out 2>/dev/null
+	-@rm env-win32-test.out 2>/dev/null
 	-@rm README.md.bak*    2>/dev/null
 
 	-@rm chsrc  					 2>/dev/null
@@ -309,4 +317,4 @@ install: $(ReleaseMode-Target-Name)
 
 .PHONY: all b build bd br bcir d t check c \
 	build-in-dev-mode build-in-debug-mode build-in-release-mode build-in-ci-release-mode \
-	debug test test-make-var test-xy test-fw test-file-update test-env fastcheck test-cli clean install build-deb clean-deb rawstr4c
+	debug test test-make-var test-xy test-fw test-file-update test-env test-env-win32 fastcheck test-cli clean install build-deb clean-deb rawstr4c
