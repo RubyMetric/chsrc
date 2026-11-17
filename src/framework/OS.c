@@ -1145,16 +1145,19 @@ log_anyway:
 static void
 chsrc_backup (const char *path)
 {
+  xy_cant_be_null (path);
+
   if (in_dry_run_mode())
     {
       goto log_anyway;
     }
 
-  char *cmd = NULL;
-  bool exist = xy_file_exist (path);
+  char *norm_path = xy_normalize_path (path);
+  bool exist = xy_file_exist (norm_path);
 
   if (!exist)
     {
+      free (norm_path);
       char *msg = ENGLISH ? "File doesn't exist, skip backup: " : "文件不存在,跳过备份: ";
       chsrc_alert2 (xy_2strcat (msg, path));
       return;
@@ -1169,25 +1172,46 @@ chsrc_backup (const char *path)
 
       for (size_t i=0; i < xy_seq_len(backed_up_paths); i++)
         {
-          if (xy_streql (xy_seq_at (backed_up_paths, i), path))
-            goto log_anyway;
+          if (xy_streql (xy_seq_at (backed_up_paths, i), norm_path))
+            {
+              free (norm_path);
+              goto log_anyway;
+            }
         }
 
-      xy_seq_push (backed_up_paths, xy_strdup (path));
+      xy_seq_push (backed_up_paths, xy_strdup (norm_path));
     }
 
+  /* POSIX shell 的双引号仍会展开 $、反引号和命令替换。 */
+  char *quoted = NULL;
+  if (!xy.on_windows)
+    {
+      char *escaped = xy_str_gsub (norm_path, "'", "'\\''");
+      quoted = xy_strcat (3, "'", escaped, "'");
+      free (escaped);
+    }
+  char *cmd = NULL;
   if (xy.on_bsd || xy.on_macos)
     {
       /* BSD 和 macOS 的 cp 不支持 --backup 选项 */
-      cmd = xy_strcat (5, "cp -f ", path, " ", path, ".bak");
+      cmd = xy_strcat (5, "cp -f -- ", quoted, " ", quoted, ".bak");
     }
   else if (xy.on_windows)
     {
-      /**
-       * @note /Y 表示覆盖
-       * @note 默认情况下会输出一个 "已复制  1个文件"
-       */
-      cmd = xy_strcat (5, "copy /Y ", path, " ", path, ".bak 1>nul");
+#ifdef XY_Build_On_Windows
+      char *backup = xy_2strcat (norm_path, ".bak");
+      wchar_t *source_w = xy_utf8_to_wstr (norm_path);
+      wchar_t *backup_w = xy_utf8_to_wstr (backup);
+      bool copied = source_w && backup_w && CopyFileW (source_w, backup_w, FALSE);
+      free (source_w);
+      free (backup_w);
+      free (backup);
+      if (!copied)
+        {
+          chsrc_error2 (ENGLISH ? "Unable to back up file" : "无法备份文件");
+          exit (Exit_UserCause);
+        }
+#endif
     }
   else
     {
@@ -1200,18 +1224,22 @@ chsrc_backup (const char *path)
        */
       char *ver = xy_run ("cp --version 2>&1", 1);
       /* cp (GNU coreutils) 9.4 */
-      if (strstr (ver, "GNU coreutils"))
+      if (ver && strstr (ver, "GNU coreutils"))
         {
-          cmd = xy_strcat (5, "cp ", path, " ", path, ".bak --backup='t'");
+          cmd = xy_strcat (5, "cp --backup=t -- ", quoted, " ", quoted, ".bak");
         }
       else
         {
           /* 非 GNU 的 cp 可能不支持 --backup ，如 busybox cp */
-          cmd = xy_strcat (5, "cp -f ", path, " ", path, ".bak");
+          cmd = xy_strcat (5, "cp -f -- ", quoted, " ", quoted, ".bak");
         }
+      if (ver) free (ver);
     }
 
-  chsrc_run_as_a_service (cmd);
+  if (cmd) chsrc_run_as_a_service (cmd);
+  free (cmd);
+  free (quoted);
+  free (norm_path);
 
 log_anyway:
   log_for_file_backup_op (path);
