@@ -895,7 +895,7 @@ xy_str_next_nonempty_line (const char *str)
  ******************************************************/
 #ifdef XY_Build_On_Windows
 /**
- * @brief UTF-8 -> Windows 宽字符
+ * @brief UTF-8 -> Windows 宽字符；非法编码返回 NULL，errno 为 EILSEQ
  *
  * @memory SAFE
  *   return caller-free
@@ -903,24 +903,24 @@ xy_str_next_nonempty_line (const char *str)
 static wchar_t *
 xy_utf8_to_wstr (const char *utf8)
 {
-  if (!utf8)
-    return NULL;
+  if (!utf8) { errno = EINVAL; return NULL; }
 
-  int wlen = MultiByteToWideChar (CP_UTF8, 0, utf8, -1, NULL, 0);
-  if (wlen <= 0)
-    return NULL;
+  int wlen = MultiByteToWideChar (CP_UTF8, MB_ERR_INVALID_CHARS, utf8, -1, NULL, 0);
+  if (wlen <= 0) { errno = EILSEQ; return NULL; }
 
-  wchar_t *wstr = xy_malloc0 ((size_t) wlen * sizeof (wchar_t));
-  if (0 == MultiByteToWideChar (CP_UTF8, 0, utf8, -1, wstr, wlen))
+  wchar_t *wstr = malloc ((size_t) wlen * sizeof (wchar_t));
+  if (!wstr) { errno = ENOMEM; return NULL; }
+  if (0 == MultiByteToWideChar (CP_UTF8, MB_ERR_INVALID_CHARS, utf8, -1, wstr, wlen))
     {
       free (wstr);
+      errno = EILSEQ;
       return NULL;
     }
   return wstr;
 }
 
 /**
- * @brief Windows 宽字符 -> UTF-8
+ * @brief Windows 宽字符 -> UTF-8；非法编码返回 NULL，errno 为 EILSEQ
  *
  * @memory SAFE
  *   return caller-free
@@ -928,17 +928,17 @@ xy_utf8_to_wstr (const char *utf8)
 static char *
 xy_wstr_to_utf8 (const wchar_t *wstr)
 {
-  if (!wstr)
-    return NULL;
+  if (!wstr) { errno = EINVAL; return NULL; }
 
-  int len = WideCharToMultiByte (CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL);
-  if (len <= 0)
-    return NULL;
+  int len = WideCharToMultiByte (CP_UTF8, WC_ERR_INVALID_CHARS, wstr, -1, NULL, 0, NULL, NULL);
+  if (len <= 0) { errno = EILSEQ; return NULL; }
 
-  char *utf8 = xy_malloc0 ((size_t) len);
-  if (0 == WideCharToMultiByte (CP_UTF8, 0, wstr, -1, utf8, len, NULL, NULL))
+  char *utf8 = malloc ((size_t) len);
+  if (!utf8) { errno = ENOMEM; return NULL; }
+  if (0 == WideCharToMultiByte (CP_UTF8, WC_ERR_INVALID_CHARS, wstr, -1, utf8, len, NULL, NULL))
     {
       free (utf8);
+      errno = EILSEQ;
       return NULL;
     }
   return utf8;
@@ -1065,6 +1065,8 @@ xy_env_get (const char *name)
 }
 
 
+static bool xy_file_read_bytes (const char *path, char **out_buf, size_t *out_len);
+
 /**
  * @brief 读取文件内容并返回字符串，失败时返回空字符串
  *
@@ -1078,36 +1080,10 @@ xy_env_get (const char *name)
 static char *
 xy_file_read (const char *path)
 {
-  FILE *fp = xy_fopen (path, "rb");
-  if (!fp)
+  char *buf = NULL;
+  size_t len = 0;
+  if (!xy_file_read_bytes (path, &buf, &len))
     return xy_strdup ("");
-
-  if (fseek (fp, 0, SEEK_END) != 0)
-    {
-      fclose (fp);
-      return xy_strdup ("");
-    }
-
-  long size = ftell (fp);
-  if (size < 0)
-    {
-      fclose (fp);
-      return xy_strdup ("");
-    }
-  rewind (fp);
-
-  char *buf = xy_malloc0 ((size_t) size + 1);
-
-  size_t read_bytes = fread (buf, 1, (size_t) size, fp);
-  if (read_bytes < (size_t) size && ferror (fp))
-    {
-      fclose (fp);
-      free (buf);
-      return xy_strdup ("");
-    }
-
-  fclose (fp);
-  buf[read_bytes] = '\0';
 
   char *formatted_str = xy_str_gsub (buf, "\r\n", "\n");
   xy_ptr_replace (&formatted_str, xy_str_gsub (formatted_str, "\r", "\n"));

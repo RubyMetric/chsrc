@@ -13,6 +13,51 @@
 
 #include "xy.h"
 
+static void
+test_shared_file_reader (void)
+{
+#ifdef __linux__
+  /* procfs 文件报告长度为 0，实际内容必须读到 EOF。 */
+  char *bytes = NULL;
+  size_t len = 0;
+  assert (xy_file_read_bytes ("/proc/self/comm", &bytes, &len));
+  assert (len > 0);
+  char *text = xy_file_read ("/proc/self/comm");
+  assert_str (text, bytes);
+  free (text);
+  free (bytes);
+#endif
+}
+
+#ifdef XY_Build_On_Windows
+static void
+test_shared_utf_conversion (void)
+{
+  const char *samples[] = { "", "ASCII", "C:\\Users\\张三\\Mirror🦀Test" };
+  for (size_t i = 0; i < xy_c_array_len (samples); i++)
+    {
+      wchar_t *wide = xy_utf8_to_wstr (samples[i]);
+      assert (wide);
+      char *utf8 = xy_wstr_to_utf8 (wide);
+      assert (utf8);
+      assert_str (utf8, samples[i]);
+      free (utf8);
+      free (wide);
+    }
+  const char *invalid[] = { "\xc0\xaf", "\xe4\xb8", "\xed\xa0\x80", "\xf4\x90\x80\x80" };
+  for (size_t i = 0; i < xy_c_array_len (invalid); i++)
+    {
+      errno = 0;
+      assert (NULL == xy_utf8_to_wstr (invalid[i]));
+      assert (EILSEQ == errno);
+    }
+  const wchar_t invalid_wide[] = { 0xd800, 0 };
+  errno = 0;
+  assert (NULL == xy_wstr_to_utf8 (invalid_wide));
+  assert (EILSEQ == errno);
+}
+#endif
+
 void
 callback_print_str_for_seq (void *str, void *DUMMY)
 {
@@ -30,6 +75,10 @@ int
 main (int argc, char const *argv[])
 {
   xy_init ();
+  test_shared_file_reader ();
+#ifdef XY_Build_On_Windows
+  test_shared_utf_conversion ();
+#endif
 
   // 关闭颜色
   // xy.enable_color = false;
