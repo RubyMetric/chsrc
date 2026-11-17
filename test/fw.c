@@ -4,7 +4,7 @@
  * File Authors  : @ccmywish
  * Contributors  : @Mikachu2333
  * Created On    : <2024-12-14>
- * Last Modified : <2026-08-20>
+ * Last Modified : <2026-10-28>
  *
  * 该文件最好启用 DEBUG mode 编译
  * ------------------------------------------------------------*/
@@ -13,6 +13,34 @@
 
 #include "../src/framework/base.c"
 #include "../src/framework/OS.c"
+
+static void
+test_file_io (void)
+{
+  char *err = NULL;
+  char *root = chsrc_make_tmpdir ("file-io", &err);
+  assert (root && !err);
+#ifdef XY_Build_On_Windows
+  char *dir = xy_path_join (root, "quoted ' & directory");
+#else
+  char *dir = xy_path_join (root, "quoted ' \" $HOME `printf wrong` $(printf wrong)");
+#endif
+  char *path = xy_path_join (dir, "nested/config");
+  ProgMode.DryRunMode = true;
+  chsrc_ensure_dir (dir);
+  assert (chsrc_try_overwrite_file ("dry", path));
+  ProgMode.DryRunMode = false;
+  assert (!xy_path_exist (dir));
+  assert (chsrc_try_overwrite_file ("text", path));
+  assert_str (xy_file_read (path), "text");
+  char *blocked = xy_path_join (path, "child");
+  assert (!chsrc_try_overwrite_file ("new", blocked));
+  assert_str (xy_file_read (path), "text");
+  free (blocked);
+  free (path);
+  free (dir);
+  free (root);
+}
 
 int
 main (int argc, char const *argv[])
@@ -24,6 +52,8 @@ main (int argc, char const *argv[])
     }
 
   xy_init ();
+  test_file_io ();
+  if (argc == 2 && xy_streql (argv[1], "--test-file-io")) return 0;
 
   br();
   chsrc_log  ("chsrc_log");
@@ -76,6 +106,9 @@ main (int argc, char const *argv[])
   chsrc_overwrite_file ("Line999 \nLine998\nLine997\n", tmpfile);
   assert_str (xy_file_read (tmpfile), "Line999 \nLine998\nLine997\n");
 
+  chsrc_overwrite_file ("", tmpfile);
+  assert_str (xy_file_read (tmpfile), "");
+
   chsrc_log (xy_2strcat ("CPU arch = ", chsrc_get_cpuarch ()));
   print ("chsrc: CPU cores = ");
   println (chsrc_get_cpucore ());
@@ -97,6 +130,11 @@ main (int argc, char const *argv[])
       chsrc_run_as_sh_file ("echo Hello from sh file");
       chsrc_run_as_bash_file ("echo Hello from Bash file");
     }
+
+#ifndef XY_Build_On_Windows
+  if (xy_file_exist ("/dev/full"))
+    assert (!chsrc_try_overwrite_file ("buffered output", "/dev/full"));
+#endif
 
   chsrc_run ("echo " Chsrc_Version " test pass!", RunOpt_Dont_Notify_On_Success);
   return 0;

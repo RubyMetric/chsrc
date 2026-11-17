@@ -987,46 +987,72 @@ chsrc_view_file (const char *path)
   chsrc_run_as_a_service (cmd);
 }
 
+/* 使用文件系统 API，目录名中的 shell 元字符不应被执行。 */
+static bool
+chsrc_try_ensure_dir (const char *dir)
+{
+  char *norm_dir = xy_normalize_path (dir);
+  /* xy_parent_dir 对根目录下文件返回空串。 */
+  if ('\0' == *norm_dir)
+    {
+      free (norm_dir);
+      norm_dir = xy_strdup ("/");
+    }
+
+  if (xy_dir_exist (norm_dir))
+    {
+      free (norm_dir);
+      return true;
+    }
+  if (xy_path_exist (norm_dir))
+    {
+      free (norm_dir);
+      errno = ENOTDIR;
+      return false;
+    }
+
+  char *parent = xy_parent_dir (norm_dir);
+  bool ok = !xy_streql (parent, norm_dir) && chsrc_try_ensure_dir (parent);
+  free (parent);
+  if (ok)
+    {
+#ifdef XY_Build_On_Windows
+      wchar_t *wide = xy_utf8_to_wstr (norm_dir);
+      ok = wide && (CreateDirectoryW (wide, NULL) || xy_dir_exist (norm_dir));
+      free (wide);
+#else
+      ok = 0 == mkdir (norm_dir, 0777) || (EEXIST == errno && xy_dir_exist (norm_dir));
+#endif
+    }
+  free (norm_dir);
+  return ok;
+}
+
 static void
 chsrc_ensure_dir (const char *dir)
 {
-  dir = xy_normalize_path (dir);
-
-  if (xy_dir_exist (dir))
+  if (in_dry_run_mode ()) return;
+  if (!chsrc_try_ensure_dir (dir))
     {
-      return;
+      chsrc_error2 (xy_2strcat (ENGLISH ? "Unable to create directory: " : "无法创建目录: ", dir));
+      exit (Exit_UserCause);
     }
-
-  // 不存在就生成
-  char *mkdir_cmd = NULL;
-  if (xy.on_windows)
-    {
-      mkdir_cmd = "md ";  // 已存在时返回 errorlevel = 1
-    }
-  else
-    {
-      mkdir_cmd = "mkdir -p ";
-    }
-  char *cmd = xy_2strcat (mkdir_cmd, dir);
-  cmd = xy_quiet_cmd (cmd);
-
-  chsrc_run_as_a_service (cmd);
-
-  char *msg = ENGLISH ? "Directory doesn't exist, created automatically " : "目录不存在，已自动创建 ";
-  chsrc_alert2 (xy_2strcat (msg, dir));
 }
 
 
 static void
 chsrc_append_to_file (const char *str, const char *filename)
 {
+  xy_cant_be_null (str);
+  xy_cant_be_null (filename);
+
   if (in_dry_run_mode())
     {
       goto log_anyway;
     }
 
   char *file = xy_normalize_path (filename);
-  char *dir = xy_parent_dir (file);
+  char *dir  = xy_parent_dir (file);
   chsrc_ensure_dir (dir);
 
   FILE *f = xy_fopen (file, "a");
@@ -1039,34 +1065,31 @@ chsrc_append_to_file (const char *str, const char *filename)
     }
 
   size_t len = strlen (str);
-
-  size_t ret = fwrite (str, len, 1, f);
-  if (ret != 1)
+  if (len > 0)
     {
-      char *msg = ENGLISH ? xy_2strcat ("Write failed to ", file)
-                          : xy_2strcat ("写入文件失败: ", file);
-      chsrc_error2 (msg);
-      exit (Exit_UserCause);
+      size_t ret = fwrite (str, 1, len, f);
+      if (ret != len)
+        {
+          fclose (f);
+          char *msg = ENGLISH ? xy_2strcat ("Write failed to ", file)
+                              : xy_2strcat ("写入文件失败: ", file);
+          chsrc_error2 (msg);
+          exit (Exit_UserCause);
+        }
     }
 
-  fclose (f);
+  if (0 != fclose (f))
+    {
+      chsrc_error2 (ENGLISH ? xy_2strcat ("Unable to flush file: ", file)
+                            : xy_2strcat ("文件刷盘失败: ", file));
+      exit (Exit_UserCause);
+    }
+  free (dir);
+  free (file);
 
 log_anyway:
   /* 输出recipe指定的文件名 */
   log_for_file_write (filename, false);
-
-  /*
-  char *cmd = NULL;
-  if (xy.on_windows)
-    {
-      cmd = xy_strcat (4, "echo ", str, " >> ", file);
-    }
-  else
-    {
-      cmd = xy_strcat (4, "echo '", str, "' >> ", file);
-    }
-  chsrc_run_a_service (cmd);
-  */
 }
 
 /**
@@ -1075,71 +1098,129 @@ log_anyway:
 static void
 chsrc_prepend_to_file (const char *str, const char *filename)
 {
+  xy_cant_be_null (str);
+  xy_cant_be_null (filename);
+
   if (in_dry_run_mode())
     {
       goto log_anyway;
     }
 
   char *file = xy_normalize_path (filename);
+  char *dir  = xy_parent_dir (file);
+  chsrc_ensure_dir (dir);
 
   char *file_content = xy_file_read (file);
-  char *content = xy_2strcat (str, file_content);
+  char *content      = xy_2strcat (str, file_content);
 
   FILE *f = xy_fopen (file, "w");
 
-  if (f)
+  if (NULL==f)
     {
-      fwrite (content, 1, strlen (content), f);
-      fclose (f);
-    }
-  else
-    {
-      chsrc_error2 ("文件打开失败");
+      char *msg = ENGLISH ? xy_2strcat ("Unable to open file to write: ", file)
+                          : xy_2strcat ("无法打开文件以写入: ", file);
+      chsrc_error2 (msg);
       exit (Exit_UserCause);
     }
+
+  size_t len = strlen (content);
+  if (len > 0)
+    {
+      size_t ret = fwrite (content, 1, len, f);
+      if (ret != len)
+        {
+          fclose (f);
+          char *msg = ENGLISH ? xy_2strcat ("Write failed to ", file)
+                              : xy_2strcat ("写入文件失败: ", file);
+          chsrc_error2 (msg);
+          exit (Exit_UserCause);
+        }
+    }
+
+  if (0 != fclose (f))
+    {
+      chsrc_error2 (ENGLISH ? xy_2strcat ("Unable to flush file: ", file)
+                            : xy_2strcat ("文件刷盘失败: ", file));
+      exit (Exit_UserCause);
+    }
+  free (content);
+  free (file_content);
+  free (dir);
+  free (file);
 
 log_anyway:
   /* 输出recipe指定的文件名 */
   log_for_file_write (filename, false);
 }
 
-static void
-chsrc_overwrite_file (const char *str, const char *filename)
+/**
+ * @brief 尝试覆写文件，失败时返回 false 而不直接 exit，供单测使用
+ */
+static bool
+chsrc_try_overwrite_file (const char *str, const char *filename)
 {
+  xy_cant_be_null (str);
+  xy_cant_be_null (filename);
+
   if (in_dry_run_mode())
     {
-      goto log_anyway;
+      log_for_file_write (filename, true);
+      return true;
     }
 
   char *file = xy_normalize_path (filename);
-  char *dir = xy_parent_dir (file);
-  chsrc_ensure_dir (dir);
+  char *dir  = xy_parent_dir (file);
+  if (!chsrc_try_ensure_dir (dir))
+    {
+      free (dir);
+      free (file);
+      return false;
+    }
 
   FILE *f = xy_fopen (file, "w");
   if (NULL==f)
     {
-      char *msg = ENGLISH ? xy_2strcat ("Unable to open file to overwrite: ", file)
-                          : xy_2strcat ("无法打开文件以覆盖: ", file);
-      chsrc_error2 (msg);
-      exit (Exit_UserCause);
+      free (dir);
+      free (file);
+      return false;
     }
 
   size_t len = strlen (str);
-  size_t ret = fwrite (str, len, 1, f);
-  if (ret != 1)
+  if (len > 0)
     {
-      fclose (f);
-      char *msg = ENGLISH ? xy_2strcat ("Write failed to ", file)
-                          : xy_2strcat ("写入文件失败: ", file);
+      size_t ret = fwrite (str, 1, len, f);
+      if (ret != len)
+        {
+          fclose (f);
+          free (dir);
+          free (file);
+          return false;
+        }
+    }
+
+  bool closed = (0 == fclose (f));
+  free (dir);
+  free (file);
+
+  if (!closed)
+    return false;
+
+  /* 输出recipe指定的文件名 */
+  log_for_file_write (filename, true);
+  return true;
+}
+
+static void
+chsrc_overwrite_file (const char *str, const char *filename)
+{
+  if (!chsrc_try_overwrite_file (str, filename))
+    {
+      char *file = xy_normalize_path (filename);
+      char *msg  = ENGLISH ? xy_2strcat ("Unable to open or write file: ", file)
+                           : xy_2strcat ("无法打开或写入文件: ", file);
       chsrc_error2 (msg);
       exit (Exit_UserCause);
     }
-
-  fclose (f);
-
-log_anyway:
-  /* 输出recipe指定的文件名 */
-  log_for_file_write (filename, true);
 }
 
 static void
