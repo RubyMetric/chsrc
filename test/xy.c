@@ -13,6 +13,51 @@
 
 #include "xy.h"
 
+static void
+test_shared_file_reader (void)
+{
+#ifdef __linux__
+  /* procfs 文件报告长度为 0，实际内容必须读到 EOF。 */
+  char *bytes = NULL;
+  size_t len = 0;
+  assert (xy_file_read_bytes ("/proc/self/comm", &bytes, &len));
+  assert (len > 0);
+  char *text = xy_file_read ("/proc/self/comm");
+  assert_str (text, bytes);
+  free (text);
+  free (bytes);
+#endif
+}
+
+#ifdef XY_Build_On_Windows
+static void
+test_shared_utf_conversion (void)
+{
+  const char *samples[] = { "", "ASCII", "C:\\Users\\张三\\Mirror🦀Test" };
+  for (size_t i = 0; i < xy_c_array_len (samples); i++)
+    {
+      wchar_t *wide = xy_utf8_to_wstr (samples[i]);
+      assert (wide);
+      char *utf8 = xy_wstr_to_utf8 (wide);
+      assert (utf8);
+      assert_str (utf8, samples[i]);
+      free (utf8);
+      free (wide);
+    }
+  const char *invalid[] = { "\xc0\xaf", "\xe4\xb8", "\xed\xa0\x80", "\xf4\x90\x80\x80" };
+  for (size_t i = 0; i < xy_c_array_len (invalid); i++)
+    {
+      errno = 0;
+      assert (NULL == xy_utf8_to_wstr (invalid[i]));
+      assert (EILSEQ == errno);
+    }
+  const wchar_t invalid_wide[] = { 0xd800, 0 };
+  errno = 0;
+  assert (NULL == xy_wstr_to_utf8 (invalid_wide));
+  assert (EILSEQ == errno);
+}
+#endif
+
 void
 callback_print_str_for_seq (void *str, void *DUMMY)
 {
@@ -30,6 +75,10 @@ int
 main (int argc, char const *argv[])
 {
   xy_init ();
+  test_shared_file_reader ();
+#ifdef XY_Build_On_Windows
+  test_shared_utf_conversion ();
+#endif
 
   // 关闭颜色
   // xy.enable_color = false;
@@ -194,6 +243,18 @@ main (int argc, char const *argv[])
   assert (XY_Stat_Query_Error == _xy_stat_error (ULONG_MAX));
 
   char *home_path = xy_normalize_path ("~");
+#ifdef XY_Build_On_Windows
+  {
+    char *home_expected = xy_2strcat ("\\\\?\\", xy_os_home);
+    assert_str (home_path, home_expected);
+    free (home_expected);
+
+    char *home_display = xy_path_display_text (home_path);
+    assert (NULL != home_display);
+    free (home_path);
+    home_path = home_display;
+  }
+#endif
   assert_str (home_path, xy_os_home);
   free (home_path);
 
@@ -215,8 +276,21 @@ main (int argc, char const *argv[])
       say (xy_normalize_path ("~"));
       say (xy_normalize_path ("~/"));
       // xy_parent_dir() 得到的结果一定是不包含尾斜杠的目录名
-      assert_str (xy_parent_dir (xy_normalize_path ("~")), "C:\\Users");
-      assert_str (xy_parent_dir (xy_normalize_path ("~/")), "C:\\Users");
+      char *home_norm = xy_normalize_path ("~");
+      char *home_parent = xy_parent_dir (home_norm);
+      char *home_parent_display = xy_path_display (home_parent);
+      assert_str (home_parent_display, "C:\\Users");
+      free (home_parent_display);
+      free (home_parent);
+      free (home_norm);
+
+      char *home_slash_norm = xy_normalize_path ("~/");
+      char *home_slash_parent = xy_parent_dir (home_slash_norm);
+      char *home_slash_display = xy_path_display (home_slash_parent);
+      assert_str (home_slash_display, "C:\\Users");
+      free (home_slash_display);
+      free (home_slash_parent);
+      free (home_slash_norm);
       assert (xy_dir_exist ("C:\\Users"));
 
       say (xy_win_powershell_profile);
@@ -224,7 +298,11 @@ main (int argc, char const *argv[])
       assert (xy_file_exist (xy_win_powershell_profile));
       assert (true == xy_file_exist (xy_win_powershellv5_profile));
 
-      assert_str (xy_normalize_path ("C:\\a bc\\def\\"), "C:\\a bc\\def\\");
+      char *spaced = xy_normalize_path ("C:\\a bc\\def\\");
+      char *spaced_display = xy_path_display (spaced);
+      assert_str (spaced_display, "C:\\a bc\\def\\");
+      free (spaced_display);
+      free (spaced);
       assert_str (xy_normalize_path ("a/b c/d"), "a\\b c\\d");
       assert_str (xy_normalize_path ("a/b c/d/"), "a\\b c\\d\\");
       assert_str (xy_parent_dir ("a/b c/d"), "a\\b c");
@@ -249,7 +327,7 @@ main (int argc, char const *argv[])
 
   if (xy.on_windows)
     {
-      assert_str ("C:\\Users\\chsrc", xy_path_join ("C:\\Users",   "chsrc"));
+      assert_str ("C:\\Users\\chsrc", xy_path_display (xy_path_join ("C:\\Users",   "chsrc")));
     }
   else
     {

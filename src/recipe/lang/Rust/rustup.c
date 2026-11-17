@@ -13,18 +13,18 @@ pl_rust_rustup_prepare (void)
   chef_prep_this_dish (pl_rust_rustup, gsr);
 
   chef_set_recipe_created_on   (this, "2024-10-02");
-  chef_set_recipe_last_updated (this, "2026-09-06");
+  chef_set_recipe_last_updated (this, "2026-10-28");
 
   chef_set_chefs (this, 1, "@ccmywish");
   chef_set_sauciers (this, 2, "@Yangmoooo", "@Mikachu2333");
 
   chef_set_scope_cap (this, ProjectScope, ScopeCap_Unable);
   chef_set_scope_cap (this, UserScope,    ScopeCap_Able_And_Implemented);
-  chef_set_scope_cap (this, SystemScope,  ScopeCap_Unable);
+  chef_set_scope_cap (this, SystemScope,  ScopeCap_Able_And_Implemented);
   chef_set_default_scope (this, UserScope);
 
-  chef_deny_english (this);
-  chef_allow_user_define(this);
+  chef_allow_english (this);
+  chef_allow_user_define (this);
 
   def_sources_begin()
   {&UpstreamProvider, "https://static.rust-lang.org",                 FeedByPrepare},
@@ -39,7 +39,6 @@ pl_rust_rustup_prepare (void)
   //{&Iscas,            "https://mirror.iscas.ac.cn/rustup",            FeedByPrepare},
   //{&Sjtug_Zhiyuan,    "https://mirror.sjtu.edu.cn/rust-static",       FeedByPrepare},
   //{&Ali,              "https://mirrors.aliyun.com/rustup",            FeedByPrepare},
-
   def_sources_end()
 
   // 40MB大小
@@ -47,11 +46,10 @@ pl_rust_rustup_prepare (void)
 }
 
 
-
 void
 pl_rust_rustup_getsrc (char *option)
 {
-  chsrc_view_env ("RUSTUP_UPDATE_ROOT", "RUSTUP_DIST_SERVER", NULL);
+  chsrc_get_env ("RUSTUP_UPDATE_ROOT", "RUSTUP_DIST_SERVER", NULL);
 }
 
 
@@ -63,57 +61,30 @@ pl_rust_rustup_setsrc (char *option)
 {
   chsrc_use_this_source (pl_rust_rustup);
 
-#ifdef XY_Build_On_Windows
+  char *dist_server = hp_remove_trailing_slash (source.url);
+  char *update_root = xy_2strcat (dist_server, "/rustup");
 
-  char *cmd1 = xy_strcat (3, "setx RUSTUP_DIST_SERVER \"", source.url, "\"");
-  char *cmd2 = xy_strcat (3, "setx RUSTUP_UPDATE_ROOT \"", source.url, "/rustup\"");
+  chsrc_set_env_block (
+    "RUSTUP_DIST_SERVER", dist_server,
+    "RUSTUP_UPDATE_ROOT", update_root,
+    NULL);
 
-  char *cmd = xy_strcat (3, cmd1, " & ", cmd2);
-  chsrc_run (cmd, RunOpt_Dont_Notify_On_Success|RunOpt_No_Last_New_Line);
-
-#else
-
-  char *w1 = xy_strcat (3, "export RUSTUP_DIST_SERVER=\"", source.url, "\"\n");
-  char *w2 = xy_strcat (3, "export RUSTUP_UPDATE_ROOT=\"", source.url, "/rustup\"\n");
-
-  char *w = xy_2strcat (w1, w2);
-
-  char *bashrc = xy_bashrc;
-  if (xy_file_exist (bashrc))
-    {
-      chsrc_backup (bashrc);
-      chsrc_append_to_file (w, bashrc);
-    }
-
-  char *zshrc = xy_zshrc;
-  if (xy_file_exist (zshrc))
-    {
-      chsrc_backup (zshrc);
-      chsrc_append_to_file (w, zshrc);
-    }
-
-  char *fishrc = xy_fishrc;
-  if (xy_file_exist (fishrc))
-    {
-      char *w1 = xy_strcat (3, "set -x RUSTUP_DIST_SERVER ", source.url, "\n");
-      char *w2 = xy_strcat (3, "set -x RUSTUP_UPDATE_ROOT ", source.url, "/rustup\n");
-
-      char *w = xy_2strcat (w1, w2);
-
-      chsrc_backup (fishrc);
-      chsrc_append_to_file (w, fishrc);
-    }
-#endif
+  free (update_root);
+  free (dist_server);
 
   chsrc_determine_chgtype (ChgType_Auto);
   chsrc_conclude (&source);
-  chsrc_alert2 ("请重启终端使rustup环境变量生效");
 }
-
 
 
 void
 pl_rust_rustup_resetsrc (char *option)
 {
-  pl_rust_rustup_setsrc (option);
+  chsrc_set_env_block (
+    "RUSTUP_DIST_SERVER", NULL,
+    "RUSTUP_UPDATE_ROOT", NULL,
+    NULL);
+
+  chsrc_determine_chgtype (ChgType_Reset);
+  chsrc_conclude (NULL);
 }

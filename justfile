@@ -86,9 +86,10 @@ LDLIBS_win := if os() == 'windows' {
 } else { '' }
 
 
-CFLAGS_dev_mode_prompt 	   := CFLAGS_base
-CFLAGS_debug_mode_prompt 	 := CFLAGS_base + ' ' + CFLAGS_debug
-CFLAGS_release_mode_prompt := CFLAGS_base + ' ' + CFLAGS_optimization + ' ' + CFLAGS_chk_static
+
+CFLAGS_dev_mode_prompt 	   := CFLAGS_base + ' ' + LDLIBS_win
+CFLAGS_debug_mode_prompt 	 := CFLAGS_base + ' ' + CFLAGS_debug + ' ' + LDLIBS_win
+CFLAGS_release_mode_prompt := CFLAGS_base + ' ' + CFLAGS_optimization + ' ' + CFLAGS_chk_static + ' ' + LDLIBS_win
 
 CFLAGS_dev_mode     := CFLAGS_dev_mode_prompt     + ' ' + LDLIBS_win + ' ' + CFLAGS_warn
 CFLAGS_debug_mode   := CFLAGS_debug_mode_prompt   + ' ' + LDLIBS_win + ' ' + CFLAGS_warn
@@ -98,6 +99,8 @@ CFLAGS_release_mode := CFLAGS_release_mode_prompt + ' ' + LDLIBS_win + ' ' + CFL
 
 BIN_xy := if os() == 'windows' {'xy.exe'} else {'./xy'}
 BIN_fw := if os() == 'windows' {'fw.exe'} else {'./fw'}
+BIN_file_update := if os() == 'windows' {'file-update-test.exe'} else {'./file-update-test.out'}
+BIN_env_win32 := if os() == 'windows' {'env-win32-test.exe'} else {'./env-win32-test.out'}
 BIN_rm := if os() == 'windows' {'del'}    else {'rm'}
 #=======================
 alias b := build-in-dev-mode
@@ -137,7 +140,11 @@ build-in-release-mode:
 debug: build-in-debug-mode
   @{{DEBUGGER}} {{DebugMode-Target-Name}}
 
-test: test-xy test-fw
+test: test-xy test-fw test-file-update test-env-win32
+
+test-env-win32:
+	@{{CC}} test/env-win32.c {{CFLAGS_debug_mode}} -o {{BIN_env_win32}}
+	@{{BIN_env_win32}}
 
 # 这些测试文件都用 DEBUG mode
 test-xy:
@@ -147,6 +154,14 @@ test-xy:
 test-fw:
 	@{{CC}} test/fw.c {{CFLAGS_debug_mode}} -o fw
 	@{{BIN_fw}}
+
+test-file-update:
+	@{{CC}} test/file-update.c {{CFLAGS_debug_mode}} -o {{BIN_file_update}}
+	@{{BIN_file_update}}
+
+[unix]
+test-env: build-in-dev-mode test-fw
+	@python3 test/env.py
 
 fastcheck:
 	@perl ./test/cli.pl fastcheck
@@ -159,6 +174,8 @@ clean:
 	-@{{BIN_rm}} *.res
 	-@{{BIN_rm}} xy
 	-@{{BIN_rm}} fw
+	-@{{BIN_rm}} file-update-test.out
+	-@{{BIN_rm}} env-win32-test.out
 	-@{{BIN_rm}} chsrc
 	-@{{BIN_rm}} chsrc-debug
 	-@{{BIN_rm}} chsrc-release
