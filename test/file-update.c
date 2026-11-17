@@ -267,6 +267,27 @@ test_dry_run_has_no_side_effects (void)
 }
 
 static void
+test_backup_uses_literal_path (void)
+{
+#ifdef XY_Build_On_Windows
+  char *path = new_path ("config & quoted ' name");
+#else
+  char *path = new_path ("config $HOME ' \" `printf injected` $(printf injected)");
+#endif
+  overwrite_file_with_bytes (path, "old", 3);
+  FileUpdate_t op = plan_file_update (path, "new", 3);
+  char *err = NULL;
+  assert (FileUpdate_OK == chsrc_update_files (&op, 1, &err));
+  assert (NULL == err);
+  char *backup = xy_2strcat (path, ".bak");
+  assert_file_with_bytes (backup, "old", 3);
+  assert_file_with_bytes (path, "new", 3);
+  free (backup);
+  free (op.old_content);
+  free (path);
+}
+
+static void
 test_commit_rollback (void)
 {
   char *first = new_path ("commit-first");
@@ -679,6 +700,7 @@ main (void)
   xy_init ();
   setvbuf (stdout, NULL, _IOLBF, 0);
   test_binary_update_and_noop ();
+  test_backup_uses_literal_path ();
   test_dry_run_has_no_side_effects ();
   test_commit_rollback ();
   test_stale_snapshot_rejects_batch ();

@@ -307,13 +307,9 @@ file_update_commit (StagedFileUpdate_t *stage, const FileUpdate_t *op)
       if (0 != link (stage->replacement, stage->target))
         {
           int err = errno;
-          /* 不支持硬链接的文件系统退回 rename，行为与旧实现一致。 */
-          if (ENOTSUP != err && EOPNOTSUPP != err && EPERM != err && EXDEV != err)
-            {
-              errno = err;
-              return false;
-            }
-          if (0 != rename (stage->replacement, stage->target)) return false;
+          /* 无法保证“不覆盖”时失败，不能退回会覆盖其他程序新文件的 rename。 */
+          errno = err;
+          return false;
         }
       else if (0 != unlink (stage->replacement))
         {
