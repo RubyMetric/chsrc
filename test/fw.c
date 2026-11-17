@@ -14,6 +14,34 @@
 #include "../src/framework/base.c"
 #include "../src/framework/OS.c"
 
+static void
+test_file_io (void)
+{
+  char *err = NULL;
+  char *root = chsrc_make_tmpdir ("file-io", &err);
+  assert (root && !err);
+#ifdef XY_Build_On_Windows
+  char *dir = xy_path_join (root, "quoted ' & directory");
+#else
+  char *dir = xy_path_join (root, "quoted ' \" $HOME `printf wrong` $(printf wrong)");
+#endif
+  char *path = xy_path_join (dir, "nested/config");
+  ProgMode.DryRunMode = true;
+  chsrc_ensure_dir (dir);
+  assert (chsrc_try_overwrite_file ("dry", path));
+  ProgMode.DryRunMode = false;
+  assert (!xy_path_exist (dir));
+  assert (chsrc_try_overwrite_file ("text", path));
+  assert_str (xy_file_read (path), "text");
+  char *blocked = xy_path_join (path, "child");
+  assert (!chsrc_try_overwrite_file ("new", blocked));
+  assert_str (xy_file_read (path), "text");
+  free (blocked);
+  free (path);
+  free (dir);
+  free (root);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -24,6 +52,8 @@ main (int argc, char const *argv[])
     }
 
   xy_init ();
+  test_file_io ();
+  if (argc == 2 && xy_streql (argv[1], "--test-file-io")) return 0;
 
   br();
   chsrc_log  ("chsrc_log");

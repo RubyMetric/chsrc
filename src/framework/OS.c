@@ -987,37 +987,56 @@ chsrc_view_file (const char *path)
   chsrc_run_as_a_service (cmd);
 }
 
-static void
-chsrc_ensure_dir (const char *dir)
+/* 使用文件系统 API，目录名中的 shell 元字符不应被执行。 */
+static bool
+chsrc_try_ensure_dir (const char *dir)
 {
   char *norm_dir = xy_normalize_path (dir);
+  /* xy_parent_dir 对根目录下文件返回空串。 */
+  if ('\0' == *norm_dir)
+    {
+      free (norm_dir);
+      norm_dir = xy_strdup ("/");
+    }
 
   if (xy_dir_exist (norm_dir))
     {
       free (norm_dir);
-      return;
+      return true;
     }
-
-  // 不存在就生成
-  char *mkdir_cmd = NULL;
-  if (xy.on_windows)
+  if (xy_path_exist (norm_dir))
     {
-      mkdir_cmd = "md ";  // 已存在时返回 errorlevel = 1
+      free (norm_dir);
+      errno = ENOTDIR;
+      return false;
     }
-  else
+
+  char *parent = xy_parent_dir (norm_dir);
+  bool ok = !xy_streql (parent, norm_dir) && chsrc_try_ensure_dir (parent);
+  free (parent);
+  if (ok)
     {
-      mkdir_cmd = "mkdir -p ";
+#ifdef XY_Build_On_Windows
+      wchar_t *wide = xy_utf8_to_wstr (norm_dir);
+      ok = wide && (CreateDirectoryW (wide, NULL) || xy_dir_exist (norm_dir));
+      free (wide);
+#else
+      ok = 0 == mkdir (norm_dir, 0777) || (EEXIST == errno && xy_dir_exist (norm_dir));
+#endif
     }
-  char *raw_cmd = xy_strcat (4, mkdir_cmd, "\"", norm_dir, "\"");
-  char *cmd     = xy_quiet_cmd (raw_cmd);
-  free (raw_cmd);
-
-  chsrc_run_as_a_service (cmd);
-  free (cmd);
-
-  char *msg = ENGLISH ? "Directory doesn't exist, created automatically " : "目录不存在，已自动创建 ";
-  chsrc_alert2 (xy_2strcat (msg, norm_dir));
   free (norm_dir);
+  return ok;
+}
+
+static void
+chsrc_ensure_dir (const char *dir)
+{
+  if (in_dry_run_mode ()) return;
+  if (!chsrc_try_ensure_dir (dir))
+    {
+      chsrc_error2 (xy_2strcat (ENGLISH ? "Unable to create directory: " : "无法创建目录: ", dir));
+      exit (Exit_UserCause);
+    }
 }
 
 
@@ -1151,7 +1170,12 @@ chsrc_try_overwrite_file (const char *str, const char *filename)
 
   char *file = xy_normalize_path (filename);
   char *dir  = xy_parent_dir (file);
-  chsrc_ensure_dir (dir);
+  if (!chsrc_try_ensure_dir (dir))
+    {
+      free (dir);
+      free (file);
+      return false;
+    }
 
   FILE *f = xy_fopen (file, "w");
   if (NULL==f)
