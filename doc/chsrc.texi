@@ -40,6 +40,8 @@ The tool and framework @command{chsrc} is a great helper to Change Source for ev
 
 @exdent 使用: chsrc <command> [options] [dish] [mirror]
 
+选项可放在命令前后或位置参数之间，例如 @samp{chsrc set npm first --dry-run}。@samp{--dry} 和 @samp{--dry-run} 是 @samp{-dry} 的别名。
+
 Exit status:
 
 @display
