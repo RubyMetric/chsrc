@@ -38,7 +38,11 @@ For chsrc @value{Chsrc_Version}
 
 The tool and framework @command{chsrc} is a great helper to Change Source for every software on every platform from the command line. This texinfo documentation is published on @b{@value{Doc_Publish_Date}} for @command{chsrc} @b{@value{Chsrc_Version}}
 
-@exdent 使用: chsrc <command> [options] [dish] [mirror]
+@exdent 使用: chsrc [options] <command> [dish] [mirror] [-- recipe-args...]
+
+本体选项可放在第一个独立的 -- 之前的任意位置，例如 chsrc set npm first --dry。
+按从左到右的顺序解析，遇到 help、--help、-h 或 --version 后立即返回，不再校验业务参数或读取后续参数；help 仅在命令位置生效。此前遇到的未知选项或无效选项值会报错。
+-- 后的参数按原有顺序和边界交给 recipe；未注册解析器时忽略。引号分组后的字符串保持为一个参数，保留内层双引号、空参数、CJK 和 emoji。组合 recipe 的实际执行子 recipe 也收到同一份参数。
 
 Exit status:
 
@@ -75,7 +79,7 @@ Exit status:
 @section 基本命令
 @table @samp
 @item help
-打印此帮助，或 h, -h, --help
+打印此帮助并立即返回，或 -h, --help
 @item issue
 查看相关issue
 
@@ -131,19 +135,22 @@ Exit status:
 @node options
 @chapter 选项
 @table @samp
-@item -dry
+@item --version
+打印版本并立即返回
+
+@item --dry
 Dry Run，模拟换源过程，命令仅打印并不运行
 
-@item -ipv6
+@item --ipv6
 使用IPv6测速
 
-@item -scope
-设置换源的作用域，可选值有：project|user|system|default (通过ls <dish>查看支持情况)
+@item --scope
+支持 --scope VALUE 和 --scope=VALUE。设置换源的作用域，可选值有：project|user|system|default (通过ls <dish>查看支持情况)
 
-@item -en(glish)
-使用英文输出
+@item --english, --English
+使用英文输出，须放在帮助或版本选项之前
 
-@item -no-color
+@item --no-color
 无颜色输出
 @end table
 

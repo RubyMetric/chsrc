@@ -344,10 +344,14 @@ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
    chsrc - Change Source - (GPLv3+)
 
 使用:
-   chsrc <command> [options] [dish] [mirror]
+   chsrc [options] <command> [dish] [mirror] [-- recipe-args...]
+   本体选项可放在 -- 之前的任意位置，例如 chsrc set npm first --dry。
+   从左到右解析；遇到帮助或版本立即返回，后续参数不再解析。
+   -- 后的参数原样交给 recipe；未配置解析器时忽略。
+   引号包裹的内容作为一个参数，保留参数内的双引号、CJK 和 emoji。
 
 命令:
-   help,  h                 打印此帮助，或 -h, --help
+   help                     打印此帮助，或 -h, --help
    issue, i                 查看相关issue
 
    list, ls, l              列出可用镜像站和可换源菜品
@@ -366,11 +370,14 @@ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
    reset  <dish>            重置，使用上游默认使用的源
 
 选项:
-   -dry                       Dry Run，模拟换源过程，命令仅打印并不运行
-   -scope=project|user|system 仅对本项目换源 / 用户级换源 / 系统级换源 (通过ls <dish>查看)
-   -ipv6                      使用IPv6测速
-   -en(glish)                 使用英文输出
-   -no-color                  无颜色输出
+   --dry                       模拟换源过程，命令仅打印并不运行
+   --scope <value>              换源作用域，也可写为 --scope=<value>
+                               default / project / user / system
+   --ipv6                      使用 IPv6 测速
+   --english, --English        使用英文输出（须放在帮助/版本选项之前）
+   --no-color                  无颜色输出
+   --version                   打印版本并立即返回
+   --help, -h                  打印帮助并立即返回
 ```
 
 <br>
@@ -395,8 +402,8 @@ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
 
 对支持 *项目级* 换源的菜品，可以避免全局（*系统级* 或 *用户级*）换源
 
-    $ chsrc set -scope=project bundler
-    $ chsrc set -scope project pdm
+    $ chsrc set --scope=project bundler
+    $ chsrc set --scope project pdm
 ```
 
 <br>

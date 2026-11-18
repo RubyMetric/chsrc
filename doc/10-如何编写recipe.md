@@ -104,6 +104,51 @@
 
 <br>
 
+## 接收 recipe 专用参数
+
+主程序把第一个独立的 `--` 后面的参数按原有顺序、内容和边界交给 recipe。
+例如 `chsrc set cargo -- "--skfw sq" sdf wiw "www"` 的尾部是四个参数：
+`--skfw sq`、`sdf`、`wiw`、`www`。主程序不会再次拆分、去引号或解释这些参数。
+作为参数内容传入的双引号、空字符串、CJK 和 emoji 均保留；Windows 入口复用
+`xy_wstr_to_utf8()` 将宽字符参数转换为 UTF-8，其他平台保留传入字节。
+
+recipe 默认忽略这些参数。需要解析时，在 `_prepare()` 中使用
+`chef_set_args_parser (this, my_parse_args)` 注册回调：
+
+```c
+static RecipeArgsResult_t
+my_parse_args (TargetCmd command, int argc, const char *const argv[])
+{
+  if (argc == 0)
+    return RecipeArgs_Continue;
+
+  if (argc == 1 && xy_streql (argv[0], "--help"))
+    {
+      puts ("本 recipe 支持的参数...");
+      return RecipeArgs_Handled;
+    }
+
+  chsrc_error ("本 recipe 不支持这些参数");
+  return RecipeArgs_Error;
+}
+```
+
+回调在操作执行前调用，可以用 `command` 区分 get、set、reset、measure 和 list。
+`argc` 是尾部参数数量，不含程序名和分隔符；`argc == 0` 时 `argv` 可以为 NULL。
+参数只读，生命周期覆盖本次 CLI 调用。
+
+- `RecipeArgs_Continue`：继续当前 recipe 的正常操作。
+- `RecipeArgs_Handled`：当前 recipe 已处理完毕，跳过其操作和子 recipe；同级 recipe 继续。
+- `RecipeArgs_Error`：停止整个命令，返回退出码 2。回调负责输出具体错误。
+
+组合 recipe 和实际参与操作的子 recipe 收到同一份参数，未配置解析器的组合仍继续向下传递。
+某个 recipe 解析参数不会消耗或改变其他 recipe 收到的参数。组合的 measure 仅展示子菜品名称，
+不执行子菜品测速，因此只调用组合自身的解析器。
+
+shell 负责外层引号和转义。例如 PowerShell 7 中
+`chsrc set cargo -- '他说 "你好" 😀'` 传入一个含双引号的参数。
+`--` 后的 `--dry`、`--help` 等均属于 recipe；本体选项须放在分隔符前。
+
 ## 开发准则
 
 1. 代码高度可移植

@@ -46,6 +46,7 @@ chsrc-ci-release
 ##############################
 xy
 fw
+cli-parser-test
 README.md.bak*
 *.tmp
 chsrc_tmp_test.txt

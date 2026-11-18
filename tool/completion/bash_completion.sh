@@ -21,18 +21,8 @@ _chsrc() {
 
     # 初始化部分
 
-    ## 手动划分字符串
-    local line="${COMP_LINE:0:$COMP_POINT}"  # COMP_LINE的从0到光标的所有输入，作为一个字符串
-    read -ra words <<< "$line"               # 按IFS重新分词，默认分隔符是" \t\n"
-    cword=$(( ${#words[@]} - 1 ))            # 下表从0开始，当前词下标
-
-    ### 如果行末是空格，说明需要补充新的词
-    if [[ "${line: -1}" == " " ]]; then
-        words+=("")
-        cword=$(( ${#words[@]} - 1 ))
-    fi
-
-    cur="${words[$cword]}"
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    COMPREPLY=()
 
     ## 定义具体dish
     local dishes_lang="gem ruby rb rubygem rubygems bundler
@@ -107,92 +97,70 @@ _chsrc() {
         conda anaconda"
 
     local all_dishes="$dishes_lang $dishes_os $dishes_ware"
-    local options="-dry -scope= -ipv6 -english -en -no-color -h --help"
-    local scope_options="project user system"
-    local commands="help issue list ls measure cesu get set reset"
+    local options="--dry --scope --ipv6 --english --English --no-color --version --help -h"
+    local scope_options="default project user system"
+    local commands="help issue issues isue i list ls l measure mea m cesu ce c get g set s reset rest r"
 
-    # 逻辑部分
-
-    # 扫描已输入词，跳过选项，依次填入 cmd / second_arg，并计数
-    # 找到第一个非选项词作为子命令
-    local non_opts=()
-    for w in "${words[@]:1:cword-1}"; do
-        [[ $w != -* ]] && non_opts+=("$w")
+    local non_opts=() word need_scope=0
+    local index
+    for ((index=1; index<COMP_CWORD; index++)); do
+        word="${COMP_WORDS[index]}"
+        [[ $word == -- ]] && return 0
+        if ((need_scope)); then
+            # Bash 默认把 '=' 作为单独的补全词。
+            [[ $word != = ]] && need_scope=0
+            continue
+        fi
+        case "$word" in
+            --scope) need_scope=1 ;;
+            --help|-h|--version) return 0 ;;
+            -*) ;;
+            *)
+                [[ ${#non_opts[@]} -eq 0 && $word == help ]] && return 0
+                non_opts+=("$word")
+                ;;
+        esac
     done
-    # 若有non_opts[0]
-    local cmd=${non_opts[0]}
 
-    if [[ -z "$cmd" ]]; then
-        COMPREPLY=( $(compgen -W "$commands $options" -- "$cur") )
+    if ((need_scope)); then
+        [[ $cur == = ]] && cur=""
+        COMPREPLY=( $(compgen -W "$scope_options" -- "$cur") ) || true
+        return 0
+    fi
+    if [[ $cur == --scope=* ]]; then
+        COMPREPLY=( $(compgen -W "--scope=default --scope=project --scope=user --scope=system" -- "$cur") ) || true
+        return 0
+    fi
+    if [[ $cur == -* ]]; then
+        COMPREPLY=( $(compgen -W "$options" -- "$cur") ) || true
         return 0
     fi
 
-    local second_arg="${non_opts[1]:-}"
+    local cmd="${non_opts[0]:-}"
     local args_after=${#non_opts[@]}
+    if [[ -z $cmd ]]; then
+        COMPREPLY=( $(compgen -W "$commands $options" -- "$cur") ) || true
+        return 0
+    fi
 
-
-    # 补全-scope=project这样的选项时，需要手动控制，先补全-scope=再补全后面的
-    # 作为一个函数来实现
-    _complete_options() {
-        if [[ $cur == -scope=* ]]; then
-            # cur="-scope=",匹配
-            COMPREPLY=( $(compgen -W "$scope_options" -- "${cur#-scope=}") )
-        elif [[ $cur == -* ]]; then
-            COMPREPLY=( $(compgen -W "$options" -- "$cur") )
-            # 补全 -scope 本身时不加尾部空格，让用户可以继续输入=
-            if [[ ${COMPREPLY[0]} == "-scope=" ]]; then
-                # 对已经补全的候选项做出调整，补全出-scope=后不跟空格，才能匹配scope_options
-                compopt -o nospace
-            fi
-        fi
-    }
-
-    # 主要的补全逻辑
     case "$cmd" in
-        help|h|issue|i)
-            COMPREPLY=( $(compgen -W "help issue" -- $cur))
-            ;;
         list|ls|l)
             if [[ $args_after -eq 1 ]]; then
-                COMPREPLY=( $(compgen -W "mirror dish os lang ware $all_dishes " -- $cur) )
-            else
-                _complete_options
+                COMPREPLY=( $(compgen -W "mirrors mirror dishes dish dishs os lang pl language ware software $all_dishes" -- "$cur") ) || true
             fi
             ;;
-        measure|m|cesu)
-            if [[ $args_after -eq 1 && $cur != -* ]]; then
-                COMPREPLY=( $(compgen -W "$all_dishes" -- "$cur") )
-            else
-                _complete_options
-            fi
-            ;;
-        get|g)
-            if [[ $args_after -eq 1 && $cur != -* ]]; then
-                COMPREPLY=( $(compgen -W "$all_dishes" -- "$cur") )
-            else
-                COMPREPLY=( $(compgen -W "$options" -- $cur) )
-            fi
-            ;;
-        reset)
+        measure|mea|m|cesu|ce|c|get|g|reset|rest|r)
             if [[ $args_after -eq 1 ]]; then
-                COMPREPLY=( $(compgen -W "$all_dishes" -- $cur) )
-            else
-                COMPREPLY=( $(compgen -W "$options" -- $cur) )
+                COMPREPLY=( $(compgen -W "$all_dishes" -- "$cur") ) || true
             fi
             ;;
         set|s)
-            if [[ $args_after -eq 1 && $cur != -* ]]; then
-                COMPREPLY=( $(compgen -W "$all_dishes" -- "$cur") )
+            if [[ $args_after -eq 1 ]]; then
+                COMPREPLY=( $(compgen -W "$all_dishes" -- "$cur") ) || true
             elif [[ $args_after -eq 2 ]]; then
-                COMPREPLY=( $(compgen -W "first" -- $cur) )
-            else
-                _complete_options
+                COMPREPLY=( $(compgen -W "first" -- "$cur") ) || true
             fi
             ;;
-        *)
-            _complete_options
-            ;;
-
     esac
     return 0
 }

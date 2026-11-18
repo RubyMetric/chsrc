@@ -40,6 +40,13 @@
 #define chef_use_this(t) Dish_t *this = &t##_dish;
 #define chsrc_use_this_source(t) Dish_t *this = &t##_dish; Source_t source = chsrc_yield_source_and_confirm (this, option);
 
+/** 在 _prepare() 中按需注册 recipe 参数解析器。 */
+void
+chef_set_args_parser (Dish_t *dish, RecipeArgsParser_t parser)
+{
+  dish->parse_args = parser;
+}
+
 /**
  * 用于定义换源列表
  *

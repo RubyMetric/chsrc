@@ -220,7 +220,7 @@ debug: build-in-debug-mode
 
 
 
-test: test-make-var test-xy test-fw
+test: test-make-var test-xy test-fw test-cli-parser
 
 test-make-var:
 	@echo "On-Linux: $(On-Linux)"
@@ -250,6 +250,17 @@ test-fw:
 	@$(CC) test/fw.c $(CFLAGS) $(LDLIBS_win) -o fw
 	@./fw
 
+test-cli-parser: CFLAGS += $(CFLAGS_debug)
+test-cli-parser:
+	@$(CC) test/cli-parser.c $(CFLAGS) $(CFLAGS_warning) $(LDLIBS_win) -o cli-parser-test
+	@./cli-parser-test
+ifeq ($(On-Windows), 1)
+	@pwsh -NoLogo -NoProfile -NonInteractive -File test/cli-argv.ps1
+else
+	@perl test/cli-argv.pl
+	@bash test/cli-completion.sh
+endif
+
 check: test
 
 # AUR package 安装时将执行此 target
@@ -264,6 +275,7 @@ clean:
 	-@rm *.res  2>/dev/null
 	-@rm xy     2>/dev/null
 	-@rm fw     2>/dev/null
+	-@rm cli-parser-test 2>/dev/null
 	-@rm README.md.bak*    2>/dev/null
 
 	-@rm chsrc  					 2>/dev/null
@@ -296,4 +308,4 @@ install: $(ReleaseMode-Target-Name)
 
 .PHONY: all b build bd br bcir d t check c \
 	build-in-dev-mode build-in-debug-mode build-in-release-mode build-in-ci-release-mode \
-	debug test test-make-var test-xy test-fw fastcheck test-cli clean install build-deb clean-deb rawstr4c
+	debug test test-make-var test-xy test-fw test-cli-parser fastcheck test-cli clean install build-deb clean-deb rawstr4c

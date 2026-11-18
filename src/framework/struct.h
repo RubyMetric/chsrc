@@ -175,6 +175,31 @@ typedef struct Contributor_t
 Contributor_t;
 
 
+typedef enum {
+  TargetCmd_Get_Source = 1,
+  TargetCmd_Set_Source,
+  TargetCmd_Reset_Source,
+  TargetCmd_Measure_Source,
+  TargetCmd_List_Info
+} TargetCmd;
+
+typedef struct RecipeArgs_t
+{
+  int argc;
+  const char *const *argv; /* -- 后的原始参数；字符串与顺序均不可修改 */
+}
+RecipeArgs_t;
+
+typedef enum RecipeArgsResult_t
+{
+  RecipeArgs_Continue,
+  RecipeArgs_Handled, /* 已处理当前 recipe，跳过其操作及子 recipe */
+  RecipeArgs_Error    /* 终止本次命令，退出码为 Exit_Unknown */
+}
+RecipeArgsResult_t;
+
+typedef RecipeArgsResult_t (*RecipeArgsParser_t) (TargetCmd command, int argc, const char *const argv[]);
+
 typedef struct Dish_t
 {
   /* 以 / 为分隔符的多个菜品别名 */
@@ -183,6 +208,8 @@ typedef struct Dish_t
   void (*getfn)   (char *option);
   void (*setfn)   (char *option);
   void (*resetfn) (char *option);
+
+  RecipeArgsParser_t parse_args; /* 可选；未配置时忽略 -- 后的参数 */
 
   /**
    * 初始化函数，用于填充该 struct 的各种信息

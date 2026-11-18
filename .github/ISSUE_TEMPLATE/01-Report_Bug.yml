@@ -45,7 +45,7 @@ body:
     attributes:
       label: chsrc 版本
       # description: 你正在使用 chsrc 哪个版本？
-      placeholder: 请使用 chsrc -h 或 chsrc -v 查看，并*复制发布日期*
+      placeholder: 请使用 chsrc -h 或 chsrc --version 查看，并*复制发布日期*
     validations:
       required: true
 

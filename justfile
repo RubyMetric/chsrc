@@ -137,7 +137,7 @@ build-in-release-mode:
 debug: build-in-debug-mode
   @{{DEBUGGER}} {{DebugMode-Target-Name}}
 
-test: test-xy test-fw
+test: test-xy test-fw test-cli-parser
 
 # 这些测试文件都用 DEBUG mode
 test-xy:
@@ -147,6 +147,11 @@ test-xy:
 test-fw:
 	@{{CC}} test/fw.c {{CFLAGS_debug_mode}} -o fw
 	@{{BIN_fw}}
+
+test-cli-parser:
+	@{{CC}} test/cli-parser.c {{CFLAGS_debug_mode}} -o cli-parser-test
+	@{{ if os() == 'windows' { 'cli-parser-test.exe' } else { './cli-parser-test' } }}
+	@{{ if os() == 'windows' { 'pwsh -NoLogo -NoProfile -NonInteractive -File test/cli-argv.ps1' } else { 'perl test/cli-argv.pl' } }}
 
 fastcheck:
 	@perl ./test/cli.pl fastcheck
@@ -159,6 +164,7 @@ clean:
 	-@{{BIN_rm}} *.res
 	-@{{BIN_rm}} xy
 	-@{{BIN_rm}} fw
+	-@{{BIN_rm}} cli-parser-test
 	-@{{BIN_rm}} chsrc
 	-@{{BIN_rm}} chsrc-debug
 	-@{{BIN_rm}} chsrc-release
