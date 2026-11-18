@@ -96,6 +96,14 @@ like `$CHSRC ls`,            $list_str,    'chsrc ls';
 like `$CHSRC list mirrors`,  $list_str,    'chsrc list mirrors';
 like `$CHSRC list os`,    qr/netbsd\s*openbsd/,   'chsrc list os';
 like `$CHSRC list ware`,  qr/brew\s*homebrew/,   'chsrc list ware';
+like `$CHSRC LiSt MiRrOrS`, $list_str, 'mixed-case command and list keyword';
+like `$CHSRC --VeRsIoN -EN`, qr/License GPLv3\+/, 'mixed-case flags';
+like `$CHSRC SeT -DRY -No-Color -SCOPE=PROJECT NpM FiRsT`,
+     qr/npm config --location project set registry https:/, 'mixed-case scope and first mirror';
+like `$CHSRC SeT -DRY -No-Color -ScOpE PrOjEcT NpM NpMmIrRoR`,
+     qr/npm config --location project set registry https:/, 'mixed-case separate scope and named mirror';
+like `$CHSRC SeT -DRY -No-Color NpM https://example.invalid/MixedCase/Index`,
+     qr{npm config set registry https://example\.invalid/MixedCase/Index}, 'URL path retains case';
 
 
 =begin comment
