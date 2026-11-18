@@ -94,6 +94,9 @@ main (int argc, char const *argv[])
   assert (xy_str_start_with ("abcdef", "abcde"));
   assert (xy_str_start_with ("abcdef", "abcdef"));
   assert (xy_str_start_with ("abcdef", ""));
+  assert (xy_str_start_with_ic ("-ScOpE=project", "-scope="));
+  assert (!xy_str_start_with_ic ("-scope", "-scope="));
+  assert (!xy_str_start_with_ic (NULL, "-scope="));
 
   assert_str ("abcdefg", xy_str_delete_suffix ("abcdefg", "cdef"));
   assert_str ("abcdefg", xy_str_delete_suffix ("abcdefg", "cdefgh"));

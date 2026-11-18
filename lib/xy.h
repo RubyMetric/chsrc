@@ -658,28 +658,23 @@ xy_streql (const char *str1, const char *str2)
 }
 
 static bool
-xy_streql_ic (const char *str1, const char *str2)
+xy_str_start_with_ic (const char *str, const char *prefix)
 {
-  if (NULL == str1 || NULL == str2)
-    {
-      return false;
-    }
+  if (!str || !prefix)
+    return false;
 
-  size_t len1 = strlen (str1);
-  size_t len2 = strlen (str2);
-  if (len1 != len2)
+  while (*prefix)
     {
-      return false;
-    }
-
-  for (size_t i = 0; i < len1; i++)
-    {
-      if (tolower (str1[i]) != tolower (str2[i]))
-        {
-          return false;
-        }
+      if (tolower ((unsigned char)*str++) != tolower ((unsigned char)*prefix++))
+        return false;
     }
   return true;
+}
+
+static bool
+xy_streql_ic (const char *str1, const char *str2)
+{
+  return str1 && str2 && strlen (str1) == strlen (str2) && xy_str_start_with_ic (str1, str2);
 }
 
 
