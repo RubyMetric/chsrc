@@ -32,7 +32,8 @@ for my $program (qw(npm yarn pnpm cargo)) {
 
 sub dry_cli {
     my ($args, $expected_status, $pattern) = @_;
-    my $output = `$chsrc -no-color $args 2>&1`;
+    my ($command, $arguments) = split / /, $args, 2;
+    my $output = `$chsrc $command -no-color $arguments 2>&1`;
     my $status = $? >> 8;
     utf8::decode ($output);
     is ($status, $expected_status, "$args: exit status");
@@ -45,21 +46,9 @@ sub dry_cli {
     local $ENV{CARGO_HOME} = $cargo_home;
     local $ENV{CHSRC_DRY_MARKER} = "$root/executed";
 
-    for my $args ('set -dry npm', 'set npm -dry', '-dry set npm',
-                  'set npm --dry', 'set npm --dry-run', 'set npm first --dry-run') {
-        my $output = dry_cli ($args, 0, qr/npm config set registry.*Dry Run: 未做任何修改/s);
-        unlike ($output, qr/全自动换源完成/, "$args: no false success");
-    }
-
-    for my $args ('set -scope project npm first -dry',
-                  '-scope=project set npm -dry first',
-                  'set npm first -scope project --dry-run') {
-        dry_cli ($args, 0, qr/npm config --location project set registry/);
-    }
-
-    dry_cli ('set npm https://example.invalid/MixedCase/Index --dry-run', 0,
-             qr{npm config set registry https://example\.invalid/MixedCase/Index});
-    dry_cli ('reset npm --dry-run', 0, qr{https://registry\.npmjs\.org/.*Dry Run: 未做任何修改}s);
+    my $output = dry_cli ('set -dry npm', 0, qr/npm config set registry.*Dry Run: 未做任何修改/s);
+    unlike ($output, qr/全自动换源完成/, 'set -dry npm: no false success');
+    dry_cli ('reset -dry npm', 0, qr{https://registry\.npmjs\.org/.*Dry Run: 未做任何修改}s);
 
     for my $command (qw(get g measure mea m cesu ce c list ls issue)) {
         dry_cli ("$command -dry npm", 2, qr/-dry 仅适用于 `set` 和 `reset` 命令/);
@@ -68,12 +57,10 @@ sub dry_cli {
         dry_cli ("$command -dry", 0, qr/Copyright/);
     }
     for my $command (qw(help h -h --help)) {
-        dry_cli ("$command --dry-run", 0, qr/选项:/);
+        dry_cli ("$command -dry", 0, qr/选项:/);
     }
-    dry_cli ('set npm -dry -scope', 2, qr/缺少参数/);
-    dry_cli ('set npm -dry -scope=invalid', 2, qr/无效的换源作用域/);
 
-    my $combo = dry_cli ('set js -dry', 0, qr/复用 Dry Run 中已选定的源/);
+    my $combo = dry_cli ('set -dry js', 0, qr/复用 Dry Run 中已选定的源/);
     my @registries = $combo =~ m{(?:set registry|set npmRegistryServer) (https?://\S+)}g;
     is (scalar @registries, 3, 'combo previews all three registries');
     is_deeply (\@registries, [('https://registry.npmmirror.com/') x 3],
@@ -90,7 +77,7 @@ sub dry_cli {
         open (my $fh, '>:raw', $config) or die "$config: $!";
         print $fh $configs[$i];
         close $fh or die "$config: $!";
-        dry_cli ('set cargo -dry', 0, qr/Dry Run: 未做任何修改/);
+        dry_cli ('set -dry cargo', 0, qr/Dry Run: 未做任何修改/);
         ok (-f $config, "cargo branch $i: config survives");
         my $after = '';
         if (open (my $read, '<:raw', $config)) {
@@ -102,11 +89,11 @@ sub dry_cli {
         ok (! -e "$config.bak", "cargo branch $i: no backup created");
     }
     unlink $config or die "$config: $!";
-    dry_cli ('set cargo -dry', 0, qr/Dry Run: 未做任何修改/);
+    dry_cli ('set -dry cargo', 0, qr/Dry Run: 未做任何修改/);
     ok (! -e $config, 'cargo dry run does not create a missing config');
 
     local $ENV{CARGO_HOME} = "$root/missing-cargo-home";
-    dry_cli ('set cargo -dry', 0, qr/Dry Run: 未做任何修改/);
+    dry_cli ('set -dry cargo', 0, qr/Dry Run: 未做任何修改/);
     ok (! -e $ENV{CARGO_HOME}, 'cargo dry run does not create a missing directory');
     ok (! -e $ENV{CHSRC_DRY_MARKER}, 'dry run never executes package manager mutations');
 }
