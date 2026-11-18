@@ -311,16 +311,19 @@ chsrc_is_root (void)
 void
 chsrc_ensure_root ()
 {
+  char *msg = NULL;
   if (chsrc_in_dry_run_mode())
     {
-      char *msg = ENGLISH ? "Dry Run: root permission is not checked"
-                          : "Dry Run: 未检查 root 权限";
+      msg = ENGLISH ? "Dry Run: root permission is not checked"
+                    : "Dry Run: 未检查 root 权限";
       chsrc_note2 (msg);
       return;
     }
 
-  char *euid = getenv ("$EUID");
-  if (NULL==euid)
+  if (chsrc_is_root ())
+    return;
+
+  if (xy.on_windows)
     {
       msg = ENGLISH ? "Please run the terminal as Administrator to ensure the necessary permissions"
                     : "请以管理员身份运行终端来保证必要的权限";
@@ -818,13 +821,17 @@ static void
 chsrc_run_as_script_file (const char *script_content, const char *filename, const char *postfix,
                           const char *cmd_prefix, const char *msg)
 {
+  chsrc_note2 (msg);
+  println (faint(script_content));
+
+  if (chsrc_in_dry_run_mode())
+    return;
+
   char *tmpfile = NULL;
   FILE *f = chsrc_make_tmpfile (filename, postfix, false, &tmpfile);
   fwrite (script_content, strlen (script_content), 1, f);
   fclose (f);
 
-  chsrc_note2 (msg);
-  println (faint(script_content));
   char *cmd = xy_strcat (3, cmd_prefix, tmpfile, "\"");
   chsrc_run (cmd, RunOpt_Dont_Abort_On_Failure);
   free (cmd);
@@ -1261,7 +1268,7 @@ chsrc_delete_file (const char *path)
       return true;
     }
 
-  bool ok = (0 == remove (path));
+  bool ok = (0 == xy_file_remove (path));
 
   if (ok)
     {

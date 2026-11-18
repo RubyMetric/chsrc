@@ -137,10 +137,11 @@ os_debian_setsrc (char *option)
       if (use_cdrom)
         {
           chsrc_backup (OS_Debian_old_SourceList);
-          chsrc_delete_file (OS_Debian_old_SourceList);
+          if (!chsrc_delete_file (OS_Debian_old_SourceList))
+            exit (Exit_UserCause);
 
           if (chsrc_in_dry_run_mode())
-            chsrc_warn2 ("Dry Run: 旧版源配置文件中使用了 CDROM 源，实际运行时将删除(已备份)该配置文件，重新配置");
+            chsrc_warn2 ("Dry Run: 旧版源配置文件中使用了 CDROM 源，实际运行时将备份并删除该配置文件，重新配置");
           else
             chsrc_warn2 ("旧版源配置文件中使用了 CDROM 源，已删除(但备份)该配置文件，重新配置");
 
