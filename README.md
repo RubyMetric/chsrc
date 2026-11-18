@@ -345,6 +345,7 @@ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
 
 使用:
    chsrc <command> [options] [dish] [mirror]
+   选项可放在命令前后或位置参数之间。例如 chsrc set npm first --dry-run（也可写作 -dry 或 --dry）。
 
 命令:
    help,  h                 打印此帮助，或 -h, --help

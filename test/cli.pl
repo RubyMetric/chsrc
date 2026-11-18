@@ -97,6 +97,8 @@ like `$CHSRC list mirrors`,  $list_str,    'chsrc list mirrors';
 like `$CHSRC list os`,    qr/netbsd\s*openbsd/,   'chsrc list os';
 like `$CHSRC list ware`,  qr/brew\s*homebrew/,   'chsrc list ware';
 
+require './test/cli-options.pl';
+
 
 =begin comment
 
