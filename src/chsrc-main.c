@@ -159,8 +159,6 @@ main (int argc, char const *argv[])
                       return Exit_Unknown;
                     }
                   scope = argv[++i];
-                  cli_arg_Dish_pos++;
-                  cli_arg_Mirror_pos++;
                 }
               else
                 {
@@ -255,6 +253,7 @@ main (int argc, char const *argv[])
   bool is_help_or_version =    xy_streql (command, "help")    || xy_streql (command, "h")
                             || xy_streql (command, "-h")      || xy_streql (command, "-help")
                             || xy_streql (command, "--help")
+                            || xy_streql (command, "ver")
                             || xy_streql (command, "version") || xy_streql (command, "-v")
                             || xy_streql (command, "-version") || xy_streql (command, "--version");
 
