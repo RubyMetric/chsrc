@@ -247,13 +247,28 @@ main (int argc, char const *argv[])
         }
     }
 
-  if (in_dry_run_mode())
+  if (chsrc_in_dry_run_mode())
     {
-      char *dry_msg = ENGLISH ? "Enable [Dry Run] mode. "
-                                "Simulate the source changing process (skipping speed measurement). "
-                                "Commands only print but don't run\n"
-                              : "开启Dry Run模式，模拟换源过程(跳过测速)，命令仅打印并不运行\n";
-      chsrc_log (bdyellow(dry_msg));
+      bool is_set_or_reset =    xy_streql (command, "set")   || xy_streql (command, "s")
+                             || xy_streql (command, "reset") || xy_streql (command, "rest")
+                             || xy_streql (command, "r");
+      bool is_help_or_version =    xy_streql (command, "help") || xy_streql (command, "h")
+                                || xy_streql (command, "version") || xy_streql (command, "ver");
+      if (!is_set_or_reset && !is_help_or_version)
+        {
+          char *msg = ENGLISH ? "-dry is only supported for `set` and `reset`"
+                              : "-dry 仅适用于 `set` 和 `reset` 命令";
+          chsrc_error (msg);
+          return Exit_Unknown;
+        }
+      if (is_set_or_reset)
+        {
+          char *dry_msg = ENGLISH ? "Enable [Dry Run] mode. "
+                                    "No files or settings will be changed; only the commands that would run are printed "
+                                    "(speed measurement is skipped)\n"
+                                  : "开启Dry Run模式，不会修改任何文件或配置；仅打印将要执行的变更命令(跳过测速)\n";
+          chsrc_log (bdyellow(dry_msg));
+        }
     }
 
   /* chsrc help */

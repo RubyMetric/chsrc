@@ -114,6 +114,18 @@
 
     `chsrc` 主程序不提供配置文件，不提供数据文件，干净无污染。那么在实现 `recipe` 的时候，除了备份文件外，也不要污染用户环境。
 
+4. 所有修改系统状态的操作都必须经过 framework
+
+   `chsrc -dry` 依赖这一点。写 `recipe` 时：
+
+   - 执行命令用 `chsrc_run()`，不要直接 `system()`/`popen()`
+   - 写文件用 `chsrc_overwrite_file()`/`chsrc_append_to_file()`/`chsrc_prepend_to_file()`
+   - 备份文件用 `chsrc_backup()`
+   - 删除文件用 `chsrc_delete_file()`
+   - 创建目录用 `chsrc_ensure_dir()`
+
+   `xy_run()` 只能用于**只读查询**（例如读取版本号、解析配置文件）。直接 `fopen()`/`remove()` 会绕过 Dry Run，导致 `chsrc -dry set` 真实修改系统。确实需要根据 Dry Run 调整提示文案时，使用 `chsrc_in_dry_run_mode()`。
+
 ## 其它
 
 如果你借助 AI 进行开发，让 AI 阅读 [copilot-instructions.md](../.github/copilot-instructions.md) 并将它作为项目规范，该文件明确了很多在 AI 辅助开发时需要注意的问题。

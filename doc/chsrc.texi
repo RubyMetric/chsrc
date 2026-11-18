@@ -132,7 +132,7 @@ Exit status:
 @chapter 选项
 @table @samp
 @item -dry
-Dry Run，模拟换源过程，命令仅打印并不运行
+Dry Run，不修改任何文件或配置，仅打印将要执行的变更命令 (仅 set/reset)
 
 @item -ipv6
 使用IPv6测速

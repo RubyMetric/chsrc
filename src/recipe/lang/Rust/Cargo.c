@@ -134,7 +134,6 @@ pl_rust_cargo_getsrc (char *option)
 void
 pl_write_rust_config (const char *path, const char *url)
 {
-  xy_file_remove (path);
   char *content = RAWSTR_pl_rust_cargo_config;
   content = xy_str_gsub (content, "@url@", url);
   chsrc_overwrite_file (content, path);

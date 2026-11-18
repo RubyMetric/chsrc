@@ -366,7 +366,7 @@ git clone https://gitee.com/RubyMetric/chsrc.git; cd chsrc; make
    reset  <dish>            重置，使用上游默认使用的源
 
 选项:
-   -dry                       Dry Run，模拟换源过程，命令仅打印并不运行
+   -dry                       Dry Run，不修改任何文件或配置，仅打印将要执行的变更命令 (仅 set/reset)
    -scope=project|user|system 仅对本项目换源 / 用户级换源 / 系统级换源 (通过ls <dish>查看)
    -ipv6                      使用IPv6测速
    -en(glish)                 使用英文输出

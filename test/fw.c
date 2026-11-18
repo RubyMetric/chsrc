@@ -4,7 +4,7 @@
  * File Authors  : @ccmywish
  * Contributors  : @Mikachu2333
  * Created On    : <2024-12-14>
- * Last Modified : <2026-08-20>
+ * Last Modified : <2026-10-29>
  *
  * 该文件最好启用 DEBUG mode 编译
  * ------------------------------------------------------------*/
@@ -13,6 +13,10 @@
 
 #include "../src/framework/base.c"
 #include "../src/framework/OS.c"
+
+#ifndef XY_Build_On_Windows
+#include <sys/wait.h>
+#endif
 
 int
 main (int argc, char const *argv[])
@@ -24,6 +28,21 @@ main (int argc, char const *argv[])
     }
 
   xy_init ();
+
+  if (argc == 2 && xy_streql (argv[1], "--ensure-root"))
+    {
+      chsrc_ensure_root ();
+      return Exit_OK;
+    }
+
+  /* 正常执行必须接受管理员/root，拒绝普通用户且不能崩溃。 */
+  char *root_cmd = xy_strcat (3, "\"", argv[0], "\" --ensure-root");
+  int root_status = xy_system (root_cmd);
+#ifndef XY_Build_On_Windows
+  assert (WIFEXITED (root_status));
+  root_status = WEXITSTATUS (root_status);
+#endif
+  assert (root_status == (chsrc_is_root () ? Exit_OK : Exit_UserCause));
 
   br();
   chsrc_log  ("chsrc_log");
@@ -63,7 +82,7 @@ main (int argc, char const *argv[])
   char *tmpfile_bk = xy_2strcat (tmpfile, ".bak");
 
   assert (xy_file_exist (tmpfile));
-  chsrc_backup (tmpfile);\
+  chsrc_backup (tmpfile);
   assert (chsrc_check_file (tmpfile_bk));
   remove (tmpfile_bk);
 
@@ -75,6 +94,54 @@ main (int argc, char const *argv[])
 
   chsrc_overwrite_file ("Line999 \nLine998\nLine997\n", tmpfile);
   assert_str (xy_file_read (tmpfile), "Line999 \nLine998\nLine997\n");
+
+  /* Dry Run 下不得修改或删除文件，也不得创建备份 */
+  ProgMode.DryRunMode = true;
+
+  chsrc_ensure_root ();
+
+  chsrc_overwrite_file ("DryRun\n", tmpfile);
+  assert_str (xy_file_read (tmpfile), "Line999 \nLine998\nLine997\n");
+
+  chsrc_append_to_file ("DryRun\n", tmpfile);
+  assert_str (xy_file_read (tmpfile), "Line999 \nLine998\nLine997\n");
+
+  chsrc_prepend_to_file ("DryRun\n", tmpfile);
+  assert_str (xy_file_read (tmpfile), "Line999 \nLine998\nLine997\n");
+
+  remove (tmpfile_bk);
+  chsrc_backup (tmpfile);
+  assert (!xy_file_exist (tmpfile_bk));
+
+  assert (chsrc_delete_file (tmpfile));
+  assert (xy_file_exist (tmpfile));
+
+  char *missing_dir = xy_2strcat (tmpfile, ".missing");
+  char *missing_file = xy_path_join (missing_dir, "config");
+  chsrc_ensure_dir (missing_dir);
+  chsrc_overwrite_file ("DryRun\n", missing_file);
+  chsrc_append_to_file ("DryRun\n", missing_file);
+  assert (!xy_dir_exist (missing_dir));
+  assert (!xy_file_exist (missing_file));
+
+  char *write_cmd = xy_strcat (3, "echo changed > \"", tmpfile, "\"");
+  chsrc_run (write_cmd, RunOpt_Default);
+  assert (0 == chsrc_run_directly (write_cmd));
+  assert_str (xy_file_read (tmpfile), "Line999 \nLine998\nLine997\n");
+
+  /* 文件名含有不存在的目录；若试运行仍创建临时脚本，此调用会失败。 */
+  chsrc_run_as_script_file (write_cmd, "missing/dry-run-script", ".sh", "sh \"", "Dry Run script");
+  assert_str (xy_file_read (tmpfile), "Line999 \nLine998\nLine997\n");
+
+  ProgMode.DryRunMode = false;
+
+  char *unicode_file = NULL;
+  FILE *unicode_tmp = chsrc_make_tmpfile ("测试删除", ".txt", false, &unicode_file);
+  fclose (unicode_tmp);
+  assert (xy_file_exist (unicode_file));
+  assert (chsrc_delete_file (unicode_file));
+  assert (!xy_file_exist (unicode_file));
+  assert (!chsrc_delete_file (unicode_file));
 
   chsrc_log (xy_2strcat ("CPU arch = ", chsrc_get_cpuarch ()));
   print ("chsrc: CPU cores = ");

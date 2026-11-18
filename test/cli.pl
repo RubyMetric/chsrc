@@ -4,7 +4,7 @@
 # Test Authors  : @ccmywish
 # Contributors  : Nil Null <nil@null.org>
 # Created On    : <2024-06-05>
-# Last Modified : <2026-08-20>
+# Last Modified : <2026-10-29>
 #
 # 测试 chsrc 可执行文件
 #
@@ -66,12 +66,12 @@ use open qw(:std :encoding(UTF-8));
 
 my $CHSRC = ($^O eq 'MSWin32') ? '.\chsrc' : './chsrc';
 
-my $version_str_cn = qr|chsrc .*\n\nCopyright .*\n许可证 GPLv3\+：GNU GPL 第 3 版或更高版本|;
+my $version_str_cn = qr|chsrc .*\r?\n\r?\nCopyright .*\r?\n许可证 GPLv3\+：GNU GPL 第 3 版或更高版本|;
 like `$CHSRC -v`,         $version_str_cn,  'chsrc -v';
 like `$CHSRC --version`,  $version_str_cn,  'chsrc --version';
 like `$CHSRC version`,    $version_str_cn,  'chsrc version';
 
-my $version_str_en = qr|chsrc .*\n\nCopyright .*\nLicense GPLv3\+: GNU GPL version 3 or later|;
+my $version_str_en = qr|chsrc .*\r?\n\r?\nCopyright .*\r?\nLicense GPLv3\+: GNU GPL version 3 or later|;
 like `$CHSRC -v -en`,     $version_str_en,  'chsrc -v -en';
 like `$CHSRC -en -v`,     $version_str_en,  'chsrc -en -v';
 like `$CHSRC --version -en`,  $version_str_en,  'chsrc --version -en';
@@ -135,7 +135,7 @@ my $set_js_url = qr/食谱更新.*\n食谱更新.*\n食谱更新/;
 # 如果有 npm, yarn, pnpm 这三个子菜品，再打开此测试
 # like `$CHSRC set js $URL`,  $set_js_url, "chsrc set js $URL";
 
-my $measure_js = qr/js 由以下3个子菜品组成.*\nnpm\nyarn\npnpm/;
+my $measure_js = qr/js 由以下3个子菜品组成.*\r?\nnpm\r?\nyarn\r?\npnpm/;
 like `$CHSRC measure -no-color js`, $measure_js, 'chsrc measure -no-color js';
 
 my $list_js = qr/食谱创建.*食谱创建.*食谱创建.*/s;
@@ -145,6 +145,15 @@ like `$CHSRC set -scope 2>&1`,                 qr/缺少参数/,       'chsrc se
 
 
 
+
+
+=begin comment
+
+测试 Dry Run
+
+=end comment
+=cut
+require './test/dry-run.pl';
 
 
 if ((defined $ARGV[0]) && ($ARGV[0] eq 'fastcheck')) {
