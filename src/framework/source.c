@@ -112,9 +112,25 @@ measure_speed_for_url (void *url)
 static double
 parse_and_say_curl_result (char *curl_buf)
 {
+  /* curl 失败时可能无任何输出，此时须软处理而非崩溃 */
+  if (NULL==curl_buf || '\0'==curl_buf[0])
+    {
+      char *msg = ENGLISH ? "ERROR curl output is empty (connection failed?): " : "错误 curl 无输出 (连接失败?): ";
+      println (red (msg));
+      return -1;
+    }
+
   /* 分隔两部分数据 */
   char *split = strchr (curl_buf, ' ');
-  if (split) *split = '\0';
+  if (NULL==split)
+    {
+      /* 输出不含空格，格式异常，软处理 */
+      char *msg = ENGLISH ? "ERROR malformed curl output: " : "错误 curl 输出格式异常: ";
+      println (red (xy_2strcat (msg, curl_buf)));
+      return -1;
+    }
+
+  *split = '\0';
 
   // say(curl_buf); say(split+1);
   int  http_code = xy_str2int (curl_buf);
