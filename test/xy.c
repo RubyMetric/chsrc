@@ -78,9 +78,28 @@ main (int argc, char const *argv[])
   xy_error_brkt ("xy.h", "错误", "西安肉丸胡辣汤里没有肉丸");
 
   assert (xy_streql    ("abc", "abc"));
-  assert (xy_streql_ic ("abc", "abc"));
+  assert (xy_streql_ci ("abc", "abc"));
   assert (false == xy_streql ("abc", "abC"));
-  assert (true  == xy_streql_ic ("abc", "abC"));
+  assert (true  == xy_streql_ci ("abc", "abC"));
+  assert (xy_streql_ci ("", ""));
+  assert (!xy_streql_ci ("abc", "ABCD"));
+  assert (!xy_streql_ci ("abcd", "ABC"));
+  assert (!xy_streql_ci ("abc", "ABD"));
+  assert (!xy_streql_ci (NULL, "abc"));
+  assert (!xy_streql_ci ("abc", NULL));
+
+  assert (NULL == xy_str2lower (NULL));
+  char *lower_empty = xy_str2lower ("");
+  assert_str ("", lower_empty);
+  free (lower_empty);
+
+  char mixed_case[] = "NpMmIrRoR-123 镜像站";
+  char *lower = xy_str2lower (mixed_case);
+  assert_str ("npmmirror-123 镜像站", lower);
+  assert_str ("NpMmIrRoR-123 镜像站", mixed_case);
+  assert (xy_str_start_with (lower, "npmmirror-"));
+  assert (!xy_str_start_with (lower, "tuna"));
+  free (lower);
 
   assert (false == xy_str_end_with ("abcdef", "abcdefg"));
   assert (xy_str_end_with ("abcdef", "def"));

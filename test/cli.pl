@@ -96,6 +96,35 @@ like `$CHSRC ls`,            $list_str,    'chsrc ls';
 like `$CHSRC list mirrors`,  $list_str,    'chsrc list mirrors';
 like `$CHSRC list os`,    qr/netbsd\s*openbsd/,   'chsrc list os';
 like `$CHSRC list ware`,  qr/brew\s*homebrew/,   'chsrc list ware';
+like `$CHSRC list MiRrOrS`, $list_str, 'mixed-case mirror list';
+like `$CHSRC list OS`, qr/netbsd\s*openbsd/, 'uppercase OS list';
+like `$CHSRC list SoFtWaRe`, qr/brew\s*homebrew/, 'mixed-case software list';
+like `$CHSRC list LaNgUaGe`, qr/js\s*javascript\s*node\s*nodejs/, 'mixed-case language list';
+like `$CHSRC list DiShEs`, qr/brew\s*homebrew/, 'mixed-case dish list';
+like `$CHSRC list -no-color NpM`, qr/npmmirror/, 'mixed-case dish name';
+
+for my $option (qw(-IPv6 -LoCaL -ScOpE -ScOpE=project -EN -English -DRY
+                   -No-Color -No-Colour -H -Help --Help -V -Version --Version)) {
+    my $output = `$CHSRC version -en -no-color $option 2>&1`;
+    isnt $? >> 8, 0, "mixed-case option $option fails";
+    like $output, qr/Unknown option: \Q$option\E/, "mixed-case option $option is rejected";
+}
+
+for my $command (qw(HeLp LiSt GeT SeT ReSeT MeAsUrE VeRsIoN IsSuE
+                    H L LS G S R REST M MEA CESU CE C VER I ISSUES ISUE)) {
+    my $output = `$CHSRC $command -en -no-color 2>&1`;
+    isnt $? >> 8, 0, "mixed-case command $command fails";
+    like $output, qr/Unknown command `\Q$command\E`/, "mixed-case command $command is rejected";
+}
+
+like `$CHSRC set -dry -no-color -scope=project NpM FiRsT`,
+     qr/npm config --location project set registry https:/, 'mixed-case first mirror';
+like `$CHSRC set -dry -no-color -scope project NpM NpMmIrRoR`,
+     qr{npm config --location project set registry https://registry\.npmmirror\.com}, 'mixed-case named mirror';
+like `$CHSRC set -dry -no-color NpM UpStReAm`,
+     qr{npm config set registry https://registry\.npmjs\.org}, 'mixed-case upstream mirror';
+like `$CHSRC set -dry -no-color NpM https://example.invalid/MixedCase/Index`,
+     qr{npm config set registry https://example\.invalid/MixedCase/Index}, 'URL path retains case';
 
 
 =begin comment

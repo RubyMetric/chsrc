@@ -657,8 +657,32 @@ xy_streql (const char *str1, const char *str2)
   return strcmp (str1, str2) == 0 ? true : false;
 }
 
+/**
+ * @brief 将字符串转为小写，返回新字符串
+ *
+ * @param str 可为NULL
+ *
+ * @return 转换后的新字符串；输入为NULL时返回NULL
+ *
+ * @memory SAFE
+ *   return caller-free
+ */
+static char *
+xy_str2lower (const char *str)
+{
+  if (!str)
+    return NULL;
+
+  char *lower = xy_strdup (str);
+  for (char *cur = lower; *cur; cur++)
+    {
+      *cur = (char) tolower ((unsigned char)*cur);
+    }
+  return lower;
+}
+
 static bool
-xy_streql_ic (const char *str1, const char *str2)
+xy_streql_ci (const char *str1, const char *str2)
 {
   if (NULL == str1 || NULL == str2)
     {
@@ -674,7 +698,7 @@ xy_streql_ic (const char *str1, const char *str2)
 
   for (size_t i = 0; i < len1; i++)
     {
-      if (tolower (str1[i]) != tolower (str2[i]))
+      if (tolower ((unsigned char)str1[i]) != tolower ((unsigned char)str2[i]))
         {
           return false;
         }
