@@ -81,6 +81,25 @@ main (int argc, char const *argv[])
   assert (xy_streql_ic ("abc", "abc"));
   assert (false == xy_streql ("abc", "abC"));
   assert (true  == xy_streql_ic ("abc", "abC"));
+  assert (xy_streql_ic ("", ""));
+  assert (!xy_streql_ic ("abc", "ABCD"));
+  assert (!xy_streql_ic ("abcd", "ABC"));
+  assert (!xy_streql_ic ("abc", "ABD"));
+  assert (!xy_streql_ic (NULL, "abc"));
+  assert (!xy_streql_ic ("abc", NULL));
+
+  assert (NULL == xy_str2lower (NULL));
+  char *lower_empty = xy_str2lower ("");
+  assert_str ("", lower_empty);
+  free (lower_empty);
+
+  char mixed_case[] = "NpMmIrRoR-123 镜像站";
+  char *lower = xy_str2lower (mixed_case);
+  assert_str ("npmmirror-123 镜像站", lower);
+  assert_str ("NpMmIrRoR-123 镜像站", mixed_case);
+  assert (xy_str_start_with (lower, "npmmirror-"));
+  assert (!xy_str_start_with (lower, "tuna"));
+  free (lower);
 
   assert (false == xy_str_end_with ("abcdef", "abcdefg"));
   assert (xy_str_end_with ("abcdef", "def"));
@@ -94,9 +113,6 @@ main (int argc, char const *argv[])
   assert (xy_str_start_with ("abcdef", "abcde"));
   assert (xy_str_start_with ("abcdef", "abcdef"));
   assert (xy_str_start_with ("abcdef", ""));
-  assert (xy_str_start_with_ic ("-ScOpE=project", "-scope="));
-  assert (!xy_str_start_with_ic ("-scope", "-scope="));
-  assert (!xy_str_start_with_ic (NULL, "-scope="));
 
   assert_str ("abcdefg", xy_str_delete_suffix ("abcdefg", "cdef"));
   assert_str ("abcdefg", xy_str_delete_suffix ("abcdefg", "cdefgh"));

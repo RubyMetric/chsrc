@@ -657,24 +657,53 @@ xy_streql (const char *str1, const char *str2)
   return strcmp (str1, str2) == 0 ? true : false;
 }
 
-static bool
-xy_str_start_with_ic (const char *str, const char *prefix)
+/**
+ * @brief 将字符串转为小写，返回新字符串
+ *
+ * @param str 可为NULL
+ *
+ * @return 转换后的新字符串；输入为NULL时返回NULL
+ *
+ * @memory SAFE
+ *   return caller-free
+ */
+static char *
+xy_str2lower (const char *str)
 {
-  if (!str || !prefix)
-    return false;
+  if (!str)
+    return NULL;
 
-  while (*prefix)
+  char *lower = xy_strdup (str);
+  for (char *cur = lower; *cur; cur++)
     {
-      if (tolower ((unsigned char)*str++) != tolower ((unsigned char)*prefix++))
-        return false;
+      *cur = (char) tolower ((unsigned char)*cur);
     }
-  return true;
+  return lower;
 }
 
 static bool
 xy_streql_ic (const char *str1, const char *str2)
 {
-  return str1 && str2 && strlen (str1) == strlen (str2) && xy_str_start_with_ic (str1, str2);
+  if (NULL == str1 || NULL == str2)
+    {
+      return false;
+    }
+
+  size_t len1 = strlen (str1);
+  size_t len2 = strlen (str2);
+  if (len1 != len2)
+    {
+      return false;
+    }
+
+  for (size_t i = 0; i < len1; i++)
+    {
+      if (tolower ((unsigned char)str1[i]) != tolower ((unsigned char)str2[i]))
+        {
+          return false;
+        }
+    }
+  return true;
 }
 
 
