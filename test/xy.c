@@ -78,15 +78,15 @@ main (int argc, char const *argv[])
   xy_error_brkt ("xy.h", "错误", "西安肉丸胡辣汤里没有肉丸");
 
   assert (xy_streql    ("abc", "abc"));
-  assert (xy_streql_ic ("abc", "abc"));
+  assert (xy_streql_ci ("abc", "abc"));
   assert (false == xy_streql ("abc", "abC"));
-  assert (true  == xy_streql_ic ("abc", "abC"));
-  assert (xy_streql_ic ("", ""));
-  assert (!xy_streql_ic ("abc", "ABCD"));
-  assert (!xy_streql_ic ("abcd", "ABC"));
-  assert (!xy_streql_ic ("abc", "ABD"));
-  assert (!xy_streql_ic (NULL, "abc"));
-  assert (!xy_streql_ic ("abc", NULL));
+  assert (true  == xy_streql_ci ("abc", "abC"));
+  assert (xy_streql_ci ("", ""));
+  assert (!xy_streql_ci ("abc", "ABCD"));
+  assert (!xy_streql_ci ("abcd", "ABC"));
+  assert (!xy_streql_ci ("abc", "ABD"));
+  assert (!xy_streql_ci (NULL, "abc"));
+  assert (!xy_streql_ci ("abc", NULL));
 
   assert (NULL == xy_str2lower (NULL));
   char *lower_empty = xy_str2lower ("");

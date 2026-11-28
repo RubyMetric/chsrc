@@ -181,19 +181,19 @@ main (int argc, char const *argv[])
                 {
                   scope = argv[i] + 7;
                 }
-              if (xy_streql_ic (scope, "project"))
+              if (xy_streql_ci (scope, "project"))
                 {
                   ProgMode.Scope = ProjectScope;
                 }
-              else if (xy_streql_ic (scope, "user"))
+              else if (xy_streql_ci (scope, "user"))
                 {
                   ProgMode.Scope = UserScope;
                 }
-              else if (xy_streql_ic (scope, "system"))
+              else if (xy_streql_ci (scope, "system"))
                 {
                   ProgMode.Scope = SystemScope;
                 }
-              else if (xy_streql_ic (scope, "default"))
+              else if (xy_streql_ci (scope, "default"))
                 {
                   ProgMode.Scope = ImplementationDefinedScope;
                 }
@@ -292,37 +292,37 @@ main (int argc, char const *argv[])
       else
         {
           dish_name = argv[cli_arg_Dish_pos];
-          if (   xy_streql_ic (dish_name, "mirrors")
-              || xy_streql_ic (dish_name, "mirror"))
+          if (   xy_streql_ci (dish_name, "mirrors")
+              || xy_streql_ci (dish_name, "mirror"))
             {
               cli_print_all_mirror_sites ();
               return Exit_OK;
             }
 
-          else if (   xy_streql_ic (dish_name, "dishes")
-                   || xy_streql_ic (dish_name, "dish")
-                   || xy_streql_ic (dish_name, "dishs")) /* 防止有人错误拼写 */
+          else if (   xy_streql_ci (dish_name, "dishes")
+                   || xy_streql_ci (dish_name, "dish")
+                   || xy_streql_ci (dish_name, "dishs")) /* 防止有人错误拼写 */
             {
               cli_print_supported_dishes ();
               return Exit_OK;
             }
 
-          else if (xy_streql_ic (dish_name, "os"))
+          else if (xy_streql_ci (dish_name, "os"))
             {
               cli_print_menu ("os");
               return Exit_OK;
             }
 
-          else if (   xy_streql_ic (dish_name, "lang")
-                   || xy_streql_ic (dish_name, "pl")
-                   || xy_streql_ic (dish_name, "language"))
+          else if (   xy_streql_ci (dish_name, "lang")
+                   || xy_streql_ci (dish_name, "pl")
+                   || xy_streql_ci (dish_name, "language"))
             {
               cli_print_menu ("pl");
               return Exit_OK;
             }
 
-          else if (   xy_streql_ic (dish_name, "ware")
-                   || xy_streql_ic (dish_name, "software"))
+          else if (   xy_streql_ci (dish_name, "ware")
+                   || xy_streql_ci (dish_name, "software"))
             {
               cli_print_menu ("wr");
               return Exit_OK;

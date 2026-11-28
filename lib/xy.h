@@ -682,7 +682,7 @@ xy_str2lower (const char *str)
 }
 
 static bool
-xy_streql_ic (const char *str1, const char *str2)
+xy_streql_ci (const char *str1, const char *str2)
 {
   if (NULL == str1 || NULL == str2)
     {
