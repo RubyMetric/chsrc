@@ -75,7 +75,7 @@ pl_yarn_setsrc (char *option)
     {
       if (chsrc_in_project_scope_mode())
         {
-          char *msg = ENGLISH ? "Yarn v1 doesn't support `-scope=project`. SKIP changing source!"
+          char *msg = ENGLISH ? "Yarn v1 doesn't support `--scope=project`. SKIP changing source!"
                               : "Yarn v1 不支持项目级换源，跳过换源";
           chsrc_error (msg);
           // 不能直接退出，因为 combo dish 不能就此结束

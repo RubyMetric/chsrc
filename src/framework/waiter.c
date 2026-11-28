@@ -229,17 +229,17 @@ cli_print_dish_features (Dish_t *dish, const char *input_dish_name)
       if (i == 0)
         {
           scope_name = CHINESE ? " 项目级换源" : " project scope";
-          scope_msg = xy_strcat (3, scope_name, " | chsrc set -scope=project ", input_dish_name);
+          scope_msg = xy_strcat (3, scope_name, " | chsrc set --scope=project ", input_dish_name);
         }
       else if (i == 1)
         {
           scope_name = CHINESE ? " 用户级换源" : " user scope";
-          scope_msg = xy_strcat (3, scope_name, " | chsrc set -scope=user    ", input_dish_name);
+          scope_msg = xy_strcat (3, scope_name, " | chsrc set --scope=user    ", input_dish_name);
         }
       else if (i == 2)
         {
           scope_name = CHINESE ? " 系统级换源" : " system scope";
-          scope_msg = xy_strcat (3, scope_name, " | chsrc set -scope=system  ", input_dish_name);
+          scope_msg = xy_strcat (3, scope_name, " | chsrc set --scope=system  ", input_dish_name);
         }
       else
         {
@@ -298,8 +298,8 @@ cli_print_dish_features (Dish_t *dish, const char *input_dish_name)
       default:
         xy_unreached();
       }
-    char *default_prefix = CHINESE ? "默认作用域 | chsrc set -scope=default "
-                                   : "Default Scope | chsrc set -scope=default ";
+    char *default_prefix = CHINESE ? "默认作用域 | chsrc set --scope=default "
+                                   : "Default Scope | chsrc set --scope=default ";
     char *msg = xy_strcat (2, bdblue (" = "),
       purple (xy_strcat (5, default_prefix, input_dish_name, " (= ", default_scope_name, ")")));
     puts (msg);
@@ -308,7 +308,7 @@ cli_print_dish_features (Dish_t *dish, const char *input_dish_name)
 
   {
   char *msg = ENGLISH ? " English: Output in English " : " English: 英文输出 ";
-  char *english_msg = xy_strcat (3, msg, "| chsrc set -en ", input_dish_name);
+  char *english_msg = xy_strcat (3, msg, "| chsrc set --english ", input_dish_name);
   if (dish->can_english) printf (" %s%s\n", bdgreen(YesMark), purple(english_msg));
   else printf (" %s%s\n", bdred(NoMark), english_msg);br();
   }
@@ -601,7 +601,7 @@ find_dish (const char *input)
   /**
    * 由于具体需要某一个 dish 时，才会表达贡献者信息，所以像
    *
-   *   $ chsrc -v
+   *   $ chsrc --version
    *   $ chsrc issue
    *
    * 等命令不需要 dish 时，就不需要注册贡献者信息，加快执行速度
@@ -626,21 +626,29 @@ find_dish (const char *input)
     }
 }
 
-typedef enum {
-  TargetCmd_Get_Source = 1,
-  TargetCmd_Set_Source,
-  TargetCmd_Reset_Source,
-  TargetCmd_Measure_Source,
-  TargetCmd_List_Info
-} TargetCmd;
+/** 未注册解析器时保持原操作；回调自行解释所有尾部参数。 */
+static RecipeArgsResult_t
+waiter_parse_recipe_args (Dish_t *dish, TargetCmd command, const RecipeArgs_t *args)
+{
+  if (!dish->parse_args)
+    return RecipeArgs_Continue;
+  const RecipeArgs_t empty = {0};
+  if (!args)
+    args = &empty;
+  return dish->parse_args (command, args->argc, args->argv);
+}
 
 
 /**
  * 由 waiter_handle_user_command() 拆分而来
  */
-void
-waiter_handle_List_Info (Dish_t *dish, const char *input, char *option)
+RecipeArgsResult_t
+waiter_handle_List_Info (Dish_t *dish, const char *input, char *option, const RecipeArgs_t *args)
 {
+  RecipeArgsResult_t parsed = waiter_parse_recipe_args (dish, TargetCmd_List_Info, args);
+  if (parsed != RecipeArgs_Continue)
+    return parsed;
+
   /* group dish 仅展示维护信息 */
   if (dish_has_sub_dishes(dish))
     {
@@ -673,10 +681,22 @@ waiter_handle_List_Info (Dish_t *dish, const char *input, char *option)
           char *sub_dish_alias = dish_get_first_alias(sub_dish);
           if (dish_has_sub_dishes(sub_dish))
             {
-              waiter_handle_List_Info (sub_dish, sub_dish_alias, option);
+              if (waiter_handle_List_Info (sub_dish, sub_dish_alias, option, args) == RecipeArgs_Error)
+                {
+                  pop_combo_stack ();
+                  return RecipeArgs_Error;
+                }
             }
           else
             {
+              RecipeArgsResult_t child = waiter_parse_recipe_args (sub_dish, TargetCmd_List_Info, args);
+              if (child == RecipeArgs_Error)
+                {
+                  pop_combo_stack ();
+                  return RecipeArgs_Error;
+                }
+              if (child == RecipeArgs_Handled)
+                continue;
               cli_print_dish_maintain_info (sub_dish, sub_dish_alias, (current_combo_stack_depth()-1) * 2);
               br();
             }
@@ -703,7 +723,7 @@ waiter_handle_List_Info (Dish_t *dish, const char *input, char *option)
         }
 
       pop_combo_stack();
-      return;
+      return RecipeArgs_Continue;
     }
 
   {
@@ -736,15 +756,20 @@ waiter_handle_List_Info (Dish_t *dish, const char *input, char *option)
   say (bdgreen(msg));
   cli_print_dish_maintain_info (dish, input, 0);
   }
+  return RecipeArgs_Continue;
 }
 
 
 /**
  * 由 waiter_handle_user_command() 拆分而来
  */
-void
-waiter_handle_Measure_Source (Dish_t *dish, const char *input, char *option)
+RecipeArgsResult_t
+waiter_handle_Measure_Source (Dish_t *dish, const char *input, char *option, const RecipeArgs_t *args)
 {
+  RecipeArgsResult_t parsed = waiter_parse_recipe_args (dish, TargetCmd_Measure_Source, args);
+  if (parsed != RecipeArgs_Continue)
+    return parsed;
+
   /* dish group 不测速，让用户自己分别测速 */
   if (dish_has_sub_dishes(dish))
     {
@@ -772,17 +797,22 @@ waiter_handle_Measure_Source (Dish_t *dish, const char *input, char *option)
   else
     {
       dish_select_fastest_source (dish);
-      return;
+      return RecipeArgs_Continue;
     }
+  return RecipeArgs_Continue;
 }
 
 
 /**
  * 由 waiter_handle_user_command() 拆分而来
  */
-void
-waiter_handle_Get_Source (Dish_t *dish, const char *input, char *option)
+RecipeArgsResult_t
+waiter_handle_Get_Source (Dish_t *dish, const char *input, char *option, const RecipeArgs_t *args)
 {
+  RecipeArgsResult_t parsed = waiter_parse_recipe_args (dish, TargetCmd_Get_Source, args);
+  if (parsed != RecipeArgs_Continue)
+    return parsed;
+
   if (dish_has_sub_dishes(dish))
     {
       for (size_t i=0; i<xy_seq_len(dish->sub_dishes); i++)
@@ -790,10 +820,13 @@ waiter_handle_Get_Source (Dish_t *dish, const char *input, char *option)
           Dish_t *sub_dish = xy_seq_at (dish->sub_dishes, i);
           sub_dish->preparefn();
           println (bdpurple(sub_dish->aliases));
-          waiter_handle_Get_Source (sub_dish, dish_get_first_alias(sub_dish), option);
+          if (waiter_handle_Get_Source (sub_dish, dish_get_first_alias(sub_dish), option, args) == RecipeArgs_Error)
+            {
+              return RecipeArgs_Error;
+            }
           br();
         }
-      return;
+      return RecipeArgs_Continue;
     }
 
   if (dish->getfn)
@@ -804,15 +837,20 @@ waiter_handle_Get_Source (Dish_t *dish, const char *input, char *option)
     {
       chsrc_error (xy_strcat (3, "暂未对 ", input, " 实现 get 功能，邀您帮助: chsrc issue"));
     }
+  return RecipeArgs_Continue;
 }
 
 
 /**
  * 由 waiter_handle_user_command() 拆分而来
  */
-void
-waiter_handle_Set_Source (Dish_t *dish, const char *input, char *option)
+RecipeArgsResult_t
+waiter_handle_Set_Source (Dish_t *dish, const char *input, char *option, const RecipeArgs_t *args)
 {
+  RecipeArgsResult_t parsed = waiter_parse_recipe_args (dish, TargetCmd_Set_Source, args);
+  if (parsed != RecipeArgs_Continue)
+    return parsed;
+
   char *user_defined_url = NULL;
   char *mirror_code = NULL;
 
@@ -853,12 +891,16 @@ waiter_handle_Set_Source (Dish_t *dish, const char *input, char *option)
           Dish_t *sub_dish = xy_seq_at (dish->sub_dishes, i);
           sub_dish->preparefn();
           println (bdpurple(sub_dish->aliases));
-          waiter_handle_Set_Source (sub_dish, dish_get_first_alias(sub_dish), option);
+          if (waiter_handle_Set_Source (sub_dish, dish_get_first_alias(sub_dish), option, args) == RecipeArgs_Error)
+            {
+              pop_combo_stack ();
+              return RecipeArgs_Error;
+            }
           br();
         }
 
       pop_combo_stack ();
-      return;
+      return RecipeArgs_Continue;
     }
 
   if (dish->setfn)
@@ -887,15 +929,20 @@ waiter_handle_Set_Source (Dish_t *dish, const char *input, char *option)
     {
       chsrc_error (xy_strcat (3, "暂未对 ", input, " 实现 set 功能，邀您帮助: chsrc issue"));
     }
+  return RecipeArgs_Continue;
 }
 
 
 /**
  * 由 waiter_handle_user_command() 拆分而来
  */
-void
-waiter_handle_Reset_Source (Dish_t *dish, const char *input, char *option)
+RecipeArgsResult_t
+waiter_handle_Reset_Source (Dish_t *dish, const char *input, char *option, const RecipeArgs_t *args)
 {
+  RecipeArgsResult_t parsed = waiter_parse_recipe_args (dish, TargetCmd_Reset_Source, args);
+  if (parsed != RecipeArgs_Continue)
+    return parsed;
+
   if (dish_has_sub_dishes(dish))
     {
       for (size_t i=0; i<xy_seq_len(dish->sub_dishes); i++)
@@ -903,10 +950,13 @@ waiter_handle_Reset_Source (Dish_t *dish, const char *input, char *option)
           Dish_t *sub_dish = xy_seq_at (dish->sub_dishes, i);
           sub_dish->preparefn();
           println (bdpurple(sub_dish->aliases));
-          waiter_handle_Reset_Source (sub_dish, dish_get_first_alias(sub_dish), option);
+          if (waiter_handle_Reset_Source (sub_dish, dish_get_first_alias(sub_dish), option, args) == RecipeArgs_Error)
+            {
+              return RecipeArgs_Error;
+            }
           br();
         }
-      return;
+      return RecipeArgs_Continue;
     }
 
   if (dish->resetfn)
@@ -918,6 +968,7 @@ waiter_handle_Reset_Source (Dish_t *dish, const char *input, char *option)
     {
       chsrc_error (xy_strcat (3, "暂未对 ", input, " 实现 reset 功能，邀您帮助: chsrc issue"));
     }
+  return RecipeArgs_Continue;
 }
 
 
@@ -926,10 +977,11 @@ waiter_handle_Reset_Source (Dish_t *dish, const char *input, char *option)
  *
  * @param  code    对 dish 要执行的操作
  * @param  input   用户输入的原菜品字符串(为了在提示中还原用户的输入)
- * @param  option  额外的选项，可为NULL
+ * @param  option  镜像名称或 URL，可为 NULL
+ * @param  args    -- 后的原始参数，各 recipe 独立解析
  */
-void
-waiter_handle_user_command (Dish_t *dish, TargetCmd code, const char *input, char *option)
+int
+waiter_handle_user_command (Dish_t *dish, TargetCmd code, const char *input, char *option, const RecipeArgs_t *args)
 {
   if (TargetCmd_Get_Source==code || TargetCmd_Set_Source==code || TargetCmd_Reset_Source==code)
     {
@@ -951,26 +1003,30 @@ waiter_handle_user_command (Dish_t *dish, TargetCmd code, const char *input, cha
         }
     }
 
+  RecipeArgsResult_t result = RecipeArgs_Continue;
   if (TargetCmd_Set_Source==code)
     {
-      waiter_handle_Set_Source (dish, input, option);
+      result = waiter_handle_Set_Source (dish, input, option, args);
     }
   else if (TargetCmd_Reset_Source==code)
     {
-      waiter_handle_Reset_Source (dish, input, option);
+      result = waiter_handle_Reset_Source (dish, input, option, args);
     }
   else if (TargetCmd_Get_Source==code)
     {
-      waiter_handle_Get_Source (dish, input, option);
+      result = waiter_handle_Get_Source (dish, input, option, args);
     }
   else if (TargetCmd_List_Info==code)
     {
-      waiter_handle_List_Info (dish, input, option);
+      result = waiter_handle_List_Info (dish, input, option, args);
     }
   else if (TargetCmd_Measure_Source==code)
     {
-      waiter_handle_Measure_Source (dish, input, option);
+      result = waiter_handle_Measure_Source (dish, input, option, args);
     }
+
+  if (result != RecipeArgs_Continue)
+    return result == RecipeArgs_Handled ? Exit_OK : Exit_Unknown;
 
   /* 核心命令 get, set, reset 完成后需要简短显示维护信息 */
   if (TargetCmd_Get_Source==code || TargetCmd_Set_Source==code || TargetCmd_Reset_Source==code)
@@ -1003,5 +1059,5 @@ waiter_handle_user_command (Dish_t *dish, TargetCmd code, const char *input, cha
   chsrc_perform_all_prepare ();
 #endif
 
-  return;
+  return Exit_OK;
 }

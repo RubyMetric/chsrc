@@ -61,6 +61,11 @@ void
   // op 可以为 NOOP|s|sr|gsr|gs, 代表支持 Get Set Reset 三种操作
   chef_prep_this_dish (<category>_<dish>, op);
 
+  // 可选：注册 -- 后的参数解析器；默认忽略这些参数。
+  // 回调返回 RecipeArgs_Continue / RecipeArgs_Handled / RecipeArgs_Error。
+  // chef_set_args_parser (this, <category>_<dish>_parse_args);
+  // 签名与示例见 doc/10-如何编写recipe.md。
+
   chef_set_recipe_created_on   (this, "2024-08-09"); // 文件创建日期
   chef_set_recipe_last_updated (this, "2025-08-12"); // 文件最后一次更新日期
 

@@ -56,7 +56,7 @@ use open qw(:std :encoding(UTF-8));
 
 在 Windows 上也是可以正常执行的，Perl 应该是内部进行了转换。然而，下面这一行却会报错：
 
-    `./chsrc get -no-color 2>&1`
+    `./chsrc get --no-color 2>&1`
 
 2>&1重定向虽然在 Windows CMD 中是正确的，但是在 Perl 中执行，却会反而把 ./chsrc 的问题给报出来。
 因此，我们需要对执行的命令进行处理
@@ -67,16 +67,12 @@ use open qw(:std :encoding(UTF-8));
 my $CHSRC = ($^O eq 'MSWin32') ? '.\chsrc' : './chsrc';
 
 my $version_str_cn = qr|chsrc .*\n\nCopyright .*\n许可证 GPLv3\+：GNU GPL 第 3 版或更高版本|;
-like `$CHSRC -v`,         $version_str_cn,  'chsrc -v';
 like `$CHSRC --version`,  $version_str_cn,  'chsrc --version';
-like `$CHSRC version`,    $version_str_cn,  'chsrc version';
+like `$CHSRC --version --English`, $version_str_cn, 'version returns before later language option';
 
 my $version_str_en = qr|chsrc .*\n\nCopyright .*\nLicense GPLv3\+: GNU GPL version 3 or later|;
-like `$CHSRC -v -en`,     $version_str_en,  'chsrc -v -en';
-like `$CHSRC -en -v`,     $version_str_en,  'chsrc -en -v';
-like `$CHSRC --version -en`,  $version_str_en,  'chsrc --version -en';
-like `$CHSRC -en --version`,  $version_str_en,  'chsrc -en --version';
-like `$CHSRC version -en`,    $version_str_en,  'chsrc version -en';
+like `$CHSRC --english --version`, $version_str_en, 'chsrc --english --version';
+like `$CHSRC --English --version`, $version_str_en, 'chsrc --English --version';
 
 my $help_str = qr/^   (help|list|get|set|reset)/m;
 like `$CHSRC -h`,     $help_str,    'chsrc -h';
@@ -97,6 +93,8 @@ like `$CHSRC list mirrors`,  $list_str,    'chsrc list mirrors';
 like `$CHSRC list os`,    qr/netbsd\s*openbsd/,   'chsrc list os';
 like `$CHSRC list ware`,  qr/brew\s*homebrew/,   'chsrc list ware';
 
+require './test/cli-options.pl';
+
 
 =begin comment
 
@@ -105,7 +103,7 @@ like `$CHSRC list ware`,  qr/brew\s*homebrew/,   'chsrc list ware';
 =end comment
 =cut
 my $get_null = qr/chsrc: 请提供想要查看源的菜品名/u;
-like `$CHSRC get -no-color 2>&1`,  $get_null,    'chsrc get -no-color';
+like `$CHSRC get --no-color 2>&1`,  $get_null,    'chsrc get --no-color';
 
 my $fake_dish_name = qr/暂不支持的换源菜品/;
 like `$CHSRC get fake_dish_name 2>&1`,  $fake_dish_name, 'chsrc get fake_dish_name';
@@ -136,12 +134,12 @@ my $set_js_url = qr/食谱更新.*\n食谱更新.*\n食谱更新/;
 # like `$CHSRC set js $URL`,  $set_js_url, "chsrc set js $URL";
 
 my $measure_js = qr/js 由以下3个子菜品组成.*\nnpm\nyarn\npnpm/;
-like `$CHSRC measure -no-color js`, $measure_js, 'chsrc measure -no-color js';
+like `$CHSRC measure --no-color js`, $measure_js, 'chsrc measure --no-color js';
 
 my $list_js = qr/食谱创建.*食谱创建.*食谱创建.*/s;
-like `$CHSRC list -no-color js`, $list_js, 'chsrc list -no-color js';
+like `$CHSRC list --no-color js`, $list_js, 'chsrc list --no-color js';
 
-like `$CHSRC set -scope 2>&1`,                 qr/缺少参数/,       'chsrc set -scope missing arg';
+like `$CHSRC set --scope 2>&1`,                 qr/缺少参数/,       'chsrc set --scope missing arg';
 
 
 
@@ -192,7 +190,7 @@ like `$CHSRC set ruby abcd 2>&1`,      $set_ruby_abcd,      'chsrc set ruby abcd
 like `$CHSRC set ruby first`,          $set_ruby_first,     'chsrc set ruby first';
 like `$CHSRC set ruby`,                $set_ruby,           'chsrc set ruby';
 like `$CHSRC reset ruby`,              $reset_ruby,         'chsrc reset ruby';
-like `$CHSRC set -scope=project ruby first`,  $set_ruby_locally,  'chsrc set -scope=project ruby first';
+like `$CHSRC set --scope=project ruby first`,  $set_ruby_locally,  'chsrc set --scope=project ruby first';
 
 
 done_testing;
